@@ -21,25 +21,5 @@
     <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Vector.cpp">
-      <Filter>Source Files\Math_Library</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Matrix4x4.cpp">
-      <Filter>Source Files\Math_Library</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Matrix3x3.cpp">
-      <Filter>Source Files\Math_Library</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\Vector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Matrix4x4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Matrix3x3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
