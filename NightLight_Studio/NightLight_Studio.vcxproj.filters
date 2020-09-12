@@ -16,6 +16,9 @@
     <Filter Include="Source Files\Math_Library">
       <UniqueIdentifier>{23c1ba14-55ff-4cce-b119-5b5a9acb777a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Component">
+      <UniqueIdentifier>{6ccff8ec-2ab3-460e-b49b-446fae79e651}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -30,6 +33,9 @@
     <ClCompile Include="Source\Vector.cpp">
       <Filter>Source Files\Math_Library</Filter>
     </ClCompile>
+    <ClCompile Include="Component\ComponentTransform.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Matrix3x3.h">
@@ -40,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="Source\Vector.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ComponentTransform.h">
+      <Filter>Source Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
