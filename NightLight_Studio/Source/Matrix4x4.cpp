@@ -3,6 +3,7 @@
 #include <math.h>
 #include "Vector.h"
 #include "Matrix4x4.h"
+#include "Matrix3x3.h"
 
 
 namespace NlMath
@@ -143,6 +144,54 @@ namespace NlMath
 			m01 * m10 * m22 * m33 + m00 * m11 * m22 * m33;
 	}
 
+	Matrix4x4 Matrix4x4::cofactor() const
+	{
+		Matrix3x3 mtx[16];
+		//1st row
+		mtx[0] = { m11, m12, m13, m21, m22, m23, m31, m32, m33 };
+		mtx[1] = { m10, m12, m13, m20, m22, m23, m30, m32, m33 };
+		mtx[2] = { m10, m11, m13, m20, m21, m23, m30, m31, m33 };
+		mtx[3] = { m10, m11, m12, m20, m21, m22, m30, m31, m32 };
+
+		//2nd row
+		mtx[4] = { m01, m02, m03, m21, m22, m23, m31, m32, m33 };
+		mtx[5] = { m00, m02, m03, m20, m22, m23, m30, m32, m33 };
+		mtx[6] = { m00, m01, m03, m20, m21, m23, m30, m31, m33 };
+		mtx[7] = { m00, m01, m02, m20, m21, m22, m30, m31, m32 };
+
+		//3rd row
+		mtx[8] = { m01, m02, m03, m11, m12, m13, m31, m32, m33 };
+		mtx[9] = { m00, m02, m03, m10, m12, m13, m30, m32, m33 };
+		mtx[10] = { m00, m01, m03, m10, m11, m13, m30, m31, m33 };
+		mtx[11] = { m00, m01, m02, m10, m11, m12, m30, m31, m32 };
+
+		//4th row
+		mtx[12] = { m01, m02, m03, m11, m12, m13, m21, m22, m23 };
+		mtx[13] = { m00, m02, m03, m10, m12, m13, m20, m22, m23 };
+		mtx[14] = { m00, m01, m03, m10, m11, m13, m20, m21, m23 };
+		mtx[15] = { m00, m01, m02, m10, m11, m12, m20, m21, m22 };
+
+
+		//creating result matrix
+		Matrix4x4 result;
+		for (size_t i = 0; i < 16; i++)
+		{
+			result[i] = mtx[i].determinant();
+		}
+
+		result[1] = -result[1];
+		result[3] = -result[3];
+		result[4] = -result[4];
+		result[6] = -result[6];
+		result[9] = -result[9];
+		result[11] = -result[11];
+		result[12] = -result[12];
+		result[14] = -result[14];
+
+		return result;
+	}
+
+
 	//Matrix4x4::operator glm::mat4x4() const
 	//{
 	//	glm::mat4x4 tmp;
@@ -162,6 +211,15 @@ namespace NlMath
 	//	glm::mat3x3 tmp{ m00,m01,m02,m10,m11,m12,m20,m21,m22 };
 	//	return tmp;
 	//}
+
+	std::ostream& operator<<(std::ostream& os, const Matrix4x4 mtx)
+	{
+		os  << "(" << mtx.m00 << ", " << mtx.m01 << ", " << mtx.m02 << ", " << mtx.m03 << ")" << std::endl
+			<< "(" << mtx.m10 << ", " << mtx.m11 << ", " << mtx.m12 << ", " << mtx.m13 << ")" << std::endl
+			<< "(" << mtx.m20 << ", " << mtx.m21 << ", " << mtx.m22 << ", " << mtx.m23 << ")" << std::endl
+			<< "(" << mtx.m30 << ", " << mtx.m31 << ", " << mtx.m32 << ", " << mtx.m33 << ")" << std::endl;
+		return os;
+	}
 
 	/**************************************************************************/
 	/*!
@@ -468,7 +526,7 @@ namespace NlMath
 		would be set to NULL.
 	*/
 	/**************************************************************************/
-	void Mtx44Inverse(Matrix4x4* pResult, const Matrix4x4& pMtx)
+	void Mtx44Inverse(Matrix4x4& pResult, const Matrix4x4& pMtx)
 	{
 		// get determinant
 		float det = pMtx.determinant();
@@ -481,41 +539,35 @@ namespace NlMath
 		}
 
 		//cofector matrix
-		Matrix4x4 mtx;
-		// 1st row
-		mtx.m00 = pMtx.m11 * pMtx.m22 - pMtx.m12 * pMtx.m21;
-		mtx.m01 = -(pMtx.m10 * pMtx.m22 - pMtx.m12 * pMtx.m20);
-		mtx.m02 = pMtx.m10 * pMtx.m21 - pMtx.m11 * pMtx.m20;
-		// 2nd row
-		mtx.m10 = -(pMtx.m01 * pMtx.m22 - pMtx.m02 * pMtx.m21);
-		mtx.m11 = pMtx.m00 * pMtx.m22 - pMtx.m02 * pMtx.m20;
-		mtx.m12 = -(pMtx.m00 * pMtx.m21 - pMtx.m01 * pMtx.m20);
-		// 3rd row
-		mtx.m20 = pMtx.m01 * pMtx.m12 - pMtx.m02 * pMtx.m11;
-		mtx.m21 = -(pMtx.m00 * pMtx.m12 - pMtx.m02 * pMtx.m10);
-		mtx.m22 = pMtx.m00 * pMtx.m11 - pMtx.m01 * pMtx.m10;
+		Matrix4x4 mtx = pMtx.cofactor();
+
 		// transpose mtx
-		Mtx44Transpose(*pResult, mtx);
+		Mtx44Transpose(pResult, mtx);
 
 		// 1/det
 		det = 1.0f / det;
 
 		// get final result
 		// 1st row
-		pResult->m00 = pResult->m00 * det;
-		pResult->m01 = pResult->m01 * det;
-		pResult->m02 = pResult->m02 * det;
-		pResult->m03 = pResult->m03 * det;
+		pResult.m00 = pResult.m00 * det;
+		pResult.m01 = pResult.m01 * det;
+		pResult.m02 = pResult.m02 * det;
+		pResult.m03 = pResult.m03 * det;
 		// 2nd row
-		pResult->m10 = pResult->m10 * det;
-		pResult->m11 = pResult->m11 * det;
-		pResult->m12 = pResult->m12 * det;
-		pResult->m13 = pResult->m13 * det;
+		pResult.m10 = pResult.m10 * det;
+		pResult.m11 = pResult.m11 * det;
+		pResult.m12 = pResult.m12 * det;
+		pResult.m13 = pResult.m13 * det;
 		// 3rd row
-		pResult->m20 = pResult->m20 * det;
-		pResult->m21 = pResult->m21 * det;
-		pResult->m22 = pResult->m22 * det;
-		pResult->m23 = pResult->m23 * det;
+		pResult.m20 = pResult.m20 * det;
+		pResult.m21 = pResult.m21 * det;
+		pResult.m22 = pResult.m22 * det;
+		pResult.m23 = pResult.m23 * det;
+		// 4th row
+		pResult.m30 = pResult.m30 * det;
+		pResult.m31 = pResult.m31 * det;
+		pResult.m32 = pResult.m32 * det;
+		pResult.m33 = pResult.m33 * det;
 	}
 
 }

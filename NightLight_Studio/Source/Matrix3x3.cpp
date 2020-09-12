@@ -124,6 +124,25 @@ namespace NlMath
 		return (d1 + d2 + d3) - (dd1 + dd2 + dd3);
 	}
 
+	Matrix3x3 Matrix3x3::cofactor() const
+	{
+		Matrix3x3 mtx;
+		// 1st row
+		mtx.m00 = m11 * m22 - m12 * m21;
+		mtx.m01 = -(m10 * m22 - m12 * m20);
+		mtx.m02 = m10 * m21 - m11 * m20;
+		// 2nd row
+		mtx.m10 = -(m01 * m22 - m02 * m21);
+		mtx.m11 = m00 * m22 - m02 * m20;
+		mtx.m12 = -(m00 * m21 - m01 * m20);
+		// 3rd row
+		mtx.m20 = m01 * m12 - m02 * m11;
+		mtx.m21 = -(m00 * m12 - m02 * m10);
+		mtx.m22 = m00 * m11 - m01 * m10;
+
+		return mtx;
+	}
+
 	//Matrix3x3::operator glm::mat4x4() const
 	//{
 	//	glm::mat4x4 tmp;
@@ -143,6 +162,14 @@ namespace NlMath
 	//	glm::mat3x3 tmp{ m00,m01,m02,m10,m11,m12,m20,m21,m22 };
 	//	return tmp;
 	//}
+
+	std::ostream& operator<<(std::ostream& os, const Matrix3x3 mtx)
+	{
+		os  << "( " << mtx.m00 << ", " << mtx.m01 << ", " << mtx.m02 << " )" << std::endl
+			<< "( " << mtx.m10 << ", " << mtx.m11 << ", " << mtx.m12 << " )" << std::endl
+			<< "( " << mtx.m20 << ", " << mtx.m21 << ", " << mtx.m22 << " )" << std::endl;
+		return os;
+	}
 
 	/**************************************************************************/
 	/*!
@@ -341,7 +368,7 @@ namespace NlMath
 		would be set to NULL.
 	*/
 	/**************************************************************************/
-	void Mtx33Inverse(Matrix3x3* pResult, const Matrix3x3& pMtx)
+	void Mtx33Inverse(Matrix3x3& pResult, const Matrix3x3& pMtx)
 	{
 		// get determinant
 		float det = pMtx.determinant();
@@ -354,36 +381,27 @@ namespace NlMath
 		}
 
 		//cofactor matrix
-		Matrix3x3 mtx;
-		// 1st row
-		mtx.m00 = pMtx.m11 * pMtx.m22 - pMtx.m12 * pMtx.m21;
-		mtx.m01 = -(pMtx.m10 * pMtx.m22 - pMtx.m12 * pMtx.m20);
-		mtx.m02 = pMtx.m10 * pMtx.m21 - pMtx.m11 * pMtx.m20;
-		// 2nd row
-		mtx.m10 = -(pMtx.m01 * pMtx.m22 - pMtx.m02 * pMtx.m21);
-		mtx.m11 = pMtx.m00 * pMtx.m22 - pMtx.m02 * pMtx.m20;
-		mtx.m12 = -(pMtx.m00 * pMtx.m21 - pMtx.m01 * pMtx.m20);
-		// 3rd row
-		mtx.m20 = pMtx.m01 * pMtx.m12 - pMtx.m02 * pMtx.m11;
-		mtx.m21 = -(pMtx.m00 * pMtx.m12 - pMtx.m02 * pMtx.m10);
-		mtx.m22 = pMtx.m00 * pMtx.m11 - pMtx.m01 * pMtx.m10;
+		Matrix3x3 mtx = pMtx.cofactor();
+
 		// transpose mtx
-		Mtx33Transpose(*pResult, mtx);
+		Mtx33Transpose(pResult, mtx);
+
 		// 1/det
 		det = 1.0f / det;
+
 		// get final result
 		// 1st row
-		pResult->m00 = pResult->m00 * det;
-		pResult->m01 = pResult->m01 * det;
-		pResult->m02 = pResult->m02 * det;
+		pResult.m00 = pResult.m00 * det;
+		pResult.m01 = pResult.m01 * det;
+		pResult.m02 = pResult.m02 * det;
 		// 2nd row
-		pResult->m10 = pResult->m10 * det;
-		pResult->m11 = pResult->m11 * det;
-		pResult->m12 = pResult->m12 * det;
+		pResult.m10 = pResult.m10 * det;
+		pResult.m11 = pResult.m11 * det;
+		pResult.m12 = pResult.m12 * det;
 		// 3rd row
-		pResult->m20 = pResult->m20 * det;
-		pResult->m21 = pResult->m21 * det;
-		pResult->m22 = pResult->m22 * det;
+		pResult.m20 = pResult.m20 * det;
+		pResult.m21 = pResult.m21 * det;
+		pResult.m22 = pResult.m22 * det;
 	}
 
 }

@@ -1,5 +1,5 @@
 #include "Vector.h"
-
+#include <iostream>
 namespace NlMath
 {
 #ifdef _MSC_VER
@@ -38,6 +38,10 @@ namespace NlMath
 		float& operator[](int i);
 
 		float determinant() const;
+
+		Matrix3x3 cofactor() const;
+
+		friend std::ostream& operator<<(std::ostream& os, const Matrix3x3 mtx);
 
 		//conversion operator is case we are using open gl, this converts my matrix to glm matrix
 		//operator glm::mat4x4() const;
@@ -109,5 +113,5 @@ namespace NlMath
 		would be set to NULL.
 	*/
 	/**************************************************************************/
-	void Mtx33Inverse(Matrix3x3* pResult, const Matrix3x3& pMtx);
+	void Mtx33Inverse(Matrix3x3& pResult, const Matrix3x3& pMtx);
 }
