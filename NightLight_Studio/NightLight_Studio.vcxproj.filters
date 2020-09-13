@@ -19,6 +19,12 @@
     <Filter Include="Source Files\Component">
       <UniqueIdentifier>{6ccff8ec-2ab3-460e-b49b-446fae79e651}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Input">
+      <UniqueIdentifier>{4e7d0fa7-de00-4177-aa6d-3f9f22635a1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Messaging">
+      <UniqueIdentifier>{aa4c90b3-aa2a-4245-8723-066186cc448d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -33,7 +39,28 @@
     <ClCompile Include="Source\Vector.cpp">
       <Filter>Source Files\Math_Library</Filter>
     </ClCompile>
-    <ClCompile Include="Component\ComponentTransform.cpp">
+    <ClCompile Include="Source\Input\SI_Controller.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\SI_KeyPress.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\SI_MousePos.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Messaging\SystemBroadcaster.cpp">
+      <Filter>Source Files\Messaging</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Messaging\SystemReceiver.cpp">
+      <Filter>Source Files\Messaging</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentManager.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentMemoryManager.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Components.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,8 +74,43 @@
     <ClInclude Include="Source\Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Component\ComponentTransform.h">
+    <ClInclude Include="Source\Input\SI_Controller.h">
+      <Filter>Source Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\SI_KeyPress.h">
+      <Filter>Source Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\SI_MousePos.h">
+      <Filter>Source Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\SystemInput.h">
+      <Filter>Source Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Messaging\SystemBroadcaster.h">
+      <Filter>Source Files\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Messaging\SystemIMessage.h">
+      <Filter>Source Files\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Messaging\SystemReceiver.h">
+      <Filter>Source Files\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentManager.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\ComponentMemoryManager.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentTest.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Components.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source\Messaging\System_Messaging_Readme.txt">
+      <Filter>Source Files\Messaging</Filter>
+    </Text>
   </ItemGroup>
 </Project>

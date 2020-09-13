@@ -26,10 +26,10 @@ namespace NlMath
 	*/
 	/**************************************************************************/
 
-	Matrix4x4::Matrix4x4(float x):	m00 { x }, m01{ 0 }, m02{ 0 }, m03{ 0 },
-									m10{ 0 }, m11{ x }, m12{ 0 }, m13{ 0 },
-									m20{ 0 }, m21{ 0 }, m22{ x }, m23{ 0 },
-									m30{ 0 }, m31{ 0 }, m32{ 0 }, m33{ x }
+	Matrix4x4::Matrix4x4(float _x):	m00 { _x }, m01{ 0 }, m02{ 0 }, m03{ 0 },
+									m10{ 0 }, m11{ _x }, m12{ 0 }, m13{ 0 },
+									m20{ 0 }, m21{ 0 }, m22{ _x }, m23{ 0 },
+									m30{ 0 }, m31{ 0 }, m32{ 0 }, m33{ _x }
 	{
 	}
 
@@ -262,9 +262,9 @@ namespace NlMath
 	Vector3D operator*(const Matrix4x4& pMtx, const Vector3D& rhs)
 	{
 		Vector3D returnVector;
-		returnVector.x = pMtx.m00 * rhs.x + pMtx.m01 * rhs.y + pMtx.m02 * rhs.z;
-		returnVector.y = pMtx.m10 * rhs.x + pMtx.m11 * rhs.y + pMtx.m12 * rhs.z;
-		returnVector.z = pMtx.m20 * rhs.x + pMtx.m21 * rhs.y + pMtx.m22 * rhs.z;
+		returnVector._x = pMtx.m00 * rhs._x + pMtx.m01 * rhs._y + pMtx.m02 * rhs.z;
+		returnVector._y = pMtx.m10 * rhs._x + pMtx.m11 * rhs._y + pMtx.m12 * rhs.z;
+		returnVector.z = pMtx.m20 * rhs._x + pMtx.m21 * rhs._y + pMtx.m22 * rhs.z;
 		return returnVector;
 	}
 
@@ -303,18 +303,18 @@ namespace NlMath
 		and saves it in pResult
 	*/
 	/**************************************************************************/
-	void Mtx44Translate(Matrix4x4& pResult, float x, float y, float z)
+	void Mtx44Translate(Matrix4x4& pResult, float _x, float _y, float z)
 	{
 		// 1st row
 		pResult.m00 = 1;
 		pResult.m01 = 0;
 		pResult.m02 = 0;
-		pResult.m03 = x;
+		pResult.m03 = _x;
 		// 2nd row
 		pResult.m10 = 0;
 		pResult.m11 = 1;
 		pResult.m12 = 0;
-		pResult.m13 = y;
+		pResult.m13 = _y;
 		// 3rd row
 		pResult.m20 = 0;
 		pResult.m21 = 0;
@@ -333,16 +333,16 @@ namespace NlMath
 		and saves it in pResult
 	*/
 	/**************************************************************************/
-	void Mtx44Scale(Matrix4x4& pResult, float x, float y, float z)
+	void Mtx44Scale(Matrix4x4& pResult, float _x, float _y, float z)
 	{
 		// 1st row
-		pResult.m00 = x;
+		pResult.m00 = _x;
 		pResult.m01 = 0;
 		pResult.m02 = 0;
 		pResult.m03 = 0;
 		// 2nd row
 		pResult.m10 = 0;
-		pResult.m11 = y;
+		pResult.m11 = _y;
 		pResult.m12 = 0;
 		pResult.m13 = 0;
 		// 3rd row
