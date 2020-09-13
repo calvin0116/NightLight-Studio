@@ -25,7 +25,7 @@ namespace NlMath
 		float m2[4][4];
 
 		Matrix3x3();
-		Matrix3x3(const float x);
+		Matrix3x3(const float _x);
 		Matrix3x3(const float* pArr);
 		Matrix3x3(	float _00, float _01, float _02,
 					float _10, float _11, float _12,
@@ -72,7 +72,7 @@ namespace NlMath
 		and saves it in pResult
 	 */
 	 /**************************************************************************/
-	void Mtx33Translate(Matrix3x3& pResult, float x, float y);
+	void Mtx33Translate(Matrix3x3& pResult, float _x, float _y);
 
 	/**************************************************************************/
 	/*!
@@ -80,7 +80,7 @@ namespace NlMath
 		and saves it in pResult
 	 */
 	 /**************************************************************************/
-	void Mtx33Scale(Matrix3x3& pResult, float x, float y);
+	void Mtx33Scale(Matrix3x3& pResult, float _x, float _y);
 
 	/**************************************************************************/
 	/*!

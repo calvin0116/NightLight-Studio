@@ -26,7 +26,7 @@ namespace NlMath
 		float m2[4][4];
 
 		Matrix4x4();
-		Matrix4x4(const float x);
+		Matrix4x4(const float _x);
 		Matrix4x4(const float* pArr);
 		Matrix4x4(	float _00, float _01, float _02, float _03,
 					float _10, float _11, float _12, float _13,
@@ -76,7 +76,7 @@ namespace NlMath
 		and saves it in pResult
 	 */
 	 /**************************************************************************/
-	void Mtx44Translate(Matrix4x4& pResult, float x, float y, float z);
+	void Mtx44Translate(Matrix4x4& pResult, float _x, float _y, float z);
 
 	/**************************************************************************/
 	/*!
@@ -84,7 +84,7 @@ namespace NlMath
 		and saves it in pResult
 	 */
 	 /**************************************************************************/
-	void Mtx44Scale(Matrix4x4& pResult, float x, float y, float z);
+	void Mtx44Scale(Matrix4x4& pResult, float _x, float _y, float z);
 
 	/**************************************************************************/
 	/*!

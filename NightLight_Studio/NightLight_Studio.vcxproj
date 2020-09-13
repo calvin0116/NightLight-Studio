@@ -20,16 +20,31 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\ComponentTransform.cpp" />
+    <ClCompile Include="Source\Input\SI_Controller.cpp" />
+    <ClCompile Include="Source\Input\SI_KeyPress.cpp" />
+    <ClCompile Include="Source\Input\SI_MousePos.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Matrix3x3.cpp" />
     <ClCompile Include="Source\Matrix4x4.cpp" />
+    <ClCompile Include="Source\Messaging\SystemBroadcaster.cpp" />
+    <ClCompile Include="Source\Messaging\SystemReceiver.cpp" />
     <ClCompile Include="Source\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentTransform.h" />
+    <ClInclude Include="Source\Input\SI_Controller.h" />
+    <ClInclude Include="Source\Input\SI_KeyPress.h" />
+    <ClInclude Include="Source\Input\SI_MousePos.h" />
+    <ClInclude Include="Source\Input\SystemInput.h" />
     <ClInclude Include="Source\Matrix3x3.h" />
     <ClInclude Include="Source\Matrix4x4.h" />
+    <ClInclude Include="Source\Messaging\SystemBroadcaster.h" />
+    <ClInclude Include="Source\Messaging\SystemIMessage.h" />
+    <ClInclude Include="Source\Messaging\SystemReceiver.h" />
     <ClInclude Include="Source\Vector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source\Messaging\System_Messaging_Readme.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
