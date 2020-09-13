@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Component\ComponentTransform.cpp" />
+    <ClCompile Include="Source\Component\ComponentManager.cpp" />
+    <ClCompile Include="Source\Component\ComponentMemoryManager.cpp" />
+    <ClCompile Include="Source\Component\Components.cpp" />
     <ClCompile Include="Source\Input\SI_Controller.cpp" />
     <ClCompile Include="Source\Input\SI_KeyPress.cpp" />
     <ClCompile Include="Source\Input\SI_MousePos.cpp" />
@@ -31,7 +33,10 @@
     <ClCompile Include="Source\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Component\ComponentTransform.h" />
+    <ClInclude Include="Source\Component\ComponentManager.h" />
+    <ClInclude Include="Source\Component\ComponentMemoryManager.h" />
+    <ClInclude Include="Source\Component\Components.h" />
+    <ClInclude Include="Source\Component\ComponentTest.h" />
     <ClInclude Include="Source\Input\SI_Controller.h" />
     <ClInclude Include="Source\Input\SI_KeyPress.h" />
     <ClInclude Include="Source\Input\SI_MousePos.h" />
@@ -123,7 +128,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>

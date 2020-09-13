@@ -39,9 +39,6 @@
     <ClCompile Include="Source\Vector.cpp">
       <Filter>Source Files\Math_Library</Filter>
     </ClCompile>
-    <ClCompile Include="Component\ComponentTransform.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Input\SI_Controller.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
@@ -57,6 +54,15 @@
     <ClCompile Include="Source\Messaging\SystemReceiver.cpp">
       <Filter>Source Files\Messaging</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\ComponentManager.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentMemoryManager.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Components.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Matrix3x3.h">
@@ -67,9 +73,6 @@
     </ClInclude>
     <ClInclude Include="Source\Vector.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\ComponentTransform.h">
-      <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Input\SI_Controller.h">
       <Filter>Source Files\Input</Filter>
@@ -91,6 +94,18 @@
     </ClInclude>
     <ClInclude Include="Source\Messaging\SystemReceiver.h">
       <Filter>Source Files\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentManager.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentMemoryManager.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentTest.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Components.h">
+      <Filter>Source Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
