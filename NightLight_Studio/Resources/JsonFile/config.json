@@ -1,0 +1,12 @@
+{
+    "window": {
+        "fullscreen": true,
+        "width": 1280,
+        "height": 720
+    },
+    "config": {
+        "startscene": "Intro",
+        "master_volume": 37.5,
+        "start_in_level_editor": false
+    }
+}

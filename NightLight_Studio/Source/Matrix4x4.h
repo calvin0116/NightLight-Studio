@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Vector.h"
 #include <iostream>
 namespace NlMath
@@ -152,3 +154,6 @@ namespace NlMath
 	/**************************************************************************/
 	void Mtx44Inverse(Matrix4x4& pResult, const Matrix4x4& pMtx);
 }
+
+//Macros for matrix
+using Mat4 = NlMath::Matrix4x4;

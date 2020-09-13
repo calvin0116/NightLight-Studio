@@ -115,3 +115,6 @@ namespace NlMath
 	/**************************************************************************/
 	void Mtx33Inverse(Matrix3x3& pResult, const Matrix3x3& pMtx);
 }
+
+//Macros for matrix
+using Mat3 = NlMath::Matrix3x3;

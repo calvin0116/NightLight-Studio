@@ -20,16 +20,57 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\ComponentTransform.cpp" />
+    <ClCompile Include="Source\ECS\Component.cpp" />
+    <ClCompile Include="Source\ECS\Entity.cpp" />
+    <ClCompile Include="Source\ECS\TransformComponent.cpp" />
+    <ClCompile Include="Source\ECS\TriggerComponent.cpp" />
+    <ClCompile Include="Source\Json\Parser.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Matrix3x3.cpp" />
     <ClCompile Include="Source\Matrix4x4.cpp" />
+    <ClCompile Include="Source\Physic\ColliderComponent.cpp" />
+    <ClCompile Include="Source\Physic\Manifold.cpp" />
+    <ClCompile Include="Source\Physic\PhysicManager.cpp" />
+    <ClCompile Include="Source\Physic\Rigidbody.cpp" />
+    <ClCompile Include="Source\System\SystemManager.cpp" />
     <ClCompile Include="Source\Vector.cpp" />
+    <ClCompile Include="Source\Window\MyWindow.cpp" />
+    <ClCompile Include="Source\Window\MyWindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentTransform.h" />
+    <ClInclude Include="Source\ECS\Component.h" />
+    <ClInclude Include="Source\ECS\Entity.h" />
+    <ClInclude Include="Source\ECS\Entity.hpp" />
+    <ClInclude Include="Source\ECS\TransformComponent.h" />
+    <ClInclude Include="Source\ECS\TriggerComponent.h" />
+    <ClInclude Include="Source\Json\JsonWrapper.h" />
+    <ClInclude Include="Source\Json\Parser.h" />
+    <ClInclude Include="Source\Json\Parser.hpp" />
+    <ClInclude Include="Source\main.h" />
     <ClInclude Include="Source\Matrix3x3.h" />
     <ClInclude Include="Source\Matrix4x4.h" />
+    <ClInclude Include="Source\Misc\Config.h" />
+    <ClInclude Include="Source\Misc\Header.h" />
+    <ClInclude Include="Source\Physic\ColliderComponent.h" />
+    <ClInclude Include="Source\Physic\Manifold.h" />
+    <ClInclude Include="Source\Physic\PhysicManager.h" />
+    <ClInclude Include="Source\Physic\Rigidbody.h" />
+    <ClInclude Include="Source\Physic\Rigidbody.hpp" />
+    <ClInclude Include="Source\Resource\targetver.h" />
+    <ClInclude Include="Source\System\ISystem.h" />
+    <ClInclude Include="Source\System\MySystem.h" />
+    <ClInclude Include="Source\System\SystemManager.h" />
     <ClInclude Include="Source\Vector.h" />
+    <ClInclude Include="Source\Window\MyWindow.h" />
+    <ClInclude Include="Source\Window\MyWindowManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Source\Resource\NightLight.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Icon\NightLight.ico" />
+    <Image Include="Resources\Icon\small.ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -112,9 +153,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>Source;Source/Json;Source/Physic;Source/System;Source/Window;Source/Misc;Source/ECS;Source/Resource;Include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -142,6 +185,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>Json;Physic;System;Window;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

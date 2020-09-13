@@ -19,6 +19,33 @@
     <Filter Include="Source Files\Component">
       <UniqueIdentifier>{6ccff8ec-2ab3-460e-b49b-446fae79e651}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\System">
+      <UniqueIdentifier>{e7da9be2-0ede-432c-95ec-578a75fd6390}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System">
+      <UniqueIdentifier>{8432e3d0-c853-4462-bd11-ee3d26e975fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physic">
+      <UniqueIdentifier>{5f2c4f7e-f754-43b8-90a0-69ee1e16642e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physic">
+      <UniqueIdentifier>{fac503f7-825f-4bd4-add2-7743b627035a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ECS">
+      <UniqueIdentifier>{8a080e8e-b31c-482b-8f44-9b091bca5bce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS">
+      <UniqueIdentifier>{fa9ad190-fb76-4d6e-b1d4-2dc877c21b06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Misc">
+      <UniqueIdentifier>{4c50c27a-f790-4299-b9ac-049239e08826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Json">
+      <UniqueIdentifier>{76dfcb46-601b-4d46-a8d2-7eaa0d1b05ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Window">
+      <UniqueIdentifier>{c1237ac6-a600-46ec-aa9f-021565f0ac3a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -36,6 +63,42 @@
     <ClCompile Include="Component\ComponentTransform.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Source\System\SystemManager.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physic\ColliderComponent.cpp">
+      <Filter>Source Files\Physic</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physic\Manifold.cpp">
+      <Filter>Source Files\Physic</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physic\PhysicManager.cpp">
+      <Filter>Source Files\Physic</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physic\Rigidbody.cpp">
+      <Filter>Source Files\Physic</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ECS\Component.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ECS\Entity.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ECS\TransformComponent.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ECS\TriggerComponent.cpp">
+      <Filter>Header Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Json\Parser.cpp">
+      <Filter>Header Files\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Window\MyWindowManager.cpp">
+      <Filter>Header Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Window\MyWindow.cpp">
+      <Filter>Header Files\Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Matrix3x3.h">
@@ -50,5 +113,84 @@
     <ClInclude Include="Component\ComponentTransform.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\SystemManager.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\MySystem.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\ISystem.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physic\ColliderComponent.h">
+      <Filter>Header Files\Physic</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physic\Manifold.h">
+      <Filter>Header Files\Physic</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physic\PhysicManager.h">
+      <Filter>Header Files\Physic</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physic\Rigidbody.h">
+      <Filter>Header Files\Physic</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physic\Rigidbody.hpp">
+      <Filter>Header Files\Physic</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ECS\Component.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ECS\Entity.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ECS\Entity.hpp">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ECS\TransformComponent.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Misc\Config.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Misc\Header.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ECS\TriggerComponent.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Resource\targetver.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Json\JsonWrapper.h">
+      <Filter>Header Files\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Json\Parser.h">
+      <Filter>Header Files\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Json\Parser.hpp">
+      <Filter>Header Files\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Window\MyWindow.h">
+      <Filter>Header Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Window\MyWindowManager.h">
+      <Filter>Header Files\Window</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Source\Resource\NightLight.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Icon\NightLight.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Icon\small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -134,4 +134,5 @@ namespace NlMath
 	float inverseSqrt(float);
 }
 	
-	
+//Macro for vec3
+using Vec3 = NlMath::Vector3D;
