@@ -34,8 +34,10 @@ public:
 	// ComponentSetManager
 	class ComponentSetManager // builds objects into component sets
 	{
+	public: // !
 		ComponentSet* compSet; // it is bound to a component set
 	public:
+		ComponentSetManager() = default;
 		ComponentSetManager(ComponentSet* inCompSet) :
 			compSet(inCompSet)
 		{

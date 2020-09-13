@@ -22,6 +22,8 @@
     <ClCompile Include="Source\Component\ComponentManager.cpp" />
     <ClCompile Include="Source\Component\ComponentMemoryManager.cpp" />
     <ClCompile Include="Source\Component\Components.cpp" />
+    <ClCompile Include="Source\Core\Engine.cpp" />
+    <ClCompile Include="Source\Core\GameStateManager.cpp" />
     <ClCompile Include="Source\Input\SI_Controller.cpp" />
     <ClCompile Include="Source\Input\SI_KeyPress.cpp" />
     <ClCompile Include="Source\Input\SI_MousePos.cpp" />
@@ -37,6 +39,8 @@
     <ClInclude Include="Source\Component\ComponentMemoryManager.h" />
     <ClInclude Include="Source\Component\Components.h" />
     <ClInclude Include="Source\Component\ComponentTest.h" />
+    <ClInclude Include="Source\Core\Engine.h" />
+    <ClInclude Include="Source\Core\GameStateManager.h" />
     <ClInclude Include="Source\Input\SI_Controller.h" />
     <ClInclude Include="Source\Input\SI_KeyPress.h" />
     <ClInclude Include="Source\Input\SI_MousePos.h" />
@@ -46,6 +50,7 @@
     <ClInclude Include="Source\Messaging\SystemBroadcaster.h" />
     <ClInclude Include="Source\Messaging\SystemIMessage.h" />
     <ClInclude Include="Source\Messaging\SystemReceiver.h" />
+    <ClInclude Include="Source\System\ISystem.h" />
     <ClInclude Include="Source\Vector.h" />
   </ItemGroup>
   <ItemGroup>
