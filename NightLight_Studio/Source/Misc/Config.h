@@ -3,6 +3,8 @@
 #include "Singleton.h"
 #include "Parser.h"
 
+// As of now config file is at Resources/JsonFile/
+// Look at assert_path to known the updated path
 
 struct ConfigData
 {

@@ -16,8 +16,8 @@ public:
 	void StartUp()
 	{
 		Systems[SYS_PHYSICS] = PhysicManager::GetInstance();
-		//Systems[SYS_INPUT]
-		//Systems[SYS_INPUT]
+		// === Insert your system here to get them running === //
+		// === Please follow how PhysicManager is created  === // 
 	}
 
 	//List of function calling for all system
@@ -38,6 +38,9 @@ public:
 	void Unload() { for (auto my_sys : Systems) my_sys.second->Unload(); };
 
 	//Helper function
+
+	// All this function for now is just placed here for normal use
+	// Sequencing will be improved later on
 	void CombineLoad()
 	{
 		EarlyLoad();
@@ -52,6 +55,12 @@ public:
 		LateInit();
 	}
 
+	void CombineUpdate()
+	{
+		FixedUpdate();
+		Update();
+		LateUpdate();
+	}
 
 };
 

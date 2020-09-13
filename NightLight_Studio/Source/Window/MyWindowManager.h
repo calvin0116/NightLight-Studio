@@ -1,13 +1,17 @@
 #pragma once
 
 #include "MyWindow.h"
+#include "Singleton.h"
+
 #include <io.h>
 //#include <stdlib.h>
 #include <shobjidl.h>
 #include <comdef.h>
 #include <fcntl.h>
 
-class MyWindowManager
+
+
+class MyWindowManager : public Singleton<MyWindowManager>
 {
 private:
 	HINSTANCE hInstance;
@@ -71,3 +75,5 @@ public:
 
 };
 
+//Window Manager
+static MyWindowManager* WIN_MAN = MyWindowManager::GetInstance();

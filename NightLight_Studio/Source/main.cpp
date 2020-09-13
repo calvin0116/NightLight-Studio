@@ -26,8 +26,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     bool gameLoop = true;
     
     //Windows creation
-    MyWindowManager my_wind_manager;
-    my_wind_manager.WindowsCreation(hInstance, nCmdShow);
+    WIN_MAN->WindowsCreation(hInstance, nCmdShow);
 
     //System creation / Loading
     SYS_MAN->CombineLoad();
@@ -38,8 +37,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         SYS_MAN->CombineInit();
         while (running)
         {
-            //
-            if (!my_wind_manager.Update())
+            SYS_MAN->CombineUpdate();
+
+            if (!WIN_MAN->Update())
             {
                 running = false;
                 gameLoop = false;
@@ -54,6 +54,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 #ifdef _DEBUG
     system("pause");
 #endif // DEBUG
+    int m = WIN_MAN->GetMsg().wParam;
 
-    return  my_wind_manager.GetMsg().wParam; //(int)msg.wParam;
+    CONFIG_DATA->DestroyInstance();
+    WIN_MAN->DestroyInstance();
+    SYS_MAN->DestroyInstance();
+    return  m; //(int)msg.wParam;
 }
