@@ -5,6 +5,8 @@
 
 // As of now config file is at Resources/JsonFile/
 // Look at assert_path to known the updated path
+// Thing that are affected by Config file as of now
+//			- Width and Height of the Window
 
 struct ConfigData
 {
@@ -52,4 +54,4 @@ public:
 	ConfigData& GetConfigData() { return config_d; };
 };
 
-static Config* CONFIG_DATA = Config::GetInstance();
+static Config* const CONFIG_DATA = Config::GetInstance();

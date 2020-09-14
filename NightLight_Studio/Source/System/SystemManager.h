@@ -10,6 +10,9 @@
 class MySystemManager : public ISystem, public Singleton<MySystemManager>
 {
 private:
+	//For singleton to access constructor / destructor
+	friend Singleton<MyWindowManager>;
+
 	std::map<SYS_PIORIOTY, MySystem*> Systems;
 	//std::vector< MySystem *
 public:
@@ -62,7 +65,12 @@ public:
 		LateUpdate();
 	}
 
+	//Getting system
+	MySystem * operator[] (SYS_PIORIOTY sys_p)
+	{
+		return Systems[sys_p];
+	}
 };
 
 //Access point for all system
-static MySystemManager* SYS_MAN = MySystemManager::GetInstance();
+static  MySystemManager* const SYS_MAN = MySystemManager::GetInstance();

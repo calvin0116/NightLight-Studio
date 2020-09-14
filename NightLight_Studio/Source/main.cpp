@@ -1,6 +1,6 @@
 // main.cpp : Defines the entry point for the application.
 //
-
+#include "main.h"
 #include "SystemManager.h"
 // Forward declarations of functions included in this code module:
 //ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -49,13 +49,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         SYS_MAN->Exit();
     }
 
-    //System Delete
-    SYS_MAN->DestroyInstance();
 #ifdef _DEBUG
     system("pause");
 #endif // DEBUG
     int m = WIN_MAN->GetMsg().wParam;
 
+    //Release of system resource
+    SYS_MAN->Unload();
+    //Release of engine resource
     CONFIG_DATA->DestroyInstance();
     WIN_MAN->DestroyInstance();
     SYS_MAN->DestroyInstance();

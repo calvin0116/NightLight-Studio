@@ -14,6 +14,9 @@
 class MyWindowManager : public Singleton<MyWindowManager>
 {
 private:
+	//For singleton to access constructor / destructor
+	friend Singleton<MyWindowManager>;
+
 	HINSTANCE hInstance;
 	MSG msg;
 
@@ -30,7 +33,7 @@ public:
 		fp = _fdopen(hConsole, "w");
 		freopen_s(&fp, "CONOUT$", "w", stdout);
 
-		//printf("Hello console on");
+		printf("Hello console on");
 	}
 
 	void WindowsCreation(HINSTANCE _hInstance, int nCmdShow)
@@ -76,4 +79,4 @@ public:
 };
 
 //Window Manager
-static MyWindowManager* WIN_MAN = MyWindowManager::GetInstance();
+static MyWindowManager* const WIN_MAN = MyWindowManager::GetInstance();
