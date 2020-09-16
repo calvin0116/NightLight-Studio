@@ -1,12 +1,17 @@
+/***************************************************************************
+Brief Description :
+		File purely to storee config data imported in from json files
+		// As of now config file is at Resources/JsonFile/
+		// Look at assert_path to known the updated path
+		// Thing that are affected by Config file as of now
+		//			- Width and Height of the Window
+**************************************************************************/
 #pragma once
 #include "Header.h"
 #include "Singleton.h"
 #include "Parser.h"
 
-// As of now config file is at Resources/JsonFile/
-// Look at assert_path to known the updated path
-// Thing that are affected by Config file as of now
-//			- Width and Height of the Window
+
 
 struct ConfigData
 {

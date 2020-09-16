@@ -1,11 +1,6 @@
 /***************************************************************************
-Copyright © 2019 DigiPen (Singapore) Corporation, all rights reserved.
-
-Filename : TransformComponent.h
-Author : Eric Aw Yuh Liang
-DP email : yuhliangeric.a@digipen.edu
-Course : GAM200F19-A
 Brief Description :
+			Transform component for ECS entity uses
 **************************************************************************/
 #pragma once
 /*

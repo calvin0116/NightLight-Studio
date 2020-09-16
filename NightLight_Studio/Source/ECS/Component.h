@@ -1,10 +1,4 @@
 /***************************************************************************
-Copyright © 2019 DigiPen (Singapore) Corporation, all rights reserved.
-
-Filename : Component.h
-Author : Eric Aw Yuh Liang
-DP email : yuhliangeric.a@digipen.edu
-Course : GAM200F19-A
 Brief Description :
 	Contains all data members and member functions that are part of
 	a Component, that will be attached to an Entity.

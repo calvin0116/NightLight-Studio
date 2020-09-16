@@ -1,10 +1,4 @@
 /***************************************************************************
-Copyright © 2019 DigiPen (Singapore) Corporation, all rights reserved.
-
-Filename : Entity.h
-Author : Eric Aw Yuh Liang (100%)
-DP email : yuhliangeric.a@digipen.edu
-Course : GAM200F19-A
 Brief Description :
 		Contains data members and functionalities pertaining an Entity,
 		as part of ECS.

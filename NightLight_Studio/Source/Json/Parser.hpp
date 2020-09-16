@@ -1,4 +1,3 @@
-//======================= Gonna be in hpp soon =====================================//
 template<typename d_type>
 inline void Parser::ChangeData(std::string name, d_type data)
 {

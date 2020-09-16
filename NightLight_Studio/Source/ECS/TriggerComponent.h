@@ -1,3 +1,10 @@
+
+/***************************************************************************
+Brief Description :
+			Idea component for script to overwrite and have collision 
+			behaviour that can be scripted
+**************************************************************************/
+
 #pragma once
 #include "Component.h"
 class TriggerComponent :

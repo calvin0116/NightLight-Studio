@@ -1,3 +1,10 @@
+/***************************************************************************
+Brief Description :
+			Json Parser with these functionality
+				-Save and load from Json file
+				-Run time adding and changing of variables
+				-Accessing data in Json file
+**************************************************************************/
 #pragma once
 #ifndef PARSER_H
 #define PARSER_H
