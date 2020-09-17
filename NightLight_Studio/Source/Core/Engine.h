@@ -10,7 +10,6 @@ enum ENGINESTATE
 
 class FluffyUnicornEngine
 {
-	GameStateManager _gsm;
 	ENGINESTATE _engineState;
 	float _prevdt;
 public:

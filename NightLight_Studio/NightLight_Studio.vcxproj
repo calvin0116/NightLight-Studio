@@ -32,6 +32,7 @@
     <ClCompile Include="Source\Input\SI_Controller.cpp" />
     <ClCompile Include="Source\Input\SI_KeyPress.cpp" />
     <ClCompile Include="Source\Input\SI_MousePos.cpp" />
+    <ClCompile Include="Source\IO\SystemIO.cpp" />
     <ClCompile Include="Source\Logic\SystemLogic.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Matrix3x3.cpp" />
@@ -56,6 +57,7 @@
     <ClInclude Include="Source\Input\SI_KeyPress.h" />
     <ClInclude Include="Source\Input\SI_MousePos.h" />
     <ClInclude Include="Source\Input\SystemInput.h" />
+    <ClInclude Include="Source\IO\SystemIO.h" />
     <ClInclude Include="Source\Logic\SystemLogic.h" />
     <ClInclude Include="Source\Matrix3x3.h" />
     <ClInclude Include="Source\Matrix4x4.h" />

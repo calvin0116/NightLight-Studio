@@ -43,6 +43,9 @@
     <Filter Include="Source Files\Logic">
       <UniqueIdentifier>{6f25a581-7cc8-45df-98de-410b7e4ef064}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\IO">
+      <UniqueIdentifier>{1b62a13f-057d-438e-a19c-7dad32eb425b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -107,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="Source\Core\Systems.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\IO\SystemIO.cpp">
+      <Filter>Source Files\IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="Source\Physics\SystemPhysics.h">
       <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IO\SystemIO.h">
+      <Filter>Source Files\IO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

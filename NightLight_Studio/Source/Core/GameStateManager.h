@@ -2,7 +2,6 @@
 
 #include "..//Component/ComponentManager.h"
 
-
 class GameStateManager
 {
 public:
@@ -32,6 +31,10 @@ private:
 	ComponentManager _mgrCom;
 	//ComponentManager::ComponentSetManager _csmgr0;
 
+	// scene
+	int _scnInd; // index of the current scene
+	int _scnIndNext; // index of the next scene
+
 public:
 	GameStateManager();
 
@@ -49,4 +52,10 @@ public:
 
 	void Unload();
 
+	int getScn();
+
+	void setScn(int scn);
+
 };
+
+extern GameStateManager G_GSM;

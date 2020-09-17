@@ -5,10 +5,14 @@
 #include "..//Component/Components.h"
 #include "Systems.h"
 
+GameStateManager G_GSM;
+
 GameStateManager::GameStateManager() :
 	_gamestate(GAMESTATE_UPDATE),
 	_gamestateNext(GAMESTATE_UPDATE),
-	_mgrCom()
+	_mgrCom(),
+	_scnInd(0),
+	_scnIndNext(0)
 {
 }
 
@@ -28,20 +32,20 @@ void GameStateManager::OnFirstStart()
 	comsetFac.StartBuild();
 
 	// adds a component using component size // adding ComponentTransform
-	G_MAINCOMPSET_CCIDS.containerTransform = comsetFac.AddComponent(sizeof(ComponentTransform)); // save the container id
+	G_MAINCOMPSET.containerTransform = comsetFac.AddComponent(sizeof(ComponentTransform)); // save the container id
 
 	// adds a component using settings // ComponentRender
 	ComponentManager::ContainerSettings set;
 	set.elementSize = sizeof(ComponentRender);
-	G_MAINCOMPSET_CCIDS.containerRender = comsetFac.AddComponent(set); // save the container id
+	G_MAINCOMPSET.containerRender = comsetFac.AddComponent(set); // save the container id
 
 	// adding other components
-	G_MAINCOMPSET_CCIDS.containerPhysics = comsetFac.AddComponent(sizeof(ComponentText));
-	G_MAINCOMPSET_CCIDS.containerRigidBody = comsetFac.AddComponent(sizeof(ComponentRigidBody));
-	G_MAINCOMPSET_CCIDS.containerInput = comsetFac.AddComponent(sizeof(ComponentInput));
-	G_MAINCOMPSET_CCIDS.containerLogic = comsetFac.AddComponent(sizeof(ComponentLogic));
-	G_MAINCOMPSET_CCIDS.containerCamera = comsetFac.AddComponent(sizeof(ComponentCamera));
-	G_MAINCOMPSET_CCIDS.containerLight = comsetFac.AddComponent(sizeof(ComponentLight));
+	G_MAINCOMPSET.containerPhysics = comsetFac.AddComponent(sizeof(ComponentText));
+	G_MAINCOMPSET.containerRigidBody = comsetFac.AddComponent(sizeof(ComponentRigidBody));
+	G_MAINCOMPSET.containerInput = comsetFac.AddComponent(sizeof(ComponentInput));
+	G_MAINCOMPSET.containerLogic = comsetFac.AddComponent(sizeof(ComponentLogic));
+	G_MAINCOMPSET.containerCamera = comsetFac.AddComponent(sizeof(ComponentCamera));
+	G_MAINCOMPSET.containerLight = comsetFac.AddComponent(sizeof(ComponentLight));
 
 	// builds the component set
 	ComponentManager::ComponentSet* mainComponentSet = comsetFac.Build();
@@ -50,7 +54,7 @@ void GameStateManager::OnFirstStart()
 	_mgrCom.AddComponentSet(mainComponentSet);
 
 	// init component set manager
-	G_MAINCOMPSET_CCIDS.csmgr.compSet = mainComponentSet; //
+	G_MAINCOMPSET.csmgr.compSet = mainComponentSet; //
 
 	//// SET UP COMPONENT
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,6 +67,7 @@ void GameStateManager::OnFirstStart()
 	G_AUDIO.OnFirstStart();
 	G_LOGIC.OnFirstStart();
 	G_PHYSICS.OnFirstStart();
+	G_IO.OnFirstStart();
 
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,25 +79,7 @@ void GameStateManager::OnFirstStart()
 
 void GameStateManager::Load()
 {
-	// build objects from json !!! 
-	// - shift this to a seperate class/function !!!
 
-	void* newComponent = nullptr;
-
-	// WHILE OBJECTS
-	int newObjId = G_MAINCOMPSET_CCIDS.csmgr.BuildObject();
-
-	// WHILE COMPONENTS
-	ComponentRender newCompComponentRender
-	{
-		0,
-		"Hello World",
-		{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f}
-	};
-	newComponent = &newCompComponentRender;
-	G_MAINCOMPSET_CCIDS.csmgr.AttachComponent(G_MAINCOMPSET_CCIDS.containerRender, newObjId, newComponent);
-	// WHILE COMPONENTS END
-	// WHILE OBJECTS END
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//// Systems
@@ -101,6 +88,7 @@ void GameStateManager::Load()
 	G_AUDIO.Load();
 	G_LOGIC.Load();
 	G_PHYSICS.Load();
+	G_IO.Load();
 
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,6 +106,7 @@ void GameStateManager::Init()
 	G_AUDIO.Init();
 	G_LOGIC.Init();
 	G_PHYSICS.Init();
+	G_IO.Init();
 
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,6 +123,7 @@ int GameStateManager::Update(float dt, int step)
 	switch (_gamestate)
 	{
 	case GAMESTATE_LOAD:
+		_scnInd = _scnIndNext;
 		Load();
 		break;
 	case GAMESTATE_INIT:
@@ -152,6 +142,7 @@ int GameStateManager::Update(float dt, int step)
 	G_AUDIO.Update(dt);
 	G_LOGIC.Update(dt);
 	G_PHYSICS.Update(dt);
+	G_IO.Update(dt);
 
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,6 +160,7 @@ void GameStateManager::Free()
 	G_AUDIO.Free();
 	G_LOGIC.Free();
 	G_PHYSICS.Free();
+	G_IO.Free();
 
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,6 +178,7 @@ void GameStateManager::Unload()
 	G_AUDIO.Unload();
 	G_LOGIC.Unload();
 	G_PHYSICS.Unload();
+	G_IO.Unload();
 
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,4 +187,14 @@ void GameStateManager::Unload()
 	_mgrCom.Free();
 
 	//_mgrCom.Unload(); // !?
+}
+
+int GameStateManager::getScn()
+{
+	return _scnInd;
+}
+
+void GameStateManager::setScn(int scn)
+{
+	_scnIndNext = scn;
 }

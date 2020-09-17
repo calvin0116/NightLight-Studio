@@ -17,22 +17,22 @@ void SystemGraphics::Init()
 void SystemGraphics::Update(float dt)
 {
 	std::cout << "SystemGraphics::Update:" << std::endl;
-	auto itr = G_MAINCOMPSET_CCIDS.csmgr.begin(G_MAINCOMPSET_CCIDS.containerRender);
-	auto itrEnd = G_MAINCOMPSET_CCIDS.csmgr.end(G_MAINCOMPSET_CCIDS.containerRender);
+	auto itr = G_MAINCOMPSET.csmgr.begin(G_MAINCOMPSET.containerRender);
+	auto itrEnd = G_MAINCOMPSET.csmgr.end(G_MAINCOMPSET.containerRender);
 	while (itr != itrEnd)
 	{
 		// get the obj id
-		std::cout << "Object:" << G_MAINCOMPSET_CCIDS.csmgr.getObjId(itr) << std::endl;
+		std::cout << "Object:" << G_MAINCOMPSET.csmgr.getObjId(itr) << std::endl;
 
 		// get the transform component from the iterator
 		ComponentRender* compR = reinterpret_cast<ComponentRender*>(*itr);
 		std::cout << "Render:" << compR->id << " " << compR->c << std::endl;
 
 		// get the entity from the iterator
-		ComponentManager::ComponentSetManager::Entity obj = G_MAINCOMPSET_CCIDS.csmgr.getEntity(itr);
+		ComponentManager::ComponentSetManager::Entity obj = G_MAINCOMPSET.csmgr.getEntity(itr);
 
 		// get transform component
-		ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(obj.getComponent(G_MAINCOMPSET_CCIDS.containerTransform));
+		ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(obj.getComponent(G_MAINCOMPSET.containerTransform));
 		if (compT != nullptr) // nullptr -> uninitialised or deleted
 			std::cout << "Transform:" << compT->_position._x << std::endl;
 

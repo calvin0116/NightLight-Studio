@@ -15,7 +15,7 @@ constexpr auto FPS_60 = 16.0f; // in ms
 
 void FluffyUnicornEngine::Init()
 {
-	_gsm.OnFirstStart();
+	G_GSM.OnFirstStart();
 	_engineState = ENGINE_UPDATE;
 }
 
@@ -49,7 +49,7 @@ void FluffyUnicornEngine::Run()
 		}
 
 		// update 
-		if (_gsm.Update(fixed_dt * DT_SCALE, currentNumberOfSteps))
+		if (G_GSM.Update(fixed_dt * DT_SCALE, currentNumberOfSteps))
 		{
 			// returns 1
 			_engineState = ENGINE_QUIT;

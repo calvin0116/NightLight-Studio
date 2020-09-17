@@ -1,6 +1,7 @@
 #include "Components.h"
 
-COMPONENT_CONTAINERS G_MAINCOMPSET_CCIDS;
+COMPONENTS G_MAINCOMPSET;
+COMPONENTS G_UICOMPSET;
 
 
 ComponentTransform::ComponentTransform() : _position{ 0.0f, 0.0f, 0.0f },

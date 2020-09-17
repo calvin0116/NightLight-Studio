@@ -2,7 +2,7 @@
 #include "..\Vector.h"
 #include "ComponentManager.h"
 
-struct COMPONENT_CONTAINERS
+struct COMPONENTS
 {
 	ComponentManager::ComponentSetManager csmgr;
 	ComponentManager::ContainerID containerTransform;
@@ -15,7 +15,8 @@ struct COMPONENT_CONTAINERS
 	ComponentManager::ContainerID containerLight;
 };
 
-extern COMPONENT_CONTAINERS G_MAINCOMPSET_CCIDS;
+extern COMPONENTS G_MAINCOMPSET;
+extern COMPONENTS G_UICOMPSET;
 
 
 struct ComponentTransform
