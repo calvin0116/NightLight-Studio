@@ -60,15 +60,15 @@ public:
 			friend ComponentSetManager; //
 
 			ContainerID containerId; // id of the container iterating thru
-			//ComponentSet* compSet; // the component set this iterator belongs to
+			ComponentSetManager* compSetMgr; // the component set mgr this belongs to
 
 			ComponentMemoryManager::MemConIterator memItr;
 
 		public:
 			// ctor
 			Iterator() :
-				containerId(-1)//,
-				//compSet(nullptr)
+				containerId(-1),
+				compSetMgr(nullptr)
 			{
 			}
 
@@ -92,6 +92,8 @@ public:
 		private:
 			//
 		};
+
+		void* getComponent(ComponentManager::ContainerID compId, Iterator itr);
 
 		class Entity
 		{

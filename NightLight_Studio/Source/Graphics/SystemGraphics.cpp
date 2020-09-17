@@ -31,13 +31,28 @@ void SystemGraphics::Update(float dt)
 		ComponentRender* compR = reinterpret_cast<ComponentRender*>(*itr);
 		std::cout << "Render:" << compR->id << " " << compR->c << std::endl;
 
-		// get the entity from the iterator
-		ComponentManager::ComponentSetManager::Entity obj = G_MAINCOMPSET.csmgr.getEntity(itr);
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//// Get entity first then get component
+		//// The reason why get entity first:
+		//// If in the future we add parent-child to entities, 
+		//// I intend to abstract obj->getChild() (returns child entity) or sth similar
 
-		// get transform component
-		ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(obj.getComponent(G_MAINCOMPSET.containerTransform));
+		//// get the entity from the iterator
+		//ComponentManager::ComponentSetManager::Entity obj = G_MAINCOMPSET.csmgr.getEntity(itr);
+
+		//// get transform component
+		//ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(obj.getComponent(G_MAINCOMPSET.containerTransform));
+		//if (compT != nullptr) // nullptr -> uninitialised or deleted
+		//	std::cout << "Transform:" << compT->_position._x << std::endl;
+
+		//// 
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		// another way to get component
+		ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(G_MAINCOMPSET.csmgr.getComponent(G_MAINCOMPSET.containerTransform, itr));
 		if (compT != nullptr) // nullptr -> uninitialised or deleted
 			std::cout << "Transform:" << compT->_position._x << std::endl;
+
 
 		_coreGraphics.AddToRenderSet(compR); // eg. add to render set
 		// system should only manage the components

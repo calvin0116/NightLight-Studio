@@ -219,7 +219,7 @@ ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetMa
 {
 	// comp itr
 	ComponentSetManager::Iterator newItr;
-	//newItr.compSet = this;
+	newItr.compSetMgr = this;
 	newItr.containerId = comT;
 	newItr.memItr = compSet->cmm.begin(comT);
 
@@ -231,12 +231,21 @@ ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetMa
 {
 	// comp itr
 	ComponentSetManager::Iterator newItr;
-	//newItr.compSet = this;
+	newItr.compSetMgr = this;
 	newItr.containerId = comT;
 	newItr.memItr = compSet->cmm.end(comT);
 
 
 	return newItr;
+}
+
+void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::ContainerID compId, Iterator itr)
+{
+	if (itr.compSetMgr != this) // check if its the same mgr
+		throw;
+
+	ComponentManager::ComponentSetManager::Entity obj = getEntity(itr);
+	return obj.getComponent(compId);
 }
 
 int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
