@@ -56,6 +56,21 @@ void GameStateManager::OnFirstStart()
 	// init component set manager
 	G_MAINCOMPSET.csmgr.compSet = mainComponentSet; //
 
+
+	// Building another component set
+	comsetFac.StartBuild();
+	G_UICOMPSET.containerTransform = comsetFac.AddComponent(sizeof(ComponentTransform)); // save the container id
+	G_UICOMPSET.containerRender = comsetFac.AddComponent(sizeof(ComponentRender));
+	G_UICOMPSET.containerPhysics = comsetFac.AddComponent(sizeof(ComponentText));
+	G_UICOMPSET.containerRigidBody = comsetFac.AddComponent(sizeof(ComponentRigidBody));
+	G_UICOMPSET.containerInput = comsetFac.AddComponent(sizeof(ComponentInput));
+	G_UICOMPSET.containerLogic = comsetFac.AddComponent(sizeof(ComponentLogic));
+	G_UICOMPSET.containerCamera = comsetFac.AddComponent(sizeof(ComponentCamera));
+	G_UICOMPSET.containerLight = comsetFac.AddComponent(sizeof(ComponentLight));
+	G_UICOMPSET.csmgr = comsetFac.Build();
+	_mgrCom.AddComponentSet(G_UICOMPSET.csmgr.compSet);
+
+
 	//// SET UP COMPONENT
 	///////////////////////////////////////////////////////////////////////////////////////////////
 

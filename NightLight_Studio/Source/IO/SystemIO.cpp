@@ -32,6 +32,23 @@ void SystemIO::Load()
 	G_MAINCOMPSET.csmgr.AttachComponent(G_MAINCOMPSET.containerRender, newObjId, newComponent);
 	// WHILE COMPONENTS END
 	// WHILE OBJECTS END
+
+	// add 2nd obj 
+	newObjId = G_MAINCOMPSET.csmgr.BuildObject();
+
+	ComponentTransform compT;
+	compT._position._x = 1.11f;
+	G_MAINCOMPSET.csmgr.AttachComponent(G_MAINCOMPSET.containerTransform, newObjId, &compT);
+
+	newCompComponentRender.id = 1;
+	G_MAINCOMPSET.csmgr.AttachComponent(G_MAINCOMPSET.containerRender, newObjId, newComponent);
+
+
+	// add obj to another component set
+	newCompComponentRender.id = 999;
+	newObjId = G_UICOMPSET.csmgr.BuildObject();
+	G_UICOMPSET.csmgr.AttachComponent(G_UICOMPSET.containerRender, newObjId, newComponent);
+
 }
 
 void SystemIO::Init()
