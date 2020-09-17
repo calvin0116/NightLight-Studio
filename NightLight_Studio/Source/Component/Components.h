@@ -38,7 +38,7 @@ struct ComponentRender
 	float f[16];
 };
 
-struct ComponentText
+struct ComponentPhysics
 {
 	int id;
 	char c;

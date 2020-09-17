@@ -40,7 +40,7 @@ void GameStateManager::OnFirstStart()
 	G_MAINCOMPSET.containerRender = comsetFac.AddComponent(set); // save the container id
 
 	// adding other components
-	G_MAINCOMPSET.containerPhysics = comsetFac.AddComponent(sizeof(ComponentText));
+	G_MAINCOMPSET.containerPhysics = comsetFac.AddComponent(sizeof(ComponentPhysics));
 	G_MAINCOMPSET.containerRigidBody = comsetFac.AddComponent(sizeof(ComponentRigidBody));
 	G_MAINCOMPSET.containerInput = comsetFac.AddComponent(sizeof(ComponentInput));
 	G_MAINCOMPSET.containerLogic = comsetFac.AddComponent(sizeof(ComponentLogic));
@@ -61,7 +61,7 @@ void GameStateManager::OnFirstStart()
 	comsetFac.StartBuild();
 	G_UICOMPSET.containerTransform = comsetFac.AddComponent(sizeof(ComponentTransform)); // save the container id
 	G_UICOMPSET.containerRender = comsetFac.AddComponent(sizeof(ComponentRender));
-	G_UICOMPSET.containerPhysics = comsetFac.AddComponent(sizeof(ComponentText));
+	G_UICOMPSET.containerPhysics = comsetFac.AddComponent(sizeof(ComponentPhysics));
 	G_UICOMPSET.containerRigidBody = comsetFac.AddComponent(sizeof(ComponentRigidBody));
 	G_UICOMPSET.containerInput = comsetFac.AddComponent(sizeof(ComponentInput));
 	G_UICOMPSET.containerLogic = comsetFac.AddComponent(sizeof(ComponentLogic));
