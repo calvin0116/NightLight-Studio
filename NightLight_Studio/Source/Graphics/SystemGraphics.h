@@ -1,7 +1,10 @@
 #pragma once
 
+#include "CoreGraphics.h"
+
 class SystemGraphics
 {
+	CoreGraphics _coreGraphics;
 public:
 	void OnFirstStart();
 

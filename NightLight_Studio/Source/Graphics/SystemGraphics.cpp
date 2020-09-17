@@ -2,6 +2,7 @@
 #include <iostream>
 #include "..\\Component\Components.h"
 
+
 void SystemGraphics::OnFirstStart()
 {
 }
@@ -38,12 +39,18 @@ void SystemGraphics::Update(float dt)
 		if (compT != nullptr) // nullptr -> uninitialised or deleted
 			std::cout << "Transform:" << compT->_position._x << std::endl;
 
+		_coreGraphics.AddToRenderSet(compR); // eg. add to render set
+		// system should only manage the components
+		// CoreGraphics should encapsulate all graphics subsystems aka provide an api for SystemGraphics to call
+
 		std::cout << std::endl;
 
 		++itr;
 	}
 
 
+	// eg. UI can be put into a seperate component set, G_UICOMPSET
+	// allows easier management of entities
 	itr = G_UICOMPSET.csmgr.begin(G_UICOMPSET.containerRender);
 	itrEnd = G_UICOMPSET.csmgr.end(G_UICOMPSET.containerRender);
 	while (itr != itrEnd)
@@ -67,6 +74,9 @@ void SystemGraphics::Update(float dt)
 
 		++itr;
 	}
+
+	_coreGraphics.Draw(); // eg. call draw fn
+
 	std::cout << "SystemGraphics::Update: END" << std::endl;
 }
 
