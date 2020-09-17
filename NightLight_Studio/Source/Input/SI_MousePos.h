@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include <string>
 
-namespace SystemInput
+namespace SystemInput_ns
 {
 	struct InputVec2
 	{
@@ -59,6 +59,6 @@ namespace SystemInput
 	};
 }
 
-extern SystemInput::SystemMousePosition GLOBAL_SYSTEM_MOUSEPOS;
+extern SystemInput_ns::SystemMousePosition GLOBAL_SYSTEM_MOUSEPOS;
 
 #endif

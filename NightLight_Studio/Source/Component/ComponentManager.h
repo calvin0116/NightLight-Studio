@@ -93,7 +93,7 @@ public:
 			//
 		};
 
-		class Object
+		class Entity
 		{
 			friend ComponentSetManager;
 
@@ -101,7 +101,7 @@ public:
 			int objId;
 
 		public:
-			Object(ComponentSetManager* csm, int oid);
+			Entity(ComponentSetManager* csm, int oid);
 
 			void* getComponent(int compId);
 		};
@@ -110,7 +110,7 @@ public:
 		Iterator end(ContainerID comT);
 
 		int getObjId(Iterator itr);
-		Object getObject(Iterator itr);
+		Entity getEntity(Iterator itr);
 
 	private:
 

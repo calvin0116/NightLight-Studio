@@ -7,7 +7,7 @@
 #include <string>
 #include <array>
 
-namespace SystemInput
+namespace SystemInput_ns
 {
 	/*=========== Key Codes for all buttons. Still can use regular Virtual Codes, Just not registered here. =============*/
 	enum VirtualKey : int
@@ -284,6 +284,6 @@ namespace SystemInput
 	};
 }
 
-extern SystemInput::SystemKeyPress GLOBAL_SYSTEM_KEYPRESS;
+extern SystemInput_ns::SystemKeyPress GLOBAL_SYSTEM_KEYPRESS;
 
 #endif

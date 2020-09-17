@@ -1,19 +1,22 @@
 #pragma once
 #include "..\Vector.h"
+#include "ComponentManager.h"
 
 struct COMPONENT_CONTAINERS
 {
-	int containerTransform;
-	int containerRender;
-	int containerPhysics;
-	int containerRigidBody;
-	int containerInput;
-	int containerLogic;
-	int containerCamera;
-	int containerLight;
+	ComponentManager::ComponentSetManager csmgr;
+	ComponentManager::ContainerID containerTransform;
+	ComponentManager::ContainerID containerRender;
+	ComponentManager::ContainerID containerPhysics;
+	ComponentManager::ContainerID containerRigidBody;
+	ComponentManager::ContainerID containerInput;
+	ComponentManager::ContainerID containerLogic;
+	ComponentManager::ContainerID containerCamera;
+	ComponentManager::ContainerID containerLight;
 };
 
-static COMPONENT_CONTAINERS MAINCOMPSET_CCIDS;
+extern COMPONENT_CONTAINERS G_MAINCOMPSET_CCIDS;
+
 
 struct ComponentTransform
 {
@@ -30,7 +33,7 @@ struct ComponentTransform
 struct ComponentRender
 {
 	int id;
-	char c;
+	char c[128];
 	float f[16];
 };
 

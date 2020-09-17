@@ -287,11 +287,11 @@ int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 //// Object
 //////////////////////////
 
-ComponentManager::ComponentSetManager::Object::Object(ComponentSetManager* csm, int oid) : compSetMgr(csm), objId(oid)
+ComponentManager::ComponentSetManager::Entity::Entity(ComponentSetManager* csm, int oid) : compSetMgr(csm), objId(oid)
 {
 }
 
-void* ComponentManager::ComponentSetManager::Object::getComponent(int compId)
+void* ComponentManager::ComponentSetManager::Entity::getComponent(int compId)
 {
 	return compSetMgr->getComponent(compId, objId);
 }
@@ -299,9 +299,9 @@ void* ComponentManager::ComponentSetManager::Object::getComponent(int compId)
 
 //////////////////////////
 
-ComponentManager::ComponentSetManager::Object ComponentManager::ComponentSetManager::getObject(Iterator itr)
+ComponentManager::ComponentSetManager::Entity ComponentManager::ComponentSetManager::getEntity(Iterator itr)
 {
-	Object obj(this, this->getObjId(itr));
+	Entity obj(this, this->getObjId(itr));
 	//obj.compSetMgr = this;
 	//obj.objId = this->getObjId(itr);
 
@@ -840,7 +840,7 @@ void ComponentManager::test2()
 		//	std::cout << "T1 : - ";
 		//}
 
-		ComponentManager::ComponentSetManager::Object obj = compSetMgr.getObject(itr);
+		ComponentManager::ComponentSetManager::Entity obj = compSetMgr.getEntity(itr);
 
 		ComponentT1* comTest1 = reinterpret_cast<ComponentT1*>(obj.getComponent(containerT1));
 		if (comTest1 != nullptr)

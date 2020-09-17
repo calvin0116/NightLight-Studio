@@ -10,7 +10,7 @@
 #include <set>
 #include <functional>
 
-namespace SystemInput
+namespace SystemInput_ns
 {
 	/*=========== Key Codes for Controller Buttons. Note that this is XINPUT (XBOX CONTROLLER) =============*/
 	/*=========== Dualshock/PS Buttons included are default locations in comparison to XBOX =============*/
@@ -191,6 +191,6 @@ namespace SystemInput
 }
 
 // FIRST DETECTED CONTROLLER
-extern SystemInput::SystemController GLOBAL_SYSTEM_CONTROLLER;
+extern SystemInput_ns::SystemController GLOBAL_SYSTEM_CONTROLLER;
 
 #endif

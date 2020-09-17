@@ -1,8 +1,8 @@
 #include "SI_MousePos.h"
 
-SystemInput::SystemMousePosition GLOBAL_SYSTEM_MOUSEPOS;
+SystemInput_ns::SystemMousePosition GLOBAL_SYSTEM_MOUSEPOS;
 
-namespace SystemInput
+namespace SystemInput_ns
 {
 	//********************************************** SYSTEM CURSOR POSITION **********************************************//
 	InputVec2 SystemMousePosition::ConvertToVec2(POINT pos)

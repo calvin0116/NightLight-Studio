@@ -189,7 +189,7 @@ int ComponentTest()
 			std::cout << "Transform:" << compT->objId0 << " " << compT->objId1 << std::endl;
 
 			// get the object from the iterator
-			ComponentManager::ComponentSetManager::Object obj = compSetMgr.getObject(itr);
+			ComponentManager::ComponentSetManager::Entity obj = compSetMgr.getEntity(itr);
 
 			// print render component
 			ComponentRender* compR = reinterpret_cast<ComponentRender*>(obj.getComponent(containerRender));

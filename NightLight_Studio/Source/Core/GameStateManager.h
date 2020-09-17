@@ -30,7 +30,7 @@ private:
 	GAMESTATE _gamestateNext;
 
 	ComponentManager _mgrCom;
-	ComponentManager::ComponentSetManager _csmgr0;
+	//ComponentManager::ComponentSetManager _csmgr0;
 
 public:
 	GameStateManager();
