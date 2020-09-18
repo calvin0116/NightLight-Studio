@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameStateManager.h"
+#include "SystemManager.h"
 
 
 //#ifdef ENGINE_EXPORTS

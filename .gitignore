@@ -370,3 +370,4 @@ healthchecksdb
 *.exe
 *.out
 *.app
+/Bin-Int
