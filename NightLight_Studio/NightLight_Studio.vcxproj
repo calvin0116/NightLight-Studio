@@ -26,6 +26,7 @@
     <ClCompile Include="Source\Core\Engine.cpp" />
     <ClCompile Include="Source\Core\GameStateManager.cpp" />
     <ClCompile Include="Source\Core\Systems.cpp" />
+    <ClCompile Include="Source\Editor\SystemEditor.cpp" />
     <ClCompile Include="Source\Graphics\CoreGraphics.cpp" />
     <ClCompile Include="Source\Graphics\SystemGraphics.cpp" />
     <ClCompile Include="Source\Input\SystemInput.cpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="Source\Core\Engine.h" />
     <ClInclude Include="Source\Core\GameStateManager.h" />
     <ClInclude Include="Source\Core\Systems.h" />
+    <ClInclude Include="Source\Editor\SystemEditor.h" />
     <ClInclude Include="Source\Graphics\CoreGraphics.h" />
     <ClInclude Include="Source\Graphics\SystemGraphics.h" />
     <ClInclude Include="Source\Input\SI_Controller.h" />

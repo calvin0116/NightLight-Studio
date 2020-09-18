@@ -46,6 +46,9 @@
     <Filter Include="Source Files\IO">
       <UniqueIdentifier>{1b62a13f-057d-438e-a19c-7dad32eb425b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Editor">
+      <UniqueIdentifier>{0a6c6069-817a-4ac9-865c-a0945debb3f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -113,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="Source\IO\SystemIO.cpp">
       <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\SystemEditor.cpp">
+      <Filter>Source Files\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="Source\IO\SystemIO.h">
       <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\SystemEditor.h">
+      <Filter>Source Files\Editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
