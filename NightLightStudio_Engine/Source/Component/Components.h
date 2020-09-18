@@ -1,5 +1,5 @@
 #pragma once
-#include "..\Vector.h"
+#include "..\\Math\Vector.h"
 #include "ComponentManager.h"
 
 struct COMPONENTS
@@ -17,6 +17,16 @@ struct COMPONENTS
 
 extern COMPONENTS G_MAINCOMPSET;
 extern COMPONENTS G_UICOMPSET;
+
+
+struct IComponent
+{
+
+	void Read();
+	void Write();
+
+
+};
 
 
 struct ComponentTransform

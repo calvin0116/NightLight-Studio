@@ -5,9 +5,9 @@
 #include "..//Component/Components.h"
 #include "Systems.h"
 
-GameStateManager G_GSM;
+SystemManager G_GSM;
 
-GameStateManager::GameStateManager() :
+SystemManager::SystemManager() :
 	_gamestate(GAMESTATE_UPDATE),
 	_gamestateNext(GAMESTATE_UPDATE),
 	_mgrCom(),
@@ -16,11 +16,11 @@ GameStateManager::GameStateManager() :
 {
 }
 
-GameStateManager::~GameStateManager()
+SystemManager::~SystemManager()
 {
 }
 
-void GameStateManager::OnFirstStart()
+void SystemManager::OnFirstStart()
 {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP COMPONENT - shift this to a seperate class/function !!!
@@ -94,7 +94,7 @@ void GameStateManager::OnFirstStart()
 	_gamestateNext = GAMESTATE_LOAD;
 }
 
-void GameStateManager::Load()
+void SystemManager::Load()
 {
 
 
@@ -116,7 +116,7 @@ void GameStateManager::Load()
 	_gamestateNext = GAMESTATE_INIT;
 }
 
-void GameStateManager::Init()
+void SystemManager::Init()
 {
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//// Systems
@@ -136,7 +136,7 @@ void GameStateManager::Init()
 	_gamestateNext = GAMESTATE_UPDATE;
 }
 
-int GameStateManager::Update(float dt, int step)
+int SystemManager::Update(float dt, int step)
 {
 	// set gamestate
 	_gamestate = _gamestateNext;
@@ -175,7 +175,7 @@ int GameStateManager::Update(float dt, int step)
 	return 0;
 }
 
-void GameStateManager::Free()
+void SystemManager::Free()
 {
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//// Systems
@@ -196,7 +196,7 @@ void GameStateManager::Free()
 	_mgrCom.Free();
 }
 
-void GameStateManager::Unload()
+void SystemManager::Unload()
 {
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//// Systems
@@ -219,12 +219,12 @@ void GameStateManager::Unload()
 	//_mgrCom.Unload(); // !?
 }
 
-int GameStateManager::getScn()
+int SystemManager::getScn()
 {
 	return _scnInd;
 }
 
-void GameStateManager::setScn(int scn)
+void SystemManager::setScn(int scn)
 {
 	_scnIndNext = scn;
 }

@@ -2,7 +2,7 @@
 
 #include "..//Component/ComponentManager.h"
 
-class GameStateManager
+class SystemManager
 {
 public:
 
@@ -36,9 +36,9 @@ private:
 	int _scnIndNext; // index of the next scene
 
 public:
-	GameStateManager();
+	SystemManager();
 
-	~GameStateManager();
+	~SystemManager();
 
 	void OnFirstStart();
 
@@ -58,4 +58,4 @@ public:
 
 };
 
-extern GameStateManager G_GSM;
+extern SystemManager G_GSM;
