@@ -12,8 +12,9 @@ Brief Description :
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "JsonWrapper.h"
+#include "JsonHeader.h"
 
+//Data type of object to distigush it
 enum D_TYPE
 {
 	D_STRING = 0,
@@ -49,8 +50,9 @@ public:
 	void Load();
     void Save();
 
+	//To look at the data in raw form
 	void PrintDataList();
-
+	//Just to get back file name if needed
 	std::string GetName();
 
 	//Add data into the initial json list
