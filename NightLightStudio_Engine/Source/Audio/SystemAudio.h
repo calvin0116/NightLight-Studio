@@ -4,7 +4,7 @@
 #include <string>
 
 #include "..\..\dep\FMOD\inc\fmod.hpp"
-#include "..\Vector.h"
+#include "..\Math\Vector.h"
 //#include "..\..\dep\FMOD\inc\fmod_errors.h"
 
 class SystemAudio
