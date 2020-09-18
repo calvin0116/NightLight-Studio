@@ -72,9 +72,6 @@
     <ClInclude Include="Source\Core\Engine.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\GameStateManager.h">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Systems.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
@@ -129,6 +126,9 @@
     <ClInclude Include="Source\Math\Vector.h">
       <Filter>Source Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\SystemManager.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -150,9 +150,6 @@
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Engine.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\GameStateManager.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Systems.cpp">
@@ -202,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="Source\Math\Vector.cpp">
       <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\SystemManager.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

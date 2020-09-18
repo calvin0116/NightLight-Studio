@@ -88,6 +88,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -96,7 +97,6 @@
       <PreprocessorDefinitions>NDEBUG;NIGHTLIGHTSTUDIOENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -124,13 +124,13 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;NIGHTLIGHTSTUDIOENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -167,7 +167,7 @@
     <ClInclude Include="Source\Component\Components.h" />
     <ClInclude Include="Source\Component\ComponentTest.h" />
     <ClInclude Include="Source\Core\Engine.h" />
-    <ClInclude Include="Source\Core\GameStateManager.h" />
+    <ClInclude Include="Source\Core\SystemManager.h" />
     <ClInclude Include="Source\Core\ISystem.h" />
     <ClInclude Include="Source\Core\Systems.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
@@ -200,7 +200,7 @@
     <ClCompile Include="Source\Component\ComponentMemoryManager.cpp" />
     <ClCompile Include="Source\Component\Components.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
-    <ClCompile Include="Source\Core\GameStateManager.cpp" />
+    <ClCompile Include="Source\Core\SystemManager.cpp" />
     <ClCompile Include="Source\Core\Systems.cpp" />
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
     <ClCompile Include="Source\Graphics\CoreGraphics.cpp" />
