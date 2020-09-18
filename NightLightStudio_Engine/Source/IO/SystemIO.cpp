@@ -1,7 +1,7 @@
 #include "SystemIO.h"
 
 #include "..\\Component\Components.h"
-#include "..\\Core\GameStateManager.h"
+#include "..\\Core\SystemManager.h"
 
 void SystemIO::OnFirstStart()
 {

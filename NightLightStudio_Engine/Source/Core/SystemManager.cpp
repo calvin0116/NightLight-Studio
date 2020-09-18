@@ -1,13 +1,13 @@
 
 
-#include "GameStateManager.h"
+#include "SystemManager.h"
 
 #include "..//Component/Components.h"
 #include "Systems.h"
 
-GameStateManager G_GSM;
+SystemManager G_GSM;
 
-GameStateManager::GameStateManager() :
+SystemManager::SystemManager() :
 	_gamestate(GAMESTATE_UPDATE),
 	_gamestateNext(GAMESTATE_UPDATE),
 	_mgrCom(),
@@ -16,11 +16,11 @@ GameStateManager::GameStateManager() :
 {
 }
 
-GameStateManager::~GameStateManager()
+SystemManager::~SystemManager()
 {
 }
 
-void GameStateManager::OnFirstStart()
+void SystemManager::OnFirstStart()
 {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP COMPONENT - shift this to a seperate class/function !!!
@@ -84,6 +84,8 @@ void GameStateManager::OnFirstStart()
 	G_PHYSICS.OnFirstStart();
 	G_IO.OnFirstStart();
 
+	G_EDITOR.OnFirstStart();
+
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -92,7 +94,7 @@ void GameStateManager::OnFirstStart()
 	_gamestateNext = GAMESTATE_LOAD;
 }
 
-void GameStateManager::Load()
+void SystemManager::Load()
 {
 
 
@@ -105,6 +107,8 @@ void GameStateManager::Load()
 	G_PHYSICS.Load();
 	G_IO.Load();
 
+	G_EDITOR.Load();
+
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -112,7 +116,7 @@ void GameStateManager::Load()
 	_gamestateNext = GAMESTATE_INIT;
 }
 
-void GameStateManager::Init()
+void SystemManager::Init()
 {
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//// Systems
@@ -123,6 +127,8 @@ void GameStateManager::Init()
 	G_PHYSICS.Init();
 	G_IO.Init();
 
+	G_EDITOR.Init();
+
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -130,7 +136,7 @@ void GameStateManager::Init()
 	_gamestateNext = GAMESTATE_UPDATE;
 }
 
-int GameStateManager::Update(float dt, int step)
+int SystemManager::Update(float dt, int step)
 {
 	// set gamestate
 	_gamestate = _gamestateNext;
@@ -159,6 +165,9 @@ int GameStateManager::Update(float dt, int step)
 	G_PHYSICS.Update(dt);
 	G_IO.Update(dt);
 
+
+	G_EDITOR.Update(dt);
+
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -166,7 +175,7 @@ int GameStateManager::Update(float dt, int step)
 	return 0;
 }
 
-void GameStateManager::Free()
+void SystemManager::Free()
 {
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//// Systems
@@ -177,6 +186,9 @@ void GameStateManager::Free()
 	G_PHYSICS.Free();
 	G_IO.Free();
 
+
+	G_EDITOR.Free();
+
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -184,7 +196,7 @@ void GameStateManager::Free()
 	_mgrCom.Free();
 }
 
-void GameStateManager::Unload()
+void SystemManager::Unload()
 {
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//// Systems
@@ -195,6 +207,9 @@ void GameStateManager::Unload()
 	G_PHYSICS.Unload();
 	G_IO.Unload();
 
+
+	G_EDITOR.Unload();
+
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -204,12 +219,12 @@ void GameStateManager::Unload()
 	//_mgrCom.Unload(); // !?
 }
 
-int GameStateManager::getScn()
+int SystemManager::getScn()
 {
 	return _scnInd;
 }
 
-void GameStateManager::setScn(int scn)
+void SystemManager::setScn(int scn)
 {
 	_scnIndNext = scn;
 }

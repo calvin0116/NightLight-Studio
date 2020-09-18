@@ -6,3 +6,5 @@ SystemAudio G_AUDIO;
 SystemLogic G_LOGIC;
 SystemPhysics G_PHYSICS;
 SystemIO G_IO;
+SystemEditor G_EDITOR;
+
