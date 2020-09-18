@@ -370,3 +370,8 @@ healthchecksdb
 *.exe
 *.out
 *.app
+
+# Custom
+*.tlog
+*.idb
+*.lastbuildstate
