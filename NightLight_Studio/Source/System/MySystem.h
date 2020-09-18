@@ -15,6 +15,4 @@ class MySystem : public ISystem
 private:
 	int id;
 	SYS_PIORIOTY piority;
-	
-
 };

@@ -1,12 +1,6 @@
 /***********************************************************************************
-Copyright © 2019 DigiPen (Singapore) Corporation, all rights reserved.
-
-Filename : RigidBody.h
-Author : Yap Junxian (100%)
-DP email : junxian.yap@digipen.edu
-Course : GAM200F19-A
 Brief Description :
-
+		Rigidbody class that contains mostly physics related values 
 ************************************************************************************/
 #ifndef  RIGID_BODY_H
 #define RIGID_BODY_H

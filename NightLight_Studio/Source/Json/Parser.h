@@ -4,6 +4,9 @@ Brief Description :
 				-Save and load from Json file
 				-Run time adding and changing of variables
 				-Accessing data in Json file
+			Work in progress
+				-Data check to see if it exist (only work for first layer currently)
+				-More improvement maybe needed
 **************************************************************************/
 #pragma once
 #ifndef PARSER_H
@@ -18,6 +21,7 @@ enum D_TYPE
 	D_FLOAT,
 	D_BOOL,
     D_ARRAY,
+	D_OBJECT,
 	D_INVALID
 };
 
@@ -36,7 +40,7 @@ private:
     //Determine type for json member
     D_TYPE DetermineType(Value::ConstMemberIterator itr);
 	//Recursive function for PrintDataList()
-    void PrintData(Value::ConstMemberIterator itr);
+	void PrintData(Value::ConstMemberIterator itr, Value& val);
 public:
     //Constructer with input of file name to parse from
 	Parser(std::string name_, std::string path_);

@@ -1,4 +1,9 @@
-  #pragma once
+/***************************************************************************
+Brief Description :
+		A Physic and pseudo force manager
+**************************************************************************/
+
+#pragma once
 #include "Header.h"
 #include "MySystem.h"
 #include "RigidBody.h"
@@ -48,7 +53,7 @@ public:
 
 		cout << "Physic Engine EarlyLoad has ended" << endl;
 	};
-
+	/*
 	void EarlyInit()
 	{
 		cout << "Physic Engine EarlyInit has started" << endl;
@@ -74,8 +79,14 @@ public:
 		rb_vec.clear();
 		cout << "Physic Engine Exit has ended" << endl;
 	};
+	*/
 
+	//Physic requires fixedupdate as fixed update will always be run no matter the framerate
+	void FixedUpdate()
+	{
+		
 
+	}
 
 	//============ Helper function===================//
 	//Easy access to add to list

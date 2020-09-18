@@ -13,6 +13,7 @@ private:
 	//For singleton to access constructor / destructor
 	friend Singleton<MyWindowManager>;
 
+	//Map of system according to their piority
 	std::map<SYS_PIORIOTY, MySystem*> Systems;
 	//std::vector< MySystem *
 public:
@@ -40,6 +41,7 @@ public:
 
 	void Exit() { for (auto my_sys : Systems) my_sys.second->Exit(); };
 	void Unload() { for (auto my_sys : Systems) my_sys.second->Unload(); };
+	void DestroyInstance() {}
 
 	//Helper function
 

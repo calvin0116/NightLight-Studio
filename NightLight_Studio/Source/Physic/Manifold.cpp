@@ -1,12 +1,6 @@
 /***********************************************************************************
-Copyright © 2019 DigiPen (Singapore) Corporation, all rights reserved.
-
-Filename : Manifold.cpp
-Author : Yap Junxian (100%)
-DP email : junxian.yap@digipen.edu
-Course : GAM200F19-A
-Brief Description :
-
+Breif Description
+	A class to store all the collision to resolve them all at once
 ************************************************************************************/
 #include "Manifold.h"
 #include "Header.h"
@@ -91,7 +85,7 @@ void CollisionResolver::SolveCollisions()
 			return largestA < largestB;
 		});
 	}
-
+	//Solve velocity before position
 	for (Manifold& manifold : Allmanifold)
 	{
 		SolveVelocity(manifold);

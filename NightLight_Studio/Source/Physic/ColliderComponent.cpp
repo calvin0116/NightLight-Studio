@@ -1,10 +1,4 @@
 /***************************************************************************
-Copyright © 2019 DigiPen (Singapore) Corporation, all rights reserved.
-
-Filename : ColliderComponent.cpp
-Author : Yap Junxian (100%)
-DP email : junxian.yap@digipen.edu
-Course : GAM200F19-A
 Brief Description :
 		A ColliderComponent for the entities
 **************************************************************************/

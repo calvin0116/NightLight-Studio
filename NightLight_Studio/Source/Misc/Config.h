@@ -45,13 +45,13 @@ public:
 	{
 		parser.Load();
 
-		Value& wind_val = parser["window"];
+		Value& wind_val = parser["config"]["window"];
 
 		config_d.height = wind_val["height"].GetInt();
 		config_d.width = wind_val["width"].GetInt();
 		config_d.toFullScreen = wind_val["fullscreen"].GetBool();
 
-		Value& config_val = parser["config"];
+		Value& config_val = parser["config"]["settings"];
 
 		config_d.startscene = config_val["startscene"].GetString();
 	};

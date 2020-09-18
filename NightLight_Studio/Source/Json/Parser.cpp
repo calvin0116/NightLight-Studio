@@ -35,6 +35,30 @@ void Parser::Load()
 	doc.Parse(data.c_str());
 	//Loop through the objects
 	PrintDataList();
+
+    in.close();
+    /*
+    filepath = path + "is_prefab.json";
+    in.open(filepath, std::ios::binary);
+
+    if (!in)
+    {
+        cout << "Error: Failed to open file in: " + filepath << endl;
+    }
+
+    std::noskipws(in);
+    // Read in content
+    std::istreambuf_iterator<char> head2(in);
+    std::istreambuf_iterator<char> tail2;
+    std::string data2(head2, tail2);
+
+    std::cout << data2 << std::endl;
+    //Interpret json formated string
+    doc.Parse(data2.c_str());
+    //Loop through the objects
+    PrintDataList();
+
+    in.close();*/
 }
 
 void Parser::PrintDataList() 
@@ -42,7 +66,7 @@ void Parser::PrintDataList()
 	cout << "Printing through doc:" << std::endl;
 	for (Value::ConstMemberIterator itr = doc.MemberBegin(); itr != doc.MemberEnd(); ++itr)
 	{
-        PrintData(itr);
+        PrintData(itr,(Value&)doc);
 	}
 }
 
@@ -105,7 +129,7 @@ D_TYPE Parser::DetermineType(Value::ConstMemberIterator itr)
 	return D_TYPE::D_INVALID;
 }
 
-void Parser::PrintData(Value::ConstMemberIterator itr)
+void Parser::PrintData(Value::ConstMemberIterator itr, Value& val)
 {
     D_TYPE data_type = DetermineType(itr);
 
@@ -131,9 +155,9 @@ void Parser::PrintData(Value::ConstMemberIterator itr)
         case D_TYPE::D_ARRAY:
         {
             std::cout << "{\n";
-            for (Value::ConstMemberIterator itr2 = doc[itr->name.GetString()].MemberBegin(); itr2 != doc[itr->name.GetString()].MemberEnd(); ++itr2)
+            for (Value::ConstMemberIterator itr2 = val[itr->name.GetString()].MemberBegin(); itr2 != val[itr->name.GetString()].MemberEnd(); ++itr2)
             {
-                PrintData(itr2);
+                PrintData(itr2, val[itr->name.GetString()]);
             }
             cout << "}" << endl;
             break;
