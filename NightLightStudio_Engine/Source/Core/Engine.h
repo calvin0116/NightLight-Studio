@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SystemManager.h"
+#include <windows.h>
 
 
 //#ifdef ENGINE_EXPORTS
@@ -29,6 +30,7 @@ class ENGINE_API FluffyUnicornEngine
 	};
 	ENGINESTATE _engineState;
 	float _prevdt;
+	HINSTANCE hinstance;
 public:
 	FluffyUnicornEngine() = default;
 	~FluffyUnicornEngine() = default;
