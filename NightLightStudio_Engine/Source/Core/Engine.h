@@ -35,6 +35,9 @@ public:
 
 	void Init();
 	void Run();
+	//**! Have and Exit or smth
+
+	
 };
 
 

@@ -4,6 +4,8 @@
 #include <vector>
 #include <map>
 
+//**! Comment more !**//
+
 class ComponentManager
 {
 public:
@@ -32,6 +34,7 @@ public:
 	};
 
 	// ComponentSetManager
+	// Manages Entity components
 	class ComponentSetManager // builds objects into component sets
 	{
 	public: // !
