@@ -71,5 +71,6 @@ void FluffyUnicornEngine::Run()
 	}
 	//**! Make this happen
 	// free all memory
-	//_gsm.Free();
+	//G_GSM.Free();
+	G_GSM.Unload();
 }
