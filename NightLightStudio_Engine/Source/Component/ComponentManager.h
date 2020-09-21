@@ -4,6 +4,8 @@
 #include <vector>
 #include <map>
 
+//**! Comment more !**//
+
 class ComponentManager
 {
 public:
@@ -13,16 +15,20 @@ public:
 
 	ComponentMemoryManager cmm;
 
-
 	class ComponentSet; // fwd decl
 
 	class ComponentSetFactory
 	{
 		ComponentSet* compSet;
 	public:
+		// Start building
 		void StartBuild();
+		// adds a container
 		ComponentManager::ContainerID AddComponent(ComponentMemoryManager::ComponentTypeSettings set);
+		// adds a container using component size
 		ComponentManager::ContainerID AddComponent(size_t size);
+		// build the component set
+		// returns ptr to the component set
 		ComponentManager::ComponentSet* Build();
 		ComponentSetFactory() :
 			compSet(nullptr)
@@ -32,6 +38,9 @@ public:
 	};
 
 	// ComponentSetManager
+	// Manages Entity components
+	// probably should be renamed Entities Manager !!!
+
 	class ComponentSetManager // builds objects into component sets
 	{
 	public: // !
@@ -43,18 +52,25 @@ public:
 		{
 		}
 
-		int BuildObject(); // returns obj id
+		// build a new entity
+		// returns entity id
+		int BuildObject(); 
 
-		void* AttachComponent(ComponentManager::ContainerID compId, int objId, void* newComp);
+		// attach component to the entity
+		void* AttachComponent(ComponentManager::ContainerID compId, int entityId, void* newComp);
 
 		// void* AttachComponent(ManagerComponent::ContainerID compId, int objId); // allocate the component first
 
-		void RemoveComponent(ComponentManager::ContainerID compId, int objId);
+		// remove component from entity
+		void RemoveComponent(ComponentManager::ContainerID compId, int entityId);
 
+		// free entity
 		void UnBuildObject(int objId);
 
-		void* getComponent(ComponentManager::ContainerID compId, int objId);
+		// get component
+		void* getComponent(ComponentManager::ContainerID compId, int entityId);
 
+		// Iterator to iterate component container // !!! USE A TYPEDEF !!!
 		class Iterator
 		{
 			friend ComponentSetManager; //
@@ -93,24 +109,38 @@ public:
 			//
 		};
 
+		// get the component
 		void* getComponent(ComponentManager::ContainerID compId, Iterator itr);
 
+		// Templated getComponent
+		// eg. get ComponentTransform
+		// ComponentTransform* compT = G_MAINCOMPSET.csmgr.getComponent<ComponentTransform>(G_MAINCOMPSET.containerTransform, itr);
+		template<typename T>
+		T* getComponent(ComponentManager::ContainerID compId, Iterator itr)
+		{
+			return reinterpret_cast<T*>(getComponent(compId, itr));
+		}
+
+		// an abstraction of the entity
 		class Entity
 		{
 			friend ComponentSetManager;
 
 			ComponentSetManager* compSetMgr; // component set obj belongs to
-			int objId;
+			int objId; // Entity Id
 
 		public:
+			// ctor
 			Entity(ComponentSetManager* csm, int oid);
-
+			// get component of the entity
 			void* getComponent(int compId);
 		};
 
+		// begin and end iterators
 		Iterator begin(ContainerID comT);
 		Iterator end(ContainerID comT);
 
+		// Get Entity and Entity Id
 		int getObjId(Iterator itr);
 		Entity getEntity(Iterator itr);
 

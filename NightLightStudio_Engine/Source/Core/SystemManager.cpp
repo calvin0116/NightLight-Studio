@@ -20,6 +20,8 @@ SystemManager::~SystemManager()
 {
 }
 
+// Do not touch
+//**! Update comments please thanks
 void SystemManager::OnFirstStart()
 {
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +76,6 @@ void SystemManager::OnFirstStart()
 	//// SET UP COMPONENT
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
-
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//// Systems
 	G_GRAPHICS.OnFirstStart();
@@ -96,7 +97,7 @@ void SystemManager::OnFirstStart()
 
 void SystemManager::Load()
 {
-
+	Tutiorial();
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//// Systems
@@ -108,7 +109,7 @@ void SystemManager::Load()
 	G_IO.Load();
 
 	G_EDITOR.Load();
-
+	
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -128,7 +129,7 @@ void SystemManager::Init()
 	G_IO.Init();
 
 	G_EDITOR.Init();
-
+	//G_Sys.Init
 	//// Systems END
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -227,4 +228,47 @@ int SystemManager::getScn()
 void SystemManager::setScn(int scn)
 {
 	_scnIndNext = scn;
+}
+
+void SystemManager::Tutiorial()
+{
+	// build objects from json !!! 
+// - shift this to a seperate class/function !!!
+
+	void* newComponent = nullptr;
+
+	// WHILE OBJECTS
+	// Start of creation and Entity
+	int newObjId = G_MAINCOMPSET.csmgr.BuildObject();
+
+	// WHILE COMPONENTS
+	// Creation
+	// Addcomponent? > .AttachComponent(G_MAINCOMPSET.containerRender, newObjId, newComponent);
+	ComponentRender newCompComponentRender
+	{
+		0,
+		"Hello World",
+		{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f}
+	};
+	newComponent = &newCompComponentRender;
+	G_MAINCOMPSET.csmgr.AttachComponent(G_MAINCOMPSET.containerRender, newObjId, newComponent);
+	// WHILE COMPONENTS END
+	// WHILE OBJECTS END
+
+	// add 2nd obj 
+	newObjId = G_MAINCOMPSET.csmgr.BuildObject();
+
+	ComponentTransform compT;
+	compT._position._x = 1.11f;
+	G_MAINCOMPSET.csmgr.AttachComponent(G_MAINCOMPSET.containerTransform, newObjId, &compT);
+
+	newCompComponentRender.id = 1;
+	G_MAINCOMPSET.csmgr.AttachComponent(G_MAINCOMPSET.containerRender, newObjId, newComponent);
+
+
+	// add obj to another component set
+	newCompComponentRender.id = 999;
+	newObjId = G_UICOMPSET.csmgr.BuildObject();
+	G_UICOMPSET.csmgr.AttachComponent(G_UICOMPSET.containerRender, newObjId, newComponent);
+
 }

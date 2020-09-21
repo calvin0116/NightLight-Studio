@@ -1,7 +1,7 @@
 #include "Components.h"
 
-COMPONENTS G_MAINCOMPSET;
-COMPONENTS G_UICOMPSET;
+ComponentsContainerID G_MAINCOMPSET;
+ComponentsContainerID G_UICOMPSET;
 
 
 ComponentTransform::ComponentTransform() : _position{ 0.0f, 0.0f, 0.0f },

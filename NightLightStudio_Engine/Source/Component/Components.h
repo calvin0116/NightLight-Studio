@@ -2,11 +2,28 @@
 #include "..\\Math\Vector.h"
 #include "ComponentManager.h"
 
-struct COMPONENTS
+
+enum ContainerID{
+	containerEntity = 0, //Don't access it
+	containerRender,
+	containerPhysics,
+	containerRigidBody,
+	containerInput,
+	containerLogic,
+	containerCamera,
+	containerLight
+};
+
+
+//Container for all intended components 
+struct ComponentsContainerID
 {
+	//Entities manager
 	ComponentManager::ComponentSetManager csmgr;
-	ComponentManager::ContainerID containerTransform;
-	ComponentManager::ContainerID containerRender;
+
+	//**!Id of the container (Please change here ty)!**//
+	ComponentManager::ContainerID containerTransform ;
+	ComponentManager::ContainerID containerRender ;
 	ComponentManager::ContainerID containerPhysics;
 	ComponentManager::ContainerID containerRigidBody;
 	ComponentManager::ContainerID containerInput;
@@ -15,21 +32,28 @@ struct COMPONENTS
 	ComponentManager::ContainerID containerLight;
 };
 
-extern COMPONENTS G_MAINCOMPSET;
-extern COMPONENTS G_UICOMPSET;
+// eg. UI can be put into a seperate component set, G_UICOMPSET
+// allows easier management of entities
+extern ComponentsContainerID G_MAINCOMPSET;
+extern ComponentsContainerID G_UICOMPSET;
 
 
 struct IComponent
 {
 
-	void Read();
-	void Write();
+	virtual void Read() {};
+	/*
+	{
+			jsonparser json;
+			_position = json["postion"];
+	};*/
+	virtual void Write() {};
 
 
 };
 
 
-struct ComponentTransform
+struct ComponentTransform : public IComponent
 {
 	NlMath::Vector3D _position;
 	NlMath::Vector3D _rotation;
@@ -39,7 +63,10 @@ struct ComponentTransform
 	~ComponentTransform();
 
 	//To add other stuff
+
 };
+
+
 
 struct ComponentRender
 {

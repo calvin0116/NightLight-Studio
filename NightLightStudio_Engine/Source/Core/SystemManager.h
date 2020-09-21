@@ -56,6 +56,8 @@ public:
 
 	void setScn(int scn);
 
+	//Sample function for Entity and component creation
+	void Tutiorial();
 };
 
 extern SystemManager G_GSM;
