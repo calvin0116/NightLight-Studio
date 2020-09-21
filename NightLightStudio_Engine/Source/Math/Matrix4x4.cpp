@@ -262,9 +262,9 @@ namespace NlMath
 	Vector3D operator*(const Matrix4x4& pMtx, const Vector3D& rhs)
 	{
 		Vector3D returnVector;
-		returnVector._x = pMtx.m00 * rhs._x + pMtx.m01 * rhs._y + pMtx.m02 * rhs.z;
-		returnVector._y = pMtx.m10 * rhs._x + pMtx.m11 * rhs._y + pMtx.m12 * rhs.z;
-		returnVector.z = pMtx.m20 * rhs._x + pMtx.m21 * rhs._y + pMtx.m22 * rhs.z;
+		returnVector._x = pMtx.m00 * rhs._x + pMtx.m01 * rhs._y + pMtx.m02 * rhs._z;
+		returnVector._y = pMtx.m10 * rhs._x + pMtx.m11 * rhs._y + pMtx.m12 * rhs._z;
+		returnVector._z = pMtx.m20 * rhs._x + pMtx.m21 * rhs._y + pMtx.m22 * rhs._z;
 		return returnVector;
 	}
 
@@ -303,7 +303,7 @@ namespace NlMath
 		and saves it in pResult
 	*/
 	/**************************************************************************/
-	void Mtx44Translate(Matrix4x4& pResult, float _x, float _y, float z)
+	void Mtx44Translate(Matrix4x4& pResult, float _x, float _y, float _z)
 	{
 		// 1st row
 		pResult.m00 = 1;
@@ -319,7 +319,7 @@ namespace NlMath
 		pResult.m20 = 0;
 		pResult.m21 = 0;
 		pResult.m22 = 1;
-		pResult.m23 = z;
+		pResult.m23 = _z;
 		// 4th row
 		pResult.m30 = 0;
 		pResult.m31 = 0;
@@ -333,7 +333,7 @@ namespace NlMath
 		and saves it in pResult
 	*/
 	/**************************************************************************/
-	void Mtx44Scale(Matrix4x4& pResult, float _x, float _y, float z)
+	void Mtx44Scale(Matrix4x4& pResult, float _x, float _y, float _z)
 	{
 		// 1st row
 		pResult.m00 = _x;
@@ -348,7 +348,7 @@ namespace NlMath
 		// 3rd row
 		pResult.m20 = 0;
 		pResult.m21 = 0;
-		pResult.m22 = z;
+		pResult.m22 = _z;
 		pResult.m23 = 0;
 		// 4th row
 		pResult.m30 = 0;

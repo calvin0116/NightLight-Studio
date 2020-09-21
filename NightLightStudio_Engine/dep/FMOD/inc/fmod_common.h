@@ -614,7 +614,7 @@ typedef struct FMOD_VECTOR
 {
     float x;
     float y;
-    float z;
+    float _z;
 } FMOD_VECTOR;
 
 typedef struct FMOD_3D_ATTRIBUTES

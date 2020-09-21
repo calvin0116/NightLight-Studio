@@ -73,6 +73,36 @@ void SystemAudio::PlayOnce(const std::string& _name)
   }
 }
 
+int SystemAudio::Play3DLoop(const std::string& _name, const NlMath::Vector3D& _pos)
+{
+  MyAudioMap::iterator it = _sounds.find(_name);
+  int retVal = -1;
+  if (it != _sounds.end())
+  {
+    for (retVal = 0; retVal < s_MAX_CHANNELS; ++retVal)
+    {
+      bool isPlaying;
+      _channels[retVal]->isPlaying(&isPlaying);
+      if (!isPlaying)
+      {
+        _system->playSound(it->second, _bgm, true, &(_channels[retVal]));
+        _channels[retVal]->setMode(FMOD_LOOP_NORMAL);
+        _channels[retVal]->setMode(FMOD_3D);
+        //m_Channels[retVal]->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 100.0f * m_fUnitsPerMeter);
+        FMOD_VECTOR fmodPos = { _pos._x, _pos._y, _pos._z };
+        FMOD_VECTOR fmodVel = { 100.0f, 0.0f, 0.0f };
+        _channels[retVal]->set3DAttributes(&fmodPos, &fmodVel);
+        _channels[retVal]->setPaused(false);
+
+        //// Setting group channel
+        //ErrorCheck(it->second.second->setChannelGroup(BGM));
+        break;
+      }
+    }
+  }
+  return retVal;
+}
+
 void SystemAudio::OnFirstStart()
 {
   // Create FMOD System Once
