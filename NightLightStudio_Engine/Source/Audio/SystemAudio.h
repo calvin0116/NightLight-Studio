@@ -29,9 +29,9 @@ class SystemAudio
   FMOD::ChannelGroup* _master;
   FMOD::ChannelGroup* _bgm;
   FMOD::ChannelGroup* _sfx;
-public:
+
   // Audio System functions
-  void  Load(const std::string& _soundPath, const std::string& _name);
+  void  LoadSound(const std::string& _soundPath, const std::string& _name);
   void  Pause(const int _channelID);
   void  Unpause(const int _channelID);
   void  Stop(const int _channelID);
@@ -47,7 +47,7 @@ public:
   inline void SetSFXVol(float _vol) { _sfx->setVolume(_vol); }
   inline void SetMASTERVol(float _vol) { _master->setVolume(_vol); }
   inline void PauseAll(bool _pause) { _master->setPaused(_pause); }
-
+public:
   // ctor
   SystemAudio() : _listenerPos({ 0.0f, 0.0f, 0.0f }), _system(nullptr), _master(nullptr), _bgm(nullptr), _sfx(nullptr) {}
   // no copy ctor
