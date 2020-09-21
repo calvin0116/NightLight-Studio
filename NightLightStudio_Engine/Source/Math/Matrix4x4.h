@@ -76,7 +76,7 @@ namespace NlMath
 		and saves it in pResult
 	 */
 	 /**************************************************************************/
-	void Mtx44Translate(Matrix4x4& pResult, float _x, float _y, float z);
+	void Mtx44Translate(Matrix4x4& pResult, float _x, float _y, float _z);
 
 	/**************************************************************************/
 	/*!
@@ -84,7 +84,7 @@ namespace NlMath
 		and saves it in pResult
 	 */
 	 /**************************************************************************/
-	void Mtx44Scale(Matrix4x4& pResult, float _x, float _y, float z);
+	void Mtx44Scale(Matrix4x4& pResult, float _x, float _y, float _z);
 
 	/**************************************************************************/
 	/*!
