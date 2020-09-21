@@ -41,13 +41,13 @@ extern ComponentsContainerID G_UICOMPSET;
 struct IComponent
 {
 
-	virtual void Read();
+	virtual void Read() {};
 	/*
 	{
 			jsonparser json;
 			_position = json["postion"];
 	};*/
-	virtual void Write();
+	virtual void Write() {};
 
 
 };
