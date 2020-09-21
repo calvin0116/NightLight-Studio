@@ -57,8 +57,25 @@ int SystemAudio::PlayBGM(const std::string& _name)
   return retVal;
 }
 
+void SystemAudio::PlayOnce(const std::string& _name)
+{
+  MyAudioMap::iterator it = _sounds.find(_name);
+  if (it != _sounds.end())
+  {
+    FMOD::Channel* temp;
+    _system->playSound(it->second, _sfx, true, &temp);
+    temp->setMode(FMOD_LOOP_OFF);
+    temp->setMode(FMOD_2D);
+    temp->setPaused(false);
+
+    //// Setting group channel
+    //ErrorCheck(it->second.second->setChannelGroup(SFX));
+  }
+}
+
 void SystemAudio::OnFirstStart()
-{  // Create FMOD System Once
+{
+  // Create FMOD System Once
   FMOD::System_Create(&_system);
   // Init FMOD System
   _system->init(s_MAX_CHANNELS, FMOD_INIT_NORMAL, 0);
@@ -86,6 +103,9 @@ void SystemAudio::Init()
 
 void SystemAudio::Update(float dt)
 {
+  (void)dt;
+  // position update ?
+  _system->update();
 }
 
 void SystemAudio::Exit()
