@@ -1,24 +1,10 @@
 #pragma once
-
+//Noted from Teck Wei: I shifted your ENGINE_API to framework.h header as i need to use it too
+#include "../../framework.h"
 #include "SystemManager.h"
 #include <windows.h>
 
 
-//#ifdef ENGINE_EXPORTS
-//#define ENGINE_API __declspec(dllexport)
-//#else
-//#define ENGINE_API __declspec(dllimport)
-//#endif
-
-
-// References
-// https://docs.microsoft.com/en-us/cpp/build/walkthrough-creating-and-using-a-dynamic-link-library-cpp?view=vs-2019
-// https://docs.microsoft.com/en-us/cpp/cpp/dllexport-dllimport?view=vs-2019
-// https://docs.microsoft.com/en-us/cpp/build/linking-an-executable-to-a-dll?view=vs-2019
-// https://docs.microsoft.com/en-us/cpp/cpp/using-dllimport-and-dllexport-in-cpp-classes?view=vs-2019
-// https://docs.microsoft.com/en-us/visualstudio/ide/how-to-create-and-remove-project-dependencies?view=vs-2019
-
-#define ENGINE_API   __declspec( dllexport )
 
 
 class ENGINE_API FluffyUnicornEngine
@@ -38,7 +24,7 @@ public:
 	void Init();
 	void Run();
 	//**! Have and Exit or smth
-
+	void Exit();
 	
 };
 

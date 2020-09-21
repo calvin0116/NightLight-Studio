@@ -1,7 +1,7 @@
 #include "SystemGraphics.h"
-#include <iostream>
 #include "..\\Component\Components.h"
 
+#include <iostream>
 
 void SystemGraphics::OnFirstStart()
 {
@@ -15,7 +15,7 @@ void SystemGraphics::Init()
 {
 }
 
-void SystemGraphics::Update(float dt)
+bool SystemGraphics::Update()
 {
 	// components are loaded in SystemIO Load()
 
@@ -93,15 +93,16 @@ void SystemGraphics::Update(float dt)
 	_coreGraphics.Draw(); // eg. call draw fn
 
 	std::cout << "SystemGraphics::Update: END" << std::endl;
+	return true;
 }
 
 void SystemGraphics::Exit()
 {
 }
-
+/*
 void SystemGraphics::Free()
 {
-}
+}*/
 
 void SystemGraphics::Unload()
 {

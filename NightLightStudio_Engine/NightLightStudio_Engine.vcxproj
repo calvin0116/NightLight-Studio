@@ -171,6 +171,8 @@
     <ClInclude Include="Source\Component\Components.h" />
     <ClInclude Include="Source\Component\ComponentTest.h" />
     <ClInclude Include="Source\Core\Engine.h" />
+    <ClInclude Include="Source\Core\MySystem.h" />
+    <ClInclude Include="Source\Core\Singleton.h" />
     <ClInclude Include="Source\Core\SystemManager.h" />
     <ClInclude Include="Source\Core\ISystem.h" />
     <ClInclude Include="Source\Core\Systems.h" />

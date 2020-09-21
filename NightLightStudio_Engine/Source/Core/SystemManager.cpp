@@ -4,7 +4,7 @@
 
 #include "..//Component/Components.h"
 #include "Systems.h"
-
+/*
 SystemManager G_GSM;
 
 SystemManager::SystemManager() :
@@ -19,11 +19,17 @@ SystemManager::SystemManager() :
 SystemManager::~SystemManager()
 {
 }
+*/
 
 // Do not touch
 //**! Update comments please thanks
-void SystemManager::OnFirstStart()
+void MySystemManager::OnFirstStart()
 {
+	//Systems[SYS_PHYSICS] = PhysicManager::GetInstance();
+	Systems[SP_GRAPHICS] = SYS_GRAPHIC;
+	// === Insert your system here to get them running === //
+	// === Please follow how PhysicManager is created  === // 
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP COMPONENT - shift this to a seperate class/function !!!
 
@@ -51,9 +57,10 @@ void SystemManager::OnFirstStart()
 
 	// builds the component set
 	ComponentManager::ComponentSet* mainComponentSet = comsetFac.Build();
-
+	//**! Help me yong wee, not sure what to do here 
+	ComponentManager mgrComp; //<< i added this cause the next link variable is not there alr
 	// adds the component set to the component manager
-	_mgrCom.AddComponentSet(mainComponentSet);
+	mgrComp.AddComponentSet(mainComponentSet);
 
 	// init component set manager
 	G_MAINCOMPSET.csmgr.compSet = mainComponentSet; //
@@ -70,12 +77,16 @@ void SystemManager::OnFirstStart()
 	G_UICOMPSET.containerCamera = comsetFac.AddComponent(sizeof(ComponentCamera));
 	G_UICOMPSET.containerLight = comsetFac.AddComponent(sizeof(ComponentLight));
 	G_UICOMPSET.csmgr = comsetFac.Build();
-	_mgrCom.AddComponentSet(G_UICOMPSET.csmgr.compSet);
-
+	mgrComp.AddComponentSet(G_UICOMPSET.csmgr.compSet);
 
 	//// SET UP COMPONENT
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	//Systems OnFirst start
+	for (auto my_sys : Systems)
+		my_sys.second->OnFirstStart();
 
+	
+	/*
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//// Systems
 	G_GRAPHICS.OnFirstStart();
@@ -93,8 +104,9 @@ void SystemManager::OnFirstStart()
 
 	// set the next gamestate
 	_gamestateNext = GAMESTATE_LOAD;
+	*/
 }
-
+/*
 void SystemManager::Load()
 {
 	Tutiorial();
@@ -229,7 +241,9 @@ void SystemManager::setScn(int scn)
 {
 	_scnIndNext = scn;
 }
+*/
 
+/*
 void SystemManager::Tutiorial()
 {
 	// build objects from json !!! 
@@ -272,3 +286,4 @@ void SystemManager::Tutiorial()
 	G_UICOMPSET.csmgr.AttachComponent(G_UICOMPSET.containerRender, newObjId, newComponent);
 
 }
+*/
