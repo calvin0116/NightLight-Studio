@@ -46,7 +46,7 @@ int SystemAudio::PlayBGM(const std::string& _name)
       _channels[retVal]->isPlaying(&isPlaying);
       if (!isPlaying)
       {
-        _system->playSound(it->second, _bgm, true, &_channels[retVal]);
+        _system->playSound(it->second, _bgm, true, _channels + retVal);
         _channels[retVal]->setMode(FMOD_LOOP_NORMAL);
         _channels[retVal]->setMode(FMOD_2D);
         _channels[retVal]->setPaused(false);
@@ -85,7 +85,7 @@ int SystemAudio::Play3DLoop(const std::string& _name, const NlMath::Vector3D& _p
       _channels[retVal]->isPlaying(&isPlaying);
       if (!isPlaying)
       {
-        _system->playSound(it->second, _bgm, true, &(_channels[retVal]));
+        _system->playSound(it->second, _bgm, true, _channels + retVal);
         _channels[retVal]->setMode(FMOD_LOOP_NORMAL);
         _channels[retVal]->setMode(FMOD_3D);
         //m_Channels[retVal]->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 100.0f * m_fUnitsPerMeter);
@@ -96,6 +96,34 @@ int SystemAudio::Play3DLoop(const std::string& _name, const NlMath::Vector3D& _p
 
         //// Setting group channel
         //ErrorCheck(it->second.second->setChannelGroup(BGM));
+        break;
+      }
+    }
+  }
+  return retVal;
+}
+
+int SystemAudio::Play3DOnce(const std::string& name, const NlMath::Vector3D& _pos)
+{
+  MyAudioMap::iterator it = _sounds.find(name);
+  int retVal = -1;
+  if (it != _sounds.end())
+  {
+    for (retVal = 0; retVal < s_MAX_CHANNELS; ++retVal)
+    {
+      bool isPlaying;
+      _channels[retVal]->isPlaying(&isPlaying);
+      if (!isPlaying)
+      {
+        _system->playSound(it->second, _sfx, true, _channels + retVal);
+        _channels[retVal]->setMode(FMOD_LOOP_OFF);
+        _channels[retVal]->setMode(FMOD_3D);
+        //ErrorCheck(temp->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 5.0f * m_fUnitsPerMeter));
+        FMOD_VECTOR fmodPos = { _pos._x, _pos._y, _pos._z };
+        _channels[retVal]->set3DAttributes(&fmodPos, nullptr);
+        _channels[retVal]->setPaused(false);
+        //// Setting group channel
+        //ErrorCheck(it->second.second->setChannelGroup(SFX));
         break;
       }
     }
@@ -134,7 +162,7 @@ void SystemAudio::Init()
 void SystemAudio::Update(float dt)
 {
   (void)dt;
-  // position update ?
+  // position update here
   _system->update();
 }
 
@@ -149,3 +177,5 @@ void SystemAudio::Free()
 void SystemAudio::Unload()
 {
 }
+
+// Missing engine exit to close systems

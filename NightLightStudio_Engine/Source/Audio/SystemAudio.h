@@ -37,6 +37,7 @@ class SystemAudio
   void  Stop(const int _channelID);
   int   PlayBGM(const std::string& _name);
   void  PlayOnce(const std::string& _name);
+  // Accepting position directly for now, need entity ID later on for checking active
   int   Play3DLoop(const std::string& _name, const NlMath::Vector3D& _pos);
   int   Play3DOnce(const std::string& name, const NlMath::Vector3D& _pos);
   // Inline
