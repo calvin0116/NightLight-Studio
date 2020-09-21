@@ -206,9 +206,9 @@ namespace NlMath
 	Vector3D operator*(const Matrix3x3& pMtx, const Vector3D& rhs)
 	{
 		Vector3D returnVector;
-		returnVector._x = pMtx.m00 * rhs._x + pMtx.m01 * rhs._y + pMtx.m02 * rhs.z;
-		returnVector._y = pMtx.m10 * rhs._x + pMtx.m11 * rhs._y + pMtx.m12 * rhs.z;
-		returnVector.z = pMtx.m20 * rhs._x + pMtx.m21 * rhs._y + pMtx.m22 * rhs.z;
+		returnVector._x = pMtx.m00 * rhs._x + pMtx.m01 * rhs._y + pMtx.m02 * rhs._z;
+		returnVector._y = pMtx.m10 * rhs._x + pMtx.m11 * rhs._y + pMtx.m12 * rhs._z;
+		returnVector._z = pMtx.m20 * rhs._x + pMtx.m21 * rhs._y + pMtx.m22 * rhs._z;
 		return returnVector;
 	}
 

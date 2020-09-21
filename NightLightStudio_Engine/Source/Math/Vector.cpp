@@ -9,11 +9,11 @@ namespace NlMath
 		default constructor
 	*/
 	/**************************************************************************/
-	Vector3D::Vector3D() :_x{ 0 }, _y{ 0 }, z{ 0 }
+	Vector3D::Vector3D() :_x{ 0 }, _y{ 0 }, _z{ 0 }
 	{
 	}
 
-	Vector3D::Vector3D(float set) : _x{ set }, _y{ set }, z{ set }
+	Vector3D::Vector3D(float set) : _x{ set }, _y{ set }, _z{ set }
 	{
 	}
 
@@ -23,7 +23,7 @@ namespace NlMath
 		3D vector ctor from 2 floats
 	*/
 	/**************************************************************************/
-	Vector3D::Vector3D(float _x, float _y, float z) : _x(_x), _y(_y), z(z)
+	Vector3D::Vector3D(float _x, float _y, float _z) : _x(_x), _y(_y), _z(_z)
 	{
 	}
 
@@ -32,7 +32,7 @@ namespace NlMath
 		Copy constructor
 	*/
 	/**************************************************************************/
-	Vector3D::Vector3D(const Vector3D& rhs) : _x(rhs._x), _y(rhs._y), z(rhs.z)
+	Vector3D::Vector3D(const Vector3D& rhs) : _x(rhs._x), _y(rhs._y), _z(rhs._z)
 	{
 	}
 
@@ -96,7 +96,7 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D Vector3D::operator-() const
 	{
-		return Vector3D(-_x, -_y, -z);
+		return Vector3D(-_x, -_y, -_z);
 	}
 
 	/**************************************************************************/
@@ -135,7 +135,7 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D operator+(const Vector3D& lhs, const Vector3D& rhs)
 	{
-		return Vector3D(lhs._x + rhs._x, lhs._y + rhs._y, lhs.z + rhs.z);
+		return Vector3D(lhs._x + rhs._x, lhs._y + rhs._y, lhs._z + rhs._z);
 	}
 
 	/**************************************************************************/
@@ -145,7 +145,7 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D operator-(const Vector3D& lhs, const Vector3D& rhs)
 	{
-		return Vector3D(lhs._x - rhs._x, lhs._y - rhs._y, lhs.z - rhs.z);
+		return Vector3D(lhs._x - rhs._x, lhs._y - rhs._y, lhs._z - rhs._z);
 	}
 
 	/**************************************************************************/
@@ -155,12 +155,12 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D operator*(const Vector3D& lhs, float rhs)
 	{
-		return Vector3D(lhs._x * rhs, lhs._y * rhs , lhs.z * rhs);
+		return Vector3D(lhs._x * rhs, lhs._y * rhs , lhs._z * rhs);
 	}
 
 	Vector3D operator*(const Vector3D& lhs, const Vector3D& rhs)
 	{
-		return Vector3D(lhs._x * rhs._x, lhs._y * rhs._y, lhs.z * rhs.z);
+		return Vector3D(lhs._x * rhs._x, lhs._y * rhs._y, lhs._z * rhs._z);
 	}
 
 	/**************************************************************************/
@@ -180,7 +180,7 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D operator/(const Vector3D& lhs, float rhs)
 	{
-		return Vector3D(lhs._x / rhs, lhs._y / rhs, lhs.z / rhs);
+		return Vector3D(lhs._x / rhs, lhs._y / rhs, lhs._z / rhs);
 	}
 
 	/**************************************************************************/
@@ -191,11 +191,11 @@ namespace NlMath
 	void Vector3DNormalize(Vector3D& pResult, const Vector3D& pVec0)
 	{
 		// find magnitude
-		float m = inverseSqrt(pVec0._x * pVec0._x + pVec0._y * pVec0._y + pVec0.z * pVec0.z);
+		float m = inverseSqrt(pVec0._x * pVec0._x + pVec0._y * pVec0._y + pVec0._z * pVec0._z);
 		// get unit vector
 		pResult._x = pVec0._x * m;
 		pResult._y = pVec0._y * m;
-		pResult.z = pVec0.z * m;
+		pResult._z = pVec0._z * m;
 	}
 
 	/**************************************************************************/
@@ -215,7 +215,7 @@ namespace NlMath
 	/**************************************************************************/
 	float Vector3DSquareLength(const Vector3D& pVec0)
 	{
-		return pVec0._x * pVec0._x + pVec0._y * pVec0._y + pVec0.z * pVec0.z;
+		return pVec0._x * pVec0._x + pVec0._y * pVec0._y + pVec0._z * pVec0._z;
 	}
 
 	/**************************************************************************/
@@ -248,7 +248,7 @@ namespace NlMath
 	/**************************************************************************/
 	float Vector3DDotProduct(const Vector3D& pVec0, const Vector3D& pVec1)
 	{
-		return pVec0._x * pVec1._x + pVec0._y * pVec1._y + pVec0.z * pVec1.z;
+		return pVec0._x * pVec1._x + pVec0._y * pVec1._y + pVec0._z * pVec1._z;
 	}
 
 	/**************************************************************************/
