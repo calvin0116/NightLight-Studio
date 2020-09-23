@@ -253,14 +253,19 @@ namespace NlMath
 
 	/**************************************************************************/
 	/*!
-		This function projects Vector1 onto Vector0
+		This function returns the cross product between pVec0 and pVec1
 	*/
 	/**************************************************************************/
-	float Vector3DCrossProductMag(const Vector3D& pVec0, const Vector3D& pVec1)
+	float Vector3DCrossProduct(const Vector3D& pVec0, const Vector3D& pVec1)
 	{
 		return pVec0._x * pVec1._y - pVec0._y * pVec1._x;
 	}
 
+	/**************************************************************************/
+	/*!
+		This function projects Vector1 onto Vector0
+	*/
+	/**************************************************************************/
 	Vector3D Vector3DProjection(const Vector3D& pVec0, const Vector3D& pVec1)
 	{
 		Vector3D normVec0;
@@ -285,7 +290,7 @@ namespace NlMath
 		//t = (q − p) × s / (r × s)
 
 		//find t
-		float t = Vector3DCrossProductMag(q - p, s) / Vector3DCrossProductMag(r, s);
+		float t = Vector3DCrossProduct(q - p, s) / Vector3DCrossProduct(r, s);
 
 		//In the same way, we can solve for u:
 
@@ -295,11 +300,11 @@ namespace NlMath
 
 		//	u = (p − q) × r / (s × r)
 
-		float u = Vector3DCrossProductMag(p - q, r) / Vector3DCrossProductMag(s, r);
+		float u = Vector3DCrossProduct(p - q, r) / Vector3DCrossProduct(s, r);
 
 		//Now there are four cases :
 		//If r × s = 0 and (q − p) × r = 0, then the two lines are collinear.
-		if ((Vector3DCrossProductMag(r, s) == 0) && (Vector3DCrossProductMag(q - p, r) == 0))
+		if ((Vector3DCrossProduct(r, s) == 0) && (Vector3DCrossProduct(q - p, r) == 0))
 		{
 			//In this case, express the endpoints of the second segment(q and q + s) in terms of the equation of the first line segment(p + t r):
 			
@@ -317,13 +322,13 @@ namespace NlMath
 		}
 
 		//r × s = 0 and (q − p) × r ≠ 0, then the two lines are parallel and non-intersecting.
-		if ((Vector3DCrossProductMag(r, s) == 0) && (Vector3DCrossProductMag(q - p, r) != 0))
+		if ((Vector3DCrossProduct(r, s) == 0) && (Vector3DCrossProduct(q - p, r) != 0))
 		{
 			return false;
 		}
 
 		//If r × s ≠ 0 and 0 ≤ t ≤ 1 and 0 ≤ u ≤ 1, the two line segments meet at the point p + t r = q + u s.
-		if ((Vector3DCrossProductMag(r, s) != 0) &&
+		if ((Vector3DCrossProduct(r, s) != 0) &&
 			(0 <= t && t <= 1) &&
 			(0 <= u && u <= 1))
 		{

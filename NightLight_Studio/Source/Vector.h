@@ -108,7 +108,7 @@ namespace NlMath
 		between pVec0 and pVec1
 	 */
 	 /**************************************************************************/
-	float	Vector3DCrossProductMag(const Vector3D& pVec0, const Vector3D& pVec1);
+	float	Vector3DCrossProduct(const Vector3D& pVec0, const Vector3D& pVec1);
 
 	/**************************************************************************/
 	/*!
