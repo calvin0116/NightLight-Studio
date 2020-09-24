@@ -49,36 +49,13 @@ struct IComponent
 	};*/
 	virtual void Write() {};
 
-
 };
-
-
-struct ComponentTransform : public IComponent
-{
-	NlMath::Vector3D _position;
-	NlMath::Vector3D _rotation;
-	NlMath::Vector3D _scale;
-
-	ComponentTransform();
-	~ComponentTransform();
-
-	//To add other stuff
-
-};
-
 
 
 struct ComponentRender
 {
 	int id;
 	char c[128];
-	float f[16];
-};
-
-struct ComponentPhysics
-{
-	int id;
-	char c;
 	float f[16];
 };
 
