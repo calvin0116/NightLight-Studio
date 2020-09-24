@@ -22,6 +22,16 @@ public:
 	ComponentPhysics();
 	~ComponentPhysics();
 
+	//getters and setters
+	NlMath::Vector3D GetVelocity() const;
+	NlMath::Vector3D SetVelocity(NlMath::Vector3D velocity);
+	NlMath::Vector3D GetAcceleration() const;
+	NlMath::Vector3D SetAcceleration(NlMath::Vector3D acceleration);
+	NlMath::Vector3D GetPostion() const;
+	NlMath::Vector3D GetPreviousPosition() const;
+	NlMath::Vector3D SetPreviousPosition(NlMath::Vector3D prevPos);
+
+
 	void Read();
 	void Write();
 };

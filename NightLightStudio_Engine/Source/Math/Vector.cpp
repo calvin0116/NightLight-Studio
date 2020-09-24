@@ -9,11 +9,11 @@ namespace NlMath
 		default constructor
 	*/
 	/**************************************************************************/
-	Vector3D::Vector3D() :_x{ 0 }, _y{ 0 }, _z{ 0 }
+	Vector3D::Vector3D() :x{ 0 }, y{ 0 }, z{ 0 }
 	{
 	}
 
-	Vector3D::Vector3D(float set) : _x{ set }, _y{ set }, _z{ set }
+	Vector3D::Vector3D(float set) : x{ set }, y{ set }, z{ set }
 	{
 	}
 
@@ -23,7 +23,7 @@ namespace NlMath
 		3D vector ctor from 2 floats
 	*/
 	/**************************************************************************/
-	Vector3D::Vector3D(float _x, float _y, float _z) : _x(_x), _y(_y), _z(_z)
+	Vector3D::Vector3D(float x, float y, float z) : x(x), y(y), z(z)
 	{
 	}
 
@@ -32,7 +32,7 @@ namespace NlMath
 		Copy constructor
 	*/
 	/**************************************************************************/
-	Vector3D::Vector3D(const Vector3D& rhs) : _x(rhs._x), _y(rhs._y), _z(rhs._z)
+	Vector3D::Vector3D(const Vector3D& rhs) : x(rhs.x), y(rhs.y), z(rhs.z)
 	{
 	}
 
@@ -43,8 +43,8 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D& Vector3D::operator+=(const Vector3D& rhs)
 	{
-		_x += rhs._x;
-		_y += rhs._y;
+		x += rhs.x;
+		y += rhs.y;
 		return *this;
 	}
 
@@ -55,8 +55,8 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D& Vector3D::operator-=(const Vector3D& rhs)
 	{
-		_x -= rhs._x;
-		_y -= rhs._y;
+		x -= rhs.x;
+		y -= rhs.y;
 		return *this;
 	}
 
@@ -67,8 +67,8 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D& Vector3D::operator*=(float rhs)
 	{
-		_x *= rhs;
-		_y *= rhs;
+		x *= rhs;
+		y *= rhs;
 		return *this;
 	}
 
@@ -79,8 +79,8 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D& Vector3D::operator/=(float rhs)
 	{
-		_x /= rhs;
-		_y /= rhs;
+		x /= rhs;
+		y /= rhs;
 		return *this;
 	}
 
@@ -96,7 +96,7 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D Vector3D::operator-() const
 	{
-		return Vector3D(-_x, -_y, -_z);
+		return Vector3D(-x, -y, -z);
 	}
 
 	/**************************************************************************/
@@ -135,7 +135,7 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D operator+(const Vector3D& lhs, const Vector3D& rhs)
 	{
-		return Vector3D(lhs._x + rhs._x, lhs._y + rhs._y, lhs._z + rhs._z);
+		return Vector3D(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
 	}
 
 	/**************************************************************************/
@@ -145,7 +145,7 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D operator-(const Vector3D& lhs, const Vector3D& rhs)
 	{
-		return Vector3D(lhs._x - rhs._x, lhs._y - rhs._y, lhs._z - rhs._z);
+		return Vector3D(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
 	}
 
 	/**************************************************************************/
@@ -155,12 +155,12 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D operator*(const Vector3D& lhs, float rhs)
 	{
-		return Vector3D(lhs._x * rhs, lhs._y * rhs , lhs._z * rhs);
+		return Vector3D(lhs.x * rhs, lhs.y * rhs , lhs.z * rhs);
 	}
 
 	Vector3D operator*(const Vector3D& lhs, const Vector3D& rhs)
 	{
-		return Vector3D(lhs._x * rhs._x, lhs._y * rhs._y, lhs._z * rhs._z);
+		return Vector3D(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
 	}
 
 	/**************************************************************************/
@@ -180,7 +180,7 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D operator/(const Vector3D& lhs, float rhs)
 	{
-		return Vector3D(lhs._x / rhs, lhs._y / rhs, lhs._z / rhs);
+		return Vector3D(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
 	}
 
 	/**************************************************************************/
@@ -191,11 +191,11 @@ namespace NlMath
 	void Vector3DNormalize(Vector3D& pResult, const Vector3D& pVec0)
 	{
 		// find magnitude
-		float m = inverseSqrt(pVec0._x * pVec0._x + pVec0._y * pVec0._y + pVec0._z * pVec0._z);
+		float m = inverseSqrt(pVec0.x * pVec0.x + pVec0.y * pVec0.y + pVec0.z * pVec0.z);
 		// get unit vector
-		pResult._x = pVec0._x * m;
-		pResult._y = pVec0._y * m;
-		pResult._z = pVec0._z * m;
+		pResult.x = pVec0.x * m;
+		pResult.y = pVec0.y * m;
+		pResult.z = pVec0.z * m;
 	}
 
 	/**************************************************************************/
@@ -215,7 +215,7 @@ namespace NlMath
 	/**************************************************************************/
 	float Vector3DSquareLength(const Vector3D& pVec0)
 	{
-		return pVec0._x * pVec0._x + pVec0._y * pVec0._y + pVec0._z * pVec0._z;
+		return pVec0.x * pVec0.x + pVec0.y * pVec0.y + pVec0.z * pVec0.z;
 	}
 
 	/**************************************************************************/
@@ -248,7 +248,7 @@ namespace NlMath
 	/**************************************************************************/
 	float Vector3DDotProduct(const Vector3D& pVec0, const Vector3D& pVec1)
 	{
-		return pVec0._x * pVec1._x + pVec0._y * pVec1._y + pVec0._z * pVec1._z;
+		return pVec0.x * pVec1.x + pVec0.y * pVec1.y + pVec0.z * pVec1.z;
 	}
 
 	/**************************************************************************/
@@ -258,7 +258,7 @@ namespace NlMath
 	/**************************************************************************/
 	float Vector3DCrossProduct(const Vector3D& pVec0, const Vector3D& pVec1)
 	{
-		return pVec0._x * pVec1._y - pVec0._y * pVec1._x;
+		return pVec0.x * pVec1.y - pVec0.y * pVec1.x;
 	}
 
 	/**************************************************************************/
@@ -341,17 +341,17 @@ namespace NlMath
 	float inverseSqrt(float number)
 	{
 		long i;
-		float x2, _y;
+		float x2, y;
 		const float threehalfs = 1.5F;
 
 		x2 = number * 0.5F;
-		_y = number;
-		i = *(long*)&_y;                       // evil floating point bit level hacking
+		y = number;
+		i = *(long*)&y;                       // evil floating point bit level hacking
 		i = 0x5f3759df - (i >> 1);               // what the fuck? 
-		_y = *(float*)&i;
-		_y = _y * (threehalfs - (x2 * _y * _y));   // 1st iteration
+		y = *(float*)&i;
+		y = y * (threehalfs - (x2 * y * y));   // 1st iteration
 	//	y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
 
-		return _y;
+		return y;
 	}
 }

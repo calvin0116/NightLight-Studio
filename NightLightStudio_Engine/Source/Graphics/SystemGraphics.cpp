@@ -50,7 +50,7 @@ bool SystemGraphics::Update()
 		// another way to get component
 		ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(G_MAINCOMPSET.csmgr.getComponent(G_MAINCOMPSET.containerTransform, itr));
 		if (compT != nullptr) // nullptr -> uninitialised or deleted
-			std::cout << "Transform:" << compT->_position._x << std::endl;
+			std::cout << "Transform:" << compT->_position.x << std::endl;
 
 
 		_coreGraphics.AddToRenderSet(compR); // eg. add to render set
@@ -82,7 +82,7 @@ bool SystemGraphics::Update()
 		// get transform component
 		ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(obj.getComponent(G_UICOMPSET.containerTransform));
 		if (compT != nullptr) // nullptr -> uninitialised or deleted
-			std::cout << "Transform:" << compT->_position._x << std::endl;
+			std::cout << "Transform:" << compT->_position.x << std::endl;
 
 		std::cout << std::endl;
 

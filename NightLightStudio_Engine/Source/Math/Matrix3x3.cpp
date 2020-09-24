@@ -24,9 +24,9 @@ namespace NlMath
 	*/
 	/**************************************************************************/
 
-	Matrix3x3::Matrix3x3(float _x):	m00 { _x }, m01{ 0 }, m02{ 0 },
-									m10 { 0 }, m11{ _x }, m12{ 0 },
-									m20 { 0 }, m21{ 0 }, m22{ _x }
+	Matrix3x3::Matrix3x3(float x):	m00 { x }, m01{ 0 }, m02{ 0 },
+									m10 { 0 }, m11{ x }, m12{ 0 },
+									m20 { 0 }, m21{ 0 }, m22{ x }
 	{
 	}
 
@@ -206,9 +206,9 @@ namespace NlMath
 	Vector3D operator*(const Matrix3x3& pMtx, const Vector3D& rhs)
 	{
 		Vector3D returnVector;
-		returnVector._x = pMtx.m00 * rhs._x + pMtx.m01 * rhs._y + pMtx.m02 * rhs._z;
-		returnVector._y = pMtx.m10 * rhs._x + pMtx.m11 * rhs._y + pMtx.m12 * rhs._z;
-		returnVector._z = pMtx.m20 * rhs._x + pMtx.m21 * rhs._y + pMtx.m22 * rhs._z;
+		returnVector.x = pMtx.m00 * rhs.x + pMtx.m01 * rhs.y + pMtx.m02 * rhs.z;
+		returnVector.y = pMtx.m10 * rhs.x + pMtx.m11 * rhs.y + pMtx.m12 * rhs.z;
+		returnVector.z = pMtx.m20 * rhs.x + pMtx.m21 * rhs.y + pMtx.m22 * rhs.z;
 		return returnVector;
 	}
 
@@ -247,17 +247,17 @@ namespace NlMath
 		and saves it in pResult
 	*/
 	/**************************************************************************/
-	void Mtx33Translate(Matrix3x3& pResult, float _x, float _y)
+	void Mtx33Translate(Matrix3x3& pResult, float x, float y)
 	{
 		// 1st row
 		pResult.m00 = 1;
 		pResult.m01 = 0;
-		pResult.m02 = _x;
+		pResult.m02 = x;
 
 		// 2nd row
 		pResult.m10 = 0;
 		pResult.m11 = 1;
-		pResult.m12 = _y;
+		pResult.m12 = y;
 
 		// 3rd row
 		pResult.m20 = 0;
@@ -271,16 +271,16 @@ namespace NlMath
 		and saves it in pResult
 	*/
 	/**************************************************************************/
-	void Mtx33Scale(Matrix3x3& pResult, float _x, float _y)
+	void Mtx33Scale(Matrix3x3& pResult, float x, float y)
 	{
 		// 1st row
-		pResult.m00 = _x;
+		pResult.m00 = x;
 		pResult.m01 = 0;
 		pResult.m02 = 0;
 
 		// 2nd row
 		pResult.m10 = 0;
-		pResult.m11 = _y;
+		pResult.m11 = y;
 		pResult.m12 = 0;
 
 		// 3rd row

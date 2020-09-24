@@ -193,6 +193,7 @@
     <ClInclude Include="Source\Messaging\SystemBroadcaster.h" />
     <ClInclude Include="Source\Messaging\SystemIMessage.h" />
     <ClInclude Include="Source\Messaging\SystemReceiver.h" />
+    <ClInclude Include="Source\Physics\CollisionMathLib.h" />
     <ClInclude Include="Source\Physics\SystemPhysics.h" />
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +227,7 @@
     <ClCompile Include="Source\Math\Vector.cpp" />
     <ClCompile Include="Source\Messaging\SystemBroadcaster.cpp" />
     <ClCompile Include="Source\Messaging\SystemReceiver.cpp" />
+    <ClCompile Include="Source\Physics\CollisionMathLib.cpp" />
     <ClCompile Include="Source\Physics\SystemPhysics.cpp" />
   </ItemGroup>
   <ItemGroup>
