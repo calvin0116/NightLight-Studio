@@ -4,23 +4,45 @@
 #include "SI_KeyPress.h"
 #include "SI_MousePos.h"
 #include "SI_Controller.h"
+#include "../../framework.h"
+#include "../Core/MySystem.h"
+
 
 #endif
 
-class SystemInput
+class SystemInput : public MySystem, public Singleton<SystemInput>
 {
+private:
+	friend Singleton<SystemInput>;
+	SystemInput_ns::SystemKeyPress _SIKeyPress;
+	SystemInput_ns::SystemController _SICtrler;
+	SystemInput_ns::SystemMousePosition _SIMousePos;
+
+protected:
+	SystemInput();
+	~SystemInput() = default;
+
 public:
-	void OnFirstStart();
+	ENGINE_API void OnFirstStart() override;
 
-	void Load();
+	ENGINE_API void Load() override;
 
-	void Init();
+	ENGINE_API void Init() override;
 
-	void Update(float dt);
+	ENGINE_API bool Update() override;
 
-	void Exit();
+	ENGINE_API void Exit() override;
 
-	void Free();
+	ENGINE_API void Unload() override;
 
-	void Unload();
+	// Access individual System Parts to use their functions or something I guess
+	ENGINE_API SystemInput_ns::SystemKeyPress& GetSystemKeyPress();
+
+	ENGINE_API SystemInput_ns::SystemController& GetSystemController();
+
+	ENGINE_API SystemInput_ns::SystemMousePosition& GetSystemMousePos();
 };
+
+//GLOBAL pointer to an instance of graphic system
+//== Good to have for every system so that you dont need to always get instance
+static SystemInput* SYS_INPUT = SystemInput::GetInstance();

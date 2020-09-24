@@ -190,7 +190,4 @@ namespace SystemInput_ns
 	};
 }
 
-// FIRST DETECTED CONTROLLER
-extern SystemInput_ns::SystemController GLOBAL_SYSTEM_CONTROLLER;
-
 #endif

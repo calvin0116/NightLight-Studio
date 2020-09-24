@@ -284,6 +284,4 @@ namespace SystemInput_ns
 	};
 }
 
-extern SystemInput_ns::SystemKeyPress GLOBAL_SYSTEM_KEYPRESS;
-
 #endif

@@ -1,7 +1,5 @@
 #include "SI_MousePos.h"
 
-SystemInput_ns::SystemMousePosition GLOBAL_SYSTEM_MOUSEPOS;
-
 namespace SystemInput_ns
 {
 	//********************************************** SYSTEM CURSOR POSITION **********************************************//

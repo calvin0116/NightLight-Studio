@@ -17,7 +17,7 @@ private:
 	friend Singleton<MySystemManager>;
 
 	//Map of system according to their piority
-	std::map<S_PIORIOTY, MySystem*> Systems;
+	std::map<S_PRIORITY, MySystem*> Systems;
 	//std::vector< MySystem *
 public:
 	//List of function calling for all system
@@ -89,7 +89,7 @@ public:
 	}
 
 	//Getting system
-	MySystem* operator[] (S_PIORIOTY sys_p)
+	MySystem* operator[] (S_PRIORITY sys_p)
 	{
 		return Systems[sys_p];
 	}
