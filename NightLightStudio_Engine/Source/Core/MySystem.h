@@ -4,7 +4,7 @@
 #include "Singleton.h"
 
 //System piority / id
-enum S_PIORIOTY
+enum S_PRIORITY
 {
 	SP_TOOLS,
 	SP_INPUT,
@@ -17,5 +17,5 @@ class ENGINE_API MySystem : public ISystem
 {
 private:
 	int id;
-	S_PIORIOTY piority;
+	S_PRIORITY piority;
 };

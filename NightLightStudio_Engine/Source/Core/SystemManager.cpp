@@ -31,6 +31,7 @@ void MySystemManager::OnFirstStart()
 	Systems[SP_GRAPHICS] = SYS_GRAPHIC;
 	// === Insert your system here to get them running === //
 	// === Please follow how PhysicManager is created  === // 
+	Systems[SP_INPUT] = SYS_INPUT;
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP COMPONENT - shift this to a seperate class/function !!!
