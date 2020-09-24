@@ -1,9 +1,11 @@
 
 
 #include "SystemManager.h"
-
-#include "..//Component/Components.h"
 #include "Systems.h"
+#include "..//Component/Components.h"
+
+#include "..//Component/ComponentTransform.h"
+#include "..//Component/ComponentPhysics.h"
 /*
 SystemManager G_GSM;
 

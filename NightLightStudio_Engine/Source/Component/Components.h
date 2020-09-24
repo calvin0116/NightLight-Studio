@@ -2,7 +2,6 @@
 #include "..\\Math\Vector.h"
 #include "ComponentManager.h"
 
-
 enum ContainerID{
 	containerEntity = 0, //Don't access it
 	containerRender,

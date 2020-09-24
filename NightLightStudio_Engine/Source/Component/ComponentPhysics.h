@@ -1,6 +1,7 @@
 #pragma once
 #include "..\\Math\Vector.h"
 #include "Components.h"
+#include "ComponentTransform.h"
 
 class ComponentPhysics : public IComponent
 {

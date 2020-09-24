@@ -1,8 +1,7 @@
 #include "SystemGraphics.h"
 #include "..\\Component\Components.h"
-
 #include <iostream>
-
+#include "..\\Component\ComponentTransform.h"
 void SystemGraphics::OnFirstStart()
 {
 }

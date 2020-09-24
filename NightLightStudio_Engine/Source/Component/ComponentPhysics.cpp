@@ -13,3 +13,11 @@ ComponentPhysics::ComponentPhysics() :
 ComponentPhysics::~ComponentPhysics()
 {
 }
+
+void ComponentPhysics::Read()
+{
+}
+
+void ComponentPhysics::Write()
+{
+}
