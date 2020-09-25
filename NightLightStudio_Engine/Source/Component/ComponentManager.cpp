@@ -163,7 +163,7 @@ void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::Cont
 {	
 	// get the index
 	ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
-	int index = compData->containerIndex;
+	//int index = compData->containerIndex;
 
 	// compData->compPtr; // <-- 
 	if (compData->compPtr == nullptr)
@@ -371,7 +371,7 @@ ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetMa
 void ComponentManager::AddComponentSet(ComponentSet* compSet)
 {
 	// define new component type
-	ContainerID newComponentSetID = ComponentSets.size();
+	ContainerID newComponentSetID = (int)ComponentSets.size();
 	while (ComponentSets.find(newComponentSetID) != ComponentSets.end())
 	{
 		// find a free id

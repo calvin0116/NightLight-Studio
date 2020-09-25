@@ -12,7 +12,7 @@ void SystemEditor::Init()
 {
 }
 
-void SystemEditor::Update(float dt)
+void SystemEditor::Update(float)
 {
 }
 

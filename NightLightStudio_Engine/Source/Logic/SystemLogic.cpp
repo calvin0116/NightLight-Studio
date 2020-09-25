@@ -14,7 +14,7 @@ void SystemLogic::Init()
 	//Get resource??
 }
 
-void SystemLogic::Update(float dt)
+void SystemLogic::Update(float )
 {
 	//Run Script?
 }
