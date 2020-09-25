@@ -6,9 +6,13 @@ Brief Description :
 #include "../../framework.h"
 
 #include "..//Component/ComponentManager.h"
+//System includes
 #include "MySystem.h"
 #include "Singleton.h"
+
+//System to manage
 #include "..//Graphics/SystemGraphics.h"
+#include "../IO/SystemIO.h"
 
 class ENGINE_API MySystemManager : public ISystem, public Singleton<MySystemManager>
 {
@@ -59,7 +63,7 @@ public:
 	//== Asserts clear
 	void Unload() { for (auto my_sys : Systems) my_sys.second->Unload(); };
 	//Memory deallocation phase
-	void Free() {}
+	void Free() { for (auto my_sys : Systems) my_sys.second->Free(); };
 
 	//== Helper function
 

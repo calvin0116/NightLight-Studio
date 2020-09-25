@@ -46,6 +46,9 @@
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{d30951f3-6878-484f-83ea-7557573e4ec1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\IO\Json">
+      <UniqueIdentifier>{f09c9436-0756-4a00-951c-207781b0ff30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -147,6 +150,18 @@
     <ClInclude Include="Source\Core\DeltaTime.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\IO\Json\Config.h">
+      <Filter>Source Files\IO\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IO\Json\JsonHeader.h">
+      <Filter>Source Files\IO\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IO\Json\Parser.h">
+      <Filter>Source Files\IO\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IO\Json\Parser.hpp">
+      <Filter>Source Files\IO\Json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -232,6 +247,9 @@
     </ClCompile>
     <ClCompile Include="Source\Core\DeltaTime.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\IO\Json\Parser.cpp">
+      <Filter>Source Files\IO\Json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

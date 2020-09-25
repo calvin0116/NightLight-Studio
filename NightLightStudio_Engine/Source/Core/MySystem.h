@@ -6,7 +6,8 @@
 //System piority / id
 enum S_PRIORITY
 {
-	SP_TOOLS,
+	SP_TOOLS = 0, 
+	SP_IO,
 	SP_INPUT,
 	SP_GRAPHICS,
 	SP_COLLISION,

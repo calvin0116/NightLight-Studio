@@ -4,7 +4,21 @@
 // Windows Header Files
 #include <windows.h>
 
+//C++ Header
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <string>
+#include <fstream>
 
+using std::vector;
+using std::string;
+using std::cout;
+using std::endl;
+
+//Json file path
+const std::string assert_path = "../Resources/JsonFile/";
 //#ifdef ENGINE_EXPORTS
 //#define ENGINE_API __declspec(dllexport)
 //#else
