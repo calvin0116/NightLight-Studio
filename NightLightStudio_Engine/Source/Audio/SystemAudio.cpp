@@ -89,7 +89,7 @@ int SystemAudio::Play3DLoop(const std::string& _name, const NlMath::Vector3D& _p
         _channels[retVal]->setMode(FMOD_LOOP_NORMAL);
         _channels[retVal]->setMode(FMOD_3D);
         //m_Channels[retVal]->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 100.0f * m_fUnitsPerMeter);
-        FMOD_VECTOR fmodPos = { _pos._x, _pos._y, _pos._z };
+        FMOD_VECTOR fmodPos = { _pos.x, _pos.y, _pos.z };
         FMOD_VECTOR fmodVel = { 100.0f, 0.0f, 0.0f };
         _channels[retVal]->set3DAttributes(&fmodPos, &fmodVel);
         _channels[retVal]->setPaused(false);
@@ -119,7 +119,7 @@ int SystemAudio::Play3DOnce(const std::string& name, const NlMath::Vector3D& _po
         _channels[retVal]->setMode(FMOD_LOOP_OFF);
         _channels[retVal]->setMode(FMOD_3D);
         //ErrorCheck(temp->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 5.0f * m_fUnitsPerMeter));
-        FMOD_VECTOR fmodPos = { _pos._x, _pos._y, _pos._z };
+        FMOD_VECTOR fmodPos = { _pos.x, _pos.y, _pos.z };
         _channels[retVal]->set3DAttributes(&fmodPos, nullptr);
         _channels[retVal]->setPaused(false);
         //// Setting group channel

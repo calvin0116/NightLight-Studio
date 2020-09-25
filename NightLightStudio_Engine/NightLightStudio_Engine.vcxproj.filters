@@ -129,6 +129,21 @@
     <ClInclude Include="Source\Core\SystemManager.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\Singleton.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\MySystem.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentPhysics.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentTransform.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\CollisionMathLib.h">
+      <Filter>Source Files\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -202,6 +217,15 @@
     </ClCompile>
     <ClCompile Include="Source\Core\SystemManager.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentPhysics.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentTransform.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics\CollisionMathLib.cpp">
+      <Filter>Source Files\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

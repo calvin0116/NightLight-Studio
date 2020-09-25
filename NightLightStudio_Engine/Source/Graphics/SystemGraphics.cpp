@@ -1,8 +1,7 @@
 #include "SystemGraphics.h"
-#include <iostream>
 #include "..\\Component\Components.h"
-
-
+#include <iostream>
+#include "..\\Component\ComponentTransform.h"
 void SystemGraphics::OnFirstStart()
 {
 }
@@ -15,7 +14,7 @@ void SystemGraphics::Init()
 {
 }
 
-void SystemGraphics::Update(float dt)
+bool SystemGraphics::Update()
 {
 	// components are loaded in SystemIO Load()
 
@@ -51,7 +50,7 @@ void SystemGraphics::Update(float dt)
 		// another way to get component
 		ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(G_MAINCOMPSET.csmgr.getComponent(G_MAINCOMPSET.containerTransform, itr));
 		if (compT != nullptr) // nullptr -> uninitialised or deleted
-			std::cout << "Transform:" << compT->_position._x << std::endl;
+			std::cout << "Transform:" << compT->_position.x << std::endl;
 
 
 		_coreGraphics.AddToRenderSet(compR); // eg. add to render set
@@ -83,7 +82,7 @@ void SystemGraphics::Update(float dt)
 		// get transform component
 		ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(obj.getComponent(G_UICOMPSET.containerTransform));
 		if (compT != nullptr) // nullptr -> uninitialised or deleted
-			std::cout << "Transform:" << compT->_position._x << std::endl;
+			std::cout << "Transform:" << compT->_position.x << std::endl;
 
 		std::cout << std::endl;
 
@@ -93,15 +92,16 @@ void SystemGraphics::Update(float dt)
 	_coreGraphics.Draw(); // eg. call draw fn
 
 	std::cout << "SystemGraphics::Update: END" << std::endl;
+	return true;
 }
 
 void SystemGraphics::Exit()
 {
 }
-
+/*
 void SystemGraphics::Free()
 {
-}
+}*/
 
 void SystemGraphics::Unload()
 {

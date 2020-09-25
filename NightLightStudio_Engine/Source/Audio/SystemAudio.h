@@ -21,7 +21,7 @@ class SystemAudio
   // to store listener position
   FMOD_VECTOR         _listenerPos;
   // to store channel handles
-  FMOD::Channel*      _channels[s_MAX_CHANNELS];
+  FMOD::Channel*      _channels[s_MAX_CHANNELS]{nullptr};
   // FMOD system
   FMOD::System*       _system;
 

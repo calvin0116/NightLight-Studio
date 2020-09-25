@@ -59,6 +59,4 @@ namespace SystemInput_ns
 	};
 }
 
-extern SystemInput_ns::SystemMousePosition GLOBAL_SYSTEM_MOUSEPOS;
-
 #endif

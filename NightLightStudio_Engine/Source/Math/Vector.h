@@ -13,7 +13,7 @@ namespace NlMath
 	{
 		struct
 		{
-			float _x, _y, _z;
+			float x, y, z;
 		};
 	
 		float m[3];
@@ -21,7 +21,7 @@ namespace NlMath
 		// Constructors
 		Vector3D();
 		Vector3D(float set);
-		Vector3D(float _x, float _y, float _z);
+		Vector3D(float x, float y, float z);
 
 		// Copy constructors
 		Vector3D(const Vector3D& rhs);
@@ -108,7 +108,7 @@ namespace NlMath
 		between pVec0 and pVec1
 	 */
 	 /**************************************************************************/
-	float	Vector3DCrossProductMag(const Vector3D& pVec0, const Vector3D& pVec1);
+	float	Vector3DCrossProduct(const Vector3D& pVec0, const Vector3D& pVec1);
 
 	/**************************************************************************/
 	/*!

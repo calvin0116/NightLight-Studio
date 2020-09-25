@@ -12,8 +12,8 @@ void SystemIO::OnFirstStart()
 void SystemIO::Load()
 {
 	
-	G_GSM.getScn(); // get the current scene
-	G_GSM.setScn(1); // set the nxt scene
+	//G_GSM.getScn(); // get the current scene
+	//G_GSM.setScn(1); // set the nxt scene
 
 }
 

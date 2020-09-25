@@ -1,7 +1,5 @@
 #include "SI_KeyPress.h"
 
-SystemInput_ns::SystemKeyPress GLOBAL_SYSTEM_KEYPRESS;
-
 namespace SystemInput_ns
 {
 	//********************************************** SYSTEM KEY PRESS **********************************************//

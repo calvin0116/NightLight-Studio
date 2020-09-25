@@ -1,7 +1,5 @@
 #include "SI_Controller.h"
 
-SystemInput_ns::SystemController GLOBAL_SYSTEM_CONTROLLER;
-
 namespace SystemInput_ns
 {
 	//********************************************** SYSTEM CONTROLLER **********************************************//
