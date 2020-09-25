@@ -14,18 +14,18 @@
 *.userprefs
 
 # Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-[Aa][Rr][Mm]/
-[Aa][Rr][Mm]64/
-bld/
-[Bb]in/
-[Oo]bj/
-[Ll]og/
+[Dd]ebug/*
+[Dd]ebugPublic/*
+[Rr]elease/*
+[Rr]eleases/*
+x64/*
+x86/*
+[Aa][Rr][Mm]/*
+[Aa][Rr][Mm]64/*
+bld/*
+[Bb]in/*
+[Oo]bj/*
+[Ll]og/*
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -375,4 +375,10 @@ healthchecksdb
 *.tlog
 *.idb
 *.lastbuildstate
-/Bin-Int
+Bin-Int/*
+NightLight_Studio/*
+NightLightStudio_Engine/dep/Mono/*
+
+# Custom excludes to allow git push
+!Bin/fmod.dll
+!Bin/fmod_vc.lib
