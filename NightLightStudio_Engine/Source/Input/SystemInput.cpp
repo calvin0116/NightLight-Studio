@@ -5,7 +5,7 @@
 using namespace SystemInput_ns;
 
 SystemInput::SystemInput()
-	: _SIKeyPress(), _SICtrler(-1, false), _SIMousePos()
+	: _siKeyPress(), _siCtrler(-1, false), _siMousePos()
 {
 }
 
@@ -19,18 +19,17 @@ void SystemInput::Load()
 
 void SystemInput::Init()
 {
-	_SIKeyPress.ALL_THE_KEYS();
+	_siKeyPress.ALL_THE_KEYS();
 }
 
 bool SystemInput::Update()
 {
-	// Testing only
 	//std::cout << "System::Input::Update::BIG" << std::endl;
-	_SIKeyPress.Update();
-	_SICtrler.Update();
-	_SIMousePos.Update();
+	_siKeyPress.Update();
+	_siCtrler.Update();
+	_siMousePos.Update();
 
-	if (_SIKeyPress.GetKeyHold(IKEY_A))
+	if (_siKeyPress.GetKeyHold(IKEY_A))
 	{
 		std::cout << "System::Input::Update::PRESSING A" << std::endl;
 	}
@@ -46,17 +45,17 @@ void SystemInput::Unload()
 {
 }
 
-ENGINE_API SystemInput_ns::SystemKeyPress& SystemInput::GetSystemKeyPress()
+SystemInput_ns::SystemKeyPress& SystemInput::GetSystemKeyPress()
 {
-	return _SIKeyPress;
+	return _siKeyPress;
 }
 
-ENGINE_API SystemInput_ns::SystemController& SystemInput::GetSystemController()
+SystemInput_ns::SystemController& SystemInput::GetSystemController()
 {
-	return _SICtrler;
+	return _siCtrler;
 }
 
-ENGINE_API SystemInput_ns::SystemMousePosition& SystemInput::GetSystemMousePos()
+SystemInput_ns::SystemMousePosition& SystemInput::GetSystemMousePos()
 {
-	return _SIMousePos;
+	return _siMousePos;
 }
