@@ -11,7 +11,7 @@ void ComponentManager::ComponentSetFactory::StartBuild()
 	compSet = new ComponentSet();
 }
 
-ComponentManager::ContainerID ComponentManager::ComponentSetFactory::AddComponent(ComponentMemoryManager::ComponentTypeSettings set)
+ComponentManager::ContainerID ComponentManager::ComponentSetFactory::AddComponentContainer(ComponentMemoryManager::ComponentTypeSettings set)
 {
 	// create new container and adds id to list
 	ContainerID conid = compSet->cmm.createNewComponentType(set);
@@ -20,12 +20,12 @@ ComponentManager::ContainerID ComponentManager::ComponentSetFactory::AddComponen
 	return conid;
 }
 
-ComponentManager::ContainerID ComponentManager::ComponentSetFactory::AddComponent(size_t size)
+ComponentManager::ContainerID ComponentManager::ComponentSetFactory::AddComponentContainer(size_t size)
 {
 	// sets only size, default settings
 	ComponentMemoryManager::ComponentTypeSettings set;
 	set.elementSize = size;
-	return AddComponent(set); // calls fn
+	return AddComponentContainer(set); // calls fn
 }
 
 ComponentManager::ComponentSet* ComponentManager::ComponentSetFactory::Build()
@@ -279,6 +279,7 @@ int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 		//check
 		ComponentSet::ObjectData::ComponentData* comp = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(obj);
 		if (comp->containerIndex == itr.memItr.getCurrentIndex())
+		//if (comp->containerId == itr.containerId) //memItr.getCurrentIndex())
 		{
 			objId = obj_o->objId;
 			break;
@@ -384,6 +385,7 @@ void ComponentManager::Free()
 	{
 		ComponentSet* cs = p.second;
 		cs->cmm.freeAll();
+		free(cs);
 	}
 }
 
@@ -657,223 +659,223 @@ void ComponentManager::test1()
 
 void ComponentManager::test2()
 {
+	// depreciated
+
+	//struct ComponentT
+	//{
+	//	float vert[4];
+	//	int id;
+	//};
+
+	//struct ComponentT1
+	//{
+	//	int id0;
+	//	float s[16];
+	//	float r[16];
+	//	float t[16];
+	//	int id1;
+	//};
+
+	//ComponentManager mgrCom;
+
+	//// factory
+	//ComponentManager::ComponentSetFactory comsetFac;
+
+	//// init the build
+	//comsetFac.StartBuild();
+
+	//// adds a component using component size
+	//ComponentManager::ContainerID containerT0 = comsetFac.AddComponentContainer(sizeof(ComponentT)); // save the container id
+
+	//// adds a component using settings
+	//ComponentManager::ContainerSettings set;
+	//set.elementSize = sizeof(ComponentT1);
+	//ComponentManager::ContainerID containerT1 = comsetFac.AddComponentContainer(set); // save the container id
+
+	//// builds the component
+	//ComponentManager::ComponentSet* compSet0 = comsetFac.Build();
+
+	//// component manager
+	//ComponentManager mgrComp;
+
+	//// adds the component set to the manager
+	//mgrComp.AddComponentSet(compSet0);
+
+	//// init component set manager
+	//ComponentManager::ComponentSetManager compSetMgr(compSet0);
+
+	//// build a new object
+	//int newObjId = compSetMgr.BuildObject();
+
+	//// attach component
+	//ComponentT newComponentT =
+	//{
+	//	{1.11f, 2.22f, 3.33f, 4.44f},
+	//	newObjId
+	//};
+	//void* newObjPtr = compSetMgr.AttachComponent(containerT0, newObjId, &newComponentT);
+
+	//// get component
+	//ComponentT* componentTest = reinterpret_cast<ComponentT*>(compSetMgr.getComponent(containerT0, newObjId));
+	//std::cout << "Test  get component:" << std::endl;
+	//std::cout << componentTest->id << std::endl;
+	//std::cout << componentTest->vert[0] << std::endl;
+	//std::cout << componentTest->vert[3] << std::endl;
 
 
-	struct ComponentT
-	{
-		float vert[4];
-		int id;
-	};
+	//// remove component
+	//compSetMgr.RemoveComponent(containerT0, newObjId);
 
-	struct ComponentT1
-	{
-		int id0;
-		float s[16];
-		float r[16];
-		float t[16];
-		int id1;
-	};
+	//// remove object
+	//compSetMgr.UnBuildObject(newObjId);
 
-	ComponentManager mgrCom;
-
-	// factory
-	ComponentManager::ComponentSetFactory comsetFac;
-
-	// init the build
-	comsetFac.StartBuild();
-
-	// adds a component using component size
-	ComponentManager::ContainerID containerT0 = comsetFac.AddComponent(sizeof(ComponentT)); // save the container id
-
-	// adds a component using settings
-	ComponentManager::ContainerSettings set;
-	set.elementSize = sizeof(ComponentT1);
-	ComponentManager::ContainerID containerT1 = comsetFac.AddComponent(set); // save the container id
-
-	// builds the component
-	ComponentManager::ComponentSet* compSet0 = comsetFac.Build();
-
-	// component manager
-	ComponentManager mgrComp;
-
-	// adds the component set to the manager
-	mgrComp.AddComponentSet(compSet0);
-
-	// init component set manager
-	ComponentManager::ComponentSetManager compSetMgr(compSet0);
-
-	// build a new object
-	int newObjId = compSetMgr.BuildObject();
-
-	// attach component
-	ComponentT newComponentT =
-	{
-		{1.11f, 2.22f, 3.33f, 4.44f},
-		newObjId
-	};
-	void* newObjPtr = compSetMgr.AttachComponent(containerT0, newObjId, &newComponentT);
-
-	// get component
-	ComponentT* componentTest = reinterpret_cast<ComponentT*>(compSetMgr.getComponent(containerT0, newObjId));
-	std::cout << "Test  get component:" << std::endl;
-	std::cout << componentTest->id << std::endl;
-	std::cout << componentTest->vert[0] << std::endl;
-	std::cout << componentTest->vert[3] << std::endl;
+	//// try get component after remove
+	//componentTest = reinterpret_cast<ComponentT*>(compSetMgr.getComponent(containerT0, newObjId));
+	//std::cout << "Test  try get component after remove:" << std::endl;
+	//std::cout << componentTest->id << std::endl;
+	//std::cout << componentTest->vert[0] << std::endl;
+	//std::cout << componentTest->vert[3] << std::endl;
 
 
-	// remove component
-	compSetMgr.RemoveComponent(containerT0, newObjId);
+	//// insert stress test
+	//std::vector<int> objIds;
+	//for (int i = 0; i < 1000; ++i)
+	//{
+	//	// new obj
+	//	newObjId = compSetMgr.BuildObject();
+	//	objIds.push_back(newObjId);
 
-	// remove object
-	compSetMgr.UnBuildObject(newObjId);
+	//	// attach component
+	//	ComponentT newComponentTN =
+	//	{
+	//		{1.11f, 2.22f, 3.33f, 4.44f},
+	//		newObjId
+	//	};
+	//	compSetMgr.AttachComponent(containerT0, newObjId, &newComponentTN);
+	//}
 
-	// try get component after remove
-	componentTest = reinterpret_cast<ComponentT*>(compSetMgr.getComponent(containerT0, newObjId));
-	std::cout << "Test  try get component after remove:" << std::endl;
-	std::cout << componentTest->id << std::endl;
-	std::cout << componentTest->vert[0] << std::endl;
-	std::cout << componentTest->vert[3] << std::endl;
+	//// get stress tess
+	//std::cout << "Test  get stress:" << std::endl;
+	//for (int id : objIds)
+	//{
+	//	componentTest = reinterpret_cast<ComponentT*>(compSetMgr.getComponent(containerT0, id));
+	//	std::cout << "Test :";
+	//	std::cout << componentTest->id << " ";
+	//	//std::cout << componentTest->vert[0] << " ";
+	//	//std::cout << componentTest->vert[3] << std::endl;
+	//}
 
+	//// insert into containerT1
+	//std::cout << "\nTest  insert containerT1:" << std::endl;
+	//std::vector<int> obj2Ids;
+	//for (int i = 0; i < 1000; ++i)
+	//{
+	//	// new obj
+	//	newObjId = compSetMgr.BuildObject();
+	//	obj2Ids.push_back(newObjId);
 
-	// insert stress test
-	std::vector<int> objIds;
-	for (int i = 0; i < 1000; ++i)
-	{
-		// new obj
-		newObjId = compSetMgr.BuildObject();
-		objIds.push_back(newObjId);
+	//	// attach component
+	//	ComponentT newComponentTN =
+	//	{
+	//		{1.11f, 2.22f, 3.33f, 4.44f},
+	//		newObjId
+	//	};
+	//	compSetMgr.AttachComponent(containerT0, newObjId, &newComponentTN);
 
-		// attach component
-		ComponentT newComponentTN =
-		{
-			{1.11f, 2.22f, 3.33f, 4.44f},
-			newObjId
-		};
-		compSetMgr.AttachComponent(containerT0, newObjId, &newComponentTN);
-	}
+	//	// attach component
+	//	ComponentT1 newComponentT1 =
+	//	{
+	//		newObjId,
+	//		{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f},
+	//		{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f},
+	//		{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f},
+	//		newObjId,
+	//	};
+	//	compSetMgr.AttachComponent(containerT1, newObjId, &newComponentT1);
+	//}
 
-	// get stress tess
-	std::cout << "Test  get stress:" << std::endl;
-	for (int id : objIds)
-	{
-		componentTest = reinterpret_cast<ComponentT*>(compSetMgr.getComponent(containerT0, id));
-		std::cout << "Test :";
-		std::cout << componentTest->id << " ";
-		//std::cout << componentTest->vert[0] << " ";
-		//std::cout << componentTest->vert[3] << std::endl;
-	}
+	//// get from containerT1
+	//std::cout << "Test  get containerT1:" << std::endl;
+	//for (int id : obj2Ids)
+	//{
+	//	ComponentT1* componentTest1 = reinterpret_cast<ComponentT1*>(compSetMgr.getComponent(containerT1, id));
+	//	std::cout << "T1 :";
+	//	std::cout << componentTest1->id0 << " ";
+	//	std::cout << componentTest1->id1 << " ";
 
-	// insert into containerT1
-	std::cout << "\nTest  insert containerT1:" << std::endl;
-	std::vector<int> obj2Ids;
-	for (int i = 0; i < 1000; ++i)
-	{
-		// new obj
-		newObjId = compSetMgr.BuildObject();
-		obj2Ids.push_back(newObjId);
-
-		// attach component
-		ComponentT newComponentTN =
-		{
-			{1.11f, 2.22f, 3.33f, 4.44f},
-			newObjId
-		};
-		compSetMgr.AttachComponent(containerT0, newObjId, &newComponentTN);
-
-		// attach component
-		ComponentT1 newComponentT1 =
-		{
-			newObjId,
-			{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f},
-			{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f},
-			{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f},
-			newObjId,
-		};
-		compSetMgr.AttachComponent(containerT1, newObjId, &newComponentT1);
-	}
-
-	// get from containerT1
-	std::cout << "Test  get containerT1:" << std::endl;
-	for (int id : obj2Ids)
-	{
-		ComponentT1* componentTest1 = reinterpret_cast<ComponentT1*>(compSetMgr.getComponent(containerT1, id));
-		std::cout << "T1 :";
-		std::cout << componentTest1->id0 << " ";
-		std::cout << componentTest1->id1 << " ";
-
-		componentTest = reinterpret_cast<ComponentT*>(compSetMgr.getComponent(containerT0, id));
-		std::cout << "T0 :";
-		std::cout << componentTest->id << " ";
-	}
+	//	componentTest = reinterpret_cast<ComponentT*>(compSetMgr.getComponent(containerT0, id));
+	//	std::cout << "T0 :";
+	//	std::cout << componentTest->id << " ";
+	//}
 
 
-	// ITERATOR
-	std::cout << "\n\nTest  ITERATOR containerT1:" << std::endl;
-	ComponentManager::ComponentSetManager::Iterator itr = compSetMgr.begin(containerT1);
-	auto itrEnd = compSetMgr.end(containerT1);
+	//// ITERATOR
+	//std::cout << "\n\nTest  ITERATOR containerT1:" << std::endl;
+	//ComponentManager::ComponentSetManager::Iterator itr = compSetMgr.begin(containerT1);
+	//auto itrEnd = compSetMgr.end(containerT1);
 
-	while (itr != itrEnd)
-	{
-		ComponentT1* comTest1 = reinterpret_cast<ComponentT1*>(*itr);
-		std::cout << "T1 :";
-		std::cout << comTest1->id0 << " ";
-		std::cout << comTest1->id1 << " ";
+	//while (itr != itrEnd)
+	//{
+	//	ComponentT1* comTest1 = reinterpret_cast<ComponentT1*>(*itr);
+	//	std::cout << "T1 :";
+	//	std::cout << comTest1->id0 << " ";
+	//	std::cout << comTest1->id1 << " ";
 
-		++itr;
-	}
-
-
-	std::cout << "\n\nTest  ITERATOR containerT0:" << std::endl;
-	itr = compSetMgr.begin(containerT0);
-	itrEnd = compSetMgr.end(containerT0);
-
-	int c = 0;
-
-	while (itr != itrEnd)
-	{
-		ComponentT* comTest0 = reinterpret_cast<ComponentT*>(*itr);
-		std::cout << "T0:";
-		std::cout << comTest0->id << " ";
-
-		std::cout << "ID:";
-		std::cout << compSetMgr.getObjId(itr) << " ";
-
-		//if (itr.getObjId() != -1)
-		//{
-		//	ComponentT1* comTest1 = reinterpret_cast<ComponentT1*>(compSetMgr.getComponent(containerT1, itr.getObjId()));
-		//	std::cout << "T1 :";
-		//	std::cout << comTest1->id0 << " ";
-		//}
-		//else
-		//{
-		//	std::cout << "T1 : - ";
-		//}
-
-		ComponentManager::ComponentSetManager::Entity obj = compSetMgr.getEntity(itr);
-
-		ComponentT1* comTest1 = reinterpret_cast<ComponentT1*>(obj.getComponent(containerT1));
-		if (comTest1 != nullptr)
-		{
-			std::cout << "T1:";
-			std::cout << comTest1->id0 << " ";
-		}
-		else
-		{
-			std::cout << "T1:-";
-		}
+	//	++itr;
+	//}
 
 
-		if (c == 1)
-		{
-			int j = 0;
-		}
+	//std::cout << "\n\nTest  ITERATOR containerT0:" << std::endl;
+	//itr = compSetMgr.begin(containerT0);
+	//itrEnd = compSetMgr.end(containerT0);
 
-		++c;
-		++itr;
-	}
+	//int c = 0;
+
+	//while (itr != itrEnd)
+	//{
+	//	ComponentT* comTest0 = reinterpret_cast<ComponentT*>(*itr);
+	//	std::cout << "T0:";
+	//	std::cout << comTest0->id << " ";
+
+	//	std::cout << "ID:";
+	//	std::cout << compSetMgr.getObjId(itr) << " ";
+
+	//	//if (itr.getObjId() != -1)
+	//	//{
+	//	//	ComponentT1* comTest1 = reinterpret_cast<ComponentT1*>(compSetMgr.getComponent(containerT1, itr.getObjId()));
+	//	//	std::cout << "T1 :";
+	//	//	std::cout << comTest1->id0 << " ";
+	//	//}
+	//	//else
+	//	//{
+	//	//	std::cout << "T1 : - ";
+	//	//}
+
+	//	ComponentManager::ComponentSetManager::Entity obj = compSetMgr.getEntity(itr);
+
+	//	ComponentT1* comTest1 = reinterpret_cast<ComponentT1*>(obj.getComponent(containerT1));
+	//	if (comTest1 != nullptr)
+	//	{
+	//		std::cout << "T1:";
+	//		std::cout << comTest1->id0 << " ";
+	//	}
+	//	else
+	//	{
+	//		std::cout << "T1:-";
+	//	}
 
 
-	mgrCom.Free();
+	//	if (c == 1)
+	//	{
+	//		int j = 0;
+	//	}
+
+	//	++c;
+	//	++itr;
+	//}
+
+
+	//mgrCom.Free();
 }
 
 

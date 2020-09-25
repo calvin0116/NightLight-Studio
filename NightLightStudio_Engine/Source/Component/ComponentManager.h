@@ -3,6 +3,8 @@
 #include "ComponentMemoryManager.h"
 #include <vector>
 #include <map>
+#include <typeinfo>
+
 
 //**! Comment more !**//
 
@@ -19,21 +21,51 @@ public:
 
 	class ComponentSetFactory
 	{
-		ComponentSet* compSet;
+		ComponentSet* compSet; // building this compset
 	public:
 		// Start building
 		void StartBuild();
-		// adds a container
-		ComponentManager::ContainerID AddComponent(ComponentMemoryManager::ComponentTypeSettings set);
-		// adds a container using component size
-		ComponentManager::ContainerID AddComponent(size_t size);
+
+
+	private: 
+		// adds a container // using container id // helper
+		ComponentManager::ContainerID AddComponentContainer(ComponentMemoryManager::ComponentTypeSettings set);
+		// adds a container using component size // using container id // helper
+		ComponentManager::ContainerID AddComponentContainer(size_t size);
+	public:
+
+		// adds a container of typename T
+		template<typename T>
+		ComponentManager::ContainerID AddComponentContainer(ComponentMemoryManager::ComponentTypeSettings set)
+		{
+			set.elementSize = sizeof(T);
+			ComponentManager::ContainerID newid = AddComponentContainer(set);
+
+			const std::type_info& tinf = typeid(T);
+			compSet->hashConIdMap.insert(std::make_pair(tinf.hash_code(), newid));
+
+			return newid;
+		}
+
+		// adds a container of typename T
+		template<typename T>
+		ComponentManager::ContainerID AddComponentContainer()
+		{
+			ComponentMemoryManager::ComponentTypeSettings set;
+			return AddComponentContainer<T>(set);
+		}
+
 		// build the component set
 		// returns ptr to the component set
 		ComponentManager::ComponentSet* Build();
+
+		// ctor
 		ComponentSetFactory() :
 			compSet(nullptr)
 		{
 		}
+
+		// dtor
 		~ComponentSetFactory();
 	};
 
@@ -56,19 +88,36 @@ public:
 		// returns entity id
 		int BuildObject(); 
 
-		// attach component to the entity
+	private:
+		// attach component to the entity // using container id // helper
 		void* AttachComponent(ComponentManager::ContainerID compId, int entityId, void* newComp);
 
 		// void* AttachComponent(ManagerComponent::ContainerID compId, int objId); // allocate the component first
+
+		// get component // using container id
+		void* getComponent(ComponentManager::ContainerID compId, int entityId);
+
+	public:
+		// attach component to the entity // WARNING !!! DOES NOT check if the entity exists if the wrong entity id is passed in the behaviour is undefined
+		template<typename T>
+		T* AttachComponent(int entityId, T* newComp)
+		{
+			const std::type_info& tinf = typeid(T);
+
+			auto find = compSet->hashConIdMap.find(tinf.hash_code());
+			if (find == compSet->hashConIdMap.end())
+				throw; // gg
+
+			return reinterpret_cast<T*>(
+				AttachComponent((*find).second, entityId, newComp)
+				);
+		}
 
 		// remove component from entity
 		void RemoveComponent(ComponentManager::ContainerID compId, int entityId);
 
 		// free entity
 		void UnBuildObject(int objId);
-
-		// get component
-		void* getComponent(ComponentManager::ContainerID compId, int entityId);
 
 		// Iterator to iterate component container // !!! USE A TYPEDEF !!!
 		class Iterator
@@ -109,17 +158,38 @@ public:
 			//
 		};
 
-		// get the component
+		// get the component // helper
 		void* getComponent(ComponentManager::ContainerID compId, Iterator itr);
 
-		// Templated getComponent
-		// eg. get ComponentTransform
-		// ComponentTransform* compT = G_MAINCOMPSET.csmgr.getComponent<ComponentTransform>(G_MAINCOMPSET.containerTransform, itr);
+	private:
+		// get component // using container id // helper
 		template<typename T>
 		T* getComponent(ComponentManager::ContainerID compId, Iterator itr)
 		{
 			return reinterpret_cast<T*>(getComponent(compId, itr));
 		}
+
+	public:
+		// get component
+		template<typename T>
+		T* getComponent(Iterator itr)
+		{
+			const std::type_info& tinf = typeid(T);
+
+			auto find = compSet->hashConIdMap.find(tinf.hash_code());
+			if (find == compSet->hashConIdMap.end())
+				throw; // gg
+
+			if (itr.containerId == (*find).second)
+			{
+				return reinterpret_cast<T*>(*itr); // faster no lookup
+			}
+
+			return reinterpret_cast<T*>(getComponent((*find).second, itr));
+		}
+
+
+
 
 		// an abstraction of the entity
 		class Entity
@@ -132,13 +202,56 @@ public:
 		public:
 			// ctor
 			Entity(ComponentSetManager* csm, int oid);
-			// get component of the entity
+
+		private:
+			// get component of the entity // using container id // helper
 			void* getComponent(int compId);
+
+		public:
+			// get component of the entity
+			template<typename T>
+			T* getComponent()
+			{
+				const std::type_info& tinf = typeid(T);
+
+				auto find = compSetMgr->compSet->hashConIdMap.find(tinf.hash_code());
+				if (find == compSetMgr->compSet->hashConIdMap.end())
+					throw; // gg
+
+				return reinterpret_cast<T*>(getComponent((*find).second));
+			}
 		};
 
-		// begin and end iterators
+	private:
+		// begin and end iterators // using container id // helper
 		Iterator begin(ContainerID comT);
 		Iterator end(ContainerID comT);
+	public:
+
+		// begin and end iterators
+		template<typename T>
+		Iterator begin()
+		{
+			const std::type_info& tinf = typeid(T);
+
+			auto find = compSet->hashConIdMap.find(tinf.hash_code());
+			if (find == compSet->hashConIdMap.end())
+				throw; // gg
+
+			return begin((*find).second);
+		}
+
+		template<typename T>
+		Iterator end()
+		{
+			const std::type_info& tinf = typeid(T);
+
+			auto find = compSet->hashConIdMap.find(tinf.hash_code());
+			if (find == compSet->hashConIdMap.end())
+				throw; // gg
+
+			return end((*find).second);
+		}
 
 		// Get Entity and Entity Id
 		int getObjId(Iterator itr);
@@ -161,6 +274,9 @@ public:
 		ComponentManager::ContainerID objContainerId; // container id for obj
 		std::vector<ComponentManager::ContainerID> componentContainerIDs; // container id for comp
 		size_t objSize; // sizeof of the obj class -> [obj] [Components] * componentSize
+
+		// maps typeid to container id
+		std::map<size_t, ComponentManager::ContainerID> hashConIdMap; // std::type_info.hash_code() , id
 
 		//std::map<ComponentManager::ContainerID, std::map<int, int>> compObjIndMap; // maps comp to obj id // O(log n)
 

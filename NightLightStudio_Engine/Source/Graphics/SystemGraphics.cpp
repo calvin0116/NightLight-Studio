@@ -19,15 +19,16 @@ bool SystemGraphics::Update()
 	// components are loaded in SystemIO Load()
 
 	std::cout << "SystemGraphics::Update:" << std::endl;
-	auto itr = G_MAINCOMPSET.csmgr.begin(G_MAINCOMPSET.containerRender);
-	auto itrEnd = G_MAINCOMPSET.csmgr.end(G_MAINCOMPSET.containerRender);
+	auto itr = G_MAINCOMPSET.begin<ComponentRender>();
+	auto itrEnd = G_MAINCOMPSET.end<ComponentRender>();
 	while (itr != itrEnd)
 	{
 		// get the obj id
-		std::cout << "Object:" << G_MAINCOMPSET.csmgr.getObjId(itr) << std::endl;
+		std::cout << "Object:" << G_MAINCOMPSET.getObjId(itr) << std::endl;
 
 		// get the transform component from the iterator
-		ComponentRender* compR = reinterpret_cast<ComponentRender*>(*itr);
+		//ComponentRender* compR = reinterpret_cast<ComponentRender*>(*itr);
+		ComponentRender* compR = G_MAINCOMPSET.getComponent<ComponentRender>(itr);
 		std::cout << "Render:" << compR->id << " " << compR->c << std::endl;
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,7 +49,8 @@ bool SystemGraphics::Update()
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// another way to get component
-		ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(G_MAINCOMPSET.csmgr.getComponent(G_MAINCOMPSET.containerTransform, itr));
+		//ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(G_MAINCOMPSET.csmgr.getComponent(G_MAINCOMPSET.containerTransform, itr));
+		ComponentTransform* compT = G_MAINCOMPSET.getComponent<ComponentTransform>(itr);
 		if (compT != nullptr) // nullptr -> uninitialised or deleted
 			std::cout << "Transform:" << compT->_position.x << std::endl;
 
@@ -65,22 +67,23 @@ bool SystemGraphics::Update()
 
 	// eg. UI can be put into a seperate component set, G_UICOMPSET
 	// allows easier management of entities
-	itr = G_UICOMPSET.csmgr.begin(G_UICOMPSET.containerRender);
-	itrEnd = G_UICOMPSET.csmgr.end(G_UICOMPSET.containerRender);
+	itr = G_UICOMPSET.begin<ComponentRender>();
+	itrEnd = G_UICOMPSET.end<ComponentRender>();
 	while (itr != itrEnd)
 	{
 		// get the obj id
-		std::cout << "Object:" << G_UICOMPSET.csmgr.getObjId(itr) << std::endl;
+		std::cout << "Object:" << G_UICOMPSET.getObjId(itr) << std::endl;
 
 		// get the transform component from the iterator
 		ComponentRender* compR = reinterpret_cast<ComponentRender*>(*itr);
 		std::cout << "Render:" << compR->id << " " << compR->c << std::endl;
 
 		// get the entity from the iterator
-		ComponentManager::ComponentSetManager::Entity obj = G_UICOMPSET.csmgr.getEntity(itr);
+		ComponentManager::ComponentSetManager::Entity obj = G_UICOMPSET.getEntity(itr);
 
 		// get transform component
-		ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(obj.getComponent(G_UICOMPSET.containerTransform));
+		//ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(obj.getComponent(G_UICOMPSET.containerTransform));
+		ComponentTransform* compT = obj.getComponent<ComponentTransform>();
 		if (compT != nullptr) // nullptr -> uninitialised or deleted
 			std::cout << "Transform:" << compT->_position.x << std::endl;
 
