@@ -8,8 +8,11 @@
 #include "..\Core\MySystem.h"
 //#include "..\..\dep\FMOD\inc\fmod_errors.h"
 
-class SystemAudio : public MySystem
+class ENGINE_API SystemAudio : public MySystem, public  Singleton<SystemAudio>
 {
+  // Singleton
+  friend Singleton<SystemAudio>;
+  // Alias
   using MyAudioMap = std::map<std::string, FMOD::Sound*>;
 
   // Max channels allowed
@@ -78,3 +81,6 @@ public:
 	void Free();
 	void Unload();
 };
+
+// Global ptr
+static SystemAudio* SYS_AUDIO = SystemAudio::GetInstance();

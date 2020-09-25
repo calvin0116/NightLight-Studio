@@ -170,12 +170,10 @@ void SystemAudio::Exit()
 {
 }
 
-void SystemAudio::Free()
-{
-}
-
 void SystemAudio::Unload()
 {
 }
 
-// Missing engine exit to close systems
+void SystemAudio::Free()
+{
+}

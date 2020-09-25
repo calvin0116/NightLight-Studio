@@ -27,11 +27,12 @@ SystemManager::~SystemManager()
 //**! Update comments please thanks
 void MySystemManager::OnFirstStart()
 {
+  // === Insert your system here to get them running === //
+  // === Please follow how PhysicManager is created  === // 
 	//Systems[SYS_PHYSICS] = PhysicManager::GetInstance();
 	Systems[SP_GRAPHICS] = SYS_GRAPHIC;
-	// === Insert your system here to get them running === //
-	// === Please follow how PhysicManager is created  === // 
 	Systems[SP_INPUT] = SYS_INPUT;
+  Systems[SP_AUDIO] = SYS_AUDIO;
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP COMPONENT - shift this to a seperate class/function !!!
