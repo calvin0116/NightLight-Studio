@@ -1,6 +1,7 @@
 #pragma once
+#include "..\Core\MySystem.h"
 
-class SystemLogic
+class ENGINE_API SystemLogic
 {
 public:
 	void OnFirstStart();
