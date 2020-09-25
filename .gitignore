@@ -375,3 +375,4 @@ healthchecksdb
 *.tlog
 *.idb
 *.lastbuildstate
+/Bin-Int
