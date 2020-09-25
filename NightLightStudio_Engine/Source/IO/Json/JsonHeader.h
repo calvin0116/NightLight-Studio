@@ -3,10 +3,10 @@ Brief Description :
 			Json header files and related defines
 **************************************************************************/
 #pragma once
-#include "rapidjson/document.h"     // rapidjson's DOM-style API
-#include "rapidjson/prettywriter.h" // for stringify JSON
-#include <rapidjson/ostreamwrapper.h>
-#include <rapidjson/writer.h>
+#include "../../../Include/rapidjson/document.h"     // rapidjson's DOM-style API
+#include "../../../Include/rapidjson/prettywriter.h" // for stringify JSON
+#include "../../../Include/rapidjson/ostreamwrapper.h"
+#include "../../../Include/rapidjson/writer.h"
 using namespace rapidjson;
 
 //!!!!== Use for allocator only ==!!!!!//
