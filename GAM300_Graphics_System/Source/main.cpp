@@ -1,5 +1,6 @@
 #include "WndUtils.h"
 #include "WndSystem.h"
+#include "GraphicsSystem.h"
 
 // Entry Point
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
@@ -7,6 +8,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nShowCmd);
+
 
 	// Get static pointer to window system
 	NS_WINDOW::pApp->SetAppInstance(hInstance);
@@ -16,6 +18,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	while (1)
 	{
 		NS_WINDOW::pApp->Update();
+		NS_GRAPHICS::pGraphicsSys->Render();
 	}
 
 	return 0;

@@ -213,6 +213,7 @@ namespace NS_WINDOW
 		pfd.cColorBits = 32;
 		pfd.cAlphaBits = 8;
 		pfd.cDepthBits = 32;
+		pfd.cStencilBits = 8;
 
 		int format = ChoosePixelFormat(hDevContext, &pfd);
 

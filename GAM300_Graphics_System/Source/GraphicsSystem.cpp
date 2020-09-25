@@ -4,6 +4,10 @@
 
 namespace NS_GRAPHICS
 {
+	// Global Pointer to Application
+	// Other files should not touch this
+	GraphicsSystem* pGraphicsSys = &GraphicsSystem::GetInstance();
+
 	GraphicsSystem::GraphicsSystem()
 		: shaderManager{ nullptr },
 		modelLoader{ nullptr },
@@ -43,6 +47,10 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::Render()
 	{
+		// testing basic gl functionality
+		// Clears to yellow bg
+		glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void GraphicsSystem::ToggleDebugDraw(bool&& set)

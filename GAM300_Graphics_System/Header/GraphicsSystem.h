@@ -78,4 +78,7 @@ namespace NS_GRAPHICS
         DebugManager* debugManager;
         CameraSystem* cameraManager;
     };
+
+    // To delete after integration
+    extern GraphicsSystem* pGraphicsSys;
 }

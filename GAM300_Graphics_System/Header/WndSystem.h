@@ -124,5 +124,7 @@ namespace NS_WINDOW
 		// Destroy OpenGL
 		void QuitGL();
 	};
+
+	// To delete after integration
 	extern WndSystem* pApp;
 }
