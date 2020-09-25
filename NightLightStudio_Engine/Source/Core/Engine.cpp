@@ -20,7 +20,7 @@ void FluffyUnicornEngine::Run()
 	bool engine_running = true;	
 	bool scene_running = true;
 	bool game_running = true;	//This should come from game / logic system later on
-	
+
 
 	//Engine layer
 	while (engine_running)

@@ -16,6 +16,7 @@ void MySystemManager::OnFirstStart()
 	// === Insert your system here to get them running === //
 	// === Please follow how PhysicManager is created  === // 
 	Systems[SP_INPUT] = SYS_INPUT;
+	Systems[SP_IO] = SYS_IO;
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP COMPONENT - shift this to a seperate class/function !!!

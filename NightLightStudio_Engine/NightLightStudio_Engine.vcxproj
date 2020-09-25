@@ -135,6 +135,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile />
+      <AdditionalIncludeDirectories>../Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -186,6 +187,10 @@
     <ClInclude Include="Source\Input\SI_KeyPress.h" />
     <ClInclude Include="Source\Input\SI_MousePos.h" />
     <ClInclude Include="Source\Input\SystemInput.h" />
+    <ClInclude Include="Source\IO\Json\Config.h" />
+    <ClInclude Include="Source\IO\Json\JsonHeader.h" />
+    <ClInclude Include="Source\IO\Json\Parser.h" />
+    <ClInclude Include="Source\IO\Json\Parser.hpp" />
     <ClInclude Include="Source\IO\SystemIO.h" />
     <ClInclude Include="Source\Logic\SystemLogic.h" />
     <ClInclude Include="Source\Math\Matrix3x3.h" />
@@ -222,6 +227,7 @@
     <ClCompile Include="Source\Input\SI_KeyPress.cpp" />
     <ClCompile Include="Source\Input\SI_MousePos.cpp" />
     <ClCompile Include="Source\Input\SystemInput.cpp" />
+    <ClCompile Include="Source\IO\Json\Parser.cpp" />
     <ClCompile Include="Source\IO\SystemIO.cpp" />
     <ClCompile Include="Source\Logic\SystemLogic.cpp" />
     <ClCompile Include="Source\Math\Matrix3x3.cpp" />

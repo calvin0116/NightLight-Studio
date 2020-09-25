@@ -25,7 +25,7 @@ void SystemInput::Init()
 bool SystemInput::Update()
 {
 	// Testing only
-	std::cout << "System::Input::Update::BIG" << std::endl;
+	//std::cout << "System::Input::Update::BIG" << std::endl;
 	_SIKeyPress.Update();
 	_SICtrler.Update();
 	_SIMousePos.Update();
