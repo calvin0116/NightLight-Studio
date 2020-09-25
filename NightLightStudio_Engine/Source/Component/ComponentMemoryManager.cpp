@@ -54,7 +54,7 @@ char* ComponentMemoryManager::allocateBlock(size_t size)
 ComponentMemoryManager::ComponentType ComponentMemoryManager::createNewComponentType(ComponentMemoryManager::ComponentTypeSettings set)
 {
 	// define new component type
-	ComponentType newComponentType = componentTypes.size();
+	ComponentType newComponentType = (int)componentTypes.size();
 	while (componentTypes.find(newComponentType) != componentTypes.end())
 	{
 		// found
@@ -284,7 +284,7 @@ int ComponentMemoryManager::insertIntoContainer(ComponentMemoryManager::Componen
 {
 
 	ComponentMetaData* meta = findMeta(comT);
-	std::vector<char*>* container = findContainer(comT);
+	//std::vector<char*>* container = findContainer(comT);
 	std::vector<char>* containerB = findContainerBits(comT);
 
 
@@ -355,7 +355,7 @@ void ComponentMemoryManager::expandContainer(ComponentMemoryManager::ComponentTy
 	std::vector<char>* containerB = findContainerBits(comT);
 	int n = (set.blockSize + meta->currentMaxSize) / 8 /*size of char*/; // n is new size
 	++n;
-	for (int i = containerB->size() - 1; i < n; ++i) // add to current size
+	for (int i = (int)containerB->size() - 1; i < n; ++i) // add to current size
 	{
 		char newBits = 0;
 		containerB->push_back(newBits);

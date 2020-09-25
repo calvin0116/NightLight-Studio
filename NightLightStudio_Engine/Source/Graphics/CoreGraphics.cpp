@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-void CoreGraphics::AddToRenderSet(ComponentRender* comR)
+void CoreGraphics::AddToRenderSet(ComponentRender*)
 {
 
 }
