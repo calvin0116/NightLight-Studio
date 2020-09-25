@@ -2,39 +2,40 @@
 #include "..\\Math\Vector.h"
 #include "ComponentManager.h"
 
-enum ContainerID{
-	containerEntity = 0, //Don't access it
-	containerRender,
-	containerPhysics,
-	containerRigidBody,
-	containerInput,
-	containerLogic,
-	containerCamera,
-	containerLight
-};
+// depreciated
+//enum ContainerID{
+//	containerEntity = 0, //Don't access it
+//	containerRender,
+//	containerPhysics,
+//	containerRigidBody,
+//	containerInput,
+//	containerLogic,
+//	containerCamera,
+//	containerLight
+//};
 
-
-//Container for all intended components 
-struct ComponentsContainerID
-{
-	//Entities manager
-	ComponentManager::ComponentSetManager csmgr;
-
-	//**!Id of the container (Please change here ty)!**//
-	ComponentManager::ContainerID containerTransform ;
-	ComponentManager::ContainerID containerRender ;
-	ComponentManager::ContainerID containerPhysics;
-	ComponentManager::ContainerID containerRigidBody;
-	ComponentManager::ContainerID containerInput;
-	ComponentManager::ContainerID containerLogic;
-	ComponentManager::ContainerID containerCamera;
-	ComponentManager::ContainerID containerLight;
-};
+// depreciated
+////Container for all intended components 
+//struct ComponentsContainerID
+//{
+//	//Entities manager
+//	ComponentManager::ComponentSetManager csmgr;
+//
+//	//**!Id of the container (Please change here ty)!**//
+//	ComponentManager::ContainerID containerTransform ;
+//	ComponentManager::ContainerID containerRender ;
+//	ComponentManager::ContainerID containerPhysics;
+//	ComponentManager::ContainerID containerRigidBody;
+//	ComponentManager::ContainerID containerInput;
+//	ComponentManager::ContainerID containerLogic;
+//	ComponentManager::ContainerID containerCamera;
+//	ComponentManager::ContainerID containerLight;
+//};
 
 // eg. UI can be put into a seperate component set, G_UICOMPSET
 // allows easier management of entities
-extern ComponentsContainerID G_MAINCOMPSET;
-extern ComponentsContainerID G_UICOMPSET;
+extern ComponentManager::ComponentSetManager G_MAINCOMPSET;
+extern ComponentManager::ComponentSetManager G_UICOMPSET;
 
 
 struct IComponent

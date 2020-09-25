@@ -56,15 +56,15 @@ int ComponentTest()
 	comsetFac.StartBuild();
 
 	// adds a component using component size // adding ComponentTransform
-	ComponentManager::ContainerID containerTransform = comsetFac.AddComponent(sizeof(ComponentTransform)); // save the container id
+	ComponentManager::ContainerID containerTransform = comsetFac.AddComponentContainer(sizeof(ComponentTransform)); // save the container id
 
 	// adds a component using settings // ComponentRender
 	ComponentManager::ContainerSettings set;
 	set.elementSize = sizeof(ComponentRender);
-	ComponentManager::ContainerID containerRender = comsetFac.AddComponent(set); // save the container id
+	ComponentManager::ContainerID containerRender = comsetFac.AddComponentContainer(set); // save the container id
 
 	// adding ComponentPhysics
-	ComponentManager::ContainerID containerPhysics = comsetFac.AddComponent(sizeof(ComponentPhysics)); // save the container id
+	ComponentManager::ContainerID containerPhysics = comsetFac.AddComponentContainer(sizeof(ComponentPhysics)); // save the container id
 
 	// builds the component set
 	ComponentManager::ComponentSet* compSet0 = comsetFac.Build();
