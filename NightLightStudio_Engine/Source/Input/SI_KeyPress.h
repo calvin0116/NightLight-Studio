@@ -1,6 +1,8 @@
 #ifndef SI_SYSTEM_INPUT_KEYPRESS
 #define SI_SYSTEM_INPUT_KEYPRESS
 
+#include "../../framework.h"
+
 #include <Windows.h>
 #include <functional>
 #include <map>
@@ -195,45 +197,45 @@ namespace SystemInput_ns
 		//ONLY TO PREVENT CHECKING WHEN OUT OF WINDOW, MAY BE REMOVED/REPLACED
 		const HWND _window = GetForegroundWindow();
 
-		void IncrementKeyUsed(unsigned int key);
-		void DecrementKeyUsed(unsigned int key);
+		ENGINE_API void IncrementKeyUsed(unsigned int key);
+		ENGINE_API void DecrementKeyUsed(unsigned int key);
 
 	public:
 		SystemKeyPress();
 		~SystemKeyPress() = default;
 
-		bool Update(float dt = 0);
+		ENGINE_API bool Update(float dt = 0);
 
 		// Checks only registered keys in use
-		bool GetKeyPress(unsigned int keycode);
+		ENGINE_API bool GetKeyPress(unsigned int keycode);
 		// Checks only registered keys in use
-		bool GetKeyHold(unsigned int keycode);
+		ENGINE_API bool GetKeyHold(unsigned int keycode);
 		// Checks only registered keys in use
-		bool GetKeyRelease(unsigned int keycode);
+		ENGINE_API bool GetKeyRelease(unsigned int keycode);
 		// Checks if key is toggled - Usually for caps lock etc.
-		bool GetKeyToggle(unsigned int keycode);
+		ENGINE_API bool GetKeyToggle(unsigned int keycode);
 
 		// Checks directly from hardware state
-		bool GetKeyStateHold(unsigned int keycode);
+		ENGINE_API bool GetKeyStateHold(unsigned int keycode);
 
 
 		// Creates new Event (Member Functions)
 		template <typename T, typename U>
-		void CreateNewEvent(const std::string& name, unsigned int keycode, std::string identifier, Trigger val, void(T::* func)(), U* obj)
+		ENGINE_API void CreateNewEvent(const std::string& name, unsigned int keycode, std::string identifier, Trigger val, void(T::* func)(), U* obj)
 		{
 			_events.emplace(std::pair<std::string, InputEventStruct>(name, InputEventStruct(keycode, identifier, val, InputEvent_MemberFunc(func, obj))));
 
 			IncrementKeyUsed(keycode);
 		}
 		// Creates new Event (Static Functions)
-		void CreateNewEvent(const std::string& name, unsigned int keycode, std::string identifier, Trigger val, INPUT_EVENT func)
+		ENGINE_API void CreateNewEvent(const std::string& name, unsigned int keycode, std::string identifier, Trigger val, INPUT_EVENT func)
 		{
 			_events.emplace(std::pair<std::string, InputEventStruct>(name, InputEventStruct(keycode, identifier, val, func)));
 
 			IncrementKeyUsed(keycode);
 		}
 		// Creates new Event (Empty Event)
-		void CreateNewEvent(const std::string& name, unsigned int keycode)
+		ENGINE_API void CreateNewEvent(const std::string& name, unsigned int keycode)
 		{
 			_events.emplace(std::pair<std::string, InputEventStruct>(name, InputEventStruct(keycode)));
 
@@ -244,7 +246,7 @@ namespace SystemInput_ns
 		// Add a new function to an Event
 		// Reminder to call RemoveAttachedFunction if you are attaching a member function and said object is being destroyed
 		template <typename T, typename U>
-		void AddFunctionToEvent(const std::string& name, std::string identifier, Trigger t, void(T::* func)(), U* obj)
+		ENGINE_API void AddFunctionToEvent(const std::string& name, std::string identifier, Trigger t, void(T::* func)(), U* obj)
 		{
 			std::map<const std::string, InputEventStruct>::iterator temp = _events.find(name);
 			if (temp != std::end(_events))
@@ -253,7 +255,7 @@ namespace SystemInput_ns
 
 		// Add a new function to an Event
 		// Reminder to call RemoveAttachedFunction if you are attaching a member function and said object is being destroyed
-		void AddFunctionToEvent(const std::string& name, std::string identifier, Trigger t, INPUT_EVENT func)
+		ENGINE_API void AddFunctionToEvent(const std::string& name, std::string identifier, Trigger t, INPUT_EVENT func)
 		{
 			std::map<const std::string, InputEventStruct>::iterator temp = _events.find(name);
 			if (temp != std::end(_events))
@@ -261,26 +263,26 @@ namespace SystemInput_ns
 		}
 
 		// Changes Key that triggers the Event
-		void ChangeEventKey(const std::string& name, unsigned int keycode);
+		ENGINE_API void ChangeEventKey(const std::string& name, unsigned int keycode);
 
 		// Removes the Event from Registered Events
-		void RemoveEvent(const std::string& name);
+		ENGINE_API void RemoveEvent(const std::string& name);
 
 		// Removes a function attached to an Event
 		// Reminder to use this if you attach a member function to an Event
-		void RemoveAttachedFunction(const std::string& name, std::string identifier);
+		ENGINE_API void RemoveAttachedFunction(const std::string& name, std::string identifier);
 
 		// Gets the Function that the Event runs
 		// Returns nullptr if unable to find
-		INPUT_EVENT GetInputEvent(const std::string& name, std::string identifier);
+		ENGINE_API INPUT_EVENT GetInputEvent(const std::string& name, std::string identifier);
 
 		// All keys are now registered
 		// Use at your own peril
-		void ALL_THE_KEYS();
+		ENGINE_API void ALL_THE_KEYS();
 
 		// All keys are now deregistered
 		// Use at your own peril
-		void NO_KEYS();
+		ENGINE_API void NO_KEYS();
 	};
 }
 

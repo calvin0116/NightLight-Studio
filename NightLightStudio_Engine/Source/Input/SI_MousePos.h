@@ -1,18 +1,20 @@
 #ifndef SI_SYSTEM_INPUT_MOUSEPOS
 #define SI_SYSTEM_INPUT_MOUSEPOS
 
+#include "..\..\framework.h"
+
 #include <Windows.h>
 #include <string>
 
 namespace SystemInput_ns
 {
-	struct InputVec2
+	struct ENGINE_API InputVec2
 	{
 		float _x;
 		float _y;
 	};
 
-	class SystemMousePosition
+	class ENGINE_API SystemMousePosition
 	{
 		POINT _mousePos;
 		POINT _prevMousePos;
