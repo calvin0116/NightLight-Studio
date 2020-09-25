@@ -8,6 +8,9 @@
 
 //**! Comment more !**//
 
+//**! I need to clean up my code !**//
+
+
 class ComponentManager
 {
 public:
@@ -386,6 +389,7 @@ public:
 };
 
 
+extern ComponentManager G_COMPMGR;
 
 
 

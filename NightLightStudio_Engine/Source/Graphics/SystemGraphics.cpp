@@ -27,33 +27,13 @@ bool SystemGraphics::Update()
 		std::cout << "Object:" << G_MAINCOMPSET.getObjId(itr) << std::endl;
 
 		// get the transform component from the iterator
-		//ComponentRender* compR = reinterpret_cast<ComponentRender*>(*itr);
 		ComponentRender* compR = G_MAINCOMPSET.getComponent<ComponentRender>(itr);
 		std::cout << "Render:" << compR->id << " " << compR->c << std::endl;
 
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//// Get entity first then get component
-		//// The reason why get entity first:
-		//// If in the future we add parent-child to entities, 
-		//// I intend to abstract obj->getChild() (returns child entity) or sth similar
-
-		//// get the entity from the iterator
-		//ComponentManager::ComponentSetManager::Entity obj = G_MAINCOMPSET.csmgr.getEntity(itr);
-
-		//// get transform component
-		//ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(obj.getComponent(G_MAINCOMPSET.containerTransform));
-		//if (compT != nullptr) // nullptr -> uninitialised or deleted
-		//	std::cout << "Transform:" << compT->_position._x << std::endl;
-
-		//// 
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		// another way to get component
-		//ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(G_MAINCOMPSET.csmgr.getComponent(G_MAINCOMPSET.containerTransform, itr));
+		// get another component
 		ComponentTransform* compT = G_MAINCOMPSET.getComponent<ComponentTransform>(itr);
 		if (compT != nullptr) // nullptr -> uninitialised or deleted
 			std::cout << "Transform:" << compT->_position.x << std::endl;
-
 
 		_coreGraphics.AddToRenderSet(compR); // eg. add to render set
 		// system should only manage the components
@@ -79,11 +59,10 @@ bool SystemGraphics::Update()
 		std::cout << "Render:" << compR->id << " " << compR->c << std::endl;
 
 		// get the entity from the iterator
-		ComponentManager::ComponentSetManager::Entity obj = G_UICOMPSET.getEntity(itr);
+		ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(itr);
 
 		// get transform component
-		//ComponentTransform* compT = reinterpret_cast<ComponentTransform*>(obj.getComponent(G_UICOMPSET.containerTransform));
-		ComponentTransform* compT = obj.getComponent<ComponentTransform>();
+		ComponentTransform* compT = entity.getComponent<ComponentTransform>();
 		if (compT != nullptr) // nullptr -> uninitialised or deleted
 			std::cout << "Transform:" << compT->_position.x << std::endl;
 
