@@ -69,6 +69,7 @@ namespace NS_GRAPHICS
     private:
 
         bool hasInit;
+        bool debugDrawing;
 
         ShaderSystem* shaderManager;
         ModelLoader* modelLoader;

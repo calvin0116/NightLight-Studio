@@ -16,7 +16,8 @@ namespace NS_GRAPHICS
 		lightManager{ nullptr },
 		debugManager{ nullptr },
 		cameraManager{ nullptr },
-		hasInit{ false }
+		hasInit{ false },
+		debugDrawing{ false }
 	{
 
 	}
@@ -55,5 +56,6 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::ToggleDebugDraw(bool&& set)
 	{
+		debugDrawing = set;
 	}
 }

@@ -13,7 +13,8 @@ namespace NS_GRAPHICS
 
 	void ShaderSystem::LoadShader(std::string& s_vertex, std::string& s_frag)
 	{
-
+		s_vertex;
+		s_frag;
 	}
 
 	void ShaderSystem::CompileLoadedShaders()
@@ -43,6 +44,7 @@ namespace NS_GRAPHICS
 
 	void ShaderSystem::StartProgram(int& programID)
 	{
+		programID;
 	}
 	void ShaderSystem::StopProgram()
 	{
