@@ -5,9 +5,10 @@
 
 #include "..\..\dep\FMOD\inc\fmod.hpp"
 #include "..\Math\Vector.h"
+#include "..\Core\MySystem.h"
 //#include "..\..\dep\FMOD\inc\fmod_errors.h"
 
-class SystemAudio
+class SystemAudio : public MySystem
 {
   using MyAudioMap = std::map<std::string, FMOD::Sound*>;
 
@@ -59,10 +60,20 @@ public:
   ~SystemAudio() = default;
 
   // System functions
-	void OnFirstStart();
-	void Load();
-	void Init();
-	void Update(float dt);
+	void OnFirstStart() override;
+
+  void EarlyLoad() override {};
+  void Load() override;
+  void LateLoad() override {};
+
+  void EarlyInit() override {};
+  void Init() override;
+  void LateInit() override {};
+
+  bool FixedUpdate() override { return true; };
+  bool Update() override;
+  bool LateUpdate() override { return true; };
+
 	void Exit();
 	void Free();
 	void Unload();

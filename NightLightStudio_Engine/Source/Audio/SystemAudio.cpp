@@ -159,11 +159,11 @@ void SystemAudio::Init()
 
 }
 
-void SystemAudio::Update(float dt)
+bool SystemAudio::Update()
 {
-  (void)dt;
   // position update here
   _system->update();
+  return true;
 }
 
 void SystemAudio::Exit()
