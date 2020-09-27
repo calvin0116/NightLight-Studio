@@ -178,4 +178,14 @@ namespace SystemInput_ns
 	{
 		_usedKeyCodes.clear();
 	}
+
+	void SystemKeyPress::Restore_EventKeys()
+	{
+		std::map<const std::string, InputEventStruct>::iterator temp = _events.begin();
+
+		for (auto& it : _events)
+		{
+			_usedKeyCodes[it.second._keycode];
+		}
+	}
 }

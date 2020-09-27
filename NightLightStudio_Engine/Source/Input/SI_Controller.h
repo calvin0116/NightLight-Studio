@@ -12,6 +12,8 @@
 #include <set>
 #include <functional>
 
+#include <string>
+
 namespace SystemInput_ns
 {
 	/*=========== Key Codes for Controller Buttons. Note that this is XINPUT (XBOX CONTROLLER) =============*/
@@ -97,15 +99,32 @@ namespace SystemInput_ns
 
 	class SystemController
 	{
+		template <typename CTYPE>
+		struct CONTROLLER_BASE_EVENT
+		{
+			unsigned int _button;
+			CTRLTrigger _trigger;
+
+			CTYPE _event;
+
+			CONTROLLER_BASE_EVENT(unsigned int button, CTRLTrigger trigger, CTYPE eve)
+				: _button(button), _trigger(trigger), _event(eve) {}
+		};
+
 		bool _allowControllers;
 		int _controllerID;
 		XINPUT_STATE _controllerState;
 		std::map<unsigned int, unsigned int> _buttonStates;
 
-		std::multimap<std::pair<unsigned int, unsigned int>, CONTROLLER_EVENT> _buttonEvents;
+		std::map<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>> _buttonEvents;
+		std::map<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_TRIGGER_EVENT>> _triggerEvents;
+		std::map<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_ANALOG_EVENT>> _analogEvents;
 
-		std::multimap<unsigned int, CONTROLLER_TRIGGER_EVENT> _triggerEvents;
-		std::multimap<unsigned int, CONTROLLER_ANALOG_EVENT> _analogEvents;
+
+		//std::multimap<std::pair<unsigned int, unsigned int>, CONTROLLER_EVENT> _buttonEvents;
+
+		//std::multimap<unsigned int, CONTROLLER_TRIGGER_EVENT> _triggerEvents;
+		//std::multimap<unsigned int, CONTROLLER_ANALOG_EVENT> _analogEvents;
 
 		//ONLY TO PREVENT CHECKING WHEN OUT OF WINDOW, MAY BE REMOVED/REPLACED
 		const HWND _window = GetForegroundWindow();
@@ -140,18 +159,18 @@ namespace SystemInput_ns
 
 		// Creates new Event (Member Functions)
 		template <typename T, typename U>
-		ENGINE_API void CreateNewEvent(unsigned int button, CTRLTrigger trig, void(T::* func)(), U* obj)
+		ENGINE_API void CreateNewEvent(std::string name, unsigned int button, CTRLTrigger trig, void(T::* func)(), U* obj)
 		{
-			_buttonEvents.emplace(std::pair<std::pair<unsigned int, unsigned int>, CONTROLLER_EVENT>
-				(std::make_pair(button, trig), CtrlEvent_MemberFunc(func, obj)));
+			_buttonEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>>
+				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>(button, trig, CtrlEvent_MemberFunc(func, obj)))));
 
 			_buttonStates.emplace(button, 0);
 		}
 		// Creates new Event (Static Functions)
-		ENGINE_API void CreateNewEvent(unsigned int button, CTRLTrigger trig, CONTROLLER_EVENT func = nullptr)
+		ENGINE_API void CreateNewEvent(std::string name, unsigned int button, CTRLTrigger trig, CONTROLLER_EVENT func = nullptr)
 		{
-			_buttonEvents.emplace(std::pair<std::pair<unsigned int, unsigned int>, CONTROLLER_EVENT>
-				(std::make_pair(button, trig), func));
+			_buttonEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>>
+				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>(button, trig, func))));
 
 			_buttonStates.emplace(button, 0);
 		}
@@ -159,34 +178,51 @@ namespace SystemInput_ns
 		// Creates new Trigger Event (Member Functions)
 		// lr -> Left Trigger = 0, Right Trigger = 1
 		template <typename T, typename U>
-		ENGINE_API void CreateNewTriggerEvent(unsigned int lr, void(T::* func)(float), U* obj)
+		ENGINE_API void CreateNewTriggerEvent(std::string name, unsigned int lr, void(T::* func)(float), U* obj)
 		{
-			_triggerEvents.emplace(std::pair<unsigned int, CONTROLLER_TRIGGER_EVENT>
-				(lr, CtrlEventTrigger_MemberFunc(func, obj)));
+			_triggerEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_TRIGGER_EVENT>>
+				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_TRIGGER_EVENT>
+					(lr, OnCTRLDefault, CtrlEventTrigger_MemberFunc(func, obj)))));
 		}
 		// Creates new Event (Static Functions)
 		// lr -> Left Trigger = 0, Right Trigger = 1
-		ENGINE_API void CreateNewTriggerEvent(unsigned int lr, CONTROLLER_TRIGGER_EVENT func = nullptr)
+		ENGINE_API void CreateNewTriggerEvent(std::string name, unsigned int lr, CONTROLLER_TRIGGER_EVENT func = nullptr)
 		{
-			_triggerEvents.emplace(std::pair<unsigned int, CONTROLLER_TRIGGER_EVENT>
-				(lr, func));
+			_triggerEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_TRIGGER_EVENT>>
+				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_TRIGGER_EVENT>(lr, OnCTRLDefault, func))));
 		}
 
 		// Creates new Analog Event (Member Functions)
 		// lr -> Left Analog Stick = 0, Right Analog Stick = 1
 		template <typename T, typename U>
-		ENGINE_API void CreateNewAnalogEvent(unsigned int lr, void(T::* func)(float, float), U* obj)
+		ENGINE_API void CreateNewAnalogEvent(std::string name, unsigned int lr, void(T::* func)(float, float), U* obj)
 		{
-			_analogEvents.emplace(std::pair<unsigned int, CONTROLLER_ANALOG_EVENT>
-				(lr, CtrlEventAnalog_MemberFunc(func, obj)));
+			_analogEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_ANALOG_EVENT>>
+				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_ANALOG_EVENT>
+					(lr, OnCTRLDefault, CtrlEventAnalog_MemberFunc(func, obj)))));
 		}
 		// Creates new Event (Static Functions)
 		// lr -> Left Analog Stick = 0, Right Analog Stick = 1
-		ENGINE_API void CreateNewAnalogEvent(unsigned int lr, CONTROLLER_ANALOG_EVENT func = nullptr)
+		ENGINE_API void CreateNewAnalogEvent(std::string name, unsigned int lr, CONTROLLER_ANALOG_EVENT func = nullptr)
 		{
-			_analogEvents.emplace(std::pair<unsigned int, CONTROLLER_ANALOG_EVENT>
-				(lr, func));
+			_analogEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_ANALOG_EVENT>>
+				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_ANALOG_EVENT>(lr, OnCTRLDefault, func))));
 		}
+
+		// Changes Key that triggers the Event
+		ENGINE_API void ChangeEventKey(const std::string& name, unsigned int button);
+
+		// Removes the Event from Registered Events
+		// Do remove the Event IF you are using member functions and it is about to be destroyed
+		ENGINE_API void RemoveEvent(const std::string& name);
+
+		// Removes the Event from Registered Trigger Events
+		// Do remove the Event IF you are using member functions and it is about to be destroyed
+		ENGINE_API void RemoveTriggerEvent(const std::string& name);
+
+		// Removes the Event from Registered Analog Events
+		// Do remove the Event IF you are using member functions and it is about to be destroyed
+		ENGINE_API void RemoveAnalogEvent(const std::string& name);
 
 		ENGINE_API bool Update(float dt = 0);
 	};
