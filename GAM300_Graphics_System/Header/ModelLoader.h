@@ -1,12 +1,13 @@
 #pragma once
 #include "FBX_SDK/fbxsdk.h"
-#include "../Mesh.h"
 
 namespace NS_GRAPHICS
 {
 	class ModelLoader
 	{
 		FbxManager* _fbxManager;
+		FbxScene* _fbxScene;
+		FbxImporter* _fbxImport;
 
 		ModelLoader();
 		~ModelLoader();
@@ -19,6 +20,7 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
-		void LoadFBX(const std::string& fileName, Mesh& mesh);
+		//void LoadFBX(const std::string& fileName, Mesh& mesh);
+		void LoadFBX(const std::string& fileName);
 	};
 }
