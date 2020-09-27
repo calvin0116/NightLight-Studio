@@ -59,13 +59,6 @@ struct ComponentRender
 	float f[16];
 };
 
-struct ComponentRigidBody
-{
-	int id;
-	char c;
-	float f[16];
-};
-
 struct ComponentInput
 {
 	int id;

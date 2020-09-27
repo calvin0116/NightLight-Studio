@@ -3,7 +3,7 @@
 #include "Components.h"
 #include "ComponentTransform.h"
 
-class ComponentPhysics : public IComponent
+class ComponentRigidBody : public IComponent
 {
 	//determine if it is a static object, a static object will not receive update
 	bool _static;
@@ -19,8 +19,8 @@ class ComponentPhysics : public IComponent
 
 	
 public:
-	ComponentPhysics();
-	~ComponentPhysics();
+	ComponentRigidBody();
+	~ComponentRigidBody();
 
 	//getters and setters
 	NlMath::Vector3D GetVelocity() const;

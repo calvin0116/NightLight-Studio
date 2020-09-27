@@ -1,11 +1,10 @@
-
-
 #include "SystemManager.h"
 #include "Systems.h"
 #include "..//Component/Components.h"
 
 #include "..//Component/ComponentTransform.h"
-#include "..//Component/ComponentPhysics.h"
+#include "..//Component/ComponentRigidBody.h"
+#include "..//Component/ComponentCollider.h"
 
 // Do not touch
 //**! Update comments please thanks
@@ -32,7 +31,7 @@ void MySystemManager::OnFirstStart()
 
 		comsetFac.AddComponentContainer<ComponentTransform>();
 		comsetFac.AddComponentContainer<ComponentRender>();
-		comsetFac.AddComponentContainer<ComponentPhysics>();
+		comsetFac.AddComponentContainer<ComponentCollider>();
 		comsetFac.AddComponentContainer<ComponentRigidBody>();
 		comsetFac.AddComponentContainer<ComponentInput>();
 		comsetFac.AddComponentContainer<ComponentLogic>();
