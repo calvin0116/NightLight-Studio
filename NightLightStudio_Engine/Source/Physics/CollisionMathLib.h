@@ -8,15 +8,7 @@
 #include "..\\Component\ComponentRigidBody.h"
 #include "..\\Math\Vector.h"
 
-enum class SIDES
-{
-	TOP = 0,
-	BOTTOM,
-	LEFT,
-	RIGHT,
-	FRONT,
-	BACK
-};
+
 
 bool PointInAABB(const AABBCollider& tBox, const NlMath::Vector3D& vecPoint);
 
