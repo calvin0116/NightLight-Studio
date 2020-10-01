@@ -51,7 +51,7 @@ namespace SystemInput_ns
 		bool ToggleCursorVisible();
 		// Sets If can view cursor
 		void SetCursorVisible(bool show);
-		// Sets Cursor image - .cur or .ani files onlt
+		// Sets Cursor image - .cur or .ani files only
 		void LoadCursorImage(std::string name);
 		// Returns Client Rect Size in pixels
 		POINT GetClientRectSize();

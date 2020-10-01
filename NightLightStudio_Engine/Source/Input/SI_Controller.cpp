@@ -133,6 +133,46 @@ namespace SystemInput_ns
 		return { 0.0f, 0.0f };
 	}
 
+	void SystemController::ChangeEventKey(const std::string& name, unsigned int button)
+	{
+		decltype(_buttonEvents)::iterator temp = _buttonEvents.find(name);
+
+		if (temp != std::end(_buttonEvents))
+		{
+			temp->second._button = button;
+		}
+	}
+
+	void SystemController::RemoveEvent(const std::string& name)
+	{
+		decltype(_buttonEvents)::iterator temp = _buttonEvents.find(name);
+
+		if (temp != std::end(_buttonEvents))
+		{
+			_buttonEvents.erase(temp);
+		}
+	}
+
+	void SystemController::RemoveTriggerEvent(const std::string& name)
+	{
+		decltype(_triggerEvents)::iterator temp = _triggerEvents.find(name);
+
+		if (temp != std::end(_triggerEvents))
+		{
+			_triggerEvents.erase(temp);
+		}
+	}
+
+	void SystemController::RemoveAnalogEvent(const std::string& name)
+	{
+		decltype(_analogEvents)::iterator temp = _analogEvents.find(name);
+
+		if (temp != std::end(_analogEvents))
+		{
+			_analogEvents.erase(temp);
+		}
+	}
+
 	bool SystemController::Update(float)
 	{
 		if (!_allowControllers)
@@ -172,31 +212,34 @@ namespace SystemInput_ns
 			}
 		}
 
-		for (decltype(_buttonEvents)::value_type but : _buttonEvents)
+
+		for (decltype(_buttonStates)::value_type but : _buttonStates)
 		{
-			decltype(_buttonStates)::iterator it= _buttonStates.find(but.first.first);
-			if (it != std::end(_buttonStates))
+			for (decltype(_buttonEvents)::value_type eventBut : _buttonEvents)
 			{
-				if (_buttonStates[but.first.first] == but.first.second)
+				if (eventBut.second._button == but.first)
 				{
-					if (but.second)
-						but.second();
+					if (eventBut.second._trigger == but.second)
+					{
+						if (eventBut.second._event)
+							eventBut.second._event();
+					}
 				}
 			}
 		}
 
 		for (decltype(_triggerEvents)::value_type trig : _triggerEvents)
 		{
-			if (trig.second)
-				trig.second(GetTrigger(trig.first));
+			if (trig.second._event)
+				trig.second._event(GetTrigger(trig.second._button));
 		}
 
 		for (decltype(_analogEvents)::value_type analog : _analogEvents)
 		{
-			if (analog.second)
+			if (analog.second._event)
 			{
-				ControllerVec2 vec = GetAnalog(analog.first);
-				analog.second(vec._x, vec._y);
+				ControllerVec2 vec = GetAnalog(analog.second._button);
+				analog.second._event(vec._x, vec._y);
 			}
 		}
 

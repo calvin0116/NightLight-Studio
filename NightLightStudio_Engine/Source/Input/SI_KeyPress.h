@@ -283,6 +283,10 @@ namespace SystemInput_ns
 		// All keys are now deregistered
 		// Use at your own peril
 		ENGINE_API void NO_KEYS();
+
+		// Restores Event Keys so that they will be checked - In case you use NO_KEYS for some reason
+		// Completely untested, but it should work
+		ENGINE_API void Restore_EventKeys();
 	};
 }
 
