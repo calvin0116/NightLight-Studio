@@ -61,37 +61,46 @@ SIDES AABBCheckCollisionSides(const AABBCollider& tBox1, const AABBCollider& tBo
     NlMath::Vector3D center1 = NlMath::Vector3DMidPoint(tBox1.vecMax, tBox1.vecMin);
     NlMath::Vector3D center2 = NlMath::Vector3DMidPoint(tBox2.vecMax, tBox2.vecMin);
 
-    //get distance vector between two box's center
-    NlMath::Vector3D diffVec = center2 - center1;
+    //get absolute distance vector between two box's center
+    NlMath::Vector3D centerDistance = center2 - center1;
+    centerDistance.x = fabsf(centerDistance.x);
+    centerDistance.y = fabsf(centerDistance.y);
+    centerDistance.z = fabsf(centerDistance.z);
+    
+    //get scaling factor
+    NlMath::Vector3D extend1 = tBox1.vecMax - center1;
+    NlMath::Vector3D extend2 = tBox2.vecMax - center2;
 
-    //lamda for sorting
-    auto cmp = [](std::pair<float, char> left, std::pair<float, char> right) { return (left.first) < (right.first); };
-    std::priority_queue<std::pair<float, char>, std::vector<std::pair<float, char>>, decltype(cmp)> magnitudeQueue(cmp);
+    //calculate total extend
+    NlMath::Vector3D totalExtend = extend1 + extend2;
 
-    //sort the maginutde of all axis
-    magnitudeQueue.push(std::pair<float, char>(fabs(diffVec.x), 'x'));
-    magnitudeQueue.push(std::pair<float, char>(fabs(diffVec.y), 'y'));
-    magnitudeQueue.push(std::pair<float, char>(fabs(diffVec.z), 'z'));
+    //total 
+    NlMath::Vector3D diffVec = totalExtend - centerDistance;
 
-    //use the longest axis to check
-    std::pair<float, char> check = magnitudeQueue.top();
-    if (check.second == 'x')
+
+    if (diffVec.x <= 0 || diffVec.y <= 0 || diffVec.z <= 0)
+    {
+        return SIDES::NO_COLLISION;
+    }
+
+
+    if (diffVec.x <= diffVec.y && diffVec.x <= diffVec.z)
     {
         //if x is positive and longest among all axis, the collision must be happening at LEFT
-        if (diffVec.x > 0)
+        if (centerDistance.x > 0)
         {
-            return SIDES::LEFT;
+            return SIDES::RIGHT;
         }
         //if x is negative and longest among all axis, the collision must be happening at RIGHT
         else
         {
-            return SIDES::RIGHT;
+            return SIDES::LEFT;
         }
     }
-    else if (check.second == 'y')
+    else if (diffVec.y <= diffVec.x && diffVec.y <= diffVec.z)
     {
         //if y is positive and longest among all axis, the collision must be happening at FRONT
-        if (diffVec.y > 0)
+        if (centerDistance.y > 0)
         {
             return SIDES::FRONT;
         }
@@ -101,10 +110,10 @@ SIDES AABBCheckCollisionSides(const AABBCollider& tBox1, const AABBCollider& tBo
             return SIDES::BACK;
         }
     }
-    else if (check.second == 'z')
+    else if (diffVec.z <= diffVec.y && diffVec.z <= diffVec.x)
     {
         //if z is positive and longest among all axis, the collision must be happening at TOP
-        if (diffVec.z > 0)
+        if (centerDistance.z > 0)
         {
             return SIDES::TOP;
         }

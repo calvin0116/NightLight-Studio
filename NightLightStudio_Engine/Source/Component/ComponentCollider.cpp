@@ -42,6 +42,11 @@ bool AABBCollider::CheckCollision(SphereCollider& collider)
 	return false;
 }
 
+ComponentCollider::ComponentCollider()
+	:tranformObject{ nullptr }, rigidBody{ nullptr }, collisionTime{FLT_MAX}
+{
+}
+
 void ComponentCollider::CollisionTimeReset()
 {
 	collisionTime = FLT_MAX;

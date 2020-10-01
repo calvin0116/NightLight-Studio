@@ -15,8 +15,8 @@ enum class SIDES
 	BACK
 };
 
-class SphereCollider;
-class AABBCollider;
+struct SphereCollider;
+struct AABBCollider;
 
 class ComponentCollider : public IComponent
 {
@@ -31,7 +31,7 @@ public:
 	// For layers
 	int ColliderTag = 1;
 
-	ComponentCollider() = default;
+	ComponentCollider();
 	void CollisionTimeReset();
 
 };
