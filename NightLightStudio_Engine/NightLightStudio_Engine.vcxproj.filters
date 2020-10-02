@@ -165,6 +165,9 @@
     <ClInclude Include="Source\Component\ComponentCollider.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\LocalVector.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
