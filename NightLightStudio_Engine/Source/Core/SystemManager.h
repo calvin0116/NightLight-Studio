@@ -11,7 +11,6 @@ Brief Description :
 #include "Singleton.h"
 
 //System to manage
-#include "..//Graphics/SystemGraphics.h"
 #include "../IO/SystemIO.h"
 
 
@@ -28,7 +27,7 @@ private:
 public:
 	//List of function calling for all system
 	//== Memory allocation phase
-	ENGINE_API void StartUp();
+	ENGINE_API void StartUp(HINSTANCE&);
 
 	//== Asserts importing / additional memory allocation phase
 	ENGINE_API void EarlyLoad() { for (auto my_sys : Systems) my_sys.second->EarlyLoad(); };
