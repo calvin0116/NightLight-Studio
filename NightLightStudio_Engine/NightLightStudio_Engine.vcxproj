@@ -184,6 +184,7 @@
     <ClInclude Include="Source\Core\DeltaTime.h" />
     <ClInclude Include="Source\Core\Engine.h" />
     <ClInclude Include="Source\Core\MySystem.h" />
+    <ClInclude Include="Source\Core\SceneManager.h" />
     <ClInclude Include="Source\Core\Singleton.h" />
     <ClInclude Include="Source\Core\SystemManager.h" />
     <ClInclude Include="Source\Core\ISystem.h" />
@@ -226,6 +227,7 @@
     <ClCompile Include="Source\Component\ComponentTransform.cpp" />
     <ClCompile Include="Source\Core\DeltaTime.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
+    <ClCompile Include="Source\Core\SceneManager.cpp" />
     <ClCompile Include="Source\Core\SystemManager.cpp" />
     <ClCompile Include="Source\Core\Systems.cpp" />
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />

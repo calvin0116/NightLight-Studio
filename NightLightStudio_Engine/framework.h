@@ -18,7 +18,7 @@ using std::cout;
 using std::endl;
 
 //Json file path
-const std::string assert_path = "../Resources/JsonFile/";
+const std::string json_path = "../Resources/JsonFile/";
 //#ifdef ENGINE_EXPORTS
 //#define ENGINE_API __declspec(dllexport)
 //#else
