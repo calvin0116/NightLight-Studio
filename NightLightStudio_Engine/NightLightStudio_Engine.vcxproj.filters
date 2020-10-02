@@ -49,6 +49,9 @@
     <Filter Include="Source Files\IO\Json">
       <UniqueIdentifier>{f09c9436-0756-4a00-951c-207781b0ff30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Window">
+      <UniqueIdentifier>{d1cbd245-3262-4f22-8988-1a1ff1a0f593}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -80,12 +83,6 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\SystemEditor.h">
       <Filter>Source Files\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\CoreGraphics.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\SystemGraphics.h">
-      <Filter>Source Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Input\SI_Controller.h">
       <Filter>Source Files\Input</Filter>
@@ -165,6 +162,39 @@
     <ClInclude Include="Source\Component\ComponentCollider.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Window\WndSystem.h">
+      <Filter>Source Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Window\WndUtils.h">
+      <Filter>Source Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\CameraSystem.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\DebugManager.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\GraphicsSystem.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\LightSystem.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Mesh.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\ModelLoader.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\ModelManager.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\ShaderSystem.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\TextureLoader.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Component\LocalVector.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
@@ -193,12 +223,6 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\SystemEditor.cpp">
       <Filter>Source Files\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\SystemGraphics.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\CoreGraphics.cpp">
-      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Input\SI_Controller.cpp">
       <Filter>Source Files\Input</Filter>
@@ -256,6 +280,36 @@
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentCollider.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Window\WndSystem.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\CameraSystem.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DebugManager.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GraphicsSystem.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\LightSystem.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Mesh.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\ModelLoader.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\ModelManager.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\ShaderSystem.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\TextureLoader.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

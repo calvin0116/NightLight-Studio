@@ -14,7 +14,7 @@ private:
 public:
 	void OnFirstStart();
 
-	void Load();
+	void EarlyLoad();
 
 	void Init();
 

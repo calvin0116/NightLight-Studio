@@ -30,25 +30,25 @@ struct ConfigData
 	std::string startscene;
 };
 
-class ENGINE_API Config : public MySystem ,public Singleton<Config> {
+class  Config : public MySystem ,public Singleton<Config> {
 private:
 	ConfigData config_d;
 	Parser parser;
 public:
-	Config()
+	ENGINE_API Config()
 		:config_d{}
 		, parser{ "config.json", assert_path }
 	{
 	};
 
-	void OnFirstStart()
+	ENGINE_API void OnFirstStart()
 	{
 		std::cout << "Parser::StartUp" << std::endl;
 		parser.Load();
 	}
 
 
-	void Load() 
+	ENGINE_API void Load()
 	{
 		std::cout << "Parser::Loading of data" << std::endl;
 		Value& wind_val = parser["config"]["window"];

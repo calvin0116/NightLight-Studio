@@ -4,20 +4,31 @@
 #include "Singleton.h"
 
 //System piority / id
-enum S_PRIORITY
+enum class S_PRIORITY
 {
-	SP_TOOLS = 0, 
+
+	SP_NOT_INITIALISED = -1,
+
+	SP_TOOLS = 0,
+	SP_WINDOW,
 	SP_IO,
 	SP_INPUT,
 	SP_GRAPHICS,
 	SP_COLLISION,
 	SP_PHYSICS,
-  SP_AUDIO
+	SP_AUDIO
 };
 
 class ENGINE_API MySystem : public ISystem
 {
-private:
+protected:
 	int id;
-	S_PRIORITY piority;
+	S_PRIORITY priority;
+
+public:
+	MySystem()
+		: id{ -1 }
+		, priority{ S_PRIORITY::SP_NOT_INITIALISED }
+	{};
+	virtual ~MySystem() {};
 };

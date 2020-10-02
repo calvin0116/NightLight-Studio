@@ -1,7 +1,7 @@
 #include "DeltaTime.h"
 
 
-DeltaTime delta_t;
+//DeltaTime delta_t;
 
 void DeltaTime::load()
 {
