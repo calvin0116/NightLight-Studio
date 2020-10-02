@@ -14,7 +14,9 @@ Brief Description :
 #include "..//Graphics/SystemGraphics.h"
 #include "../IO/SystemIO.h"
 
-class ENGINE_API MySystemManager : public Singleton<MySystemManager>
+
+
+class  MySystemManager : public Singleton<MySystemManager>
 {
 private:
 	//For singleton to access constructor / destructor
@@ -26,32 +28,32 @@ private:
 public:
 	//List of function calling for all system
 	//== Memory allocation phase
-	void OnFirstStart();
+	ENGINE_API void StartUp();
 
 	//== Asserts importing / additional memory allocation phase
-	void EarlyLoad() { for (auto my_sys : Systems) my_sys.second->EarlyLoad(); };
-	void Load() { for (auto my_sys : Systems) my_sys.second->Load(); };
-	void LateLoad() { for (auto my_sys : Systems) my_sys.second->LateLoad(); };
+	ENGINE_API void EarlyLoad() { for (auto my_sys : Systems) my_sys.second->EarlyLoad(); };
+	ENGINE_API void Load() { for (auto my_sys : Systems) my_sys.second->Load(); };
+	ENGINE_API void LateLoad() { for (auto my_sys : Systems) my_sys.second->LateLoad(); };
 
 	//== Game / Usage of assert phase
-	void EarlyInit() { for (auto my_sys : Systems) my_sys.second->EarlyInit(); };
-	void Init() { for (auto my_sys : Systems) my_sys.second->Init(); };
-	void LateInit() { for (auto my_sys : Systems) my_sys.second->LateInit(); }
+	ENGINE_API void EarlyInit() { for (auto my_sys : Systems) my_sys.second->EarlyInit(); };
+	ENGINE_API void Init() { for (auto my_sys : Systems) my_sys.second->Init(); };
+	ENGINE_API void LateInit() { for (auto my_sys : Systems) my_sys.second->LateInit(); }
 
 	//== Game / System running loop
-	bool FixedUpdate() { 
+	ENGINE_API bool FixedUpdate() {
 		for (auto my_sys : Systems) 
 			if(!my_sys.second->FixedUpdate())
 				return false;
 		return true;
 	};
-	bool Update() { 
+	ENGINE_API bool Update() {
 		for (auto my_sys : Systems)
 			if (!my_sys.second->Update())
 				return false;
 		return true;
 	};
-	bool LateUpdate() { 
+	ENGINE_API bool LateUpdate() {
 		for (auto my_sys : Systems)
 			if (!my_sys.second->LateUpdate())
 				return false;
@@ -59,31 +61,31 @@ public:
 	};
 
 	//== Game info clear
-	void Exit() { for (auto my_sys : Systems) my_sys.second->Exit(); };
+	ENGINE_API void Exit() { for (auto my_sys : Systems) my_sys.second->Exit(); };
 	//== Asserts clear
-	void Unload() { for (auto my_sys : Systems) my_sys.second->Unload(); };
+	ENGINE_API void Unload() { for (auto my_sys : Systems) my_sys.second->Unload(); };
 	//Memory deallocation phase
-	void Free() { for (auto my_sys : Systems) my_sys.second->Free(); };
+	ENGINE_API void Free() { for (auto my_sys : Systems) my_sys.second->Free(); };
 
 	//== Helper function
 
 	// All this function for now is just placed here for normal use
 	// Sequencing will be improved later on
-	void CombineLoad()
+	ENGINE_API void CombineLoad()
 	{
 		EarlyLoad();
 		Load();
 		LateLoad();
 	}
 
-	void CombineInit()
+	ENGINE_API void CombineInit()
 	{
 		EarlyInit();
 		Init();
 		LateInit();
 	}
 
-	bool CombineUpdate()
+	ENGINE_API bool CombineUpdate()
 	{
 		if(!FixedUpdate()) return false;
 		if(!Update()) return false;
@@ -93,7 +95,7 @@ public:
 	}
 
 	//Getting system
-	MySystem* operator[] (S_PRIORITY sys_p)
+	ENGINE_API MySystem* operator[] (S_PRIORITY sys_p)
 	{
 		return Systems[sys_p];
 	}

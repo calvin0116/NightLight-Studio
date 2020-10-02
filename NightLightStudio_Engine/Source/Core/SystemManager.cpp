@@ -8,16 +8,16 @@
 
 // Do not touch
 //**! Update comments please thanks
-void MySystemManager::OnFirstStart()
+void MySystemManager::StartUp()
 {
   // === Insert your system here to get them running === //
   // === Please follow how PhysicManager is created  === // 
 	//Systems[SYS_PHYSICS] = PhysicManager::GetInstance();
 	//Systems[SP_WINDOW] = SYS_WINDOW;
-	Systems[SP_GRAPHICS] = SYS_GRAPHIC;
-	Systems[SP_INPUT] = SYS_INPUT;
-	Systems[SP_IO] = SYS_IO;
-	Systems[SP_AUDIO] = SYS_AUDIO;
+	Systems[S_PRIORITY::SP_GRAPHICS] = SYS_GRAPHIC;
+	Systems[S_PRIORITY::SP_INPUT] = SYS_INPUT;
+	Systems[S_PRIORITY::SP_IO] = SYS_IO;
+	Systems[S_PRIORITY::SP_AUDIO] = SYS_AUDIO;
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP HANDLER TO WINDOW(CLIENT) INSTANCE

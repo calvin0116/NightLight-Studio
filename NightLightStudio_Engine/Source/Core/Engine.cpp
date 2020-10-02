@@ -10,7 +10,7 @@
 
 void FluffyUnicornEngine::Init()
 {
-	SYS_MAN->OnFirstStart();
+	SYS_MAN->StartUp();
 	//_engineState = ENGINE_UPDATE;
 }
 
@@ -21,11 +21,10 @@ void FluffyUnicornEngine::Run()
 	bool scene_running = true;
 	bool game_running = true;	//This should come from game / logic system later on
 
-
 	//Engine layer
 	while (engine_running)
 	{
-		delta_t.load();
+		DELTA_T->load();
 		SYS_MAN->CombineLoad();
 		while (scene_running)
 		{
@@ -33,8 +32,9 @@ void FluffyUnicornEngine::Run()
 			while (game_running)
 			{
 				//fps start
-				delta_t.start();
+				DELTA_T->start();
 				//Exit if update fails
+				//Need help to remove this for messaging system
 				if (!SYS_MAN->CombineUpdate())
 				{
 					//Temp for now
@@ -44,7 +44,7 @@ void FluffyUnicornEngine::Run()
 				}
 				//////
 				// fps end
-				delta_t.end();
+				DELTA_T->end();
 				//std::cout << fps << std::endl;
 				//std::cout << "60.00" << std::endl; // best solution for 60fps
 
