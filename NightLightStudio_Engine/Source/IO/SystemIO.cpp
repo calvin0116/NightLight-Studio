@@ -11,9 +11,9 @@ void SystemIO::OnFirstStart()
 
 
 
-void SystemIO::Load()
+void SystemIO::EarlyLoad()
 {
-	std::cout << "SystemIO::Load" << std::endl;
+	std::cout << "SystemIO::EarlyLoad" << std::endl;
 	//G_GSM.getScn(); // get the current scene
 	//G_GSM.setScn(1); // set the nxt scene
 	CONFIG_DATA->Load();

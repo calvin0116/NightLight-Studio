@@ -78,7 +78,7 @@ namespace SystemInput_ns
 	void SystemMousePosition::LoadCursorImage(std::string name)
 	{
 		std::wstring wStr = std::wstring(std::begin(name), std::end(name));
-		HCURSOR hCurs = LoadCursorFromFile(wStr.data());
+		HCURSOR hCurs = LoadCursorFromFile((LPCSTR)wStr.data());
 		SetClassLongPtr(_window, GCLP_HCURSOR, (LONG_PTR)hCurs);
 	}
 	POINT SystemMousePosition::GetClientRectSize()
