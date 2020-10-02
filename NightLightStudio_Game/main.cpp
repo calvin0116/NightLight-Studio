@@ -21,18 +21,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nShowCmd);
 
-
-	// Get static pointer to window system
-	//NS_WINDOW::pApp->SetAppInstance(hInstance);
-
-	//NS_WINDOW::pApp->Init();
-
-	/*while (1)
-	{
-		NS_WINDOW::pApp->Update();
-		NS_GRAPHICS::pGraphicsSys->Render();
-	}*/
-
 #ifdef _DEBUG
 	// Spawn console for debugging
 	if (AllocConsole())
@@ -55,6 +43,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	engine.Run();
 
 	engine.Exit();
+
+#ifdef _DEBUG
+	FreeConsole();
+#endif
 
 	return 0;
 }
