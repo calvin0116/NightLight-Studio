@@ -14,7 +14,7 @@ Brief Description :
 #include "..//Graphics/SystemGraphics.h"
 #include "../IO/SystemIO.h"
 
-class ENGINE_API MySystemManager : public ISystem, public Singleton<MySystemManager>
+class ENGINE_API MySystemManager : public Singleton<MySystemManager>
 {
 private:
 	//For singleton to access constructor / destructor

@@ -9,7 +9,7 @@ int main()
 	
 	engine.Run();
 
-
+	engine.Exit();
 	return 0;
 }
 
