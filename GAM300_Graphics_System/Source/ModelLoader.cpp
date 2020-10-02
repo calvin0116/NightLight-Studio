@@ -66,6 +66,7 @@ namespace NS_GRAPHICS
 		}
 
 		// Convert Unit System
+		// Convert to CM
 		FbxSystemUnit SceneSystemUnit = _fbxScene->GetGlobalSettings().GetSystemUnit();
 
 		if (SceneSystemUnit.GetScaleFactor() != 1.0)

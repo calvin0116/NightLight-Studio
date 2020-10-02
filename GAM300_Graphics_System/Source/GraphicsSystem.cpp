@@ -19,7 +19,6 @@ namespace NS_GRAPHICS
 		hasInit{ false },
 		debugDrawing{ false }
 	{
-
 	}
 
 	GraphicsSystem::~GraphicsSystem()
@@ -36,6 +35,13 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::Init()
 	{
+		// If client window has not been initialized, return error without initializing sub systems
+		if (NS_WINDOW::pApp->HasInit())
+		{
+			std::cout << "ERROR: Window System not initialized before Graphics System, please check WndSystem initialization." << std::endl;
+			return;
+		}
+
 		// Get pointer to all static instances of sub systems and managers
 		shaderManager = &ShaderSystem::GetInstance();
 		modelLoader = &ModelLoader::GetInstance();
@@ -49,9 +55,12 @@ namespace NS_GRAPHICS
 	void GraphicsSystem::Render()
 	{
 		// testing basic gl functionality
-		// Clears to yellow bg
-		glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+		// Clears to gray bg
+		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+		// Sample draw triangle
 	}
 
 	void GraphicsSystem::ToggleDebugDraw(bool&& set)

@@ -4,17 +4,29 @@ namespace NS_GRAPHICS
 {
 	ShaderSystem::ShaderSystem()
 	{
+		// Reserve memory to avoid expensive allocations (Reduces load time)
+		files.reserve(max_shaders);
+		programs.reserve(max_shaders);
 	}
 
 	ShaderSystem::~ShaderSystem()
 	{
-
+		// Delete shader programs
+		for (auto i : programs)
+		{
+			glDeleteProgram(i);
+		}
 	}
 
-	void ShaderSystem::LoadShader(std::string& s_vertex, std::string& s_frag)
+	void ShaderSystem::LoadShader(std::string& fp_vertex, std::string& fp_frag)
 	{
-		s_vertex;
-		s_frag;
+		fp_vertex;
+		fp_frag;
+	}
+
+	void ShaderSystem::LoadShaderVariables()
+	{
+
 	}
 
 	void ShaderSystem::CompileLoadedShaders()
@@ -32,9 +44,13 @@ namespace NS_GRAPHICS
 			glDetachShader(ProgramID, sFragmentID);
 			glDeleteShader(sFragmentID);*/
 		}
+
+		// Discard unnecessary vector of files after compilation
 	}
 	void ShaderSystem::Init()
 	{
+		// Load all available shaders
+		// Shader path example: ../Shaders/sampleshader.vert
 		//LoadShader("","");
 		//LoadShader("","");
 		//LoadShader("","");
@@ -44,9 +60,10 @@ namespace NS_GRAPHICS
 
 	void ShaderSystem::StartProgram(int& programID)
 	{
-		programID;
+		glUseProgram(programID);
 	}
 	void ShaderSystem::StopProgram()
 	{
+		glUseProgram(NULL);
 	}
 }

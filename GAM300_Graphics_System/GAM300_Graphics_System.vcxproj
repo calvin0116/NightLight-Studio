@@ -171,6 +171,7 @@
     <ClInclude Include="Header\DebugManager.h" />
     <ClInclude Include="Header\GraphicsSystem.h" />
     <ClInclude Include="Header\main.h" />
+    <ClInclude Include="Header\Mesh.h" />
     <ClInclude Include="Header\WndSystem.h" />
     <ClInclude Include="Header\WndUtils.h" />
     <ClInclude Include="Header\LightSystem.h" />
@@ -178,7 +179,6 @@
     <ClInclude Include="Header\ModelManager.h" />
     <ClInclude Include="Header\ShaderSystem.h" />
     <ClInclude Include="Header\TextureLoader.h" />
-    <ClInclude Include="Mesh.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

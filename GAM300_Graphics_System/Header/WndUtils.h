@@ -26,6 +26,7 @@ Institute of Technology is prohibited.
 //BASIC UTIL INCLUDES
 #include <string>
 #include <sstream>
+#include <iostream>
 
 // OPENGL INCLUDES
 #include "OpenGL/glew.h" // MUST BE INCLUDED FIRST
