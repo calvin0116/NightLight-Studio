@@ -57,6 +57,15 @@ namespace NlMath
 	Vector3D operator * (float lhs, const Vector3D& rhs);
 	Vector3D operator / (const Vector3D& lhs, float rhs);
 	
+
+	/**************************************************************************/
+	/*!
+		In this function, the return value is the mid point of 
+		point pVec0 and point pVec1
+	 */
+	 /**************************************************************************/
+	Vector3D	Vector3DMidPoint(const Vector3D& pVec0, const Vector3D& pVec1);
+
 	/**************************************************************************/
 	/*!
 		In this function, pResult will be the unit vector of pVec0

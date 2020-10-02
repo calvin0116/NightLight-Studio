@@ -182,6 +182,17 @@ namespace NlMath
 	{
 		return Vector3D(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
 	}
+	/**************************************************************************/
+	/*!
+		In this function, the return value is the mid point of
+		point pVec0 and point pVec1
+	 */
+	 /**************************************************************************/
+	Vector3D Vector3DMidPoint(const Vector3D& pVec0, const Vector3D& pVec1)
+	{
+		Vector3D minpoint = (pVec0 + pVec1) / 2;
+		return minpoint;
+	}
 
 	/**************************************************************************/
 	/*!

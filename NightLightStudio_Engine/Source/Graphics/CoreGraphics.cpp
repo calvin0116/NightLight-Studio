@@ -9,5 +9,5 @@ void CoreGraphics::AddToRenderSet(ComponentRender*)
 
 void CoreGraphics::Draw()
 {
-	std::cout << "CoreGraphics.Draw()" << std::endl;
+//	std::cout << "CoreGraphics.Draw()" << std::endl;
 }

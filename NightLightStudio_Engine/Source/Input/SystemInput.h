@@ -14,13 +14,13 @@ class SystemInput : public MySystem, public Singleton<SystemInput>
 {
 private:
 	friend Singleton<SystemInput>;
-	SystemInput_ns::SystemKeyPress _SIKeyPress;
-	SystemInput_ns::SystemController _SICtrler;
-	SystemInput_ns::SystemMousePosition _SIMousePos;
+	SystemInput_ns::SystemKeyPress _siKeyPress;
+	SystemInput_ns::SystemController _siCtrler;
+	SystemInput_ns::SystemMousePosition _siMousePos;
 
 protected:
-	SystemInput();
-	~SystemInput() = default;
+	ENGINE_API SystemInput();
+	ENGINE_API ~SystemInput() = default;
 
 public:
 	ENGINE_API void OnFirstStart() override;

@@ -3,7 +3,7 @@
 #include <utility>
 #include <string>
 
-#include "..\..\dep\FMOD\inc\fmod.hpp"
+#include "..\..\FMOD\inc\fmod.hpp"
 #include "..\Math\Vector.h"
 #include "..\Core\MySystem.h"
 //#include "..\..\dep\FMOD\inc\fmod_errors.h"

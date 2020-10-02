@@ -46,6 +46,9 @@
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{d30951f3-6878-484f-83ea-7557573e4ec1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\IO\Json">
+      <UniqueIdentifier>{f09c9436-0756-4a00-951c-207781b0ff30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -135,9 +138,6 @@
     <ClInclude Include="Source\Core\MySystem.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\ComponentPhysics.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\ComponentTransform.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
@@ -147,11 +147,26 @@
     <ClInclude Include="Source\Core\DeltaTime.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\IO\Json\Config.h">
+      <Filter>Source Files\IO\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IO\Json\JsonHeader.h">
+      <Filter>Source Files\IO\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IO\Json\Parser.h">
+      <Filter>Source Files\IO\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IO\Json\Parser.hpp">
+      <Filter>Source Files\IO\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentRigidBody.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentCollider.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -221,9 +236,6 @@
     <ClCompile Include="Source\Core\SystemManager.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\ComponentPhysics.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\ComponentTransform.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
@@ -232,6 +244,15 @@
     </ClCompile>
     <ClCompile Include="Source\Core\DeltaTime.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\IO\Json\Parser.cpp">
+      <Filter>Source Files\IO\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentRigidBody.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentCollider.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

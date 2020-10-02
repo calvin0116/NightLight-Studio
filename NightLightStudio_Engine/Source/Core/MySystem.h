@@ -6,17 +6,19 @@
 //System piority / id
 enum S_PRIORITY
 {
-	SP_TOOLS,
+	SP_TOOLS = 0, 
+	SP_WINDOW,
+	SP_IO,
 	SP_INPUT,
 	SP_GRAPHICS,
 	SP_COLLISION,
 	SP_PHYSICS,
-  SP_AUDIO
+	SP_AUDIO
 };
 
 class ENGINE_API MySystem : public ISystem
 {
 private:
 	int id;
-	S_PRIORITY piority;
+	S_PRIORITY priority;
 };

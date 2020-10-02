@@ -45,4 +45,6 @@ public:
 	virtual void Unload() {};
 	virtual void LateUnload() {};
 
+	//Final destruction for system
+	virtual void Free() {};
 };

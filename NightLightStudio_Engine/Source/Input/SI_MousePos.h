@@ -1,18 +1,20 @@
 #ifndef SI_SYSTEM_INPUT_MOUSEPOS
 #define SI_SYSTEM_INPUT_MOUSEPOS
 
+#include "..\..\framework.h"
+
 #include <Windows.h>
 #include <string>
 
 namespace SystemInput_ns
 {
-	struct InputVec2
+	struct ENGINE_API InputVec2
 	{
 		float _x;
 		float _y;
 	};
 
-	class SystemMousePosition
+	class ENGINE_API SystemMousePosition
 	{
 		POINT _mousePos;
 		POINT _prevMousePos;
@@ -49,7 +51,7 @@ namespace SystemInput_ns
 		bool ToggleCursorVisible();
 		// Sets If can view cursor
 		void SetCursorVisible(bool show);
-		// Sets Cursor image - .cur or .ani files onlt
+		// Sets Cursor image - .cur or .ani files only
 		void LoadCursorImage(std::string name);
 		// Returns Client Rect Size in pixels
 		POINT GetClientRectSize();

@@ -2,6 +2,7 @@
 #include "../../framework.h"
 #include "CoreGraphics.h"
 #include "../Core/MySystem.h"
+#include "../IO/Json/Config.h"
 
 //~~! Sample System
 // ENGINE_API / __declspec(dllexport) < is for virtual function being overriding from Interface class
@@ -12,6 +13,7 @@ class ENGINE_API SystemGraphics : public MySystem, public Singleton<SystemGraphi
 private:
 	friend Singleton<SystemGraphics>;
 	CoreGraphics _coreGraphics;
+
 protected:
 	SystemGraphics() {};
 	~SystemGraphics() {};
@@ -22,7 +24,7 @@ public:
 	 void Init();
 	 bool Update() ;//float dt);
 	 void Exit() ;
-	//void Free() override;
+	 void Free() ;
 	 void Unload() ;
 	
 };
