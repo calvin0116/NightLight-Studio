@@ -100,7 +100,7 @@ namespace NlMath
 		is in radian. Save the resultant matrix in pResult.
 	 */
 	 /**************************************************************************/
-		void Mtx44RotYRad(Matrix4x4& pResult, float angle);
+	void Mtx44RotYRad(Matrix4x4& pResult, float angle);
 	
 	/**************************************************************************/
 	/*!
@@ -109,6 +109,14 @@ namespace NlMath
 	 */
 	 /**************************************************************************/
 	void Mtx44RotZRad(Matrix4x4& pResult, float angle);
+
+	/**************************************************************************/
+	/*!
+		This matrix creates a rotation matrix from an "angle" vector whose value
+		is in radian. Save the resultant matrix in pResult.
+	 */
+	 /**************************************************************************/
+	void Mtx44RotRad(Matrix4x4& pResult, const Vector3D& angle);
 
 
 	/**************************************************************************/
