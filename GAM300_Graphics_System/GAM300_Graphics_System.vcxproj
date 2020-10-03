@@ -88,7 +88,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)Include;$(SolutionDir)Header;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Lib;$(SolutionDir)Lib\FBX_SDK\release;$(SolutionDir)Lib\SOIL;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -141,16 +141,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FBXSDK_SHARED;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Header;$(SolutionDir)Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Header;$(SolutionDir)Include;$(SolutionDir)Include/FBX_SDK;$(SolutionDir)Include/SOIL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glu32.lib; glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>soil.lib;libfbxsdk.lib;opengl32.lib;glu32.lib; glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Lib;$(SolutionDir)Lib\SOIL</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -159,6 +160,7 @@
     <ClCompile Include="Source\GraphicsSystem.cpp" />
     <ClCompile Include="Source\LightSystem.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
+    <ClCompile Include="Source\Model.cpp" />
     <ClCompile Include="Source\ModelLoader.cpp" />
     <ClCompile Include="Source\ModelManager.cpp" />
     <ClCompile Include="Source\ShaderSystem.cpp" />
@@ -172,6 +174,7 @@
     <ClInclude Include="Header\GraphicsSystem.h" />
     <ClInclude Include="Header\main.h" />
     <ClInclude Include="Header\Mesh.h" />
+    <ClInclude Include="Header\Model.h" />
     <ClInclude Include="Header\WndSystem.h" />
     <ClInclude Include="Header\WndUtils.h" />
     <ClInclude Include="Header\LightSystem.h" />
