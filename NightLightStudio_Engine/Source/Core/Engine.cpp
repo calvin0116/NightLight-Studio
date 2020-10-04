@@ -8,9 +8,9 @@
 #include "DeltaTime.h"
 
 
-void FluffyUnicornEngine::Init()
+void FluffyUnicornEngine::Init(HINSTANCE& hInstance)
 {
-	SYS_MAN->StartUp();
+	SYS_MAN->StartUp(hInstance);
 	//_engineState = ENGINE_UPDATE;
 }
 

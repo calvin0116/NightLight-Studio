@@ -3,27 +3,30 @@
 
 #include "..//Component/Components.h"
 
+#include "../IO/Json/Config.h"
+
+#include "..//Component/Components.h"
 #include "..//Component/ComponentTransform.h"
 #include "..//Component/ComponentRigidBody.h"
 #include "..//Component/ComponentCollider.h"
 
+
 // Do not touch
 //**! Update comments please thanks
-void MySystemManager::StartUp()
+void MySystemManager::StartUp(HINSTANCE& hInstance)
 {
   // === Insert your system here to get them running === //
   // === Please follow how PhysicManager is created  === // 
 	//Systems[SYS_PHYSICS] = PhysicManager::GetInstance();
-	//Systems[SP_WINDOW] = SYS_WINDOW;
-	Systems[S_PRIORITY::SP_GRAPHICS] = SYS_GRAPHIC;
+	Systems[S_PRIORITY::SP_WINDOW] = NS_WINDOW::SYS_WINDOW;
+	Systems[S_PRIORITY::SP_GRAPHICS] = NS_GRAPHICS::SYS_GRAPHICS;
 	Systems[S_PRIORITY::SP_INPUT] = SYS_INPUT;
 	Systems[S_PRIORITY::SP_IO] = SYS_IO;
 	Systems[S_PRIORITY::SP_AUDIO] = SYS_AUDIO;
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
-	//// SET UP HANDLER TO WINDOW(CLIENT) INSTANCE
-	//Systems[SP_WINDOW]->SetAppInstance(hInstance);
-
+	//// SET UP WINDOW(CLIENT) INSTANCE
+	NS_WINDOW::SYS_WINDOW->SetAppInstance(hInstance);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP COMPONENT - shift this to a seperate class/function !!!

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "..\\Graphics\SystemGraphics.h"
+#include "../Window/WndSystem.h"
+#include "../Graphics/GraphicsSystem.h"
 #include "..\\Input\SystemInput.h"
 #include "..\\Audio\SystemAudio.h"
 #include "..\\Logic\SystemLogic.h"

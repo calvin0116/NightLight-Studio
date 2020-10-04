@@ -21,7 +21,7 @@ public:
 	FluffyUnicornEngine() = default;
 	~FluffyUnicornEngine() = default;
 
-	void Init();
+	void Init(HINSTANCE&);
 	void Run();
 	//**! Have and Exit or smth
 	void Exit();

@@ -5,6 +5,11 @@
 
 ComponentManager G_COMPMGR;
 
+// this works on the assumption that IDRANGE < number of entities in a compset at any time
+#define IDRANGE 1000000
+
+int G_CURRIDMOD = 0;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //// ComponentSetFactory
 
@@ -34,7 +39,7 @@ ComponentManager::ComponentSet* ComponentManager::ComponentSetFactory::Build()
 {
 	// build obj
 	size_t size = sizeof(ComponentManager::ComponentSet::ObjectData);
-	size += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * compSet->componentContainerIDs.size();
+	size += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * compSet->hashConIdMap.size();
 
 	// using default settings
 	ComponentMemoryManager::ComponentTypeSettings set;
@@ -43,6 +48,12 @@ ComponentManager::ComponentSet* ComponentManager::ComponentSetFactory::Build()
 
 	// save objContainerId // create obj container
 	compSet->objContainerId = compSet->cmm.createNewComponentType(set);
+	// container for childs
+	compSet->objContainerIdChilds = compSet->cmm.createNewComponentType(set);
+
+	// set
+	G_CURRIDMOD += IDRANGE;
+	compSet->idIndexModifier = G_CURRIDMOD;
 
 	// set to nullptr and return
 	ComponentManager::ComponentSet* returnCompSet = compSet;
@@ -76,6 +87,12 @@ int ComponentManager::ComponentSetManager::BuildObject()
 	// insert the obj
 	int objId = compSet->cmm.insertIntoContainer(compSet->objContainerId, newObj);
 
+	// check
+	if (objId > IDRANGE)
+	{
+		throw; // cannot, objects exceeded
+	}
+
 	// free the obj instance
 	free(reinterpret_cast<void*>(newObj));
 	// get the obj from the container
@@ -84,7 +101,7 @@ int ComponentManager::ComponentSetManager::BuildObject()
 	// set the obj
 	reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(newObj)->objId = objId;
 
-	return objId;
+	return objId + compSet->idIndexModifier;
 }
 
 void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::ContainerID compId, int objId, void* newComp)
@@ -93,6 +110,7 @@ void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::C
 	int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<char*>(newComp));
 
 	// set object component data
+	objId -= compSet->idIndexModifier;
 	ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
 	compData->containerId = compId; // set container id
 	compData->compPtr = reinterpret_cast<void*>( // set component ptr within the container
@@ -110,6 +128,7 @@ void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::C
 void ComponentManager::ComponentSetManager::RemoveComponent(ComponentManager::ContainerID compId, int objId)
 {
 	// get the index
+	objId -= compSet->idIndexModifier;
 	ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
 	int index = compData->containerIndex;
 
@@ -128,6 +147,7 @@ void ComponentManager::ComponentSetManager::RemoveComponent(ComponentManager::Co
 void ComponentManager::ComponentSetManager::UnBuildObject(int objId)
 {
 	// get the object
+	objId -= compSet->idIndexModifier;
 	char* obj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
 
 	// uninit/free the components
@@ -162,6 +182,7 @@ void ComponentManager::ComponentSetManager::UnBuildObject(int objId)
 void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::ContainerID compId, int objId)
 {	
 	// get the index
+	objId -= compSet->idIndexModifier;
 	ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
 	//int index = compData->containerIndex;
 
@@ -292,7 +313,7 @@ int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 
 	if (objId == -1) throw;
 
-	return objId;
+	return objId + compSet->idIndexModifier;
 }
 
 //////////////////////////

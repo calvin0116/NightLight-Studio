@@ -174,7 +174,7 @@ namespace NlMath
 
 		//creating result matrix
 		Matrix4x4 result;
-		for (size_t i = 0; i < 16; i++)
+		for (int i = 0; i < 16; i++)
 		{
 			result[i] = mtx[i].determinant();
 		}
@@ -451,6 +451,29 @@ namespace NlMath
 		pResult.m31 = 0;
 		pResult.m32 = 0;
 		pResult.m33 = 1;
+	}
+
+
+	/**************************************************************************/
+	/*!
+		This matrix creates a rotation matrix from an "angle" vector whose value
+		is in radian. Save the resultant matrix in pResult.
+	 */
+	 /**************************************************************************/
+	void Mtx44RotRad(Matrix4x4& pResult, const Vector3D& angle)
+	{
+		//tmp matrix to store rotation
+		Matrix4x4 rot;
+		//rotate x
+		Mtx44RotXRad(pResult, angle.x);
+		//store rotate y
+		Mtx44RotYRad(rot, angle.y);
+		//rotate y
+		pResult *= rot;
+		//store rotate z
+		Mtx44RotZRad(rot, angle.z);
+		//rotate z
+		pResult *= rot;
 	}
 
 	/**************************************************************************/
