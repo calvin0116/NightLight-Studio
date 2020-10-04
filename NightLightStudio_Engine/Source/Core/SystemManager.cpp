@@ -116,6 +116,67 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	//// Sample for component access
+
+	std::cout << "Test Cmponents:" << std::endl;
+
+	auto itr = G_MAINCOMPSET.begin<ComponentRender>();
+	auto itrEnd = G_MAINCOMPSET.end<ComponentRender>();
+	while (itr != itrEnd)
+	{
+		// get the obj id
+		std::cout << "Object:" << G_MAINCOMPSET.getObjId(itr) << std::endl;
+
+		// get the transform component from the iterator
+		ComponentRender* compR = G_MAINCOMPSET.getComponent<ComponentRender>(itr);
+		std::cout << "Render:" << compR->id << " " << compR->c << std::endl;
+
+		// get another component
+		ComponentTransform* compT = G_MAINCOMPSET.getComponent<ComponentTransform>(itr);
+		
+		if (compT != nullptr) // nullptr -> uninitialised or deleted
+			std::cout << "Transform:" << compT->_position.x << std::endl;
+		
+		std::cout << std::endl;
+
+		++itr;
+	}
+
+
+	// eg. UI can be put into a seperate component set, G_UICOMPSET
+	// allows easier management of entities
+	itr = G_UICOMPSET.begin<ComponentRender>();
+	itrEnd = G_UICOMPSET.end<ComponentRender>();
+	while (itr != itrEnd)
+	{
+		// get the obj id
+		std::cout << "Object:" << G_UICOMPSET.getObjId(itr) << std::endl;
+
+		// get the transform component from the iterator
+		ComponentRender* compR = reinterpret_cast<ComponentRender*>(*itr);
+		std::cout << "Render:" << compR->id << " " << compR->c << std::endl;
+
+		// get the entity from the iterator
+		ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(itr);
+
+		// get transform component
+		ComponentTransform* compT = entity.getComponent<ComponentTransform>();
+		if (compT != nullptr) // nullptr -> uninitialised or deleted
+			std::cout << "Transform:" << compT->_position.x << std::endl;
+			
+		std::cout << std::endl;
+
+		++itr;
+	}
+
+	std::cout << "Test Cmponents END" << std::endl;
+
+	//// Sample for component access END
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+
 	//mgrComp.Free();  // testing // rmb to free !!
 
 }
