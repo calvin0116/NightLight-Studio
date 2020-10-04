@@ -1,6 +1,8 @@
 #include "SystemManager.h"
 #include "Systems.h"
 
+#include "..//Component/Components.h"
+
 #include "../IO/Json/Config.h"
 
 #include "..//Component/Components.h"
