@@ -2,18 +2,9 @@
 
 namespace NS_GRAPHICS
 {
-	ModelLoader::ModelLoader() : _fbxScene{ NULL }, _fbxImport{ NULL }, _axisSystem{ FbxAxisSystem::eYAxis, FbxAxisSystem::eParityOdd, FbxAxisSystem::eRightHanded }
+	ModelLoader::ModelLoader() : _fbxManager { nullptr }, _fbxScene { nullptr }, _fbxImport{ nullptr },
+		_axisSystem{ FbxAxisSystem::eYAxis, FbxAxisSystem::eParityOdd, FbxAxisSystem::eRightHanded }
 	{
-		_fbxManager = FbxManager::Create();
-		FbxIOSettings* settings = FbxIOSettings::Create(_fbxManager, IOSROOT);
-		_fbxManager->SetIOSettings(settings);
-
-		//Might be removed in the future
-		if (!_fbxScene)
-		{
-			FBXSDK_printf("Error: Unable to create FBX scene!\n");
-			exit(1);
-		}
 	}
 
 	ModelLoader::~ModelLoader()
@@ -40,13 +31,20 @@ namespace NS_GRAPHICS
 				newMesh->_rotation = { (float)rotation[0], (float)rotation[1], (float)rotation[2] };
 
 				const int vertexCount = mesh->GetControlPointsCount();
-				FbxVector4* vertexs = NULL;
-				vertexs = new FbxVector4[vertexCount];
-				memcpy(vertexs, mesh->GetControlPoints(), vertexCount * sizeof(FbxVector4));
+				FbxVector4* vertexs = mesh->GetControlPoints();
+				newMesh->_vertices.reserve(vertexCount);
+
+				for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
+				{
+					glm::vec3 vertex = { (float)vertexs[vertexIndex][0],
+										 (float)vertexs[vertexIndex][1],
+										 (float)vertexs[vertexIndex][2]};
+
+					newMesh->_vertices.push_back(vertex);
+				}
 
 				//Might update this part
 				const int totalBufferSize = mesh->GetPolygonVertexCount();
-				newMesh->_vertices.reserve(totalBufferSize);
 				newMesh->_indices.reserve(totalBufferSize);
 
 				const int polygonCount = mesh->GetPolygonCount();
@@ -55,11 +53,7 @@ namespace NS_GRAPHICS
 					const int verticeCount = mesh->GetPolygonSize(polygonIndex);
 					for (int verticeIndex = 0; verticeIndex < verticeCount; ++verticeIndex)
 					{
-						glm::vec3 vertex = { (float)vertexs[mesh->GetPolygonVertex(polygonIndex, verticeIndex)][0],
-													(float)vertexs[mesh->GetPolygonVertex(polygonIndex, verticeIndex)][1],
-													(float)vertexs[mesh->GetPolygonVertex(polygonIndex, verticeIndex)][2] };
-
-						newMesh->_vertices.push_back(vertex);
+						//newMesh->_vertices.push_back(vertex);
 						newMesh->_indices.push_back(mesh->GetPolygonVertex(polygonIndex, verticeIndex));
 					}
 				}
@@ -87,6 +81,20 @@ namespace NS_GRAPHICS
 		fbxImport->Import(mesh.fbxScene);
 		fbxImport->Destroy();
 	}*/
+
+	void ModelLoader::Init()
+	{
+		_fbxManager = FbxManager::Create();
+		FbxIOSettings* settings = FbxIOSettings::Create(_fbxManager, IOSROOT);
+		_fbxManager->SetIOSettings(settings);
+
+		//Might be removed in the future
+		if (!_fbxScene)
+		{
+			FBXSDK_printf("Error: Unable to create FBX scene!\n");
+			exit(1);
+		}
+	}
 
 	void ModelLoader::LoadFBX(const std::string& fileName, Model*& model)
 	{

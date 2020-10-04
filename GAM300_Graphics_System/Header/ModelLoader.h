@@ -24,6 +24,8 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
+		void Init();
+
 		//void LoadFBX(const std::string& fileName, Mesh& mesh);
 		void LoadFBX(const std::string& fileName, Model*& model);
 	};
