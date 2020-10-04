@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "OpenGL/glew.h"
+#include "WndUtils.h"
 #include "SOIL/SOIL.h"
 
 namespace NS_GRAPHICS
