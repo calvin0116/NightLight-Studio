@@ -49,6 +49,8 @@ namespace NS_GRAPHICS
 		lightManager = &LightSystem::GetInstance();
 		debugManager = &DebugManager::GetInstance();
 		cameraManager = &CameraSystem::GetInstance();
+
+		modelLoader->Init();
 	}
 
 	void GraphicsSystem::Render()

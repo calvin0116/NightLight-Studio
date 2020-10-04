@@ -90,9 +90,9 @@ namespace NS_GRAPHICS
 		_fbxManager->SetIOSettings(settings);
 
 		//Might be removed in the future
-		if (!_fbxScene)
+		if (!_fbxManager)
 		{
-			FBXSDK_printf("Error: Unable to create FBX scene!\n");
+			printf("Error: Unable to create FBX scene!\n");
 			exit(1);
 		}
 	}
