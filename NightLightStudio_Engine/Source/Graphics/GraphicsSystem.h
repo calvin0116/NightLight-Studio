@@ -12,6 +12,9 @@
 #include "DebugManager.h"
 #include "CameraSystem.h"
 
+#include "../glm/glm.hpp"   // glm::mat4
+
+
 namespace NS_GRAPHICS
 {
     class ENGINE_API GraphicsSystem : public MySystem, public Singleton<GraphicsSystem>
@@ -62,7 +65,12 @@ namespace NS_GRAPHICS
 
         void Render();
 
-        void ToggleDebugDraw(bool&& set);
+        void ToggleDebugDraw(const bool& set);
+
+        // Sets perspective frustrum, very expensive, DO NOT CALL EVERY FRAME
+        // Default values are set if not called throughout program lifetime
+        // fov must be given in degrees
+        void SetProjectionMatrix(const float& fov = 45.f, const float& aspect_ratio = 1.78f, const float& near_plane = 0.01f, const float& far_plane = 1000.f);
 
     private:
 
@@ -76,6 +84,12 @@ namespace NS_GRAPHICS
         LightSystem* lightManager;
         DebugManager* debugManager;
         CameraSystem* cameraManager;
+
+        // Should NOT be calculated every frame
+        glm::mat4 projectionMatrix;
+
+        //temporary view matrix, to be removed after camera system implementation
+        glm::mat4 viewMatrix;
     };
 
     //GLOBAL pointer to an instance of graphic system
