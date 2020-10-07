@@ -14,5 +14,7 @@ namespace NS_GRAPHICS
 			static CameraSystem instance;
 			return instance;
 		}
+
+		void Init();
 	};
 }
