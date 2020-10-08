@@ -191,6 +191,7 @@
     <ClInclude Include="Source\Core\ISystem.h" />
     <ClInclude Include="Source\Core\Systems.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
+    <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />

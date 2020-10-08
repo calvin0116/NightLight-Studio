@@ -67,10 +67,17 @@ namespace NS_GRAPHICS
 
         void ToggleDebugDraw(const bool& set);
 
+        // Sets view matrix, called for as long as camera is required to move
+        // Default values are set if not called throughout program lifetime
+        void SetViewMatrix();
+
         // Sets perspective frustrum, very expensive, DO NOT CALL EVERY FRAME
         // Default values are set if not called throughout program lifetime
         // fov must be given in degrees
         void SetProjectionMatrix(const float& fov = 45.f, const float& aspect_ratio = 1.78f, const float& near_plane = 0.01f, const float& far_plane = 1000.f);
+
+        // Creates a basic cube based on given data
+        void CreateCube(const glm::vec3& rgb, const float& edgeLength);
 
     private:
 

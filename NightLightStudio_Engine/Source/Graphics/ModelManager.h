@@ -18,6 +18,6 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
-
+		std::vector<Model*> models;
 	};
 }

@@ -28,6 +28,13 @@ namespace NS_GRAPHICS
 
 	bool GraphicsSystem::Update()
 	{
+		cameraManager->Update();
+
+		if (cameraManager->CheckUpdate())
+		{
+			SetViewMatrix();
+		}
+
 		Render();
 
 		return true;
@@ -60,23 +67,30 @@ namespace NS_GRAPHICS
 		// Initialize sub systems and managers
 		shaderManager->Init();
 
+		cameraManager->Init();
+
 		// Set default values for view matrix
 		// temporary solution before camera system implementation
 		// NOTE THAT CAMERA POSITION MUST/SHOULD BE SOME DISTANCE AWAY FROM OBJECT TO BE ABLE TO SEE
 		// Positive Z = Towards Screen 
-		glm::vec3 cameraPos(0.f, 0.f, 5.f);
+		/*glm::vec3 cameraPos(0.f, 0.f, 5.f);
 		glm::vec3 cameraFront(0.f, 0.f, -1.f);
 		glm::vec3 cameraUp(0.f, 1.f, 0.f);
 
-		viewMatrix = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+		viewMatrix = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);*/
 
-		// Update to view matrix in shader program
-		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetViewProjectionUniformLocation());
-		glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewMatrix));
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		// Set default values for view matrix
+		SetViewMatrix();
 
 		// Set default values for projection matrix
 		SetProjectionMatrix();
+
+		// Enable depth buffering
+		glEnable(GL_DEPTH_TEST);
+
+		// Passes if the fragment's depth value is less than the stored depth value.
+		// This is the default, but we will call this function to be explicit
+		glDepthFunc(GL_LESS);
 	}
 
 	void GraphicsSystem::Render()
@@ -144,6 +158,15 @@ namespace NS_GRAPHICS
 	{
 		debugDrawing = set;
 	}
+
+	void GraphicsSystem::SetViewMatrix()
+	{
+		// Update to view matrix in shader program
+		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetViewProjectionUniformLocation());
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(cameraManager->GetViewMatrix()));
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	}
+
 	void GraphicsSystem::SetProjectionMatrix(const float& fov, const float& aspect_ratio, const float& near_plane, const float& far_plane)
 	{
 		projectionMatrix = glm::perspective(glm::radians(fov), aspect_ratio, near_plane, far_plane);
@@ -152,5 +175,10 @@ namespace NS_GRAPHICS
 		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetViewProjectionUniformLocation());
 		glBufferSubData(GL_UNIFORM_BUFFER, 64, 64, glm::value_ptr(projectionMatrix));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	}
+
+	void GraphicsSystem::CreateCube(const glm::vec3& rgb, const float& edgeLength)
+	{
+		// Create cube and put into model manager's vector of models
 	}
 }
