@@ -23,7 +23,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	Systems[S_PRIORITY::SP_INPUT] = SYS_INPUT;
 	Systems[S_PRIORITY::SP_IO] = SYS_IO;
 	Systems[S_PRIORITY::SP_AUDIO] = SYS_AUDIO;
-
+	Systems[S_PRIORITY::SP_SCENEMANAGER] = SYS_SCENEMANAGER;
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP WINDOW(CLIENT) INSTANCE
 	NS_WINDOW::SYS_WINDOW->SetAppInstance(hInstance);

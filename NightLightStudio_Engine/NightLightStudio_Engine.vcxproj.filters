@@ -198,6 +198,9 @@
     <ClInclude Include="Source\Component\LocalVector.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\SceneManager.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -310,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\TextureLoader.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\SceneManager.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

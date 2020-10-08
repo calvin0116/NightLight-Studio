@@ -8,6 +8,7 @@
 #include "..\\Physics\SystemPhysics.h"
 #include "..\\IO\SystemIO.h"
 #include "..\\Editor\SystemEditor.h"
+#include "../Core/SceneManager.h"
 /*
 extern SystemGraphics G_GRAPHICS;
 extern SystemInput G_INPUT;
