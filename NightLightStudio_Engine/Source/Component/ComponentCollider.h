@@ -4,6 +4,7 @@
 #include "ComponentTransform.h"
 #include "ComponentRigidBody.h"
 #include "..\\Physics\CollisionMathLib.h"
+#include "..\Core\MySystem.h"
 
 enum class SIDES
 {
@@ -39,7 +40,17 @@ struct ComponentCollider : public IComponent
 
 };
 
-
+struct PlaneCollider : public ComponentCollider
+{
+	NlMath::Vector3D center;
+	NlMath::Vector3D extend;
+	NlMath::Vector3D rotation;
+	PlaneCollider();
+	PlaneCollider(
+		NlMath::Vector3D _point, 
+		NlMath::Vector3D _extend = NlMath::Vector3D(1, 1, 1),
+		NlMath::Vector3D _rotation = NlMath::Vector3D(0, 0, 0));
+};
 
 struct SphereCollider : public ComponentCollider
 {
@@ -61,10 +72,29 @@ struct OBBCollider : public ComponentCollider
 {
 	NlMath::Vector3D center;
 	NlMath::Vector3D extend;
+	//rotation in radiant
 	NlMath::Vector3D rotation;
 	
 	OBBCollider();
-	OBBCollider(NlMath::Vector3D _center, NlMath::Vector3D _extend, NlMath::Vector3D _rotation);
+	OBBCollider(NlMath::Vector3D _center, 
+		NlMath::Vector3D _extend = NlMath::Vector3D(1, 1, 1),
+		NlMath::Vector3D _rotation = NlMath::Vector3D(0, 0, 0));
+};
+
+struct CapsuleCollider : public ComponentCollider
+{
+	NlMath::Vector3D tip;
+	NlMath::Vector3D base;
+	float radius;
+	//rotation in radiant
+	NlMath::Vector3D rotation;
+
+	CapsuleCollider();
+	CapsuleCollider(
+		NlMath::Vector3D _tip, 
+		NlMath::Vector3D _base, 
+		float _radius = 1,
+		NlMath::Vector3D _rotation = NlMath::Vector3D(0, 0, 0));
 };
 
 //enum TYPE_COL

@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../../framework.h"
+#include "Model.h"
+
 namespace NS_GRAPHICS
 {
 	class ModelManager
@@ -14,5 +17,7 @@ namespace NS_GRAPHICS
 			static ModelManager instance;
 			return instance;
 		}
+
+
 	};
 }
