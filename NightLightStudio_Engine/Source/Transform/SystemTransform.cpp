@@ -2,11 +2,11 @@
 
 bool SystemTransform::Update()
 {
-	auto itr = G_MAINCOMPSET.begin<ComponentTransform>();
-	auto itrEnd = G_MAINCOMPSET.end<ComponentTransform>();
+	auto itr = G_MAINCOMPSET->begin<ComponentTransform>();
+	auto itrEnd = G_MAINCOMPSET->end<ComponentTransform>();
 	while (itr != itrEnd)
 	{
-		ComponentTransform* compT = G_MAINCOMPSET.getComponent<ComponentTransform>(itr);
+		ComponentTransform* compT = G_MAINCOMPSET->getComponent<ComponentTransform>(itr);
 
 		glm::mat4x4 translateMat(1), rotateMat(1), scaleMat(1);
 

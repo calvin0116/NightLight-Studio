@@ -50,7 +50,7 @@ namespace NS_PHYSICS
 				continue;
 
 			
-			compT->_position += compR->velocity;
+			//compT->_position += compR->velocity; // I am commenting this away because the build failed // check the types
 
 			
 		}
