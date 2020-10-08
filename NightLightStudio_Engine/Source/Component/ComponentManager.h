@@ -10,6 +10,7 @@
 // max children per parent // this can be technically be dynamic, but I will smash my head against the wall
 #define MAX_CHILDREN 32
 
+
 //**! Comment more !**//
 
 //**! I need to clean up my code !**//
@@ -150,6 +151,8 @@ public:
 	//typedef int ComponentSetID;
 	typedef ComponentMemoryManager::ComponentTypeSettings ContainerSettings;
 
+	typedef LocalVector<int, MAX_CHILDREN> ChildContainerT;
+
 	ComponentMemoryManager cmm;
 
 	class ComponentSet; // fwd decl
@@ -232,6 +235,11 @@ public:
 		int BuildObject(); 
 
 	private:
+
+		// build a new child Entity
+		// 
+		int BuildChildObject();
+
 		// attach component to the entity // using container id // helper
 		void* AttachComponent(ComponentManager::ContainerID compId, int entityId, void* newComp);
 
@@ -368,15 +376,25 @@ public:
 			///////////////////////////////////////////////////////////////////////////////////////
 			// parent and child entities
 
-			//int getNumberOfChildren();
+		private:
 
-			//int getNumberOfDecendants();
 
-			//void makeChild(); // (<_<)
+		public:
 
-			//int getParent();
+			int getNumChildren();
 
-			//int getChildren(); // ???
+			int getNumDecendants();
+
+			Entity makeChild(); // (<_<)
+
+			int getParentId();
+
+			ChildContainerT* getChildren(); // ???
+
+			class IteratorChildEntity
+			{
+
+			};
 
 
 			///////////////////////////////////////////////////////////////////////////////////////
@@ -428,7 +446,7 @@ public:
 	{
 	//public:
 		friend ComponentSetFactory; // allows factory to build
-		friend ComponentSetManager; // allows factory to build
+		friend ComponentSetManager; // allows mgr to mg
 		friend ComponentManager;
 
 		ComponentMemoryManager cmm; // contains container for object and containers for components
@@ -449,11 +467,13 @@ public:
 
 		class ObjectData
 		{
-		//public:
+		public:
 			friend ComponentSetFactory; // allows factory to build
 			friend ComponentSetManager; // allows factory to build
 
-			int objId; // unique id of the object
+			int objInd; // unique id of the object
+
+			int parentObjId;
 
 			struct ChildData
 			{
@@ -461,7 +481,8 @@ public:
 				int numDecendants;
 				int numChild;
 				//int childIDs[MAX_CHILDREN];
-				LocalVector<int, 100> childIDs;
+				//LocalVector<int, MAX_CHILDREN> childIDs;
+				ChildContainerT childIDs;
 				ChildData() :
 					generation(0),
 					numDecendants(0),
