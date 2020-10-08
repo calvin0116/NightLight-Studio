@@ -14,9 +14,12 @@ struct PlaneCollider;
 struct AABBCollider;
 struct SphereCollider;
 struct OBBCollider;
+struct CapsuleCollider;
 
 namespace NlMath
 {
+	Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint);
+
 	bool PointInAABB(const AABBCollider& tBox, const NlMath::Vector3D& vecPoint);
 
 	bool AABBtoAABB(const AABBCollider& tBox1, const AABBCollider& tBox2);
@@ -24,6 +27,8 @@ namespace NlMath
 	bool PlaneToPlane(const PlaneCollider& tPlane1, const PlaneCollider& tPlane2);
 
 	bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2);
+
+	bool CapsuleToCapsule(const CapsuleCollider& tCap1, const CapsuleCollider& tCap2);
 
 	//return all 8 points of a cube from AABB collider 
 	std::vector<NlMath::Vector3D> AllPointsOf(const AABBCollider& tBox);
@@ -34,7 +39,7 @@ namespace NlMath
 
 	SIDES AABB_SphereCollision(const AABBCollider& tBox1, const SphereCollider& tSpr1, NlMath::Vector3D& circleVec);
 
-
+	
 
 	
 }

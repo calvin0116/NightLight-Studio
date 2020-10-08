@@ -6,6 +6,15 @@
 
 namespace NlMath
 {
+    Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint)
+    {
+        //construct linesegment AB
+        Vector3D AB = segmentPointB - segmentPointA;
+        //find projection
+        float t = Vector3DDotProduct(CheckPoint - segmentPointA, AB) / Vector3DDotProduct(AB, AB);
+        return segmentPointA + t * AB;
+    }
+
     bool PointInAABB(const AABBCollider& tBox, const NlMath::Vector3D& vecPoint)
     {
         //Check if the point is less than max and greater than min
@@ -121,17 +130,17 @@ namespace NlMath
         //calculate total extend
         NlMath::Vector3D totalExtend = extend1 + extend2;
 
-        //total differnce
-        NlMath::Vector3D diffVec = totalExtend - absCtrDistance;
+        //find penetration depth
+        NlMath::Vector3D penetrationDepth = totalExtend - absCtrDistance;
 
 
-        if (diffVec.x <= 0 || diffVec.y <= 0 || diffVec.z <= 0)
+        if (penetrationDepth.x <= 0 || penetrationDepth.y <= 0 || penetrationDepth.z <= 0)
         {
             return SIDES::NO_COLLISION;
         }
 
 
-        if (diffVec.x <= diffVec.y && diffVec.x <= diffVec.z)
+        if (penetrationDepth.x <= penetrationDepth.y && penetrationDepth.x <= penetrationDepth.z)
         {
             //if x is positive and shortest among all axis, the collision must be happening at LEFT
             if (centerDistance.x > 0)
@@ -144,7 +153,7 @@ namespace NlMath
                 return SIDES::LEFT;
             }
         }
-        else if (diffVec.y <= diffVec.x && diffVec.y <= diffVec.z)
+        else if (penetrationDepth.y <= penetrationDepth.x && penetrationDepth.y <= penetrationDepth.z)
         {
             //if y is positive and shortest among all axis, the collision must be happening at FRONT
             if (centerDistance.y > 0)
@@ -157,7 +166,7 @@ namespace NlMath
                 return SIDES::BOTTOM;
             }
         }
-        else if (diffVec.z <= diffVec.y && diffVec.z <= diffVec.x)
+        else if (penetrationDepth.z <= penetrationDepth.y && penetrationDepth.z <= penetrationDepth.x)
         {
             //if z is positive and shortest among all axis, the collision must be happening at TOP
             if (centerDistance.z > 0)
@@ -217,10 +226,10 @@ namespace NlMath
         //calculate total extend
         NlMath::Vector3D totalExtend = extend1 + extend2;
 
-        //total difference
-        NlMath::Vector3D diffVec = totalExtend - absCtrDistance;
+        //total penetration depth
+        NlMath::Vector3D penetrationDepth = totalExtend - absCtrDistance;
 
-        if (diffVec.x <= 0 || diffVec.y <= 0 || diffVec.z <= 0)
+        if (penetrationDepth.x <= 0 || penetrationDepth.y <= 0 || penetrationDepth.z <= 0)
         {
             return SIDES::NO_COLLISION;
         }
@@ -229,7 +238,7 @@ namespace NlMath
         circleColNormal = -centerDistance;
 
 
-        if (diffVec.x <= diffVec.y && diffVec.x <= diffVec.z)
+        if (penetrationDepth.x <= penetrationDepth.y && penetrationDepth.x <= penetrationDepth.z)
         {
             //if x is positive and shortest among all axis, the collision must be happening at LEFT
             if (centerDistance.x > 0)
@@ -242,7 +251,7 @@ namespace NlMath
                 return SIDES::LEFT;
             }
         }
-        else if (diffVec.y <= diffVec.x && diffVec.y <= diffVec.z)
+        else if (penetrationDepth.y <= penetrationDepth.x && penetrationDepth.y <= penetrationDepth.z)
         {
             //if y is positive and shortest among all axis, the collision must be happening at FRONT
             if (centerDistance.y > 0)
@@ -255,7 +264,7 @@ namespace NlMath
                 return SIDES::BOTTOM;
             }
         }
-        else if (diffVec.z <= diffVec.y && diffVec.z <= diffVec.x)
+        else if (penetrationDepth.z <= penetrationDepth.y && penetrationDepth.z <= penetrationDepth.x)
         {
             //if z is positive and shortest among all axis, the collision must be happening at TOP
             if (centerDistance.z > 0)
@@ -338,5 +347,64 @@ namespace NlMath
             getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalY2)) ||
             getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalZ2)));
 
+    }
+    bool CapsuleToCapsule(const CapsuleCollider& tCap1, const CapsuleCollider& tCap2)
+    {
+        //Capsule collision is made up of 2 circles, one at tip and the other at base
+        
+        //start by finding the normal of the capsule 1, which is the tip - base
+        Vector3D normal1 = Vector3DNormalize(tCap1.tip - tCap1.base);
+        //find the vector to reach the center of circle
+        Vector3D lineOffSet1 = normal1 * tCap1.radius;
+        //find the center of tip circle and base circle
+        Vector3D baseCircleCtr1 = tCap1.base + lineOffSet1;
+        Vector3D tipCircleCtr1 = tCap1.tip + lineOffSet1;
+
+        //repeat to find the normal of the capsule 2, which is the tip - base
+        Vector3D normal2 = Vector3DNormalize(tCap2.tip - tCap2.base);
+        //find the vector to reach the center of circle
+        Vector3D lineOffSet2 = normal2 * tCap2.radius;
+        //find the center of tip circle and base circle
+        Vector3D baseCircleCtr2 = tCap2.base + lineOffSet2;
+        Vector3D tipCircleCtr2 = tCap2.tip + lineOffSet2;
+
+        // vectors between line endpoints:
+        Vector3D dis0 = baseCircleCtr2 - baseCircleCtr1;
+        Vector3D dis1 = tipCircleCtr2 - baseCircleCtr1;
+        Vector3D dis2 = baseCircleCtr2 - tipCircleCtr1;
+        Vector3D dis3 = tipCircleCtr2 - tipCircleCtr1;
+
+        // squared distances:
+        float d0 = dis0 * dis0;
+        float d1 = dis1 * dis1;
+        float d2 = dis2 * dis2;
+        float d3 = dis3 * dis3;
+
+        // select closest potential endpoint on capsule 1:
+        Vector3D closest1;
+        if (d2 < d0 || d2 < d1 || d3 < d0 || d3 < d1)
+        {
+            closest1 = tipCircleCtr1;
+        }
+        else
+        {
+            closest1 = baseCircleCtr1;
+        }
+
+        // select point on capsule2 line segment nearest to best potential endpoint on capsule1:
+        Vector3D closest2 = ClosestPointOnLineSegment(baseCircleCtr2, tipCircleCtr2, closest1);
+
+        // now do the same for capsule 1 segment:
+        closest1 = ClosestPointOnLineSegment(baseCircleCtr1, tipCircleCtr1, closest2);
+
+        //two closest possible candidates on both capsule axes are selected 
+        //What remains is to place spheres on those pointsand perform the sphere intersection routine :
+        Vector3D penetration_normal = closest1 - closest2;
+        float len = penetration_normal.length();
+        penetration_normal /= len;  // normalize
+        float penetration_depth = tCap1.radius + tCap2.radius - len;
+        bool intersects = penetration_depth > 0;
+
+        return intersects;
     }
 }

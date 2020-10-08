@@ -55,3 +55,13 @@ PlaneCollider::PlaneCollider(NlMath::Vector3D _point, NlMath::Vector3D _extend, 
 	center(_point), extend(_extend), rotation(_rotation)
 {
 }
+
+CapsuleCollider::CapsuleCollider()
+	: tip(0, 0, 1), base(0, 0, -1), radius(1), rotation(0, 0, 0)
+{
+}
+
+CapsuleCollider::CapsuleCollider(NlMath::Vector3D _tip, NlMath::Vector3D _base, float _radius, NlMath::Vector3D _rotation)
+	: tip(_tip), base(_base), radius(_radius), rotation(_rotation)
+{
+}

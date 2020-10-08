@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cmath>
 
+#include "../glm/glm.hpp"   
 namespace NlMath
 {
 #ifdef _MSC_VER
@@ -35,10 +36,10 @@ namespace NlMath
 		// Unary operators
 		Vector3D operator -() const;
 
-		//conversion operator is case we are using open gl, this converts my vector to glm vectors
-		//operator glm::vec2() const;
-		//operator glm::vec3() const;
-		//operator glm::vec4() const;
+		/*conversion operator is case we are using open gl, this converts my vector to glm vectors*/
+		operator glm::vec2() const;
+		operator glm::vec3() const;
+		operator glm::vec4() const;
 		
 		float length();
 	} Vector3D, Vec2, Point2D, Pt2;
@@ -68,10 +69,10 @@ namespace NlMath
 
 	/**************************************************************************/
 	/*!
-		In this function, pResult will be the unit vector of pVec0
+		In this function, function will return the unit vector of pVec0
 	 */
 	 /**************************************************************************/
-	void	Vector3DNormalize(Vector3D& pResult, const Vector3D& pVec0);
+	Vector3D	Vector3DNormalize(const Vector3D& pVec0);
 	
 	/**************************************************************************/
 	/*!

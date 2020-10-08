@@ -2,6 +2,7 @@
 #include <cmath>
 #include "Vector.h"
 
+
 namespace NlMath
 {
 	/**************************************************************************/
@@ -111,20 +112,20 @@ namespace NlMath
 
 
 	//conversion operator is case we are using open gl, this converts my vector to glm vectors
-	//Vector3D::operator glm::vec2() const
-	//{
-	//	return glm::vec2(x, y);
-	//}
+	Vector3D::operator glm::vec2() const
+	{
+		return glm::vec2(x, y);
+	}
 
-	//Vector3D::operator glm::vec3() const
-	//{
-	//	return glm::vec3(x, y, z);
-	//}
+	Vector3D::operator glm::vec3() const
+	{
+		return glm::vec3(x, y, z);
+	}
 
-	//Vector3D::operator glm::vec4() const
-	//{
-	//	return glm::vec4(x, y, z, 1.0);
-	//}
+	Vector3D::operator glm::vec4() const
+	{
+		return glm::vec4(x, y, z, 1.0);
+	}
 
 
 
@@ -198,14 +199,16 @@ namespace NlMath
 		In this function, pResult will be the unit vector of pVec0
 	*/
 	/**************************************************************************/
-	void Vector3DNormalize(Vector3D& pResult, const Vector3D& pVec0)
+	Vector3D Vector3DNormalize(const Vector3D& pVec0)
 	{
+		Vector3D pResult;
 		// find magnitude
 		float m = sqrt(pVec0.x * pVec0.x + pVec0.y * pVec0.y + pVec0.z * pVec0.z);
 		// get unit vector
 		pResult.x = pVec0.x / m;
 		pResult.y = pVec0.y / m;
 		pResult.z = pVec0.z / m;
+		return pResult;
 	}
 
 	/**************************************************************************/
@@ -281,8 +284,7 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D Vector3DProjection(const Vector3D& pVec0, const Vector3D& pVec1)
 	{
-		Vector3D normVec0;
-		Vector3DNormalize(normVec0, pVec0);
+		Vector3D normVec0 = Vector3DNormalize(pVec0);
 		Vector3D resultVector = normVec0 * Vector3DDotProduct(normVec0, pVec1);
 		return resultVector;
 	}
