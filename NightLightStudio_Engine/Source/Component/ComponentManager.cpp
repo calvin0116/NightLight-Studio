@@ -3,9 +3,8 @@
 
 #include <iostream>
 
-ComponentManager G_COMPMGR;
-
-int G_CURRIDMOD = 0;
+// local g var
+static int G_CURRIDMOD = 0;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //// ComponentSetFactory
@@ -601,268 +600,272 @@ void ComponentManager::Free()
 
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+////  Test Fns
+//// 
+
+// depreciated test below // just for my reference
 
 // test
-
-bool ComponentManager::IteratorM::operator==(IteratorM& itr)
-{
-	return mci == itr.mci;
-}
-
-bool ComponentManager::IteratorM::operator!=(IteratorM& itr)
-{
-	return mci != itr.mci;
-}
-
-char* ComponentManager::IteratorM::operator*()
-{
-	return *mci;
-}
-
-ComponentManager::IteratorM& ComponentManager::IteratorM::operator++()
-{
-	++mci;
-	return *this;
-}
-
-ComponentManager::IteratorM ComponentManager::IteratorM::operator++(int)
-{
-	mci++;
-	return *this;
-}
-
-ComponentManager::IteratorM ComponentManager::end(ContainerID comT)
-{
-	IteratorM itr;
-	itr.mci = cmm.end(comT);
-	return itr;
-}
-
-ComponentManager::IteratorM ComponentManager::begin(ContainerID comT)
-{
-	IteratorM itr;
-	itr.mci = cmm.begin(comT);
-	return itr;
-}
-
-ComponentManager::ContainerID ComponentManager::createNewComponentType(ContainerSettings set)
-{
-	return cmm.createNewComponentType(set);
-}
-
-char* ComponentManager::getElementAt(ContainerID comT, int index)
-{
-	return cmm.getElementAt(comT, index);
-}
-
-int ComponentManager::insertIntoContainer(ContainerID comT, char* obj)
-{
-	return cmm.insertIntoContainer(comT, obj);
-}
-
-void ComponentManager::removeFromContainer(ContainerID comT, int index)
-{
-	cmm.removeFromContainer(comT, index);
-}
-
-void ComponentManager::removeFromContainer(IteratorM& itr)
-{
-	cmm.removeFromContainer(itr.mci);
-}
-
-void ComponentManager::freeAll()
-{
-	cmm.freeAll();
-}
-
-
-
-
-
-
-
-
+//
+//bool ComponentManager::IteratorM::operator==(IteratorM& itr)
+//{
+//	return mci == itr.mci;
+//}
+//
+//bool ComponentManager::IteratorM::operator!=(IteratorM& itr)
+//{
+//	return mci != itr.mci;
+//}
+//
+//char* ComponentManager::IteratorM::operator*()
+//{
+//	return *mci;
+//}
+//
+//ComponentManager::IteratorM& ComponentManager::IteratorM::operator++()
+//{
+//	++mci;
+//	return *this;
+//}
+//
+//ComponentManager::IteratorM ComponentManager::IteratorM::operator++(int)
+//{
+//	mci++;
+//	return *this;
+//}
+//
+//ComponentManager::IteratorM ComponentManager::end(ContainerID comT)
+//{
+//	IteratorM itr;
+//	itr.mci = cmm.end(comT);
+//	return itr;
+//}
+//
+//ComponentManager::IteratorM ComponentManager::begin(ContainerID comT)
+//{
+//	IteratorM itr;
+//	itr.mci = cmm.begin(comT);
+//	return itr;
+//}
+//
+//ComponentManager::ContainerID ComponentManager::createNewComponentType(ContainerSettings set)
+//{
+//	return cmm.createNewComponentType(set);
+//}
+//
+//char* ComponentManager::getElementAt(ContainerID comT, int index)
+//{
+//	return cmm.getElementAt(comT, index);
+//}
+//
+//int ComponentManager::insertIntoContainer(ContainerID comT, char* obj)
+//{
+//	return cmm.insertIntoContainer(comT, obj);
+//}
+//
+//void ComponentManager::removeFromContainer(ContainerID comT, int index)
+//{
+//	cmm.removeFromContainer(comT, index);
+//}
+//
+//void ComponentManager::removeFromContainer(IteratorM& itr)
+//{
+//	cmm.removeFromContainer(itr.mci);
+//}
+//
+//void ComponentManager::freeAll()
+//{
+//	cmm.freeAll();
+//}
+//
+//
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ////  Test Fns
+//// 
+
+// depreciated test below // just for my reference
+
+//
+//void ComponentManager::test0()
+//{
+//	struct ComponentT
+//	{
+//		float vert[4];
+//		int id;
+//	};
+//
+//	struct ComponentT2
+//	{
+//		int id;
+//		float vertT[16];
+//		int t1;
+//		int t2;
+//		float vert[4];
+//	};
+//
+//	std::cout << "Hello World!\n";
+//
+//	std::cout << sizeof(char) << "\n";
+//
+//	ComponentMemoryManager comMgr;
+//
+//	ComponentMemoryManager::ComponentTypeSettings csetT;
+//	csetT.elementSize = sizeof(ComponentT);
+//
+//	ComponentMemoryManager::ComponentType ctT = comMgr.createNewComponentType(csetT);
+//
+//
+//	for (int i = 0; i < 1000; ++i)
+//	{
+//		ComponentT newComp
+//		{
+//			{1.0f, 2.0f, 3.0f, 4.0f},
+//			i
+//		};
+//
+//		comMgr.insertIntoContainer(ctT, reinterpret_cast<char*>(&newComp));
+//	}
+//
+//	ComponentT* cT = reinterpret_cast<ComponentT*>(comMgr.getElementAt(ctT, 0));
+//
+//	std::cout << cT->id << std::endl;
+//	std::cout << cT->vert[0] << std::endl;
+//	std::cout << cT->vert[3] << std::endl;
+//
+//	comMgr.removeFromContainer(ctT, 159);
+//	comMgr.removeFromContainer(ctT, 784);
+//
+//	ComponentMemoryManager::MemConIterator itr = comMgr.begin(ctT);
+//	itr = comMgr.begin(ctT);
+//	auto itrEnd = comMgr.end(ctT);
+//	int i = 0;
+//
+//	while (itr != itrEnd)
+//	{
+//		ComponentT* testC = reinterpret_cast<ComponentT*>(*itr);
+//
+//		if (i != testC->id)
+//		{
+//			std::cout << testC->id << std::endl;
+//			std::cout << testC->vert[2] << std::endl;
+//
+//			++i;
+//		}
+//
+//		++i;
+//		++itr;
+//	}
+//
+//
+//	// DUN ANYHOW FREE !!!
+//	comMgr.freeAll();
+//}
+
+// depreciated
+//void ComponentManager::test1()
+//{
+	// depreciated
+	//struct ComponentT
+	//{
+	//	float vert[4];
+	//	int id;
+	//};
+
+	////ManagerComponent::ComponentType;
+
+	//ComponentManager mgrCom;
+
+	////mgrCom.test();
+	////std::cout << "Test!\n";
+
+	//// settings
+	//ComponentManager::ContainerSettings set;
+	//// set component size
+	//set.elementSize = sizeof(ComponentT);
+
+	//// create container // returns a container id
+	//ComponentManager::ContainerID container1 = mgrCom.createNewComponentType(set);
+
+	//int n = 0;
+
+	//for (int i = 0; i < 1000; ++i)
+	//{
+	//	// init a new component
+	//	ComponentT newComponent{ {1.11f, 2.22f, 3.33f, 4.44f}, i };
+
+	//	// insert the component
+	//	mgrCom.insertIntoContainer(container1, reinterpret_cast<char*>(&newComponent)); // can use templates ?
+
+	//	++n;
+	//}
+
+	//std::cout << "Obj created :" << n << std::endl;
+
+	//// get component at index
+	//ComponentT* comT = reinterpret_cast<ComponentT*>((mgrCom.getElementAt(container1, 777)));
+	//std::cout << "Should read 777 :" << comT->id << std::endl;
+
+	//// del component at index
+	//mgrCom.removeFromContainer(container1, 777);
+	//std::cout << "mgrCom.removeFromContainer(container1, 777);" << std::endl;
+
+	//// get component at index
+	//comT = reinterpret_cast<ComponentT*>((mgrCom.getElementAt(container1, 777)));
+	//std::cout << "Should read 0, since removed :" << comT->id << std::endl;
+
+	//// this index includes empty slots
+
+	//// iteration
+	//auto itr = mgrCom.begin(container1);
+	//auto itrEnd = mgrCom.end(container1);
+	//int i = 0;
+	//while (itr != itrEnd)
+	//{
+	//	comT = reinterpret_cast<ComponentT*>(*itr);
+	//	std::cout << comT->id << " ";
+	//	++itr;
+	//	++i;
+	//}
+	//std::cout << std::endl;
+	//std::cout << "1000 - 1 removed = 999 left:" << i << std::endl;
+
+	//// remove with itr
+	//// iteration
+	//itr = mgrCom.begin(container1);
+	//itrEnd = mgrCom.end(container1);
+	//i = 0;
+	//while (itr != itrEnd)
+	//{
+	//	comT = reinterpret_cast<ComponentT*>(*itr);
+	//	std::cout << comT->id << " ";
+
+	//	if (comT->id == 861)
+	//	{
+	//		std::cout << "\n Remove:" << comT->id << " \n";
+	//		mgrCom.removeFromContainer(itr);
+	//		itrEnd = mgrCom.end(container1); // need to update the end itr !!
+	//		std::cout << "\n After Remove:" << comT->id << " \n";
+
+	//		--i; // remove count
+	//	}
+
+	//	++itr;
+	//	++i;
+	//}
+	//std::cout << std::endl;
+	//std::cout << "999 - 1 removed = 998 left:" << i << std::endl;
 
 
-void ComponentManager::test0()
-{
-	struct ComponentT
-	{
-		float vert[4];
-		int id;
-	};
 
-	struct ComponentT2
-	{
-		int id;
-		float vertT[16];
-		int t1;
-		int t2;
-		float vert[4];
-	};
+	//// dun anyhow free
+	//mgrCom.freeAll();
+//}
 
-	std::cout << "Hello World!\n";
-
-	std::cout << sizeof(char) << "\n";
-
-	ComponentMemoryManager comMgr;
-
-	ComponentMemoryManager::ComponentTypeSettings csetT;
-	csetT.elementSize = sizeof(ComponentT);
-
-	ComponentMemoryManager::ComponentType ctT = comMgr.createNewComponentType(csetT);
-
-
-	for (int i = 0; i < 1000; ++i)
-	{
-		ComponentT newComp
-		{
-			{1.0f, 2.0f, 3.0f, 4.0f},
-			i
-		};
-
-		comMgr.insertIntoContainer(ctT, reinterpret_cast<char*>(&newComp));
-	}
-
-	ComponentT* cT = reinterpret_cast<ComponentT*>(comMgr.getElementAt(ctT, 0));
-
-	std::cout << cT->id << std::endl;
-	std::cout << cT->vert[0] << std::endl;
-	std::cout << cT->vert[3] << std::endl;
-
-	comMgr.removeFromContainer(ctT, 159);
-	comMgr.removeFromContainer(ctT, 784);
-
-	ComponentMemoryManager::MemConIterator itr = comMgr.begin(ctT);
-	itr = comMgr.begin(ctT);
-	auto itrEnd = comMgr.end(ctT);
-	int i = 0;
-
-	while (itr != itrEnd)
-	{
-		ComponentT* testC = reinterpret_cast<ComponentT*>(*itr);
-
-		if (i != testC->id)
-		{
-			std::cout << testC->id << std::endl;
-			std::cout << testC->vert[2] << std::endl;
-
-			++i;
-		}
-
-		++i;
-		++itr;
-	}
-
-
-	// DUN ANYHOW FREE !!!
-	comMgr.freeAll();
-}
-
-void ComponentManager::test1()
-{
-	struct ComponentT
-	{
-		float vert[4];
-		int id;
-	};
-
-	//ManagerComponent::ComponentType;
-
-	ComponentManager mgrCom;
-
-	//mgrCom.test();
-	//std::cout << "Test!\n";
-
-	// settings
-	ComponentManager::ContainerSettings set;
-	// set component size
-	set.elementSize = sizeof(ComponentT);
-
-	// create container // returns a container id
-	ComponentManager::ContainerID container1 = mgrCom.createNewComponentType(set);
-
-	int n = 0;
-
-	for (int i = 0; i < 1000; ++i)
-	{
-		// init a new component
-		ComponentT newComponent{ {1.11f, 2.22f, 3.33f, 4.44f}, i };
-
-		// insert the component
-		mgrCom.insertIntoContainer(container1, reinterpret_cast<char*>(&newComponent)); // can use templates ?
-
-		++n;
-	}
-
-	std::cout << "Obj created :" << n << std::endl;
-
-	// get component at index
-	ComponentT* comT = reinterpret_cast<ComponentT*>((mgrCom.getElementAt(container1, 777)));
-	std::cout << "Should read 777 :" << comT->id << std::endl;
-
-	// del component at index
-	mgrCom.removeFromContainer(container1, 777);
-	std::cout << "mgrCom.removeFromContainer(container1, 777);" << std::endl;
-
-	// get component at index
-	comT = reinterpret_cast<ComponentT*>((mgrCom.getElementAt(container1, 777)));
-	std::cout << "Should read 0, since removed :" << comT->id << std::endl;
-
-	// this index includes empty slots
-
-	// iteration
-	auto itr = mgrCom.begin(container1);
-	auto itrEnd = mgrCom.end(container1);
-	int i = 0;
-	while (itr != itrEnd)
-	{
-		comT = reinterpret_cast<ComponentT*>(*itr);
-		std::cout << comT->id << " ";
-		++itr;
-		++i;
-	}
-	std::cout << std::endl;
-	std::cout << "1000 - 1 removed = 999 left:" << i << std::endl;
-
-	// remove with itr
-	// iteration
-	itr = mgrCom.begin(container1);
-	itrEnd = mgrCom.end(container1);
-	i = 0;
-	while (itr != itrEnd)
-	{
-		comT = reinterpret_cast<ComponentT*>(*itr);
-		std::cout << comT->id << " ";
-
-		if (comT->id == 861)
-		{
-			std::cout << "\n Remove:" << comT->id << " \n";
-			mgrCom.removeFromContainer(itr);
-			itrEnd = mgrCom.end(container1); // need to update the end itr !!
-			std::cout << "\n After Remove:" << comT->id << " \n";
-
-			--i; // remove count
-		}
-
-		++itr;
-		++i;
-	}
-	std::cout << std::endl;
-	std::cout << "999 - 1 removed = 998 left:" << i << std::endl;
-
-
-
-	// dun anyhow free
-	mgrCom.freeAll();
-}
-
-void ComponentManager::test2()
-{
+//void ComponentManager::test2()
+//{
 	// depreciated
 
 	//struct ComponentT
@@ -1080,6 +1083,6 @@ void ComponentManager::test2()
 
 
 	//mgrCom.Free();
-}
+//}
 
 

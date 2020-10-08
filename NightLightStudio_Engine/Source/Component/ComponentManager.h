@@ -1,5 +1,9 @@
 #pragma once
 
+
+#include "../Core/MySystem.h"
+#include "../../framework.h"
+
 #include "ComponentMemoryManager.h"
 #include <vector>
 #include <map>
@@ -10,19 +14,18 @@
 // max children per parent // this can be technically be dynamic, but I will smash my head against the wall
 #define MAX_CHILDREN 32
 
-
 // this works on the assumption that IDRANGE < number of entities in a compset at any time
-//#define IDRANGE 1000000
-constexpr size_t IDRANGE = 1000000;       // <--
-constexpr float RATIO_RT = 0.75;          // <--
-constexpr float RATIO_CH = 1 - RATIO_RT;
+constexpr size_t IDRANGE = 1000000;        // <--| change these two
+constexpr double RATIO_RT = 0.75;          // <--|
+constexpr double RATIO_CH = 1 - RATIO_RT;  
 constexpr size_t IDRANGE_RT = IDRANGE * RATIO_RT;
 constexpr size_t IDRANGE_CH = IDRANGE * RATIO_CH;
 
 // unique id allocation - rt is root entity - ch is child entites - they are in different containers so have different index
 //  <-------- compset0 --------->    <-------- compset1 --------->    <-------- compset2 --------->
-//  [          IDRANGE          ]    [          IDRANGE          ]    [          IDRANGE          ]    
+//  [          IDRANGE          ]    [          IDRANGE          ]    [          IDRANGE          ]
 //  [ IDRANGE_RT ] [ IDRANGE_CH ]    [ IDRANGE_RT ] [ IDRANGE_CH ]    [ IDRANGE_RT ] [ IDRANGE_CH ]
+//  change RATIO_RT to determine the size ratio of IDRANGE_RT : IDRANGE_CH
 
 
 
@@ -160,8 +163,10 @@ constexpr size_t IDRANGE_CH = IDRANGE * RATIO_CH;
 //
 
 
-class ComponentManager
+class ENGINE_API ComponentManager : public MySystem, public Singleton<ComponentManager>
 {
+	friend Singleton<ComponentManager>;
+
 public:
 	typedef int ContainerID;
 	//typedef int ComponentSetID;
@@ -435,13 +440,7 @@ public:
 
 			int getParentId();
 
-			ChildContainerT* getChildren(); // ???
-
-			class IteratorChildEntity
-			{
-
-			};
-
+			ChildContainerT* getChildren(); // gets a container of child uids
 
 			///////////////////////////////////////////////////////////////////////////////////////
 			///////////////////////////////////////////////////////////////////////////////////////
@@ -567,17 +566,12 @@ public:
 
 	void AddComponentSet(ComponentSet* compSet); // adds teh component set to the manager
 
-	// 
 
-	//void Init();
+	//// virtual fns for system calls
+    // go check ISystem.h for virtual fns
 
-	//void Load();
 
-	//void Update();
-
-	//void Unload();
-
-	void Free();
+	void Free() override;
 
 	////
 
@@ -593,54 +587,56 @@ public:
 
 
 
-	///////////////////
-	// Test functions
-
-private:
-
-	class IteratorM
-	{
-		friend ComponentManager;
-		ComponentMemoryManager::MemConIterator mci;
-	public:
-		IteratorM() = default;
-		IteratorM(const IteratorM& itr) = default;
-
-		// copy
-		IteratorM& operator=(IteratorM& itr) = default;
-		IteratorM& operator=(IteratorM&& itr) = default;
-
-		// comparison op
-		bool operator==(IteratorM& itr);
-		bool operator!=(IteratorM& itr);
-
-		// other op
-		char* operator*();
-		IteratorM& operator++();
-		IteratorM operator++(int); // post fix // slower
-	};
-
-	IteratorM end(ContainerID comT);
-	IteratorM begin(ContainerID comT);
-
-	ContainerID createNewComponentType(ContainerSettings set);
-
-	char* getElementAt(ContainerID comT, int index);
-
-	int insertIntoContainer(ContainerID comT, char* obj);
-	void removeFromContainer(ContainerID comT, int index);
-	void removeFromContainer(IteratorM& itr);
-	void freeAll();
-
-public:
+////////////////////////////////////////////////
+// Test functions // depreciated, sort of anyway
+//
+//private:
+//
+//	class IteratorM
+//	{
+//		friend ComponentManager;
+//		ComponentMemoryManager::MemConIterator mci;
+//	public:
+//		IteratorM() = default;
+//		IteratorM(const IteratorM& itr) = default;
+//
+//		// copy
+//		IteratorM& operator=(IteratorM& itr) = default;
+//		IteratorM& operator=(IteratorM&& itr) = default;
+//
+//		// comparison op
+//		bool operator==(IteratorM& itr);
+//		bool operator!=(IteratorM& itr);
+//
+//		// other op
+//		char* operator*();
+//		IteratorM& operator++();
+//		IteratorM operator++(int); // post fix // slower
+//	};
+//
+//	IteratorM end(ContainerID comT);
+//	IteratorM begin(ContainerID comT);
+//
+//	ContainerID createNewComponentType(ContainerSettings set);
+//
+//	char* getElementAt(ContainerID comT, int index);
+//
+//	int insertIntoContainer(ContainerID comT, char* obj);
+//	void removeFromContainer(ContainerID comT, int index);
+//	void removeFromContainer(IteratorM& itr);
+//	void freeAll();
+//
+//public:
 	// test fn
-	void test0(); 
-	void test1();
-	void test2();
+	// depreciated
+	//void test0(); 
+	//void test1();
+	//void test2();
 };
 
+static ComponentManager* SYS_COMPONENT = ComponentManager::GetInstance();
 
-extern ComponentManager G_COMPMGR;
+//extern ComponentManager G_COMPMGR;
 
 
 

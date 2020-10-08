@@ -65,5 +65,5 @@ void FluffyUnicornEngine::Exit()
 {
 	SYS_MAN->Free();
 
-	G_COMPMGR.Free();
+	SYS_COMPONENT->Free();
 }
