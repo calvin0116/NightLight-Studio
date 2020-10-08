@@ -23,6 +23,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	Systems[S_PRIORITY::SP_INPUT] = SYS_INPUT;
 	Systems[S_PRIORITY::SP_IO] = SYS_IO;
 	Systems[S_PRIORITY::SP_AUDIO] = SYS_AUDIO;
+	Systems[S_PRIORITY::SP_PHYSICS] = NS_PHYSICS::SYS_PHYSICS;
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP WINDOW(CLIENT) INSTANCE
@@ -81,6 +82,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 	// WHILE COMPONENTS
 	// Creation
+	ComponentRigidBody newRigid;
 	ComponentRender newCompComponentRender
 	{
 		0,
@@ -90,13 +92,15 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	G_MAINCOMPSET.AttachComponent<ComponentRender>(newObjId, &newCompComponentRender);
 	// WHILE COMPONENTS END
 	// WHILE OBJECTS END
-
-	// add 2nd obj 
-	newObjId = G_MAINCOMPSET.BuildObject();
-
+	G_MAINCOMPSET.AttachComponent<ComponentRigidBody>(newObjId, &newRigid);
 	ComponentTransform compT;
 	compT._position.x = 1.11f;
 	G_MAINCOMPSET.AttachComponent<ComponentTransform>(newObjId, &compT);
+	// add 2nd obj 
+	newObjId = G_MAINCOMPSET.BuildObject();
+
+	
+
 
 	newCompComponentRender.id = 1;
 	G_MAINCOMPSET.AttachComponent<ComponentRender>(newObjId, &newCompComponentRender);
