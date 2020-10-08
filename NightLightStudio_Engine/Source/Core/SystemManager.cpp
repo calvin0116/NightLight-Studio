@@ -10,6 +10,7 @@
 #include "..//Component/ComponentRigidBody.h"
 #include "..//Component/ComponentCollider.h"
 
+#include "../Component/LocalVector.h"
 
 // Do not touch
 //**! Update comments please thanks
@@ -27,6 +28,21 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP WINDOW(CLIENT) INSTANCE
 	NS_WINDOW::SYS_WINDOW->SetAppInstance(hInstance);
+
+	////////////////
+	// me test stuff
+	std::cout << std::endl;
+	std::cout << "/////////////////////////////////////" << std::endl;
+	std::cout << "me test stuff:" << std::endl;
+	std::cout << std::endl;
+	TestVector tv;
+	tv.testMyVector();
+	std::cout << std::endl;
+	std::cout << "me test stuff END" << std::endl;
+	std::cout << "/////////////////////////////////////" << std::endl;
+	std::cout << std::endl;
+	// 
+	////////////////
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP COMPONENT - shift this to a seperate class/function !!!
@@ -112,6 +128,65 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	newCompComponentRender.id = 123;
 	G_UICOMPSET.AttachComponent<ComponentRender>(newObjId, &newCompComponentRender);
 
+	///////////////////////////////
+	// hierarchical entity test
+	{
+		std::cout << std::endl;
+		std::cout << "/////////////////////////////////////" << std::endl;
+		std::cout << "hierarchical entity test - LOAD" << std::endl;
+		std::cout << std::endl;
+
+		// remind self to typedef this !!
+		ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(newObjId);
+
+
+		int numChild = entity.getNumChildren();
+		int numDec = entity.getNumDecendants();
+		int parentuid = entity.getParentId();
+
+		std::cout << "numChild:" << numChild << std::endl;
+		std::cout << "numDec:" << numDec << std::endl;
+		std::cout << "parentuid:" << parentuid << std::endl;
+
+		ComponentManager::ComponentSetManager::Entity childEntity = entity.makeChild();
+		ComponentManager::ChildContainerT* childrens = entity.getChildren();
+
+		std::cout << std::endl;
+
+		int numChild_child = childEntity.getNumChildren();
+		int numDec_child = childEntity.getNumDecendants();
+		int parentuid_child = childEntity.getParentId();
+
+		std::cout << "numChild_child:" << childEntity.getId() << std::endl;
+		std::cout << "numChild_child:" << numChild_child << std::endl;
+		std::cout << "numDec_child:" << numDec_child << std::endl;
+		std::cout << "parentuid_child:" << parentuid_child << std::endl;
+
+		newCompComponentRender.id = 54321;
+		G_UICOMPSET.AttachComponent<ComponentRender>(childEntity.getId(), &newCompComponentRender);
+
+		std::cout << std::endl;
+		std::cout << "hierarchical entity test - LOAD  END" << std::endl;
+		std::cout << "////////////////////////////////////" << std::endl;
+		std::cout << std::endl;
+	}
+	{
+		// make 2 more childs from the entity
+		ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(newObjId);
+
+
+		ComponentManager::ComponentSetManager::Entity childEntity1 = entity.makeChild();
+		newCompComponentRender.id = 5432;
+		G_UICOMPSET.AttachComponent<ComponentRender>(childEntity1.getId(), &newCompComponentRender);
+
+
+		ComponentManager::ComponentSetManager::Entity childEntity2 = entity.makeChild();
+		newCompComponentRender.id = 543;
+		G_UICOMPSET.AttachComponent<ComponentRender>(childEntity2.getId(), &newCompComponentRender);
+	}
+	// hierarchical entity test END
+	///////////////////////////////
+
 	//// LOAD COMPONENT END
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -165,8 +240,27 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		ComponentTransform* compT = entity.getComponent<ComponentTransform>();
 		if (compT != nullptr) // nullptr -> uninitialised or deleted
 			std::cout << "Transform:" << compT->_position.x << std::endl;
-			
-		std::cout << std::endl;
+
+		////////////
+		// childrens
+		ComponentManager::ChildContainerT* childrens = entity.getChildren();
+
+		for (int uid : *childrens)
+		{
+			ComponentManager::ComponentSetManager::Entity childEntity = G_UICOMPSET.getEntity(uid);
+
+			std::cout << "childEntity id:" << childEntity.getId() << std::endl;
+			std::cout << "childEntity numChild:" << childEntity.getNumChildren() << std::endl;
+			std::cout << "childEntity numDec:" << childEntity.getNumDecendants() << std::endl;
+			std::cout << "childEntity parentuid:" << childEntity.getParentId() << std::endl;
+
+			compR = childEntity.getComponent<ComponentRender>();
+			std::cout << "Child Render:" << compR->id << " " << compR->c << std::endl;
+		}
+
+
+		//
+		////////////
 
 		++itr;
 	}

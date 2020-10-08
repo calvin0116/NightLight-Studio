@@ -11,6 +11,21 @@
 #define MAX_CHILDREN 32
 
 
+// this works on the assumption that IDRANGE < number of entities in a compset at any time
+//#define IDRANGE 1000000
+constexpr size_t IDRANGE = 1000000;       // <--
+constexpr float RATIO_RT = 0.75;          // <--
+constexpr float RATIO_CH = 1 - RATIO_RT;
+constexpr size_t IDRANGE_RT = IDRANGE * RATIO_RT;
+constexpr size_t IDRANGE_CH = IDRANGE * RATIO_CH;
+
+// unique id allocation - rt is root entity - ch is child entites - they are in different containers so have different index
+//  <-------- compset0 --------->    <-------- compset1 --------->    <-------- compset2 --------->
+//  [          IDRANGE          ]    [          IDRANGE          ]    [          IDRANGE          ]    
+//  [ IDRANGE_RT ] [ IDRANGE_CH ]    [ IDRANGE_RT ] [ IDRANGE_CH ]    [ IDRANGE_RT ] [ IDRANGE_CH ]
+
+
+
 //**! Comment more !**//
 
 //**! I need to clean up my code !**//
@@ -131,6 +146,7 @@
 //						// Get Entity and Entity Id
 //						int getObjId(Iterator itr);
 //						Entity getEntity(Iterator itr);
+//                      Entity getEntity(int uid); // get entity with entity unique id
 //
 //
 //				// component set and its dependents are all private
@@ -254,21 +270,35 @@ public:
 		T* AttachComponent(int entityId, T* newComp)
 		{
 			const std::type_info& tinf = typeid(T);
-
-			auto find = compSet->hashConIdMap.find(tinf.hash_code());
-			if (find == compSet->hashConIdMap.end())
-				throw; // gg
-
-			return reinterpret_cast<T*>(
-				AttachComponent((*find).second, entityId, newComp)
-				);
+			
+			//entityId -= compSet->idIndexModifier;
+			if (entityId - compSet->idIndexModifier >= IDRANGE_RT)
+			{
+				auto find = compSet->hashConIdMapChilds.find(tinf.hash_code());
+				if (find == compSet->hashConIdMapChilds.end())
+					throw; // gg
+				return reinterpret_cast<T*>(
+					AttachComponent((*find).second, entityId, newComp) // <- pass in index, not uid
+					);
+			}
+			else
+			{
+				auto find = compSet->hashConIdMap.find(tinf.hash_code());
+				if (find == compSet->hashConIdMap.end())
+					throw; // gg
+				return reinterpret_cast<T*>(
+					AttachComponent((*find).second, entityId, newComp) // <- pass in index, not uid
+					);
+			}
 		}
 
 		// remove component from entity
 		void RemoveComponent(ComponentManager::ContainerID compId, int entityId);
+		// TODO for child
 
 		// free entity
 		void UnBuildObject(int objId);
+		// TODO for child
 
 		// Iterator to iterate component container // !!! USE A TYPEDEF !!!
 		class Iterator
@@ -365,11 +395,23 @@ public:
 			{
 				const std::type_info& tinf = typeid(T);
 
-				auto find = compSetMgr->compSet->hashConIdMap.find(tinf.hash_code());
-				if (find == compSetMgr->compSet->hashConIdMap.end())
-					throw; // gg
+				//objId -= compSetMgr->compSet->idIndexModifier;
+				if (objId - compSetMgr->compSet->idIndexModifier >= IDRANGE_RT)
+				{
+					auto find = compSetMgr->compSet->hashConIdMapChilds.find(tinf.hash_code());
+					if (find == compSetMgr->compSet->hashConIdMapChilds.end())
+						throw; // gg
 
-				return reinterpret_cast<T*>(getComponent((*find).second));
+					return reinterpret_cast<T*>(getComponent((*find).second));
+				}
+				else
+				{
+					auto find = compSetMgr->compSet->hashConIdMap.find(tinf.hash_code());
+					if (find == compSetMgr->compSet->hashConIdMap.end())
+						throw; // gg
+
+					return reinterpret_cast<T*>(getComponent((*find).second));
+				}
 			}
 
 			///////////////////////////////////////////////////////////////////////////////////////
@@ -377,9 +419,11 @@ public:
 			// parent and child entities
 
 		private:
-
+			char* getObj();
 
 		public:
+
+			int getId();
 
 			int getNumChildren();
 
@@ -435,10 +479,11 @@ public:
 		// Get Entity and Entity Id
 		int getObjId(Iterator itr);
 		Entity getEntity(Iterator itr);
+		Entity getEntity(int uid);
 
 	private:
 
-		char* getObjectComponent(ComponentManager::ContainerID compId, int objId);
+		char* getObjectComponent(ComponentManager::ContainerID compId, int objId, bool isChild = false);
 
 	};
 
@@ -471,7 +516,7 @@ public:
 			friend ComponentSetFactory; // allows factory to build
 			friend ComponentSetManager; // allows factory to build
 
-			int objInd; // unique id of the object
+			int objId; // unique id of the object
 
 			int parentObjId;
 

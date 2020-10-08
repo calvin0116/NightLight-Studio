@@ -5,20 +5,6 @@
 
 ComponentManager G_COMPMGR;
 
-// this works on the assumption that IDRANGE < number of entities in a compset at any time
-//#define IDRANGE 1000000
-constexpr size_t IDRANGE = 1000000;       // <--
-constexpr float RATIO_RT = 0.75;          // <--
-constexpr float RATIO_CH = 1 - RATIO_RT;
-constexpr size_t IDRANGE_RT = IDRANGE / RATIO_RT;
-constexpr size_t IDRANGE_CH = IDRANGE / RATIO_CH;
-
-// unique id allocation - rt is root entity - ch is child entites - they are in different containers so have different index
-//  <-------- compset0 --------->    <-------- compset1 --------->    <-------- compset2 --------->
-//  [          IDRANGE          ]    [          IDRANGE          ]    [          IDRANGE          ]    
-//  [ IDRANGE_RT ] [ IDRANGE_CH ]    [ IDRANGE_RT ] [ IDRANGE_CH ]    [ IDRANGE_RT ] [ IDRANGE_CH ]
-
-
 int G_CURRIDMOD = 0;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +96,14 @@ int ComponentManager::ComponentSetManager::BuildObject()
 	newObj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
 
 	// set the obj
-	reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(newObj)->objInd = objId;
+	//reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(newObj)->objInd = objId;
+	ComponentManager::ComponentSet::ObjectData* newObj_o = reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(newObj);
+	newObj_o->objId = objId;
+	//newObj_o->parentObjId = -1; //it already is -1
+	newObj_o->children.numChild = 0;
+	newObj_o->children.numDecendants = 0;
+	newObj_o->children.childIDs.init();
+	newObj_o->children.generation = 0;
 
 	return objId + compSet->idIndexModifier;
 }
@@ -126,7 +119,7 @@ int ComponentManager::ComponentSetManager::BuildChildObject()
 		throw; // err
 
 	// insert the obj
-	int objId = compSet->cmm.insertIntoContainer(compSet->objContainerId, newObj);
+	int objId = compSet->cmm.insertIntoContainer(compSet->objContainerIdChilds, newObj);
 
 	// check
 	if (objId > IDRANGE_CH)
@@ -138,14 +131,20 @@ int ComponentManager::ComponentSetManager::BuildChildObject()
 	free(reinterpret_cast<void*>(newObj));
 
 	// get the obj from the container
-	newObj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
+	newObj = compSet->cmm.getElementAt(compSet->objContainerIdChilds, objId);
 
 	// set the obj
-	reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(newObj)->objInd = objId;
+	//reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(newObj)->objInd = objId;
+	ComponentManager::ComponentSet::ObjectData* newObj_o = reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(newObj);
+	newObj_o->objId = objId;
+	//newObj_o->parentObjId = -1; //it already is -1
+	newObj_o->children.numChild = 0;
+	newObj_o->children.numDecendants = 0;
+	newObj_o->children.childIDs.init();
 
-	//return objId + compSet->idIndexModifier + IDRANGE_RT;
+	return objId + compSet->idIndexModifier + IDRANGE_RT;
 
-	return objId;
+	//return objId;
 }
 
 void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::ContainerID compId, int objId, void* newComp)
@@ -154,15 +153,26 @@ void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::C
 	int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<char*>(newComp));
 
 	// set object component data
-	objId -= compSet->idIndexModifier;
-	ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
+
+	ComponentSet::ObjectData::ComponentData* compData;
+
+	objId -= compSet->idIndexModifier; // // 
+	if (objId >= IDRANGE_RT)
+	{
+		objId -= IDRANGE_RT;
+		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId, true));
+	}
+	else
+	{
+		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
+	}
+
+	// !
 	compData->containerId = compId; // set container id
 	compData->compPtr = reinterpret_cast<void*>( // set component ptr within the container
 		compSet->cmm.getElementAt(compId, newCId)
 		);;
 	compData->containerIndex = newCId; // set component index within the container
-
-	// !
 
 
 	// return the component
@@ -217,7 +227,7 @@ void ComponentManager::ComponentSetManager::UnBuildObject(int objId)
 	}
 
 	// uninit the obj
-	reinterpret_cast<ComponentSet::ObjectData*>(obj)->objInd = -1;
+	reinterpret_cast<ComponentSet::ObjectData*>(obj)->objId = -1;
 
 	// remove the object
 	compSet->cmm.removeFromContainer(compSet->objContainerId, objId);
@@ -227,8 +237,20 @@ void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::Cont
 {	
 	// get the index
 	objId -= compSet->idIndexModifier;
-	ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
+
+	ComponentSet::ObjectData::ComponentData* compData;// = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
 	//int index = compData->containerIndex;
+
+	//
+	if (objId >= IDRANGE_RT)
+	{
+		objId -= IDRANGE_RT;
+		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId, true));
+	}
+	else
+	{
+		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
+	}
 
 	// compData->compPtr; // <-- 
 	if (compData->compPtr == nullptr)
@@ -242,9 +264,17 @@ void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::Cont
 	//return compSet->cmm.getElementAt(compId, index);
 }
 
-char* ComponentManager::ComponentSetManager::getObjectComponent(ComponentManager::ContainerID compId, int objId)
+char* ComponentManager::ComponentSetManager::getObjectComponent(ComponentManager::ContainerID compId, int objId, bool isChild)
 {
-	char* obj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
+	char* obj;
+	if (isChild)
+	{
+		obj = compSet->cmm.getElementAt(compSet->objContainerIdChilds, objId);
+	}
+	else
+	{
+		obj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
+	}
 
 	// obj building
 	//size_t size = sizeof(ManagerComponent::ComponentSet::Object);
@@ -348,7 +378,7 @@ int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 		if (comp->containerIndex == itr.memItr.getCurrentIndex())
 		//if (comp->containerId == itr.containerId) //memItr.getCurrentIndex())
 		{
-			objId = obj_o->objInd;
+			objId = obj_o->objId;
 			break;
 		}
 
@@ -374,65 +404,84 @@ void* ComponentManager::ComponentSetManager::Entity::getComponent(int compId)
 	return compSetMgr->getComponent(compId, objId);
 }
 
+char* ComponentManager::ComponentSetManager::Entity::getObj()
+{
+	// get the index first then get the container id then get the obj data
+
+	int objIndex = objId - compSetMgr->compSet->idIndexModifier;
+
+	if (objIndex >= IDRANGE_RT)
+	{
+		objIndex -= IDRANGE_RT;
+		char* obj = compSetMgr->compSet->cmm.getElementAt(compSetMgr->compSet->objContainerIdChilds, objIndex);
+		return obj;
+	}
+	else
+	{
+		char* obj = compSetMgr->compSet->cmm.getElementAt(compSetMgr->compSet->objContainerId, objIndex);
+		return obj;
+	}
+	// getElementAt is technically O(1), 
+	// though there is a search for container and its metadata, 
+	// but as long as the number of containers is small there shldnt be a huge impact
+	// number of containers is proportional to number of types of components
+}
+
+int ComponentManager::ComponentSetManager::Entity::getId()
+{
+	return objId;
+}
+
 int ComponentManager::ComponentSetManager::Entity::getNumChildren()
 {
-	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(
-		compSetMgr->compSet->cmm.getElementAt(compSetMgr->compSet->objContainerId, objId) 
-	);
-	// getElementAt is technically O(1), 
-	// though there is a search for container and its settings, 
-	// but as long as the number of containers is small there shldnt be a huge impact
-
+	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
 	return obj->children.numChild;
 }
 
 int ComponentManager::ComponentSetManager::Entity::getNumDecendants()
 {
-	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(
-		compSetMgr->compSet->cmm.getElementAt(compSetMgr->compSet->objContainerId, objId)
-		);
+	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
 	return obj->children.numDecendants;
 }
 
 ComponentManager::ComponentSetManager::Entity ComponentManager::ComponentSetManager::Entity::makeChild()
 {
-	ComponentSet::ObjectData* objParent = reinterpret_cast<ComponentSet::ObjectData*>(
-		compSetMgr->compSet->cmm.getElementAt(compSetMgr->compSet->objContainerId, objId)
-	);
+
+	ComponentSet::ObjectData* objParent = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
 
 	///////////////// !!!
-	int childInd = compSetMgr->BuildChildObject();
+	int childUid = compSetMgr->BuildChildObject();
 
+	//ComponentSet::ObjectData* objChild = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
+	ComponentManager::ComponentSetManager::Entity entChi = compSetMgr->getEntity(childUid);
 	ComponentSet::ObjectData* objChild = reinterpret_cast<ComponentSet::ObjectData*>(
-		compSetMgr->compSet->cmm.getElementAt(compSetMgr->compSet->objContainerIdChilds, childInd)
+		entChi.getObj()
 	);
 
 	objChild->children.generation = 1 + objParent->children.generation;
 
-	objParent->children.childIDs.push_back(childInd);
+	objParent->children.childIDs.push_back(childUid);
 
 
 	//++(objParent->children.numDecendants); // need to recursively update !!
 
 	++(objParent->children.numChild);
 
+	objChild->parentObjId = objParent->objId;
 
-	return Entity(compSetMgr, childInd + compSetMgr->compSet->idIndexModifier + IDRANGE_RT);
+
+	return Entity(compSetMgr, childUid);
 }
 
 int ComponentManager::ComponentSetManager::Entity::getParentId()
 {
-	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(
-		compSetMgr->compSet->cmm.getElementAt(compSetMgr->compSet->objContainerId, objId)
-		);
+	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
 	return obj->parentObjId;
 }
 
 ComponentManager::ChildContainerT* ComponentManager::ComponentSetManager::Entity::getChildren()
 {
-	ComponentSet::ObjectData* objParent = reinterpret_cast<ComponentSet::ObjectData*>(
-		compSetMgr->compSet->cmm.getElementAt(compSetMgr->compSet->objContainerId, objId)
-	);
+	ComponentSet::ObjectData* objParent = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
 
 	return &(objParent->children.childIDs);
 }
@@ -447,6 +496,13 @@ ComponentManager::ComponentSetManager::Entity ComponentManager::ComponentSetMana
 	//obj.compSetMgr = this;
 	//obj.objId = this->getObjId(itr);
 
+	return obj;
+}
+
+ComponentManager::ComponentSetManager::Entity ComponentManager::ComponentSetManager::getEntity(int uid)
+{
+	// need to chk if uid valid // within range
+	Entity obj(this, uid);
 	return obj;
 }
 
