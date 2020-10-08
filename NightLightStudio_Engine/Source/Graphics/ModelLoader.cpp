@@ -15,8 +15,6 @@ namespace NS_GRAPHICS
 
 	void ModelLoader::TransverseChild(FbxNode* node, Model*& model)
 	{
-		FbxDouble3 translation = node->LclTranslation.Get();
-		FbxDouble3 rotation = node->LclRotation.Get();
 		FbxDouble3 scaling = node->LclScaling.Get();
 
 		for (int i = 0; i < node->GetNodeAttributeCount(); ++i)
@@ -27,9 +25,6 @@ namespace NS_GRAPHICS
 			{
 				Mesh* newMesh = new Mesh();
 				FbxMesh* mesh = node->GetMesh();
-				newMesh->_position = { (float)translation[0], (float)translation[1], (float)translation[2] };
-				newMesh->_scale = { (float)scaling[0], (float)scaling[1], (float)scaling[2] };
-				newMesh->_rotation = { (float)rotation[0], (float)rotation[1], (float)rotation[2] };
 
 				const int vertexCount = mesh->GetControlPointsCount();
 				FbxVector4* vertexs = mesh->GetControlPoints();
@@ -37,9 +32,9 @@ namespace NS_GRAPHICS
 
 				for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
 				{
-					glm::vec3 vertex = { (float)vertexs[vertexIndex][0],
-										 (float)vertexs[vertexIndex][1],
-										 (float)vertexs[vertexIndex][2] };
+					glm::vec3 vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
+										 (float)vertexs[vertexIndex][1] * (float)scaling[1],
+										 (float)vertexs[vertexIndex][2] * (float)scaling[2]};
 
 					newMesh->_vertices.push_back(vertex);
 				}
