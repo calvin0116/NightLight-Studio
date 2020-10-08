@@ -1,5 +1,9 @@
 #pragma once
 
+
+#include "../Core/MySystem.h"
+#include "../../framework.h"
+
 #include "ComponentMemoryManager.h"
 #include <vector>
 #include <map>
@@ -9,6 +13,28 @@
 
 // max children per parent // this can be technically be dynamic, but I will smash my head against the wall
 #define MAX_CHILDREN 32
+
+// this works on the assumption that IDRANGE < number of entities in a compset at any time
+constexpr size_t IDRANGE = 1000000;        // <--| change these two
+constexpr double RATIO_RT = 0.75;          // <--|
+constexpr double RATIO_CH = 1 - RATIO_RT;  
+constexpr size_t IDRANGE_RT = (size_t) (IDRANGE * RATIO_RT);
+constexpr size_t IDRANGE_CH = (size_t) (IDRANGE * RATIO_CH);
+
+// unique id allocation - rt is root entity - ch is child entites - they are in different containers so have different index
+//  <-------- compset0 --------->    <-------- compset1 --------->    <-------- compset2 --------->
+//  [          IDRANGE          ]    [          IDRANGE          ]    [          IDRANGE          ]
+//  [ IDRANGE_RT ] [ IDRANGE_CH ]    [ IDRANGE_RT ] [ IDRANGE_CH ]    [ IDRANGE_RT ] [ IDRANGE_CH ]
+//  change RATIO_RT to determine the size ratio of IDRANGE_RT : IDRANGE_CH
+
+enum COMPONENTSETNAMES
+{
+	COMPONENT_MAIN = 0,
+	COMPONENT_UI,
+
+
+	COMPONENT_END
+};
 
 //**! Comment more !**//
 
@@ -93,10 +119,11 @@
 //						T* AttachComponent(int entityId, T* newComp)
 //
 //						// remove component from entity
-//						void RemoveComponent(ComponentManager::ContainerID compId, int entityId);
+//						template<typename T>
+//						void RemoveComponent(int entityId)
 //
-//						// free entity
-//						void UnBuildObject(int objId);
+//						// free entity // removes entity and all its decendants // recursive
+//						void FreeEntity(int uid);
 //
 //						class Iterator
 //
@@ -121,6 +148,27 @@
 //								template<typename T>
 //								T* getComponent()
 //
+//                              // get uid of the entity
+//								int getId();
+//
+//                              // generation of the entity root is 0
+//								int getGeneration();
+//
+//                              // number of children this entity has
+//								int getNumChildren();
+//
+//                              // number of decendants this entity has // WIP !!!
+//								int getNumDecendants();
+//
+//                              // make a child that belongs to this entity
+//								Entity makeChild(); // (<_<)
+//
+//                              // get the parent id of this entity // root entity returns -1
+//								int getParentId();
+//
+//                              // gets a container of child uids
+//								ChildContainerT* getChildren();
+//
 //						// begin and end iterators
 //						template<typename T>
 //						Iterator begin()
@@ -130,6 +178,7 @@
 //						// Get Entity and Entity Id
 //						int getObjId(Iterator itr);
 //						Entity getEntity(Iterator itr);
+//                      Entity getEntity(int uid); // get entity with entity unique id
 //
 //
 //				// component set and its dependents are all private
@@ -142,13 +191,16 @@
 //								struct ComponentData
 //
 
-
-class ComponentManager
+class ENGINE_API ComponentManager : public MySystem, public Singleton<ComponentManager>
 {
+	friend Singleton<ComponentManager>;
+
 public:
 	typedef int ContainerID;
 	//typedef int ComponentSetID;
 	typedef ComponentMemoryManager::ComponentTypeSettings ContainerSettings;
+
+	typedef LocalVector<int, MAX_CHILDREN> ChildContainerT;
 
 	ComponentMemoryManager cmm;
 
@@ -232,6 +284,11 @@ public:
 		int BuildObject(); 
 
 	private:
+
+		// build a new child Entity
+		// 
+		int BuildChildObject();
+
 		// attach component to the entity // using container id // helper
 		void* AttachComponent(ComponentManager::ContainerID compId, int entityId, void* newComp);
 
@@ -246,21 +303,60 @@ public:
 		T* AttachComponent(int entityId, T* newComp)
 		{
 			const std::type_info& tinf = typeid(T);
-
-			auto find = compSet->hashConIdMap.find(tinf.hash_code());
-			if (find == compSet->hashConIdMap.end())
-				throw; // gg
-
-			return reinterpret_cast<T*>(
-				AttachComponent((*find).second, entityId, newComp)
-				);
+			
+			//entityId -= compSet->idIndexModifier;
+			if (entityId - compSet->idIndexModifier >= (int)IDRANGE_RT)
+			{
+				auto find = compSet->hashConIdMapChilds.find(tinf.hash_code());
+				if (find == compSet->hashConIdMapChilds.end())
+					throw; // gg
+				return reinterpret_cast<T*>(
+					AttachComponent((*find).second, entityId, newComp) // <- pass in index, not uid
+					);
+			}
+			else
+			{
+				auto find = compSet->hashConIdMap.find(tinf.hash_code());
+				if (find == compSet->hashConIdMap.end())
+					throw; // gg
+				return reinterpret_cast<T*>(
+					AttachComponent((*find).second, entityId, newComp) // <- pass in index, not uid
+					);
+			}
 		}
 
-		// remove component from entity
+	private:
+		// remove component from entity // helper
 		void RemoveComponent(ComponentManager::ContainerID compId, int entityId);
 
-		// free entity
-		void UnBuildObject(int objId);
+	public:
+		template<typename T>
+		void RemoveComponent(int entityId)
+		{
+			const std::type_info& tinf = typeid(T);
+
+			//entityId -= compSet->idIndexModifier;
+			if (entityId - compSet->idIndexModifier >= (int)IDRANGE_RT)
+			{
+				auto find = compSet->hashConIdMapChilds.find(tinf.hash_code());
+				if (find == compSet->hashConIdMapChilds.end())
+					throw; // gg
+				RemoveComponent((*find).second, entityId); // <- pass in index, not uid
+			}
+			else
+			{
+				auto find = compSet->hashConIdMap.find(tinf.hash_code());
+				if (find == compSet->hashConIdMap.end())
+					throw; // gg
+				RemoveComponent((*find).second, entityId); // <- pass in index, not uid
+			}
+		}
+
+	private:
+		// free entity // helper
+		void UnBuildObject(int objId); // this removes 1 entity
+	public:
+		void FreeEntity(int uid); // this removes 1 entity and all descendants, leaf first
 
 		// Iterator to iterate component container // !!! USE A TYPEDEF !!!
 		class Iterator
@@ -335,7 +431,7 @@ public:
 
 
 		// an abstraction of the entity
-		class Entity
+		class EntityHandle
 		{
 			friend ComponentSetManager;
 
@@ -344,7 +440,7 @@ public:
 
 		public:
 			// ctor
-			Entity(ComponentSetManager* csm, int oid);
+			EntityHandle(ComponentSetManager* csm, int oid);
 
 		private:
 			// get component of the entity // using container id // helper
@@ -357,27 +453,47 @@ public:
 			{
 				const std::type_info& tinf = typeid(T);
 
-				auto find = compSetMgr->compSet->hashConIdMap.find(tinf.hash_code());
-				if (find == compSetMgr->compSet->hashConIdMap.end())
-					throw; // gg
+				//objId -= compSetMgr->compSet->idIndexModifier;
+				if (objId - compSetMgr->compSet->idIndexModifier >= IDRANGE_RT)
+				{
+					auto find = compSetMgr->compSet->hashConIdMapChilds.find(tinf.hash_code());
+					if (find == compSetMgr->compSet->hashConIdMapChilds.end())
+						throw; // gg
 
-				return reinterpret_cast<T*>(getComponent((*find).second));
+					return reinterpret_cast<T*>(getComponent((*find).second));
+				}
+				else
+				{
+					auto find = compSetMgr->compSet->hashConIdMap.find(tinf.hash_code());
+					if (find == compSetMgr->compSet->hashConIdMap.end())
+						throw; // gg
+
+					return reinterpret_cast<T*>(getComponent((*find).second));
+				}
 			}
 
 			///////////////////////////////////////////////////////////////////////////////////////
 			///////////////////////////////////////////////////////////////////////////////////////
 			// parent and child entities
 
-			//int getNumberOfChildren();
+		private:
+			char* getObj();
 
-			//int getNumberOfDecendants();
+		public:
 
-			//void makeChild(); // (<_<)
+			int getId();
 
-			//int getParent();
+			int getGeneration();
 
-			//int getChildren(); // ???
+			int getNumChildren();
 
+			int getNumDecendants();
+
+			EntityHandle makeChild(); // (<_<)
+
+			int getParentId();
+
+			ChildContainerT* getChildren(); // gets a container of child uids
 
 			///////////////////////////////////////////////////////////////////////////////////////
 			///////////////////////////////////////////////////////////////////////////////////////
@@ -416,11 +532,12 @@ public:
 
 		// Get Entity and Entity Id
 		int getObjId(Iterator itr);
-		Entity getEntity(Iterator itr);
+		EntityHandle getEntity(Iterator itr);
+		EntityHandle getEntity(int uid);
 
 	private:
 
-		char* getObjectComponent(ComponentManager::ContainerID compId, int objId);
+		char* getObjectComponent(ComponentManager::ContainerID compId, int objId, bool isChild = false);
 
 	};
 
@@ -428,7 +545,7 @@ public:
 	{
 	//public:
 		friend ComponentSetFactory; // allows factory to build
-		friend ComponentSetManager; // allows factory to build
+		friend ComponentSetManager; // allows mgr to mg
 		friend ComponentManager;
 
 		ComponentMemoryManager cmm; // contains container for object and containers for components
@@ -449,11 +566,13 @@ public:
 
 		class ObjectData
 		{
-		//public:
+		public:
 			friend ComponentSetFactory; // allows factory to build
 			friend ComponentSetManager; // allows factory to build
 
 			int objId; // unique id of the object
+
+			int parentObjId;
 
 			struct ChildData
 			{
@@ -461,7 +580,8 @@ public:
 				int numDecendants;
 				int numChild;
 				//int childIDs[MAX_CHILDREN];
-				LocalVector<int, 100> childIDs;
+				//LocalVector<int, MAX_CHILDREN> childIDs;
+				ChildContainerT childIDs;
 				ChildData() :
 					generation(0),
 					numDecendants(0),
@@ -493,23 +613,23 @@ public:
 	};
 
 
-	////
-
+	//////////////////////////
+	// ComponentManager vars
 	std::map<ContainerID, ComponentSet*> ComponentSets;
 
-	void AddComponentSet(ComponentSet* compSet); // adds teh component set to the manager
+	std::map<COMPONENTSETNAMES, ComponentSetManager> ComponentSetManagers;
+	//
+	//////////////////////////
 
-	// 
+	void AddComponentSet(COMPONENTSETNAMES id, ComponentSet* compSet); // adds teh component set to the manager
 
-	//void Init();
+	ComponentSetManager* getComponentSetMgr(COMPONENTSETNAMES id);
 
-	//void Load();
+	//// virtual fns for system calls
+    // go check ISystem.h for virtual fns
 
-	//void Update();
 
-	//void Unload();
-
-	void Free();
+	void Free() override;
 
 	////
 
@@ -525,54 +645,54 @@ public:
 
 
 
-	///////////////////
-	// Test functions
-
-private:
-
-	class IteratorM
-	{
-		friend ComponentManager;
-		ComponentMemoryManager::MemConIterator mci;
-	public:
-		IteratorM() = default;
-		IteratorM(const IteratorM& itr) = default;
-
-		// copy
-		IteratorM& operator=(IteratorM& itr) = default;
-		IteratorM& operator=(IteratorM&& itr) = default;
-
-		// comparison op
-		bool operator==(IteratorM& itr);
-		bool operator!=(IteratorM& itr);
-
-		// other op
-		char* operator*();
-		IteratorM& operator++();
-		IteratorM operator++(int); // post fix // slower
-	};
-
-	IteratorM end(ContainerID comT);
-	IteratorM begin(ContainerID comT);
-
-	ContainerID createNewComponentType(ContainerSettings set);
-
-	char* getElementAt(ContainerID comT, int index);
-
-	int insertIntoContainer(ContainerID comT, char* obj);
-	void removeFromContainer(ContainerID comT, int index);
-	void removeFromContainer(IteratorM& itr);
-	void freeAll();
-
-public:
+////////////////////////////////////////////////
+// Test functions // depreciated, sort of anyway
+//
+//private:
+//
+//	class IteratorM
+//	{
+//		friend ComponentManager;
+//		ComponentMemoryManager::MemConIterator mci;
+//	public:
+//		IteratorM() = default;
+//		IteratorM(const IteratorM& itr) = default;
+//
+//		// copy
+//		IteratorM& operator=(IteratorM& itr) = default;
+//		IteratorM& operator=(IteratorM&& itr) = default;
+//
+//		// comparison op
+//		bool operator==(IteratorM& itr);
+//		bool operator!=(IteratorM& itr);
+//
+//		// other op
+//		char* operator*();
+//		IteratorM& operator++();
+//		IteratorM operator++(int); // post fix // slower
+//	};
+//
+//	IteratorM end(ContainerID comT);
+//	IteratorM begin(ContainerID comT);
+//
+//	ContainerID createNewComponentType(ContainerSettings set);
+//
+//	char* getElementAt(ContainerID comT, int index);
+//
+//	int insertIntoContainer(ContainerID comT, char* obj);
+//	void removeFromContainer(ContainerID comT, int index);
+//	void removeFromContainer(IteratorM& itr);
+//	void freeAll();
+//
+//public:
 	// test fn
-	void test0(); 
-	void test1();
-	void test2();
+	// depreciated
+	//void test0(); 
+	//void test1();
+	//void test2();
 };
 
 
-extern ComponentManager G_COMPMGR;
 
 
 
@@ -580,4 +700,18 @@ extern ComponentManager G_COMPMGR;
 
 
 
+
+
+
+
+
+typedef ComponentManager::ComponentSetManager::EntityHandle Entity;
+
+static ComponentManager* SYS_COMPONENT = ComponentManager::GetInstance();
+
+//extern ComponentManager G_COMPMGR;
+
+static ComponentManager::ComponentSetManager* G_MAINCOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
+
+static ComponentManager::ComponentSetManager* G_UICOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_UI);
 

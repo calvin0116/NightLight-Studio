@@ -1,3 +1,5 @@
+#pragma once
+#include "Vector.h"
 #include <iostream>
 
 #include "Vector.h"

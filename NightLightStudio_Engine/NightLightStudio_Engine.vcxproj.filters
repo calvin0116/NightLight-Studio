@@ -52,6 +52,9 @@
     <Filter Include="Source Files\Window">
       <UniqueIdentifier>{d1cbd245-3262-4f22-8988-1a1ff1a0f593}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Transform">
+      <UniqueIdentifier>{fdfc5e4c-3c8f-4dd1-8c40-a43272953dc7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -206,6 +209,8 @@
     </ClInclude>
     <ClInclude Include="Source\Graphics\Camera.h">
       <Filter>Source Files\Graphics</Filter>
+    <ClInclude Include="Source\Transform\SystemTransform.h">
+      <Filter>Source Files\Transform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -325,6 +330,9 @@
     </ClCompile>
     <ClCompile Include="Source\Core\SceneManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Transform\SystemTransform.cpp">
+      <Filter>Source Files\Transform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

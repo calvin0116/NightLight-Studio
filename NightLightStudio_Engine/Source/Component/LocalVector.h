@@ -14,7 +14,7 @@ class LocalVector
 	T data[N];
 	size_t currentSize;
 
-	std::vector<T> ggvec;
+	//std::vector<T> ggvec;
 
 public:
 
@@ -60,6 +60,12 @@ public:
 			return vec->at(currentIndex);
 		}
 	};
+
+	void init()
+	{
+		currentSize = 0;
+		//ggvec = 
+	}
 
 	void push_back(T in)
 	{
@@ -117,7 +123,7 @@ public:
 
 	void clear()
 	{
-		ggvec.clear();
+		//ggvec.clear();
 		currentSize = 0;
 	}
 
@@ -137,51 +143,59 @@ public:
 
 
 // Test Driver
-//
-////typedef std::vector<int> vecT;
-//typedef LocalVector<int, 100> vecT;
-//
-//int testMyVector()
-//{
-//	std::cout << "Hello World!\n";
-//
-//	vecT vec;
-//
-//	vec.push_back(1);
-//	std::cout << "sz : " << vec.size() << std::endl;
-//	std::cout << "at : " << vec.at(0) << std::endl;
-//
-//	vec.push_back(2);
-//	std::cout << "sz : " << vec.size() << std::endl;
-//	std::cout << "at : " << vec.at(1) << std::endl;
-//
-//	vec.push_back(3);
-//	std::cout << "sz : " << vec.size() << std::endl;
-//	std::cout << "at : " << vec.at(2) << std::endl;
-//
-//
-//	std::cout << "itr:" << std::endl;
-//	auto itr = vec.begin();
-//	auto itrEnd = vec.end();
-//	while (itr != itrEnd)
-//	{
-//
-//		std::cout << *itr << std::endl;
-//		++itr;
-//	}
-//
-//	itr = vec.begin();
-//	vec.erase(itr);
-//	itr = vec.begin();
-//	itrEnd = vec.end();
-//	while (itr != itrEnd)
-//	{
-//
-//		std::cout << *itr << std::endl;
-//		++itr;
-//	}
-//
-//	vec.clear();
-//	
-//	return 0;
-//}
+
+class TestVector
+{
+public:
+
+	//typedef std::vector<int> vecT;
+	typedef LocalVector<int, 100> vecT;
+
+	int testMyVector()
+	{
+		std::cout << "Hello World!\n";
+
+		vecT vec;
+
+		vec.push_back(1);
+		std::cout << "sz : " << vec.size() << " ";
+		std::cout << "at : " << vec.at(0) << std::endl;
+
+		vec.push_back(2);
+		std::cout << "sz : " << vec.size() << " ";
+		std::cout << "at : " << vec.at(1) << std::endl;
+
+		vec.push_back(3);
+		std::cout << "sz : " << vec.size() << " ";
+		std::cout << "at : " << vec.at(2) << std::endl;
+
+
+		std::cout << "itr:" << std::endl;
+		auto itr = vec.begin();
+		auto itrEnd = vec.end();
+		while (itr != itrEnd)
+		{
+
+			std::cout << *itr << std::endl;
+			++itr;
+		}
+
+		std::cout << std::endl;
+
+		itr = vec.begin();
+		vec.erase(itr);
+		itr = vec.begin();
+		itrEnd = vec.end();
+		while (itr != itrEnd)
+		{
+
+			std::cout << *itr << std::endl;
+			++itr;
+		}
+
+		vec.clear();
+
+		return 0;
+	}
+
+};

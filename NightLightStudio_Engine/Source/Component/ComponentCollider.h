@@ -28,8 +28,6 @@ struct ComponentCollider : public IComponent
 	MyVector preCollisionData;
 	MyVector newCollisionData;
 
-	ComponentTransform* tranformObject;
-	ComponentRigidBody* rigidBody;
 	float collisionTime;
 
 	// For layers
