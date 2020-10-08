@@ -18,8 +18,8 @@
 constexpr size_t IDRANGE = 1000000;        // <--| change these two
 constexpr double RATIO_RT = 0.75;          // <--|
 constexpr double RATIO_CH = 1 - RATIO_RT;  
-constexpr size_t IDRANGE_RT = IDRANGE * RATIO_RT;
-constexpr size_t IDRANGE_CH = IDRANGE * RATIO_CH;
+constexpr size_t IDRANGE_RT = (size_t) (IDRANGE * RATIO_RT);
+constexpr size_t IDRANGE_CH = (size_t) (IDRANGE * RATIO_CH);
 
 // unique id allocation - rt is root entity - ch is child entites - they are in different containers so have different index
 //  <-------- compset0 --------->    <-------- compset1 --------->    <-------- compset2 --------->
@@ -27,7 +27,14 @@ constexpr size_t IDRANGE_CH = IDRANGE * RATIO_CH;
 //  [ IDRANGE_RT ] [ IDRANGE_CH ]    [ IDRANGE_RT ] [ IDRANGE_CH ]    [ IDRANGE_RT ] [ IDRANGE_CH ]
 //  change RATIO_RT to determine the size ratio of IDRANGE_RT : IDRANGE_CH
 
+enum COMPONENTSETNAMES
+{
+	COMPONENT_MAIN = 0,
+	COMPONENT_UI,
 
+
+	COMPONENT_END
+};
 
 //**! Comment more !**//
 
@@ -298,7 +305,7 @@ public:
 			const std::type_info& tinf = typeid(T);
 			
 			//entityId -= compSet->idIndexModifier;
-			if (entityId - compSet->idIndexModifier >= IDRANGE_RT)
+			if (entityId - compSet->idIndexModifier >= (int)IDRANGE_RT)
 			{
 				auto find = compSet->hashConIdMapChilds.find(tinf.hash_code());
 				if (find == compSet->hashConIdMapChilds.end())
@@ -329,7 +336,7 @@ public:
 			const std::type_info& tinf = typeid(T);
 
 			//entityId -= compSet->idIndexModifier;
-			if (entityId - compSet->idIndexModifier >= IDRANGE_RT)
+			if (entityId - compSet->idIndexModifier >= (int)IDRANGE_RT)
 			{
 				auto find = compSet->hashConIdMapChilds.find(tinf.hash_code());
 				if (find == compSet->hashConIdMapChilds.end())
@@ -606,12 +613,17 @@ public:
 	};
 
 
-	////
-
+	//////////////////////////
+	// ComponentManager vars
 	std::map<ContainerID, ComponentSet*> ComponentSets;
 
-	void AddComponentSet(ComponentSet* compSet); // adds teh component set to the manager
+	std::map<COMPONENTSETNAMES, ComponentSetManager> ComponentSetManagers;
+	//
+	//////////////////////////
 
+	void AddComponentSet(COMPONENTSETNAMES id, ComponentSet* compSet); // adds teh component set to the manager
+
+	ComponentSetManager* getComponentSetMgr(COMPONENTSETNAMES id);
 
 	//// virtual fns for system calls
     // go check ISystem.h for virtual fns
@@ -699,5 +711,7 @@ static ComponentManager* SYS_COMPONENT = ComponentManager::GetInstance();
 
 //extern ComponentManager G_COMPMGR;
 
+static ComponentManager::ComponentSetManager* G_MAINCOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
 
+static ComponentManager::ComponentSetManager* G_UICOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_UI);
 

@@ -25,16 +25,16 @@ namespace NS_PHYSICS
 
 	bool PhysicsSystem::Update()
 	{
-		auto itr = G_MAINCOMPSET.begin<ComponentRigidBody>();
-		auto itrEnd = G_MAINCOMPSET.end<ComponentRigidBody>();
+		auto itr = G_MAINCOMPSET->begin<ComponentRigidBody>();
+		auto itrEnd = G_MAINCOMPSET->end<ComponentRigidBody>();
 		for (; itr != itrEnd; ++itr)
 		{
-			ComponentRigidBody* compR = G_MAINCOMPSET.getComponent<ComponentRigidBody>(itr);
+			ComponentRigidBody* compR = G_MAINCOMPSET->getComponent<ComponentRigidBody>(itr);
 			if (compR->isStatic)
 				continue;
 
 			//get the transform to update
-			ComponentTransform* compT = G_MAINCOMPSET.getComponent<ComponentTransform>(itr);
+			ComponentTransform* compT = G_MAINCOMPSET->getComponent<ComponentTransform>(itr);
 
 			//set max speed
 			if (compR->velocity.x > _maxspeed.x)

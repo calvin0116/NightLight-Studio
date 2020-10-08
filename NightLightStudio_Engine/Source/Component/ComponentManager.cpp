@@ -230,11 +230,11 @@ void ComponentManager::ComponentSetManager::UnBuildObject(int objId)
 		// uninit/free the components
 		for (auto p : compSet->hashConIdMapChilds)
 		{
-			int id = p.second;
+			int currentId = p.second;
 
 			// probably a better way to do this !!
 
-			ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(id, objId, true));
+			ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(currentId, objId, true));
 
 			if (compData->containerId != -1 && compData->containerIndex != -1) // skip if uninit
 			{
@@ -259,11 +259,11 @@ void ComponentManager::ComponentSetManager::UnBuildObject(int objId)
 		// uninit/free the components
 		for (auto p : compSet->hashConIdMap)
 		{
-			int id = p.second;
+			int currentId = p.second;
 
 			// probably a better way to do this !!
 
-			ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(id, objId));
+			ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(currentId, objId));
 
 			if (compData->containerId != -1 && compData->containerIndex != -1) // skip if uninit
 			{
@@ -333,9 +333,9 @@ void ComponentManager::ComponentSetManager::UnBuildObject(int objId)
 
 void ComponentManager::ComponentSetManager::FreeEntity(int objId)
 {
-	std::function<void(int)> delObj = [&](int id)
+	std::function<void(int)> delObj = [&](int thisid)
 	{
-		int getIndex = id;
+		int getIndex = thisid;
 		// get the index
 		getIndex -= compSet->idIndexModifier; // // 
 
@@ -365,7 +365,7 @@ void ComponentManager::ComponentSetManager::FreeEntity(int objId)
 		{
 			delObj(childId);
 		}
-		UnBuildObject(id); // delete childs first then del this
+		UnBuildObject(thisid); // delete childs first then del this
 	};
 
 	delObj(objId);
@@ -423,9 +423,9 @@ char* ComponentManager::ComponentSetManager::getObjectComponent(ComponentManager
 
 	// find the container id
 	int n = 0;
-	for (int id : compSet->componentContainerIDs)
+	for (int currentId : compSet->componentContainerIDs)
 	{
-		if (id == compId)
+		if (currentId == compId)
 			break;
 		++n;
 	}
@@ -502,9 +502,9 @@ int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 
 		// find the container id
 		int n = 0;
-		for (int id : compSet->componentContainerIDs)
+		for (int currentId : compSet->componentContainerIDs)
 		{
-			if (id == itr.containerId)
+			if (currentId == itr.containerId)
 				break;
 			++n;
 		}
@@ -709,7 +709,7 @@ ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetMa
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ComponentManager::AddComponentSet(ComponentSet* compSet)
+void ComponentManager::AddComponentSet(COMPONENTSETNAMES idname, ComponentSet* compSet)
 {
 	// define new component type
 	ContainerID newComponentSetID = (int)ComponentSets.size();
@@ -720,6 +720,16 @@ void ComponentManager::AddComponentSet(ComponentSet* compSet)
 	} // loop ends when id is not found -> unique id
 
 	ComponentSets.insert(std::pair<ContainerID, ComponentSet*>(newComponentSetID, compSet));
+
+	// can try using a vector // dun need this to be sorted
+	ComponentSetManagers.try_emplace(idname, ComponentSetManager(compSet)); // idk this doesnt work?
+	ComponentSetManagers[idname].compSet = compSet;
+}
+
+ComponentManager::ComponentSetManager* ComponentManager::getComponentSetMgr(COMPONENTSETNAMES idname)
+{	
+	ComponentSetManager* csm_p = &(ComponentSetManagers[idname]);
+	return csm_p;
 }
 
 void ComponentManager::Free()

@@ -4,8 +4,8 @@
 
 #include "LocalVector.h"
 
-extern ComponentManager::ComponentSetManager G_MAINCOMPSET;
-extern ComponentManager::ComponentSetManager G_UICOMPSET;
+//extern ComponentManager::ComponentSetManager G_MAINCOMPSET;
+//extern ComponentManager::ComponentSetManager G_UICOMPSET;
 
 
 struct IComponent

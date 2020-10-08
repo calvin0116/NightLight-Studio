@@ -56,11 +56,12 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP COMPONENT - shift this to a seperate class/function !!!
+	//// probably shift this to comp sys later
 	{
 		// factory
 		ComponentManager::ComponentSetFactory comsetFac;
 
-		auto build = [&]()
+		auto build = [&](COMPONENTSETNAMES id)
 		{
 			// Building another component set
 			comsetFac.StartBuild();
@@ -78,14 +79,20 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 			// builds the component set
 			ComponentManager::ComponentSet* cs = comsetFac.Build();
 			// adds the component set to the component manager
-			SYS_COMPONENT->AddComponentSet(cs);
+			SYS_COMPONENT->AddComponentSet(id, cs);
 
 			return cs;
 		};
 
 		// init component set manager
-		G_MAINCOMPSET = build();
-		G_UICOMPSET = build();
+
+		build(COMPONENT_MAIN);
+		build(COMPONENT_UI);
+
+		//SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
+		//SYS_COMPONENT->getComponentSetMgr(COMPONENT_UI);
+		//G_MAINCOMPSET = build();
+		//G_UICOMPSET = build();
 	}
 	//// SET UP COMPONENT END
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +114,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 		// WHILE OBJECTS
 		// Start of creation and Entity
-		int newObjId = G_MAINCOMPSET.BuildObject();
+		int newObjId = G_MAINCOMPSET->BuildObject();
 
 		// WHILE COMPONENTS
 		// Creation
@@ -117,37 +124,37 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 			"Hello World",
 			{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f}
 		};
-		G_MAINCOMPSET.AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+		G_MAINCOMPSET->AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
 		// WHILE COMPONENTS END
 		// WHILE OBJECTS END
 
 		// add 2nd obj 
-		newObjId = G_MAINCOMPSET.BuildObject();
+		newObjId = G_MAINCOMPSET->BuildObject();
 
 		ComponentTransform compT;
 		compT._position.x = 1.11f;
-		G_MAINCOMPSET.AttachComponent<ComponentTransform>(newObjId, &compT);
+		G_MAINCOMPSET->AttachComponent<ComponentTransform>(newObjId, &compT);
 
 		ComponentRigidBody compRB;
-		G_MAINCOMPSET.AttachComponent<ComponentRigidBody>(newObjId, &compRB);
+		G_MAINCOMPSET->AttachComponent<ComponentRigidBody>(newObjId, &compRB);
 
 		newCompComponentTest0.id = 1;
-		G_MAINCOMPSET.AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+		G_MAINCOMPSET->AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
 
 		// add 3rd obj 
-		newObjId = G_MAINCOMPSET.BuildObject();
-		G_MAINCOMPSET.AttachComponent<ComponentRigidBody>(newObjId, &compRB);
+		newObjId = G_MAINCOMPSET->BuildObject();
+		G_MAINCOMPSET->AttachComponent<ComponentRigidBody>(newObjId, &compRB);
 
 
 		// add obj to another component set
 		newCompComponentTest0.id = 999;
-		newObjId = G_UICOMPSET.BuildObject();
-		G_UICOMPSET.AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+		newObjId = G_UICOMPSET->BuildObject();
+		G_UICOMPSET->AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
 
 		//// add to another compset
-		newObjId = G_UICOMPSET.BuildObject();
+		newObjId = G_UICOMPSET->BuildObject();
 		newCompComponentTest0.id = 123;
-		G_UICOMPSET.AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+		G_UICOMPSET->AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
 
 		///////////////////////////////
 		// hierarchical entity test
@@ -158,7 +165,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 			std::cout << std::endl;
 
 			// remind self to typedef this !!
-			Entity entity = G_UICOMPSET.getEntity(newObjId);
+			Entity entity = G_UICOMPSET->getEntity(newObjId);
 
 
 			int numChild = entity.getNumChildren();
@@ -184,7 +191,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 			std::cout << "parentuid_child:" << parentuid_child << std::endl;
 
 			newCompComponentTest0.id = 54321;
-			G_UICOMPSET.AttachComponent<ComponentTest0>(childEntity.getId(), &newCompComponentTest0);
+			G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity.getId(), &newCompComponentTest0);
 
 			std::cout << std::endl;
 			std::cout << "// hierarchical entity test - LOAD  END" << std::endl;
@@ -193,73 +200,73 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		}
 		{
 			// make 2 more childs from the entity
-			Entity entity = G_UICOMPSET.getEntity(newObjId);
+			Entity entity = G_UICOMPSET->getEntity(newObjId);
 
 			// child1
 			Entity childEntity1 = entity.makeChild();
 			newCompComponentTest0.id = 5432;
-			G_UICOMPSET.AttachComponent<ComponentTest0>(childEntity1.getId(), &newCompComponentTest0);
+			G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity1.getId(), &newCompComponentTest0);
 
 
 			// make child of child - grandchild
 			Entity grandChildEntity0 = childEntity1.makeChild();
 			newCompComponentTest0.id = 777;
-			G_UICOMPSET.AttachComponent<ComponentTest0>(grandChildEntity0.getId(), &newCompComponentTest0);
+			G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity0.getId(), &newCompComponentTest0);
 
 
 			// child2
 			Entity childEntity2 = entity.makeChild();
 			newCompComponentTest0.id = 543;
-			G_UICOMPSET.AttachComponent<ComponentTest0>(childEntity2.getId(), &newCompComponentTest0);
+			G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity2.getId(), &newCompComponentTest0);
 		}
 		{
 			// adding more test objects
 
-			newObjId = G_UICOMPSET.BuildObject();
+			newObjId = G_UICOMPSET->BuildObject();
 			newCompComponentTest0.id = 1234;
-			G_UICOMPSET.AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+			G_UICOMPSET->AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
 
 			compT._position.x = 2.22f;
-			G_UICOMPSET.AttachComponent<ComponentTransform>(newObjId, &compT);
+			G_UICOMPSET->AttachComponent<ComponentTransform>(newObjId, &compT);
 
 			{
 				// adding childs
-				Entity entity = G_UICOMPSET.getEntity(newObjId);
+				Entity entity = G_UICOMPSET->getEntity(newObjId);
 
 				// child1
 				Entity childEntity1 = entity.makeChild();
 				newCompComponentTest0.id = 7771;
-				G_UICOMPSET.AttachComponent<ComponentTest0>(childEntity1.getId(), &newCompComponentTest0);
+				G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity1.getId(), &newCompComponentTest0);
 
 
 				// make child of child - grandchild
 				Entity grandChildEntity0 = childEntity1.makeChild();
 				newCompComponentTest0.id = 8881;
-				G_UICOMPSET.AttachComponent<ComponentTest0>(grandChildEntity0.getId(), &newCompComponentTest0);
+				G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity0.getId(), &newCompComponentTest0);
 
 				// make 2nd grandchild
 				Entity grandChildEntity1 = childEntity1.makeChild();
 				newCompComponentTest0.id = 8882;
-				G_UICOMPSET.AttachComponent<ComponentTest0>(grandChildEntity1.getId(), &newCompComponentTest0);
+				G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity1.getId(), &newCompComponentTest0);
 
 				compT._position.x = 3.33f;
-				G_UICOMPSET.AttachComponent<ComponentTransform>(grandChildEntity1.getId(), &compT);
+				G_UICOMPSET->AttachComponent<ComponentTransform>(grandChildEntity1.getId(), &compT);
 
 				// make 3rd grandchild
 				Entity grandChildEntity2 = childEntity1.makeChild();
 				newCompComponentTest0.id = 8883;
-				G_UICOMPSET.AttachComponent<ComponentTest0>(grandChildEntity2.getId(), &newCompComponentTest0);
+				G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity2.getId(), &newCompComponentTest0);
 
 				// child2
 				Entity childEntity2 = entity.makeChild();
 				newCompComponentTest0.id = 7772;
-				G_UICOMPSET.AttachComponent<ComponentTest0>(childEntity2.getId(), &newCompComponentTest0);
+				G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity2.getId(), &newCompComponentTest0);
 
 			}
 
-			newObjId = G_UICOMPSET.BuildObject();
+			newObjId = G_UICOMPSET->BuildObject();
 			newCompComponentTest0.id = 1235;
-			G_UICOMPSET.AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+			G_UICOMPSET->AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
 		}
 		// hierarchical entity test END
 		///////////////////////////////
@@ -283,19 +290,19 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		std::cout << std::endl;
 
 		// G_MAINCOMPSET
-		auto itr = G_MAINCOMPSET.begin<ComponentTest0>();
-		auto itrEnd = G_MAINCOMPSET.end<ComponentTest0>();
+		auto itr = G_MAINCOMPSET->begin<ComponentTest0>();
+		auto itrEnd = G_MAINCOMPSET->end<ComponentTest0>();
 		while (itr != itrEnd)
 		{
 			// get the obj id
-			std::cout << "Object:" << G_MAINCOMPSET.getObjId(itr) << std::endl;
+			std::cout << "Object:" << G_MAINCOMPSET->getObjId(itr) << std::endl;
 
 			// get the transform component from the iterator
-			ComponentTest0* compR = G_MAINCOMPSET.getComponent<ComponentTest0>(itr);
+			ComponentTest0* compR = G_MAINCOMPSET->getComponent<ComponentTest0>(itr);
 			std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
 
 			// get another component
-			ComponentTransform* compT = G_MAINCOMPSET.getComponent<ComponentTransform>(itr);
+			ComponentTransform* compT = G_MAINCOMPSET->getComponent<ComponentTransform>(itr);
 
 			if (compT != nullptr) // nullptr -> uninitialised or deleted
 				std::cout << "Transform:" << compT->_position.x << std::endl;
@@ -312,20 +319,20 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		auto print = [&]()
 		{
 			// G_UICOMPSET
-			itr = G_UICOMPSET.begin<ComponentTest0>();
-			itrEnd = G_UICOMPSET.end<ComponentTest0>();
+			itr = G_UICOMPSET->begin<ComponentTest0>();
+			itrEnd = G_UICOMPSET->end<ComponentTest0>();
 			while (itr != itrEnd)
 			{
 				// get the obj id
 				std::cout << std::endl;
-				std::cout << "Object:" << G_UICOMPSET.getObjId(itr) << std::endl;
+				std::cout << "Object:" << G_UICOMPSET->getObjId(itr) << std::endl;
 
 				// get the transform component from the iterator
 				ComponentTest0* compR = reinterpret_cast<ComponentTest0*>(*itr);
 				std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
 
 				// get the entity from the iterator
-				Entity entity = G_UICOMPSET.getEntity(itr);
+				Entity entity = G_UICOMPSET->getEntity(itr);
 
 				// get transform component
 				ComponentTransform* compT = entity.getComponent<ComponentTransform>();
@@ -335,7 +342,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 				// get id for remove
 				if (compR->id == 1234)
 				{
-					toDel1 = G_UICOMPSET.getObjId(itr);
+					toDel1 = G_UICOMPSET->getObjId(itr);
 				}
 
 				////////////
@@ -347,7 +354,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 				{
 					for (int uid : *childrens)
 					{
-						Entity childEntity = G_UICOMPSET.getEntity(uid);
+						Entity childEntity = G_UICOMPSET->getEntity(uid);
 
 
 						std::cout << std::endl << "Print child:" << std::endl;
@@ -376,7 +383,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 						std::cout << std::endl;
 
 						// call recursive fn for each child
-						doChildrens(G_UICOMPSET.getEntity(uid).getChildren());
+						doChildrens(G_UICOMPSET->getEntity(uid).getChildren());
 					}
 				};
 
@@ -385,7 +392,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 				//
 				////////////
 
-				std::cout << "Object:" << G_UICOMPSET.getObjId(itr) << " END" << std::endl;
+				std::cout << "Object:" << G_UICOMPSET->getObjId(itr) << " END" << std::endl;
 				std::cout << std::endl;
 
 				++itr;
@@ -406,10 +413,10 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		std::cout << "// Test Remove Components:" << std::endl;
 		std::cout << std::endl;
 
-		G_UICOMPSET.RemoveComponent<ComponentTransform>(toDel0);
+		G_UICOMPSET->RemoveComponent<ComponentTransform>(toDel0);
 		//print();
 
-		G_UICOMPSET.FreeEntity(toDel1);
+		G_UICOMPSET->FreeEntity(toDel1);
 		print();
 
 		std::cout << std::endl;
