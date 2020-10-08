@@ -192,25 +192,25 @@ namespace NlMath
 	}
 
 
-	//Matrix4x4::operator glm::mat4x4() const
-	//{
-	//	glm::mat4x4 tmp;
-	//	for (glm::mat4x4::length_type i = 0; i < 4; i++)
-	//	{
-	//		for (glm::mat4x4::length_type j = 0; j < 4; j++)
-	//		{
-	//			tmp[i][j] = m2[i][j];
-	//		}
-	//	}
+	Matrix4x4::operator glm::mat4x4() const
+	{
+		glm::mat4x4 tmp;
+		for (glm::mat4x4::length_type i = 0; i < 4; i++)
+		{
+			for (glm::mat4x4::length_type j = 0; j < 4; j++)
+			{
+				tmp[i][j] = m2[i][j];
+			}
+		}
 	
-	//	return tmp;
-	//}
+		return tmp;
+	}
 	
-	//Matrix4x4::operator glm::mat3x3() const
-	//{
-	//	glm::mat3x3 tmp{ m00,m01,m02,m10,m11,m12,m20,m21,m22 };
-	//	return tmp;
-	//}
+	Matrix4x4::operator glm::mat3x3() const
+	{
+		glm::mat3x3 tmp{ m00,m01,m02,m10,m11,m12,m20,m21,m22 };
+		return tmp;
+	}
 
 	std::ostream& operator<<(std::ostream& os, const Matrix4x4 mtx)
 	{
