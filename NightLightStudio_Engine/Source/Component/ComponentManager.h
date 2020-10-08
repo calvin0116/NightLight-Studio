@@ -115,8 +115,8 @@ constexpr size_t IDRANGE_CH = IDRANGE * RATIO_CH;
 //						template<typename T>
 //						void RemoveComponent(int entityId)
 //
-//						// free entity
-//						void UnBuildObject(int objId);
+//						// free entity // removes entity and all its decendants // recursive
+//						void FreeEntity(int uid);
 //
 //						class Iterator
 //
@@ -322,7 +322,6 @@ public:
 	private:
 		// remove component from entity // helper
 		void RemoveComponent(ComponentManager::ContainerID compId, int entityId);
-		// TODO for child
 
 	public:
 		template<typename T>
@@ -347,9 +346,11 @@ public:
 			}
 		}
 
-		// free entity
-		void UnBuildObject(int objId);
-		// TODO for child
+	private:
+		// free entity // helper
+		void UnBuildObject(int objId); // this removes 1 entity
+	public:
+		void FreeEntity(int uid); // this removes 1 entity and all descendants, leaf first
 
 		// Iterator to iterate component container // !!! USE A TYPEDEF !!!
 		class Iterator

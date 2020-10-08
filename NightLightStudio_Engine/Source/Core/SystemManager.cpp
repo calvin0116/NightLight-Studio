@@ -292,7 +292,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 			// get the transform component from the iterator
 			ComponentTest0* compR = G_MAINCOMPSET.getComponent<ComponentTest0>(itr);
-			std::cout << "Render:" << compR->id << " " << compR->c << std::endl;
+			std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
 
 			// get another component
 			ComponentTransform* compT = G_MAINCOMPSET.getComponent<ComponentTransform>(itr);
@@ -307,6 +307,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 		//
 		int toDel0 = -1;
+		int toDel1 = -1;
 
 		auto print = [&]()
 		{
@@ -321,7 +322,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 				// get the transform component from the iterator
 				ComponentTest0* compR = reinterpret_cast<ComponentTest0*>(*itr);
-				std::cout << "Render:" << compR->id << " " << compR->c << std::endl;
+				std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
 
 				// get the entity from the iterator
 				ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(itr);
@@ -330,6 +331,12 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 				ComponentTransform* compT = entity.getComponent<ComponentTransform>();
 				if (compT != nullptr) // nullptr -> uninitialised or deleted
 					std::cout << "Transform:" << compT->_position.x << std::endl;
+
+				// get id for remove
+				if (compR->id == 1234)
+				{
+					toDel1 = G_UICOMPSET.getObjId(itr);
+				}
 
 				////////////
 				// childrens
@@ -353,8 +360,9 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 						std::cout << "childEntity parentuid:" << childEntity.getParentId() << std::endl;
 
 						compR = childEntity.getComponent<ComponentTest0>();
-						std::cout << "Child Render:" << compR->id << " " << compR->c << std::endl;
+						std::cout << "Child ComponentTest0:" << compR->id << " " << compR->c << std::endl;
 
+						// get id for remove
 						if (compR->id == 8882)
 						{
 							toDel0 = childEntity.getId();
@@ -399,6 +407,9 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		std::cout << std::endl;
 
 		G_UICOMPSET.RemoveComponent<ComponentTransform>(toDel0);
+		//print();
+
+		G_UICOMPSET.FreeEntity(toDel1);
 		print();
 
 		std::cout << std::endl;

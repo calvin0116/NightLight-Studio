@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include <functional>
+
 // local g var
 static int G_CURRIDMOD = 0;
 
@@ -215,35 +217,159 @@ void ComponentManager::ComponentSetManager::UnBuildObject(int objId)
 {
 	// get the object
 	objId -= compSet->idIndexModifier;
-	char* obj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
 
-	// uninit/free the components
-	for (int id : compSet->componentContainerIDs)
+	char* obj = nullptr;
+
+	if (objId >= IDRANGE_RT)
 	{
-		// there is a better way to do it im just too lazy now
+		// child
 
-		ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(id, objId));
+		objId -= IDRANGE_RT;
+		obj = compSet->cmm.getElementAt(compSet->objContainerIdChilds, objId);
 
-		if (compData->containerId != -1 && compData->containerIndex != -1) // skip if uninit
+		// uninit/free the components
+		for (auto p : compSet->hashConIdMapChilds)
 		{
-			// remove
-			compSet->cmm.removeFromContainer(compData->containerId, compData->containerIndex);
+			int id = p.second;
 
-			// !
+			// probably a better way to do this !!
 
+			ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(id, objId, true));
 
-			//reset
-			compData->containerId = -1;
-			compData->containerIndex = -1;
-			compData->compPtr = nullptr;
+			if (compData->containerId != -1 && compData->containerIndex != -1) // skip if uninit
+			{
+				// remove
+				compSet->cmm.removeFromContainer(compData->containerId, compData->containerIndex);
+
+				// !
+
+				//reset
+				compData->containerId = -1;
+				compData->containerIndex = -1;
+				compData->compPtr = nullptr;
+			}
 		}
 	}
+	else
+	{
+		// root
+
+		obj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
+
+		// uninit/free the components
+		for (auto p : compSet->hashConIdMap)
+		{
+			int id = p.second;
+
+			// probably a better way to do this !!
+
+			ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(id, objId));
+
+			if (compData->containerId != -1 && compData->containerIndex != -1) // skip if uninit
+			{
+				// remove
+				compSet->cmm.removeFromContainer(compData->containerId, compData->containerIndex);
+
+				// !
+
+				//reset
+				compData->containerId = -1;
+				compData->containerIndex = -1;
+				compData->compPtr = nullptr;
+			}
+		}
+	}
+	if (obj == nullptr) throw;
+
+	ComponentSet::ObjectData* objData = reinterpret_cast<ComponentSet::ObjectData*>(obj);
 
 	// uninit the obj
-	reinterpret_cast<ComponentSet::ObjectData*>(obj)->objId = -1;
+	objData->objId = -1;
+
+	objData->children.childIDs.clear(); 
+	objData->children.generation = -1;
+	objData->children.numChild = -1;
+
+
+
+
+	// set the parent
+	ComponentSet::ObjectData* objRootParent = nullptr;
+	if (objData->parentObjId != -1)
+	{
+		int parentObjId = objData->parentObjId - compSet->idIndexModifier;
+		if (parentObjId >= IDRANGE_RT)
+		{
+			// child
+
+			parentObjId -= IDRANGE_RT;
+
+			objRootParent = reinterpret_cast<ComponentSet::ObjectData*>(
+				compSet->cmm.getElementAt(compSet->objContainerIdChilds, parentObjId)
+			);
+		}
+		else
+		{
+			//root
+			objRootParent = reinterpret_cast<ComponentSet::ObjectData*>(
+				compSet->cmm.getElementAt(compSet->objContainerId, parentObjId)
+				);
+		}
+		if (objRootParent == nullptr) throw;
+
+		--objRootParent->children.numChild;
+
+		//objRootParent->children.numDecendants; // TODO !!!
+
+	}
+
+	objData->children.numDecendants = -1;
+	objData->parentObjId = -1;
+
 
 	// remove the object
 	compSet->cmm.removeFromContainer(compSet->objContainerId, objId);
+}
+
+void ComponentManager::ComponentSetManager::FreeEntity(int objId)
+{
+	std::function<void(int)> delObj = [&](int id)
+	{
+		int getIndex = id;
+		// get the index
+		getIndex -= compSet->idIndexModifier; // // 
+
+		ComponentSet::ObjectData* objData = nullptr;
+
+		if (getIndex >= IDRANGE_RT)
+		{
+			// child
+
+			getIndex -= IDRANGE_RT;
+			objData = reinterpret_cast<ComponentSet::ObjectData*>(
+				compSet->cmm.getElementAt(compSet->objContainerIdChilds, getIndex)
+				);
+		}
+		else
+		{
+			// root
+
+			objData = reinterpret_cast<ComponentSet::ObjectData*>(
+				compSet->cmm.getElementAt(compSet->objContainerId, getIndex)
+				);
+		}
+		if (objData == nullptr) throw;
+		// get obj Data
+
+		for (int childId : objData->children.childIDs)
+		{
+			delObj(childId);
+		}
+		UnBuildObject(id); // delete childs first then del this
+	};
+
+	delObj(objId);
+
 }
 
 void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::ContainerID compId, int objId)
