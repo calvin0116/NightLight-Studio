@@ -19,7 +19,7 @@
 // summary of component lifecycle	(sequence diag)																																					
 //																																																	
 //																												.																					
-//  (program starts)																				(public)	.	(private)																		
+//  (program starts)																(public)(to other systems)	.	(private)(within component system)												
 //				ComponentManager																				.																					
 //						|																						.																					
 //						|				ComponentSetFactory														.																					

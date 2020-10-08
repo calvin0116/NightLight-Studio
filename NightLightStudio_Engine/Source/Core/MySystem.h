@@ -16,7 +16,8 @@ enum class S_PRIORITY
 	SP_GRAPHICS,
 	SP_COLLISION,
 	SP_PHYSICS,
-	SP_AUDIO
+	SP_AUDIO,
+	SP_SCENEMANAGER
 };
 
 class ENGINE_API MySystem : public ISystem

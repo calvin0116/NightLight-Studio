@@ -28,7 +28,7 @@ Institute of Technology is prohibited.
 
 namespace NS_WINDOW
 {
-	class ENGINE_API WndSystem : public MySystem, public Singleton<WndSystem>
+	class WndSystem : public MySystem, public Singleton<WndSystem>
 	{
 		friend Singleton<WndSystem>;
 
