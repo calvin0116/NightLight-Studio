@@ -480,7 +480,7 @@ void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::Cont
 	if (itr.compSetMgr != this) // check if its the same mgr
 		throw;
 
-	ComponentManager::ComponentSetManager::Entity obj = getEntity(itr);
+	ComponentManager::ComponentSetManager::EntityHandle obj = getEntity(itr);
 	return obj.getComponent(compId);
 }
 
@@ -534,16 +534,16 @@ int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 ////			ComponentManager::ComponentSetManager::Entity
 //////////////////////////
 
-ComponentManager::ComponentSetManager::Entity::Entity(ComponentSetManager* csm, int oid) : compSetMgr(csm), objId(oid)
+ComponentManager::ComponentSetManager::EntityHandle::EntityHandle(ComponentSetManager* csm, int oid) : compSetMgr(csm), objId(oid)
 {
 }
 
-void* ComponentManager::ComponentSetManager::Entity::getComponent(int compId)
+void* ComponentManager::ComponentSetManager::EntityHandle::getComponent(int compId)
 {
 	return compSetMgr->getComponent(compId, objId);
 }
 
-char* ComponentManager::ComponentSetManager::Entity::getObj()
+char* ComponentManager::ComponentSetManager::EntityHandle::getObj()
 {
 	// get the index first then get the container id then get the obj data
 
@@ -566,30 +566,30 @@ char* ComponentManager::ComponentSetManager::Entity::getObj()
 	// number of containers is proportional to number of types of components
 }
 
-int ComponentManager::ComponentSetManager::Entity::getId()
+int ComponentManager::ComponentSetManager::EntityHandle::getId()
 {
 	return objId;
 }
 
-int ComponentManager::ComponentSetManager::Entity::getGeneration()
+int ComponentManager::ComponentSetManager::EntityHandle::getGeneration()
 {
 	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
 	return obj->children.generation;
 }
 
-int ComponentManager::ComponentSetManager::Entity::getNumChildren()
+int ComponentManager::ComponentSetManager::EntityHandle::getNumChildren()
 {
 	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
 	return obj->children.numChild;
 }
 
-int ComponentManager::ComponentSetManager::Entity::getNumDecendants()
+int ComponentManager::ComponentSetManager::EntityHandle::getNumDecendants()
 {
 	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
 	return obj->children.numDecendants;
 }
 
-ComponentManager::ComponentSetManager::Entity ComponentManager::ComponentSetManager::Entity::makeChild()
+ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::EntityHandle::makeChild()
 {
 
 	ComponentSet::ObjectData* objParent = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
@@ -598,7 +598,7 @@ ComponentManager::ComponentSetManager::Entity ComponentManager::ComponentSetMana
 	int childUid = compSetMgr->BuildChildObject();
 
 	//ComponentSet::ObjectData* objChild = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
-	ComponentManager::ComponentSetManager::Entity entChi = compSetMgr->getEntity(childUid);
+	ComponentManager::ComponentSetManager::EntityHandle entChi = compSetMgr->getEntity(childUid);
 	ComponentSet::ObjectData* objChild = reinterpret_cast<ComponentSet::ObjectData*>(
 		entChi.getObj()
 	);
@@ -625,16 +625,16 @@ ComponentManager::ComponentSetManager::Entity ComponentManager::ComponentSetMana
 
 
 
-	return Entity(compSetMgr, childUid);
+	return EntityHandle(compSetMgr, childUid);
 }
 
-int ComponentManager::ComponentSetManager::Entity::getParentId()
+int ComponentManager::ComponentSetManager::EntityHandle::getParentId()
 {
 	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
 	return obj->parentObjId;
 }
 
-ComponentManager::ChildContainerT* ComponentManager::ComponentSetManager::Entity::getChildren()
+ComponentManager::ChildContainerT* ComponentManager::ComponentSetManager::EntityHandle::getChildren()
 {
 	ComponentSet::ObjectData* objParent = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
 
@@ -645,19 +645,19 @@ ComponentManager::ChildContainerT* ComponentManager::ComponentSetManager::Entity
 //// Entity END
 //////////////////////////
 
-ComponentManager::ComponentSetManager::Entity ComponentManager::ComponentSetManager::getEntity(Iterator itr)
+ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::getEntity(Iterator itr)
 {
-	Entity obj(this, this->getObjId(itr));
+	EntityHandle obj(this, this->getObjId(itr));
 	//obj.compSetMgr = this;
 	//obj.objId = this->getObjId(itr);
 
 	return obj;
 }
 
-ComponentManager::ComponentSetManager::Entity ComponentManager::ComponentSetManager::getEntity(int uid)
+ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::getEntity(int uid)
 {
 	// need to chk if uid valid // within range
-	Entity obj(this, uid);
+	EntityHandle obj(this, uid);
 	return obj;
 }
 

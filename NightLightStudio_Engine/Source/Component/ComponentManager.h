@@ -184,7 +184,6 @@ constexpr size_t IDRANGE_CH = IDRANGE * RATIO_CH;
 //								struct ComponentData
 //
 
-
 class ENGINE_API ComponentManager : public MySystem, public Singleton<ComponentManager>
 {
 	friend Singleton<ComponentManager>;
@@ -425,7 +424,7 @@ public:
 
 
 		// an abstraction of the entity
-		class Entity
+		class EntityHandle
 		{
 			friend ComponentSetManager;
 
@@ -434,7 +433,7 @@ public:
 
 		public:
 			// ctor
-			Entity(ComponentSetManager* csm, int oid);
+			EntityHandle(ComponentSetManager* csm, int oid);
 
 		private:
 			// get component of the entity // using container id // helper
@@ -483,7 +482,7 @@ public:
 
 			int getNumDecendants();
 
-			Entity makeChild(); // (<_<)
+			EntityHandle makeChild(); // (<_<)
 
 			int getParentId();
 
@@ -526,8 +525,8 @@ public:
 
 		// Get Entity and Entity Id
 		int getObjId(Iterator itr);
-		Entity getEntity(Iterator itr);
-		Entity getEntity(int uid);
+		EntityHandle getEntity(Iterator itr);
+		EntityHandle getEntity(int uid);
 
 	private:
 
@@ -681,14 +680,24 @@ public:
 	//void test2();
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef ComponentManager::ComponentSetManager::EntityHandle Entity;
+
 static ComponentManager* SYS_COMPONENT = ComponentManager::GetInstance();
 
 //extern ComponentManager G_COMPMGR;
-
-
-
-
-
 
 
 

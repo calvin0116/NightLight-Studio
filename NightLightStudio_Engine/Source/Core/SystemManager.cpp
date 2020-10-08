@@ -158,7 +158,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 			std::cout << std::endl;
 
 			// remind self to typedef this !!
-			ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(newObjId);
+			Entity entity = G_UICOMPSET.getEntity(newObjId);
 
 
 			int numChild = entity.getNumChildren();
@@ -169,7 +169,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 			std::cout << "numDec:" << numDec << std::endl;
 			std::cout << "parentuid:" << parentuid << std::endl;
 
-			ComponentManager::ComponentSetManager::Entity childEntity = entity.makeChild();
+			Entity childEntity = entity.makeChild();
 			ComponentManager::ChildContainerT* childrens = entity.getChildren();
 
 			std::cout << std::endl;
@@ -193,22 +193,22 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		}
 		{
 			// make 2 more childs from the entity
-			ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(newObjId);
+			Entity entity = G_UICOMPSET.getEntity(newObjId);
 
 			// child1
-			ComponentManager::ComponentSetManager::Entity childEntity1 = entity.makeChild();
+			Entity childEntity1 = entity.makeChild();
 			newCompComponentTest0.id = 5432;
 			G_UICOMPSET.AttachComponent<ComponentTest0>(childEntity1.getId(), &newCompComponentTest0);
 
 
 			// make child of child - grandchild
-			ComponentManager::ComponentSetManager::Entity grandChildEntity0 = childEntity1.makeChild();
+			Entity grandChildEntity0 = childEntity1.makeChild();
 			newCompComponentTest0.id = 777;
 			G_UICOMPSET.AttachComponent<ComponentTest0>(grandChildEntity0.getId(), &newCompComponentTest0);
 
 
 			// child2
-			ComponentManager::ComponentSetManager::Entity childEntity2 = entity.makeChild();
+			Entity childEntity2 = entity.makeChild();
 			newCompComponentTest0.id = 543;
 			G_UICOMPSET.AttachComponent<ComponentTest0>(childEntity2.getId(), &newCompComponentTest0);
 		}
@@ -224,21 +224,21 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 			{
 				// adding childs
-				ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(newObjId);
+				Entity entity = G_UICOMPSET.getEntity(newObjId);
 
 				// child1
-				ComponentManager::ComponentSetManager::Entity childEntity1 = entity.makeChild();
+				Entity childEntity1 = entity.makeChild();
 				newCompComponentTest0.id = 7771;
 				G_UICOMPSET.AttachComponent<ComponentTest0>(childEntity1.getId(), &newCompComponentTest0);
 
 
 				// make child of child - grandchild
-				ComponentManager::ComponentSetManager::Entity grandChildEntity0 = childEntity1.makeChild();
+				Entity grandChildEntity0 = childEntity1.makeChild();
 				newCompComponentTest0.id = 8881;
 				G_UICOMPSET.AttachComponent<ComponentTest0>(grandChildEntity0.getId(), &newCompComponentTest0);
 
 				// make 2nd grandchild
-				ComponentManager::ComponentSetManager::Entity grandChildEntity1 = childEntity1.makeChild();
+				Entity grandChildEntity1 = childEntity1.makeChild();
 				newCompComponentTest0.id = 8882;
 				G_UICOMPSET.AttachComponent<ComponentTest0>(grandChildEntity1.getId(), &newCompComponentTest0);
 
@@ -246,12 +246,12 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 				G_UICOMPSET.AttachComponent<ComponentTransform>(grandChildEntity1.getId(), &compT);
 
 				// make 3rd grandchild
-				ComponentManager::ComponentSetManager::Entity grandChildEntity2 = childEntity1.makeChild();
+				Entity grandChildEntity2 = childEntity1.makeChild();
 				newCompComponentTest0.id = 8883;
 				G_UICOMPSET.AttachComponent<ComponentTest0>(grandChildEntity2.getId(), &newCompComponentTest0);
 
 				// child2
-				ComponentManager::ComponentSetManager::Entity childEntity2 = entity.makeChild();
+				Entity childEntity2 = entity.makeChild();
 				newCompComponentTest0.id = 7772;
 				G_UICOMPSET.AttachComponent<ComponentTest0>(childEntity2.getId(), &newCompComponentTest0);
 
@@ -325,7 +325,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 				std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
 
 				// get the entity from the iterator
-				ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(itr);
+				Entity entity = G_UICOMPSET.getEntity(itr);
 
 				// get transform component
 				ComponentTransform* compT = entity.getComponent<ComponentTransform>();
@@ -347,7 +347,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 				{
 					for (int uid : *childrens)
 					{
-						ComponentManager::ComponentSetManager::Entity childEntity = G_UICOMPSET.getEntity(uid);
+						Entity childEntity = G_UICOMPSET.getEntity(uid);
 
 
 						std::cout << std::endl << "Print child:" << std::endl;
