@@ -28,6 +28,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	Systems[S_PRIORITY::SP_INPUT] = SYS_INPUT;
 	Systems[S_PRIORITY::SP_IO] = SYS_IO;
 	Systems[S_PRIORITY::SP_AUDIO] = SYS_AUDIO;
+	Systems[S_PRIORITY::SP_PHYSICS] = NS_PHYSICS::SYS_PHYSICS;
 	Systems[S_PRIORITY::SP_COMPONENT] = SYS_COMPONENT;
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,8 +128,15 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		compT._position.x = 1.11f;
 		G_MAINCOMPSET.AttachComponent<ComponentTransform>(newObjId, &compT);
 
+		ComponentRigidBody compRB;
+		G_MAINCOMPSET.AttachComponent<ComponentRigidBody>(newObjId, &compRB);
+
 		newCompComponentTest0.id = 1;
 		G_MAINCOMPSET.AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+
+		// add 3rd obj 
+		newObjId = G_MAINCOMPSET.BuildObject();
+		G_MAINCOMPSET.AttachComponent<ComponentRigidBody>(newObjId, &compRB);
 
 
 		// add obj to another component set
