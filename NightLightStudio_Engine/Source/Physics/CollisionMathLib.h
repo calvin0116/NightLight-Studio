@@ -10,6 +10,7 @@
 #include "..\\Math\Matrix4x4.h"
 
 enum class SIDES;
+struct PlaneCollider;
 struct AABBCollider;
 struct SphereCollider;
 struct OBBCollider;
@@ -20,7 +21,9 @@ namespace NlMath
 
 	bool AABBtoAABB(const AABBCollider& tBox1, const AABBCollider& tBox2);
 
-	bool PlaneToPlane();
+	bool PlaneToPlane(const PlaneCollider& tPlane1, const PlaneCollider& tPlane2);
+
+	bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2);
 
 	//return all 8 points of a cube from AABB collider 
 	std::vector<NlMath::Vector3D> AllPointsOf(const AABBCollider& tBox);
@@ -31,7 +34,7 @@ namespace NlMath
 
 	SIDES AABB_SphereCollision(const AABBCollider& tBox1, const SphereCollider& tSpr1, NlMath::Vector3D& circleVec);
 
-	SIDES OBB_OBBCollision(const OBBCollider& tBox1, const OBBCollider& tBox2);
+
 
 	
 }

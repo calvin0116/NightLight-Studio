@@ -53,8 +53,8 @@ namespace NlMath
 	Vector3D operator + (const Vector3D& lhs, const Vector3D& rhs);
 	Vector3D operator - (const Vector3D& lhs, const Vector3D& rhs);
 	Vector3D operator * (const Vector3D& lhs, float rhs);
-	Vector3D operator * (const Vector3D& lhs, const Vector3D& rhs);
 	Vector3D operator * (float lhs, const Vector3D& rhs);
+	float operator * (const Vector3D& lhs, const Vector3D& rhs);
 	Vector3D operator / (const Vector3D& lhs, float rhs);
 	
 

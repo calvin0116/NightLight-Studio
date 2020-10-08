@@ -158,19 +158,18 @@ namespace NlMath
 		return Vector3D(lhs.x * rhs, lhs.y * rhs , lhs.z * rhs);
 	}
 
-	Vector3D operator*(const Vector3D& lhs, const Vector3D& rhs)
-	{
-		return Vector3D(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
-	}
-
-	/**************************************************************************/
-	/*!
-		3D vector multiplication with float operator
-	*/
-	/**************************************************************************/
 	Vector3D operator*(float lhs, const Vector3D& rhs)
 	{
 		return rhs * lhs;
+	}
+	/**************************************************************************/
+	/*!
+		3D vector Dot Product
+	*/
+	/**************************************************************************/
+	float operator*(const Vector3D& lhs, const Vector3D& rhs)
+	{
+		return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
 	}
 
 	/**************************************************************************/

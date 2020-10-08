@@ -37,8 +37,42 @@ namespace NlMath
 
     }
 
-    bool PlaneToPlane()
+    bool PlaneToPlane(const PlaneCollider& tPlane1, const PlaneCollider& tPlane2)
     {
+        Matrix4x4 rotationalMtx;
+
+        //setting up normals for plane1
+        Vector3D normalX1(1, 0, 0);
+        Vector3D normalY1(0, 1, 0);
+        Vector3D normalZ1(0, 0, 1);
+        Mtx44RotRad(rotationalMtx, tPlane1.rotation);
+        //rotate normals to correct position
+        normalX1 = rotationalMtx * normalX1;
+        normalY1 = rotationalMtx * normalY1;
+        normalZ1 = rotationalMtx * normalZ1;
+
+        //setting up normals for plane2
+        Vector3D normalX2(1, 0, 0);
+        Vector3D normalY2(0, 1, 0);
+        Vector3D normalZ2(0, 0, 1);
+        Mtx44RotRad(rotationalMtx, tPlane2.rotation);
+        //rotate normals to correct position
+        normalX2 = rotationalMtx * normalX2;
+        normalY2 = rotationalMtx * normalY2;
+        normalZ2 = rotationalMtx * normalZ2;
+
+        Vector3D nearPoint;
+        Vector3D farPoint;
+        Vector3D maxDistance;
+        Vector3D maxDistanceToCtr;
+        float farLength = -FLT_MAX;
+        float nearLength = FLT_MAX;
+
+        float tmpLength = 0;
+
+        maxDistance = tPlane1.center + normalX1 * tPlane1.extend.x + normalZ1 * tPlane1.extend.z;
+        maxDistanceToCtr = tPlane1.center - maxDistance;
+
 
 
         return false;
@@ -241,16 +275,68 @@ namespace NlMath
         }
     }
 
-    SIDES OBB_OBBCollision(const OBBCollider& tBox1, const OBBCollider& tBox2)
+    bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2)
     {
         //axis view explaination: (value going from negative to positive)
         //x going from left to right
         //y going from back(into the screen) to front(out of the screen)
         //z going from bottom to top
 
+        Matrix4x4 rotationalMtx;
+
+        //setting up normals for Box1
+        Vector3D normalX1(1, 0, 0);
+        Vector3D normalY1(0, 1, 0);
+        Vector3D normalZ1(0, 0, 1);
+        Mtx44RotRad(rotationalMtx, tBox1.rotation);
+        //rotate normals to correct position
+        normalX1 = rotationalMtx * normalX1;
+        normalY1 = rotationalMtx * normalY1;
+        normalZ1 = rotationalMtx * normalZ1;
+
+        //setting up normals for Box2
+        Vector3D normalX2(1, 0, 0);
+        Vector3D normalY2(0, 1, 0);
+        Vector3D normalZ2(0, 0, 1);
+        Mtx44RotRad(rotationalMtx, tBox2.rotation);
+        //rotate normals to correct position
+        normalX2 = rotationalMtx * normalX2;
+        normalY2 = rotationalMtx * normalY2;
+        normalZ2 = rotationalMtx * normalZ2;
+
         //get distance vector between two box's center
         Vector3D centerDistance = tBox2.center - tBox1.center;
 
-        return SIDES();
+        // check if there's a separating plane in between the selected axes
+        auto getSeparatingPlane = [=](const Vector3D& Plane)
+        {
+            return (fabs(centerDistance * Plane) >
+                (fabs((normalX1 * tBox1.extend.x) * Plane) +
+                    fabs((normalY1 * tBox1.extend.y) * Plane) +
+                    fabs((normalZ1 * tBox1.extend.z) * Plane) +
+                    fabs((normalX2 * tBox2.extend.x) * Plane) +
+                    fabs((normalY2 * tBox2.extend.y) * Plane) +
+                    fabs((normalZ2 * tBox2.extend.z) * Plane)));
+        };
+
+        return !(getSeparatingPlane(normalX1) ||
+            getSeparatingPlane(normalY1) ||
+            getSeparatingPlane(normalZ1) ||
+            getSeparatingPlane(normalX2) ||
+            getSeparatingPlane(normalY2) ||
+            getSeparatingPlane(normalZ2) ||
+            
+            getSeparatingPlane(Vector3DCrossProduct(normalX1, normalX2)) ||
+            getSeparatingPlane(Vector3DCrossProduct(normalX1, normalY2)) ||
+            getSeparatingPlane(Vector3DCrossProduct(normalX1, normalZ2)) ||
+
+            getSeparatingPlane(Vector3DCrossProduct(normalY1,normalX2)) ||
+            getSeparatingPlane(Vector3DCrossProduct(normalY1,normalY2)) ||
+            getSeparatingPlane(Vector3DCrossProduct(normalY1,normalZ2)) ||
+
+            getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalX2)) ||
+            getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalY2)) ||
+            getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalZ2)));
+
     }
 }
