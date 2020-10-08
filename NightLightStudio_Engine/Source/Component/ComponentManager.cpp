@@ -153,7 +153,7 @@ void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::C
 
 	// set object component data
 
-	ComponentSet::ObjectData::ComponentData* compData;
+	ComponentSet::ObjectData::ComponentData* compData = nullptr;
 
 	objId -= compSet->idIndexModifier; // // 
 	if (objId >= IDRANGE_RT)
@@ -165,6 +165,7 @@ void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::C
 	{
 		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
 	}
+	if (compData == nullptr) throw;
 
 	// !
 	compData->containerId = compId; // set container id
@@ -181,8 +182,21 @@ void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::C
 void ComponentManager::ComponentSetManager::RemoveComponent(ComponentManager::ContainerID compId, int objId)
 {
 	// get the index
-	objId -= compSet->idIndexModifier;
-	ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
+	objId -= compSet->idIndexModifier; // // 
+
+	ComponentSet::ObjectData::ComponentData* compData = nullptr;
+
+	if (objId >= IDRANGE_RT)
+	{
+		objId -= IDRANGE_RT;
+		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId, true));
+	}
+	else
+	{
+		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
+	}
+	if (compData == nullptr) throw;
+
 	int index = compData->containerIndex;
 
 	// remove

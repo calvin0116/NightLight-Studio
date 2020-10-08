@@ -112,7 +112,8 @@ constexpr size_t IDRANGE_CH = IDRANGE * RATIO_CH;
 //						T* AttachComponent(int entityId, T* newComp)
 //
 //						// remove component from entity
-//						void RemoveComponent(ComponentManager::ContainerID compId, int entityId);
+//						template<typename T>
+//						void RemoveComponent(int entityId)
 //
 //						// free entity
 //						void UnBuildObject(int objId);
@@ -139,6 +140,27 @@ constexpr size_t IDRANGE_CH = IDRANGE * RATIO_CH;
 //								// get component of the entity
 //								template<typename T>
 //								T* getComponent()
+//
+//                              // get uid of the entity
+//								int getId();
+//
+//                              // generation of the entity root is 0
+//								int getGeneration();
+//
+//                              // number of children this entity has
+//								int getNumChildren();
+//
+//                              // number of decendants this entity has // WIP !!!
+//								int getNumDecendants();
+//
+//                              // make a child that belongs to this entity
+//								Entity makeChild(); // (<_<)
+//
+//                              // get the parent id of this entity // root entity returns -1
+//								int getParentId();
+//
+//                              // gets a container of child uids
+//								ChildContainerT* getChildren();
 //
 //						// begin and end iterators
 //						template<typename T>
@@ -297,9 +319,33 @@ public:
 			}
 		}
 
-		// remove component from entity
+	private:
+		// remove component from entity // helper
 		void RemoveComponent(ComponentManager::ContainerID compId, int entityId);
 		// TODO for child
+
+	public:
+		template<typename T>
+		void RemoveComponent(int entityId)
+		{
+			const std::type_info& tinf = typeid(T);
+
+			//entityId -= compSet->idIndexModifier;
+			if (entityId - compSet->idIndexModifier >= IDRANGE_RT)
+			{
+				auto find = compSet->hashConIdMapChilds.find(tinf.hash_code());
+				if (find == compSet->hashConIdMapChilds.end())
+					throw; // gg
+				RemoveComponent((*find).second, entityId); // <- pass in index, not uid
+			}
+			else
+			{
+				auto find = compSet->hashConIdMap.find(tinf.hash_code());
+				if (find == compSet->hashConIdMap.end())
+					throw; // gg
+				RemoveComponent((*find).second, entityId); // <- pass in index, not uid
+			}
+		}
 
 		// free entity
 		void UnBuildObject(int objId);

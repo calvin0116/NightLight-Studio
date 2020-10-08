@@ -219,6 +219,9 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 			newCompComponentTest0.id = 1234;
 			G_UICOMPSET.AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
 
+			compT._position.x = 2.22f;
+			G_UICOMPSET.AttachComponent<ComponentTransform>(newObjId, &compT);
+
 			{
 				// adding childs
 				ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(newObjId);
@@ -238,6 +241,14 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 				ComponentManager::ComponentSetManager::Entity grandChildEntity1 = childEntity1.makeChild();
 				newCompComponentTest0.id = 8882;
 				G_UICOMPSET.AttachComponent<ComponentTest0>(grandChildEntity1.getId(), &newCompComponentTest0);
+
+				compT._position.x = 3.33f;
+				G_UICOMPSET.AttachComponent<ComponentTransform>(grandChildEntity1.getId(), &compT);
+
+				// make 3rd grandchild
+				ComponentManager::ComponentSetManager::Entity grandChildEntity2 = childEntity1.makeChild();
+				newCompComponentTest0.id = 8883;
+				G_UICOMPSET.AttachComponent<ComponentTest0>(grandChildEntity2.getId(), &newCompComponentTest0);
 
 				// child2
 				ComponentManager::ComponentSetManager::Entity childEntity2 = entity.makeChild();
@@ -294,77 +305,110 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 			++itr;
 		}
 
-		// G_UICOMPSET
-		itr = G_UICOMPSET.begin<ComponentTest0>();
-		itrEnd = G_UICOMPSET.end<ComponentTest0>();
-		while (itr != itrEnd)
+		//
+		int toDel0 = -1;
+
+		auto print = [&]()
 		{
-			// get the obj id
-			std::cout << std::endl;
-			std::cout << "Object:" << G_UICOMPSET.getObjId(itr) << std::endl;
-
-			// get the transform component from the iterator
-			ComponentTest0* compR = reinterpret_cast<ComponentTest0*>(*itr);
-			std::cout << "Render:" << compR->id << " " << compR->c << std::endl;
-
-			// get the entity from the iterator
-			ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(itr);
-
-			// get transform component
-			ComponentTransform* compT = entity.getComponent<ComponentTransform>();
-			if (compT != nullptr) // nullptr -> uninitialised or deleted
-				std::cout << "Transform:" << compT->_position.x << std::endl;
-
-			////////////
-			// childrens
-
-			// recursive fn to do to all children
-
-			std::function<void(ComponentManager::ChildContainerT*)> doChildrens = [&](ComponentManager::ChildContainerT* childrens)
+			// G_UICOMPSET
+			itr = G_UICOMPSET.begin<ComponentTest0>();
+			itrEnd = G_UICOMPSET.end<ComponentTest0>();
+			while (itr != itrEnd)
 			{
-				for (int uid : *childrens)
+				// get the obj id
+				std::cout << std::endl;
+				std::cout << "Object:" << G_UICOMPSET.getObjId(itr) << std::endl;
+
+				// get the transform component from the iterator
+				ComponentTest0* compR = reinterpret_cast<ComponentTest0*>(*itr);
+				std::cout << "Render:" << compR->id << " " << compR->c << std::endl;
+
+				// get the entity from the iterator
+				ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(itr);
+
+				// get transform component
+				ComponentTransform* compT = entity.getComponent<ComponentTransform>();
+				if (compT != nullptr) // nullptr -> uninitialised or deleted
+					std::cout << "Transform:" << compT->_position.x << std::endl;
+
+				////////////
+				// childrens
+
+				// recursive fn to do to all children
+
+				std::function<void(ComponentManager::ChildContainerT*)> doChildrens = [&](ComponentManager::ChildContainerT* childrens)
 				{
-					ComponentManager::ComponentSetManager::Entity childEntity = G_UICOMPSET.getEntity(uid);
+					for (int uid : *childrens)
+					{
+						ComponentManager::ComponentSetManager::Entity childEntity = G_UICOMPSET.getEntity(uid);
 
 
-					std::cout << std::endl << "Print child:" << std::endl;
+						std::cout << std::endl << "Print child:" << std::endl;
 
-					std::cout << "childEntity generation:" << childEntity.getGeneration() << std::endl;
+						std::cout << "childEntity generation:" << childEntity.getGeneration() << std::endl;
 
-					std::cout << "childEntity id:" << childEntity.getId() << std::endl;
-					std::cout << "childEntity numChild:" << childEntity.getNumChildren() << std::endl;
-					std::cout << "childEntity numDec:" << childEntity.getNumDecendants() << std::endl;
-					std::cout << "childEntity parentuid:" << childEntity.getParentId() << std::endl;
+						std::cout << "childEntity id:" << childEntity.getId() << std::endl;
+						std::cout << "childEntity numChild:" << childEntity.getNumChildren() << std::endl;
+						std::cout << "childEntity numDec:" << childEntity.getNumDecendants() << std::endl;
+						std::cout << "childEntity parentuid:" << childEntity.getParentId() << std::endl;
 
-					compR = childEntity.getComponent<ComponentTest0>();
-					std::cout << "Child Render:" << compR->id << " " << compR->c << std::endl;
+						compR = childEntity.getComponent<ComponentTest0>();
+						std::cout << "Child Render:" << compR->id << " " << compR->c << std::endl;
 
-					std::cout << std::endl;
+						if (compR->id == 8882)
+						{
+							toDel0 = childEntity.getId();
+						}
 
-					// call recursive fn for each child
-					doChildrens(G_UICOMPSET.getEntity(uid).getChildren());
-				}
-			};
+						// get transform component
+						ComponentTransform* compT = childEntity.getComponent<ComponentTransform>();
+						if (compT != nullptr) // nullptr -> uninitialised or deleted
+							std::cout << "Transform:" << compT->_position.x << std::endl;
 
-			doChildrens(entity.getChildren());
+						std::cout << std::endl;
 
-			//
-			////////////
+						// call recursive fn for each child
+						doChildrens(G_UICOMPSET.getEntity(uid).getChildren());
+					}
+				};
 
-			std::cout << "Object:" << G_UICOMPSET.getObjId(itr) << " END" << std::endl;
-			std::cout << std::endl;
+				doChildrens(entity.getChildren());
 
-			++itr;
-		}
+				//
+				////////////
+
+				std::cout << "Object:" << G_UICOMPSET.getObjId(itr) << " END" << std::endl;
+				std::cout << std::endl;
+
+				++itr;
+			}
+		};
+
+		print();
 
 		std::cout << std::endl;
-		std::cout << "// Test Get Components:" << std::endl;
+		std::cout << "// Test Get Components END" << std::endl;
 		std::cout << std::endl;
 
+
+
+
+
+		std::cout << std::endl;
+		std::cout << "// Test Remove Components:" << std::endl;
+		std::cout << std::endl;
+
+		G_UICOMPSET.RemoveComponent<ComponentTransform>(toDel0);
+		print();
+
+		std::cout << std::endl;
+		std::cout << "// Test Remove Components END" << std::endl;
+		std::cout << std::endl;
 
 		std::cout << "// Test Components END" << std::endl;
 		std::cout << "////////////////////////////////////" << std::endl;
 		std::cout << std::endl;
+
 	}
 	//// GET COMPONENT END
 	///////////////////////////////////////////////////////////////////////////////////////////////
