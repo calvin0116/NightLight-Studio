@@ -117,7 +117,7 @@ namespace NlMath
 		between pVec0 and pVec1
 	 */
 	 /**************************************************************************/
-	float	Vector3DCrossProduct(const Vector3D& pVec0, const Vector3D& pVec1);
+	Vector3D	Vector3DCrossProduct(const Vector3D& pVec0, const Vector3D& pVec1);
 
 	/**************************************************************************/
 	/*!
@@ -125,22 +125,6 @@ namespace NlMath
 	*/
 	/**************************************************************************/
 	Vector3D	Vector3DProjection(const Vector3D& pVec0, const Vector3D& pVec1);
-
-	/**************************************************************************/
-	/*!
-		This function tells if two vectors are intersecting
-	*/
-	/**************************************************************************/
-	bool	Vector3DIntersection(
-		const Vector3D& point0, const Vector3D& Vec0,
-		const Vector3D& point1, const Vector3D& Vec1);
-
-	/**************************************************************************/
-	/*!
-		fast inverse sqrt for normalizing
-	*/
-	/**************************************************************************/
-	float inverseSqrt(float);
 }
 	
 	

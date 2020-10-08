@@ -37,6 +37,13 @@ namespace NlMath
 
     }
 
+    bool PlaneToPlane()
+    {
+
+
+        return false;
+    }
+
     std::vector<NlMath::Vector3D> AllPointsOf(const AABBCollider& tBox)
     {
         std::vector<NlMath::Vector3D> points;
@@ -56,9 +63,9 @@ namespace NlMath
     {
         //axis view explaination: (value going from negative to positive)
         //x going from left to right
-        //y going from back(into the screen) to front(out of the screen)
-        //z going from bottom to top
-
+        //y going from bottom to top
+        //z going from back(into the screen) to front(out of the screen)
+        
 
         //get the center between two box
         NlMath::Vector3D center1 = NlMath::Vector3DMidPoint(tBox1.vecMax, tBox1.vecMin);
@@ -92,12 +99,12 @@ namespace NlMath
 
         if (diffVec.x <= diffVec.y && diffVec.x <= diffVec.z)
         {
-            //if x is positive and longest among all axis, the collision must be happening at LEFT
+            //if x is positive and shortest among all axis, the collision must be happening at LEFT
             if (centerDistance.x > 0)
             {
                 return SIDES::RIGHT;
             }
-            //if x is negative and longest among all axis, the collision must be happening at RIGHT
+            //if x is negative and shortest among all axis, the collision must be happening at RIGHT
             else
             {
                 return SIDES::LEFT;
@@ -105,28 +112,28 @@ namespace NlMath
         }
         else if (diffVec.y <= diffVec.x && diffVec.y <= diffVec.z)
         {
-            //if y is positive and longest among all axis, the collision must be happening at FRONT
+            //if y is positive and shortest among all axis, the collision must be happening at FRONT
             if (centerDistance.y > 0)
             {
-                return SIDES::FRONT;
+                return SIDES::TOP;
             }
-            //if y is negative and longest among all axis, the collision must be happening at RIGHT
+            //if y is negative and shortest among all axis, the collision must be happening at RIGHT
             else
             {
-                return SIDES::BACK;
+                return SIDES::BOTTOM;
             }
         }
         else if (diffVec.z <= diffVec.y && diffVec.z <= diffVec.x)
         {
-            //if z is positive and longest among all axis, the collision must be happening at TOP
+            //if z is positive and shortest among all axis, the collision must be happening at TOP
             if (centerDistance.z > 0)
             {
-                return SIDES::TOP;
+                return SIDES::FRONT;
             }
-            //if z is negative and longest among all axis, the collision must be happening at BOTTOM
+            //if z is negative and shortest among all axis, the collision must be happening at BOTTOM
             else
             {
-                return SIDES::BOTTOM;
+                return SIDES::BACK;
             }
         }
         else
@@ -153,8 +160,8 @@ namespace NlMath
     {
         //axis view explaination: (value going from negative to positive)
         //x going from left to right
-        //y going from back(into the screen) to front(out of the screen)
-        //z going from bottom to top
+        //y going from bottom to top
+        //z going from back(into the screen) to front(out of the screen)
 
         //get the center between two box
         NlMath::Vector3D center1 = NlMath::Vector3DMidPoint(tBox1.vecMax, tBox1.vecMin);
@@ -190,12 +197,12 @@ namespace NlMath
 
         if (diffVec.x <= diffVec.y && diffVec.x <= diffVec.z)
         {
-            //if x is positive and longest among all axis, the collision must be happening at LEFT
+            //if x is positive and shortest among all axis, the collision must be happening at LEFT
             if (centerDistance.x > 0)
             {
                 return SIDES::RIGHT;
             }
-            //if x is negative and longest among all axis, the collision must be happening at RIGHT
+            //if x is negative and shortest among all axis, the collision must be happening at RIGHT
             else
             {
                 return SIDES::LEFT;
@@ -203,28 +210,28 @@ namespace NlMath
         }
         else if (diffVec.y <= diffVec.x && diffVec.y <= diffVec.z)
         {
-            //if y is positive and longest among all axis, the collision must be happening at FRONT
+            //if y is positive and shortest among all axis, the collision must be happening at FRONT
             if (centerDistance.y > 0)
             {
-                return SIDES::FRONT;
+                return SIDES::TOP;
             }
-            //if y is negative and longest among all axis, the collision must be happening at RIGHT
+            //if y is negative and shortest among all axis, the collision must be happening at RIGHT
             else
             {
-                return SIDES::BACK;
+                return SIDES::BOTTOM;
             }
         }
         else if (diffVec.z <= diffVec.y && diffVec.z <= diffVec.x)
         {
-            //if z is positive and longest among all axis, the collision must be happening at TOP
+            //if z is positive and shortest among all axis, the collision must be happening at TOP
             if (centerDistance.z > 0)
             {
-                return SIDES::TOP;
+                return SIDES::FRONT;
             }
-            //if z is negative and longest among all axis, the collision must be happening at BOTTOM
+            //if z is negative and shortest among all axis, the collision must be happening at BOTTOM
             else
             {
-                return SIDES::BOTTOM;
+                return SIDES::BACK;
             }
         }
         else
@@ -244,8 +251,6 @@ namespace NlMath
         //get distance vector between two box's center
         Vector3D centerDistance = tBox2.center - tBox1.center;
 
-        Matrix4x4 rotMat;
-        
         return SIDES();
     }
 }

@@ -5,6 +5,7 @@
 ComponentCollider::ComponentCollider()
 	:tranformObject{ nullptr }, rigidBody{ nullptr }, collisionTime{ FLT_MAX }
 {
+
 }
 
 void ComponentCollider::CollisionTimeReset()
@@ -45,3 +46,12 @@ OBBCollider::OBBCollider(NlMath::Vector3D _center, NlMath::Vector3D _extend, NlM
 {
 }
 
+PlaneCollider::PlaneCollider() :
+	center(0, 0, 0), extend(1, 1, 1), rotation(0, 0, 0)
+{
+}
+
+PlaneCollider::PlaneCollider(NlMath::Vector3D _point, NlMath::Vector3D _extend, NlMath::Vector3D _rotation) :
+	center(_point), extend(_extend), rotation(_rotation)
+{
+}
