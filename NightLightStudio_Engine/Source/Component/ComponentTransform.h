@@ -1,13 +1,17 @@
 #pragma once
 #include "..\\Math\Vector.h"
+#include "..\\Math\Matrix4x4.h"
 #include "Components.h"
+#include "..\glm\glm.hpp"
 
 class ComponentTransform : public IComponent
 {
 public:
-	NlMath::Vector3D _position;
-	NlMath::Vector3D _rotation;
-	NlMath::Vector3D _scale;
+	glm::vec3 _position;
+	glm::vec3 _rotation;
+	glm::vec3 _scale;
+
+	glm::mat4x4 _model;
 
 	ComponentTransform();
 	~ComponentTransform();
