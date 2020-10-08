@@ -11,7 +11,7 @@ namespace NS_GRAPHICS
 		std::vector<glm::vec2> _uv;
 		std::vector<glm::vec3> _normals;
 		std::vector<int> _indices;
-		std::vector<unsigned> _textures;
+		std::vector<unsigned> _textures; // each face has its own texture
 		glm::vec3 _position;
 		glm::vec3 _scale;
 		glm::vec3 _rotation;

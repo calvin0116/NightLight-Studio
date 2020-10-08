@@ -104,7 +104,8 @@ namespace NS_GRAPHICS
 			 0.0f,  0.5f, 0.0f,    0.0f, 0.0f,   // bottom left
 		};
 
-		glm::mat4 testmodelMatrix(1.f);
+		// Provide rotation in radians
+		glm::mat4 testmodelMatrix = glm::rotate(glm::mat4(1.f), glm::radians(15.f), glm::vec3(0.0f,0.0f,1.f));
 
 		glBindVertexArray(VAO);
 

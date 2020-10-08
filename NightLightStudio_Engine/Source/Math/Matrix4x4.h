@@ -1,5 +1,7 @@
-#include "Vector.h"
 #include <iostream>
+
+#include "Vector.h"
+#include "../glm/glm.hpp"   
 namespace NlMath
 {
 #ifdef _MSC_VER
@@ -48,8 +50,8 @@ namespace NlMath
 		friend std::ostream& operator<<(std::ostream& os, const Matrix4x4 mtx);
 
 		//conversion operator is case we are using open gl, this converts my matrix to glm matrix
-		//operator glm::mat4x4() const;
-		//operator glm::mat3x3() const;
+		operator glm::mat4x4() const;
+		operator glm::mat3x3() const;
 
 	} Matrix4x4, Matrix4x4, Mtx44;
 
