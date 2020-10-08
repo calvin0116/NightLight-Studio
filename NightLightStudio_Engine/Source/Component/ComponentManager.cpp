@@ -432,6 +432,12 @@ int ComponentManager::ComponentSetManager::Entity::getId()
 	return objId;
 }
 
+int ComponentManager::ComponentSetManager::Entity::getGeneration()
+{
+	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
+	return obj->children.generation;
+}
+
 int ComponentManager::ComponentSetManager::Entity::getNumChildren()
 {
 	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
@@ -467,7 +473,17 @@ ComponentManager::ComponentSetManager::Entity ComponentManager::ComponentSetMana
 
 	++(objParent->children.numChild);
 
-	objChild->parentObjId = objParent->objId;
+	if (objParent->children.generation > 0)
+	{
+		// parent is not root
+		objChild->parentObjId = objParent->objId + compSetMgr->compSet->idIndexModifier + IDRANGE_RT;
+	}
+	else
+	{
+		// parent is root
+		objChild->parentObjId = objParent->objId + compSetMgr->compSet->idIndexModifier;
+	}
+
 
 
 	return Entity(compSetMgr, childUid);

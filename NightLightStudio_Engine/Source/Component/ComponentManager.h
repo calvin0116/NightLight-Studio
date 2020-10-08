@@ -425,6 +425,8 @@ public:
 
 			int getId();
 
+			int getGeneration();
+
 			int getNumChildren();
 
 			int getNumDecendants();

@@ -12,6 +12,8 @@
 
 #include "../Component/LocalVector.h"
 
+#include <functional>
+
 // Do not touch
 //**! Update comments please thanks
 void MySystemManager::StartUp(HINSTANCE& hInstance)
@@ -174,12 +176,19 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		// make 2 more childs from the entity
 		ComponentManager::ComponentSetManager::Entity entity = G_UICOMPSET.getEntity(newObjId);
 
-
+		// child1
 		ComponentManager::ComponentSetManager::Entity childEntity1 = entity.makeChild();
 		newCompComponentRender.id = 5432;
 		G_UICOMPSET.AttachComponent<ComponentRender>(childEntity1.getId(), &newCompComponentRender);
 
 
+		// make child of child - grandchild
+		ComponentManager::ComponentSetManager::Entity grandChildEntity0 = childEntity1.makeChild();
+		newCompComponentRender.id = 777;
+		G_UICOMPSET.AttachComponent<ComponentRender>(grandChildEntity0.getId(), &newCompComponentRender);
+
+
+		// child2
 		ComponentManager::ComponentSetManager::Entity childEntity2 = entity.makeChild();
 		newCompComponentRender.id = 543;
 		G_UICOMPSET.AttachComponent<ComponentRender>(childEntity2.getId(), &newCompComponentRender);
@@ -243,21 +252,35 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 		////////////
 		// childrens
-		ComponentManager::ChildContainerT* childrens = entity.getChildren();
 
-		for (int uid : *childrens)
+		// recursive fn to do to all children
+
+		std::function<void(ComponentManager::ChildContainerT*)> doChildrens = [&](ComponentManager::ChildContainerT* childrens)
 		{
-			ComponentManager::ComponentSetManager::Entity childEntity = G_UICOMPSET.getEntity(uid);
+			for (int uid : *childrens)
+			{
+				std::cout << std::endl << "Print child:" << std::endl;
 
-			std::cout << "childEntity id:" << childEntity.getId() << std::endl;
-			std::cout << "childEntity numChild:" << childEntity.getNumChildren() << std::endl;
-			std::cout << "childEntity numDec:" << childEntity.getNumDecendants() << std::endl;
-			std::cout << "childEntity parentuid:" << childEntity.getParentId() << std::endl;
+				ComponentManager::ComponentSetManager::Entity childEntity = G_UICOMPSET.getEntity(uid);
 
-			compR = childEntity.getComponent<ComponentRender>();
-			std::cout << "Child Render:" << compR->id << " " << compR->c << std::endl;
-		}
+				std::cout << "childEntity generation:" << childEntity.getGeneration() << std::endl;
 
+				std::cout << "childEntity id:" << childEntity.getId() << std::endl;
+				std::cout << "childEntity numChild:" << childEntity.getNumChildren() << std::endl;
+				std::cout << "childEntity numDec:" << childEntity.getNumDecendants() << std::endl;
+				std::cout << "childEntity parentuid:" << childEntity.getParentId() << std::endl;
+
+				compR = childEntity.getComponent<ComponentRender>();
+				std::cout << "Child Render:" << compR->id << " " << compR->c << std::endl;
+
+				std::cout << std::endl;
+
+				// recursive
+				doChildrens(G_UICOMPSET.getEntity(uid).getChildren());
+			}
+		};
+
+		doChildrens(entity.getChildren());
 
 		//
 		////////////
