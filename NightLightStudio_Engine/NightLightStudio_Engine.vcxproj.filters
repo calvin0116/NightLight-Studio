@@ -165,6 +165,9 @@
     <ClInclude Include="Source\Component\ComponentCollider.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\LocalVector.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Window\WndSystem.h">
       <Filter>Source Files\Window</Filter>
     </ClInclude>
@@ -198,19 +201,11 @@
     <ClInclude Include="Source\Graphics\TextureLoader.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\LocalVector.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Graphics\Model.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\SceneManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\Camera.h">
-      <Filter>Source Files\Graphics</Filter>
-    <ClInclude Include="Source\Transform\SystemTransform.h">
-      <Filter>Source Files\Transform</Filter>
+      <Filter>Source Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -329,10 +324,7 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\SceneManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Transform\SystemTransform.cpp">
-      <Filter>Source Files\Transform</Filter>
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

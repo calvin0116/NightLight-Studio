@@ -37,7 +37,7 @@ private:
 public:
 	ENGINE_API Config()
 		:config_d{}
-		, parser{ "config.json", json_path }
+		, parser{ "config", json_path }
 	{
 	};
 
