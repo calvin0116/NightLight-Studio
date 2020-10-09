@@ -18,6 +18,7 @@ struct CapsuleCollider;
 
 namespace NlMath
 {
+
 	Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint);
 
 	bool PointInAABB(const AABBCollider& tBox, const NlMath::Vector3D& vecPoint);

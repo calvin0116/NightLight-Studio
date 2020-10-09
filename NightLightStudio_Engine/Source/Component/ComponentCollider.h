@@ -20,6 +20,11 @@ struct ComponentCollider;
 struct SphereCollider;
 struct AABBCollider;
 
+enum Col_Type
+{
+	PLANE,
+	SPHERE
+};
 
 typedef std::vector<ComponentCollider> MyVector;
 
@@ -32,6 +37,7 @@ struct ComponentCollider : public IComponent
 
 	// For layers
 	int ColliderTag = 1;
+	
 
 	ComponentCollider();
 	void CollisionTimeReset();

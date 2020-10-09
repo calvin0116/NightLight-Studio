@@ -49,9 +49,12 @@ namespace NS_PHYSICS
 			if (compT == nullptr) // nullptr -> uninitialised or deleted
 				continue;
 
-			
-			//compT->_position += compR->velocity; // I am commenting this away because the build failed // check the types
+			//Rejection
 
+
+			//compT->_position += compR->velocity; // I am commenting this away because the build failed // check the types
+			//Check all collision
+			//Loop 
 			
 		}
 		return true;

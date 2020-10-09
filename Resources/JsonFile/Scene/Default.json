@@ -1,3 +1,9 @@
 {
-	"Default" : 1
+	"Objects" :{
+		"Camera" :{
+			"TransformComponent":{
+				
+			}
+		}
+	}
 }
