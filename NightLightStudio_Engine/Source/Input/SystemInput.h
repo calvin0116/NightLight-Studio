@@ -7,9 +7,6 @@
 #include "../../framework.h"
 #include "../Core/MySystem.h"
 
-
-#endif
-
 class SystemInput : public MySystem, public Singleton<SystemInput>
 {
 private:
@@ -46,3 +43,5 @@ public:
 //GLOBAL pointer to an instance of graphic system
 //== Good to have for every system so that you dont need to always get instance
 static SystemInput* SYS_INPUT = SystemInput::GetInstance();
+
+#endif
