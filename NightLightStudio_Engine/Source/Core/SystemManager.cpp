@@ -32,6 +32,10 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	Systems[S_PRIORITY::SP_TRANSFORM] = SYS_TRANSFORM;
 	Systems[S_PRIORITY::SP_PHYSICS] = NS_PHYSICS::SYS_PHYSICS;
 	Systems[S_PRIORITY::SP_COMPONENT] = SYS_COMPONENT;
+	
+#ifdef _EDITOR
+	Systems[S_PRIORITY::SP_EDITOR] = SYS_EDITOR;
+#endif
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP WINDOW(CLIENT) INSTANCE
