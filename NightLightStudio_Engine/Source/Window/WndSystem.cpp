@@ -19,6 +19,12 @@ Institute of Technology is prohibited.
 #include "WndSystem.h"
 #include "../IO/Json/Config.h"
 
+
+#ifdef _EDITOR
+#include "../Editor/imgui/imgui_impl_win32.h"
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#endif
+
 namespace NS_WINDOW
 {
 
@@ -359,6 +365,10 @@ namespace NS_WINDOW
 	// Note: Only messages we want to specifically handle should be here, else windows will handle them as per default
 	LRESULT WndSystem::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
+#ifdef _EDITOR
+		if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+			return true;
+#endif
 		switch (msg)
 		{
 		/*case WM_ACTIVATEAPP: // Used to handle pausing/playing upon alt-tab
