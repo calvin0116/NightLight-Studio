@@ -91,6 +91,7 @@ namespace NS_GRAPHICS
         LightSystem* lightManager;
         DebugManager* debugManager;
         CameraSystem* cameraManager;
+        //Renderer* renderer;
 
         // Should NOT be calculated every frame
         glm::mat4 projectionMatrix;
