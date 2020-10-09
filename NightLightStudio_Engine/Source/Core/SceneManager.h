@@ -41,10 +41,12 @@ public:
 	//Save scenes config
 	void Save();
 	
-	void Init();		//Init current scene
-	bool LateUpdate();	//For checking if there is a need for change of scene
-	void Exit();		//Clear current scene
-	void Free();		//Destroy current system
+	bool Update();
+
+	void InitScene();		//Init current scene
+	bool UpdateScene();		//For checking if there is a need for change of scene
+	void ExitScene();		//Clear current scene
+	void FreeScene();		//Destroy current system
 
 	//Load specific scene
 	void LoadScene(std::string scene_name);

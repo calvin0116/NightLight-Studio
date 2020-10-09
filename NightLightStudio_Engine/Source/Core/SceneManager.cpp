@@ -53,14 +53,29 @@ void SceneManager::Save()
 	scene_parser.Save();
 }
 
-void SceneManager::Init()
+bool SceneManager::Update()
+{
+	//LoadScene();
+	
+	//InitScene();
+
+	UpdateScene();
+
+	//UnloadScene();
+
+	//ExitScene();
+
+	return false;
+}
+
+void SceneManager::InitScene()
 {
 	//Load up initial scene
 	Parser* scene = scene_list[current_scene];
 	scene->Load();
 }
 
-bool SceneManager::LateUpdate()
+bool SceneManager::UpdateScene()
 {
 	if (to_change_scene)
 		return false;
@@ -68,13 +83,13 @@ bool SceneManager::LateUpdate()
 	return true;
 }
 
-void SceneManager::Exit()
+void SceneManager::ExitScene()
 {
 	scene_list[current_scene]->CleanDoc();
 	current_scene = next_scene;
 }
 
-void SceneManager::Free()
+void SceneManager::FreeScene()
 {
 	DestroyInstance();
 }

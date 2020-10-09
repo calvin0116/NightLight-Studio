@@ -18,7 +18,7 @@
 
 // Do not touch
 //**! Update comments please thanks
-void MySystemManager::StartUp(HINSTANCE& hInstance)
+void MySystemManager::InitSystem(HINSTANCE& hInstance)
 {
   // === Insert your system here to get them running === //
   // === Please follow how PhysicManager is created  === // 

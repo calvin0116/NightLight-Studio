@@ -1,6 +1,7 @@
 #pragma once
+//#include "../Core/System.h"
 
-class SystemLogic
+class SystemLogic //: public System
 {
 public:
 	void OnFirstStart();

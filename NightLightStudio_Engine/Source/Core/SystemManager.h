@@ -27,17 +27,17 @@ private:
 public:
 	//List of function calling for all system
 	//== Memory allocation phase
-	ENGINE_API void StartUp(HINSTANCE&);
+	ENGINE_API void InitSystem(HINSTANCE&);
 
 	//== Asserts importing / additional memory allocation phase
-	ENGINE_API void EarlyLoad() { for (auto my_sys : Systems) my_sys.second->EarlyLoad(); };
-	ENGINE_API void Load() { for (auto my_sys : Systems) my_sys.second->Load(); };
-	ENGINE_API void LateLoad() { for (auto my_sys : Systems) my_sys.second->LateLoad(); };
+	//ENGINE_API void EarlyLoad() { for (auto my_sys : Systems) my_sys.second->EarlyLoad(); };
+	ENGINE_API void LoadGame() { for (auto my_sys : Systems) my_sys.second->Load(); };
+	//ENGINE_API void LateLoad() { for (auto my_sys : Systems) my_sys.second->LateLoad(); };
 
 	//== Game / Usage of assert phase
-	ENGINE_API void EarlyInit() { for (auto my_sys : Systems) my_sys.second->EarlyInit(); };
-	ENGINE_API void Init() { for (auto my_sys : Systems) my_sys.second->Init(); };
-	ENGINE_API void LateInit() { for (auto my_sys : Systems) my_sys.second->LateInit(); }
+	//ENGINE_API void EarlyInit() { for (auto my_sys : Systems) my_sys.second->EarlyInit(); };
+	ENGINE_API void OnGameStart() { for (auto my_sys : Systems) my_sys.second->Init(); };
+	//ENGINE_API void LateInit() { for (auto my_sys : Systems) my_sys.second->LateInit(); }
 
 	//== Game / System running loop
 	ENGINE_API bool FixedUpdate() {
