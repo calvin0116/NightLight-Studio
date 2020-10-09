@@ -192,6 +192,7 @@
     <ClInclude Include="Source\Core\ISystem.h" />
     <ClInclude Include="Source\Core\Systems.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
+    <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
@@ -220,6 +221,7 @@
     <ClInclude Include="Source\Messaging\SystemReceiver.h" />
     <ClInclude Include="Source\Physics\CollisionMathLib.h" />
     <ClInclude Include="Source\Physics\SystemPhysics.h" />
+    <ClInclude Include="Source\Transform\SystemTransform.h" />
     <ClInclude Include="Source\Window\WndSystem.h" />
     <ClInclude Include="Source\Window\WndUtils.h" />
   </ItemGroup>
@@ -267,6 +269,7 @@
     <ClCompile Include="Source\Messaging\SystemReceiver.cpp" />
     <ClCompile Include="Source\Physics\CollisionMathLib.cpp" />
     <ClCompile Include="Source\Physics\SystemPhysics.cpp" />
+    <ClCompile Include="Source\Transform\SystemTransform.cpp" />
     <ClCompile Include="Source\Window\WndSystem.cpp" />
   </ItemGroup>
   <ItemGroup>

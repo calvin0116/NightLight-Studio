@@ -3,7 +3,7 @@
 
 
 ComponentCollider::ComponentCollider()
-	:tranformObject{ nullptr }, rigidBody{ nullptr }, collisionTime{ FLT_MAX }
+	:collisionTime{ FLT_MAX }
 {
 
 }

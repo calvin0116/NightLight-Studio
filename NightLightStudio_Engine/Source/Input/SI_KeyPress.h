@@ -195,7 +195,7 @@ namespace SystemInput_ns
 		std::map<unsigned int, int> _usedKeyCodes;
 
 		//ONLY TO PREVENT CHECKING WHEN OUT OF WINDOW, MAY BE REMOVED/REPLACED
-		const HWND _window = GetForegroundWindow();
+		HWND _window = GetForegroundWindow();
 
 		ENGINE_API void IncrementKeyUsed(unsigned int key);
 		ENGINE_API void DecrementKeyUsed(unsigned int key);
@@ -286,7 +286,9 @@ namespace SystemInput_ns
 
 		// Restores Event Keys so that they will be checked - In case you use NO_KEYS for some reason
 		// Completely untested, but it should work
-		ENGINE_API void Restore_EventKeys();
+		ENGINE_API void RestoreEventKeys();
+
+		ENGINE_API void SetWindow(HWND win);
 	};
 }
 

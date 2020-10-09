@@ -1,19 +1,38 @@
 #pragma once
+#include "../Core/MySystem.h"
+//#include "../IO/Json/Config.h"
+#include "../../framework.h"
+#include "../Math/Vector.h"
 
-class SystemPhysics
+namespace NS_PHYSICS
 {
-public:
-	void OnFirstStart();
+	class ENGINE_API PhysicsSystem : public MySystem, public Singleton<PhysicsSystem>
+	{
+		NlMath::Vector3D _maxspeed;
+		float gravity;
+		friend Singleton<PhysicsSystem>;
+		
+	public:
+		
+		
+		PhysicsSystem();
 
-	void Load();
+		void OnFirstStart();
 
-	void Init();
+		void Load();
 
-	void Update(float dt);
+		void Init();
 
-	void Exit();
+		bool Update();
 
-	void Free();
+		void Exit();
 
-	void Unload();
-};
+		void Free();
+
+		void Unload();
+
+
+	};
+
+	static PhysicsSystem* SYS_PHYSICS = PhysicsSystem::GetInstance();
+}
