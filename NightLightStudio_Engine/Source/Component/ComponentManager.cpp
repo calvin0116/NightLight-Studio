@@ -1034,7 +1034,9 @@ void ComponentManager::Free()
 		ComponentSet* cs = p.second;
 		cs->cmm.freeAll();
 		free(cs);
+		p.second = nullptr;
 	}
+	ComponentSets.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
