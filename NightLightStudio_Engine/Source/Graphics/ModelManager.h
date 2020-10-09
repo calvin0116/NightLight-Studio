@@ -19,5 +19,13 @@ namespace NS_GRAPHICS
 		}
 
 		std::vector<Model*> models;
+
+		// Adds model to queue
+		void AddModel(const Model*& model);
+
+		// Gets models for rendering
+		std::vector<Model*>& GetModels();
+
+
 	};
 }

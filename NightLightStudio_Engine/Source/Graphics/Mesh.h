@@ -2,11 +2,16 @@
 #include <vector>
 #include "../glm/vec3.hpp"
 #include "../glm/vec2.hpp"
+#include "../Window/WndUtils.h"
 
 namespace NS_GRAPHICS
 {
 	struct Mesh
 	{
+		GLuint VAO;
+		GLuint VBO;
+		GLuint EBO;
+
 		std::vector<glm::vec3> _vertices;
 		std::vector<glm::vec2> _uv;
 		std::vector<glm::vec3> _normals;

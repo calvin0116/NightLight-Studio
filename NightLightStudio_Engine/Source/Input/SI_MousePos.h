@@ -24,7 +24,7 @@ namespace SystemInput_ns
 		POINT _clientRectSize;
 
 		//ONLY TO PREVENT CHECKING WHEN OUT OF WINDOW, MAY BE REMOVED/REPLACED
-		const HWND _window = GetForegroundWindow();
+		HWND _window = GetForegroundWindow();
 
 		// CURRENTLY BUILDING
 		InputVec2 ConvertToVec2(POINT pos);
@@ -58,6 +58,8 @@ namespace SystemInput_ns
 
 		// Gets the cursor's position in the client rect from 0.0 to 1.0 in xy coordinates, (0,0) Begins in Bottom-Left Corner
 		InputVec2 GetRelativeLocation();
+
+		void SetWindow(HWND win);
 	};
 }
 

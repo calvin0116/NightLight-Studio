@@ -127,7 +127,7 @@ namespace SystemInput_ns
 		//std::multimap<unsigned int, CONTROLLER_ANALOG_EVENT> _analogEvents;
 
 		//ONLY TO PREVENT CHECKING WHEN OUT OF WINDOW, MAY BE REMOVED/REPLACED
-		const HWND _window = GetForegroundWindow();
+		HWND _window = GetForegroundWindow();
 
 	public:
 		ENGINE_API SystemController(int _controllerID = -1, bool allowController = false);
@@ -225,6 +225,8 @@ namespace SystemInput_ns
 		ENGINE_API void RemoveAnalogEvent(const std::string& name);
 
 		ENGINE_API bool Update(float dt = 0);
+
+		ENGINE_API void SetWindow(HWND win);
 	};
 }
 

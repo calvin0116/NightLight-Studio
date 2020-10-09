@@ -33,6 +33,7 @@ namespace NS_GRAPHICS
 		if (cameraManager->CheckUpdate())
 		{
 			SetViewMatrix();
+			cameraManager->AckUpdate();
 		}
 
 		Render();
@@ -105,34 +106,106 @@ namespace NS_GRAPHICS
 
 		GLuint VAO = NULL;
 		GLuint VBO = NULL;
+		GLuint EBO = NULL;
 		GLuint ModelMatrixBO = NULL;
 
 		glGenVertexArrays(1, &VAO);
 		glGenBuffers(1, &VBO);
 		glGenBuffers(1, &ModelMatrixBO);
 
-		float vertices[] = {
-			// positions           // texture coords
-			 0.5f, -0.5f, 0.0f,    1.0f, 1.0f,   // top right
-			-0.5f, -0.5f, 0.0f,    1.0f, 0.0f,   // bottom right
-			 0.0f,  0.5f, 0.0f,    0.0f, 0.0f,   // bottom left
+		//float vertices[] = {
+		//	// positions           // texture coords
+		//	 0.5f, -0.5f, 0.0f,    1.0f, 1.0f,   // top right
+		//	-0.5f, -0.5f, 0.0f,    1.0f, 0.0f,   // bottom right
+		//	 0.0f,  0.5f, 0.0f,    0.0f, 0.0f,   // bottom left
+		//};
+
+		float cube_vertices[] = {
+			// positions		// texture coords	// color
+			-1.0, -1.0,  1.0,	1.0f, 1.0f,			1.0f, 0.0f, 0.0f,
+			 1.0, -1.0,  1.0,	1.0f, 0.0f,			0.0f, 1.0f, 0.0f,
+			 1.0,  1.0,  1.0,	0.0f, 0.0f,			0.0f, 0.0f, 1.0f,
+			-1.0,  1.0,  1.0,	1.0f, 1.0f,			1.0f, 1.0f, 1.0f,
+			-1.0, -1.0, -1.0,	1.0f, 0.0f,			1.0f, 0.0f, 0.0f,
+			 1.0, -1.0, -1.0,	0.0f, 0.0f,			0.0f, 1.0f, 0.0f,
+			 1.0,  1.0, -1.0,	1.0f, 1.0f,			0.0f, 0.0f, 1.0f,
+			-1.0,  1.0, -1.0,	1.0f, 0.0f,			1.0f, 1.0f, 1.0f
+		};
+
+		unsigned short cube_elements[] = {
+			// front
+			0, 1, 2,
+			2, 3, 0,
+			// right
+			1, 5, 6,
+			6, 2, 1,
+			// back
+			7, 6, 5,
+			5, 4, 7,
+			// left
+			4, 0, 3,
+			3, 7, 4,
+			// bottom
+			4, 5, 1,
+			1, 0, 4,
+			// top
+			3, 2, 6,
+			6, 7, 3
 		};
 
 		// Provide rotation in radians
-		glm::mat4 testmodelMatrix = glm::rotate(glm::mat4(1.f), glm::radians(15.f), glm::vec3(0.0f,0.0f,1.f));
+		glm::mat4 testmodelMatrix = glm::rotate(glm::mat4(1.f), glm::radians(15.f), glm::vec3(0.0f,1.0f,0.f));
+
+		//glBindVertexArray(VAO);
+
+		//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		//// pos attribute
+		//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		//glEnableVertexAttribArray(0);
+
+		//// uv attribute
+		//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		//glEnableVertexAttribArray(1);
+
+		//glBindBuffer(GL_ARRAY_BUFFER, ModelMatrixBO);
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), &testmodelMatrix, GL_DYNAMIC_DRAW);
+
+		//glEnableVertexAttribArray(2);
+		//glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)0);
+		//glEnableVertexAttribArray(3);
+		//glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)(sizeof(glm::vec4)));
+		//glEnableVertexAttribArray(4);
+		//glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)(2 * sizeof(glm::vec4)));
+		//glEnableVertexAttribArray(5);
+		//glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)(3 * sizeof(glm::vec4)));
+
+		//glVertexAttribDivisor(2, 1);
+		//glVertexAttribDivisor(3, 1);
+		//glVertexAttribDivisor(4, 1);
+		//glVertexAttribDivisor(5, 1);
 
 		glBindVertexArray(VAO);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
 
 		// pos attribute
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 
 		// uv attribute
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(1);
+
+		// color attribute
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+		glEnableVertexAttribArray(2);
+
+		glGenBuffers(1, &EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_elements), cube_elements, GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ARRAY_BUFFER, ModelMatrixBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), &testmodelMatrix, GL_DYNAMIC_DRAW);
@@ -151,7 +224,7 @@ namespace NS_GRAPHICS
 		glVertexAttribDivisor(4, 1);
 		glVertexAttribDivisor(5, 1);
 
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 36 * sizeof(unsigned short), GL_UNSIGNED_SHORT, 0);
 	}
 
 	void GraphicsSystem::ToggleDebugDraw(const bool& set)

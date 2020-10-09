@@ -89,4 +89,8 @@ namespace SystemInput_ns
 	{
 		return { (float)_mousePos.x / (float)_clientRectSize.x, 1.0f - (float)_mousePos.y / (float)_clientRectSize.y };
 	}
+	void SystemMousePosition::SetWindow(HWND win)
+	{
+		_window = win;
+	}
 }

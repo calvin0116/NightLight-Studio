@@ -245,4 +245,8 @@ namespace SystemInput_ns
 
 		return false;
 	}
+	void SystemController::SetWindow(HWND win)
+	{
+		_window = win;
+	}
 }

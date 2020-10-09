@@ -33,7 +33,6 @@ private:
 	Document doc;
 	Document::AllocatorType* alloc;
 
-
 	std::string name;
 	std::string path;
 	std::string filepath;
@@ -47,34 +46,43 @@ public:
 	ENGINE_API Parser(std::string name_, std::string path_);
 
     //Basic function to load/save data into the file
-	ENGINE_API void Load();
-	ENGINE_API void Save();
+	ENGINE_API void Load();		//Load from file
+	ENGINE_API void Save();		//Save to file
 
 	//To look at the data in raw form
 	ENGINE_API void PrintDataList();
+	
+	//=================	Getter / Setter ============================// 
 	//Just to get back file name if needed
 	ENGINE_API std::string GetName();
+	ENGINE_API std::string GetPath();
+	ENGINE_API std::string GetFilePath();
+	ENGINE_API Document& GetDoc();
 
+
+	//===========Functionality for data manipulation=================//
 	//Add data into the initial json list
     template<typename d_type>
 	ENGINE_API void AddData(std::string name, d_type data);
-
 	//For known name change
 	template<typename d_type>
 	ENGINE_API void ChangeData(std::string name, d_type data);
-	
 	//For object access change
 	template<typename d_type>
 	ENGINE_API void ChangeData(Value* val, std::string name, d_type data);
 	//Error checking to see if member is in json
 	ENGINE_API bool CheckForMember(std::string mem_name);
 	//Access by name
-
 	ENGINE_API Value& operator[](std::string str)
 	{
 		return doc[str.c_str()];
 	}
 
+	ENGINE_API void CleanDoc()
+	{
+		//doc.Clear();
+		//alloc = nullptr;
+	}
 	//Access by count
 	//WIP
 	/*

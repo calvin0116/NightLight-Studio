@@ -5,7 +5,7 @@
 Parser::Parser(std::string name_, std::string path_)
 {
 	name = name_;
-	path = path_;
+	path = path_ + "/";
 
 	alloc = &doc.GetAllocator();
 }
@@ -13,7 +13,7 @@ Parser::Parser(std::string name_, std::string path_)
 void Parser::Load()
 {
 	//StringBuffer s;
-	filepath = path + name;
+	filepath = path + name + ".json";
 		//assert_path + "config.json";
 
 	//Read in the data from the file
@@ -34,31 +34,9 @@ void Parser::Load()
 	//Interpret json formated string
 	doc.Parse(data.c_str());
 	//Loop through the objects
-	PrintDataList();
+	//PrintDataList();
 
     in.close();
-    /*
-    filepath = path + "is_prefab.json";
-    in.open(filepath, std::ios::binary);
-
-    if (!in)
-    {
-        cout << "Error: Failed to open file in: " + filepath << endl;
-    }
-
-    std::noskipws(in);
-    // Read in content
-    std::istreambuf_iterator<char> head2(in);
-    std::istreambuf_iterator<char> tail2;
-    std::string data2(head2, tail2);
-
-    std::cout << data2 << std::endl;
-    //Interpret json formated string
-    doc.Parse(data2.c_str());
-    //Loop through the objects
-    PrintDataList();
-
-    in.close();*/
 }
 
 void Parser::PrintDataList() 
@@ -75,6 +53,21 @@ void Parser::PrintDataList()
 std::string Parser::GetName()
 {
 	return name;
+}
+
+std::string Parser::GetPath()
+{
+    return path;
+}
+
+std::string Parser::GetFilePath()
+{
+    return filepath;
+}
+
+Document& Parser::GetDoc()
+{
+    return doc;
 }
 
 bool Parser::CheckForMember(std::string mem_name)
