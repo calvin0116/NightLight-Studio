@@ -32,6 +32,10 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	Systems[S_PRIORITY::SP_TRANSFORM] = SYS_TRANSFORM;
 	Systems[S_PRIORITY::SP_PHYSICS] = NS_PHYSICS::SYS_PHYSICS;
 	Systems[S_PRIORITY::SP_COMPONENT] = SYS_COMPONENT;
+	
+#ifdef _EDITOR
+	Systems[S_PRIORITY::SP_EDITOR] = SYS_EDITOR;
+#endif
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// SET UP WINDOW(CLIENT) INSTANCE
@@ -180,45 +184,45 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 			Entity childEntity = entity.makeChild();
 			ComponentManager::ChildContainerT* childrens = entity.getChildren();
 
-			std::cout << std::endl;
+std::cout << std::endl;
 
-			int numChild_child = childEntity.getNumChildren();
-			int numDec_child = childEntity.getNumDecendants();
-			int parentuid_child = childEntity.getParentId();
+int numChild_child = childEntity.getNumChildren();
+int numDec_child = childEntity.getNumDecendants();
+int parentuid_child = childEntity.getParentId();
 
-			std::cout << "numChild_child:" << childEntity.getId() << std::endl;
-			std::cout << "numChild_child:" << numChild_child << std::endl;
-			std::cout << "numDec_child:" << numDec_child << std::endl;
-			std::cout << "parentuid_child:" << parentuid_child << std::endl;
+std::cout << "numChild_child:" << childEntity.getId() << std::endl;
+std::cout << "numChild_child:" << numChild_child << std::endl;
+std::cout << "numDec_child:" << numDec_child << std::endl;
+std::cout << "parentuid_child:" << parentuid_child << std::endl;
 
-			newCompComponentTest0.id = 54321;
-			G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity.getId(), &newCompComponentTest0);
+newCompComponentTest0.id = 54321;
+G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity.getId(), &newCompComponentTest0);
 
-			std::cout << std::endl;
-			std::cout << "// hierarchical entity test - LOAD  END" << std::endl;
-			std::cout << "////////////////////////////////////" << std::endl;
-			std::cout << std::endl;
+std::cout << std::endl;
+std::cout << "// hierarchical entity test - LOAD  END" << std::endl;
+std::cout << "////////////////////////////////////" << std::endl;
+std::cout << std::endl;
 		}
 		{
-			// make 2 more childs from the entity
-			Entity entity = G_UICOMPSET->getEntity(newObjId);
+		// make 2 more childs from the entity
+		Entity entity = G_UICOMPSET->getEntity(newObjId);
 
-			// child1
-			Entity childEntity1 = entity.makeChild();
-			newCompComponentTest0.id = 5432;
-			G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity1.getId(), &newCompComponentTest0);
-
-
-			// make child of child - grandchild
-			Entity grandChildEntity0 = childEntity1.makeChild();
-			newCompComponentTest0.id = 777;
-			G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity0.getId(), &newCompComponentTest0);
+		// child1
+		Entity childEntity1 = entity.makeChild();
+		newCompComponentTest0.id = 5432;
+		G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity1.getId(), &newCompComponentTest0);
 
 
-			// child2
-			Entity childEntity2 = entity.makeChild();
-			newCompComponentTest0.id = 543;
-			G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity2.getId(), &newCompComponentTest0);
+		// make child of child - grandchild
+		Entity grandChildEntity0 = childEntity1.makeChild();
+		newCompComponentTest0.id = 777;
+		G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity0.getId(), &newCompComponentTest0);
+
+
+		// child2
+		Entity childEntity2 = entity.makeChild();
+		newCompComponentTest0.id = 543;
+		G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity2.getId(), &newCompComponentTest0);
 		}
 		{
 			// adding more test objects
@@ -279,10 +283,78 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// GET COMPONENT SAMPLE
+	//{
+	//	std::cout << std::endl;
+	//	std::cout << "////////////////////////////////////" << std::endl;
+	//	std::cout << "// Component Sample" << std::endl;
+	//	std::cout << std::endl;
+
+
+
+	//	std::cout << std::endl;
+	//	std::cout << "// Component Sample END" << std::endl;
+	//	std::cout << "////////////////////////////////////" << std::endl;
+	//	std::cout << std::endl;
+	//}
 	{
 		std::cout << std::endl;
 		std::cout << "////////////////////////////////////" << std::endl;
 		std::cout << "// Test Components:" << std::endl;
+		std::cout << std::endl;
+
+		std::cout << std::endl;
+		std::cout << "// Test Iterator:" << std::endl;
+		std::cout << std::endl;
+
+		//
+
+		// G_UICOMPSET
+        // ComponentIteratorState::ITR_BOTH   // Iterate both root and child entities // this will iterate root first then child // child is not sorted by generation, not yet anyway
+        // ComponentIteratorState::ITR_ROOT   // Iterate both root only
+        // ComponentIteratorState::ITR_CHILD  // Iterate both child only
+
+		auto testItr = [&](ComponentIteratorState st)
+		{
+			auto itrT = G_UICOMPSET->begin<ComponentTest0>(st);
+			auto itrTEnd = G_UICOMPSET->end<ComponentTest0>(st);
+			while (itrT != itrTEnd)
+			{
+				// get the obj id
+				std::cout << "Object:" << G_UICOMPSET->getObjId(itrT) << std::endl;
+
+				// get the transform component from the iterator
+				ComponentTest0* compR = G_UICOMPSET->getComponent<ComponentTest0>(itrT);
+				std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
+
+				// get another component
+				ComponentTransform* compT = G_UICOMPSET->getComponent<ComponentTransform>(itrT);
+
+				if (compT != nullptr) // nullptr -> uninitialised or deleted
+					std::cout << "Transform:" << compT->_position.x << std::endl;
+
+				// get entity
+				Entity entity = G_UICOMPSET->getEntity(itrT);
+
+				std::cout << "ID: " << entity.getId() << std::endl;
+				std::cout << "Parent ID: " << entity.getParentId() << std::endl;
+				std::cout << "Generation: " << entity.getGeneration() << std::endl;
+
+				// can get component from entity too
+				ComponentTransform* compT1 = entity.getComponent<ComponentTransform>();
+				if (compT != compT1) throw;
+
+				std::cout << std::endl;
+
+				++itrT;
+			}
+		};
+		testItr(ComponentIteratorState::ITR_BOTH);
+		//testItr(ComponentIteratorState::ITR_ROOT);
+		//testItr(ComponentIteratorState::ITR_CHILD);
+
+
+		std::cout << std::endl;
+		std::cout << "// Test Iterator END" << std::endl;
 		std::cout << std::endl;
 
 
@@ -431,6 +503,9 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		std::cout << std::endl;
 		std::cout << "// Test Remove Components END" << std::endl;
 		std::cout << std::endl;
+
+
+
 
 		std::cout << "// Test Components END" << std::endl;
 		std::cout << "////////////////////////////////////" << std::endl;

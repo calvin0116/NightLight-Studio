@@ -31,6 +31,10 @@ namespace NS_GRAPHICS
 		// Will be changed to vector of cameras in the future
 		Camera _camera;
 
+		// Check if rotation has been changed
+		bool updatedRot;
+
+		// Check if view matrix has updated at all
 		bool updated;
 
 	public:
@@ -46,6 +50,8 @@ namespace NS_GRAPHICS
 		void Update();
 
 		bool CheckUpdate();
+
+		void AckUpdate();
 
 		glm::mat4 GetViewMatrix();
 	};

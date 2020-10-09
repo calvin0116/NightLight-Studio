@@ -33,9 +33,9 @@ namespace NS_GRAPHICS
 			cameraFront(0.f, 0.f, -1.f),
 			cameraRight{ glm::normalize(glm::cross(cameraFront, globalUp)) },
 			cameraUp{ glm::normalize(glm::cross(cameraRight, cameraFront)) },
-			cameraSpeed{ 0.05f },
-			cameraYaw{ 36.f / 2.f }, // NUM_STEPS_PI / 2
-			cameraPitch{ 1.0f }
+			cameraSpeed{ 0.005f },
+			cameraYaw{ 0.f },
+			cameraPitch{ 0.f }
 		{
 		}
 
@@ -100,10 +100,11 @@ namespace NS_GRAPHICS
 		void Update()
 		{
 			// Calculate the new Front vector
-			cameraFront.x = cos(cameraYaw) * cos(cameraPitch);
-			cameraFront.y = sin(cameraPitch);
-			cameraFront.z = sin(cameraYaw) * cos(cameraPitch);
-			glm::normalize(cameraFront);
+			glm::vec3 direction;
+			direction.x = cos(cameraYaw) * cos(cameraPitch);
+			direction.y = sin(cameraPitch);
+			direction.z = sin(cameraYaw) * cos(cameraPitch);
+			cameraFront = glm::normalize(direction);
 
 			// Recalculate Right and Up vector based on updated front vector
 			cameraRight = glm::normalize(glm::cross(cameraFront, globalUp));

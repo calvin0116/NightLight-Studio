@@ -34,3 +34,5 @@ const std::string json_path = "../Resources/JsonFile/";
 // https://docs.microsoft.com/en-us/visualstudio/ide/how-to-create-and-remove-project-dependencies?view=vs-2019
 
 #define ENGINE_API   __declspec( dllexport )
+
+//#define _EDITOR

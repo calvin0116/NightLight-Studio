@@ -544,26 +544,76 @@ char* ComponentManager::ComponentSetManager::getObjectComponent(ComponentManager
 //////////////////////////
 
 
-ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetManager::begin(ContainerID comT)
+ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetManager::begin(ContainerID comT, ContainerID comTC)
 {
 	// comp itr
 	ComponentSetManager::Iterator newItr;
+
+	if (comTC == -1)
+	{
+		newItr.itrDoState = Iterator::IteratorState::ITR_ROOT;
+		newItr.itrCurrState = Iterator::IteratorState::ITR_ROOT;
+	}
+	else
+	{
+		newItr.memItrChild = compSet->cmm.begin(comTC);
+	}
+	if (comT == -1)
+	{
+		newItr.itrDoState = Iterator::IteratorState::ITR_CHILD;
+		newItr.itrCurrState = Iterator::IteratorState::ITR_CHILD;
+	}
+	else
+	{
+		newItr.memItr = compSet->cmm.begin(comT);
+	}
+	if (comTC != -1 && comT != -1)
+	{
+		newItr.itrDoState = Iterator::IteratorState::ITR_BOTH;
+		newItr.itrCurrState = Iterator::IteratorState::ITR_ROOT;
+		newItr.endRtObjIndex = compSet->cmm.end(comT).getCurrentObjIndex();
+	}
+
 	newItr.compSetMgr = this;
 	newItr.containerId = comT;
-	newItr.memItr = compSet->cmm.begin(comT);
-
-
+	newItr.containerIdChild = comTC;
+	
 	return newItr;
 }
 
-ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetManager::end(ContainerID comT)
+ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetManager::end(ContainerID comT, ContainerID comTC)
 {
 	// comp itr
 	ComponentSetManager::Iterator newItr;
+
+	if (comTC == -1)
+	{
+		newItr.itrDoState = Iterator::IteratorState::ITR_ROOT;
+		newItr.itrCurrState = Iterator::IteratorState::ITR_ROOT;
+	}
+	else
+	{
+		newItr.memItrChild = compSet->cmm.end(comTC);
+	}
+	if (comT == -1)
+	{
+		newItr.itrDoState = Iterator::IteratorState::ITR_CHILD;
+		newItr.itrCurrState = Iterator::IteratorState::ITR_CHILD;
+	}
+	else
+	{
+		newItr.memItr = compSet->cmm.end(comT);
+	}
+	if (comTC != -1 && comT != -1)
+	{
+		newItr.itrDoState = Iterator::IteratorState::ITR_BOTH;
+		newItr.itrCurrState = Iterator::IteratorState::ITR_CHILD;
+		newItr.endRtObjIndex = compSet->cmm.end(comT).getCurrentObjIndex();
+	}
+
 	newItr.compSetMgr = this;
 	newItr.containerId = comT;
-	newItr.memItr = compSet->cmm.end(comT);
-
+	newItr.containerIdChild = comTC;
 
 	return newItr;
 }
@@ -579,11 +629,15 @@ void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::Cont
 
 int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 {
+	int containerId = itr.itrCurrState == Iterator::IteratorState::ITR_ROOT ? itr.containerId : itr.containerIdChild;
+	int objContainerId = itr.itrCurrState == Iterator::IteratorState::ITR_ROOT ? compSet->objContainerId : compSet->objContainerIdChilds;
+
 	int objId = -1;
 
+
 	//compSet->cmm.getElementAt(compSet->objContainerId, 0);
-	auto itrOb = compSet->cmm.begin(compSet->objContainerId);
-	auto itrObEnd = compSet->cmm.end(compSet->objContainerId);
+	auto itrOb = compSet->cmm.begin(objContainerId);
+	auto itrObEnd = compSet->cmm.end(objContainerId);
 	while (itrOb != itrObEnd)
 	{
 		char* obj = (*itrOb);
@@ -597,7 +651,7 @@ int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 		int n = 0;
 		for (int currentId : compSet->componentContainerIDs)
 		{
-			if (currentId == itr.containerId)
+			if (currentId == containerId)
 				break;
 			++n;
 		}
@@ -607,11 +661,22 @@ int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 
 		//check
 		ComponentSet::ObjectData::ComponentData* comp = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(obj);
-		if (comp->containerIndex == itr.memItr.getCurrentIndex())
-		//if (comp->containerId == itr.containerId) //memItr.getCurrentIndex())
+		if (itr.itrCurrState == Iterator::IteratorState::ITR_ROOT)
 		{
-			objId = obj_o->objId;
-			break;
+			if (comp->containerIndex == itr.memItr.getCurrentIndex())
+			//if (comp->containerId == itr.containerId) //memItr.getCurrentIndex())
+			{
+				objId = obj_o->objId;
+				break;
+			}
+		}
+		else
+		{
+			if (comp->containerIndex == itr.memItrChild.getCurrentIndex())
+			{
+				objId = obj_o->objId;
+				break;
+			}
 		}
 
 		++itrOb;
@@ -619,7 +684,8 @@ int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 
 	if (objId == -1) throw;
 
-	return objId + compSet->idIndexModifier;
+	//return objId + compSet->idIndexModifier;
+	return itr.itrCurrState == Iterator::IteratorState::ITR_ROOT ? objId + compSet->idIndexModifier : objId + compSet->idIndexModifier + IDRANGE_RT;
 }
 
 //////////////////////////
@@ -765,35 +831,171 @@ ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentS
 
 bool ComponentManager::ComponentSetManager::Iterator::operator==(ComponentManager::ComponentSetManager::Iterator& itr)
 {
+	switch (itrDoState)
+	{
+	case IteratorState::ITR_ROOT:
+		return (memItr == itr.memItr);
+		break;
 
-	return (memItr == itr.memItr); 
+	case IteratorState::ITR_CHILD:
+		return (memItrChild == itr.memItrChild);
+		break;
+
+	case IteratorState::ITR_BOTH:
+		if (itrCurrState == IteratorState::ITR_ROOT)
+		{
+			return false;
+		}
+		else if (itrCurrState == IteratorState::ITR_CHILD)
+		{
+			return (memItrChild == itr.memItrChild);
+		}
+		else
+			throw;
+		break;
+	}
+
+	throw;
 }
 
 bool ComponentManager::ComponentSetManager::Iterator::operator!=(ComponentManager::ComponentSetManager::Iterator& itr)
 {
+	switch (itrDoState)
+	{
+	case IteratorState::ITR_ROOT:
+		return (memItr != itr.memItr);
+		break;
 
-	return (memItr != itr.memItr); 
+	case IteratorState::ITR_CHILD:
+		return (memItrChild != itr.memItrChild);
+		break;
+
+	case IteratorState::ITR_BOTH:
+		if (itrCurrState == IteratorState::ITR_ROOT)
+		{
+			return true;
+		}
+		else if (itrCurrState == IteratorState::ITR_CHILD)
+		{
+			return (memItrChild != itr.memItrChild);
+		}
+		else
+			throw;
+		break;
+	}
+
+	throw;
 }
 
 void* ComponentManager::ComponentSetManager::Iterator::operator*()
 {
-	return reinterpret_cast<void*>(*memItr);
+	switch (itrDoState)
+	{
+	case IteratorState::ITR_ROOT:
+		return reinterpret_cast<void*>(*memItr);
+		break;
+
+	case IteratorState::ITR_CHILD:
+		return reinterpret_cast<void*>(*memItrChild);
+		break;
+
+	case IteratorState::ITR_BOTH:
+		if (itrCurrState == IteratorState::ITR_ROOT)
+		{
+			return reinterpret_cast<void*>(*memItr);
+		}
+		else if (itrCurrState == IteratorState::ITR_CHILD)
+		{
+			return reinterpret_cast<void*>(*memItrChild);
+		}
+		else
+			throw;
+		break;
+	}
+
+	throw;
+
 }
 
 ComponentManager::ComponentSetManager::Iterator& ComponentManager::ComponentSetManager::Iterator::operator++()
 {
-	++memItr;
+	switch (itrDoState)
+	{
+	case IteratorState::ITR_ROOT:
+		++memItr;
+		return *this;
+		break;
 
-	return *this;
+	case IteratorState::ITR_CHILD:
+		++memItrChild;
+		return *this;
+		break;
+
+	case IteratorState::ITR_BOTH:
+		if (itrCurrState == IteratorState::ITR_ROOT)
+		{
+			++memItr;
+			if (endRtObjIndex == memItr.getCurrentObjIndex())
+			{
+				itrCurrState = IteratorState::ITR_CHILD;
+			}
+			return *this;
+		}
+		else if (itrCurrState == IteratorState::ITR_CHILD)
+		{
+			++memItrChild;
+			return *this;
+		}
+		else
+			throw;
+		break;
+	}
+
+	throw;
 }
 
 ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetManager::Iterator::operator++(int)
 {
-	ComponentManager::ComponentSetManager::Iterator newItr = *this; // post
+	switch (itrDoState)
+	{
+	case IteratorState::ITR_ROOT:
+	{
+		ComponentManager::ComponentSetManager::Iterator newItr = *this; // post
+		++memItr;
+		return newItr;
+		break;
+	}
 
-	++memItr;
+	case IteratorState::ITR_CHILD:
+	{
+		ComponentManager::ComponentSetManager::Iterator newItr = *this; // post
+		++memItrChild;
+		return newItr;
+		break;
+	}
 
-	return newItr;
+	case IteratorState::ITR_BOTH:
+		ComponentManager::ComponentSetManager::Iterator newItr = *this; // post
+		if (itrCurrState == IteratorState::ITR_ROOT)
+		{
+			++memItr;
+			if (endRtObjIndex == memItr.getCurrentObjIndex())
+			{
+				itrCurrState = IteratorState::ITR_CHILD;
+			}
+			return newItr;
+		}
+		else if (itrCurrState == IteratorState::ITR_CHILD)
+		{
+			++memItrChild;
+			return newItr;
+		}
+		else
+			throw;
+		break;
+	}
+
+	throw;
 }
 
 //// ComponentManager::ComponentSet::Iterator END
@@ -832,7 +1034,9 @@ void ComponentManager::Free()
 		ComponentSet* cs = p.second;
 		cs->cmm.freeAll();
 		free(cs);
+		p.second = nullptr;
 	}
+	ComponentSets.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
