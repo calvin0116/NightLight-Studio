@@ -284,6 +284,56 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		std::cout << "// Test Components:" << std::endl;
 		std::cout << std::endl;
 
+		std::cout << std::endl;
+		std::cout << "// Test Iterator:" << std::endl;
+		std::cout << std::endl;
+
+		//
+
+		// G_UICOMPSET
+        // ComponentIteratorState::ITR_BOTH   // Iterate both root and child entities // this will iterate root first then child // child is not sorted by generation, not yet anyway
+        // ComponentIteratorState::ITR_ROOT   // Iterate both root only
+        // ComponentIteratorState::ITR_CHILD  // Iterate both child only
+
+		auto testItr = [&](ComponentIteratorState st)
+		{
+			auto itrT = G_UICOMPSET->begin<ComponentTest0>(st);
+			auto itrTEnd = G_UICOMPSET->end<ComponentTest0>(st);
+			while (itrT != itrTEnd)
+			{
+				// get the obj id
+				std::cout << "Object:" << G_UICOMPSET->getObjId(itrT) << std::endl;
+
+				// get the transform component from the iterator
+				ComponentTest0* compR = G_UICOMPSET->getComponent<ComponentTest0>(itrT);
+				std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
+
+				// get another component
+				ComponentTransform* compT = G_UICOMPSET->getComponent<ComponentTransform>(itrT);
+
+				if (compT != nullptr) // nullptr -> uninitialised or deleted
+					std::cout << "Transform:" << compT->_position.x << std::endl;
+
+				Entity entity = G_UICOMPSET->getEntity(itrT);
+
+				std::cout << "ID: " << entity.getId() << std::endl;
+				std::cout << "Parent ID: " << entity.getParentId() << std::endl;
+				std::cout << "Generation: " << entity.getGeneration() << std::endl;
+
+				std::cout << std::endl;
+
+				++itrT;
+			}
+		};
+		testItr(ComponentIteratorState::ITR_BOTH);
+		//testItr(ComponentIteratorState::ITR_ROOT);
+		//testItr(ComponentIteratorState::ITR_CHILD);
+
+
+		std::cout << std::endl;
+		std::cout << "// Test Iterator END" << std::endl;
+		std::cout << std::endl;
+
 
 		std::cout << std::endl;
 		std::cout << "// Test Get Components:" << std::endl;
@@ -430,6 +480,9 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		std::cout << std::endl;
 		std::cout << "// Test Remove Components END" << std::endl;
 		std::cout << std::endl;
+
+
+
 
 		std::cout << "// Test Components END" << std::endl;
 		std::cout << "////////////////////////////////////" << std::endl;

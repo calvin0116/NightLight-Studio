@@ -151,6 +151,8 @@ public:
 
 		int getCurrentIndex();
 
+		int getCurrentObjIndex();
+
 	private:
 		// get the current element
 		char* getElement();
