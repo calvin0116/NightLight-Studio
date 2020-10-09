@@ -34,10 +34,12 @@ namespace NS_GRAPHICS
 		// Call to activate all keys
 		//SYS_INPUT->GetSystemKeyPress().ALL_THE_KEYS();
 
+		// Move camera based on axis vectors
+
 		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_A))
 		{
 			//Position -= Right * velocity;
-			_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetRight());
+			_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetRight() * _camera.GetSpeed());
 			updated = true;
 			std::cout << "Camera has moved left" << std::endl;
 		}
@@ -45,9 +47,55 @@ namespace NS_GRAPHICS
 		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_D))
 		{
 			//Position += Right * velocity;
-			_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetRight());
+			_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetRight() * _camera.GetSpeed());
 			updated = true;
 			std::cout << "Camera has moved right" << std::endl;
+		}
+
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_W))
+		{
+			//Position += Front * velocity;
+			_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * _camera.GetSpeed());
+			updated = true;
+			std::cout << "Camera has moved frontwards" << std::endl;
+		}
+
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_S))
+		{
+			//Position -= Front * velocity;
+			_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * _camera.GetSpeed());
+			updated = true;
+			std::cout << "Camera has moved backwards" << std::endl;
+		}
+
+		// Move vector via rotation about a point
+		// Should be based on offset of mouse x and y from prev frame
+		// Should also check if right mouse button is held
+		if (NULL)
+		{
+			//float offset;
+			//offset = _camera.GetSpeed() * mouse_xoffset;
+
+			// Rotation about X axis
+			//_camera.GetYaw += offset;
+
+			// Constrain to prevent screen flip
+			if (_camera.GetYaw() < 0.f)
+				_camera.SetCameraYaw(_camera.GetYaw() + TWO_NUM_STEPS_PI);
+
+			else if (_camera.GetYaw() > TWO_NUM_STEPS_PI)
+				_camera.SetCameraYaw(_camera.GetYaw() - TWO_NUM_STEPS_PI);
+		}
+
+		if (NULL)
+		{
+			//float offset;
+			//offset = _camera.GetSpeed() * mouse_yoffset;
+
+			// Rotation about Y axis
+			//cameraPitch += offset;
+
+			// No need to set constraint here
 		}
 
 		// Only update the camera properties if changes occurred

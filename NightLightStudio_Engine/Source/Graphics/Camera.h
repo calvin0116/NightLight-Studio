@@ -1,6 +1,5 @@
 #pragma once
 
-#include "CameraSystem.h"
 #include "../glm/glm.hpp"
 #include "../glm/gtc/matrix_transform.hpp" // glm::lookAt
 
@@ -21,11 +20,9 @@ namespace NS_GRAPHICS
 		float cameraSpeed;
 
 		// Variables for camera rotation
+		// Given in radians
 		float cameraYaw;	// x-axis rotation
 		float cameraPitch;  // y-axis rotation
-
-		// Dictates how close/far from the target that the camera should be
-		float cameraZoom;
 
 		//////////////////////////////////////////////////////////////
 		///// PUBLIC FUNCTIONS
@@ -37,9 +34,8 @@ namespace NS_GRAPHICS
 			cameraRight{ glm::normalize(glm::cross(cameraFront, globalUp)) },
 			cameraUp{ glm::normalize(glm::cross(cameraRight, cameraFront)) },
 			cameraSpeed{ 0.05f },
-			cameraYaw{ -90.0f },
-			cameraPitch{ 0.0f },
-			cameraZoom{ 45.0f }
+			cameraYaw{ 36.f / 2.f }, // NUM_STEPS_PI / 2
+			cameraPitch{ 1.0f }
 		{
 		}
 
@@ -58,6 +54,26 @@ namespace NS_GRAPHICS
 		const glm::vec3& GetRight()
 		{
 			return cameraRight;
+		}
+
+		const glm::vec3& GetFront()
+		{
+			return cameraFront;
+		}
+
+		const float& GetSpeed()
+		{
+			return cameraSpeed;
+		}
+
+		const float& GetYaw()
+		{
+			return cameraYaw;
+		}
+
+		const float& GetPitch()
+		{
+			return cameraPitch;
 		}
 
 		void SetCameraPosition(const glm::vec3& position)
@@ -80,18 +96,13 @@ namespace NS_GRAPHICS
 			cameraSpeed = speed;
 		}
 
-		void SetCameraZoomSensitivity(const float& zoom)
-		{
-			cameraZoom = zoom;
-		}
-
 		// Update vectors & position for current camera based on updated values
 		void Update()
 		{
 			// Calculate the new Front vector
-			cameraFront.x = cos(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
-			cameraFront.y = sin(glm::radians(cameraPitch));
-			cameraFront.z = sin(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
+			cameraFront.x = cos(cameraYaw) * cos(cameraPitch);
+			cameraFront.y = sin(cameraPitch);
+			cameraFront.z = sin(cameraYaw) * cos(cameraPitch);
 			glm::normalize(cameraFront);
 
 			// Recalculate Right and Up vector based on updated front vector

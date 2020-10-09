@@ -6,6 +6,7 @@ namespace NS_GRAPHICS
 {
 	// Const variables used for handling camera movement
 	/*  The step for rotation */
+	static const float EPSILON = 0.00001f;
 	static const float  PI = 3.14159f;
 	static const int    NUM_STEPS_PI = 36;
 	static const int    TWO_NUM_STEPS_PI = 2 * NUM_STEPS_PI;
