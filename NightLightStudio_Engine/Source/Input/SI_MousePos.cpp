@@ -3,14 +3,14 @@
 namespace SystemInput_ns
 {
 	//********************************************** SYSTEM CURSOR POSITION **********************************************//
-	InputVec2 SystemMousePosition::ConvertToVec2(POINT pos)
+	glm::vec2 SystemMousePosition::ConvertToVec2(POINT pos)
 	{
 		return { (float)pos.x, (float)pos.y };
 	}
 
-	InputVec2 SystemMousePosition::Offset(InputVec2 pos, InputVec2 offset)
+	glm::vec2 SystemMousePosition::Offset(glm::vec2 pos, glm::vec2 offset)
 	{
-		return { pos._x + offset._x, pos._y + offset._y };
+		return { pos.x + offset.x, pos.y + offset.y };
 	}
 
 	SystemMousePosition::SystemMousePosition(bool showCursor) : _mousePos{}, _prevMousePos{}, _showCursor{ showCursor }
@@ -38,19 +38,19 @@ namespace SystemInput_ns
 		}
 		return 0;
 	}
-	POINT SystemMousePosition::operator()()
+	glm::vec2 SystemMousePosition::operator()()
 	{
 		return GetMousePos();
 	}
-	POINT SystemMousePosition::GetMousePos()
+	glm::vec2 SystemMousePosition::GetMousePos()
 	{
 		return { _mousePos.x, _clientRectSize.y - _mousePos.y };
 	}
-	POINT SystemMousePosition::GetOriginalMousePos()
+	glm::vec2 SystemMousePosition::GetOriginalMousePos()
 	{
-		return _mousePos;
+		return { _mousePos.x, _mousePos.y };
 	}
-	POINT SystemMousePosition::GetMouseDragVec()
+	glm::vec2 SystemMousePosition::GetMouseDragVec()
 	{
 		return { _mousePos.x - _prevMousePos.x,  _prevMousePos.y - _mousePos.y };;
 	}
@@ -85,7 +85,7 @@ namespace SystemInput_ns
 	{
 		return _clientRectSize;
 	}
-	InputVec2 SystemMousePosition::GetRelativeLocation()
+	glm::vec2 SystemMousePosition::GetRelativeLocation()
 	{
 		return { (float)_mousePos.x / (float)_clientRectSize.x, 1.0f - (float)_mousePos.y / (float)_clientRectSize.y };
 	}

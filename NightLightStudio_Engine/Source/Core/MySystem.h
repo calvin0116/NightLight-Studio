@@ -19,7 +19,8 @@ enum class S_PRIORITY
 	SP_AUDIO,
 	SP_SCENEMANAGER,
 	SP_TRANSFORM,
-	SP_COMPONENT
+	SP_COMPONENT,
+	SP_EDITOR
 };
 
 class ENGINE_API MySystem : public ISystem
