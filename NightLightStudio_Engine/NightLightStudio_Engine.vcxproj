@@ -175,6 +175,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Source\Audio\SystemAudio.h" />
+    <ClInclude Include="Source\Component\ComponentAudio.h" />
     <ClInclude Include="Source\Component\ComponentCollider.h" />
     <ClInclude Include="Source\Component\ComponentManager.h" />
     <ClInclude Include="Source\Component\ComponentMemoryManager.h" />
@@ -233,6 +234,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Audio\SystemAudio.cpp" />
+    <ClCompile Include="Source\Component\ComponentAudio.cpp" />
     <ClCompile Include="Source\Component\ComponentCollider.cpp" />
     <ClCompile Include="Source\Component\ComponentManager.cpp" />
     <ClCompile Include="Source\Component\ComponentMemoryManager.cpp" />

@@ -174,6 +174,13 @@ enum COMPONENTSETNAMES
 //						Iterator begin()
 //						template<typename T>
 //						Iterator end()
+//                      // ComponentIteratorState::ITR_BOTH   // Iterate both root and child entities
+//                      // ComponentIteratorState::ITR_ROOT   // Iterate both root only
+//                      // ComponentIteratorState::ITR_CHILD  // Iterate both child only
+//						template<typename T>
+//						Iterator begin(ComponentIteratorState)
+//						template<typename T>
+//						Iterator end(ComponentIteratorState)
 // 
 //						// Get Entity and Entity Id
 //						int getObjId(Iterator itr);
@@ -362,17 +369,38 @@ public:
 		class Iterator
 		{
 			friend ComponentSetManager; //
+		public:
+			enum class IteratorState
+			{
+				ITR_GG,
+				ITR_ROOT,
+				ITR_CHILD,
+				ITR_BOTH
+			};
+		private:
 
-			ContainerID containerId; // id of the container iterating thru
 			ComponentSetManager* compSetMgr; // the component set mgr this belongs to
 
-			ComponentMemoryManager::MemConIterator memItr;
+			IteratorState itrDoState;
+			IteratorState itrCurrState;
+
+			ContainerID containerId; // id of the container iterating thru
+			ContainerID containerIdChild;
+
+			ComponentMemoryManager::MemConIterator memItr; // le iterator
+			ComponentMemoryManager::MemConIterator memItrChild;
+
+			int endRtObjIndex;
 
 		public:
 			// ctor
 			Iterator() :
+				compSetMgr(nullptr),
+				itrDoState(IteratorState::ITR_GG),
+				itrCurrState(IteratorState::ITR_GG),
 				containerId(-1),
-				compSetMgr(nullptr)
+				containerIdChild(-1),
+				endRtObjIndex(-1)
 			{
 			}
 
@@ -414,17 +442,31 @@ public:
 		T* getComponent(Iterator itr)
 		{
 			const std::type_info& tinf = typeid(T);
-
-			auto find = compSet->hashConIdMap.find(tinf.hash_code());
-			if (find == compSet->hashConIdMap.end())
-				throw; // gg
-
-			if (itr.containerId == (*find).second)
+			int con = -1;
+			if (itr.itrCurrState == Iterator::IteratorState::ITR_ROOT)
 			{
-				return reinterpret_cast<T*>(*itr); // faster no lookup
+				auto find = compSet->hashConIdMap.find(tinf.hash_code());
+				if (find == compSet->hashConIdMap.end())
+					throw; // gg
+				con = (*find).second;
+				if (itr.containerId == (*find).second)
+				{
+					return reinterpret_cast<T*>(*itr); // faster no lookup
+				}
+			}
+			else
+			{
+				auto find = compSet->hashConIdMapChilds.find(tinf.hash_code());
+				if (find == compSet->hashConIdMapChilds.end())
+					throw; // gg
+				con = (*find).second;
+				if (itr.containerIdChild == (*find).second)
+				{
+					return reinterpret_cast<T*>(*itr); // faster no lookup
+				}
 			}
 
-			return reinterpret_cast<T*>(getComponent((*find).second, itr));
+			return reinterpret_cast<T*>(getComponent(con, itr));
 		}
 
 
@@ -501,8 +543,8 @@ public:
 
 	private:
 		// begin and end iterators // using container id // helper
-		Iterator begin(ContainerID comT);
-		Iterator end(ContainerID comT);
+		Iterator begin(ContainerID comT, ContainerID comTC = -1);
+		Iterator end(ContainerID comT, ContainerID comTC = -1);
 	public:
 
 		// begin and end iterators
@@ -528,6 +570,81 @@ public:
 				throw; // gg
 
 			return end((*find).second);
+		}
+
+		// begin and end iterators
+		template<typename T>
+		Iterator begin(Iterator::IteratorState its)
+		{
+			const std::type_info& tinf = typeid(T);
+			switch (its)
+			{
+			case Iterator::IteratorState::ITR_ROOT:
+				{
+					auto find = compSet->hashConIdMap.find(tinf.hash_code());
+					if (find == compSet->hashConIdMap.end())
+						throw; // gg
+					return begin((*find).second);
+					break;
+				}
+			case Iterator::IteratorState::ITR_CHILD:
+				{
+					auto findC = compSet->hashConIdMapChilds.find(tinf.hash_code());
+					if (findC == compSet->hashConIdMapChilds.end())
+						throw; // gg
+					return begin(-1, (*findC).second);
+					break;
+				}
+			case Iterator::IteratorState::ITR_BOTH:
+				{
+					auto find = compSet->hashConIdMap.find(tinf.hash_code());
+					if (find == compSet->hashConIdMap.end())
+						throw; // gg
+					auto findC = compSet->hashConIdMapChilds.find(tinf.hash_code());
+					if (findC == compSet->hashConIdMapChilds.end())
+						throw; // gg
+					return begin((*find).second, (*findC).second);
+					break;
+				}
+			}
+			throw;
+		}
+
+		template<typename T>
+		Iterator end(Iterator::IteratorState its)
+		{
+			const std::type_info& tinf = typeid(T);
+			switch (its)
+			{
+			case Iterator::IteratorState::ITR_ROOT:
+			{
+				auto find = compSet->hashConIdMap.find(tinf.hash_code());
+				if (find == compSet->hashConIdMap.end())
+					throw; // gg
+				return end((*find).second);
+				break;
+			}
+			case Iterator::IteratorState::ITR_CHILD:
+			{
+				auto findC = compSet->hashConIdMapChilds.find(tinf.hash_code());
+				if (findC == compSet->hashConIdMapChilds.end())
+					throw; // gg
+				return end(-1, (*findC).second);
+				break;
+			}
+			case Iterator::IteratorState::ITR_BOTH:
+			{
+				auto find = compSet->hashConIdMap.find(tinf.hash_code());
+				if (find == compSet->hashConIdMap.end())
+					throw; // gg
+				auto findC = compSet->hashConIdMapChilds.find(tinf.hash_code());
+				if (findC == compSet->hashConIdMapChilds.end())
+					throw; // gg
+				return end((*find).second, (*findC).second);
+				break;
+			}
+			}
+			throw;
 		}
 
 		// Get Entity and Entity Id
@@ -707,6 +824,10 @@ public:
 
 typedef ComponentManager::ComponentSetManager::EntityHandle Entity;
 
+typedef ComponentManager::ComponentSetManager::Iterator ComponentIterator;
+
+typedef ComponentManager::ComponentSetManager::Iterator::IteratorState ComponentIteratorState;
+
 static ComponentManager* SYS_COMPONENT = ComponentManager::GetInstance();
 
 //extern ComponentManager G_COMPMGR;
@@ -715,3 +836,5 @@ static ComponentManager::ComponentSetManager* G_MAINCOMPSET = SYS_COMPONENT->get
 
 static ComponentManager::ComponentSetManager* G_UICOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_UI);
 
+// for some reason gfx becomes black screen with this
+//static ComponentManager::ComponentSetManager* G_UICOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);

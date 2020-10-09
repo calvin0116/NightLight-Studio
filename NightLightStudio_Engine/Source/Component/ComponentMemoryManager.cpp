@@ -168,6 +168,11 @@ int ComponentMemoryManager::MemConIterator::getCurrentIndex()
 	return currentIndex;
 }
 
+int ComponentMemoryManager::MemConIterator::getCurrentObjIndex()
+{
+	return currentObjIndex;
+}
+
 char* ComponentMemoryManager::MemConIterator::getElement()
 {
 	return currentElement;
