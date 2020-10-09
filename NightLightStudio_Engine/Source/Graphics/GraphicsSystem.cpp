@@ -33,6 +33,7 @@ namespace NS_GRAPHICS
 		if (cameraManager->CheckUpdate())
 		{
 			SetViewMatrix();
+			cameraManager->AckUpdate();
 		}
 
 		Render();
