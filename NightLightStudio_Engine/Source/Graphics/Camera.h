@@ -1,6 +1,5 @@
 #pragma once
 
-#include "CameraSystem.h"
 #include "../glm/glm.hpp"
 #include "../glm/gtc/matrix_transform.hpp" // glm::lookAt
 
@@ -35,7 +34,7 @@ namespace NS_GRAPHICS
 			cameraRight{ glm::normalize(glm::cross(cameraFront, globalUp)) },
 			cameraUp{ glm::normalize(glm::cross(cameraRight, cameraFront)) },
 			cameraSpeed{ 0.05f },
-			cameraYaw{ NUM_STEPS_PI / 2 },
+			cameraYaw{ 36.f / 2.f }, // NUM_STEPS_PI / 2
 			cameraPitch{ 1.0f }
 		{
 		}
