@@ -165,7 +165,6 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 			std::cout << "// hierarchical entity test - LOAD" << std::endl;
 			std::cout << std::endl;
 
-			// remind self to typedef this !!
 			Entity entity = G_UICOMPSET->getEntity(newObjId);
 
 
@@ -316,6 +315,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		//
 		int toDel0 = -1;
 		int toDel1 = -1;
+		int toDel2 = -1;
 
 		auto print = [&]()
 		{
@@ -375,6 +375,10 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 						{
 							toDel0 = childEntity.getId();
 						}
+						if (compR->id == 5432)
+						{
+							toDel2 = childEntity.getId();
+						}
 
 						// get transform component
 						ComponentTransform* compT = childEntity.getComponent<ComponentTransform>();
@@ -415,6 +419,9 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 		std::cout << std::endl;
 
 		G_UICOMPSET->RemoveComponent<ComponentTransform>(toDel0);
+		//print();
+
+		G_UICOMPSET->FreeEntity(toDel2);
 		//print();
 
 		G_UICOMPSET->FreeEntity(toDel1);

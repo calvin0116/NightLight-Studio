@@ -216,12 +216,17 @@ void ComponentManager::ComponentSetManager::RemoveComponent(ComponentManager::Co
 void ComponentManager::ComponentSetManager::UnBuildObject(int objId)
 {
 	// get the object
+
+	//int deletingObjId = objId;
 	objId -= compSet->idIndexModifier;
 
 	char* obj = nullptr;
 
+	bool isChild = false;
+
 	if (objId >= IDRANGE_RT)
 	{
+		isChild = true;
 		// child
 
 		objId -= IDRANGE_RT;
@@ -284,7 +289,6 @@ void ComponentManager::ComponentSetManager::UnBuildObject(int objId)
 	ComponentSet::ObjectData* objData = reinterpret_cast<ComponentSet::ObjectData*>(obj);
 
 	// uninit the obj
-	objData->objId = -1;
 
 	objData->children.childIDs.clear(); 
 	objData->children.generation = -1;
@@ -294,41 +298,63 @@ void ComponentManager::ComponentSetManager::UnBuildObject(int objId)
 
 
 	// set the parent
-	ComponentSet::ObjectData* objRootParent = nullptr;
-	if (objData->parentObjId != -1)
-	{
-		int parentObjId = objData->parentObjId - compSet->idIndexModifier;
-		if (parentObjId >= IDRANGE_RT)
-		{
-			// child
+	//ComponentSet::ObjectData* objRootParent = nullptr;
+	//if (objData->parentObjId != -1)
+	//{
+	//	int parentObjId = objData->parentObjId - compSet->idIndexModifier;
+	//	if (parentObjId >= IDRANGE_RT)
+	//	{
+	//		// child
 
-			parentObjId -= IDRANGE_RT;
+	//		parentObjId -= IDRANGE_RT;
 
-			objRootParent = reinterpret_cast<ComponentSet::ObjectData*>(
-				compSet->cmm.getElementAt(compSet->objContainerIdChilds, parentObjId)
-			);
-		}
-		else
-		{
-			//root
-			objRootParent = reinterpret_cast<ComponentSet::ObjectData*>(
-				compSet->cmm.getElementAt(compSet->objContainerId, parentObjId)
-				);
-		}
-		if (objRootParent == nullptr) throw;
+	//		objRootParent = reinterpret_cast<ComponentSet::ObjectData*>(
+	//			compSet->cmm.getElementAt(compSet->objContainerIdChilds, parentObjId)
+	//		);
+	//	}
+	//	else
+	//	{
+	//		//root
+	//		objRootParent = reinterpret_cast<ComponentSet::ObjectData*>(
+	//			compSet->cmm.getElementAt(compSet->objContainerId, parentObjId)
+	//			);
+	//	}
+	//	if (objRootParent == nullptr) throw;
 
-		--objRootParent->children.numChild;
+	//	--objRootParent->children.numChild;
 
-		//objRootParent->children.numDecendants; // TODO !!!
+	//	// cant do this here
+	//	//auto itr = objRootParent->children.childIDs.begin();
+	//	//auto itrEnd = objRootParent->children.childIDs.end();
+	//	//while (itr != itrEnd)
+	//	//{
+	//	//	if (*itr == deletingObjId)
+	//	//	{
+	//	//		objRootParent->children.childIDs.erase(itr);
+	//	//		break;
+	//	//	}
+	//	//	++itr;
+	//	//}
 
-	}
+
+	//	//objRootParent->children.numDecendants; // TODO !!!
+
+	//}
 
 	objData->children.numDecendants = -1;
 	objData->parentObjId = -1;
+	objData->objId = -1;
 
 
 	// remove the object
-	compSet->cmm.removeFromContainer(compSet->objContainerId, objId);
+	if (isChild)
+	{
+		compSet->cmm.removeFromContainer(compSet->objContainerIdChilds, objId);
+	}
+	else
+	{
+		compSet->cmm.removeFromContainer(compSet->objContainerId, objId);
+	}
 }
 
 void ComponentManager::ComponentSetManager::FreeEntity(int objId)
@@ -368,8 +394,75 @@ void ComponentManager::ComponentSetManager::FreeEntity(int objId)
 		UnBuildObject(thisid); // delete childs first then del this
 	};
 
-	delObj(objId);
 
+	int deletingObjId = objId;
+	objId -= compSet->idIndexModifier;
+	char* obj = nullptr;
+	if (objId >= IDRANGE_RT)
+	{
+		// child
+
+		objId -= IDRANGE_RT;
+		obj = compSet->cmm.getElementAt(compSet->objContainerIdChilds, objId);
+
+	}
+	else
+	{
+		// root
+
+		obj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
+	}
+	if (obj == nullptr) throw;
+	ComponentSet::ObjectData* objData = reinterpret_cast<ComponentSet::ObjectData*>(obj);
+	int parentObjId = objData->parentObjId;
+	// need to get the parent obj
+
+	//ComponentSet::ObjectData* t = reinterpret_cast<ComponentSet::ObjectData*>(
+	//	compSet->cmm.getElementAt(compSet->objContainerId, parentObjId - compSet->idIndexModifier)
+	//	);
+
+	delObj(deletingObjId);
+
+	// delete child entry in parent !!
+	ComponentSet::ObjectData* objRootParent = nullptr;
+	if (parentObjId != -1)
+	{
+		parentObjId = parentObjId - compSet->idIndexModifier;
+		if (parentObjId >= IDRANGE_RT)
+		{
+			// child
+
+			parentObjId -= IDRANGE_RT;
+
+			objRootParent = reinterpret_cast<ComponentSet::ObjectData*>(
+				compSet->cmm.getElementAt(compSet->objContainerIdChilds, parentObjId)
+				);
+		}
+		else
+		{
+			//root
+			objRootParent = reinterpret_cast<ComponentSet::ObjectData*>(
+				compSet->cmm.getElementAt(compSet->objContainerId, parentObjId)
+				);
+		}
+		if (objRootParent == nullptr) throw;
+
+		auto itr = objRootParent->children.childIDs.begin();
+		auto itrend = objRootParent->children.childIDs.end();
+		while (itr != itrend)
+		{
+			if (*itr == deletingObjId)
+			{
+				objRootParent->children.childIDs.erase(itr);
+				break;
+			}
+			++itr;
+		}
+
+		--objRootParent->children.numChild;
+
+		//	//objRootParent->children.numDecendants; // TODO !!!
+	}
 }
 
 void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::ContainerID compId, int objId)
