@@ -1,5 +1,6 @@
 #pragma once
 #include "SystemInput.h"
+#include "../Window/WndSystem.h"
 #include <iostream>
 
 using namespace SystemInput_ns;
@@ -19,7 +20,10 @@ void SystemInput::Load()
 
 void SystemInput::Init()
 {
-	_siKeyPress.ALL_THE_KEYS();
+	std::cout << "System::Input::Init" << std::endl;
+	_siKeyPress.SetWindow(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
+	_siCtrler.SetWindow(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
+	_siMousePos.SetWindow(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
 }
 
 bool SystemInput::Update()
@@ -28,11 +32,6 @@ bool SystemInput::Update()
 	_siKeyPress.Update();
 	_siCtrler.Update();
 	_siMousePos.Update();
-
-	if (_siKeyPress.GetKeyHold(IKEY_A))
-	{
-		std::cout << "System::Input::Update::PRESSING A" << std::endl;
-	}
 
 	return true;
 }
