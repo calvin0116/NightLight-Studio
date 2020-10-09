@@ -19,14 +19,32 @@ namespace NS_GRAPHICS
 		// Initialize all required cameras(if any)
 		// Currently only one test camera, thus no initialization required
 
-		// Call to activate all keys
-		//SYS_INPUT->GetSystemKeyPress().ALL_THE_KEYS();
-
 		// Register keys required
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_FRONT", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnPress, nullptr);
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnPress, nullptr);
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_BACK", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnPress, nullptr);
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnPress, nullptr);
+		// Move camera based on axis vectors
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_FRONT", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]()
+			{
+				//Position += Front * velocity;
+				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * _camera.GetSpeed());
+				updated = true;
+			});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]()
+			{
+				//Position -= Right * velocity;
+				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetRight() * _camera.GetSpeed());
+				updated = true;
+			});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_BACK", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]()
+			{
+				//Position -= Front * velocity;
+				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * _camera.GetSpeed());
+				updated = true;
+			});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]()
+			{
+				//Position += Right * velocity;
+				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetRight() * _camera.GetSpeed());
+				updated = true;
+			});
 
 		// Rotation
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_LEFT", SystemInput_ns::IKEY_LEFT, "LEFT", SystemInput_ns::OnPress, nullptr);
@@ -37,40 +55,6 @@ namespace NS_GRAPHICS
 	{
 		// Call to activate all keys
 		//SYS_INPUT->GetSystemKeyPress().ALL_THE_KEYS();
-
-		// Move camera based on axis vectors
-
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_A))
-		{
-			//Position -= Right * velocity;
-			_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetRight() * _camera.GetSpeed());
-			std::cout << "Camera has moved left" << std::endl;
-			updated = true;
-		}
-
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_D))
-		{
-			//Position += Right * velocity;
-			_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetRight() * _camera.GetSpeed());
-			std::cout << "Camera has moved right" << std::endl;
-			updated = true;
-		}
-
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_W))
-		{
-			//Position += Front * velocity;
-			_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * _camera.GetSpeed());
-			std::cout << "Camera has moved frontwards" << std::endl;
-			updated = true;
-		}
-
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_S))
-		{
-			//Position -= Front * velocity;
-			_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * _camera.GetSpeed());
-			std::cout << "Camera has moved backwards" << std::endl;
-			updated = true;
-		}
 
 		// Move vector via rotation about a point
 		// Should be based on offset of mouse x and y from prev frame
