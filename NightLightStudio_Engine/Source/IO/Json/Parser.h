@@ -57,6 +57,8 @@ public:
 	ENGINE_API std::string GetName();
 	ENGINE_API std::string GetPath();
 	ENGINE_API std::string GetFilePath();
+	ENGINE_API Document& GetDoc();
+
 
 	//===========Functionality for data manipulation=================//
 	//Add data into the initial json list
@@ -76,6 +78,11 @@ public:
 		return doc[str.c_str()];
 	}
 
+	ENGINE_API void CleanDoc()
+	{
+		//doc.Clear();
+		//alloc = nullptr;
+	}
 	//Access by count
 	//WIP
 	/*

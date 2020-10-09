@@ -5,7 +5,7 @@
 Parser::Parser(std::string name_, std::string path_)
 {
 	name = name_;
-	path = path_;
+	path = path_ + "/";
 
 	alloc = &doc.GetAllocator();
 }
@@ -63,6 +63,11 @@ std::string Parser::GetPath()
 std::string Parser::GetFilePath()
 {
     return filepath;
+}
+
+Document& Parser::GetDoc()
+{
+    return doc;
 }
 
 bool Parser::CheckForMember(std::string mem_name)

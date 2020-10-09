@@ -1,5 +1,5 @@
 {
-	"SceneFolder" : "/Scene",
+	"SceneFolder" : "Scene",
 	"StartUpScene" : "Default",
 	"ListOfSceneToLoad" : 
 	[]

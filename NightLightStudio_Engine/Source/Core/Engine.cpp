@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 #include "SystemManager.h"
+#include "SceneManager.h"
 
 #include "..\Component\ComponentManager.h"
 
@@ -26,13 +27,16 @@ void FluffyUnicornEngine::Run()
 	{
 		DELTA_T->load();
 		SYS_MAN->CombineLoad();
+		SYS_SCENEMANAGER->Load();
 		while (scene_running)
 		{
+			SYS_SCENEMANAGER->Init();
 			SYS_MAN->CombineInit();
 			while (game_running)
 			{
 				//fps start
 				DELTA_T->start();
+
 				//Exit if update fails
 				//Need help to remove this for messaging system
 				if (!SYS_MAN->CombineUpdate())
@@ -40,7 +44,21 @@ void FluffyUnicornEngine::Run()
 					//Temp for now
 					//Any update return false will terminate the engine / game
 					game_running = false;
+					scene_running = false;
 					engine_running = false;
+				}
+
+				//Check for changing of scene
+				if (!SYS_SCENEMANAGER->LateUpdate())
+				{
+					scene_running = false;
+					game_running = false;
+
+					//If exit is being called
+					if (SYS_SCENEMANAGER->GetToExit())
+					{
+						engine_running = false;
+					}
 				}
 				//////
 				// fps end
@@ -53,6 +71,7 @@ void FluffyUnicornEngine::Run()
 				//////
 			}
 			SYS_MAN->Exit();
+			SYS_SCENEMANAGER->Exit();
 		}
 		SYS_MAN->Unload();
 	}
