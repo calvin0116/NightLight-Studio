@@ -225,6 +225,11 @@ namespace NS_GRAPHICS
 		glVertexAttribDivisor(5, 1);
 
 		glDrawElements(GL_TRIANGLES, 36 * sizeof(unsigned short), GL_UNSIGNED_SHORT, 0);
+
+		glDeleteVertexArrays(1, &VAO);
+		glDeleteBuffers(1, &VBO);
+		glDeleteBuffers(1, &EBO);
+		glDeleteBuffers(1, &ModelMatrixBO);
 	}
 
 	void GraphicsSystem::ToggleDebugDraw(const bool& set)
