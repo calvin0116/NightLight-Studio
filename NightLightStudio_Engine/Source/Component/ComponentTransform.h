@@ -11,8 +11,6 @@ public:
 	glm::vec3 _rotation;
 	glm::vec3 _scale;
 
-	glm::mat4x4 _model;
-
 	ComponentTransform();
 	~ComponentTransform();
 
