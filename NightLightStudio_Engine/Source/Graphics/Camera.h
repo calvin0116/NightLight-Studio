@@ -2,9 +2,18 @@
 
 #include "../glm/glm.hpp"
 #include "../glm/gtc/matrix_transform.hpp" // glm::lookAt
+#include "CameraSystem.h"
 
 namespace NS_GRAPHICS
 {
+	/* Math variables for camera */
+	static const float  EPSILON = 0.00001f;
+	static const float  PI = 3.14159f;
+	static const float  HALF_PI = PI / 2.f;
+	static const float  ONE_ROT_STEP = PI / 1800.f; // Each step for rotation, should allow access in the future
+	static const float  MAX_PITCH = 1.5534f;
+	static const float  MIN_PITCH = -MAX_PITCH;
+
 	class Camera
 	{
 		// World/Global Up Vector
@@ -21,8 +30,8 @@ namespace NS_GRAPHICS
 
 		// Variables for camera rotation
 		// Given in radians
-		float cameraYaw;	// x-axis rotation
-		float cameraPitch;  // y-axis rotation
+		float cameraYaw;	// x-axis rotation (Rotation about y axis vector)
+		float cameraPitch;  // y-axis rotation (Rotation about x axis vector)
 
 		//////////////////////////////////////////////////////////////
 		///// PUBLIC FUNCTIONS
@@ -34,7 +43,7 @@ namespace NS_GRAPHICS
 			cameraRight{ glm::normalize(glm::cross(cameraFront, globalUp)) },
 			cameraUp{ glm::normalize(glm::cross(cameraRight, cameraFront)) },
 			cameraSpeed{ 0.005f },
-			cameraYaw{ 0.f },
+			cameraYaw{ -HALF_PI },
 			cameraPitch{ 0.f }
 		{
 		}
@@ -100,11 +109,10 @@ namespace NS_GRAPHICS
 		void Update()
 		{
 			// Calculate the new Front vector
-			glm::vec3 direction;
-			direction.x = cos(cameraYaw) * cos(cameraPitch);
-			direction.y = sin(cameraPitch);
-			direction.z = sin(cameraYaw) * cos(cameraPitch);
-			cameraFront = glm::normalize(direction);
+			cameraFront.x = cos(cameraYaw) * cos(cameraPitch);
+			cameraFront.y = sin(cameraPitch);
+			cameraFront.z = sin(cameraYaw) * cos(cameraPitch);
+			cameraFront = glm::normalize(cameraFront);
 
 			// Recalculate Right and Up vector based on updated front vector
 			cameraRight = glm::normalize(glm::cross(cameraFront, globalUp));
