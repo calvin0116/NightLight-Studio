@@ -24,9 +24,9 @@ public:
 	//*Init with different timing to suit different system*//
 	//Same as load, Overwrite Init for basic uses
 	//Others is see as you need
-	virtual void EarlyInit() {};
+	//virtual void EarlyInit() {};
 	virtual void Init() {};
-	virtual void LateInit() {};
+	//virtual void LateInit() {};
 
 	//*Update with different timing to suit different system*//
 	//Same as load 
@@ -39,7 +39,7 @@ public:
 	 
 	//If need any early or late exit please tell me
 	//For now i do not see any uses
-	virtual void Exit() {};
+	//virtual void Exit() {};
 
 	//Unload for normal resources, Late unload depended system (e.g. graphics)
 	virtual void Unload() {};

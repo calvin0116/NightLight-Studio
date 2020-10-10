@@ -69,9 +69,9 @@ public:
   void Load() override;
   void LateLoad() override {};
 
-  void EarlyInit() override {};
+	// void EarlyInit() override {};
   void Init() override;
-  void LateInit() override {};
+  //void LateInit() override {};
 
   bool FixedUpdate() override { return true; };
   bool Update() override;

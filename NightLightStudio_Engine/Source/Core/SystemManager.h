@@ -35,9 +35,9 @@ public:
 	ENGINE_API void LateLoad() { for (auto my_sys : Systems) my_sys.second->LateLoad(); };
 
 	//== Game / Usage of assert phase
-	ENGINE_API void EarlyInit() { for (auto my_sys : Systems) my_sys.second->EarlyInit(); };
+	//ENGINE_API void EarlyInit() { for (auto my_sys : Systems) my_sys.second->EarlyInit(); };
 	ENGINE_API void Init() { for (auto my_sys : Systems) my_sys.second->Init(); };
-	ENGINE_API void LateInit() { for (auto my_sys : Systems) my_sys.second->LateInit(); }
+	//ENGINE_API void LateInit() { for (auto my_sys : Systems) my_sys.second->LateInit(); }
 
 	//== Game / System running loop
 	ENGINE_API bool FixedUpdate() {
@@ -60,7 +60,7 @@ public:
 	};
 
 	//== Game info clear
-	ENGINE_API void Exit() { for (auto my_sys : Systems) my_sys.second->Exit(); };
+	//ENGINE_API void Exit() { for (auto my_sys : Systems) my_sys.second->Exit(); };
 	//== Asserts clear
 	ENGINE_API void Unload() { for (auto my_sys : Systems) my_sys.second->Unload(); };
 	//Memory deallocation phase
@@ -79,9 +79,9 @@ public:
 
 	ENGINE_API void CombineInit()
 	{
-		EarlyInit();
+		//EarlyInit();
 		Init();
-		LateInit();
+		//LateInit();
 	}
 
 	ENGINE_API bool CombineUpdate()

@@ -301,7 +301,7 @@ namespace NS_WINDOW
 	}
 
 	// Initialises the System
-	void WndSystem::EarlyInit()
+	void WndSystem::Init()
 	{
 		if (hasInit)
 			return;

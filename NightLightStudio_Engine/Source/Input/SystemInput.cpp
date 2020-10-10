@@ -35,10 +35,10 @@ bool SystemInput::Update()
 
 	return true;
 }
-
+/*
 void SystemInput::Exit()
 {
-}
+}*/
 
 void SystemInput::Unload()
 {

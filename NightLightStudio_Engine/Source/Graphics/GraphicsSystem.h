@@ -61,7 +61,7 @@ namespace NS_GRAPHICS
             > Camera Manager
             > Light Instance Manager
         */
-        void Init();
+        void Init() override;
 
         void Render();
 

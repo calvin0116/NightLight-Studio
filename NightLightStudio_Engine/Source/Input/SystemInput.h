@@ -28,7 +28,7 @@ public:
 
 	ENGINE_API bool Update() override;
 
-	ENGINE_API void Exit() override;
+	//ENGINE_API void Exit() override;
 
 	ENGINE_API void Unload() override;
 
