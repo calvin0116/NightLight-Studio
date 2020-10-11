@@ -47,32 +47,21 @@ inline void SceneManager::Load()
 	}*/
 }
 
-void SceneManager::Save()
+void SceneManager::GameLoad()
 {
-	//scene_parser.ChangeData("StartScene", current_scene);
-	scene_parser.Save();
+	LoadScene();
 }
 
-void SceneManager::Init()
+void SceneManager::GameInit()
 {
-	//Load up initial scene
-	Parser* scene = scene_list[current_scene];
-	scene->Load();
+	InitScene();
 }
 
-bool SceneManager::LateUpdate()
+SCENE_CHANGE SceneManager::CheckChangeScene()
 {
-	if (to_change_scene)
-		return false;
-
-	return true;
+    return to_change_scene;
 }
 
-void SceneManager::Exit()
-{
-	scene_list[current_scene]->CleanDoc();
-	current_scene = next_scene;
-}
 
 void SceneManager::Free()
 {
@@ -82,6 +71,22 @@ void SceneManager::Free()
 
 void SceneManager::LoadScene()
 {
+    Parser* scene = scene_list[current_scene];
+    scene->Load();
+	to_change_scene = SC_NOCHANGE;
+	//~~!Create object using data
+}
+
+void SceneManager::InitScene()
+{
+	Parser* scene = scene_list[current_scene];
+	//~~!Insert data back to the objects
+}
+
+void SceneManager::ExitScene()
+{
+    scene_list[current_scene]->CleanDoc();
+    current_scene = next_scene;
 }
 
 void SceneManager::LoadScene(std::string scene_name)
@@ -138,17 +143,14 @@ bool SceneManager::CheckIfSceneExist(std::string& scene_name)
 }
 
 
-inline void SceneManager::SetNextScene(std::string scene_name)
+void SceneManager::SetNextScene(std::string scene_name)
 {
-	scene_name = next_scene;
-	to_change_scene = true;
+    next_scene = scene_name;
 	
 	if (scene_name == EXIT_SCENCE)
-		to_exit = true;
-
-}
-
-bool SceneManager::GetToExit()
-{
-	return to_exit;
+        to_change_scene = SC_EXIT;
+    else if(next_scene == current_scene)
+        to_change_scene = SC_RESTART;
+    else
+        to_change_scene = SC_CHANGE;
 }

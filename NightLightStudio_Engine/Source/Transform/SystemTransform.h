@@ -18,23 +18,18 @@ class ENGINE_API SystemTransform : public MySystem, public Singleton<SystemTrans
 
 public:
     // System functions
-    void OnFirstStart() override {};
-
-    void EarlyLoad() override {};
     void Load() override {};
-    void LateLoad() override {};
-
-    void EarlyInit() override {};
     void Init() override {};
-    void LateInit() override {};
 
-    bool FixedUpdate() override { return true; };
-    bool Update() override;
-    bool LateUpdate() override { return true; };
+    void GameInit() override {};
 
-    void Exit() override {};
+    void FixedUpdate() override { };
+    void Update() override;
+    //void LateUpdate() override {};
+
+    void GameExit() override {};
     void Free() override {};
-    void Unload() override {};
+    //void Unload() override {};
 };
 
 //Probably wont need this

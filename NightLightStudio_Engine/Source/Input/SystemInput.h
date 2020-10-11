@@ -20,17 +20,18 @@ protected:
 	ENGINE_API ~SystemInput() = default;
 
 public:
-	ENGINE_API void OnFirstStart() override;
+	//ENGINE_API void OnFirstStart() override;
 
 	ENGINE_API void Load() override;
 
 	ENGINE_API void Init() override;
 
-	ENGINE_API bool Update() override;
+	ENGINE_API void Update() override;
+
+	ENGINE_API void Free() override;
 
 	ENGINE_API void Exit() override;
 
-	ENGINE_API void Unload() override;
 
 	// Access individual System Parts to use their functions or something I guess
 	ENGINE_API SystemInput_ns::SystemKeyPress& GetSystemKeyPress();

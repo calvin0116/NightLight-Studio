@@ -37,7 +37,7 @@ namespace NS_GRAPHICS
             > Shader Program Variables
             > Render
         */
-        bool Update();
+        void Update();
 
         /*
             Free the following in the following order:
@@ -61,7 +61,7 @@ namespace NS_GRAPHICS
             > Camera Manager
             > Light Instance Manager
         */
-        void Init();
+        void Init() override;
 
         void Render();
 

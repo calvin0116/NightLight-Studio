@@ -42,11 +42,11 @@ namespace NS_WINDOW
 
 		// Main Application Loop
 		void Load();
-		bool Update();
+		void Update();
 		void Free();
 
 		// Initialise the Window System
-		void EarlyInit();
+		void Init();
 
 		// The WndProc function for Win32
 		virtual LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

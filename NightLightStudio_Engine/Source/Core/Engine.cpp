@@ -11,7 +11,8 @@
 
 void FluffyUnicornEngine::Init(HINSTANCE& hInstance)
 {
-	SYS_MAN->StartUp(hInstance);
+	//System Start Up / Load up
+	SYS_MAN->StartUp(hInstance);	// Graphics / Sound Engine 
 	//_engineState = ENGINE_UPDATE;
 }
 
@@ -19,43 +20,39 @@ void FluffyUnicornEngine::Run()
 {
 	//Two running boolean that may need to be global depending on use case
 	bool engine_running = true;	
-	bool scene_running = true;
-	bool game_running = true;	//This should come from game / logic system later on
+	//bool scene_running = true;
+	bool scene_running = true;	//This should come from game / logic system later on
 
-	//Engine layer
+	//=====System layer====//
+    DELTA_T->load();
+	//System Init
+	SYS_MAN->Init();		// Master Sound Volume / Graphics settings (high res / lows) 
 	while (engine_running)
 	{
-		DELTA_T->load();
-		SYS_MAN->CombineLoad();
-		SYS_SCENEMANAGER->Load();
-		while (scene_running)
+		//=====Scene Layer====//
+		SYS_MAN->GameLoad();
+		//SYS_SCENE_MANAGER->LoadScene();
+		while (SYS_SCENE_MANAGER->CheckChangeScene() == SC_NOCHANGE)	//Aka while scene not changed
 		{
-			SYS_SCENEMANAGER->Init();
-			SYS_MAN->CombineInit();
-			while (game_running)
+			SYS_MAN->GameInit();
+			//SYS_SCENE_MANAGER->InitScene();
+			while (scene_running)	//Scene / Game loop
 			{
 				//fps start
 				DELTA_T->start();
 
 				//Exit if update fails
 				//Need help to remove this for messaging system
-				if (!SYS_MAN->CombineUpdate())
-				{
-					//Temp for now
-					//Any update return false will terminate the engine / game
-					game_running = false;
-					scene_running = false;
-					engine_running = false;
-				}
+
+				SYS_MAN->FixedUpdate();			
+				SYS_MAN->Update();
 
 				//Check for changing of scene
-				if (!SYS_SCENEMANAGER->LateUpdate())
+				if (!SYS_SCENE_MANAGER->CheckChangeScene() != SC_NOCHANGE)
 				{
 					scene_running = false;
-					game_running = false;
-
 					//If exit is being called
-					if (SYS_SCENEMANAGER->GetToExit())
+					if (SYS_SCENE_MANAGER->CheckChangeScene() == SC_EXIT)
 					{
 						engine_running = false;
 					}
@@ -70,19 +67,18 @@ void FluffyUnicornEngine::Run()
 				// fps
 				//////
 			}
-			SYS_MAN->Exit();
-			SYS_SCENEMANAGER->Exit();
+
+			//SYS_SCENEMANAGER->Exit();
 		}
-		SYS_MAN->Unload();
+		SYS_MAN->GameExit();
+		//SYS_SCENE_MANAGER->ExitScene();
 	}
-	//**! Make this happen
-	// free all memory
-	//G_GSM.Free();
+    SYS_MAN->Free();
 }
 
 void FluffyUnicornEngine::Exit()
 {
-	SYS_MAN->Free();
-
+	//SYS_MAN->Free();
+	SYS_MAN->Exit();
 	SYS_COMPONENT->Free();
 }

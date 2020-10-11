@@ -26,7 +26,7 @@ namespace NS_GRAPHICS
 	{
 	}
 
-	bool GraphicsSystem::Update()
+	void GraphicsSystem::Update()
 	{
 		cameraManager->Update();
 
@@ -37,8 +37,6 @@ namespace NS_GRAPHICS
 		}
 
 		Render();
-
-		return true;
 	}
 
 	void GraphicsSystem::Free()

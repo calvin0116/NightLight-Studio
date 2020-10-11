@@ -25,6 +25,8 @@ Institute of Technology is prohibited.
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #endif
 
+#include "../Core/SceneManager.h"
+
 namespace NS_WINDOW
 {
 
@@ -101,7 +103,7 @@ namespace NS_WINDOW
 	}
 
 	// Window Update Loop
-	bool WndSystem::Update()
+	void WndSystem::Update()
 	{
 		// Allows for definition of keyboard shortcuts to use for game application
 		// Uncomment and edit if required
@@ -118,7 +120,8 @@ namespace NS_WINDOW
 			if (msg.message == WM_QUIT)
 			{
 				NS_WINDOW::SYS_WINDOW->Free();
-				return false;
+				//return false;
+				SYS_SCENE_MANAGER->SetNextScene(EXIT_SCENCE);
 			}
 
 			// Uncomment and edit if accelerator table is implemented
@@ -137,7 +140,7 @@ namespace NS_WINDOW
 		if (swap)
 			SwapBuffers(hDevContext);
 
-		return true; // Return error msg for breaking out of update loop
+		//return true; // Return error msg for breaking out of update loop
 	}
 
 	// Frees the resources used by the System
@@ -301,7 +304,7 @@ namespace NS_WINDOW
 	}
 
 	// Initialises the System
-	void WndSystem::EarlyInit()
+	void WndSystem::Init()
 	{
 		if (hasInit)
 			return;

@@ -63,23 +63,16 @@ public:
   ~SystemAudio() = default;
 
   // System functions
-	void OnFirstStart() override;
-
-  void EarlyLoad() override {};
   void Load() override;
-  void LateLoad() override {};
-
-  void EarlyInit() override {};
+// void EarlyInit() override {};
   void Init() override;
-  void LateInit() override {};
+  //void LateInit() override {};
 
-  bool FixedUpdate() override { return true; };
-  bool Update() override;
-  bool LateUpdate() override { return true; };
+  void FixedUpdate() override {};
+  void Update() override;
 
-	void Exit();
 	void Free();
-	void Unload();
+	void Exit();
 };
 
 // Global ptr

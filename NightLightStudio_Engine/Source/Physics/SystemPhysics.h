@@ -23,7 +23,7 @@ namespace NS_PHYSICS
 
 		void Init();
 
-		bool Update();
+		void Update();
 
 		void Exit();
 

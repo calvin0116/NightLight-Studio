@@ -10,10 +10,6 @@ SystemInput::SystemInput()
 {
 }
 
-void SystemInput::OnFirstStart()
-{
-}
-
 void SystemInput::Load()
 {
 }
@@ -26,22 +22,21 @@ void SystemInput::Init()
 	_siMousePos.SetWindow(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
 }
 
-bool SystemInput::Update()
+void SystemInput::Update()
 {
 	//std::cout << "System::Input::Update::BIG" << std::endl;
 	_siKeyPress.Update();
 	_siCtrler.Update();
 	_siMousePos.Update();
+}
 
-	return true;
+void SystemInput::Free()
+{
 }
 
 void SystemInput::Exit()
 {
-}
 
-void SystemInput::Unload()
-{
 }
 
 SystemInput_ns::SystemKeyPress& SystemInput::GetSystemKeyPress()
