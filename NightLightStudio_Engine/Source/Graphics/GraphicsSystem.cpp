@@ -68,6 +68,10 @@ namespace NS_GRAPHICS
 
 		cameraManager->Init();
 
+		/*Model* model = new Model();
+		modelLoader->LoadFBX("test.fbx",model);
+		delete model;*/
+
 		// Set default values for view matrix
 		// temporary solution before camera system implementation
 		// NOTE THAT CAMERA POSITION MUST/SHOULD BE SOME DISTANCE AWAY FROM OBJECT TO BE ABLE TO SEE
@@ -219,5 +223,7 @@ namespace NS_GRAPHICS
 	void GraphicsSystem::CreateCube(const glm::vec3& rgb, const float& edgeLength)
 	{
 		// Create cube and put into model manager's vector of models
+		rgb;
+		edgeLength;
 	}
 }
