@@ -70,6 +70,10 @@ namespace NS_GRAPHICS
 
 		cameraManager->Init();
 
+		/*Model* model = new Model();
+		modelLoader->LoadFBX("test.fbx",model);
+		delete model;*/
+
 		// Set default values for view matrix
 		// temporary solution before camera system implementation
 		// NOTE THAT CAMERA POSITION MUST/SHOULD BE SOME DISTANCE AWAY FROM OBJECT TO BE ABLE TO SEE
