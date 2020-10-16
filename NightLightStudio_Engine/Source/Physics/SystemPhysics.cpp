@@ -21,13 +21,19 @@ namespace NS_PHYSICS
 
 	void PhysicsSystem::Init()
 	{
-		int newId = G_MAINCOMPSET->BuildObject();
-		ComponentTransform compT;
-		G_MAINCOMPSET->AttachComponent<ComponentTransform>(newId, &compT);
+		//int newId = G_MAINCOMPSET->BuildEntity();
+		//ComponentTransform compT;
+		//G_MAINCOMPSET->AttachComponent<ComponentTransform>(newId, &compT);
 
-		// Entity E = G_MAINCOMPSET->BuildEntity().AttachComponent<ComponentTransform>();
-		//  return Entity                         
-		// E.attachComp
+		 /*Entity E = */
+		Entity ent = G_MAINCOMPSET->BuildEntity();
+
+		ComponentTransform c;
+		ent.AttachComponent<ComponentTransform>(ComponentTransform()); 
+
+		ent = G_MAINCOMPSET->BuildEntity().AttachComponent<ComponentTransform>(ComponentTransform());
+		 // return Entity                         
+		 //E.attachComp
 	}
 
 	void PhysicsSystem::Update()

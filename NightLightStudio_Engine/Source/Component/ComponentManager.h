@@ -277,6 +277,9 @@ public:
 
 	class ComponentSetManager // builds objects into component sets
 	{
+
+		class EntityHandle; // fwd decl
+
 	public: // !
 		ComponentSet* compSet; // it is bound to a component set
 	public:
@@ -288,7 +291,7 @@ public:
 
 		// build a new entity
 		// returns entity id
-		int BuildObject(); 
+		EntityHandle BuildEntity();
 
 	private:
 
@@ -297,7 +300,7 @@ public:
 		int BuildChildObject();
 
 		// attach component to the entity // using container id // helper
-		void* AttachComponent(ComponentManager::ContainerID compId, int entityId, void* newComp);
+		void* AttachComponent(ComponentManager::ContainerID compId, int entityId, const void* newComp);
 
 		// void* AttachComponent(ManagerComponent::ContainerID compId, int objId); // allocate the component first
 
@@ -307,8 +310,12 @@ public:
 	public:
 		// attach component to the entity // WARNING !!! DOES NOT check if the entity exists if the wrong entity id is passed in the behaviour is undefined
 		template<typename T>
-		T* AttachComponent(int entityId, T* newComp)
+		T* AttachComponent(EntityHandle ent, const T& newComp_r)
 		{
+			const T* newComp = &newComp_r;
+
+			int entityId = ent.objId;
+
 			//static_assert(std::is_standard_layout_v<T>, "Component must be standard layout to memcpy the component");
 			const std::type_info& tinf = typeid(T);
 			
@@ -513,6 +520,20 @@ public:
 
 					return reinterpret_cast<T*>(getComponent((*find).second));
 				}
+			}
+
+			template<typename T>
+			EntityHandle AttachComponent(T& comp)
+			{
+				compSetMgr->AttachComponent<T>(*this, comp);
+				return *this;
+			}
+
+			template<typename T>
+			EntityHandle AttachComponent(T&& comp)
+			{
+				compSetMgr->AttachComponent<T>(*this, comp);
+				return *this;
 			}
 
 			///////////////////////////////////////////////////////////////////////////////////////

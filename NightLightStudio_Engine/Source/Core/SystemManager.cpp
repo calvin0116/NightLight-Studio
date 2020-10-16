@@ -119,7 +119,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 		// WHILE OBJECTS
 		// Start of creation and Entity
-		int newObjId = G_MAINCOMPSET->BuildObject();
+		Entity newEntity = G_MAINCOMPSET->BuildEntity();
 
 		// WHILE COMPONENTS
 		// Creation
@@ -129,38 +129,38 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 			"Hello World",
 			{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f}
 		};
-		G_MAINCOMPSET->AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+		G_MAINCOMPSET->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
 		// WHILE COMPONENTS END
 		// WHILE OBJECTS END
 
 		// add 2nd obj 
-		newObjId = G_MAINCOMPSET->BuildObject();
+		newEntity = G_MAINCOMPSET->BuildEntity();
 
 		ComponentTransform compT;
 		compT._position.x = 1.11f;
 		
-		G_MAINCOMPSET->AttachComponent<ComponentTransform>(newObjId, &compT);
+		G_MAINCOMPSET->AttachComponent<ComponentTransform>(newEntity, compT);
 
 		ComponentRigidBody compRB;
-		G_MAINCOMPSET->AttachComponent<ComponentRigidBody>(newObjId, &compRB);
+		G_MAINCOMPSET->AttachComponent<ComponentRigidBody>(newEntity, compRB);
 
 		newCompComponentTest0.id = 1;
-		G_MAINCOMPSET->AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+		G_MAINCOMPSET->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
 
 		// add 3rd obj 
-		newObjId = G_MAINCOMPSET->BuildObject();
-		G_MAINCOMPSET->AttachComponent<ComponentRigidBody>(newObjId, &compRB);
+		newEntity = G_MAINCOMPSET->BuildEntity();
+		G_MAINCOMPSET->AttachComponent<ComponentRigidBody>(newEntity, compRB);
 
 
 		// add obj to another component set
 		newCompComponentTest0.id = 999;
-		newObjId = G_UICOMPSET->BuildObject();
-		G_UICOMPSET->AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+		newEntity = G_UICOMPSET->BuildEntity();
+		G_UICOMPSET->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
 
 		//// add to another compset
-		newObjId = G_UICOMPSET->BuildObject();
+		newEntity = G_UICOMPSET->BuildEntity();
 		newCompComponentTest0.id = 123;
-		G_UICOMPSET->AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+		G_UICOMPSET->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
 
 		///////////////////////////////
 		// hierarchical entity test
@@ -170,7 +170,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 			std::cout << "// hierarchical entity test - LOAD" << std::endl;
 			std::cout << std::endl;
 
-			Entity entity = G_UICOMPSET->getEntity(newObjId);
+			Entity entity = G_UICOMPSET->getEntity(newEntity.getId());
 
 
 			int numChild = entity.getNumChildren();
@@ -196,7 +196,7 @@ std::cout << "numDec_child:" << numDec_child << std::endl;
 std::cout << "parentuid_child:" << parentuid_child << std::endl;
 
 newCompComponentTest0.id = 54321;
-G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity.getId(), &newCompComponentTest0);
+G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity, newCompComponentTest0);
 
 std::cout << std::endl;
 std::cout << "// hierarchical entity test - LOAD  END" << std::endl;
@@ -205,74 +205,75 @@ std::cout << std::endl;
 		}
 		{
 		// make 2 more childs from the entity
-		Entity entity = G_UICOMPSET->getEntity(newObjId);
+		Entity entity = G_UICOMPSET->getEntity(newEntity.getId());
 		//entity.AttachComponent<ComponentTest0>();
 
 		// child1
 		Entity childEntity1 = entity.makeChild();
 		newCompComponentTest0.id = 5432;
-		G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity1.getId(), &newCompComponentTest0);
+		G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity1, newCompComponentTest0);
 
 
 		// make child of child - grandchild
 		Entity grandChildEntity0 = childEntity1.makeChild();
 		newCompComponentTest0.id = 777;
-		G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity0.getId(), &newCompComponentTest0);
+		G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity0, newCompComponentTest0);
 
 
 		// child2
 		Entity childEntity2 = entity.makeChild();
 		newCompComponentTest0.id = 543;
-		G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity2.getId(), &newCompComponentTest0);
+		G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity2, newCompComponentTest0);
 		}
 		{
 			// adding more test objects
 
-			newObjId = G_UICOMPSET->BuildObject();
+			newEntity = G_UICOMPSET->BuildEntity();
 			newCompComponentTest0.id = 1234;
-			G_UICOMPSET->AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+			G_UICOMPSET->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
 
 			compT._position.x = 2.22f;
-			G_UICOMPSET->AttachComponent<ComponentTransform>(newObjId, &compT);
+			G_UICOMPSET->AttachComponent<ComponentTransform>(newEntity, compT);
 
 			{
 				// adding childs
-				Entity entity = G_UICOMPSET->getEntity(newObjId);
+				Entity entity = G_UICOMPSET->getEntity(newEntity.getId());
 
 				// child1
 				Entity childEntity1 = entity.makeChild();
 				newCompComponentTest0.id = 7771;
-				G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity1.getId(), &newCompComponentTest0);
+				G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity1, newCompComponentTest0);
 
 
 				// make child of child - grandchild
 				Entity grandChildEntity0 = childEntity1.makeChild();
 				newCompComponentTest0.id = 8881;
-				G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity0.getId(), &newCompComponentTest0);
+				G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity0, newCompComponentTest0);
 
 				// make 2nd grandchild
 				Entity grandChildEntity1 = childEntity1.makeChild();
 				newCompComponentTest0.id = 8882;
-				G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity1.getId(), &newCompComponentTest0);
+				G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity1, newCompComponentTest0);
 
 				compT._position.x = 3.33f;
-				G_UICOMPSET->AttachComponent<ComponentTransform>(grandChildEntity1.getId(), &compT);
+				G_UICOMPSET->AttachComponent<ComponentTransform>(grandChildEntity1, compT);
 
 				// make 3rd grandchild
 				Entity grandChildEntity2 = childEntity1.makeChild();
 				newCompComponentTest0.id = 8883;
-				G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity2.getId(), &newCompComponentTest0);
+				G_UICOMPSET->AttachComponent<ComponentTest0>(grandChildEntity2, newCompComponentTest0);
 
 				// child2
 				Entity childEntity2 = entity.makeChild();
 				newCompComponentTest0.id = 7772;
-				G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity2.getId(), &newCompComponentTest0);
+				G_UICOMPSET->AttachComponent<ComponentTest0>(childEntity2, newCompComponentTest0);
+				
 
 			}
 
-			newObjId = G_UICOMPSET->BuildObject();
+			newEntity = G_UICOMPSET->BuildEntity();
 			newCompComponentTest0.id = 1235;
-			G_UICOMPSET->AttachComponent<ComponentTest0>(newObjId, &newCompComponentTest0);
+			G_UICOMPSET->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
 		}
 		// hierarchical entity test END
 		///////////////////////////////

@@ -72,7 +72,7 @@ ComponentManager::ComponentSetFactory::~ComponentSetFactory()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //// ComponentSetManager
 
-int ComponentManager::ComponentSetManager::BuildObject()
+ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::BuildEntity()
 {
 	// new obj instance
 	char* newObj = reinterpret_cast<char*>(malloc(compSet->objSize));
@@ -106,7 +106,8 @@ int ComponentManager::ComponentSetManager::BuildObject()
 	newObj_o->children.childIDs.init();
 	newObj_o->children.generation = 0;
 
-	return objId + compSet->idIndexModifier;
+	//return objId + compSet->idIndexModifier;
+	return (EntityHandle(this, objId + compSet->idIndexModifier));
 }
 
 int ComponentManager::ComponentSetManager::BuildChildObject()
@@ -148,10 +149,10 @@ int ComponentManager::ComponentSetManager::BuildChildObject()
 	//return objId;
 }
 
-void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::ContainerID compId, int objId, void* newComp)
+void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::ContainerID compId, int objId, const void* newComp)
 {
 	// insert the component
-	int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<char*>(newComp));
+	int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<const char*>(newComp));
 
 	// set object component data
 

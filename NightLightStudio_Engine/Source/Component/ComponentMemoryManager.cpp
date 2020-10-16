@@ -285,7 +285,7 @@ ComponentMemoryManager::MemConIterator ComponentMemoryManager::begin(ComponentMe
 	return newItr;
 }
 
-int ComponentMemoryManager::insertIntoContainer(ComponentMemoryManager::ComponentType comT, char* obj)
+int ComponentMemoryManager::insertIntoContainer(ComponentMemoryManager::ComponentType comT, const char* obj)
 {
 
 	ComponentMetaData* meta = findMeta(comT);
