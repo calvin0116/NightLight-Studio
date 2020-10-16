@@ -29,9 +29,9 @@ namespace NS_PHYSICS
 		Entity ent = G_MAINCOMPSET->BuildEntity();
 
 		ComponentTransform c;
-		ent.AttachComponent<ComponentTransform>(ComponentTransform()); 
+		ent.AttachComponent<ComponentTransform>(); 
 
-		ent = G_MAINCOMPSET->BuildEntity().AttachComponent<ComponentTransform>(ComponentTransform());
+		ent = G_MAINCOMPSET->BuildEntity().AttachComponent<ComponentTransform>();
 		 // return Entity                         
 		 //E.attachComp
 	}
