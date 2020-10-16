@@ -51,13 +51,13 @@ namespace NS_GRAPHICS
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_LEFT", SystemInput_ns::IKEY_LEFT, "LEFT", SystemInput_ns::OnHold, [this]()
 			{
 				// Rotation to the left
-				_camera.SetCameraYaw(_camera.GetYaw() + ONE_ROT_STEP);
+				_camera.SetCameraYaw(_camera.GetYaw() - ONE_ROT_STEP);
 				updatedRot = true;
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_RIGHT", SystemInput_ns::IKEY_RIGHT, "RIGHT", SystemInput_ns::OnHold, [this]()
 			{
 				// Rotation to the right
-				_camera.SetCameraYaw(_camera.GetYaw() - ONE_ROT_STEP);
+				_camera.SetCameraYaw(_camera.GetYaw() + ONE_ROT_STEP);
 				updatedRot = true;
 			});
 
