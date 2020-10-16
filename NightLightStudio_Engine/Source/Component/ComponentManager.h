@@ -531,7 +531,7 @@ public:
 			}
 
 			template<typename T>
-			EntityHandle AttachComponent(T&& comp)
+			EntityHandle AttachComponent(T&& comp = T())
 			{
 				compSetMgr->AttachComponent<T>(*this, comp);
 				return *this;
