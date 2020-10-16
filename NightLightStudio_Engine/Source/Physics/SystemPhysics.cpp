@@ -21,12 +21,34 @@ namespace NS_PHYSICS
 
 	void PhysicsSystem::Init()
 	{
+		int newId = G_MAINCOMPSET->BuildObject();
+		ComponentTransform compT;
+		G_MAINCOMPSET->AttachComponent<ComponentTransform>(newId, &compT);
+
+		// Entity E = G_MAINCOMPSET->BuildEntity().AttachComponent<ComponentTransform>();
+		//  return Entity                         
+		// E.attachComp
 	}
 
 	void PhysicsSystem::Update()
 	{
 		auto itr = G_MAINCOMPSET->begin<ComponentRigidBody>();
 		auto itrEnd = G_MAINCOMPSET->end<ComponentRigidBody>();
+		
+		/*struct ComponentView
+		{
+			decltype(itr) beg;
+			decltype(itr) end;
+
+			auto begin() { return beg; }
+			auto end() { return end; }
+		} view;*/
+
+		/*for (ComponentRigidBody& component : G_MAINCOMPSET->getComponentSpan<ComponentRigidBody>())
+		{
+
+		}*/
+
 		for (; itr != itrEnd; ++itr)
 		{
 			ComponentRigidBody* compR = G_MAINCOMPSET->getComponent<ComponentRigidBody>(itr);
@@ -35,6 +57,7 @@ namespace NS_PHYSICS
 
 			//get the transform to update
 			ComponentTransform* compT = G_MAINCOMPSET->getComponent<ComponentTransform>(itr);
+
 
 			//set max speed
 			if (compR->velocity.x > _maxspeed.x)

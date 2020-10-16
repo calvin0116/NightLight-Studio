@@ -160,12 +160,21 @@ void SystemAudio::Update()
   _system->update();
 }
 
-void SystemAudio::Exit()
-{
-    DestroyInstance();
-}
-
-
 void SystemAudio::Free()
 {
+  // Release Channels
+  _bgm->release();
+  _sfx->release();
+
+  // Release DSPs
+  // Not implemented yet...
+}
+
+void SystemAudio::Exit()
+{
+  // Close and release system
+  _system->close();
+  _system->release();
+
+  DestroyInstance();
 }
