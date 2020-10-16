@@ -175,4 +175,6 @@ void SystemAudio::Exit()
   // Close and release system
   _system->close();
   _system->release();
+
+  DestroyInstance();
 }

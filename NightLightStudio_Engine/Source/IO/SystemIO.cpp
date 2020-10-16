@@ -40,3 +40,8 @@ void SystemIO::Free()
 {
 }
 
+void SystemIO::Exit()
+{
+	DestroyInstance();
+}
+

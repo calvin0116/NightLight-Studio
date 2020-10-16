@@ -63,6 +63,8 @@ namespace NS_GRAPHICS
         */
         void Init() override;
 
+        void Exit() override;
+
         void Render();
 
         void ToggleDebugDraw(const bool& set);

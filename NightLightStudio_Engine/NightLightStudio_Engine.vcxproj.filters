@@ -246,6 +246,9 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\MemoryThingy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

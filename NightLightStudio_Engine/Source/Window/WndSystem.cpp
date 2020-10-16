@@ -361,6 +361,11 @@ namespace NS_WINDOW
 		return;
 	}
 
+	void WndSystem::Exit()
+	{
+		DestroyInstance();
+	}
+
 	// Window Event/Message Handler
 
 	// WM = Windows Message. Determined based on user input

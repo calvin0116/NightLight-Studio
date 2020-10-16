@@ -20,6 +20,7 @@ public:
 	void Update() override;
 	void GameExit() override;
 	void Free() override;
+	void Exit() override;
 
 	//void Unload();
 };

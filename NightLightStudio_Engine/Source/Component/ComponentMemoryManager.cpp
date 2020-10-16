@@ -411,13 +411,15 @@ void ComponentMemoryManager::freeAll()
 			free(reinterpret_cast<void*>(itv));
 		}
 
-		free(reinterpret_cast<void*>(v));
+		//free(reinterpret_cast<void*>(v));
+		delete v;
 	}
 
 	for (auto it = componentContainerBits.begin(); it != componentContainerBits.end(); ++it)
 	{
 		std::vector<char>* freePtr = (*it).second;
-		free(freePtr);
+		//free(freePtr);
+		delete freePtr;
 	}
 }
 
