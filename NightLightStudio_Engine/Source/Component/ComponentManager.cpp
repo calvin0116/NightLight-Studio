@@ -524,7 +524,7 @@ char* ComponentManager::ComponentSetManager::getObjectComponent(ComponentManager
 	}
 
 	// get the position of the component data
-	obj += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * n;
+	obj += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * (n/2);
 
 	// check
 	//ComponentSet::Object::Component* compData = reinterpret_cast<ComponentSet::Object::Component*>(getObjectComponent(compId, objId));
@@ -657,7 +657,7 @@ int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 		}
 
 		// get the position of the component data
-		obj += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * n;
+		obj += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * (n/2);
 
 		//check
 		ComponentSet::ObjectData::ComponentData* comp = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(obj);
@@ -1041,7 +1041,6 @@ void ComponentManager::Free()
 
 void ComponentManager::Exit()
 {
-	DestroyInstance();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
