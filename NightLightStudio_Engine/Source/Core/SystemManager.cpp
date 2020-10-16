@@ -138,6 +138,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 		ComponentTransform compT;
 		compT._position.x = 1.11f;
+		
 		G_MAINCOMPSET->AttachComponent<ComponentTransform>(newObjId, &compT);
 
 		ComponentRigidBody compRB;
@@ -205,6 +206,7 @@ std::cout << std::endl;
 		{
 		// make 2 more childs from the entity
 		Entity entity = G_UICOMPSET->getEntity(newObjId);
+		//entity.AttachComponent<ComponentTest0>();
 
 		// child1
 		Entity childEntity1 = entity.makeChild();

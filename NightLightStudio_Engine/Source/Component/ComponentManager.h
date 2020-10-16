@@ -309,6 +309,7 @@ public:
 		template<typename T>
 		T* AttachComponent(int entityId, T* newComp)
 		{
+			//static_assert(std::is_standard_layout_v<T>, "Component must be standard layout to memcpy the component");
 			const std::type_info& tinf = typeid(T);
 			
 			//entityId -= compSet->idIndexModifier;
