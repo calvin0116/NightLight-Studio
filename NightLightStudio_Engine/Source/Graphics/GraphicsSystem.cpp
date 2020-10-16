@@ -220,9 +220,12 @@ namespace NS_GRAPHICS
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
-	void GraphicsSystem::CreateCube(const glm::vec3& rgb, const float& edgeLength)
+	void GraphicsSystem::CreateCube(const int& objID, const glm::vec3& rgb, const float& edgeLength)
 	{
+		// Check if graphics component is already exists for obj
+
 		// Create cube and put into model manager's vector of models
+		objID;
 		rgb;
 		edgeLength;
 	}

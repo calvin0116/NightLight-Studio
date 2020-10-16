@@ -53,6 +53,7 @@ namespace SystemInput_ns
 
 		// Gets the cursor's position in the client rect from 0.0 to 1.0 in xy coordinates, (0,0) Begins in Bottom-Left Corner
 		glm::vec2 GetRelativeLocation();
+		glm::vec2 GetRelativeDragVec();
 
 		void SetWindow(HWND win);
 	};
