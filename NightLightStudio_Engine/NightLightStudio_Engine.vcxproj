@@ -178,6 +178,7 @@
     <ClInclude Include="Source\Audio\SystemAudio.h" />
     <ClInclude Include="Source\Component\ComponentAudio.h" />
     <ClInclude Include="Source\Component\ComponentCollider.h" />
+    <ClInclude Include="Source\Component\ComponentGraphics.h" />
     <ClInclude Include="Source\Component\ComponentManager.h" />
     <ClInclude Include="Source\Component\ComponentMemoryManager.h" />
     <ClInclude Include="Source\Component\ComponentRigidBody.h" />
@@ -248,6 +249,7 @@
     <ClCompile Include="Source\Audio\SystemAudio.cpp" />
     <ClCompile Include="Source\Component\ComponentAudio.cpp" />
     <ClCompile Include="Source\Component\ComponentCollider.cpp" />
+    <ClCompile Include="Source\Component\ComponentGraphics.cpp" />
     <ClCompile Include="Source\Component\ComponentManager.cpp" />
     <ClCompile Include="Source\Component\ComponentMemoryManager.cpp" />
     <ClCompile Include="Source\Component\ComponentRigidBody.cpp" />

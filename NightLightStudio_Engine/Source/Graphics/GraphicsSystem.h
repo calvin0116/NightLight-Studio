@@ -81,7 +81,7 @@ namespace NS_GRAPHICS
         // Creates a basic cube based on given data
         // Attaches graphics component to given object ID
         // Object ID MUST BE VALID, else undefined behavior
-        void CreateCube(const int& objID, const glm::vec3& rgb, const float& edgeLength);
+        void CreateCube(const int& objID, const glm::vec3& rgb = glm::vec3(0.5f,0.5f, 0.5f), const float& midExtent = 0.5f);
 
         //G_MAINCOMPSET.AttachComponent<GraphicsComponent>(objID, GraphicsComponent)
 

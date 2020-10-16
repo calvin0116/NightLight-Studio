@@ -41,6 +41,9 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::Free()
 	{
+		// Free all OpenGL objects before exit
+		// Includes VAO, VBO, EBO, ModelMatrixBO
+		modelManager->FreeGLObjects();
 	}
 
 	void GraphicsSystem::Init()
@@ -225,13 +228,102 @@ namespace NS_GRAPHICS
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
-	void GraphicsSystem::CreateCube(const int& objID, const glm::vec3& rgb, const float& edgeLength)
+	void GraphicsSystem::CreateCube(const int& objID, const glm::vec3& rgb, const float& midExtent)
 	{
 		// Check if graphics component is already exists for obj
+		if (objID);
 
 		// Create cube and put into model manager's vector of models
+		GLuint VAO = NULL;
+		GLuint VBO = NULL;
+		GLuint EBO = NULL;
+		GLuint ModelMatrixBO = NULL;
+
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &VBO);
+		glGenBuffers(1, &ModelMatrixBO);
+
+		float cube_vertices[] = {
+			// positions							// texture coords	// color
+			-midExtent, -midExtent,  midExtent,		1.0f, 1.0f,			rgb.x, rgb.y, rgb.z,
+			 midExtent, -midExtent,  midExtent,		1.0f, 0.0f,			rgb.x, rgb.y, rgb.z,
+			 midExtent,  midExtent,  midExtent,		0.0f, 0.0f,			rgb.x, rgb.y, rgb.z,
+			-midExtent,  midExtent,  midExtent,		1.0f, 1.0f,			rgb.x, rgb.y, rgb.z,
+			-midExtent, -midExtent, -midExtent,		1.0f, 0.0f,			rgb.x, rgb.y, rgb.z,
+			 midExtent, -midExtent, -midExtent,		0.0f, 0.0f,			rgb.x, rgb.y, rgb.z,
+			 midExtent,  midExtent, -midExtent,		1.0f, 1.0f,			rgb.x, rgb.y, rgb.z,
+			-midExtent,  midExtent, -midExtent,		1.0f, 0.0f,			rgb.x, rgb.y, rgb.z
+		};
+
+		unsigned short cube_elements[] = {
+			// front
+			0, 1, 2,
+			2, 3, 0,
+			// right
+			1, 5, 6,
+			6, 2, 1,
+			// back
+			7, 6, 5,
+			5, 4, 7,
+			// left
+			4, 0, 3,
+			3, 7, 4,
+			// bottom
+			4, 5, 1,
+			1, 0, 4,
+			// top
+			3, 2, 6,
+			6, 7, 3
+		};
+
+		// Provide rotation in radians
+		glm::mat4 testmodelMatrix = glm::rotate(glm::mat4(1.f), glm::radians(15.f), glm::vec3(0.0f, 1.0f, 0.f));
+
+		glBindVertexArray(VAO);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
+
+		// pos attribute
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		// uv attribute
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
+
+		// color attribute
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+		glEnableVertexAttribArray(2);
+
+		glGenBuffers(1, &EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_elements), cube_elements, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, ModelMatrixBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), &testmodelMatrix, GL_DYNAMIC_DRAW);
+
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)0);
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)(sizeof(glm::vec4)));
+		glEnableVertexAttribArray(5);
+		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)(2 * sizeof(glm::vec4)));
+		glEnableVertexAttribArray(6);
+		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)(3 * sizeof(glm::vec4)));
+
+		glVertexAttribDivisor(3, 1);
+		glVertexAttribDivisor(4, 1);
+		glVertexAttribDivisor(5, 1);
+		glVertexAttribDivisor(6, 1);
+
+		// Unbind buffers and array object
+		// Assign to mesh data manager and new graphics component
+		// Attach graphics component to object
+	}
+	void GraphicsSystem::ChangeCubeColor(const int& objID, const glm::vec3& rgb)
+	{
 		objID;
 		rgb;
-		edgeLength;
 	}
 }
