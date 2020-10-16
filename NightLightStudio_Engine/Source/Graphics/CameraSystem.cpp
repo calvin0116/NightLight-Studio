@@ -24,44 +24,71 @@ namespace NS_GRAPHICS
 		// Move camera based on axis vectors
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_FRONT", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]()
 			{
-				//Position += Front * velocity;
-				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * _camera.GetSpeed());
-				updated = true;
+			//Only if mouse left button is pressed, camera will moved with w.
+				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IMOUSE_LBUTTON))
+				{
+					//Position += Front * velocity;
+					_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * _camera.GetSpeed());
+						updated = true;
+				}
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]()
 			{
-				//Position -= Right * velocity;
-				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetRight() * _camera.GetSpeed());
-				updated = true;
+			//Only if mouse left button is pressed, camera will moved with a.
+				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IMOUSE_LBUTTON))
+				{
+					//Position -= Right * velocity;
+					_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetRight() * _camera.GetSpeed());
+					updated = true;
+				}
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_BACK", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]()
 			{
-				//Position -= Front * velocity;
-				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * _camera.GetSpeed());
-				updated = true;
+			//Only if mouse left button is pressed, camera will moved with s.
+				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IMOUSE_LBUTTON))
+				{
+					//Position -= Front * velocity;
+					_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * _camera.GetSpeed());
+					updated = true;
+				}
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]()
 			{
-				//Position += Right * velocity;
-				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetRight() * _camera.GetSpeed());
-				updated = true;
+			//Only if mouse left button is pressed, camera will moved with d.
+				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IMOUSE_LBUTTON))
+				{
+					//Position += Right * velocity;
+					_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetRight() * _camera.GetSpeed());
+					updated = true;
+				}
 			});
 
 		// Rotation
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_LEFT", SystemInput_ns::IKEY_LEFT, "LEFT", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_LEFT", SystemInput_ns::IMOUSE_LBUTTON, "LEFT", SystemInput_ns::OnHold, [this]()
 			{
 				// Rotation to the left
-				_camera.SetCameraYaw(_camera.GetYaw() - ONE_ROT_STEP);
+				glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
+				_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x);
+
+				float offsetted = _camera.GetPitch() + mousePos.y;
+				//std::cout << mousePos.y << std::endl;
+
+				if (offsetted > MAX_PITCH)
+					offsetted = MAX_PITCH;
+
+				// Rotation to the top
+				_camera.SetCameraPitch(offsetted);
+
 				updatedRot = true;
 			});
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_RIGHT", SystemInput_ns::IKEY_RIGHT, "RIGHT", SystemInput_ns::OnHold, [this]()
+		/*SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_RIGHT", SystemInput_ns::IKEY_RIGHT, "RIGHT", SystemInput_ns::OnHold, [this]()
 			{
 				// Rotation to the right
 				_camera.SetCameraYaw(_camera.GetYaw() + ONE_ROT_STEP);
 				updatedRot = true;
-			});
+			});*/
 
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_UP", SystemInput_ns::IKEY_UP, "UP", SystemInput_ns::OnHold, [this]()
+		/*SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_UP", SystemInput_ns::IKEY_UP, "UP", SystemInput_ns::OnHold, [this]()
 			{
 				float offsetted = _camera.GetPitch() + ONE_ROT_STEP;
 
@@ -83,7 +110,7 @@ namespace NS_GRAPHICS
 				// Rotation to the bottom
 				_camera.SetCameraPitch(offsetted);
 				updatedRot = true;
-			});
+			});*/
 	}
 
 	void CameraSystem::Update()

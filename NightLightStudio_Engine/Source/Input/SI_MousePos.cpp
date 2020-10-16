@@ -91,7 +91,7 @@ namespace SystemInput_ns
 	}
 	glm::vec2 SystemMousePosition::GetRelativeDragVec()
 	{
-		return { (float)(_mousePos.x - _prevMousePos.x) / (float)_clientRectSize.x,  1.0f - ((_prevMousePos.y - _mousePos.y) / (float)_clientRectSize.y )};
+		return { (float)(_mousePos.x - _prevMousePos.x) / (float)_clientRectSize.x,  ((_prevMousePos.y - _mousePos.y) / (float)_clientRectSize.y )};
 	}
 	void SystemMousePosition::SetWindow(HWND win)
 	{
