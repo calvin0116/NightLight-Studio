@@ -60,7 +60,8 @@ public:
 	void GameLoad();
 	void GameInit();		//Init current scene
 	
-	void Free();		//Destroy current system
+	void Free() override;		//Destroy current system
+	void Exit() override;
 
 	//================Scene Function====================//
     SCENE_CHANGE CheckChangeScene();	//For checking if there is a need for change of scene

@@ -48,7 +48,7 @@ void FluffyUnicornEngine::Run()
 				SYS_MAN->Update();
 
 				//Check for changing of scene
-				if (!SYS_SCENE_MANAGER->CheckChangeScene() != SC_NOCHANGE)
+				if (SYS_SCENE_MANAGER->CheckChangeScene() != SC_NOCHANGE)
 				{
 					scene_running = false;
 					//If exit is being called

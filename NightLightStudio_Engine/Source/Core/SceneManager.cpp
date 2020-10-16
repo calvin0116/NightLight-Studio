@@ -65,6 +65,11 @@ SCENE_CHANGE SceneManager::CheckChangeScene()
 
 void SceneManager::Free()
 {
+
+}
+
+void SceneManager::Exit()
+{
 	DestroyInstance();
 }
 
