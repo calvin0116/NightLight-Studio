@@ -70,6 +70,11 @@ namespace NS_GRAPHICS
 			return cameraFront;
 		}
 
+		const glm::vec3& GetCameraUp()
+		{
+			return cameraUp;
+		}
+
 		const float& GetSpeed()
 		{
 			return cameraSpeed;

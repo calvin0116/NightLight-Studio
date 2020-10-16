@@ -22,6 +22,19 @@ namespace NS_GRAPHICS
 
 		// Register keys required
 		// Move camera based on axis vectors
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_UP", SystemInput_ns::IKEY_UP, "UP", SystemInput_ns::OnHold, [this]()
+			{
+				//Position += CameraUp * velocity;
+				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetCameraUp() * _camera.GetSpeed());
+				updated = true;
+			});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_DOWN", SystemInput_ns::IKEY_DOWN, "DOWN", SystemInput_ns::OnHold, [this]()
+			{
+				//Position -= CameraUp * velocity;
+				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetCameraUp() * _camera.GetSpeed());
+				updated = true;
+			});
+
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_FRONT", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]()
 			{
 			//Only if mouse left button is pressed, camera will moved with w.
@@ -64,7 +77,7 @@ namespace NS_GRAPHICS
 			});
 
 		// Rotation
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_LEFT", SystemInput_ns::IMOUSE_LBUTTON, "LEFT", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_LEFT", SystemInput_ns::IMOUSE_LBUTTON, "MOUSE_CLICK_LEFT", SystemInput_ns::OnHold, [this]()
 			{
 				// Rotation to the left
 				glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
