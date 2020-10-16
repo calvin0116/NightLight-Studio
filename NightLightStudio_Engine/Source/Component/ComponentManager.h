@@ -749,6 +749,8 @@ public:
 
 	void Free() override;
 
+	void Exit() override;
+
 	////
 
 

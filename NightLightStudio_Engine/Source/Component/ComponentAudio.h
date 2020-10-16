@@ -8,12 +8,18 @@ class ComponentAudio : public IComponent
   {
     // Is the sound active
     bool        _isActive       = false;
-    // Loop the sound
-    bool        _loop           = false;
     // Play on scene start
     bool        _playOnStart    = false;
-    // name given after loading all the sounds path from the resource manager (not implemented yet as of 9 Oct 2020)
+    // Loop the sound
+    bool        _loop           = false;
+    // Sound is 3D
+    bool        _is3D           = false;
+    // user defined name, must be unique
     std::string _name           = "";
+    // path of sound
+    std::string _path           = "";
+    // channelID given by SystemAudio
+    int         _channel        = -1;
   };
 
   const static size_t MAX_SIZE = 4;

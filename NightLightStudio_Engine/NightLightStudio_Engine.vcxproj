@@ -185,6 +185,7 @@
     <ClInclude Include="Source\Component\ComponentTest.h" />
     <ClInclude Include="Source\Component\ComponentTransform.h" />
     <ClInclude Include="Source\Component\LocalVector.h" />
+    <ClInclude Include="Source\Component\MemoryThingy.h" />
     <ClInclude Include="Source\Core\DeltaTime.h" />
     <ClInclude Include="Source\Core\Engine.h" />
     <ClInclude Include="Source\Core\MySystem.h" />

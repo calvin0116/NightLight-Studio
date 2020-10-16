@@ -36,7 +36,7 @@ void SystemInput::Free()
 
 void SystemInput::Exit()
 {
-
+	DestroyInstance();
 }
 
 SystemInput_ns::SystemKeyPress& SystemInput::GetSystemKeyPress()

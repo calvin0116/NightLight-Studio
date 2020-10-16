@@ -48,6 +48,8 @@ namespace NS_WINDOW
 		// Initialise the Window System
 		void Init();
 
+		void Exit() override;
+
 		// The WndProc function for Win32
 		virtual LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

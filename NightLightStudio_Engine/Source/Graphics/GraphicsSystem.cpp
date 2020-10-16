@@ -96,6 +96,11 @@ namespace NS_GRAPHICS
 		glDepthFunc(GL_LESS);
 	}
 
+	void GraphicsSystem::Exit()
+	{
+		DestroyInstance();
+	}
+
 	void GraphicsSystem::Render()
 	{
 		// testing basic gl functionality
