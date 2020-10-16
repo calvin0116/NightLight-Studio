@@ -13,7 +13,7 @@ namespace SystemInput_ns
 		return { pos.x + offset.x, pos.y + offset.y };
 	}
 
-	SystemMousePosition::SystemMousePosition(bool showCursor) : _mousePos{}, _prevMousePos{}, _showCursor{ showCursor }
+	SystemMousePosition::SystemMousePosition(bool showCursor) : _mousePos{}, _prevMousePos{}, _showCursor{ showCursor }, _scrollDown{}
 	{
 		RECT rect;
 		GetClientRect(_window, &rect);
@@ -35,6 +35,14 @@ namespace SystemInput_ns
 			{
 				_mousePos = _prevMousePos;
 			}
+
+			if (_scrollDown < -110)
+				_scrollDown += 110;
+			else if (_scrollDown > 110)
+				_scrollDown -= 110;
+			else
+				_scrollDown = 0;
+
 		}
 		return 0;
 	}
@@ -96,5 +104,20 @@ namespace SystemInput_ns
 	void SystemMousePosition::SetWindow(HWND win)
 	{
 		_window = win;
+	}
+	void SystemMousePosition::SetScroll(short scroll)
+	{
+		if (GetForegroundWindow() == _window)
+		{
+			_scrollDown = scroll;
+		}
+	}
+	bool SystemMousePosition::GetIfScrollUp()
+	{
+		return _scrollDown > 0;
+	}
+	bool SystemMousePosition::GetIfScrollDown()
+	{
+		return _scrollDown < 0;;
 	}
 }

@@ -31,6 +31,7 @@ enum COMPONENTSETNAMES
 {
 	COMPONENT_MAIN = 0,
 	COMPONENT_UI,
+	COMPONENT_PREFABS,
 
 
 	COMPONENT_END
@@ -862,9 +863,14 @@ static ComponentManager* SYS_COMPONENT = ComponentManager::GetInstance();
 
 //extern ComponentManager G_COMPMGR;
 
-static ComponentManager::ComponentSetManager* G_MAINCOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
+// Entity component manager
+static ComponentManager::ComponentSetManager* G_ECMANAGER = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
 
-static ComponentManager::ComponentSetManager* G_UICOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_UI);
+// Entity component manager UI
+static ComponentManager::ComponentSetManager* G_ECMANAGER_UI = SYS_COMPONENT->getComponentSetMgr(COMPONENT_UI);
+
+// Entity component manager Prefabs
+static ComponentManager::ComponentSetManager* G_ECMANAGER_PREFABS = SYS_COMPONENT->getComponentSetMgr(COMPONENT_PREFABS);
 
 // for some reason gfx becomes black screen with this
 //static ComponentManager::ComponentSetManager* G_UICOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);

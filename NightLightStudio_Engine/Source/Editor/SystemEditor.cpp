@@ -8,10 +8,6 @@ SystemEditor::SystemEditor()
 {
 }
 
-void SystemEditor::OnFirstStart()
-{
-}
-
 void SystemEditor::Load()
 {
 }
@@ -21,10 +17,9 @@ void SystemEditor::Init()
 	_editor.Init(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
 }
 
-bool SystemEditor::Update()
+void SystemEditor::Update()
 {
 	_editor.Update();
-	return true;
 }
 
 void SystemEditor::Exit()
@@ -33,10 +28,6 @@ void SystemEditor::Exit()
 }
 
 void SystemEditor::Free()
-{
-}
-
-void SystemEditor::Unload()
 {
 }
 

@@ -16,8 +16,6 @@ namespace NS_GRAPHICS
 
 	void ModelLoader::TransverseChild(FbxNode* node, Model*& model)
 	{
-		FbxDouble3 scaling = node->LclScaling.Get();
-
 		for (int i = 0; i < node->GetNodeAttributeCount(); ++i)
 		{
 			FbxNodeAttribute* nodeType = node->GetNodeAttributeByIndex(i);
@@ -31,6 +29,7 @@ namespace NS_GRAPHICS
 				const int vertexCount = mesh->GetControlPointsCount();
 				FbxVector4* vertexs = mesh->GetControlPoints();
 				newMesh->_vertices.reserve(vertexCount);
+				FbxDouble3 scaling = node->LclScaling.Get();
 
 				for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
 				{
