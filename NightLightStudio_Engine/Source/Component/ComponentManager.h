@@ -764,9 +764,15 @@ public:
 
 	ComponentSetManager* getComponentSetMgr(COMPONENTSETNAMES id);
 
+	// add components here
+	void ComponentCreation();
+
+	void TestComponents();
+
 	//// virtual fns for system calls
     // go check ISystem.h for virtual fns
 
+	void Init() override;
 
 	void Free() override;
 
