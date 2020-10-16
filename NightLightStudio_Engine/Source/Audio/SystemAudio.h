@@ -72,7 +72,7 @@ public:
   void Update() override;
 
 	void Free();
-	void Exit();
+    void Exit() override;
 };
 
 // Global ptr

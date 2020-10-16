@@ -162,6 +162,7 @@ void SystemAudio::Update()
 
 void SystemAudio::Exit()
 {
+    DestroyInstance();
 }
 
 

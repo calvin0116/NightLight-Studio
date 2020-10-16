@@ -25,7 +25,7 @@ namespace NS_PHYSICS
 
 		void Update();
 
-		void Exit();
+		void Exit() override;
 
 		void Free();
 

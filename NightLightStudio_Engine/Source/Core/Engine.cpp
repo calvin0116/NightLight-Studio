@@ -79,6 +79,6 @@ void FluffyUnicornEngine::Run()
 void FluffyUnicornEngine::Exit()
 {
 	//SYS_MAN->Free();
-	SYS_MAN->Exit();
 	SYS_COMPONENT->Free();
+	SYS_MAN->Exit();
 }

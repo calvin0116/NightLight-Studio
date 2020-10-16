@@ -59,6 +59,7 @@ namespace NS_PHYSICS
 
 	void PhysicsSystem::Exit()
 	{
+		DestroyInstance();
 	}
 
 	void PhysicsSystem::Free()
