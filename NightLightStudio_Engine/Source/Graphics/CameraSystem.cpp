@@ -33,13 +33,13 @@ namespace NS_GRAPHICS
 				{
 					glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
 					//handles topdown
-					glm::vec3 newCameraOffset = _camera.GetCameraUp() * mousePos.y * _camera.GetSpeed();
-					newCameraOffset *= DELTA_T->dt;
-					_camera.SetCameraPosition(_camera.GetPosition() + newCameraOffset);
+					glm::vec3 newCameraOffset = _camera.GetCameraUp() * -mousePos.y * POSITION_SENSITIVITY;
+					//newCameraOffset *= DELTA_T->dt;
+					//_camera.SetCameraPosition(_camera.GetPosition() + newCameraOffset);
 
 					//handles leftright
-					newCameraOffset = _camera.GetRight() * mousePos.x * _camera.GetSpeed();
-					newCameraOffset *= DELTA_T->dt;
+					newCameraOffset += _camera.GetRight() * -mousePos.x * POSITION_SENSITIVITY;
+					//newCameraOffset *= DELTA_T->dt;
 
 					//Position += CameraUp * velocity;
 					_camera.SetCameraPosition(_camera.GetPosition() + newCameraOffset);
@@ -120,10 +120,10 @@ namespace NS_GRAPHICS
 					glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
 
 					// Rotation for left and right
-					_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x * _camera.GetSpeed() * DELTA_T->dt);
+					_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x * ROTATION_SENSITIVITY * ONE_ROT_STEP);
 
 					// Rotation for up and down
-					float offsetted = _camera.GetPitch() + mousePos.y * _camera.GetSpeed() * DELTA_T->dt;
+					float offsetted = _camera.GetPitch() + mousePos.y * ROTATION_SENSITIVITY * ONE_ROT_STEP;
 
 					if (offsetted > MAX_PITCH)
 						offsetted = MAX_PITCH;
