@@ -5,7 +5,8 @@ namespace NS_GRAPHICS
 {
 	CameraSystem::CameraSystem()
 		: _camera(),
-		updatedRot{ false }
+		updatedRot{ false },
+		updated{ false }
 	{
 	}
 
@@ -21,88 +22,114 @@ namespace NS_GRAPHICS
 
 		// Register keys required
 		// Move camera based on axis vectors
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_FRONT", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_UP", SystemInput_ns::IKEY_UP, "UP", SystemInput_ns::OnHold, [this]()
 			{
-				//Position += Front * velocity;
-				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * _camera.GetSpeed());
+				//Position += CameraUp * velocity;
+				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetCameraUp() * _camera.GetSpeed());
 				updated = true;
 			});
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_DOWN", SystemInput_ns::IKEY_DOWN, "DOWN", SystemInput_ns::OnHold, [this]()
 			{
-				//Position -= Right * velocity;
-				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetRight() * _camera.GetSpeed());
-				updated = true;
-			});
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_BACK", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]()
-			{
-				//Position -= Front * velocity;
-				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * _camera.GetSpeed());
-				updated = true;
-			});
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]()
-			{
-				//Position += Right * velocity;
-				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetRight() * _camera.GetSpeed());
+				//Position -= CameraUp * velocity;
+				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetCameraUp() * _camera.GetSpeed());
 				updated = true;
 			});
 
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_FRONT", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]()
+			{
+			//Only if mouse left button is pressed, camera will moved with w.
+				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IMOUSE_LBUTTON))
+				{
+					//Position += Front * velocity;
+					_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * _camera.GetSpeed());
+						updated = true;
+				}
+			});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]()
+			{
+			//Only if mouse left button is pressed, camera will moved with a.
+				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IMOUSE_LBUTTON))
+				{
+					//Position -= Right * velocity;
+					_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetRight() * _camera.GetSpeed());
+					updated = true;
+				}
+			});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_BACK", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]()
+			{
+			//Only if mouse left button is pressed, camera will moved with s.
+				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IMOUSE_LBUTTON))
+				{
+					//Position -= Front * velocity;
+					_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * _camera.GetSpeed());
+					updated = true;
+				}
+			});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]()
+			{
+			//Only if mouse left button is pressed, camera will moved with d.
+				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IMOUSE_LBUTTON))
+				{
+					//Position += Right * velocity;
+					_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetRight() * _camera.GetSpeed());
+					updated = true;
+				}
+			});
+
 		// Rotation
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_LEFT", SystemInput_ns::IKEY_LEFT, "LEFT", SystemInput_ns::OnPress, nullptr);
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_RIGHT", SystemInput_ns::IKEY_RIGHT, "RIGHT", SystemInput_ns::OnPress, nullptr);
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_LEFT", SystemInput_ns::IMOUSE_LBUTTON, "MOUSE_CLICK_LEFT", SystemInput_ns::OnHold, [this]()
+			{
+				// Rotation to the left
+				glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
+				_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x);
+
+				float offsetted = _camera.GetPitch() + mousePos.y;
+				//std::cout << mousePos.y << std::endl;
+
+				if (offsetted > MAX_PITCH)
+					offsetted = MAX_PITCH;
+
+				// Rotation to the top
+				_camera.SetCameraPitch(offsetted);
+
+				updatedRot = true;
+			});
+		/*SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_RIGHT", SystemInput_ns::IKEY_RIGHT, "RIGHT", SystemInput_ns::OnHold, [this]()
+			{
+				// Rotation to the right
+				_camera.SetCameraYaw(_camera.GetYaw() + ONE_ROT_STEP);
+				updatedRot = true;
+			});*/
+
+		/*SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_UP", SystemInput_ns::IKEY_UP, "UP", SystemInput_ns::OnHold, [this]()
+			{
+				float offsetted = _camera.GetPitch() + ONE_ROT_STEP;
+
+				if (offsetted > MAX_PITCH)
+					offsetted = MAX_PITCH;
+
+				// Rotation to the top
+				_camera.SetCameraPitch(offsetted);
+				updatedRot = true;
+			});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_DOWN", SystemInput_ns::IKEY_DOWN, "DOWN", SystemInput_ns::OnHold, [this]()
+			{
+				float offsetted = _camera.GetPitch() - ONE_ROT_STEP;
+
+				// Check if out of bounds to prevent flipping
+				if (offsetted < MIN_PITCH)
+					offsetted = MIN_PITCH;
+
+				// Rotation to the bottom
+				_camera.SetCameraPitch(offsetted);
+				updatedRot = true;
+			});*/
 	}
 
 	void CameraSystem::Update()
 	{
 		// Call to activate all keys
 		//SYS_INPUT->GetSystemKeyPress().ALL_THE_KEYS();
-
-		// Move vector via rotation about a point
-		// Should be based on offset of mouse x and y from prev frame
-		// Should also check if right mouse button is held
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_LEFT))
-		{
-			//float offset;
-			//offset = _camera.GetSpeed() * mouse_xoffset;
-
-			// Rotation about X axis
-			_camera.SetCameraYaw(_camera.GetYaw() + 1.f);
-
-			// Constrain to prevent screen flip vertically
-			if (_camera.GetYaw() > TWO_NUM_STEPS_PI)
-				_camera.SetCameraYaw(_camera.GetYaw() - TWO_NUM_STEPS_PI);
-
-			std::cout << "Camera has rotated to left" << std::endl;
-			updatedRot = true;
-		}
-
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_RIGHT))
-		{
-			//float offset;
-			//offset = _camera.GetSpeed() * mouse_xoffset;
-
-			// Rotation about X axis
-			_camera.SetCameraYaw(_camera.GetYaw() - 1.f);
-
-			// Constrain to prevent screen flip vertically
-			if (_camera.GetYaw() < 0.f)
-				_camera.SetCameraYaw(_camera.GetYaw() + TWO_NUM_STEPS_PI);
-
-			std::cout << "Camera has rotated to right" << std::endl;
-			updatedRot = true;
-		}
-
-		if (NULL)
-		{
-			//float offset;
-			//offset = _camera.GetSpeed() * mouse_yoffset;
-
-			// Rotation about Y axis
-			//_camera.SetCameraPitch(_camera.GetPitch() + offset);
-
-			// No need to set constraint here
-
-			updatedRot = true;
-		}
 
 		// Only update the camera vectors if changes to rotation occurred
 		// Function is required as vectors require more elaborate calculation compared to position

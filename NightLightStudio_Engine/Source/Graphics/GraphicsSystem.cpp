@@ -26,7 +26,7 @@ namespace NS_GRAPHICS
 	{
 	}
 
-	bool GraphicsSystem::Update()
+	void GraphicsSystem::Update()
 	{
 		cameraManager->Update();
 
@@ -37,8 +37,6 @@ namespace NS_GRAPHICS
 		}
 
 		Render();
-
-		return true;
 	}
 
 	void GraphicsSystem::Free()
@@ -70,6 +68,10 @@ namespace NS_GRAPHICS
 
 		cameraManager->Init();
 
+		/*Model* model = new Model();
+		modelLoader->LoadFBX("test.fbx",model);
+		delete model;*/
+
 		// Set default values for view matrix
 		// temporary solution before camera system implementation
 		// NOTE THAT CAMERA POSITION MUST/SHOULD BE SOME DISTANCE AWAY FROM OBJECT TO BE ABLE TO SEE
@@ -92,6 +94,11 @@ namespace NS_GRAPHICS
 		// Passes if the fragment's depth value is less than the stored depth value.
 		// This is the default, but we will call this function to be explicit
 		glDepthFunc(GL_LESS);
+	}
+
+	void GraphicsSystem::Exit()
+	{
+		DestroyInstance();
 	}
 
 	void GraphicsSystem::Render()
@@ -218,8 +225,13 @@ namespace NS_GRAPHICS
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
-	void GraphicsSystem::CreateCube(const glm::vec3& rgb, const float& edgeLength)
+	void GraphicsSystem::CreateCube(const int& objID, const glm::vec3& rgb, const float& edgeLength)
 	{
+		// Check if graphics component is already exists for obj
+
 		// Create cube and put into model manager's vector of models
+		objID;
+		rgb;
+		edgeLength;
 	}
 }

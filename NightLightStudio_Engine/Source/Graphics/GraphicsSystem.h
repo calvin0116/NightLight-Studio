@@ -37,7 +37,7 @@ namespace NS_GRAPHICS
             > Shader Program Variables
             > Render
         */
-        bool Update();
+        void Update();
 
         /*
             Free the following in the following order:
@@ -61,7 +61,9 @@ namespace NS_GRAPHICS
             > Camera Manager
             > Light Instance Manager
         */
-        void Init();
+        void Init() override;
+
+        void Exit() override;
 
         void Render();
 
@@ -77,7 +79,13 @@ namespace NS_GRAPHICS
         void SetProjectionMatrix(const float& fov = 45.f, const float& aspect_ratio = 1.78f, const float& near_plane = 0.01f, const float& far_plane = 1000.f);
 
         // Creates a basic cube based on given data
-        void CreateCube(const glm::vec3& rgb, const float& edgeLength);
+        // Attaches graphics component to given object ID
+        // Object ID MUST BE VALID, else undefined behavior
+        void CreateCube(const int& objID, const glm::vec3& rgb, const float& edgeLength);
+
+        //G_MAINCOMPSET.AttachComponent<GraphicsComponent>(objID, GraphicsComponent)
+
+        void ChangeCubeColor(const int& objID, const glm::vec3& rgb);
 
     private:
 

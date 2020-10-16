@@ -1039,6 +1039,11 @@ void ComponentManager::Free()
 	ComponentSets.clear();
 }
 
+void ComponentManager::Exit()
+{
+	DestroyInstance();
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 

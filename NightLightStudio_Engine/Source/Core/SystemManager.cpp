@@ -28,8 +28,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	Systems[S_PRIORITY::SP_INPUT] = SYS_INPUT;
 	Systems[S_PRIORITY::SP_IO] = SYS_IO;
 	Systems[S_PRIORITY::SP_AUDIO] = SYS_AUDIO;
-	//Systems[S_PRIORITY::SP_SCENEMANAGER] = SYS_SCENEMANAGER;
-	Systems[S_PRIORITY::SP_TRANSFORM] = SYS_TRANSFORM;
+	Systems[S_PRIORITY::SP_SCENEMANAGER] = SYS_SCENE_MANAGER;
 	Systems[S_PRIORITY::SP_PHYSICS] = NS_PHYSICS::SYS_PHYSICS;
 	Systems[S_PRIORITY::SP_COMPONENT] = SYS_COMPONENT;
 	
@@ -108,7 +107,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// Systems OnFirst start
 	for (auto my_sys : Systems)
-		my_sys.second->OnFirstStart();
+		my_sys.second->Load();
 	// Systems OnFirst start END
 	///////////////////////////////////////////////////////////////////////////////////////////////
 

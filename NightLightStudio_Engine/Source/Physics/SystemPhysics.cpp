@@ -23,7 +23,7 @@ namespace NS_PHYSICS
 	{
 	}
 
-	bool PhysicsSystem::Update()
+	void PhysicsSystem::Update()
 	{
 		auto itr = G_MAINCOMPSET->begin<ComponentRigidBody>();
 		auto itrEnd = G_MAINCOMPSET->end<ComponentRigidBody>();
@@ -57,11 +57,12 @@ namespace NS_PHYSICS
 			//Loop 
 			
 		}
-		return true;
+		//return true;
 	}
 
 	void PhysicsSystem::Exit()
 	{
+		DestroyInstance();
 	}
 
 	void PhysicsSystem::Free()

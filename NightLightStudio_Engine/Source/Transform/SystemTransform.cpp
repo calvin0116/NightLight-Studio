@@ -1,6 +1,6 @@
 #include "SystemTransform.h"
 
-bool SystemTransform::Update()
+void SystemTransform::Update()
 {
 	auto itr = G_MAINCOMPSET->begin<ComponentTransform>();
 	auto itrEnd = G_MAINCOMPSET->end<ComponentTransform>();
@@ -23,5 +23,5 @@ bool SystemTransform::Update()
 		++itr;
 	}
 
-	return true;
+	//return true;
 }

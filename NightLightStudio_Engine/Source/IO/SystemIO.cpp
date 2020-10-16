@@ -3,38 +3,45 @@
 #include "..\\Component\Components.h"
 #include "..\\Core\SystemManager.h"
 
-void SystemIO::OnFirstStart()
+
+void SystemIO::Load()
 {
-	std::cout << "SystemIO::OnFirstStart" << std::endl;
-	CONFIG_DATA->OnFirstStart();
-}
-
-
-
-void SystemIO::EarlyLoad()
-{
-	std::cout << "SystemIO::EarlyLoad" << std::endl;
+	std::cout << "SystemIO::Load" << std::endl;
 	//G_GSM.getScn(); // get the current scene
 	//G_GSM.setScn(1); // set the nxt scene
+
 	CONFIG_DATA->Load();
 }
 
 void SystemIO::Init()
 {
+	std::cout << "SystemIO::OnFirstStart" << std::endl;
+	CONFIG_DATA->Init();
 }
 
-void SystemIO::Update(float )
+void SystemIO::GameInit()
 {
 }
 
-void SystemIO::Exit()
+void SystemIO::GameLoad()
 {
 }
+
+void SystemIO::Update()
+{
+}
+
+void SystemIO::GameExit()
+{
+}
+
 
 void SystemIO::Free()
 {
 }
 
-void SystemIO::Unload()
+void SystemIO::Exit()
 {
+	DestroyInstance();
 }
+

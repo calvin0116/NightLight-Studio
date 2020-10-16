@@ -26,73 +26,32 @@ private:
 	//std::vector< MySystem *
 public:
 	//List of function calling for all system
-	//== Memory allocation phase
+	//== Memory allocation phase / Load all system
 	ENGINE_API void StartUp(HINSTANCE&);
-
-	//== Asserts importing / additional memory allocation phase
-	ENGINE_API void EarlyLoad() { for (auto my_sys : Systems) my_sys.second->EarlyLoad(); };
-	ENGINE_API void Load() { for (auto my_sys : Systems) my_sys.second->Load(); };
-	ENGINE_API void LateLoad() { for (auto my_sys : Systems) my_sys.second->LateLoad(); };
-
-	//== Game / Usage of assert phase
-	ENGINE_API void EarlyInit() { for (auto my_sys : Systems) my_sys.second->EarlyInit(); };
 	ENGINE_API void Init() { for (auto my_sys : Systems) my_sys.second->Init(); };
-	ENGINE_API void LateInit() { for (auto my_sys : Systems) my_sys.second->LateInit(); }
+
+
+	//== Asserts importing
+	ENGINE_API void GameLoad() { for (auto my_sys : Systems) my_sys.second->GameLoad(); };
+	//== Game / Usage of assert phase
+	//ENGINE_API void EarlyInit() { for (auto my_sys : Systems) my_sys.second->EarlyInit(); };
+	ENGINE_API void GameInit() { for (auto my_sys : Systems) my_sys.second->GameInit(); };
+	//ENGINE_API void LateInit() { for (auto my_sys : Systems) my_sys.second->LateInit(); }
 
 	//== Game / System running loop
-	ENGINE_API bool FixedUpdate() {
-		for (auto my_sys : Systems) 
-			if(!my_sys.second->FixedUpdate())
-				return false;
-		return true;
-	};
-	ENGINE_API bool Update() {
-		for (auto my_sys : Systems)
-			if (!my_sys.second->Update())
-				return false;
-		return true;
-	};
-	ENGINE_API bool LateUpdate() {
-		for (auto my_sys : Systems)
-			if (!my_sys.second->LateUpdate())
-				return false;
-		return true;
-	};
+	ENGINE_API void FixedUpdate() {	for (auto my_sys : Systems) my_sys.second->FixedUpdate();};
+	ENGINE_API void Update() {	for (auto my_sys : Systems) my_sys.second->Update();	};
 
-	//== Game info clear
-	ENGINE_API void Exit() { for (auto my_sys : Systems) my_sys.second->Exit(); };
-	//== Asserts clear
-	ENGINE_API void Unload() { for (auto my_sys : Systems) my_sys.second->Unload(); };
-	//Memory deallocation phase
+
+	//== Game Asserts clear
+	ENGINE_API void GameExit() { for (auto my_sys : Systems) my_sys.second->GameExit(); };
+
+	//Memory deallocation phase without dependancy
 	ENGINE_API void Free() { for (auto my_sys : Systems) my_sys.second->Free(); };
+	//Memory deallocation phase without dependancy
+	ENGINE_API void Exit() { for (auto my_sys : Systems) my_sys.second->Exit(); };
 
 	//== Helper function
-
-	// All this function for now is just placed here for normal use
-	// Sequencing will be improved later on
-	ENGINE_API void CombineLoad()
-	{
-		EarlyLoad();
-		Load();
-		LateLoad();
-	}
-
-	ENGINE_API void CombineInit()
-	{
-		EarlyInit();
-		Init();
-		LateInit();
-	}
-
-	ENGINE_API bool CombineUpdate()
-	{
-		if(!FixedUpdate()) return false;
-		if(!Update()) return false;
-		if(!LateUpdate()) return false;
-
-		return true;
-	}
-
 	//Getting system
 	ENGINE_API MySystem* operator[] (S_PRIORITY sys_p)
 	{

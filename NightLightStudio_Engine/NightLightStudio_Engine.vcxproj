@@ -185,6 +185,7 @@
     <ClInclude Include="Source\Component\ComponentTest.h" />
     <ClInclude Include="Source\Component\ComponentTransform.h" />
     <ClInclude Include="Source\Component\LocalVector.h" />
+    <ClInclude Include="Source\Component\MemoryThingy.h" />
     <ClInclude Include="Source\Core\DeltaTime.h" />
     <ClInclude Include="Source\Core\Engine.h" />
     <ClInclude Include="Source\Core\MySystem.h" />
@@ -234,7 +235,6 @@
     <ClInclude Include="Source\Messaging\SystemReceiver.h" />
     <ClInclude Include="Source\Physics\CollisionMathLib.h" />
     <ClInclude Include="Source\Physics\SystemPhysics.h" />
-    <ClInclude Include="Source\Transform\SystemTransform.h" />
     <ClInclude Include="Source\Window\WndSystem.h" />
     <ClInclude Include="Source\Window\WndUtils.h" />
   </ItemGroup>
@@ -294,7 +294,6 @@
     <ClCompile Include="Source\Messaging\SystemReceiver.cpp" />
     <ClCompile Include="Source\Physics\CollisionMathLib.cpp" />
     <ClCompile Include="Source\Physics\SystemPhysics.cpp" />
-    <ClCompile Include="Source\Transform\SystemTransform.cpp" />
     <ClCompile Include="Source\Window\WndSystem.cpp" />
   </ItemGroup>
   <ItemGroup>

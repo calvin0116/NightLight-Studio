@@ -52,7 +52,7 @@ namespace SystemInput_ns
 	}
 	glm::vec2 SystemMousePosition::GetMouseDragVec()
 	{
-		return { _mousePos.x - _prevMousePos.x,  _prevMousePos.y - _mousePos.y };;
+		return { _mousePos.x - _prevMousePos.x,  _prevMousePos.y - _mousePos.y };
 	}
 	bool SystemMousePosition::ToggleCursorVisible()
 	{
@@ -88,6 +88,10 @@ namespace SystemInput_ns
 	glm::vec2 SystemMousePosition::GetRelativeLocation()
 	{
 		return { (float)_mousePos.x / (float)_clientRectSize.x, 1.0f - (float)_mousePos.y / (float)_clientRectSize.y };
+	}
+	glm::vec2 SystemMousePosition::GetRelativeDragVec()
+	{
+		return { (float)(_mousePos.x - _prevMousePos.x) / (float)_clientRectSize.x,  ((_prevMousePos.y - _mousePos.y) / (float)_clientRectSize.y )};
 	}
 	void SystemMousePosition::SetWindow(HWND win)
 	{
