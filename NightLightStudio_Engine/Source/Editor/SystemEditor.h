@@ -19,19 +19,15 @@ protected:
 	ENGINE_API ~SystemEditor() = default;
 
 public:
-	ENGINE_API void OnFirstStart() override;
-
 	ENGINE_API void Load() override;
 
 	ENGINE_API void Init() override;
 
-	ENGINE_API bool Update() override;
+	ENGINE_API void Update() override;
 
 	ENGINE_API void Exit() override;
 
 	ENGINE_API void Free() override;
-
-	ENGINE_API void Unload() override;
 };
 
 //GLOBAL pointer to an instance of graphic system

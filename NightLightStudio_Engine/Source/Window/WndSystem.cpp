@@ -22,6 +22,7 @@ Institute of Technology is prohibited.
 
 #ifdef _EDITOR
 #include "../Editor/imgui/imgui_impl_win32.h"
+#include "../Input/SystemInput.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #endif
 
@@ -379,6 +380,14 @@ namespace NS_WINDOW
 #endif
 		switch (msg)
 		{
+#ifdef _EDITOR
+		case WM_MOUSEWHEEL:
+		{
+			// Like seriously i don't know how else to get mouse wheels
+			SYS_INPUT->GetSystemMousePos().SetScroll((GET_WHEEL_DELTA_WPARAM(wParam)));
+		break;
+		}
+#endif
 		/*case WM_ACTIVATEAPP: // Used to handle pausing/playing upon alt-tab
 			break;*/
 		case WM_DESTROY:

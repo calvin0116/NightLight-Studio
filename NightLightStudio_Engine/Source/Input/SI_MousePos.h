@@ -16,6 +16,8 @@ namespace SystemInput_ns
 
 		bool _showCursor;
 
+		short _scrollDown;
+
 		POINT _clientRectSize;
 
 		//ONLY TO PREVENT CHECKING WHEN OUT OF WINDOW, MAY BE REMOVED/REPLACED
@@ -56,6 +58,10 @@ namespace SystemInput_ns
 		glm::vec2 GetRelativeDragVec();
 
 		void SetWindow(HWND win);
+
+		void SetScroll(short scroll);
+		bool GetIfScrollUp();
+		bool GetIfScrollDown();
 	};
 }
 
