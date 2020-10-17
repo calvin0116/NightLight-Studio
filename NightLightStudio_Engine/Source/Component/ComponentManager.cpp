@@ -12,6 +12,7 @@
 #include "..//Component/ComponentTransform.h"
 #include "..//Component/ComponentRigidBody.h"
 #include "..//Component/ComponentCollider.h"
+#include "..//Component/ComponentGraphics.h"
 
 #include "../Component/LocalVector.h"
 
@@ -1054,6 +1055,7 @@ void ComponentManager::ComponentCreation()
 		comsetFac.AddComponentContainer<ComponentTest0>();
 		comsetFac.AddComponentContainer<ComponentCollider>();
 		comsetFac.AddComponentContainer<ComponentRigidBody>();
+		comsetFac.AddComponentContainer<ComponentGraphics>();
 		//comsetFac.AddComponentContainer<ComponentInput>();
 		//comsetFac.AddComponentContainer<ComponentLogic>();
 		//comsetFac.AddComponentContainer<ComponentCamera>();

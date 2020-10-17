@@ -26,15 +26,22 @@ namespace NS_GRAPHICS
 		GLuint VAO = NULL;
 		GLuint VBO = NULL;
 		GLuint EBO = NULL;
-		GLuint modelMatrixBO = NULL;
+		
+		GLuint ModelMatrixBO = NULL;
 
-		/// //////////////////////////
+		//////////////////////////////
+
+		// ** TEMPORARY BEFORE NEW DATA INTEGRATION
+		GLuint CBO = NULL;			// Color Buffer object
+		GLuint UVBO = NULL;
 
 		std::vector<glm::vec3> _vertices;
 		std::vector<glm::vec2> _uv;
 		std::vector<glm::vec3> _normals;
 		std::vector<glm::vec3> _faceNormals; //If ever need to calculate
-		std::vector<int> _indices;
+		std::vector<unsigned short> _indices;
+		
+		std::vector<glm::vec3> _rgb;
 		//std::vector<unsigned> _textures; // each face has its own texture
 
 		Mesh() = default;

@@ -11,6 +11,14 @@ namespace NS_GRAPHICS
 	{
 
 	}
+	void ModelManager::DeleteMeshes()
+	{
+		for (auto& i : meshes)
+		{
+			delete i;
+		}
+	}
+
 	void ModelManager::FreeGLObjects()
 	{
 		for (auto& i : VAOs)

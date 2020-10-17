@@ -2,6 +2,10 @@
 #include "../Window/WndSystem.h"
 #include "GraphicsSystem.h"
 
+#include "../Component/Components.h" // Access to components
+#include "../Component/ComponentTransform.h"
+#include "../Component/ComponentGraphics.h"
+
 #include "../glm/gtc/matrix_transform.hpp" // glm::perspective
 #include "../glm/gtc/type_ptr.hpp"         // Cast to type pointer for communication with gpu
 
@@ -69,6 +73,9 @@ namespace NS_GRAPHICS
 		// Initialize sub systems and managers
 		shaderManager->Init();
 
+		// Set default values for view matrix
+		SetViewMatrix();
+
 		cameraManager->Init();
 
 		/*Model* model = new Model();
@@ -84,9 +91,6 @@ namespace NS_GRAPHICS
 		glm::vec3 cameraUp(0.f, 1.f, 0.f);
 
 		viewMatrix = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);*/
-
-		// Set default values for view matrix
-		SetViewMatrix();
 
 		// Set default values for projection matrix
 		SetProjectionMatrix();
@@ -231,58 +235,97 @@ namespace NS_GRAPHICS
 	void GraphicsSystem::CreateCube(const int& objID, const glm::vec3& rgb, const float& midExtent)
 	{
 		// Check if graphics component is already exists for obj
-		if (objID);
+		// Assume it's a proper objID for now
+		//if (G_ECMANAGER->getEntity(objID));
+
+		Mesh* mesh = new Mesh();
 
 		// Create cube and put into model manager's vector of models
-		GLuint VAO = NULL;
-		GLuint VBO = NULL;
-		GLuint EBO = NULL;
-		GLuint ModelMatrixBO = NULL;
 
-		glGenVertexArrays(1, &VAO);
-		glGenBuffers(1, &VBO);
-		glGenBuffers(1, &ModelMatrixBO);
+		glGenVertexArrays(1, &mesh->VAO);
+		glGenBuffers(1, &mesh->VBO);
+		glGenBuffers(1, &mesh->EBO);
+		glGenBuffers(1, &mesh->CBO);
+		glGenBuffers(1, &mesh->UVBO);
+		glGenBuffers(1, &mesh->ModelMatrixBO);
 
-		float cube_vertices[] = {
-			// positions							// texture coords	// color
-			-midExtent, -midExtent,  midExtent,		1.0f, 1.0f,			rgb.x, rgb.y, rgb.z,
-			 midExtent, -midExtent,  midExtent,		1.0f, 0.0f,			rgb.x, rgb.y, rgb.z,
-			 midExtent,  midExtent,  midExtent,		0.0f, 0.0f,			rgb.x, rgb.y, rgb.z,
-			-midExtent,  midExtent,  midExtent,		1.0f, 1.0f,			rgb.x, rgb.y, rgb.z,
-			-midExtent, -midExtent, -midExtent,		1.0f, 0.0f,			rgb.x, rgb.y, rgb.z,
-			 midExtent, -midExtent, -midExtent,		0.0f, 0.0f,			rgb.x, rgb.y, rgb.z,
-			 midExtent,  midExtent, -midExtent,		1.0f, 1.0f,			rgb.x, rgb.y, rgb.z,
-			-midExtent,  midExtent, -midExtent,		1.0f, 0.0f,			rgb.x, rgb.y, rgb.z
-		};
+		// Vertex position
+		mesh->_vertices.emplace_back(-midExtent, -midExtent, midExtent);
+		mesh->_vertices.emplace_back(midExtent, -midExtent, midExtent);
+		mesh->_vertices.emplace_back(midExtent, midExtent, midExtent);
+		mesh->_vertices.emplace_back(-midExtent, midExtent, midExtent);
+		mesh->_vertices.emplace_back(-midExtent, -midExtent, -midExtent);
+		mesh->_vertices.emplace_back(midExtent, -midExtent, -midExtent);
+		mesh->_vertices.emplace_back(midExtent, midExtent, -midExtent);
+		mesh->_vertices.emplace_back(-midExtent, midExtent, -midExtent);
 
-		unsigned short cube_elements[] = {
-			// front
-			0, 1, 2,
-			2, 3, 0,
-			// right
-			1, 5, 6,
-			6, 2, 1,
-			// back
-			7, 6, 5,
-			5, 4, 7,
-			// left
-			4, 0, 3,
-			3, 7, 4,
-			// bottom
-			4, 5, 1,
-			1, 0, 4,
-			// top
-			3, 2, 6,
-			6, 7, 3
-		};
+		// Vertex color
+		mesh->_rgb.emplace_back(rgb.x, rgb.y, rgb.z);
+		mesh->_rgb.emplace_back(rgb.x, rgb.y, rgb.z);
+		mesh->_rgb.emplace_back(rgb.x, rgb.y, rgb.z);
+		mesh->_rgb.emplace_back(rgb.x, rgb.y, rgb.z);
+		mesh->_rgb.emplace_back(rgb.x, rgb.y, rgb.z);
+		mesh->_rgb.emplace_back(rgb.x, rgb.y, rgb.z);
+		mesh->_rgb.emplace_back(rgb.x, rgb.y, rgb.z);
+		mesh->_rgb.emplace_back(rgb.x, rgb.y, rgb.z);
 
-		// Provide rotation in radians
-		glm::mat4 testmodelMatrix = glm::rotate(glm::mat4(1.f), glm::radians(15.f), glm::vec3(0.0f, 1.0f, 0.f));
+		// Vertex Index
+		mesh->_indices.emplace_back(0);
+		mesh->_indices.emplace_back(1);
+		mesh->_indices.emplace_back(2);
+		mesh->_indices.emplace_back(2);
+		mesh->_indices.emplace_back(3);
+		mesh->_indices.emplace_back(0);
 
-		glBindVertexArray(VAO);
+		mesh->_indices.emplace_back(1);
+		mesh->_indices.emplace_back(5);
+		mesh->_indices.emplace_back(6);
+		mesh->_indices.emplace_back(6);
+		mesh->_indices.emplace_back(2);
+		mesh->_indices.emplace_back(1);
 
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
+		mesh->_indices.emplace_back(7);
+		mesh->_indices.emplace_back(6);
+		mesh->_indices.emplace_back(5);
+		mesh->_indices.emplace_back(5);
+		mesh->_indices.emplace_back(4);
+		mesh->_indices.emplace_back(7);
+
+		mesh->_indices.emplace_back(4);
+		mesh->_indices.emplace_back(0);
+		mesh->_indices.emplace_back(3);
+		mesh->_indices.emplace_back(3);
+		mesh->_indices.emplace_back(7);
+		mesh->_indices.emplace_back(4);
+
+		mesh->_indices.emplace_back(4);
+		mesh->_indices.emplace_back(5);
+		mesh->_indices.emplace_back(1);
+		mesh->_indices.emplace_back(1);
+		mesh->_indices.emplace_back(0);
+		mesh->_indices.emplace_back(4);
+
+		mesh->_indices.emplace_back(3);
+		mesh->_indices.emplace_back(2);
+		mesh->_indices.emplace_back(6);
+		mesh->_indices.emplace_back(6);
+		mesh->_indices.emplace_back(7);
+		mesh->_indices.emplace_back(3);
+
+		// Texture coord (redundant for now)
+		mesh->_uv.emplace_back(1.0f, 1.0f);
+		mesh->_uv.emplace_back(1.0f, 0.0f);
+		mesh->_uv.emplace_back(0.0f, 0.0f);
+		mesh->_uv.emplace_back(1.0f, 1.0f);
+		mesh->_uv.emplace_back(1.0f, 0.0f);
+		mesh->_uv.emplace_back(0.0f, 0.0f);
+		mesh->_uv.emplace_back(1.0f, 1.0f);
+		mesh->_uv.emplace_back(1.0f, 0.0f);
+
+		glBindVertexArray(mesh->VAO);
+
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * mesh->_vertices.size(), &mesh->_vertices[0], GL_STATIC_DRAW);
 
 		// pos attribute
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -296,21 +339,21 @@ namespace NS_GRAPHICS
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 		glEnableVertexAttribArray(2);
 
-		glGenBuffers(1, &EBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_elements), cube_elements, GL_STATIC_DRAW);
+		// Indices
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * mesh->_indices.size(), &mesh->_indices[0], GL_STATIC_DRAW);
 
-		glBindBuffer(GL_ARRAY_BUFFER, ModelMatrixBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), &testmodelMatrix, GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
 
 		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)0);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
 		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)(sizeof(glm::vec4)));
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
 		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)(2 * sizeof(glm::vec4)));
+		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
 		glEnableVertexAttribArray(6);
-		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)(3 * sizeof(glm::vec4)));
+		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
 
 		glVertexAttribDivisor(3, 1);
 		glVertexAttribDivisor(4, 1);
@@ -320,6 +363,12 @@ namespace NS_GRAPHICS
 		// Unbind buffers and array object
 		// Assign to mesh data manager and new graphics component
 		// Attach graphics component to object
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
+		glBindBuffer(GL_ARRAY_BUFFER, NULL);
+		glBindVertexArray(NULL);
+		
+
+
 	}
 	void GraphicsSystem::ChangeCubeColor(const int& objID, const glm::vec3& rgb)
 	{

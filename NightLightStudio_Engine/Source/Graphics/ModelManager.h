@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../framework.h"
-#include "Model.h"
+#include "Mesh.h"
 #include "../Window/WndUtils.h"
 
 namespace NS_GRAPHICS
@@ -25,6 +25,11 @@ namespace NS_GRAPHICS
 		std::vector<GLuint> VBOs;			// Vertex Buffer Objects, vertex position/RGBA/UV ID
 		std::vector<GLuint> EBOs;			// Element Buffer Objects, indices ID
 		std::vector<GLuint> ModelMatrixBOs; // Vertex Buffer objects, model matrix ID
+
+		std::vector<Mesh*> meshes;
+
+
+		void DeleteMeshes();
 
 		// Free all existing OpenGL Objects, if any
 		// This should be called upon graphics system shutdown
