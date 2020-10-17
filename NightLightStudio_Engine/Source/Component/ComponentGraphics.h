@@ -1,20 +1,22 @@
 #pragma once
 #include "Components.h"
-#include "..\Graphics\Mesh.h"
 
 class ComponentGraphics : public IComponent
 {
 public:
 	// Temporarily make them public for easy access
 
-	// Empty mesh at start
-	NS_GRAPHICS::Mesh mesh;
+	bool isActive; // Temporarily set to true at beginning
+
+	unsigned MeshID;
 
 	// Default constructor
 	ComponentGraphics();
 
 	// Parametrized constructor 
-	ComponentGraphics(const NS_GRAPHICS::Mesh& reference);
+	ComponentGraphics(const unsigned& meshID);
+
+	void AssignMeshID(const unsigned& meshID);
 
 	// Destructor, destroy all OpenGL objects via graphics system
 	~ComponentGraphics();

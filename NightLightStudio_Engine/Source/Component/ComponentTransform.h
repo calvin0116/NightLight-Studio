@@ -8,11 +8,13 @@ class ComponentTransform : public IComponent
 {
 public:
 	glm::vec3 _position;
-	glm::vec3 _rotation;
+	glm::vec3 _rotation; // Euler angles x, y, z
 	glm::vec3 _scale;
 
 	ComponentTransform();
 	~ComponentTransform();
+
+	glm::mat4 GetModelMatrix();
 
 	//read and write function for initialization from saved files
 	void Read();

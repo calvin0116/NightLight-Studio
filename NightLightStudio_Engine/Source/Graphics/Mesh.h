@@ -34,6 +34,7 @@ namespace NS_GRAPHICS
 		// ** TEMPORARY BEFORE NEW DATA INTEGRATION
 		GLuint CBO = NULL;			// Color Buffer object
 		GLuint UVBO = NULL;
+		std::vector<glm::vec3> _rgb;
 
 		std::vector<glm::vec3> _vertices;
 		std::vector<glm::vec2> _uv;
@@ -41,7 +42,7 @@ namespace NS_GRAPHICS
 		std::vector<glm::vec3> _faceNormals; //If ever need to calculate
 		std::vector<unsigned short> _indices;
 		
-		std::vector<glm::vec3> _rgb;
+		
 		//std::vector<unsigned> _textures; // each face has its own texture
 
 		Mesh() = default;

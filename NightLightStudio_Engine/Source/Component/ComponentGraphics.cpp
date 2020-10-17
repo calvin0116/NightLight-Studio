@@ -1,12 +1,20 @@
 #include "ComponentGraphics.h"
 
 ComponentGraphics::ComponentGraphics()
+	: isActive{ true },
+	MeshID{ NULL }
 {
 }
 
-ComponentGraphics::ComponentGraphics(const NS_GRAPHICS::Mesh& reference)
+ComponentGraphics::ComponentGraphics(const unsigned& meshID)
+	: isActive{ true },
+	MeshID{ meshID }
 {
-	reference;
+}
+
+void ComponentGraphics::AssignMeshID(const unsigned& meshID)
+{
+	MeshID = meshID;
 }
 
 ComponentGraphics::~ComponentGraphics()
