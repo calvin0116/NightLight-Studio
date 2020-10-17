@@ -51,16 +51,16 @@ namespace NS_GRAPHICS
 		{
 			//Only if mouse wheel + alt button is pressed, camera will move.
 			//NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
-			/*if (SYS_INPUT->GetSystemMousePos().GetIfScrollUp())
+			if (SYS_INPUT->GetSystemMousePos().GetIfScrollUp())
 			{
-				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * DELTA_T->dt);
+				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront());
 				updated = true;
 			}
 			else if (SYS_INPUT->GetSystemMousePos().GetIfScrollDown())
 			{
-				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * DELTA_T->dt);
+				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront());
 				updated = true;
-			}*/
+			}
 		});
 		/*SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_DOWN", SystemInput_ns::IKEY_DOWN, "DOWN", SystemInput_ns::OnHold, [this]()
 			{

@@ -25,6 +25,7 @@ Institute of Technology is prohibited.
 #include "../Input/SystemInput.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #endif
+#include "../Input/SystemInput.h"
 
 #include "../Core/SceneManager.h"
 
@@ -388,6 +389,12 @@ namespace NS_WINDOW
 		break;
 		}
 #endif
+		case WM_MOUSEWHEEL:
+		{
+			// Like seriously i don't know how else to get mouse wheels
+			SYS_INPUT->GetSystemMousePos().SetScroll((GET_WHEEL_DELTA_WPARAM(wParam)));
+			break;
+		}
 		/*case WM_ACTIVATEAPP: // Used to handle pausing/playing upon alt-tab
 			break;*/
 		case WM_DESTROY:
