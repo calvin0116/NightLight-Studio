@@ -11,7 +11,7 @@
 
 // Comment away for whichever is required
 // Only either one should be running at a time
-#define TEST_CUBE_DRAW_WITHOUT_COMPONENT
+//#define TEST_CUBE_DRAW_WITHOUT_COMPONENT
 
 #define DRAW_WITH_COMPONENTS
 

@@ -1,4 +1,5 @@
 #include "SystemPhysics.h"
+#include "../Graphics/GraphicsSystem.h"//for testing, to be removed
 #include "../Component/Components.h"
 #include "../Component/ComponentCollider.h"
 #include "../Component/ComponentTransform.h"
@@ -13,6 +14,7 @@ namespace NS_PHYSICS
 
 	void PhysicsSystem::OnFirstStart()
 	{
+		
 	}
 
 	void PhysicsSystem::Load()
@@ -26,14 +28,21 @@ namespace NS_PHYSICS
 		//G_MAINCOMPSET->AttachComponent<ComponentTransform>(newId, &compT);
 
 		 /*Entity E = */
-		Entity ent = G_ECMANAGER->BuildEntity();
+		//Entity ent = G_ECMANAGER->BuildEntity();
 
-		ComponentTransform c;
-		ent.AttachComponent<ComponentTransform>(ComponentTransform()); 
+		//ComponentTransform c;
+		//ent.AttachComponent<ComponentTransform>(ComponentTransform()); 
 
-		ent = G_ECMANAGER->BuildEntity().AttachComponent<ComponentTransform>(ComponentTransform());
+		//ent = G_ECMANAGER->BuildEntity().AttachComponent<ComponentTransform>(ComponentTransform());
 		 // return Entity                         
 		 //E.attachComp
+
+		Entity cube1Test = G_ECMANAGER_UI->BuildEntity();
+		ComponentTransform C;
+		C._scale = NlMath::Vector3D(100,100,100);
+		cube1Test.AttachComponent<ComponentTransform>(C);
+		
+		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test);
 	}
 
 	void PhysicsSystem::Update()
