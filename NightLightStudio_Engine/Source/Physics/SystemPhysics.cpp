@@ -42,7 +42,14 @@ namespace NS_PHYSICS
 		C._scale = glm::vec3(1.f,1.f,1.f);
 		cube1Test.AttachComponent<ComponentTransform>(C);
 		
-		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test, glm::vec3(1.f,1.f,1.f));
+		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test, glm::vec3(0.5f,0.5f,1.f));
+
+		Entity cube2Test = G_ECMANAGER->BuildEntity();
+		ComponentTransform D;
+		D._position = glm::vec3(5.f, 5.f, 5.f);
+		cube2Test.AttachComponent<ComponentTransform>(D);
+
+		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
 	}
 
 	void PhysicsSystem::Update()
