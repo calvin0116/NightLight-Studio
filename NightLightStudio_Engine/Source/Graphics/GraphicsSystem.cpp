@@ -246,34 +246,57 @@ namespace NS_GRAPHICS
 #endif
 
 #ifdef DRAW_WITH_COMPONENTS
+		//shaderManager->StartProgram(0);
+
+		//auto itr = G_ECMANAGER->begin<ComponentGraphics>();
+		//auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
+		//while (itr != itrEnd)
+		//{
+		//	ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
+
+		//	Mesh* mesh = modelManager->meshes[graphicsComp->MeshID];
+
+		//	glm::mat4 ModelMatrix(1.f);
+
+		//	// get transform component
+		//	ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
+
+		//	//if (transformComp != nullptr)
+		//	//{
+		//		ModelMatrix = transformComp->GetModelMatrix();
+		//	//}
+
+		//	glBindVertexArray(mesh->VAO);
+
+		//	// We will only substitute Color and ModelMatrix Data
+		//	glBindBuffer(GL_ARRAY_BUFFER, mesh->CBO);
+		//	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec3) * mesh->_rgb.size(), &mesh->_rgb[0]);
+
+		//	glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+		//	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);
+		//}
+
+		//shaderManager->StopProgram();
+
+		// This works
 		shaderManager->StartProgram(0);
 
-		auto itr = G_ECMANAGER->begin<ComponentGraphics>();
-		auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
-		while (itr != itrEnd)
+		for (auto& i : modelManager->meshes)
 		{
-			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
+			// Provide rotation in radians
+			// test model matrix
+			glm::mat4 testmodelMatrix = glm::rotate(glm::mat4(1.f), glm::radians(15.f), glm::vec3(0.0f, 1.0f, 0.f));
 
-			Mesh* mesh = modelManager->meshes[graphicsComp->MeshID];
-
-			glm::mat4 ModelMatrix(1.f);
-
-			// get transform component
-			ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
-
-			if (transformComp != nullptr)
-			{
-				ModelMatrix = transformComp->GetModelMatrix();
-			}
-
-			glBindVertexArray(mesh->VAO);
+			glBindVertexArray(i->VAO);
 
 			// We will only substitute Color and ModelMatrix Data
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->CBO);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec3) * mesh->_rgb.size(), &mesh->_rgb[0]);
+			glBindBuffer(GL_ARRAY_BUFFER, i->CBO);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec3) * i->_rgb.size(), &i->_rgb[0]);
 
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+			glBindBuffer(GL_ARRAY_BUFFER, i->ModelMatrixBO);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &testmodelMatrix);
 
 			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);
 		}
@@ -442,9 +465,9 @@ namespace NS_GRAPHICS
 		// Unbind buffers and array object
 		// Assign to mesh data manager and new graphics component
 		// Attach graphics component to object
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
+		/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
 		glBindBuffer(GL_ARRAY_BUFFER, NULL);
-		glBindVertexArray(NULL);
+		glBindVertexArray(NULL);*/
 		
 		unsigned currentid = modelManager->AddMesh(mesh);
 

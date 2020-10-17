@@ -82,11 +82,11 @@ namespace NS_GRAPHICS
         // Creates a basic cube based on given data
         // Attaches graphics component to given object ID
         // Object ID MUST BE VALID, else undefined behavior
-        void CreateCube(Entity& entity, const glm::vec3& rgb = glm::vec3(0.5f,0.5f, 0.5f), const float& midExtent = 0.5f);
+        void CreateCube(Entity& entity, const glm::vec3& rgb = glm::vec3(0.5f, 0.5f, 1.0f), const float& midExtent = 1.f);
 
         // Testing for drawing cube without component system
         // Returns mesh ID
-        unsigned TestCreateCube(const glm::vec3& rgb = glm::vec3(0.5f, 0.5f, 0.5f), const float& midExtent = 0.5f);
+        unsigned TestCreateCube(const glm::vec3& rgb = glm::vec3(0.5f, 0.5f, 0.5f), const float& midExtent = 1.f);
 
         // Sets whole mesh color
         void SetMeshColor(Entity& entity, const glm::vec3& rgb);

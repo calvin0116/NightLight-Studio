@@ -25,7 +25,6 @@ glm::mat4 ComponentTransform::GetModelMatrix()
 
 
 	return Translate * Rotate * Scale;
-	return glm::mat4();
 }
 
 void ComponentTransform::Read()

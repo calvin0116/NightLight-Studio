@@ -37,12 +37,12 @@ namespace NS_PHYSICS
 		 // return Entity                         
 		 //E.attachComp
 
-		Entity cube1Test = G_ECMANAGER_UI->BuildEntity();
+		Entity cube1Test = G_ECMANAGER->BuildEntity();
 		ComponentTransform C;
-		C._scale = NlMath::Vector3D(100,100,100);
+		C._scale = glm::vec3(1.f,1.f,1.f);
 		cube1Test.AttachComponent<ComponentTransform>(C);
 		
-		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test);
+		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test, glm::vec3(1.f,1.f,1.f));
 	}
 
 	void PhysicsSystem::Update()
