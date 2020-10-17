@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Camera.h"
+#include "..\Core\DeltaTime.h"
 
 namespace NS_GRAPHICS
 {

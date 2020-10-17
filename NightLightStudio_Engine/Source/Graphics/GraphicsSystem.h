@@ -3,6 +3,7 @@
 #include "../Core/MySystem.h"
 #include "../IO/Json/Config.h"
 #include "../../framework.h"
+#include "../Component/ComponentManager.h"
 
 #include "ShaderSystem.h"
 #include "ModelLoader.h"
@@ -81,13 +82,18 @@ namespace NS_GRAPHICS
         // Creates a basic cube based on given data
         // Attaches graphics component to given object ID
         // Object ID MUST BE VALID, else undefined behavior
-        void CreateCube(const int& objID, const glm::vec3& rgb, const float& edgeLength);
+        void CreateCube(Entity& entity, const glm::vec3& rgb = glm::vec3(0.5f,0.5f, 0.5f), const float& midExtent = 0.5f);
 
-        //G_MAINCOMPSET.AttachComponent<GraphicsComponent>(objID, GraphicsComponent)
+        // Testing for drawing cube without component system
+        // Returns mesh ID
+        unsigned TestCreateCube(const glm::vec3& rgb = glm::vec3(0.5f, 0.5f, 0.5f), const float& midExtent = 0.5f);
 
-        void ChangeCubeColor(const int& objID, const glm::vec3& rgb);
+        // Sets whole mesh color
+        void SetMeshColor(Entity& entity, const glm::vec3& rgb);
 
     private:
+
+        unsigned testCubeID;
 
         bool hasInit;
         bool debugDrawing;

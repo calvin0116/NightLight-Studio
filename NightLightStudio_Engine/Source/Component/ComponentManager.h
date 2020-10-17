@@ -31,6 +31,7 @@ enum COMPONENTSETNAMES
 {
 	COMPONENT_MAIN = 0,
 	COMPONENT_UI,
+	COMPONENT_PREFABS,
 
 
 	COMPONENT_END
@@ -277,6 +278,9 @@ public:
 
 	class ComponentSetManager // builds objects into component sets
 	{
+
+		class EntityHandle; // fwd decl
+
 	public: // !
 		ComponentSet* compSet; // it is bound to a component set
 	public:
@@ -288,7 +292,7 @@ public:
 
 		// build a new entity
 		// returns entity id
-		int BuildObject(); 
+		EntityHandle BuildEntity();
 
 	private:
 
@@ -297,7 +301,7 @@ public:
 		int BuildChildObject();
 
 		// attach component to the entity // using container id // helper
-		void* AttachComponent(ComponentManager::ContainerID compId, int entityId, void* newComp);
+		void* AttachComponent(ComponentManager::ContainerID compId, int entityId, const void* newComp);
 
 		// void* AttachComponent(ManagerComponent::ContainerID compId, int objId); // allocate the component first
 
@@ -307,8 +311,13 @@ public:
 	public:
 		// attach component to the entity // WARNING !!! DOES NOT check if the entity exists if the wrong entity id is passed in the behaviour is undefined
 		template<typename T>
-		T* AttachComponent(int entityId, T* newComp)
+		T* AttachComponent(EntityHandle ent, const T& newComp_r)
 		{
+			const T* newComp = &newComp_r;
+
+			int entityId = ent.objId;
+
+			//static_assert(std::is_standard_layout_v<T>, "Component must be standard layout to memcpy the component");
 			const std::type_info& tinf = typeid(T);
 			
 			//entityId -= compSet->idIndexModifier;
@@ -512,6 +521,20 @@ public:
 
 					return reinterpret_cast<T*>(getComponent((*find).second));
 				}
+			}
+
+			template<typename T>
+			EntityHandle AttachComponent(T& comp)
+			{
+				compSetMgr->AttachComponent<T>(*this, comp);
+				return *this;
+			}
+
+			template<typename T>
+			EntityHandle AttachComponent(T&& comp = T())
+			{
+				compSetMgr->AttachComponent<T>(*this, comp);
+				return *this;
 			}
 
 			///////////////////////////////////////////////////////////////////////////////////////
@@ -742,9 +765,15 @@ public:
 
 	ComponentSetManager* getComponentSetMgr(COMPONENTSETNAMES id);
 
+	// add components here
+	void ComponentCreation();
+
+	void TestComponents();
+
 	//// virtual fns for system calls
     // go check ISystem.h for virtual fns
 
+	void Init() override;
 
 	void Free() override;
 
@@ -834,9 +863,14 @@ static ComponentManager* SYS_COMPONENT = ComponentManager::GetInstance();
 
 //extern ComponentManager G_COMPMGR;
 
-static ComponentManager::ComponentSetManager* G_MAINCOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
+// Entity component manager
+static ComponentManager::ComponentSetManager* G_ECMANAGER = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
 
-static ComponentManager::ComponentSetManager* G_UICOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_UI);
+// Entity component manager UI
+static ComponentManager::ComponentSetManager* G_ECMANAGER_UI = SYS_COMPONENT->getComponentSetMgr(COMPONENT_UI);
+
+// Entity component manager Prefabs
+static ComponentManager::ComponentSetManager* G_ECMANAGER_PREFABS = SYS_COMPONENT->getComponentSetMgr(COMPONENT_PREFABS);
 
 // for some reason gfx becomes black screen with this
 //static ComponentManager::ComponentSetManager* G_UICOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);

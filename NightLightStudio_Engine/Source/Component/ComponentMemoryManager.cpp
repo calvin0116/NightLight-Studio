@@ -285,7 +285,7 @@ ComponentMemoryManager::MemConIterator ComponentMemoryManager::begin(ComponentMe
 	return newItr;
 }
 
-int ComponentMemoryManager::insertIntoContainer(ComponentMemoryManager::ComponentType comT, char* obj)
+int ComponentMemoryManager::insertIntoContainer(ComponentMemoryManager::ComponentType comT, const char* obj)
 {
 
 	ComponentMetaData* meta = findMeta(comT);
@@ -408,10 +408,14 @@ void ComponentMemoryManager::freeAll()
 
 		for (auto itv : *v)
 		{
-			free(reinterpret_cast<void*>(itv));
+			void* freeptr = reinterpret_cast<void*>(itv);
+			//free(reinterpret_cast<void*>(freeptr));
+			std::free(freeptr);
 		}
 
 		//free(reinterpret_cast<void*>(v));
+
+		v->clear();
 		delete v;
 	}
 
@@ -421,6 +425,9 @@ void ComponentMemoryManager::freeAll()
 		//free(freePtr);
 		delete freePtr;
 	}
+
+	componentContainers.clear();
+	componentContainerBits.clear();
 }
 
 

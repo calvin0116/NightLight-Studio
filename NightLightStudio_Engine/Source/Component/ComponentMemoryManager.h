@@ -175,7 +175,7 @@ public:
 
 	MemConIterator begin(ComponentType comT);
 
-	int insertIntoContainer(ComponentType comT, char* obj);
+	int insertIntoContainer(ComponentType comT, const char* obj);
 
 	void removeFromContainer(ComponentType comT, int index);
 

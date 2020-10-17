@@ -21,20 +21,54 @@ namespace NS_PHYSICS
 
 	void PhysicsSystem::Init()
 	{
+		//int newId = G_MAINCOMPSET->BuildEntity();
+		//ComponentTransform compT;
+		//G_MAINCOMPSET->AttachComponent<ComponentTransform>(newId, &compT);
+
+		 /*Entity E = */
+		Entity ent = G_ECMANAGER->BuildEntity();
+
+		ComponentTransform c;
+		ent.AttachComponent<ComponentTransform>(ComponentTransform()); 
+
+		ent = G_ECMANAGER->BuildEntity().AttachComponent<ComponentTransform>(ComponentTransform());
+		 // return Entity                         
+		 //E.attachComp
 	}
 
 	void PhysicsSystem::Update()
 	{
-		auto itr = G_MAINCOMPSET->begin<ComponentRigidBody>();
-		auto itrEnd = G_MAINCOMPSET->end<ComponentRigidBody>();
+		auto itr = G_ECMANAGER->begin<ComponentRigidBody>();
+		auto itrEnd = G_ECMANAGER->end<ComponentRigidBody>();
+		
+		/*struct ComponentView
+		{
+			decltype(itr) beg;
+			decltype(itr) end;
+
+			auto begin() { return beg; }
+			auto end() { return end; }
+		} view;*/
+
+		/*for (ComponentRigidBody& component : G_MAINCOMPSET->getComponentSpan<ComponentRigidBody>())
+		{
+
+		}*/
+
 		for (; itr != itrEnd; ++itr)
 		{
-			ComponentRigidBody* compR = G_MAINCOMPSET->getComponent<ComponentRigidBody>(itr);
-			if (compR->isStatic)
-				continue;
+			ComponentRigidBody* compR = G_ECMANAGER->getComponent<ComponentRigidBody>(itr);
+			//if (compR->isStatic)
+			//	continue;
+
+			//itr.getComponent<>();
 
 			//get the transform to update
-			ComponentTransform* compT = G_MAINCOMPSET->getComponent<ComponentTransform>(itr);
+			ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+
+			Entity ent = G_ECMANAGER->getEntity(itr);
+			if (compT != ent.getComponent<ComponentTransform>())
+				throw;
 
 			//set max speed
 			if (compR->velocity.x > _maxspeed.x)

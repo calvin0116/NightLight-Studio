@@ -13,6 +13,8 @@ namespace NS_GRAPHICS
 	static const float  ONE_ROT_STEP = PI / 1800.f; // Each step for rotation, should allow access in the future
 	static const float  MAX_PITCH = 1.5534f;
 	static const float  MIN_PITCH = -MAX_PITCH;
+	static const float  ROTATION_SENSITIVITY = 1000.f;
+	static const float  POSITION_SENSITIVITY = 15.f;
 
 	class Camera
 	{
@@ -42,7 +44,7 @@ namespace NS_GRAPHICS
 			cameraFront(0.f, 0.f, -1.f),
 			cameraRight{ glm::normalize(glm::cross(cameraFront, globalUp)) },
 			cameraUp{ glm::normalize(glm::cross(cameraRight, cameraFront)) },
-			cameraSpeed{ 0.005f },
+			cameraSpeed{ 1.0f },
 			cameraYaw{ -HALF_PI },
 			cameraPitch{ 0.f }
 		{

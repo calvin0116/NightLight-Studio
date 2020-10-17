@@ -249,6 +249,9 @@
     <ClInclude Include="Source\Component\MemoryThingy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\ComponentGraphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -402,6 +405,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentGraphics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

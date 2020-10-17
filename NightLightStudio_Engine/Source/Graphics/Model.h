@@ -7,7 +7,8 @@ namespace NS_GRAPHICS
 {
 	struct Model
 	{
-		GLuint modelMatrixBO;
+		GLuint ModelMatrixBO = NULL; // Buffer Object ID for Model Matrix
+
 		std::vector<Mesh*> _meshes;
 
 		Model() = default;

@@ -22,20 +22,54 @@ namespace NS_GRAPHICS
 
 		// Register keys required
 		// Move camera based on axis vectors
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_UP", SystemInput_ns::IKEY_UP, "UP", SystemInput_ns::OnHold, [this]()
+		
+		//Needed for alt key checking in input system
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ALT_REGISTER", SystemInput_ns::IKEY_ALT);
+
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_XY", SystemInput_ns::IMOUSE_MBUTTON, "XY_CAMERA_MOVE", SystemInput_ns::OnHold, [this]()
 			{
-				//Position += CameraUp * velocity;
-				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetCameraUp() * _camera.GetSpeed());
-				updated = true;
+				//Only if mouse + alt button is pressed, camera will move.
+				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ALT))
+				{
+					glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
+					//handles topdown
+					glm::vec3 newCameraOffset = _camera.GetCameraUp() * -mousePos.y * POSITION_SENSITIVITY;
+					//newCameraOffset *= DELTA_T->dt;
+					//_camera.SetCameraPosition(_camera.GetPosition() + newCameraOffset);
+
+					//handles leftright
+					newCameraOffset += _camera.GetRight() * -mousePos.x * POSITION_SENSITIVITY;
+					//newCameraOffset *= DELTA_T->dt;
+
+					//Position += CameraUp * velocity;
+					_camera.SetCameraPosition(_camera.GetPosition() + newCameraOffset);
+					updated = true;
+				}
 			});
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_DOWN", SystemInput_ns::IKEY_DOWN, "DOWN", SystemInput_ns::OnHold, [this]()
+
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_Z", SystemInput_ns::IKEY_ALT, "Z_CAMERA_MOVE", SystemInput_ns::OnHold, [this]()
+		{
+			//Only if mouse wheel + alt button is pressed, camera will move.
+			//NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
+			if (SYS_INPUT->GetSystemMousePos().GetIfScrollUp())
+			{
+				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront());
+				updated = true;
+			}
+			else if (SYS_INPUT->GetSystemMousePos().GetIfScrollDown())
+			{
+				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront());
+				updated = true;
+			}
+		});
+		/*SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_DOWN", SystemInput_ns::IKEY_DOWN, "DOWN", SystemInput_ns::OnHold, [this]()
 			{
 				//Position -= CameraUp * velocity;
 				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetCameraUp() * _camera.GetSpeed());
 				updated = true;
 			});
 
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_FRONT", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_Z", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]()
 			{
 			//Only if mouse left button is pressed, camera will moved with w.
 				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IMOUSE_LBUTTON))
@@ -74,25 +108,30 @@ namespace NS_GRAPHICS
 					_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetRight() * _camera.GetSpeed());
 					updated = true;
 				}
-			});
+			});*/
 
 		// Rotation
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_LEFT", SystemInput_ns::IMOUSE_LBUTTON, "MOUSE_CLICK_LEFT", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA", SystemInput_ns::IMOUSE_LBUTTON, "ROTATE_CAMERA_CLICK", SystemInput_ns::OnHold, [this]()
 			{
-				// Rotation to the left
-				glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
-				_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x);
+				//Only if mouse + alt button is pressed, camera will rotate.
+				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ALT))
+				{
+					//Mouse relative velocity
+					glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
 
-				float offsetted = _camera.GetPitch() + mousePos.y;
-				//std::cout << mousePos.y << std::endl;
+					// Rotation for left and right
+					_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x * ROTATION_SENSITIVITY * ONE_ROT_STEP);
 
-				if (offsetted > MAX_PITCH)
-					offsetted = MAX_PITCH;
+					// Rotation for up and down
+					float offsetted = _camera.GetPitch() + mousePos.y * ROTATION_SENSITIVITY * ONE_ROT_STEP;
 
-				// Rotation to the top
-				_camera.SetCameraPitch(offsetted);
+					if (offsetted > MAX_PITCH)
+						offsetted = MAX_PITCH;
 
-				updatedRot = true;
+					_camera.SetCameraPitch(offsetted);
+
+					updatedRot = true;
+				}
 			});
 		/*SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ROTATE_CAMERA_RIGHT", SystemInput_ns::IKEY_RIGHT, "RIGHT", SystemInput_ns::OnHold, [this]()
 			{

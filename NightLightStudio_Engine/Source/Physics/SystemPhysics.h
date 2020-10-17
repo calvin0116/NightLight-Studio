@@ -23,7 +23,7 @@ namespace NS_PHYSICS
 
 		void Init();
 
-		void Update();
+		void Update() override;
 
 		void Exit() override;
 
