@@ -1,8 +1,17 @@
 #include "SI_MousePos.h"
 
-namespace NS_INPUT
+namespace SystemInput_ns
 {
 	//********************************************** SYSTEM CURSOR POSITION **********************************************//
+	glm::vec2 SystemMousePosition::ConvertToVec2(POINT pos)
+	{
+		return { (float)pos.x, (float)pos.y };
+	}
+
+	glm::vec2 SystemMousePosition::Offset(glm::vec2 pos, glm::vec2 offset)
+	{
+		return { pos.x + offset.x, pos.y + offset.y };
+	}
 
 	SystemMousePosition::SystemMousePosition(bool showCursor) : _mousePos{}, _prevMousePos{}, _showCursor{ showCursor }, _scrollDown{}
 	{

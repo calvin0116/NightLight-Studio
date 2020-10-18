@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace NS_MESSAGING
+namespace SystemMessaging
 {
 	class IMessage
 	{

@@ -23,7 +23,7 @@ class LE_WindowBase
 protected:
 	LevelEditor* _levelEditor = nullptr;
 	// Add editor pointer
-	virtual void _AddEditor(LevelEditor* editor) { _levelEditor = editor; }
+	virtual void AddEditor(LevelEditor* editor) { _levelEditor = editor; }
 public:
 	LE_WindowBase() = default;
 	virtual ~LE_WindowBase() = default;
@@ -56,6 +56,7 @@ class LevelEditor
 	HWND _window; 
 	bool show_demo_window = true;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	bool isOpen = false;
 	/***** TO REMOVE/REPLACE *****/
 
 	bool _windowBG = true;
@@ -82,8 +83,8 @@ class LevelEditor
 
 	std::vector<LEWindow> _editorWind;
 
-	void _LE_RunWindows();
-	void _LE_MainMenuBar();
+	void LE_RunWindows();
+	void LE_MainMenuBar();
 public:
 	LevelEditor();
 	~LevelEditor();
@@ -105,7 +106,7 @@ public:
 	void LE_CreateWindow(const std::string& name, bool isOpenByDefault = false, ImGuiWindowFlags flag = ImGuiWindowFlags_None)
 	{
 		LE_WindowBase* ptr = T().Clone();
-		ptr->_AddEditor(this);
+		ptr->AddEditor(this);
 		_editorWind.emplace_back(LEWindow(name, isOpenByDefault, flag, ptr));
 	}
 
@@ -205,9 +206,9 @@ public:
 	void LE_AddArrowButton(const std::string& name, ImGuiDir dir = ImGuiDir_Right, std::function<void()> fn = nullptr);
 	
 	// Adds a selectable that runs a function while selected. Input Boolean is unaffected.
-	void LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0, ImVec2 size = ImVec2(0, 0));
+	void LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0);
 	// Adds a selectable that runs a function while selected. Input Boolean is affected.
-	void LE_AddSelectable(const std::string& name, bool* isSelectedPtr, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0, ImVec2 size = ImVec2(0, 0));
+	void LE_AddSelectable(const std::string& name, bool* isSelectedPtr, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0);
 
 	// Adds an Input Int Property
 	void LE_AddInputIntProperty(const std::string& name, int& prop, std::function<void()> fn = nullptr,
@@ -252,11 +253,6 @@ public:
 	void LE_AddImage(const ImTextureID& id, const ImVec2& size, 
 		const ImVec2& minUV = ImVec2(0,0), const ImVec2& maxUV = ImVec2(1,1), 
 		const ImVec4& tintCol = ImVec4(1,1,1,1), const ImVec4& borderCol = ImVec4(0,0,0,0));
-
-	void LE_AddImageButton(const ImTextureID& id, const ImVec2& size, std::function<void()> fn,
-		const ImVec2& minUV = ImVec2(0, 0), const ImVec2& maxUV = ImVec2(1, 1),
-		const int framePad = -1,
-		const ImVec4& bgCol = ImVec4(0, 0, 0, 0), const ImVec4& tintCol = ImVec4(1, 1, 1, 1));
 
 	/**********************************************************************/
 

@@ -3,7 +3,7 @@
 
 #include "SystemReceiver.h"
 
-namespace NS_MESSAGING
+namespace SystemMessaging
 {
 	class SystemBroadcast
 	{
@@ -31,6 +31,6 @@ namespace NS_MESSAGING
 	};
 }
 
-extern NS_MESSAGING::SystemBroadcast G_SYSTEM_BROADCAST;
+extern SystemMessaging::SystemBroadcast GLOBAL_SYSTEM_BROADCAST;
 
 #endif

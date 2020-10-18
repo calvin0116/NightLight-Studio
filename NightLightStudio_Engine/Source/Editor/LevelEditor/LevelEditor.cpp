@@ -5,7 +5,7 @@ LevelEditor::LevelEditor() : _window{ nullptr }
 {
     // Purely for testing purposes
     LE_CreateWindow<TestCase>("Test", true, 0);
-    LE_CreateWindow<ConsoleLog>("Console", false, 0);
+    LE_CreateWindow<ConsoleLog>("Console", true, 0);
 }
 
 LevelEditor::~LevelEditor()
@@ -45,9 +45,8 @@ bool LevelEditor::Update(float)
     ImGui::NewFrame();
 
     // Run the MainMenubar
-    _LE_MainMenuBar();
+    LE_MainMenuBar();
 
-    /*
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     ImGui::ShowDemoWindow(&show_demo_window);
 
@@ -65,8 +64,8 @@ bool LevelEditor::Update(float)
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::End();
     }
-    */
-    _LE_RunWindows();
+
+    LE_RunWindows();
 
 
     // Rendering
@@ -172,7 +171,7 @@ void LevelEditor::LE_AddStyleVar(ImGuiStyleVar var, float val, std::function<voi
 
 }
 
-void LevelEditor::_LE_RunWindows()
+void LevelEditor::LE_RunWindows()
 {
     for (unsigned i = 0; i < _editorWind.size(); ++i)
     {

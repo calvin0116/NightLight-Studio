@@ -14,7 +14,7 @@
 
 #include <string>
 
-namespace NS_INPUT
+namespace SystemInput_ns
 {
 	/*=========== Key Codes for Controller Buttons. Note that this is XINPUT (XBOX CONTROLLER) =============*/
 	/*=========== Dualshock/PS Buttons included are default locations in comparison to XBOX =============*/

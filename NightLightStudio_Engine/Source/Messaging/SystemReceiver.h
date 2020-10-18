@@ -8,7 +8,7 @@
 #include <functional>
 #include <set>
 
-namespace NS_MESSAGING
+namespace SystemMessaging
 {
 	typedef std::function<void(IMessage&)> MESSAGE_HANDLER;
 	//typedef void(*MESSAGE_HANDLER)(IMessage&);
@@ -56,8 +56,8 @@ namespace NS_MESSAGING
 		std::map<std::string, MESSAGE_HANDLER> _handleMap;
 		std::map<SystemBroadcast*, unsigned int> _allRegBroadcasters;
 
-		void _GlobalRegister(const std::string& msgId);
-		void _GlobalUnregister(const std::string& msgId);
+		void GlobalRegister(const std::string& msgId);
+		void GlobalUnregister(const std::string& msgId);
 
 	public:
 		SystemReceiver();
@@ -72,7 +72,7 @@ namespace NS_MESSAGING
 		void AttachHandler(const std::string& messageId, void(*handler)(T&))
 		{
 			_handleMap.emplace(std::pair<std::string, MESSAGE_HANDLER>(messageId, Message_BindToFunc(handler)));
-			_GlobalRegister(messageId);
+			GlobalRegister(messageId);
 		}
 		// Attach a handle (Member Function) to the Receiver
 		template <typename T, typename U, typename Y,
@@ -80,13 +80,13 @@ namespace NS_MESSAGING
 			void AttachHandler(const std::string& messageId, void(T::* handler)(U&), Y* obj)
 		{
 			_handleMap.emplace(std::pair<std::string, MESSAGE_HANDLER>(messageId, BindMemFuncOneParam(handler, obj)));
-			_GlobalRegister(messageId);
+			GlobalRegister(messageId);
 		}
 		// Attach a handle (Function) to the Receiver
 		void AttachHandler(const std::string& messageId, MESSAGE_HANDLER handler)
 		{
 			_handleMap.emplace(std::pair<std::string, MESSAGE_HANDLER>(messageId, handler));
-			_GlobalRegister(messageId);
+			GlobalRegister(messageId);
 		}
 
 		// Removes a handle (Function) to the Receiver

@@ -11,9 +11,9 @@ class SystemInput : public MySystem, public Singleton<SystemInput>
 {
 private:
 	friend Singleton<SystemInput>;
-	NS_INPUT::SystemKeyPress _siKeyPress;
-	NS_INPUT::SystemController _siCtrler;
-	NS_INPUT::SystemMousePosition _siMousePos;
+	SystemInput_ns::SystemKeyPress _siKeyPress;
+	SystemInput_ns::SystemController _siCtrler;
+	SystemInput_ns::SystemMousePosition _siMousePos;
 
 protected:
 	ENGINE_API SystemInput();
@@ -34,11 +34,11 @@ public:
 
 
 	// Access individual System Parts to use their functions or something I guess
-	ENGINE_API NS_INPUT::SystemKeyPress& GetSystemKeyPress();
+	ENGINE_API SystemInput_ns::SystemKeyPress& GetSystemKeyPress();
 
-	ENGINE_API NS_INPUT::SystemController& GetSystemController();
+	ENGINE_API SystemInput_ns::SystemController& GetSystemController();
 
-	ENGINE_API NS_INPUT::SystemMousePosition& GetSystemMousePos();
+	ENGINE_API SystemInput_ns::SystemMousePosition& GetSystemMousePos();
 };
 
 //GLOBAL pointer to an instance of graphic system
