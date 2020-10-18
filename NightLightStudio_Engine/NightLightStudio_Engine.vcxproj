@@ -197,6 +197,10 @@
     <ClInclude Include="Source\Core\Systems.h" />
     <ClInclude Include="Source\Editor\imgui\imconfig.h" />
     <ClInclude Include="Source\Editor\imgui\imgui.h" />
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImCurveEdit.h" />
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImGradient.h" />
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImGuizmo.h" />
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImSequencer.h" />
     <ClInclude Include="Source\Editor\imgui\imgui_impl_opengl3.h" />
     <ClInclude Include="Source\Editor\imgui\imgui_impl_win32.h" />
     <ClInclude Include="Source\Editor\imgui\imgui_internal.h" />
@@ -261,6 +265,10 @@
     <ClCompile Include="Source\Core\SystemManager.cpp" />
     <ClCompile Include="Source\Core\Systems.cpp" />
     <ClCompile Include="Source\Editor\imgui\imgui.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImGradient.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImGuizmo.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImSequencer.cpp" />
     <ClCompile Include="Source\Editor\imgui\imgui_demo.cpp" />
     <ClCompile Include="Source\Editor\imgui\imgui_draw.cpp" />
     <ClCompile Include="Source\Editor\imgui\imgui_impl_opengl3.cpp" />
