@@ -7,7 +7,7 @@
 #include <Windows.h>
 #include <string>
 
-namespace SystemInput_ns
+namespace NS_INPUT
 {
 	class ENGINE_API SystemMousePosition
 	{
@@ -22,10 +22,6 @@ namespace SystemInput_ns
 
 		//ONLY TO PREVENT CHECKING WHEN OUT OF WINDOW, MAY BE REMOVED/REPLACED
 		HWND _window = GetForegroundWindow();
-
-		// CURRENTLY BUILDING
-		glm::vec2 ConvertToVec2(POINT pos);
-		glm::vec2 Offset(glm::vec2 pos, glm::vec2 offset);
 
 	public:
 		SystemMousePosition(bool showCursor = true);

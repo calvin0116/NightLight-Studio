@@ -1,15 +1,15 @@
 #include "SI_KeyPress.h"
 
-namespace SystemInput_ns
+namespace NS_INPUT
 {
 	//********************************************** SYSTEM KEY PRESS **********************************************//
 
-	void SystemKeyPress::IncrementKeyUsed(unsigned int key)
+	void SystemKeyPress::_IncrementKeyUsed(unsigned int key)
 	{
 		_usedKeyCodes[key]++;
 	}
 
-	void SystemKeyPress::DecrementKeyUsed(unsigned int key)
+	void SystemKeyPress::_DecrementKeyUsed(unsigned int key)
 	{
 		_usedKeyCodes[key]--;
 		if (!_usedKeyCodes[key])
@@ -121,11 +121,11 @@ namespace SystemInput_ns
 		{
 			// Removes previous key from events if necessary
 			unsigned int key = temp->second._keycode;
-			DecrementKeyUsed(key);
+			_DecrementKeyUsed(key);
 
 			// Changes key and adds it to used key codes
 			temp->second._keycode = keycode;
-			IncrementKeyUsed(keycode);
+			_IncrementKeyUsed(keycode);
 		}
 	}
 
@@ -137,7 +137,7 @@ namespace SystemInput_ns
 		{
 			unsigned int key = temp->second._keycode;
 
-			DecrementKeyUsed(key);
+			_DecrementKeyUsed(key);
 
 			_events.erase(name);
 		}

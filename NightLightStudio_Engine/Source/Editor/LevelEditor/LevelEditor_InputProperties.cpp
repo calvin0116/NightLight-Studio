@@ -23,18 +23,18 @@ void LevelEditor::LE_AddArrowButton(const std::string& name, ImGuiDir dir, std::
     }
 }
 
-void LevelEditor::LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn, ImGuiSelectableFlags flag)
+void LevelEditor::LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn, ImGuiSelectableFlags flag, ImVec2 size)
 {
-    if (ImGui::Selectable(name.c_str(), isSelected, flag))
+    if (ImGui::Selectable(name.c_str(), isSelected, flag, size))
     {
         if (fn)
             fn();
     }
 }
 
-void LevelEditor::LE_AddSelectable(const std::string& name, bool* isSelectedPtr, std::function<void()> fn, ImGuiSelectableFlags flag)
+void LevelEditor::LE_AddSelectable(const std::string& name, bool* isSelectedPtr, std::function<void()> fn, ImGuiSelectableFlags flag, ImVec2 size)
 {
-    if (ImGui::Selectable(name.c_str(), isSelectedPtr, flag))
+    if (ImGui::Selectable(name.c_str(), isSelectedPtr, flag, size))
     {
         if (fn)
             fn();
@@ -168,6 +168,15 @@ void LevelEditor::LE_AddImage(const ImTextureID& id, const ImVec2& size, const I
 {
     // Add a check to see if id exists?
     ImGui::Image(id, size, minUV, maxUV, tintCol, borderCol);
+}
+
+void LevelEditor::LE_AddImageButton(const ImTextureID& id, const ImVec2& size, std::function<void()> fn, const ImVec2& minUV, const ImVec2& maxUV, const int framePad, const ImVec4& bgCol, const ImVec4& tintCol)
+{
+    if (ImGui::ImageButton(id, size, minUV, maxUV, framePad, bgCol, tintCol))
+    {
+        if (fn)
+            fn();
+    }
 }
 
 void LevelEditor::LE_AddPlotLines(const std::string& name, std::vector<float>& graph, bool addData, const float& newData)

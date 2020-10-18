@@ -1,6 +1,6 @@
 #include "SI_Controller.h"
 
-namespace SystemInput_ns
+namespace NS_INPUT
 {
 	//********************************************** SYSTEM CONTROLLER **********************************************//
 

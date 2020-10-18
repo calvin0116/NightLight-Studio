@@ -3,7 +3,7 @@
 #include "../Window/WndSystem.h"
 #include <iostream>
 
-using namespace SystemInput_ns;
+using namespace NS_INPUT;
 
 SystemInput::SystemInput()
 	: _siKeyPress(), _siCtrler(-1, false), _siMousePos()
@@ -39,17 +39,17 @@ void SystemInput::Exit()
 	DestroyInstance();
 }
 
-SystemInput_ns::SystemKeyPress& SystemInput::GetSystemKeyPress()
+NS_INPUT::SystemKeyPress& SystemInput::GetSystemKeyPress()
 {
 	return _siKeyPress;
 }
 
-SystemInput_ns::SystemController& SystemInput::GetSystemController()
+NS_INPUT::SystemController& SystemInput::GetSystemController()
 {
 	return _siCtrler;
 }
 
-SystemInput_ns::SystemMousePosition& SystemInput::GetSystemMousePos()
+NS_INPUT::SystemMousePosition& SystemInput::GetSystemMousePos()
 {
 	return _siMousePos;
 }

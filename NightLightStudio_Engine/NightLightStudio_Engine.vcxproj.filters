@@ -58,11 +58,11 @@
     <Filter Include="Source Files\Editor\imgui">
       <UniqueIdentifier>{7f18bdb0-899c-4dea-b7a2-9d525116bb4a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Editor\LevelEditor">
-      <UniqueIdentifier>{b4083232-d9ec-488d-91c2-f300f9597070}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Editor\imgui\imguizmo">
       <UniqueIdentifier>{f6126799-0d15-4749-b21e-e31e5c6408b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\Level_Editor">
+      <UniqueIdentifier>{b4083232-d9ec-488d-91c2-f300f9597070}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -253,13 +253,13 @@
       <Filter>Source Files\Editor\imgui</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
+      <Filter>Source Files\Editor\Level_Editor</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
+      <Filter>Source Files\Editor\Level_Editor</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
+      <Filter>Source Files\Editor\Level_Editor</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\imgui\imguizmo\ImCurveEdit.h">
       <Filter>Source Files\Editor\imgui\imguizmo</Filter>
@@ -417,19 +417,19 @@
       <Filter>Source Files\Editor\imgui</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
+      <Filter>Source Files\Editor\Level_Editor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Console.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
+      <Filter>Source Files\Editor\Level_Editor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_DropDowns.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
+      <Filter>Source Files\Editor\Level_Editor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
+      <Filter>Source Files\Editor\Level_Editor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
+      <Filter>Source Files\Editor\Level_Editor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\imgui\imguizmo\ImCurveEdit.cpp">
       <Filter>Source Files\Editor\imgui\imguizmo</Filter>

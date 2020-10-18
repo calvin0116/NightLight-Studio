@@ -2,15 +2,15 @@
 #include "SystemBroadcaster.h"
 #include <algorithm>    // std::for_each
 
-namespace SystemMessaging
+namespace NS_MESSAGING
 {
-	void SystemReceiver::GlobalRegister(const std::string& msgId)
+	void SystemReceiver::_GlobalRegister(const std::string& msgId)
 	{
-		GLOBAL_SYSTEM_BROADCAST.Register(msgId, *this);
+		G_SYSTEM_BROADCAST.Register(msgId, *this);
 	}
-	void SystemReceiver::GlobalUnregister(const std::string& msgId)
+	void SystemReceiver::_GlobalUnregister(const std::string& msgId)
 	{
-		GLOBAL_SYSTEM_BROADCAST.Unregister(msgId, *this);
+		G_SYSTEM_BROADCAST.Unregister(msgId, *this);
 	}
 
 	SystemReceiver::SystemReceiver() : _id { "\n" }

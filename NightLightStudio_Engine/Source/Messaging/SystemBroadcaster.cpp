@@ -2,9 +2,9 @@
 #include <algorithm>
 
 // Global Broacaster
-SystemMessaging::SystemBroadcast GLOBAL_SYSTEM_BROADCAST ("GLOBAL_BROADCAST");
+NS_MESSAGING::SystemBroadcast G_SYSTEM_BROADCAST ("GLOBAL_BROADCAST");
 
-namespace SystemMessaging
+namespace NS_MESSAGING
 {
 	SystemBroadcast::SystemBroadcast() : _id{ "\n" }
 	{

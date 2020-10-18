@@ -1,6 +1,6 @@
 #include "LevelEditor.h"
 
-void LevelEditor::LE_MainMenuBar()
+void LevelEditor::_LE_MainMenuBar()
 {
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
     // because it would be confusing to have two docking targets within each others.

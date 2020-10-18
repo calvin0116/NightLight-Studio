@@ -9,7 +9,7 @@
 #include <string>
 #include <array>
 
-namespace SystemInput_ns
+namespace NS_INPUT
 {
 	/*=========== Key Codes for all buttons. Still can use regular Virtual Codes, Just not registered here. =============*/
 	enum VirtualKey : int
@@ -197,8 +197,8 @@ namespace SystemInput_ns
 		//ONLY TO PREVENT CHECKING WHEN OUT OF WINDOW, MAY BE REMOVED/REPLACED
 		HWND _window = GetForegroundWindow();
 
-		ENGINE_API void IncrementKeyUsed(unsigned int key);
-		ENGINE_API void DecrementKeyUsed(unsigned int key);
+		ENGINE_API void _IncrementKeyUsed(unsigned int key);
+		ENGINE_API void _DecrementKeyUsed(unsigned int key);
 
 	public:
 		SystemKeyPress();
@@ -225,21 +225,21 @@ namespace SystemInput_ns
 		{
 			_events.emplace(std::pair<std::string, InputEventStruct>(name, InputEventStruct(keycode, identifier, val, InputEvent_MemberFunc(func, obj))));
 
-			IncrementKeyUsed(keycode);
+			_IncrementKeyUsed(keycode);
 		}
 		// Creates new Event (Static Functions)
 		ENGINE_API void CreateNewEvent(const std::string& name, unsigned int keycode, std::string identifier, Trigger val, INPUT_EVENT func)
 		{
 			_events.emplace(std::pair<std::string, InputEventStruct>(name, InputEventStruct(keycode, identifier, val, func)));
 
-			IncrementKeyUsed(keycode);
+			_IncrementKeyUsed(keycode);
 		}
 		// Creates new Event (Empty Event)
 		ENGINE_API void CreateNewEvent(const std::string& name, unsigned int keycode)
 		{
 			_events.emplace(std::pair<std::string, InputEventStruct>(name, InputEventStruct(keycode)));
 
-			IncrementKeyUsed(keycode);
+			_IncrementKeyUsed(keycode);
 		}
 
 
