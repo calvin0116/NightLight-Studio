@@ -123,7 +123,7 @@ namespace NS_WINDOW
 			{
 				NS_WINDOW::SYS_WINDOW->Free();
 				//return false;
-				SYS_SCENE_MANAGER->SetNextScene(EXIT_SCENCE);
+				NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(NS_SCENE::EXIT_SCENCE);
 			}
 
 			// Uncomment and edit if accelerator table is implemented

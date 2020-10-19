@@ -32,7 +32,7 @@ void FluffyUnicornEngine::Run()
 		//=====Scene Layer====//
 		SYS_MAN->GameLoad();
 		//SYS_SCENE_MANAGER->LoadScene();
-		while (SYS_SCENE_MANAGER->CheckChangeScene() == SC_NOCHANGE)	//Aka while scene not changed
+		while (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() == NS_SCENE::SC_NOCHANGE)	//Aka while scene not changed
 		{
 			SYS_MAN->GameInit();
 			//SYS_SCENE_MANAGER->InitScene();
@@ -48,11 +48,11 @@ void FluffyUnicornEngine::Run()
 				SYS_MAN->Update();
 
 				//Check for changing of scene
-				if (SYS_SCENE_MANAGER->CheckChangeScene() != SC_NOCHANGE)
+				if (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() != NS_SCENE::SC_NOCHANGE)
 				{
 					scene_running = false;
 					//If exit is being called
-					if (SYS_SCENE_MANAGER->CheckChangeScene() == SC_EXIT)
+					if (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() == NS_SCENE::SC_EXIT)
 					{
 						engine_running = false;
 					}
@@ -80,5 +80,7 @@ void FluffyUnicornEngine::Exit()
 {
 	//SYS_MAN->Free();
 	SYS_COMPONENT->Free();
+	
 	SYS_MAN->Exit();
+	
 }

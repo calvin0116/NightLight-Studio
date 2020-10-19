@@ -1,3 +1,4 @@
+
 #include "DeltaTime.h"
 
 
@@ -35,4 +36,5 @@ void DeltaTime::end()
 	fps = 1000.0f / ((dt + _prevdt) * 0.5f);
 
 	_prevdt = dt;
+	
 }
