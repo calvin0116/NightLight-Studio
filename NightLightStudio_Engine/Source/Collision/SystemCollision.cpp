@@ -110,7 +110,7 @@ namespace NS_COLLISION
 
 				if (check)
 				{
-					
+					// store collision event
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(1.0f, 0.0f, 1.f));
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(1.0f, 0.0f, 1.f));
 				}
@@ -121,6 +121,8 @@ namespace NS_COLLISION
 				}
 			}
 		}
+
+		//resolve collision here
 	}
 	void CollisionSystem::GameExit()
 	{

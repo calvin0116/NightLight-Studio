@@ -79,6 +79,8 @@ namespace NS_GRAPHICS
         // fov must be given in degrees
         void SetProjectionMatrix(const float& fov = 45.f, const float& aspect_ratio = 1.78f, const float& near_plane = 0.01f, const float& far_plane = 1000.f);
 
+        /////////////////////////////////////////////////////////////////////
+        ////// DEBUG FUNCTIONS
         // Creates a basic cube based on given data
         // Attaches graphics component to given object ID
         // Object ID MUST BE VALID, else undefined behavior
@@ -88,8 +90,19 @@ namespace NS_GRAPHICS
         // Returns mesh ID
         unsigned TestCreateCube(const glm::vec3& rgb = glm::vec3(0.5f, 0.5f, 0.5f), const float& midExtent = 1.f);
 
+        /////////////////////////////////////////////////////////////////////
+
         // Sets whole mesh color
         void SetMeshColor(Entity& entity, const glm::vec3& rgb);
+
+        // Loads and stores mesh in local storage, calls mesh loader
+        void LoadMesh(const std::string& path);
+
+        // Links mesh to specified entity for rendering
+        void AttachMesh(Entity& entity, const unsigned& meshID);
+
+        // Unlinks mesh to specified entity for rendering, if any
+        void DetachMesh(Entity& entity);
 
     private:
 

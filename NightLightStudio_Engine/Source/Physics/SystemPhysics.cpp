@@ -87,6 +87,7 @@ namespace NS_PHYSICS
 
 			
 			//compT->_position += (glm::vec3)compR->velocity * realDt; // I am commenting this away because the build failed // check the types
+			//NLMath::Vector3d nextPosition =compT->_position = (glm::vec3)compR->velocity * realDt; // keep in rigid body
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]() {});
 				
