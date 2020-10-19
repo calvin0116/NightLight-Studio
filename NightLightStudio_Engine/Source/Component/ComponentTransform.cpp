@@ -18,10 +18,8 @@ glm::mat4 ComponentTransform::GetModelMatrix()
 	glm::mat4 Translate = glm::translate(glm::mat4(1.f), _position);
 	
 	// Perform rotation using Quarternions
-	//glm::quat Quaternion(glm::radians(_rotation));
-	//glm::mat4 Rotate = glm::mat4_cast(Quaternion);
-
-	glm::mat4 Rotate = glm::rotate(glm::mat4(1.f), glm::radians(_rotation.x), glm::vec3(1.0f,1.0f,1.0f));
+	glm::quat Quaternion(glm::radians(_rotation));
+	glm::mat4 Rotate = glm::mat4_cast(Quaternion);
 
 	glm::mat4 Scale = glm::scale(glm::mat4(1.f), _scale);
 
