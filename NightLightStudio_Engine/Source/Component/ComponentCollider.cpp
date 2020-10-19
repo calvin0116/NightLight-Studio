@@ -2,8 +2,9 @@
 #include "ComponentCollider.h"
 
 
-ComponentCollider::ComponentCollider()
-	:collisionTime{ FLT_MAX }
+
+ComponentCollider::ComponentCollider(COLLIDERS _col)
+	: collisionTime{ FLT_MAX }, colliderType(_col)
 {
 
 }
@@ -14,8 +15,13 @@ void ComponentCollider::CollisionTimeReset()
 }
 
 
-SphereCollider::SphereCollider() : center{ 0 }, radius{ 0 }
+
+
+SphereCollider::SphereCollider() 
+	:center{ 0 }, radius{ 0 }
 {
+
+
 }
 
 SphereCollider::SphereCollider(NlMath::Vector3D Point, float Radius)
@@ -23,9 +29,21 @@ SphereCollider::SphereCollider(NlMath::Vector3D Point, float Radius)
 {
 }
 
+void SphereCollider::init(ComponentTransform* transform)
+{
+	
+	center.x = transform->_position.x;
+	center.y = transform->_position.y;
+	center.z = transform->_position.z;
+
+	radius = transform->_scale.x;
+}
 
 
-AABBCollider::AABBCollider() : vecMax{ 0 }, vecMin{ 0 }
+
+
+AABBCollider::AABBCollider() 
+	:  vecMax{ 0 }, vecMin{ 0 }
 {
 }
 
@@ -34,16 +52,30 @@ AABBCollider::AABBCollider(NlMath::Vector3D VecMax, NlMath::Vector3D VecMin)
 {
 }
 
+void AABBCollider::init(ComponentTransform* transform)
+{
+	vecMax = transform->_position + transform->_scale;
+	vecMin= transform->_position - transform->_scale;
+}
+
+
 
 
 OBBCollider::OBBCollider()
-	: center(0), extend(0), rotation(0)
+	:  center(0), extend(0), rotation(0)
 {
 }
 
 OBBCollider::OBBCollider(NlMath::Vector3D _center, NlMath::Vector3D _extend, NlMath::Vector3D _rotation)
 	: center(_center), extend(_extend), rotation(_rotation)
 {
+}
+
+void OBBCollider::init(ComponentTransform* transform)
+{
+	center = transform->_position;
+	extend = transform->_scale;
+	rotation = transform->_rotation;
 }
 
 PlaneCollider::PlaneCollider() :
@@ -56,6 +88,10 @@ PlaneCollider::PlaneCollider(NlMath::Vector3D _point, NlMath::Vector3D _extend, 
 {
 }
 
+void PlaneCollider::init(ComponentTransform* transform)
+{
+}
+
 CapsuleCollider::CapsuleCollider()
 	: tip(0, 0, 1), base(0, 0, -1), radius(1), rotation(0, 0, 0)
 {
@@ -63,5 +99,9 @@ CapsuleCollider::CapsuleCollider()
 
 CapsuleCollider::CapsuleCollider(NlMath::Vector3D _tip, NlMath::Vector3D _base, float _radius, NlMath::Vector3D _rotation)
 	: tip(_tip), base(_base), radius(_radius), rotation(_rotation)
+{
+}
+
+void CapsuleCollider::init(ComponentTransform* transform)
 {
 }

@@ -3,6 +3,7 @@
 //#include "../IO/Json/Config.h"
 #include "../../framework.h"
 #include "../Math/Vector.h"
+#include "../Core/DeltaTime.h"
 
 namespace NS_PHYSICS
 {
@@ -23,7 +24,7 @@ namespace NS_PHYSICS
 
 		void Init();
 
-		void Update() override;
+		void FixedUpdate() override;
 
 		void Exit() override;
 
