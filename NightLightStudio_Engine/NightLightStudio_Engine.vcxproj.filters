@@ -54,8 +54,18 @@
     </Filter>
     <Filter Include="Source Files\Transform">
       <UniqueIdentifier>{fdfc5e4c-3c8f-4dd1-8c40-a43272953dc7}</UniqueIdentifier>
+    </Filter>    <Filter Include="Source Files\Editor\imgui">
+      <UniqueIdentifier>{7f18bdb0-899c-4dea-b7a2-9d525116bb4a}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
+    <Filter Include="Source Files\Editor\LevelEditor">
+      <UniqueIdentifier>{b4083232-d9ec-488d-91c2-f300f9597070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\imgui\imguizmo">
+      <UniqueIdentifier>{f6126799-0d15-4749-b21e-e31e5c6408b4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup> <Filter Include="Source Files\Collision">
+      <UniqueIdentifier>{ea29ae5f-d5a4-468d-89e8-d0bdb8743ebd}</UniqueIdentifier>
+    </Filter>
   <ItemGroup>
     <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
@@ -141,9 +151,6 @@
     <ClInclude Include="Source\Component\ComponentTransform.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Physics\CollisionMathLib.h">
-      <Filter>Source Files\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\DeltaTime.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
@@ -213,44 +220,62 @@
     <ClInclude Include="Source\Component\ComponentAudio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imconfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imgui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imgui_impl_opengl3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imgui_impl_win32.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imgui_internal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imstb_rectpack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imstb_textedit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imstb_truetype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\MemoryThingy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentGraphics.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imconfig.h">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imgui.h">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imgui_impl_opengl3.h">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imgui_impl_win32.h">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imgui_internal.h">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imstb_rectpack.h">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imstb_textedit.h">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imstb_truetype.h">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImCurveEdit.h">
+      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImGradient.h">
+      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImGuizmo.h">
+      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImSequencer.h">
+      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\SystemCollision.h">
+      <Filter>Source Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\CollisionMathLib.h">
+      <Filter>Source Files\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -320,9 +345,6 @@
     <ClCompile Include="Source\Component\ComponentTransform.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Physics\CollisionMathLib.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\DeltaTime.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -374,41 +396,59 @@
     <ClCompile Include="Source\Component\ComponentAudio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imgui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imgui_impl_opengl3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imgui_impl_win32.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imgui_widgets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Console.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_DropDowns.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\ComponentGraphics.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\imgui\imgui.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\imgui\imgui_demo.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\imgui\imgui_draw.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\imgui\imgui_impl_win32.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\imgui\imgui_widgets.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Console.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_DropDowns.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImCurveEdit.cpp">
+      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImGradient.cpp">
+      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImGuizmo.cpp">
+      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImSequencer.cpp">
+      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\SystemCollision.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\CollisionMathLib.cpp">
+      <Filter>Source Files\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

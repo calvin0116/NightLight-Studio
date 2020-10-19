@@ -3,7 +3,7 @@
 #include "..\\Math\Vector.h"
 #include "ComponentTransform.h"
 #include "ComponentRigidBody.h"
-#include "..\\Physics\CollisionMathLib.h"
+#include "..\\Collision\CollisionMathLib.h"
 #include "..\Core\MySystem.h"
 
 enum class SIDES
@@ -16,35 +16,27 @@ enum class SIDES
 	FRONT,
 	BACK
 };
-struct ComponentCollider;
-struct SphereCollider;
-struct AABBCollider;
 
-enum Col_Type
+enum class COLLIDERS
 {
-	PLANE,
-	SPHERE
+	PLANE = 0,
+	AABB,
+	SPHERE,
+	OBB,
+	CAPSULE
 };
 
-typedef std::vector<ComponentCollider> MyVector;
+//typedef std::vector<ComponentCollider> MyVector;
 
-struct ComponentCollider : public IComponent
+
+
+
+struct ICollider
 {
-	MyVector preCollisionData;
-	MyVector newCollisionData;
-
-	float collisionTime;
-
-	// For layers
-	int ColliderTag = 1;
-	
-
-	ComponentCollider();
-	void CollisionTimeReset();
 
 };
 
-struct PlaneCollider : public ComponentCollider
+struct PlaneCollider : public ICollider
 {
 	NlMath::Vector3D center;
 	NlMath::Vector3D extend;
@@ -54,25 +46,31 @@ struct PlaneCollider : public ComponentCollider
 		NlMath::Vector3D _point, 
 		NlMath::Vector3D _extend = NlMath::Vector3D(1, 1, 1),
 		NlMath::Vector3D _rotation = NlMath::Vector3D(0, 0, 0));
+
+	void init(ComponentTransform* transform);
 };
 
-struct SphereCollider : public ComponentCollider
+struct SphereCollider : public ICollider
 {
 	NlMath::Vector3D center;
 	float radius;
 	SphereCollider();
 	SphereCollider(NlMath::Vector3D Point, float Radius);
+
+	void init(ComponentTransform* transform);
 };
 
-struct AABBCollider : public ComponentCollider
+struct AABBCollider : public ICollider
 {
 	NlMath::Vector3D vecMax;
 	NlMath::Vector3D vecMin;
 	AABBCollider();
 	AABBCollider(NlMath::Vector3D VecMax, NlMath::Vector3D VecMin);
+
+	void init(ComponentTransform* transform);
 };
 
-struct OBBCollider : public ComponentCollider
+struct OBBCollider : public ICollider
 {
 	NlMath::Vector3D center;
 	NlMath::Vector3D extend;
@@ -83,9 +81,12 @@ struct OBBCollider : public ComponentCollider
 	OBBCollider(NlMath::Vector3D _center, 
 		NlMath::Vector3D _extend = NlMath::Vector3D(1, 1, 1),
 		NlMath::Vector3D _rotation = NlMath::Vector3D(0, 0, 0));
+
+	void init(ComponentTransform* transform);
+
 };
 
-struct CapsuleCollider : public ComponentCollider
+struct CapsuleCollider : public ICollider
 {
 	NlMath::Vector3D tip;
 	NlMath::Vector3D base;
@@ -99,6 +100,36 @@ struct CapsuleCollider : public ComponentCollider
 		NlMath::Vector3D _base, 
 		float _radius = 1,
 		NlMath::Vector3D _rotation = NlMath::Vector3D(0, 0, 0));
+
+	void init(ComponentTransform* transform);
+};
+
+struct ComponentCollider : public IComponent
+{
+	union Collider
+	{
+		PlaneCollider	plane;
+		SphereCollider	sphere;
+		AABBCollider	aabb;
+		OBBCollider		obb;
+		CapsuleCollider capsule;
+		Collider() {};
+	};
+
+	//MyVector preCollisionData;
+	//MyVector newCollisionData;
+	COLLIDERS colliderType;
+	float collisionTime;
+	// For layers
+	int ColliderTag = 1;
+
+	Collider collider;
+
+	ComponentCollider(COLLIDERS col);
+
+	void CollisionTimeReset();
+
+
 };
 
 //enum TYPE_COL

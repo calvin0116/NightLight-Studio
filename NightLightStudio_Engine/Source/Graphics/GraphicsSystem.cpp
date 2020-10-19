@@ -649,4 +649,17 @@ namespace NS_GRAPHICS
 
 		// No need to perform glBufferSubData here, update() will perform communication with GPU data
 	}
+	void GraphicsSystem::LoadMesh(const std::string& path)
+	{
+		path;
+	}
+	void GraphicsSystem::AttachMesh(Entity& entity, const unsigned& meshID)
+	{
+		entity;
+		meshID;
+	}
+	void GraphicsSystem::DetachMesh(Entity& entity)
+	{
+		entity;
+	}
 }

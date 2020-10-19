@@ -1,14 +1,16 @@
 #pragma once
 
-#include "../Window/WndSystem.h"
-#include "../Graphics/GraphicsSystem.h"
+#include "..\Window\WndSystem.h"
+#include "..\Graphics\GraphicsSystem.h"
 #include "..\\Input\SystemInput.h"
 #include "..\\Audio\SystemAudio.h"
 #include "..\\Logic\SystemLogic.h"
 #include "..\\Physics\SystemPhysics.h"
 #include "..\\IO\SystemIO.h"
 #include "..\\Editor\SystemEditor.h"
-#include "../Core/SceneManager.h"
+#include "..\Core\SceneManager.h"
+#include "..\Collision\SystemCollision.h"
+
 /*
 extern SystemGraphics G_GRAPHICS;
 extern SystemInput G_INPUT;

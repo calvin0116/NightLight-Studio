@@ -111,6 +111,16 @@ namespace NlMath
 	}
 
 
+	Vector3D& Vector3D::operator=(const glm::vec3& rhs)
+	{
+		x = rhs.x;
+		y = rhs.y;
+		z = rhs.z;
+
+		return *this;
+		// TODO: insert return statement here
+	}
+
 	//conversion operator is case we are using open gl, this converts my vector to glm vectors
 	Vector3D::operator glm::vec2() const
 	{
