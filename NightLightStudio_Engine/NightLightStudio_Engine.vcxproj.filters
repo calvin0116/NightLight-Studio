@@ -54,7 +54,8 @@
     </Filter>
     <Filter Include="Source Files\Transform">
       <UniqueIdentifier>{fdfc5e4c-3c8f-4dd1-8c40-a43272953dc7}</UniqueIdentifier>
-    </Filter>    <Filter Include="Source Files\Editor\imgui">
+    </Filter>
+    <Filter Include="Source Files\Editor\imgui">
       <UniqueIdentifier>{7f18bdb0-899c-4dea-b7a2-9d525116bb4a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Editor\LevelEditor">
@@ -63,9 +64,10 @@
     <Filter Include="Source Files\Editor\imgui\imguizmo">
       <UniqueIdentifier>{f6126799-0d15-4749-b21e-e31e5c6408b4}</UniqueIdentifier>
     </Filter>
-  </ItemGroup> <Filter Include="Source Files\Collision">
+    <Filter Include="Source Files\Collision">
       <UniqueIdentifier>{ea29ae5f-d5a4-468d-89e8-d0bdb8743ebd}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
@@ -393,12 +395,6 @@
     <ClCompile Include="Source\Core\SceneManager.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\ComponentAudio.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ComponentGraphics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Editor\imgui\imgui.cpp">
       <Filter>Source Files\Editor\imgui</Filter>
     </ClCompile>
@@ -449,6 +445,12 @@
     </ClCompile>
     <ClCompile Include="Source\Collision\CollisionMathLib.cpp">
       <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentGraphics.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentAudio.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
