@@ -47,9 +47,13 @@ public:
 	ENGINE_API void GameExit() { for (auto my_sys : Systems) my_sys.second->GameExit(); };
 
 	//Memory deallocation phase without dependancy
-	ENGINE_API void Free() { for (auto my_sys : Systems) my_sys.second->Free(); };
+	ENGINE_API void Free() {
+		for (auto my_sys : Systems) my_sys.second->Free(); };
 	//Memory deallocation phase without dependancy
-	ENGINE_API void Exit() { for (auto my_sys : Systems) my_sys.second->Exit(); };
+	ENGINE_API void Exit() { 
+		for (auto my_sys : Systems) my_sys.second->Exit();
+		DestroyInstance();
+	};
 
 	//== Helper function
 	//Getting system

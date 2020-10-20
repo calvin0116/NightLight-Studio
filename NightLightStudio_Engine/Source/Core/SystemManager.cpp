@@ -15,12 +15,13 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
   // === Insert your system here to get them running === //
   // === Please follow how PhysicManager is created  === // 
 	//Systems[SYS_PHYSICS] = PhysicManager::GetInstance();
+	
 	Systems[S_PRIORITY::SP_WINDOW] = NS_WINDOW::SYS_WINDOW;
 	Systems[S_PRIORITY::SP_GRAPHICS] = NS_GRAPHICS::SYS_GRAPHICS;
 	Systems[S_PRIORITY::SP_INPUT] = SYS_INPUT;
 	Systems[S_PRIORITY::SP_IO] = SYS_IO;
 	Systems[S_PRIORITY::SP_AUDIO] = SYS_AUDIO;
-	Systems[S_PRIORITY::SP_SCENEMANAGER] = SYS_SCENE_MANAGER;
+	Systems[S_PRIORITY::SP_SCENEMANAGER] = NS_SCENE::SYS_SCENE_MANAGER;
 	Systems[S_PRIORITY::SP_PHYSICS] = NS_PHYSICS::SYS_PHYSICS;
 	Systems[S_PRIORITY::SP_COMPONENT] = SYS_COMPONENT;
 	Systems[S_PRIORITY::SP_COLLISION] = NS_COLLISION::SYS_COLLISION;

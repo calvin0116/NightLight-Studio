@@ -29,7 +29,7 @@ namespace NlMath
         return false;
 
     }
-
+    //Rejection
     bool AABBtoAABB(const AABBCollider& tBox1, const AABBCollider& tBox2)
     {
 

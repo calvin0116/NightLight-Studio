@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 
 #include "..\Component\ComponentManager.h"
+#include "Systems.h"
 
 #include <iostream>
 #include "DeltaTime.h"
@@ -32,7 +33,7 @@ void FluffyUnicornEngine::Run()
 		//=====Scene Layer====//
 		SYS_MAN->GameLoad();
 		//SYS_SCENE_MANAGER->LoadScene();
-		while (SYS_SCENE_MANAGER->CheckChangeScene() == SC_NOCHANGE)	//Aka while scene not changed
+		while (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() == NS_SCENE::SC_NOCHANGE)	//Aka while scene not changed
 		{
 			SYS_MAN->GameInit();
 			//SYS_SCENE_MANAGER->InitScene();
@@ -48,11 +49,11 @@ void FluffyUnicornEngine::Run()
 				SYS_MAN->Update();
 
 				//Check for changing of scene
-				if (SYS_SCENE_MANAGER->CheckChangeScene() != SC_NOCHANGE)
+				if (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() != NS_SCENE::SC_NOCHANGE)
 				{
 					scene_running = false;
 					//If exit is being called
-					if (SYS_SCENE_MANAGER->CheckChangeScene() == SC_EXIT)
+					if (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() == NS_SCENE::SC_EXIT)
 					{
 						engine_running = false;
 					}
@@ -78,7 +79,23 @@ void FluffyUnicornEngine::Run()
 
 void FluffyUnicornEngine::Exit()
 {
+	DELTA_T->Exit();
 	//SYS_MAN->Free();
 	SYS_COMPONENT->Free();
+	
 	SYS_MAN->Exit();
+
+	// ==== Manaul singleton deletion ========//
+	/*
+	NS_WINDOW::SYS_WINDOW->DestroyInstance();
+	NS_GRAPHICS::SYS_GRAPHICS->DestroyInstance();
+	SYS_INPUT->DestroyInstance();
+	SYS_IO->DestroyInstance();
+	SYS_AUDIO->DestroyInstance();
+	NS_SCENE::SYS_SCENE_MANAGER->DestroyInstance();
+	NS_PHYSICS::SYS_PHYSICS->DestroyInstance();
+	SYS_COMPONENT->DestroyInstance();
+	NS_COLLISION::SYS_COLLISION->DestroyInstance();
+	*/
+	
 }

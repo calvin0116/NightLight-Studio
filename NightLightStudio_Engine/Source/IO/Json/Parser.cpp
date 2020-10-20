@@ -10,6 +10,11 @@ Parser::Parser(std::string name_, std::string path_)
 	alloc = &doc.GetAllocator();
 }
 
+Parser::~Parser()
+{
+    //doc.ckk
+}
+
 void Parser::Load()
 {
 	//StringBuffer s;
