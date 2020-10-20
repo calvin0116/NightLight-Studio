@@ -231,75 +231,17 @@ namespace NS_COLLISION
 				AABBCollider * a = &(Collider1->collider.aabb);
 				AABBCollider * b = &(Collider2->collider.aabb);
 
-				switch (NlMath::AABB_AABBCollision(*a, *b))
+				CollisionEvent newEvent;
+				newEvent.colidingSide = NlMath::AABB_AABBCollision(*a, *b);
+				if (newEvent.colidingSide == SIDES::NO_COLLISION)
 				{
-				case SIDES::BACK:
-				{
-					CollisionEvent newEvent;
-					newEvent.collisionNormal = NlMath::Vector3D(0,0,-1);
-					newEvent.rigid1 = Rigid1;
-					newEvent.rigid2 = Rigid2;
-					colResolver.addCollisionEvent(newEvent);
-					return true;
-					break;
-				}
-				case SIDES::FRONT:
-				{
-					CollisionEvent newEvent;
-					newEvent.collisionNormal = NlMath::Vector3D(0, 0, 1);
-					newEvent.rigid1 = Rigid1;
-					newEvent.rigid2 = Rigid2;
-					colResolver.addCollisionEvent(newEvent);
-					return true;
-					break;
-				}
-				case SIDES::LEFT:
-				{
-					CollisionEvent newEvent;
-					newEvent.collisionNormal = NlMath::Vector3D(-1, 0, 0);
-					newEvent.rigid1 = Rigid1;
-					newEvent.rigid2 = Rigid2;
-					colResolver.addCollisionEvent(newEvent);
-					return true;
-					break;
-				}
-				case SIDES::RIGHT:
-				{
-					CollisionEvent newEvent;
-					newEvent.collisionNormal = NlMath::Vector3D(1, 0, 0);
-					newEvent.rigid1 = Rigid1;
-					newEvent.rigid2 = Rigid2;
-					colResolver.addCollisionEvent(newEvent);
-					return true;
-					break;
-				}
-				case SIDES::TOP:
-				{
-					CollisionEvent newEvent;
-					newEvent.collisionNormal = NlMath::Vector3D(0, 1, 0);
-					newEvent.rigid1 = Rigid1;
-					newEvent.rigid2 = Rigid2;
-					colResolver.addCollisionEvent(newEvent);
-					return true;
-					break;
-				}
-				case SIDES::BOTTOM:
-				{
-					CollisionEvent newEvent;
-					newEvent.collisionNormal = NlMath::Vector3D(0, -1, 0);
-					newEvent.rigid1 = Rigid1;
-					newEvent.rigid2 = Rigid2;
-					colResolver.addCollisionEvent(newEvent);
-					return true;
-					break;
-				}
-				case SIDES::NO_COLLISION:
 					return false;
-					break;
-				default:
-					throw;
-					break;
 				}
+				newEvent.rigid1 = Rigid1;
+				newEvent.rigid2 = Rigid2;
+				colResolver.addCollisionEvent(newEvent);
+				return true;
+				
 			}
 			//if (Collider2->colliderType == COLLIDERS::CAPSULE)
 			//{

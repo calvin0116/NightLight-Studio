@@ -74,14 +74,16 @@ namespace NS_PHYSICS
 
 			//deltatime, convert to second
 			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
-			compR->velocity.y -= gravity * realDt;
+
+			// enable gravity
+			//compR->velocity.y -= gravity * realDt;
 			
 			if (compT == nullptr) // nullptr -> uninitialised or deleted
 				continue;
 
 
-			// enable gravity
-			//compT->_position += (glm::vec3)compR->velocity * realDt;
+			
+			compT->_position += (glm::vec3)compR->velocity * realDt;
 
 			//predict the next position for collision check
 			compT->_nextPos = compT->_position + (glm::vec3)compR->velocity * realDt;
@@ -98,7 +100,7 @@ namespace NS_PHYSICS
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_D))
 			{
 				
-				compT->_position.x += 1 * realDt;
+				compR->velocity.x = 1;
 			}
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]() {});
@@ -106,7 +108,7 @@ namespace NS_PHYSICS
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_A))
 			{
 
-				compT->_position.x -= 1 * realDt;
+				compR->velocity.x = -1;
 			}
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_DOWN", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]() {});
@@ -114,7 +116,7 @@ namespace NS_PHYSICS
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_S))
 			{
 
-				compT->_position.y -= 1 * realDt;
+				compR->velocity.y = -1;
 			}
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_UP", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]() {});
@@ -122,21 +124,21 @@ namespace NS_PHYSICS
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_W))
 			{
 
-				compT->_position.y += 1 * realDt;
+				compR->velocity.y = 1;
 			}
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_FRONT", SystemInput_ns::IKEY_Q, "Q", SystemInput_ns::OnHold, [this]() {});
 
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_Q))
 			{
 
-				compT->_position.z += 1 * realDt;
+				compR->velocity.z = 1;
 			}
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_BACK", SystemInput_ns::IKEY_E, "E", SystemInput_ns::OnHold, [this]() {});
 
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_E))
 			{
 
-				compT->_position.z -= 1 * realDt;
+				compR->velocity.z = -1;
 			}
 			/// </Testing>//////////////////////////////////////////////////////////////////////////////////////////
 		}

@@ -15,7 +15,52 @@ void CollsionResolver::resolveCollision()
 {
 	for (CollisionEvent& colEvent : colEventList)
 	{
-		
+		//AABB resolution
+		switch (colEvent.colidingSide)
+		{
+		case SIDES::NO_COLLISION:
+		{
+			break;
+		}
+		case SIDES::FRONT:
+		{
+			if (colEvent.rigid1->velocity.z > 0)
+			colEvent.rigid1->velocity.z = 0;
+			break;
+		}
+		case SIDES::BACK:
+		{
+			if (colEvent.rigid1->velocity.z < 0)
+			colEvent.rigid1->velocity.z = 0;
+			break;
+		}
+		case SIDES::TOP:
+		{
+			if (colEvent.rigid1->velocity.y > 0)
+			colEvent.rigid1->velocity.y = 0;
+			break;
+		}
+		case SIDES::BOTTOM:
+		{
+			if (colEvent.rigid1->velocity.y < 0)
+			colEvent.rigid1->velocity.y = 0;
+			break;
+		}
+		case SIDES::RIGHT:
+		{
+			if (colEvent.rigid1->velocity.x > 0)
+			colEvent.rigid1->velocity.x = 0;
+			break;
+		}
+		case SIDES::LEFT:
+		{
+			if (colEvent.rigid1->velocity.x < 0)
+			colEvent.rigid1->velocity.x = 0;
+			break;
+		}
+		default:
+			throw;
+		}
 	}
 	colEventList.clear();
 }
