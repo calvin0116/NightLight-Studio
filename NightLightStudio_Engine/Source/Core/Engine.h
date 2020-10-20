@@ -1,7 +1,6 @@
 #pragma once
 //Noted from Teck Wei: I shifted your ENGINE_API to framework.h header as i need to use it too
 #include "../../framework.h"
-#include "SystemManager.h"
 #include <windows.h>
 
 

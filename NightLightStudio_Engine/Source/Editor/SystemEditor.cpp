@@ -25,6 +25,7 @@ void SystemEditor::Update()
 void SystemEditor::Exit()
 {
 	_editor.Exit();
+	DestroyInstance();
 }
 
 void SystemEditor::Free()

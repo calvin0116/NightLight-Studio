@@ -80,6 +80,7 @@ void FluffyUnicornEngine::Run()
 void FluffyUnicornEngine::Exit()
 {
 	DELTA_T->Exit();
+	CONFIG_DATA->Exit();
 	//SYS_MAN->Free();
 	SYS_COMPONENT->Free();
 	
