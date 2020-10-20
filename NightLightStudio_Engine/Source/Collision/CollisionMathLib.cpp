@@ -286,13 +286,105 @@ namespace NlMath
 
     bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2)
     {
+        ////axis view explaination: (value going from negative to positive)
+        ////x going from left to right
+        ////y going from back(into the screen) to front(out of the screen)
+        ////z going from bottom to top
+
+        //Matrix4x4 rotationalMtx;
+        //
+        ////setting up normals for Box1
+        //Vector3D normalX1(1, 0, 0);
+        //Vector3D normalY1(0, 1, 0);
+        //Vector3D normalZ1(0, 0, 1);
+        //Mtx44RotRad(rotationalMtx, tBox1.rotation);
+        ////rotate normals to correct position
+        //normalX1 = rotationalMtx * normalX1;
+        //normalY1 = rotationalMtx * normalY1;
+        //normalZ1 = rotationalMtx * normalZ1;
+        //
+        ////setting up normals for Box2
+        //Vector3D normalX2(1, 0, 0);
+        //Vector3D normalY2(0, 1, 0);
+        //Vector3D normalZ2(0, 0, 1);
+        //Mtx44RotRad(rotationalMtx, tBox2.rotation);
+        ////rotate normals to correct position
+        //normalX2 = rotationalMtx * normalX2;
+        //normalY2 = rotationalMtx * normalY2;
+        //normalZ2 = rotationalMtx * normalZ2;
+
+        ////get distance vector between two box's center
+        //Vector3D centerDistance = tBox2.center - tBox1.center;
+
+        //// check if there's a separating plane in between the selected axes
+        //auto getSeparatingPlane = [=](const Vector3D& normal)
+        //{
+        //    float check1 = fabs(centerDistance * normal);
+
+        //    float check2 = fabs((normalX1 * tBox1.extend.x) * normal);
+        //    float check3 = fabs((normalY1 * tBox1.extend.y) * normal);
+        //    float check4 = fabs((normalZ1 * tBox1.extend.z) * normal);
+        //    float check5 = fabs((normalX2 * tBox2.extend.x) * normal);
+        //    float check6 = fabs((normalY2 * tBox2.extend.y) * normal);
+        //    float check7 = fabs((normalZ2 * tBox2.extend.z) * normal);
+
+        //    float check8 = check2 + check3 + check4 + check5 + check6 + check7;
+
+        //    return (fabs(centerDistance * normal) >
+        //            (fabs((normalX1 * tBox1.extend.x) * normal) +
+        //            fabs((normalY1 * tBox1.extend.y) * normal) +
+        //            fabs((normalZ1 * tBox1.extend.z) * normal) +
+        //            fabs((normalX2 * tBox2.extend.x) * normal) +
+        //            fabs((normalY2 * tBox2.extend.y) * normal) +
+        //            fabs((normalZ2 * tBox2.extend.z) * normal)));
+        //};
+
+        //bool check1 = getSeparatingPlane(normalX1);
+        //bool check2 = getSeparatingPlane(normalY1);
+        //bool check3 = getSeparatingPlane(normalZ1);
+        //bool check4 = getSeparatingPlane(normalX2);
+        //bool check5 = getSeparatingPlane(normalY2);
+        //bool check6 = getSeparatingPlane(normalZ2);
+
+        //bool check7 =getSeparatingPlane(Vector3DCrossProduct(normalX1, normalX2));
+        //bool check8 =getSeparatingPlane(Vector3DCrossProduct(normalX1, normalY2));
+        //bool check9 =getSeparatingPlane(Vector3DCrossProduct(normalX1, normalZ2));
+        //                                                       
+        //bool check10 =getSeparatingPlane(Vector3DCrossProduct(normalY1, normalX2));
+        //bool check11 =getSeparatingPlane(Vector3DCrossProduct(normalY1, normalY2));
+        //bool check12 =getSeparatingPlane(Vector3DCrossProduct(normalY1, normalZ2));
+        //                                                         
+        //bool check13 =getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalX2));
+        //bool check14 =getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalY2));
+        //bool check15 =getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalZ2));
+
+        //return !(
+        //    getSeparatingPlane(normalX1) ||
+        //    getSeparatingPlane(normalY1) ||
+        //    getSeparatingPlane(normalZ1) ||
+        //    getSeparatingPlane(normalX2) ||
+        //    getSeparatingPlane(normalY2) ||
+        //    getSeparatingPlane(normalZ2) ||
+        //    
+        //    getSeparatingPlane(Vector3DCrossProduct(normalX1, normalX2)) ||
+        //    getSeparatingPlane(Vector3DCrossProduct(normalX1, normalY2)) ||
+        //    getSeparatingPlane(Vector3DCrossProduct(normalX1, normalZ2)) ||
+
+        //    getSeparatingPlane(Vector3DCrossProduct(normalY1,normalX2)) ||
+        //    getSeparatingPlane(Vector3DCrossProduct(normalY1,normalY2)) ||
+        //    getSeparatingPlane(Vector3DCrossProduct(normalY1,normalZ2)) ||
+
+        //    getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalX2)) ||
+        //    getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalY2)) ||
+        //    getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalZ2)));
+
         //axis view explaination: (value going from negative to positive)
         //x going from left to right
         //y going from back(into the screen) to front(out of the screen)
         //z going from bottom to top
 
         Matrix4x4 rotationalMtx;
-        
+
         //setting up normals for Box1
         Vector3D normalX1(1, 0, 0);
         Vector3D normalY1(0, 1, 0);
@@ -302,7 +394,7 @@ namespace NlMath
         normalX1 = rotationalMtx * normalX1;
         normalY1 = rotationalMtx * normalY1;
         normalZ1 = rotationalMtx * normalZ1;
-        
+
         //setting up normals for Box2
         Vector3D normalX2(1, 0, 0);
         Vector3D normalY2(0, 1, 0);
@@ -314,69 +406,125 @@ namespace NlMath
         normalZ2 = rotationalMtx * normalZ2;
 
         //get distance vector between two box's center
-        Vector3D centerDistance = tBox2.center - tBox1.center;
+        Vector3D t = tBox2.center - tBox1.center;
 
-        // check if there's a separating plane in between the selected axes
-        auto getSeparatingPlane = [=](const Vector3D& normal)
+        std::vector<NlMath::Vector3D> mAxes;
+        mAxes.push_back(normalX1);
+        mAxes.push_back(normalY1);
+        mAxes.push_back(normalZ1);
+        std::vector<NlMath::Vector3D> mAxes2;
+        mAxes2.push_back(normalX2);
+        mAxes2.push_back(normalY2);
+        mAxes2.push_back(normalZ2);
+        std::vector<float> mExtents;
+        mExtents.push_back(tBox1.extend.x);
+        mExtents.push_back(tBox1.extend.y);
+        mExtents.push_back(tBox1.extend.z);
+        std::vector<float> mExtents2;
+        mExtents2.push_back(tBox2.extend.x);
+        mExtents2.push_back(tBox2.extend.y);
+        mExtents2.push_back(tBox2.extend.z);
+        float ra, rb;
+        NlMath::Matrix4x4 R, AbsR;
+        NlMath::Vector3D vec;
+
+        // matrix[i][j] = matrix3D[j+i*width]
+
+        // Compute rotation matrix expressing other OBB in this one's coordinate frame
+        for (size_t i = 0; i < 3; ++i)
         {
-            float check1 = fabs(centerDistance * normal);
+            for (size_t j = 0; j < 3; ++j)
+            {
+                R[j + i * 4] = mAxes[i]*mAxes2[j];
+            }
+        }
 
-            float check2 = fabs((normalX1 * tBox1.extend.x) * normal);
-            float check3 = fabs((normalY1 * tBox1.extend.y) * normal);
-            float check4 = fabs((normalZ1 * tBox1.extend.z) * normal);
-            float check5 = fabs((normalX2 * tBox2.extend.x) * normal);
-            float check6 = fabs((normalY2 * tBox2.extend.y) * normal);
-            float check7 = fabs((normalZ2 * tBox2.extend.z) * normal);
+        // Compute translation vector t
+        //auto t = other.mCenter - mCenter;
 
-            float check8 = check2 + check3 + check4 + check5 + check6 + check7;
+        // Bring translation into this OBB's coordinate frame
+        t = NlMath::Vector3D(t*mAxes[0]), t*mAxes[1], t*mAxes[2];
 
-            return (fabs(centerDistance * normal) >
-                    (fabs((normalX1 * tBox1.extend.x) * normal) +
-                    fabs((normalY1 * tBox1.extend.y) * normal) +
-                    fabs((normalZ1 * tBox1.extend.z) * normal) +
-                    fabs((normalX2 * tBox2.extend.x) * normal) +
-                    fabs((normalY2 * tBox2.extend.y) * normal) +
-                    fabs((normalZ2 * tBox2.extend.z) * normal)));
-        };
+        // Compute common subexpressions. Epsilon counteract arithmetic errors
+        // when two edges are parallel and their cross product is null (or near)
+        for (size_t i = 0; i < 3; ++i)
+            for (size_t j = 0; j < 3; ++j)
+                AbsR[j + i * 4] = fabs(R[j + i * 4]) + 0.001f;
 
-        bool check1 = getSeparatingPlane(normalX1);
-        bool check2 = getSeparatingPlane(normalY1);
-        bool check3 = getSeparatingPlane(normalZ1);
-        bool check4 = getSeparatingPlane(normalX2);
-        bool check5 = getSeparatingPlane(normalY2);
-        bool check6 = getSeparatingPlane(normalZ2);
+        // Test axes L = A0, L = A1, L = A2
+        for (size_t i = 0; i < 3; ++i)
+        {
+            ra = mExtents[i];
+            rb = mExtents2[0] * AbsR[0 + i * 4] + mExtents2[1] * AbsR[1 + i * 4] + mExtents2[2] * AbsR[2 + i * 4];
 
-        bool check7 =getSeparatingPlane(Vector3DCrossProduct(normalX1, normalX2));
-        bool check8 =getSeparatingPlane(Vector3DCrossProduct(normalX1, normalY2));
-        bool check9 =getSeparatingPlane(Vector3DCrossProduct(normalX1, normalZ2));
-                                                               
-        bool check10 =getSeparatingPlane(Vector3DCrossProduct(normalY1, normalX2));
-        bool check11 =getSeparatingPlane(Vector3DCrossProduct(normalY1, normalY2));
-        bool check12 =getSeparatingPlane(Vector3DCrossProduct(normalY1, normalZ2));
-                                                                 
-        bool check13 =getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalX2));
-        bool check14 =getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalY2));
-        bool check15 =getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalZ2));
+            if (fabs(t[i]) > ra + rb) return false;
+        }
 
-        return !(
-            getSeparatingPlane(normalX1) ||
-            getSeparatingPlane(normalY1) ||
-            getSeparatingPlane(normalZ1) ||
-            getSeparatingPlane(normalX2) ||
-            getSeparatingPlane(normalY2) ||
-            getSeparatingPlane(normalZ2) ||
-            
-            getSeparatingPlane(Vector3DCrossProduct(normalX1, normalX2)) ||
-            getSeparatingPlane(Vector3DCrossProduct(normalX1, normalY2)) ||
-            getSeparatingPlane(Vector3DCrossProduct(normalX1, normalZ2)) ||
+        // Test axes L = B0, L = B1, L = B2
+        for (size_t i = 0; i < 3; ++i)
+        {
+            ra = mExtents[0] * AbsR[i] + mExtents[1] * AbsR[i + 4] + mExtents[2] * AbsR[i + 8];
+            rb = mExtents2[i];
 
-            getSeparatingPlane(Vector3DCrossProduct(normalY1,normalX2)) ||
-            getSeparatingPlane(Vector3DCrossProduct(normalY1,normalY2)) ||
-            getSeparatingPlane(Vector3DCrossProduct(normalY1,normalZ2)) ||
+            if (fabs(t[0] * R[i] + t[1] * R[i + 4] + t[2] * R[i + 8]) > ra + rb) return false;
+        }
 
-            getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalX2)) ||
-            getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalY2)) ||
-            getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalZ2)));
+        //// Since no separating axis is found, the OBBs must be intersecting
+        //if (fastCheck) return true;
+
+        //// Other 8 axes
+
+        //============== A0
+        // Test axis L = A0 x B0
+        ra = mExtents[1] * AbsR[8] + mExtents[2] * AbsR[4];
+        rb = mExtents2[1] * AbsR[2] + mExtents2[2] * AbsR[1];
+        if (fabs(t[2] * R[4] - t[1] * R[8]) > ra + rb) return false;
+
+        // Test axis L = A0 x B1
+        ra = mExtents[1] * AbsR[9] + mExtents[2] * AbsR[5];
+        rb = mExtents2[0] * AbsR[2] + mExtents2[2] * AbsR[0];
+        if (fabs(t[2] * R[5] - t[1] * R[9]) > ra + rb) return false;
+
+        // Test axis L = A0 x B2
+        ra = mExtents[1] * AbsR[10] + mExtents[2] * AbsR[6];
+        rb = mExtents2[0] * AbsR[1] + mExtents2[1] * AbsR[0];
+        if (fabs(t[2] * R[6] - t[1] * R[10]) > ra + rb) return false;
+
+        //============== A1
+        // Test axis L = A1 x B0
+        ra = mExtents[0] * AbsR[8] + mExtents[2] * AbsR[0];
+        rb = mExtents2[1] * AbsR[6] + mExtents2[2] * AbsR[5];
+        if (fabs(t[0] * R[8] - t[2] * R[0]) > ra + rb) return false;
+
+        // Test axis L = A1 x B1
+        ra = mExtents[0] * AbsR[9] + mExtents[2] * AbsR[1];
+        rb = mExtents2[0] * AbsR[6] + mExtents2[2] * AbsR[4];
+        if (fabs(t[0] * R[9] - t[2] * R[1]) > ra + rb) return false;
+
+        // Test axis L = A1 x B2
+        ra = mExtents[0] * AbsR[10] + mExtents[2] * AbsR[2];
+        rb = mExtents2[0] * AbsR[5] + mExtents2[1] * AbsR[4];
+        if (fabs(t[0] * R[10] - t[2] * R[2]) > ra + rb) return false;
+
+        //============== A2
+        // Test axis L = A2 x B0
+        ra = mExtents[0] * AbsR[4] + mExtents[1] * AbsR[0];
+        rb = mExtents2[1] * AbsR[10] + mExtents2[2] * AbsR[9];
+        if (fabs(t[1] * R[0] - t[0] * R[4]) > ra + rb) return false;
+
+        // Test axis L = A2 x B1
+        ra = mExtents[0] * AbsR[5] + mExtents[1] * AbsR[1];
+        rb = mExtents2[0] * AbsR[10] + mExtents2[2] * AbsR[8];
+        if (fabs(t[1] * R[1] - t[0] * R[5]) > ra + rb) return false;
+
+        // Test axis L = A2 x B2
+        ra = mExtents[0] * AbsR[6] + mExtents[1] * AbsR[2];
+        rb = mExtents2[0] * AbsR[9] + mExtents2[1] * AbsR[8];
+        if (fabs(t[1] * R[2] - t[0] * R[6]) > ra + rb) return false;
+
+        // Since no separating axis is found, the OBBs must be intersecting
+        return true;
+
 
     }
     bool CapsuleToCapsule(const CapsuleCollider& tCap1, const CapsuleCollider& tCap2)
