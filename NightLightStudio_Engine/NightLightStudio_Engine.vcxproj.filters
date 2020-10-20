@@ -279,6 +279,15 @@
     <ClInclude Include="Source\Collision\CollisionMathLib.h">
       <Filter>Source Files\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Collision\CollisionResolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\ForceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -451,6 +460,15 @@
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentAudio.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\CollisionResolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics\ForceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

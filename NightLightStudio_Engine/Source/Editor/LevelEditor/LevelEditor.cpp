@@ -1,11 +1,14 @@
 #include "LevelEditor.h"
-#include "LevelEditor_WindowClass.h"
+#include "LevelEditor_Console.h"
+#include "LevelEditor_AssetInsp.h"
 
 LevelEditor::LevelEditor() : _window{ nullptr }
 {
     // Purely for testing purposes
-    LE_CreateWindow<TestCase>("Test", true, 0);
-    LE_CreateWindow<ConsoleLog>("Console", true, 0);
+    //LE_CreateWindow<TestCase>("Test", false, 0);
+    LE_CreateWindow<ConsoleLog>("Console", false, 0);
+    LE_CreateWindow<AssetInspector>("AssetInspector", true);
+
 }
 
 LevelEditor::~LevelEditor()

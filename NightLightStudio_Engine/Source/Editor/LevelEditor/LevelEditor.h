@@ -263,7 +263,7 @@ public:
 
 	void LE_AddCollapsingHeader(const std::string& name, const std::vector<std::function<void()>> fns = {});
 
-	void LE_AddTreeNodes(const std::string& name, const std::vector<std::function<void()>> fns = {});
+	void LE_AddTreeNodes(const std::string& name, const std::vector<std::function<void()>> fns = {}, ImGuiTreeNodeFlags flag = 0);
 
 	/**********************************************************************/
 
