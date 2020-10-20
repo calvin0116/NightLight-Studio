@@ -62,6 +62,11 @@ public:
 		config_d.startscene = config_val["startscene"].GetString();
 	};
 
+	ENGINE_API void Exit()
+	{
+		DestroyInstance();
+	}
+
 	ConfigData& GetConfigData() { return config_d; };
 };
 
