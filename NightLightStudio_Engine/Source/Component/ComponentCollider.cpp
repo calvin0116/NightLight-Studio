@@ -75,7 +75,7 @@ void OBBCollider::init(ComponentTransform* transform)
 {
 	center = transform->_position;
 	extend = transform->_scale;
-	rotation = transform->_rotation;
+	rotation = glm::radians(transform->_rotation);
 }
 
 PlaneCollider::PlaneCollider() :

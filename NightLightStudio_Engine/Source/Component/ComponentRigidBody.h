@@ -11,6 +11,8 @@ struct ComponentRigidBody : public IComponent
 	NlMath::Vector3D acceleration;
 	//previous position
 	NlMath::Vector3D prevPos;
+	//previous position
+	NlMath::Vector3D nextPos;
 	//determine if it is a static object, a static object will not receive update
 	bool isStatic;
 	float mass;

@@ -1,464 +1,144 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Source Files\Audio">
-      <UniqueIdentifier>{690ed57f-f1d8-4062-b40c-29b6d2f2121c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Component">
-      <UniqueIdentifier>{65da2e35-9cbb-4199-92d3-7b83c93c18b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{fca79de9-5c3c-4c8d-af96-f539fddf6b88}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Editor">
-      <UniqueIdentifier>{c21ac359-03ee-4aef-a451-77d7a20e12e6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Graphics">
-      <UniqueIdentifier>{b5037201-fcb3-4d49-9063-80321e830578}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Input">
-      <UniqueIdentifier>{6ab385ce-7091-47c1-94ee-84ca2bfc480f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\IO">
-      <UniqueIdentifier>{91e0fd4f-b248-4991-81e9-eeed5f9a63e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Logic">
-      <UniqueIdentifier>{95e54b84-bd5f-4941-b089-3dce83137fba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Messaging">
-      <UniqueIdentifier>{66544706-2fbb-4b3c-82dd-71b354f88d70}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Physics">
-      <UniqueIdentifier>{866c6f0c-9466-4dba-9244-8fe3e7de9c05}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Math">
-      <UniqueIdentifier>{d30951f3-6878-484f-83ea-7557573e4ec1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\IO\Json">
-      <UniqueIdentifier>{f09c9436-0756-4a00-951c-207781b0ff30}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Window">
-      <UniqueIdentifier>{d1cbd245-3262-4f22-8988-1a1ff1a0f593}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Transform">
-      <UniqueIdentifier>{fdfc5e4c-3c8f-4dd1-8c40-a43272953dc7}</UniqueIdentifier>
-    </Filter>    <Filter Include="Source Files\Editor\imgui">
-      <UniqueIdentifier>{7f18bdb0-899c-4dea-b7a2-9d525116bb4a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Editor\LevelEditor">
-      <UniqueIdentifier>{b4083232-d9ec-488d-91c2-f300f9597070}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Editor\imgui\imguizmo">
-      <UniqueIdentifier>{f6126799-0d15-4749-b21e-e31e5c6408b4}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup> <Filter Include="Source Files\Collision">
-      <UniqueIdentifier>{ea29ae5f-d5a4-468d-89e8-d0bdb8743ebd}</UniqueIdentifier>
-    </Filter>
-  <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Audio\SystemAudio.h">
-      <Filter>Source Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ComponentManager.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ComponentMemoryManager.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\Components.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ComponentTest.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\Engine.h">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\Systems.h">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\SystemEditor.h">
-      <Filter>Source Files\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Input\SI_Controller.h">
-      <Filter>Source Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Input\SI_KeyPress.h">
-      <Filter>Source Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Input\SI_MousePos.h">
-      <Filter>Source Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Input\SystemInput.h">
-      <Filter>Source Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\IO\SystemIO.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Logic\SystemLogic.h">
-      <Filter>Source Files\Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Messaging\SystemBroadcaster.h">
-      <Filter>Source Files\Messaging</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Messaging\SystemIMessage.h">
-      <Filter>Source Files\Messaging</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Messaging\SystemReceiver.h">
-      <Filter>Source Files\Messaging</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Physics\SystemPhysics.h">
-      <Filter>Source Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\ISystem.h">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Math\Matrix3x3.h">
-      <Filter>Source Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Math\Matrix4x4.h">
-      <Filter>Source Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Math\Vector.h">
-      <Filter>Source Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\SystemManager.h">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\Singleton.h">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\MySystem.h">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ComponentTransform.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\DeltaTime.h">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\IO\Json\Config.h">
-      <Filter>Source Files\IO\Json</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\IO\Json\JsonHeader.h">
-      <Filter>Source Files\IO\Json</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\IO\Json\Parser.h">
-      <Filter>Source Files\IO\Json</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\IO\Json\Parser.hpp">
-      <Filter>Source Files\IO\Json</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ComponentRigidBody.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ComponentCollider.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\LocalVector.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Window\WndSystem.h">
-      <Filter>Source Files\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Window\WndUtils.h">
-      <Filter>Source Files\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\CameraSystem.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\DebugManager.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\GraphicsSystem.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\LightSystem.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\Mesh.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\ModelLoader.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\ModelManager.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\ShaderSystem.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\TextureLoader.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\Model.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\SceneManager.h">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ComponentAudio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\MemoryThingy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ComponentGraphics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imconfig.h">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imgui.h">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imgui_impl_opengl3.h">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imgui_impl_win32.h">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imgui_internal.h">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imstb_rectpack.h">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imstb_textedit.h">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imstb_truetype.h">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imguizmo\ImCurveEdit.h">
-      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imguizmo\ImGradient.h">
-      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imguizmo\ImGuizmo.h">
-      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imguizmo\ImSequencer.h">
-      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collision\SystemCollision.h">
-      <Filter>Source Files\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collision\CollisionMathLib.h">
-      <Filter>Source Files\Collision</Filter>
-    </ClInclude>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Source\Audio\SystemAudio.cpp" />
+    <ClCompile Include="Source\Collision\CollisionMathLib.cpp" />
+    <ClCompile Include="Source\Collision\SystemCollision.cpp" />
+    <ClCompile Include="Source\Component\ComponentAudio.cpp" />
+    <ClCompile Include="Source\Component\ComponentCollider.cpp" />
+    <ClCompile Include="Source\Component\ComponentGraphics.cpp" />
+    <ClCompile Include="Source\Component\ComponentManager.cpp" />
+    <ClCompile Include="Source\Component\ComponentMemoryManager.cpp" />
+    <ClCompile Include="Source\Component\ComponentRigidBody.cpp" />
+    <ClCompile Include="Source\Component\Components.cpp" />
+    <ClCompile Include="Source\Component\ComponentTransform.cpp" />
+    <ClCompile Include="Source\Core\DeltaTime.cpp" />
+    <ClCompile Include="Source\Core\Engine.cpp" />
+    <ClCompile Include="Source\Core\SceneManager.cpp" />
+    <ClCompile Include="Source\Core\SystemManager.cpp" />
+    <ClCompile Include="Source\Core\Systems.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImGradient.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImGuizmo.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImSequencer.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Console.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_DropDowns.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp" />
+    <ClCompile Include="Source\Editor\SystemEditor.cpp" />
+    <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
+    <ClCompile Include="Source\Graphics\DebugManager.cpp" />
+    <ClCompile Include="Source\Graphics\GraphicsSystem.cpp" />
+    <ClCompile Include="Source\Graphics\LightSystem.cpp" />
+    <ClCompile Include="Source\Graphics\Mesh.cpp" />
+    <ClCompile Include="Source\Graphics\Model.cpp" />
+    <ClCompile Include="Source\Graphics\ModelLoader.cpp" />
+    <ClCompile Include="Source\Graphics\ModelManager.cpp" />
+    <ClCompile Include="Source\Graphics\ShaderSystem.cpp" />
+    <ClCompile Include="Source\Graphics\TextureLoader.cpp" />
+    <ClCompile Include="Source\Input\SI_Controller.cpp" />
+    <ClCompile Include="Source\Input\SI_KeyPress.cpp" />
+    <ClCompile Include="Source\Input\SI_MousePos.cpp" />
+    <ClCompile Include="Source\Input\SystemInput.cpp" />
+    <ClCompile Include="Source\IO\Json\Parser.cpp" />
+    <ClCompile Include="Source\IO\SystemIO.cpp" />
+    <ClCompile Include="Source\Logic\SystemLogic.cpp" />
+    <ClCompile Include="Source\Math\Matrix3x3.cpp" />
+    <ClCompile Include="Source\Math\Matrix4x4.cpp" />
+    <ClCompile Include="Source\Math\Vector.cpp" />
+    <ClCompile Include="Source\Messaging\SystemBroadcaster.cpp" />
+    <ClCompile Include="Source\Messaging\SystemReceiver.cpp" />
+    <ClCompile Include="Source\Physics\SystemPhysics.cpp" />
+    <ClCompile Include="Source\Window\WndSystem.cpp" />
+    <ClCompile Include="Source\Physics\ForceManager.cpp" />
+    <ClCompile Include="Source\Collision\CollisionResolver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Audio\SystemAudio.cpp">
-      <Filter>Source Files\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ComponentManager.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ComponentMemoryManager.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\Components.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\Engine.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\Systems.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\SystemEditor.cpp">
-      <Filter>Source Files\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Input\SI_Controller.cpp">
-      <Filter>Source Files\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Input\SI_KeyPress.cpp">
-      <Filter>Source Files\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Input\SI_MousePos.cpp">
-      <Filter>Source Files\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Input\SystemInput.cpp">
-      <Filter>Source Files\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\IO\SystemIO.cpp">
-      <Filter>Source Files\IO</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Logic\SystemLogic.cpp">
-      <Filter>Source Files\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Messaging\SystemBroadcaster.cpp">
-      <Filter>Source Files\Messaging</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Messaging\SystemReceiver.cpp">
-      <Filter>Source Files\Messaging</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Physics\SystemPhysics.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Math\Matrix3x3.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Math\Matrix4x4.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Math\Vector.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\SystemManager.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ComponentTransform.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\DeltaTime.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\IO\Json\Parser.cpp">
-      <Filter>Source Files\IO\Json</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ComponentRigidBody.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ComponentCollider.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Window\WndSystem.cpp">
-      <Filter>Source Files\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\CameraSystem.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DebugManager.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GraphicsSystem.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\LightSystem.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\Mesh.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\ModelLoader.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\ModelManager.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\ShaderSystem.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\TextureLoader.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\Model.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\SceneManager.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ComponentAudio.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ComponentGraphics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imgui.cpp">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imgui_demo.cpp">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imgui_draw.cpp">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imgui_impl_opengl3.cpp">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imgui_impl_win32.cpp">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imgui_widgets.cpp">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Console.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_DropDowns.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imguizmo\ImCurveEdit.cpp">
-      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imguizmo\ImGradient.cpp">
-      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imguizmo\ImGuizmo.cpp">
-      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\imgui\imguizmo\ImSequencer.cpp">
-      <Filter>Source Files\Editor\imgui\imguizmo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Collision\SystemCollision.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Collision\CollisionMathLib.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Source\Audio\SystemAudio.h" />
+    <ClInclude Include="Source\Collision\CollisionMathLib.h" />
+    <ClInclude Include="Source\Collision\SystemCollision.h" />
+    <ClInclude Include="Source\Component\ComponentAudio.h" />
+    <ClInclude Include="Source\Component\ComponentCollider.h" />
+    <ClInclude Include="Source\Component\ComponentGraphics.h" />
+    <ClInclude Include="Source\Component\ComponentManager.h" />
+    <ClInclude Include="Source\Component\ComponentMemoryManager.h" />
+    <ClInclude Include="Source\Component\ComponentRigidBody.h" />
+    <ClInclude Include="Source\Component\Components.h" />
+    <ClInclude Include="Source\Component\ComponentTest.h" />
+    <ClInclude Include="Source\Component\ComponentTransform.h" />
+    <ClInclude Include="Source\Component\LocalVector.h" />
+    <ClInclude Include="Source\Component\MemoryThingy.h" />
+    <ClInclude Include="Source\Core\DeltaTime.h" />
+    <ClInclude Include="Source\Core\Engine.h" />
+    <ClInclude Include="Source\Core\MySystem.h" />
+    <ClInclude Include="Source\Core\SceneManager.h" />
+    <ClInclude Include="Source\Core\Singleton.h" />
+    <ClInclude Include="Source\Core\SystemManager.h" />
+    <ClInclude Include="Source\Core\ISystem.h" />
+    <ClInclude Include="Source\Core\Systems.h" />
+    <ClInclude Include="Source\Editor\imgui\imconfig.h" />
+    <ClInclude Include="Source\Editor\imgui\imgui.h" />
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImCurveEdit.h" />
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImGradient.h" />
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImGuizmo.h" />
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImSequencer.h" />
+    <ClInclude Include="Source\Editor\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="Source\Editor\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="Source\Editor\imgui\imgui_internal.h" />
+    <ClInclude Include="Source\Editor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="Source\Editor\imgui\imstb_textedit.h" />
+    <ClInclude Include="Source\Editor\imgui\imstb_truetype.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h" />
+    <ClInclude Include="Source\Editor\SystemEditor.h" />
+    <ClInclude Include="Source\Graphics\Camera.h" />
+    <ClInclude Include="Source\Graphics\CameraSystem.h" />
+    <ClInclude Include="Source\Graphics\DebugManager.h" />
+    <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
+    <ClInclude Include="Source\Graphics\LightSystem.h" />
+    <ClInclude Include="Source\Graphics\Mesh.h" />
+    <ClInclude Include="Source\Graphics\Model.h" />
+    <ClInclude Include="Source\Graphics\ModelLoader.h" />
+    <ClInclude Include="Source\Graphics\ModelManager.h" />
+    <ClInclude Include="Source\Graphics\ShaderSystem.h" />
+    <ClInclude Include="Source\Graphics\TextureLoader.h" />
+    <ClInclude Include="Source\Input\SI_Controller.h" />
+    <ClInclude Include="Source\Input\SI_KeyPress.h" />
+    <ClInclude Include="Source\Input\SI_MousePos.h" />
+    <ClInclude Include="Source\Input\SystemInput.h" />
+    <ClInclude Include="Source\IO\Json\Config.h" />
+    <ClInclude Include="Source\IO\Json\JsonHeader.h" />
+    <ClInclude Include="Source\IO\Json\Parser.h" />
+    <ClInclude Include="Source\IO\Json\Parser.hpp" />
+    <ClInclude Include="Source\IO\SystemIO.h" />
+    <ClInclude Include="Source\Logic\SystemLogic.h" />
+    <ClInclude Include="Source\Math\Matrix3x3.h" />
+    <ClInclude Include="Source\Math\Matrix4x4.h" />
+    <ClInclude Include="Source\Math\Vector.h" />
+    <ClInclude Include="Source\Messaging\SystemBroadcaster.h" />
+    <ClInclude Include="Source\Messaging\SystemIMessage.h" />
+    <ClInclude Include="Source\Messaging\SystemReceiver.h" />
+    <ClInclude Include="Source\Physics\SystemPhysics.h" />
+    <ClInclude Include="Source\Window\WndSystem.h" />
+    <ClInclude Include="Source\Window\WndUtils.h" />
+    <ClInclude Include="Source\Physics\ForceManager.h" />
+    <ClInclude Include="Source\Collision\CollisionResolver.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Source\Messaging\System_Messaging_Readme.txt">
-      <Filter>Source Files\Messaging</Filter>
-    </Text>
+    <Library Include="..\Bin\fmod_vc.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\Bin\fmod_vc.lib">
-      <Filter>Resource Files</Filter>
-    </Library>
+    <Text Include="Source\Messaging\System_Messaging_Readme.txt" />
   </ItemGroup>
 </Project>

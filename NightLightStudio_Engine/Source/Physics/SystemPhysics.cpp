@@ -23,23 +23,12 @@ namespace NS_PHYSICS
 
 	void PhysicsSystem::Init()
 	{
-		//int newId = G_MAINCOMPSET->BuildEntity();
-		//ComponentTransform compT;
-		//G_MAINCOMPSET->AttachComponent<ComponentTransform>(newId, &compT);
-
-		 /*Entity E = */
-		//Entity ent = G_ECMANAGER->BuildEntity();
-
-		//ComponentTransform c;
-		//ent.AttachComponent<ComponentTransform>(ComponentTransform()); 
-
-		//ent = G_ECMANAGER->BuildEntity().AttachComponent<ComponentTransform>(ComponentTransform());
-		 // return Entity                         
-		 //E.attachComp
 	}
 
 	void PhysicsSystem::FixedUpdate()
 	{
+		//TA's example
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*struct ComponentView
 		{
 			decltype(itr) beg;
@@ -51,18 +40,19 @@ namespace NS_PHYSICS
 		
 		/*for (ComponentRigidBody& component : G_MAINCOMPSET->getComponentSpan<ComponentRigidBody>())
 		{
-		
+			//itr.getComponent<>();
 		}*/
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+		//TA's example
 		auto itr = G_ECMANAGER->begin<ComponentRigidBody>();
 		auto itrEnd = G_ECMANAGER->end<ComponentRigidBody>();
 
 		for (; itr != itrEnd; ++itr)
 		{
+			
 			ComponentRigidBody* compR = G_ECMANAGER->getComponent<ComponentRigidBody>(itr);
 			if (compR->isStatic)
 				continue;
-
-			//itr.getComponent<>();
 
 			//get the transform to update
 			ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
@@ -70,6 +60,9 @@ namespace NS_PHYSICS
 			Entity ent = G_ECMANAGER->getEntity(itr);
 			if (compT != ent.getComponent<ComponentTransform>())
 				throw;
+			
+			//set previous position
+			compR->prevPos = compT->_position;
 
 			//set max speed
 			if (compR->velocity.x > _maxspeed.x)
@@ -79,16 +72,22 @@ namespace NS_PHYSICS
 			if (compR->velocity.z > _maxspeed.z)
 				compR->velocity.z = _maxspeed.z;
 
+			//deltatime, convert to second
 			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
 			compR->velocity.y -= gravity * realDt;
 			
 			if (compT == nullptr) // nullptr -> uninitialised or deleted
 				continue;
 
-			
-			//compT->_position += (glm::vec3)compR->velocity * realDt; // I am commenting this away because the build failed // check the types
+			// enable gravity
+			//compT->_position += (glm::vec3)compR->velocity * realDt;
+
 			//NLMath::Vector3d nextPosition =compT->_position = (glm::vec3)compR->velocity * realDt; // keep in rigid body
 
+
+
+			/// <Testing>///////////////////////////////////////////////////////////////////////////////////////////////
+			
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]() {});
 				
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_D))
@@ -120,7 +119,21 @@ namespace NS_PHYSICS
 
 				compT->_position.y += 1 * realDt;
 			}
-			
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_FRONT", SystemInput_ns::IKEY_Q, "Q", SystemInput_ns::OnHold, [this]() {});
+
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_Q))
+			{
+
+				compT->_position.z += 1 * realDt;
+			}
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_BACK", SystemInput_ns::IKEY_E, "E", SystemInput_ns::OnHold, [this]() {});
+
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_E))
+			{
+
+				compT->_position.z -= 1 * realDt;
+			}
+			/// </Testing>//////////////////////////////////////////////////////////////////////////////////////////
 		}
 		//return true;
 	}

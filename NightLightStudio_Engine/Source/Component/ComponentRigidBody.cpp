@@ -5,7 +5,8 @@ ComponentRigidBody::ComponentRigidBody() :
 	mass{ 0 },
 	velocity{ 0 },
 	acceleration{ 0 },
-	prevPos{ 0 }
+	prevPos{ 0 },
+	nextPos{ 0 }
 {
 }
 

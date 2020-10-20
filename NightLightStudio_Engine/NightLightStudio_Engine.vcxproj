@@ -177,6 +177,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Source\Audio\SystemAudio.h" />
     <ClInclude Include="Source\Collision\CollisionMathLib.h" />
+    <ClInclude Include="Source\Collision\CollisionResolver.h" />
     <ClInclude Include="Source\Collision\SystemCollision.h" />
     <ClInclude Include="Source\Component\ComponentAudio.h" />
     <ClInclude Include="Source\Component\ComponentCollider.h" />
@@ -240,6 +241,7 @@
     <ClInclude Include="Source\Messaging\SystemBroadcaster.h" />
     <ClInclude Include="Source\Messaging\SystemIMessage.h" />
     <ClInclude Include="Source\Messaging\SystemReceiver.h" />
+    <ClInclude Include="Source\Physics\ForceManager.h" />
     <ClInclude Include="Source\Physics\SystemPhysics.h" />
     <ClInclude Include="Source\Window\WndSystem.h" />
     <ClInclude Include="Source\Window\WndUtils.h" />
@@ -253,6 +255,7 @@
     </ClCompile>
     <ClCompile Include="Source\Audio\SystemAudio.cpp" />
     <ClCompile Include="Source\Collision\CollisionMathLib.cpp" />
+    <ClCompile Include="Source\Collision\CollisionResolver.cpp" />
     <ClCompile Include="Source\Collision\SystemCollision.cpp" />
     <ClCompile Include="Source\Component\ComponentAudio.cpp" />
     <ClCompile Include="Source\Component\ComponentCollider.cpp" />
@@ -305,6 +308,7 @@
     <ClCompile Include="Source\Math\Vector.cpp" />
     <ClCompile Include="Source\Messaging\SystemBroadcaster.cpp" />
     <ClCompile Include="Source\Messaging\SystemReceiver.cpp" />
+    <ClCompile Include="Source\Physics\ForceManager.cpp" />
     <ClCompile Include="Source\Physics\SystemPhysics.cpp" />
     <ClCompile Include="Source\Window\WndSystem.cpp" />
   </ItemGroup>

@@ -292,7 +292,7 @@ namespace NlMath
         //z going from bottom to top
 
         Matrix4x4 rotationalMtx;
-
+        
         //setting up normals for Box1
         Vector3D normalX1(1, 0, 0);
         Vector3D normalY1(0, 1, 0);
@@ -302,7 +302,7 @@ namespace NlMath
         normalX1 = rotationalMtx * normalX1;
         normalY1 = rotationalMtx * normalY1;
         normalZ1 = rotationalMtx * normalZ1;
-
+        
         //setting up normals for Box2
         Vector3D normalX2(1, 0, 0);
         Vector3D normalY2(0, 1, 0);
@@ -317,18 +317,49 @@ namespace NlMath
         Vector3D centerDistance = tBox2.center - tBox1.center;
 
         // check if there's a separating plane in between the selected axes
-        auto getSeparatingPlane = [=](const Vector3D& Plane)
+        auto getSeparatingPlane = [=](const Vector3D& normal)
         {
-            return (fabs(centerDistance * Plane) >
-                (fabs((normalX1 * tBox1.extend.x) * Plane) +
-                    fabs((normalY1 * tBox1.extend.y) * Plane) +
-                    fabs((normalZ1 * tBox1.extend.z) * Plane) +
-                    fabs((normalX2 * tBox2.extend.x) * Plane) +
-                    fabs((normalY2 * tBox2.extend.y) * Plane) +
-                    fabs((normalZ2 * tBox2.extend.z) * Plane)));
+            float check1 = fabs(centerDistance * normal);
+
+            float check2 = fabs((normalX1 * tBox1.extend.x) * normal);
+            float check3 = fabs((normalY1 * tBox1.extend.y) * normal);
+            float check4 = fabs((normalZ1 * tBox1.extend.z) * normal);
+            float check5 = fabs((normalX2 * tBox2.extend.x) * normal);
+            float check6 = fabs((normalY2 * tBox2.extend.y) * normal);
+            float check7 = fabs((normalZ2 * tBox2.extend.z) * normal);
+
+            float check8 = check2 + check3 + check4 + check5 + check6 + check7;
+
+            return (fabs(centerDistance * normal) >
+                    (fabs((normalX1 * tBox1.extend.x) * normal) +
+                    fabs((normalY1 * tBox1.extend.y) * normal) +
+                    fabs((normalZ1 * tBox1.extend.z) * normal) +
+                    fabs((normalX2 * tBox2.extend.x) * normal) +
+                    fabs((normalY2 * tBox2.extend.y) * normal) +
+                    fabs((normalZ2 * tBox2.extend.z) * normal)));
         };
 
-        return !(getSeparatingPlane(normalX1) ||
+        bool check1 = getSeparatingPlane(normalX1);
+        bool check2 = getSeparatingPlane(normalY1);
+        bool check3 = getSeparatingPlane(normalZ1);
+        bool check4 = getSeparatingPlane(normalX2);
+        bool check5 = getSeparatingPlane(normalY2);
+        bool check6 = getSeparatingPlane(normalZ2);
+
+        bool check7 =getSeparatingPlane(Vector3DCrossProduct(normalX1, normalX2));
+        bool check8 =getSeparatingPlane(Vector3DCrossProduct(normalX1, normalY2));
+        bool check9 =getSeparatingPlane(Vector3DCrossProduct(normalX1, normalZ2));
+                                                               
+        bool check10 =getSeparatingPlane(Vector3DCrossProduct(normalY1, normalX2));
+        bool check11 =getSeparatingPlane(Vector3DCrossProduct(normalY1, normalY2));
+        bool check12 =getSeparatingPlane(Vector3DCrossProduct(normalY1, normalZ2));
+                                                                 
+        bool check13 =getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalX2));
+        bool check14 =getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalY2));
+        bool check15 =getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalZ2));
+
+        return !(
+            getSeparatingPlane(normalX1) ||
             getSeparatingPlane(normalY1) ||
             getSeparatingPlane(normalZ1) ||
             getSeparatingPlane(normalX2) ||
@@ -346,110 +377,6 @@ namespace NlMath
             getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalX2)) ||
             getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalY2)) ||
             getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalZ2)));
-
-        //float rayD;
-        //Matrix4x4 absRayM, rayM;
-
-        //Vector3D tmpD = tBox1.center - tBox2.center;
-
-
-        //Vector3D trans{ tmpD * normalX1,tmpD * normalY1 ,tmpD * normalZ1 };
-
-        //std::vector<Vector3D> faceNormals1 = { normalX1,normalY1,normalZ1 };
-        //std::vector<Vector3D> faceNormals2 = { normalX2,normalY2,normalZ2 };
-
-        //for (int i = 0; i < 3; i++)
-        //{
-        //    for (int j = 0; j < 3; j++)
-        //    {
-        //        rayM[i, j] = faceNormals1[i] * faceNormals2[j];
-        //        absRayM[i, j] = std::fabsf(rayM[i, j]);
-        //    }
-        //}
-
-        ///// Test axes lhs side normal
-        //rayD = tBox1.extend.x + tBox2.extend.x * absRayM[0, 0] + tBox2.extend.y * absRayM[0, 1] + tBox2.extend.z * absRayM[0,  2];
-        //if (std::fabsf(trans.x) > rayD) return false;
-
-
-        ///// Test axes lhs up normal
-        //rayD = tBox1.extend.y + tBox2.extend.x * absRayM[1, 0] + tBox2.extend.y * absRayM[1, 1] + tBox2.extend.z * absRayM[1, 2];
-        //if (std::fabsf(trans.y) > rayD) return false;
-
-        ///// Test axes lhs forward normal
-        //rayD = tBox1.extend.z + tBox2.extend.x * absRayM[2, 0] + tBox2.extend.y * absRayM[2, 1] + tBox2.extend.z * absRayM[2, 2];
-        //if (std::fabsf(trans.z) > rayD) return false;
-
-
-        ///// Test axes rhs side normal
-        //rayD = tBox2.extend.x + tBox1.extend.x * absRayM[0, 0] + tBox1.extend.y * absRayM[1, 0] + tBox1.extend.z * absRayM[2, 0];
-        //if (std::fabsf(trans.x * rayM[0, 0] + trans.y * rayM[1, 0] + trans.z * rayM[2, 0]) > rayD) return false;
-
-        ///// Test axes rhs up normal
-        //rayD = tBox2.extend.y + tBox1.extend.x * absRayM[0, 1] + tBox1.extend.y * absRayM[1, 1] + tBox1.extend.z * absRayM[2, 1];
-        //if (std::fabsf(trans.x * rayM[0, 1] + trans.y * rayM[1, 1] + trans.z * rayM[2, 1]) > rayD) return false;
-
-
-        ///// Test axes rhs forward normal
-        //rayD = tBox2.extend.z + tBox1.extend.x * absRayM[0,  2] + tBox1.extend.y * absRayM[1, 2] + tBox1.extend.z * absRayM[2, 2];
-        //if (std::fabsf(trans.x * rayM[0, 2] + trans.y * rayM[1, 2] + trans.z * rayM[2, 2]) > rayD) return false;
-
-
-
-        ///// Test axes lhs side normal cross rhs side normal
-        //rayD = tBox1.extend.y * absRayM[2, 0] + tBox1.extend.z * absRayM[1, 0];
-        //rayD += tBox2.extend.y * absRayM[0,  2] + tBox2.extend.z * absRayM[0, 1];
-        //if (std::fabsf(trans[2] * rayM[1, 0] - trans[1] * rayM[2, 0]) > rayD) return false;
-
-
-        ///// Test axes lhs side normal cross rhs up normal
-        //rayD = tBox1.extend.y * absRayM[2, 1] + tBox1.extend.z * absRayM[1, 1];
-        //rayD += tBox2.extend.x * absRayM[0,  2] + tBox2.extend.z * absRayM[0, 0];
-        //if (std::fabsf(trans[2] * rayM[1, 1] - trans[1] * rayM[2, 1]) > rayD) return false;
-
-        ///// Test axes lhs side normal cross rhs forward normal
-        //rayD = tBox1.extend.y * absRayM[2, 2] + tBox1.extend.z * absRayM[1, 2];
-        //rayD += tBox2.extend.x * absRayM[0, 1] + tBox2.extend.y * absRayM[0, 0];
-        //if (std::fabsf(trans[2] * rayM[1, 2] - trans[1] * rayM[2, 2]) > rayD) return false;
-
-
-
-
-
-        ///// Test axes lhs up normal cross rhs side normal
-        //rayD = tBox1.extend.x * absRayM[2, 0] + tBox1.extend.z * absRayM[0, 0];
-        //rayD += tBox2.extend.y * absRayM[1, 2] + tBox2.extend.z * absRayM[1, 1];
-        //if (std::fabsf(trans[2] * rayM[2, 1] - trans[2] * rayM[0, 1]) > rayD) return false;
-
-        ///// Test axes lhs up normal cross rhs up normal
-        //rayD = tBox1.extend.x * absRayM[2, 1] + tBox1.extend.z * absRayM[0, 1];
-        //rayD += tBox2.extend.x * absRayM[1, 2] + tBox2.extend.z * absRayM[1, 0];
-        //if (std::fabsf(trans[0] * rayM[2, 1] - trans[2] * rayM[0, 1]) > rayD) return false;
-
-        ///// Test axes lhs up normal cross rhs forward normal
-        //rayD = tBox1.extend.x * absRayM[2, 2] + tBox1.extend.z * absRayM[0,  2];
-        //rayD += tBox2.extend.x * absRayM[1, 1] + tBox2.extend.y * absRayM[1, 0];
-        //if (std::fabsf(trans[0] * rayM[2, 2] - trans[2] * rayM[0, 2]) > rayD) return false;
-
-
-
-        ///// Test axes lhs forward normal cross rhs side normal
-        //rayD = tBox1.extend.x * absRayM[1, 0] + tBox1.extend.y * absRayM[0, 0];
-        //rayD += tBox2.extend.y * absRayM[2, 2] + tBox2.extend.z * absRayM[2, 1];
-        //if (std::fabsf(trans[1] * rayM[0, 0] - trans[0] * rayM[1, 0]) > rayD) return false;
-
-        ///// Test axes lhs forward normal cross rhs up normal
-        //rayD = tBox1.extend.x * absRayM[1, 1] + tBox1.extend.y * absRayM[0, 1];
-        //rayD += tBox2.extend.x * absRayM[2, 2] + tBox2.extend.z * absRayM[2, 0];
-        //if (std::fabsf(trans[1] * rayM[0, 1] - trans[0] * rayM[1, 1]) > rayD) return false;
-
-        ///// Test axes lhs forward normal cross rhs forward normal
-
-        //rayD = tBox1.extend.x * absRayM[1, 2] + tBox1.extend.y * absRayM[0,  2];
-        //rayD += tBox2.extend.y * absRayM[2, 1] + tBox2.extend.y * absRayM[2, 0];
-        //if (std::fabsf(trans[1] * rayM[0, 2] - trans[0] * rayM[1, 2]) > rayD) return false;
-
-        //return true;
 
     }
     bool CapsuleToCapsule(const CapsuleCollider& tCap1, const CapsuleCollider& tCap2)

@@ -52,6 +52,7 @@ namespace NlMath
 		friend std::ostream& operator<<(std::ostream& os, const Matrix4x4 mtx);
 
 		//conversion operator is case we are using open gl, this converts my matrix to glm matrix
+		Matrix4x4& operator=(const glm::mat4x4& rhs);
 		operator glm::mat4x4() const;
 		operator glm::mat3x3() const;
 

@@ -23,35 +23,49 @@ namespace NS_COLLISION
 		Entity cube1Test = G_ECMANAGER->BuildEntity();
 		ComponentTransform Transform1;
 		ComponentRigidBody Rigid1;
-		ComponentCollider OBB1(COLLIDERS::OBB);
+		
 
 		Rigid1.isStatic = false;
-		Transform1._rotation.x = 3.14 / 4;
-		Transform1._rotation.y = 3.14 / 4;
-		Transform1._rotation.z = 3.14 / 4;
+		//Transform1._rotation.x = 45;
+		//Transform1._rotation.y = 45;
+		//Transform1._rotation.z = 45;
 
 		cube1Test.AttachComponent<ComponentTransform>(Transform1);
 		cube1Test.AttachComponent<ComponentRigidBody>(Rigid1);
-		cube1Test.AttachComponent<ComponentCollider>(OBB1);
+		
 
-		ComponentCollider* test1 = cube1Test.getComponent<ComponentCollider>();
 
 		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test, glm::vec3(0.5f, 0.5f, 1.f));
 
 		Entity cube2Test = G_ECMANAGER->BuildEntity();
 		ComponentTransform Transform2;
 		ComponentRigidBody Rigid2;
-		ComponentCollider OBB2(COLLIDERS::OBB);
+		
 
 		Transform2._position = glm::vec3(2.5f, 2.5f, 1.f);
+		//Transform2._rotation.x = 45;
+		//Transform2._rotation.y = 45;
+		//Transform1._rotation.z = 45;
+
 
 		cube2Test.AttachComponent<ComponentTransform>(Transform2);
 		cube2Test.AttachComponent<ComponentRigidBody>(Rigid2);
-		cube2Test.AttachComponent<ComponentCollider>(OBB2);
 		
-		ComponentCollider* test2 = cube1Test.getComponent<ComponentCollider>();
-
+		
+		
 		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
+
+		ComponentCollider AABB1(COLLIDERS::AABB);
+		ComponentCollider AABB2(COLLIDERS::AABB);
+		cube1Test.AttachComponent<ComponentCollider>(AABB1);
+		cube2Test.AttachComponent<ComponentCollider>(AABB2);
+
+		//ComponentCollider OBB1(COLLIDERS::OBB);
+		//ComponentCollider OBB2(COLLIDERS::OBB);
+		//cube1Test.AttachComponent<ComponentCollider>(OBB1);
+		//cube2Test.AttachComponent<ComponentCollider>(OBB2);
+
+
 		
 		//////////////////////////////////////////////////////////////////////////////////////
 	}
@@ -108,11 +122,15 @@ namespace NS_COLLISION
 
 				bool check = CheckCollision(comCol1, comCol2);
 
+				//comTrans1->_rotation.x += 1;
+				//comTrans1->_rotation.y += 1;
+				//comTrans1->_rotation.z += 1;
+
 				if (check)
 				{
 					// store collision event
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(1.0f, 0.0f, 1.f));
-					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(1.0f, 0.0f, 1.f));
+					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(0.8f, 0.0f, 1.f));
 				}
 				else
 				{
@@ -199,6 +217,40 @@ namespace NS_COLLISION
 			{
 				AABBCollider * a = &(Collider1->collider.aabb);
 				AABBCollider * b = &(Collider2->collider.aabb);
+
+				switch (NlMath::AABB_AABBCollision(*a, *b))
+				{
+				case SIDES::BACK:
+					std::cout << "Back" << std::endl;
+					return true;
+					break;
+				case SIDES::FRONT:
+					std::cout << "Front" << std::endl;
+					return true;
+					break;
+				case SIDES::LEFT:
+					std::cout << "Left" << std::endl;
+					return true;
+				case SIDES::RIGHT:
+					std::cout << "Right" << std::endl;
+					return true;
+					break;
+				case SIDES::TOP:
+					std::cout << "Top" << std::endl;
+					return true;
+					break;
+				case SIDES::BOTTOM:
+					std::cout << "Bottom" << std::endl;
+					return true;
+					break;
+				case SIDES::NO_COLLISION:
+					
+					return false;
+					break;
+				default:
+					break;
+				}
+
 
 				return NlMath::AABBtoAABB(*a, *b);
 				

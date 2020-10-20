@@ -39,7 +39,6 @@ namespace NS_COLLISION
 		
 		bool CheckCollision(ComponentCollider* Collider1 , ComponentCollider* Collider2);
 
-
 	};
 
 	static CollisionSystem* SYS_COLLISION = CollisionSystem::GetInstance();
