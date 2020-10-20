@@ -4,14 +4,15 @@
 #include "../../framework.h"
 #include "../Math/Vector.h"
 #include "../Component/ComponentCollider.h"
+#include "CollisionResolver.h"
 
 namespace NS_COLLISION
 {
 	class ENGINE_API CollisionSystem : public MySystem, public Singleton<CollisionSystem>
 	{
+		CollsionResolver colResolver;
 
 		friend Singleton<CollisionSystem>;
-
 	public:
 
 
@@ -37,7 +38,7 @@ namespace NS_COLLISION
 
 		void UpdateCollisionBoxPos(ComponentCollider * comCol, ComponentTransform * comTrans);
 		
-		bool CheckCollision(ComponentCollider* Collider1 , ComponentCollider* Collider2);
+		bool CheckCollision(ComponentCollider* Collider1, ComponentCollider* Collider2, ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2);
 
 	};
 

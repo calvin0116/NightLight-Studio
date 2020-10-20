@@ -17,7 +17,10 @@ namespace NS_COLLISION
 	}
 	void CollisionSystem::Init()
 	{
+		colResolver.clear();
 
+
+		//test code, to be removed
 		//////////////////////////////////////////////////////////////////////////////////////
 		//test creation
 		Entity cube1Test = G_ECMANAGER->BuildEntity();
@@ -118,15 +121,15 @@ namespace NS_COLLISION
 				//Get Transforms
 				ComponentTransform* comTrans1 = G_ECMANAGER->getComponent<ComponentTransform>(itr1);
 
+				//Get rigidBody for Collision Resolution
+				ComponentRigidBody* comRigid1 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr1);
+				ComponentRigidBody* comRigid2 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr2);
+
 				UpdateCollisionBoxPos(comCol1, comTrans1);
 
-				bool check = CheckCollision(comCol1, comCol2);
-
-				//comTrans1->_rotation.x += 1;
-				//comTrans1->_rotation.y += 1;
-				//comTrans1->_rotation.z += 1;
-
-				if (check)
+				
+				//check for collision, also create collision event in CheckCollision if there is collision
+				if (CheckCollision(comCol1, comCol2, comRigid1, comRigid2))
 				{
 					// store collision event
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(1.0f, 0.0f, 1.f));
@@ -137,10 +140,18 @@ namespace NS_COLLISION
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(0.5f, 0.5f, 1.f));
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(1.0f, 0.0f, 1.f));
 				}
+
+				//test code, to be romoved
+				/////////////////////////////////////////////////////////////////////////////////////////
+				//comTrans1->_rotation.x += 1;
+				//comTrans1->_rotation.y += 1;
+				//comTrans1->_rotation.z += 1;
+				/////////////////////////////////////////////////////////////////////////////////////////
 			}
 		}
 
 		//resolve collision here
+		colResolver.resolveCollision();
 	}
 	void CollisionSystem::GameExit()
 	{
@@ -209,7 +220,9 @@ namespace NS_COLLISION
 
 	}
 
-	bool CollisionSystem::CheckCollision(ComponentCollider* Collider1, ComponentCollider* Collider2)
+	bool CollisionSystem::CheckCollision(
+		ComponentCollider* Collider1, ComponentCollider* Collider2, 
+		ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2)
 	{
 		if (Collider1->colliderType == COLLIDERS::AABB)
 		{
@@ -221,39 +234,72 @@ namespace NS_COLLISION
 				switch (NlMath::AABB_AABBCollision(*a, *b))
 				{
 				case SIDES::BACK:
-					std::cout << "Back" << std::endl;
+				{
+					CollisionEvent newEvent;
+					newEvent.collisionNormal = NlMath::Vector3D(0,0,-1);
+					newEvent.rigid1 = Rigid1;
+					newEvent.rigid2 = Rigid2;
+					colResolver.addCollisionEvent(newEvent);
 					return true;
 					break;
+				}
 				case SIDES::FRONT:
-					std::cout << "Front" << std::endl;
+				{
+					CollisionEvent newEvent;
+					newEvent.collisionNormal = NlMath::Vector3D(0, 0, 1);
+					newEvent.rigid1 = Rigid1;
+					newEvent.rigid2 = Rigid2;
+					colResolver.addCollisionEvent(newEvent);
 					return true;
 					break;
+				}
 				case SIDES::LEFT:
-					std::cout << "Left" << std::endl;
+				{
+					CollisionEvent newEvent;
+					newEvent.collisionNormal = NlMath::Vector3D(-1, 0, 0);
+					newEvent.rigid1 = Rigid1;
+					newEvent.rigid2 = Rigid2;
+					colResolver.addCollisionEvent(newEvent);
 					return true;
+					break;
+				}
 				case SIDES::RIGHT:
-					std::cout << "Right" << std::endl;
+				{
+					CollisionEvent newEvent;
+					newEvent.collisionNormal = NlMath::Vector3D(1, 0, 0);
+					newEvent.rigid1 = Rigid1;
+					newEvent.rigid2 = Rigid2;
+					colResolver.addCollisionEvent(newEvent);
 					return true;
 					break;
+				}
 				case SIDES::TOP:
-					std::cout << "Top" << std::endl;
+				{
+					CollisionEvent newEvent;
+					newEvent.collisionNormal = NlMath::Vector3D(0, 1, 0);
+					newEvent.rigid1 = Rigid1;
+					newEvent.rigid2 = Rigid2;
+					colResolver.addCollisionEvent(newEvent);
 					return true;
 					break;
+				}
 				case SIDES::BOTTOM:
-					std::cout << "Bottom" << std::endl;
+				{
+					CollisionEvent newEvent;
+					newEvent.collisionNormal = NlMath::Vector3D(0, -1, 0);
+					newEvent.rigid1 = Rigid1;
+					newEvent.rigid2 = Rigid2;
+					colResolver.addCollisionEvent(newEvent);
 					return true;
 					break;
+				}
 				case SIDES::NO_COLLISION:
-					
 					return false;
 					break;
 				default:
+					throw;
 					break;
 				}
-
-
-				return NlMath::AABBtoAABB(*a, *b);
-				
 			}
 			//if (Collider2->colliderType == COLLIDERS::CAPSULE)
 			//{

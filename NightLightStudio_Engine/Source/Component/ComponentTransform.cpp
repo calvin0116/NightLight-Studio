@@ -2,7 +2,8 @@
 #include "../../glm/gtc/matrix_transform.hpp"
 #include "../../glm/gtc/quaternion.hpp"
 
-ComponentTransform::ComponentTransform() : _position{ 0.0f, 0.0f, 0.0f },
+ComponentTransform::ComponentTransform() : 
+	_nextPos(0),_position{ 0.0f, 0.0f, 0.0f },
 _rotation{ 0.0f, 0.0f, 0.0f }, _scale{ 1.0f, 1.0f, 1.0f }
 {
 

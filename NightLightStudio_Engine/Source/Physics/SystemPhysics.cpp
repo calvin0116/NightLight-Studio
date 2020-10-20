@@ -79,10 +79,15 @@ namespace NS_PHYSICS
 			if (compT == nullptr) // nullptr -> uninitialised or deleted
 				continue;
 
+
 			// enable gravity
 			//compT->_position += (glm::vec3)compR->velocity * realDt;
 
+			//predict the next position for collision check
+			compT->_nextPos = compT->_position + (glm::vec3)compR->velocity * realDt;
+			
 			//NLMath::Vector3d nextPosition =compT->_position = (glm::vec3)compR->velocity * realDt; // keep in rigid body
+
 
 
 

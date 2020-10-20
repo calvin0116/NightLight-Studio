@@ -7,6 +7,9 @@
 class ComponentTransform : public IComponent
 {
 public:
+	//for collision check
+	NlMath::Vector3D _nextPos;
+
 	glm::vec3 _position;
 	glm::vec3 _rotation; // Euler angles x, y, z
 	glm::vec3 _scale;
