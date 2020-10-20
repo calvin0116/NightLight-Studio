@@ -30,6 +30,8 @@ public:
 	void start();
 
 	void end();
+
+	void Exit();
 };
 
 // global variable for dt

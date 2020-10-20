@@ -1,6 +1,11 @@
 #include "SceneManager.h"
 
+#include "../Component/ComponentManager.h"
+#include "../Component/Components.h"
+
 #include <filesystem>
+
+using Ent_Handle = ComponentManager::ComponentSetManager::EntityHandle;
 
 namespace fs = std::filesystem;
 namespace NS_SCENE
@@ -20,6 +25,7 @@ namespace NS_SCENE
 		//Load up scene manager's parser
 		scene_parser.Load();
 		scene_parser.PrintDataList();
+		
 		current_scene = scene_parser["StartUpScene"].GetString();
 
 		//Filepath that contains the scene
@@ -45,8 +51,14 @@ namespace NS_SCENE
 		//Load up each scene
 		for (const auto& pars : scene_list)
 		{
-			pars.second->Load();
-			pars.second->PrintDataList();
+			//pars.second->Load();
+			//pars.second->PrintDataList();
+			Parser& level_parse = *(pars.second);
+			if (level_parse.CheckForMember("Objects"))
+			{
+				level_parse["Objects"]
+			}
+
 		}*/
 	}
 
@@ -87,6 +99,16 @@ namespace NS_SCENE
 		scene->Load();
 		to_change_scene = SC_NOCHANGE;
 		//~~!Create object using data
+		std::cout << "Loading Scene: " << current_scene << std::endl;
+		if (scene->CheckForMember("Objects"))
+		{
+			std::cout << "Initialising Objects....." << std::endl;
+			EntityListCreation((*scene)["Objects"]);
+		}
+		else
+		{
+			std::cout << "Failed to find object to initailise....." << std::endl;
+		}
 	}
 
 	void SceneManager::InitScene()
@@ -101,9 +123,31 @@ namespace NS_SCENE
 		current_scene = next_scene;
 	}
 
+	void SceneManager::EntityListCreation(Value& Ent_list)
+	{
+		for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
+		{
+			std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
+			Ent_Handle ent_handle = G_ECMANAGER->BuildEntity();
+			Value& Component_list = Ent_list[itr->name.GetString()];
+
+			for (auto itr2 = Component_list.MemberBegin(); itr2 != Component_list.MemberEnd(); ++itr2)
+			{
+				std::cout << "~~ Component: " << itr2->name.GetString() << std::endl;
+				if (itr2->name.GetString() == "TransformComponent")
+				{
+					
+
+				}
+
+			}
+		}
+
+	}
+
 	void SceneManager::LoadScene(std::string scene_name)
 	{
-#ifdef _DEBUG
+#ifdef _DEBUG 
 		if (!CheckIfSceneExist(scene_name))
 		{
 			std::cout << "Scene does not exist" << std::endl;

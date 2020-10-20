@@ -44,6 +44,7 @@ private:
 public:
     //Constructer with input of file name to parse from
 	ENGINE_API Parser(std::string name_, std::string path_);
+	ENGINE_API ~Parser();
 
     //Basic function to load/save data into the file
 	ENGINE_API void Load();		//Load from file

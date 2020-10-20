@@ -15,6 +15,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
   // === Insert your system here to get them running === //
   // === Please follow how PhysicManager is created  === // 
 	//Systems[SYS_PHYSICS] = PhysicManager::GetInstance();
+	
 	Systems[S_PRIORITY::SP_WINDOW] = NS_WINDOW::SYS_WINDOW;
 	Systems[S_PRIORITY::SP_GRAPHICS] = NS_GRAPHICS::SYS_GRAPHICS;
 	Systems[S_PRIORITY::SP_INPUT] = SYS_INPUT;

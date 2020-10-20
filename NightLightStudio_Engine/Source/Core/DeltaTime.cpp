@@ -38,3 +38,8 @@ void DeltaTime::end()
 	_prevdt = dt;
 	
 }
+
+void DeltaTime::Exit()
+{
+	DestroyInstance();
+}

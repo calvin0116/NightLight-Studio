@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 
 #include "..\Component\ComponentManager.h"
+#include "Systems.h"
 
 #include <iostream>
 #include "DeltaTime.h"
@@ -78,9 +79,23 @@ void FluffyUnicornEngine::Run()
 
 void FluffyUnicornEngine::Exit()
 {
+	DELTA_T->Exit();
 	//SYS_MAN->Free();
 	SYS_COMPONENT->Free();
 	
 	SYS_MAN->Exit();
+
+	// ==== Manaul singleton deletion ========//
+	/*
+	NS_WINDOW::SYS_WINDOW->DestroyInstance();
+	NS_GRAPHICS::SYS_GRAPHICS->DestroyInstance();
+	SYS_INPUT->DestroyInstance();
+	SYS_IO->DestroyInstance();
+	SYS_AUDIO->DestroyInstance();
+	NS_SCENE::SYS_SCENE_MANAGER->DestroyInstance();
+	NS_PHYSICS::SYS_PHYSICS->DestroyInstance();
+	SYS_COMPONENT->DestroyInstance();
+	NS_COLLISION::SYS_COLLISION->DestroyInstance();
+	*/
 	
 }
