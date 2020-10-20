@@ -22,9 +22,9 @@ void LevelEditor::LE_AddCollapsingHeader(const std::string& name, const std::vec
     }
 }
 
-void LevelEditor::LE_AddTreeNodes(const std::string& name, const std::vector<std::function<void()>> fns)
+void LevelEditor::LE_AddTreeNodes(const std::string& name, const std::vector<std::function<void()>> fns, ImGuiTreeNodeFlags flag)
 {
-    if (ImGui::TreeNode(name.c_str()))
+    if (ImGui::TreeNodeEx(name.c_str(), flag))
     {
         for (unsigned i = 0; i < fns.size(); ++i)
         {

@@ -211,6 +211,7 @@
     <ClInclude Include="Source\Editor\imgui\imstb_textedit.h" />
     <ClInclude Include="Source\Editor\imgui\imstb_truetype.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
@@ -281,6 +282,7 @@
     <ClCompile Include="Source\Editor\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="Source\Editor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Console.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_DropDowns.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp" />
