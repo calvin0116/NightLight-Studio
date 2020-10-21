@@ -4,11 +4,6 @@
 
 LevelEditor::LevelEditor() : _window{ nullptr }
 {
-    // Purely for testing purposes
-    //LE_CreateWindow<TestCase>("Test", false, 0);
-    LE_CreateWindow<ConsoleLog>("Console", false, 0);
-    LE_CreateWindow<AssetInspector>("AssetInspector", true);
-
 }
 
 LevelEditor::~LevelEditor()
@@ -17,6 +12,12 @@ LevelEditor::~LevelEditor()
 
 void LevelEditor::Init(HWND window)
 {
+    // CREATE WINDOWS HERE
+    //LE_CreateWindow<TestCase>("Test", false, 0);
+    LE_CreateWindow<ConsoleLog>("Console", false, 0);
+    LE_CreateWindow<AssetInspector>("AssetInspector", true);
+
+
     _window = window;
 
     // Setup Dear ImGui context
