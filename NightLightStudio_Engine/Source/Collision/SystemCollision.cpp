@@ -29,9 +29,9 @@ namespace NS_COLLISION
 		
 
 		Rigid1.isStatic = false;
-		//Transform1._rotation.x = 45;
-		//Transform1._rotation.y = 45;
-		//Transform1._rotation.z = 45;
+		Transform1._rotation.x = 45;
+		Transform1._rotation.y = 90;
+		Transform1._rotation.z = 45;	 
 
 		cube1Test.AttachComponent<ComponentTransform>(Transform1);
 		cube1Test.AttachComponent<ComponentRigidBody>(Rigid1);
@@ -45,10 +45,11 @@ namespace NS_COLLISION
 		ComponentRigidBody Rigid2;
 		
 
-		Transform2._position = glm::vec3(2.5f, 2.5f, 1.f);
-		//Transform2._rotation.x = 45;
-		//Transform2._rotation.y = 45;
-		//Transform1._rotation.z = 45;
+		Transform2._position = glm::vec3(2.5f, 0.0f, 0.f);
+		Transform2._rotation.x = 45;
+		Transform2._rotation.y = 45;
+		Transform2._rotation.z = 45;
+		Transform2._scale.x = 2;
 
 
 		cube2Test.AttachComponent<ComponentTransform>(Transform2);
@@ -127,7 +128,6 @@ namespace NS_COLLISION
 
 				UpdateCollisionBoxPos(comCol1, comTrans1);
 
-				
 				//check for collision, also create collision event in CheckCollision if there is collision
 				if (CheckCollision(comCol1, comCol2, comRigid1, comRigid2))
 				{
@@ -143,9 +143,9 @@ namespace NS_COLLISION
 
 				//test code, to be romoved
 				/////////////////////////////////////////////////////////////////////////////////////////
-				//comTrans1->_rotation.x += 1;
-				//comTrans1->_rotation.y += 1;
-				//comTrans1->_rotation.z += 1;
+				comTrans1->_rotation.x += 1;
+				comTrans1->_rotation.y += 1;
+				comTrans1->_rotation.z += 1;
 				/////////////////////////////////////////////////////////////////////////////////////////
 			}
 		}

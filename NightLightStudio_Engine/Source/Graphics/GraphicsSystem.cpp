@@ -11,7 +11,6 @@
 
 // Comment away for whichever is required
 // Only either one should be running at a time
-//#define TEST_CUBE_DRAW_WITHOUT_COMPONENT
 
 #define DRAW_WITH_COMPONENTS
 
@@ -86,9 +85,9 @@ namespace NS_GRAPHICS
 
 		cameraManager->Init();
 
-		/*Model* model = new Model();
-		modelLoader->LoadFBX("test.fbx",model);
-		delete model;*/
+		//Model* model = new Model();
+		modelLoader->LoadFBX("cylinder.fbx");
+		//delete model;
 
 		// Set default values for view matrix
 		// temporary solution before camera system implementation
@@ -109,10 +108,6 @@ namespace NS_GRAPHICS
 		// Passes if the fragment's depth value is less than the stored depth value.
 		// This is the default, but we will call this function to be explicit
 		glDepthFunc(GL_LESS);
-
-#ifdef TEST_CUBE_DRAW_WITHOUT_COMPONENT
-		testCubeID = TestCreateCube(glm::vec3(1.0f, 0.5f, 1.0f), 1.f);
-#endif
 	}
 
 	void GraphicsSystem::Exit()
@@ -126,124 +121,6 @@ namespace NS_GRAPHICS
 		// Clears to gray bg
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// Sample draw cube
-		//shaderManager->StartProgram(0);
-
-		//GLuint VAO = NULL;
-		//GLuint VBO = NULL;
-		//GLuint EBO = NULL;
-		//GLuint ModelMatrixBO = NULL;
-
-		//glGenVertexArrays(1, &VAO);
-		//glGenBuffers(1, &VBO);
-		//glGenBuffers(1, &ModelMatrixBO);
-
-		//float cube_vertices[] = {
-		//	// positions		// texture coords	// color
-		//	-1.0, -1.0,  1.0,	1.0f, 1.0f,			1.0f, 0.0f, 0.0f,
-		//	 1.0, -1.0,  1.0,	1.0f, 0.0f,			0.0f, 1.0f, 0.0f,
-		//	 1.0,  1.0,  1.0,	0.0f, 0.0f,			0.0f, 0.0f, 1.0f,
-		//	-1.0,  1.0,  1.0,	1.0f, 1.0f,			1.0f, 1.0f, 1.0f,
-		//	-1.0, -1.0, -1.0,	1.0f, 0.0f,			1.0f, 0.0f, 0.0f,
-		//	 1.0, -1.0, -1.0,	0.0f, 0.0f,			0.0f, 1.0f, 0.0f,
-		//	 1.0,  1.0, -1.0,	1.0f, 1.0f,			0.0f, 0.0f, 1.0f,
-		//	-1.0,  1.0, -1.0,	1.0f, 0.0f,			1.0f, 1.0f, 1.0f
-		//};
-
-		//unsigned short cube_elements[] = {
-		//	// front
-		//	0, 1, 2,
-		//	2, 3, 0,
-		//	// right
-		//	1, 5, 6,
-		//	6, 2, 1,
-		//	// back
-		//	7, 6, 5,
-		//	5, 4, 7,
-		//	// left
-		//	4, 0, 3,
-		//	3, 7, 4,
-		//	// bottom
-		//	4, 5, 1,
-		//	1, 0, 4,
-		//	// top
-		//	3, 2, 6,
-		//	6, 7, 3
-		//};
-
-		//// Provide rotation in radians
-		//glm::mat4 testmodelMatrix = glm::rotate(glm::mat4(1.f), glm::radians(15.f), glm::vec3(0.0f,1.0f,0.f));
-
-		//glBindVertexArray(VAO);
-
-		//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
-
-		//// pos attribute
-		//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-		//glEnableVertexAttribArray(0);
-
-		//// uv attribute
-		//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-		//glEnableVertexAttribArray(1);
-
-		//// color attribute
-		//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-		//glEnableVertexAttribArray(2);
-
-		//glGenBuffers(1, &EBO);
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_elements), cube_elements, GL_STATIC_DRAW);
-
-		//glBindBuffer(GL_ARRAY_BUFFER, ModelMatrixBO);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), &testmodelMatrix, GL_DYNAMIC_DRAW);
-
-		//glEnableVertexAttribArray(3);
-		//glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)0);
-		//glEnableVertexAttribArray(4);
-		//glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)(sizeof(glm::vec4)));
-		//glEnableVertexAttribArray(5);
-		//glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)(2 * sizeof(glm::vec4)));
-		//glEnableVertexAttribArray(6);
-		//glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(testmodelMatrix), (void*)(3 * sizeof(glm::vec4)));
-
-		//glVertexAttribDivisor(3, 1);
-		//glVertexAttribDivisor(4, 1);
-		//glVertexAttribDivisor(5, 1);
-		//glVertexAttribDivisor(6, 1);
-
-		//glDrawElements(GL_TRIANGLES, 36 * sizeof(unsigned short), GL_UNSIGNED_SHORT, 0);
-
-		//glDeleteVertexArrays(1, &VAO);
-		//glDeleteBuffers(1, &VBO);
-		//glDeleteBuffers(1, &EBO);
-		//glDeleteBuffers(1, &ModelMatrixBO);
-
-#ifdef TEST_CUBE_DRAW_WITHOUT_COMPONENT
-
-		shaderManager->StartProgram(0);
-
-		for (auto& i : meshManager->meshes)
-		{
-			// Provide rotation in radians
-			// test model matrix
-		    glm::mat4 testmodelMatrix = glm::rotate(glm::mat4(1.f), glm::radians(15.f), glm::vec3(0.0f,1.0f,0.f));
-
-			glBindVertexArray(i->VAO);
-
-			// We will only substitute Color and ModelMatrix Data
-			glBindBuffer(GL_ARRAY_BUFFER, i->CBO);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec3) * i->_rgb.size(), &i->_rgb[0]);
-			
-			glBindBuffer(GL_ARRAY_BUFFER, i->ModelMatrixBO);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &testmodelMatrix);
-
-			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);
-		}
-
-		shaderManager->StopProgram();
-#endif
 
 #ifdef DRAW_WITH_COMPONENTS
 		shaderManager->StartProgram(0);
@@ -275,49 +152,7 @@ namespace NS_GRAPHICS
 			itr++;
 		}
 
-		//if (modelManager->meshes.size())
-		//{
-		//	Mesh* mesh = modelManager->meshes[0];
-
-		//	glm::mat4 testmodelMatrix = glm::rotate(glm::mat4(1.f), glm::radians(15.f), glm::vec3(0.0f, 1.0f, 0.f));
-
-		//	glBindVertexArray(mesh->VAO);
-
-		//	// We will only substitute Color and ModelMatrix Data
-		//	glBindBuffer(GL_ARRAY_BUFFER, mesh->CBO);
-		//	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec3) * mesh->_rgb.size(), &mesh->_rgb[0]);
-
-		//	glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-		//	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &testmodelMatrix);
-
-		//	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);
-		//}
-		
-
 		shaderManager->StopProgram();
-
-		// This works
-		//shaderManager->StartProgram(0);
-
-		//for (auto& i : modelManager->meshes)
-		//{
-		//	// Provide rotation in radians
-		//	// test model matrix
-		//	glm::mat4 testmodelMatrix = glm::rotate(glm::mat4(1.f), glm::radians(15.f), glm::vec3(0.0f, 1.0f, 0.f));
-
-		//	glBindVertexArray(i->VAO);
-
-		//	// We will only substitute Color and ModelMatrix Data
-		//	glBindBuffer(GL_ARRAY_BUFFER, i->CBO);
-		//	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec3) * i->_rgb.size(), &i->_rgb[0]);
-
-		//	glBindBuffer(GL_ARRAY_BUFFER, i->ModelMatrixBO);
-		//	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &testmodelMatrix);
-
-		//	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);
-		//}
-
-		//shaderManager->StopProgram();
 #endif
 	}
 
@@ -624,6 +459,87 @@ namespace NS_GRAPHICS
 		// Attach graphics component to object
 
 		return meshManager->AddMesh(mesh);
+	}
+
+	void GraphicsSystem::DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& rgb)
+	{
+		shaderManager->StartProgram(0);
+
+		GLuint VAO = NULL;
+		GLuint VBO = NULL;
+		GLuint CBO = NULL;
+		GLuint UVBO = NULL;
+		GLuint ModelMatrixBO = NULL;
+
+		std::vector<glm::vec3> _vertices;
+		std::vector<glm::vec2> _uv;
+		std::vector<glm::vec3> _rgb;
+
+		_vertices.push_back(start);
+		_vertices.push_back(end);
+
+		_uv.emplace_back(1.f, 0.f);
+		_uv.emplace_back(1.f, 0.f);
+
+		_rgb.push_back(rgb);
+		_rgb.push_back(rgb);
+
+		glm::mat4 modelmatrix(1.f);
+
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &VBO);
+		glGenBuffers(1, &CBO);
+		glGenBuffers(1, &UVBO);
+		glGenBuffers(1, &ModelMatrixBO);
+
+		glBindVertexArray(VAO);
+
+		// pos attribute
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * _vertices.size(), &_vertices[0], GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+		glEnableVertexAttribArray(0);
+
+
+		// uv attribute
+		glBindBuffer(GL_ARRAY_BUFFER, UVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * _uv.size(), &_uv[0], GL_STATIC_DRAW);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
+		glEnableVertexAttribArray(1);
+
+		// color attribute
+		glBindBuffer(GL_ARRAY_BUFFER, CBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * _rgb.size(), &_rgb[0], GL_STATIC_DRAW);
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+		glEnableVertexAttribArray(2);
+
+		// Model Matrix
+		glBindBuffer(GL_ARRAY_BUFFER, ModelMatrixBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), &modelmatrix, GL_DYNAMIC_DRAW);
+
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+		glEnableVertexAttribArray(5);
+		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+		glEnableVertexAttribArray(6);
+		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+
+		glVertexAttribDivisor(3, 1);
+		glVertexAttribDivisor(4, 1);
+		glVertexAttribDivisor(5, 1);
+		glVertexAttribDivisor(6, 1);
+
+		glDrawArrays(GL_LINES, 0, 2);
+
+		glDeleteBuffers(1, &ModelMatrixBO);
+		glDeleteBuffers(1, &UVBO);
+		glDeleteBuffers(1, &CBO);
+		glDeleteBuffers(1, &VBO);
+		glDeleteVertexArrays(1, &VAO);
+
+		shaderManager->StopProgram();
 	}
 
 	void GraphicsSystem::SetMeshColor(Entity& entity, const glm::vec3& rgb)

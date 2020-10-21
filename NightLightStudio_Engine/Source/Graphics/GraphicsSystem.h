@@ -18,7 +18,7 @@
 
 namespace NS_GRAPHICS
 {
-    class ENGINE_API GraphicsSystem : public MySystem, public Singleton<GraphicsSystem>
+    class GraphicsSystem : public MySystem, public Singleton<GraphicsSystem>
     {
         GraphicsSystem();
 
@@ -89,6 +89,9 @@ namespace NS_GRAPHICS
         // Testing for drawing cube without component system
         // Returns mesh ID
         unsigned TestCreateCube(const glm::vec3& rgb = glm::vec3(0.5f, 0.5f, 0.5f), const float& midExtent = 1.f);
+
+
+        void DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& rgb = glm::vec3(0.f,0.f,0.f));
 
         /////////////////////////////////////////////////////////////////////
 

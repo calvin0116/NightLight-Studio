@@ -5,8 +5,6 @@
 
 #include <filesystem>
 
-//using Ent_Handle = ComponentManager::ComponentSetManager::EntityHandle;
-
 namespace fs = std::filesystem;
 
 namespace NS_SCENE

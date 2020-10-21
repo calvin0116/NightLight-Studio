@@ -8,7 +8,7 @@
 
 namespace NS_COLLISION
 {
-	class ENGINE_API CollisionSystem : public MySystem, public Singleton<CollisionSystem>
+	class CollisionSystem : public MySystem, public Singleton<CollisionSystem>
 	{
 		CollsionResolver colResolver;
 

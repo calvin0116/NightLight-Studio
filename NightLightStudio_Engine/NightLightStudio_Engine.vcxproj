@@ -184,6 +184,7 @@
     <ClInclude Include="Source\Component\ComponentCollider.h" />
     <ClInclude Include="Source\Component\ComponentGraphics.h" />
     <ClInclude Include="Source\Component\ComponentManager.h" />
+    <ClInclude Include="Source\Component\ComponentManagerTypedefs.h" />
     <ClInclude Include="Source\Component\ComponentMemoryManager.h" />
     <ClInclude Include="Source\Component\ComponentRigidBody.h" />
     <ClInclude Include="Source\Component\Components.h" />

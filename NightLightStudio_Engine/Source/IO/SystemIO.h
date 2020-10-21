@@ -8,7 +8,7 @@
 #include "Json/Config.h"
 
 //~!Engine Updated
-class ENGINE_API SystemIO : public MySystem , public Singleton<SystemIO>
+class SystemIO : public MySystem , public Singleton<SystemIO>
 {
 private:
 	friend Singleton<SystemIO>;	//For singleton to work

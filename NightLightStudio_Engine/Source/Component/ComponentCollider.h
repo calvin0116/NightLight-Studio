@@ -75,10 +75,10 @@ struct AABBCollider : public ICollider
 
 struct OBBCollider : public ICollider
 {
-	NlMath::Vector3D center;
-	NlMath::Vector3D extend;
+	 NlMath::Vector3D center;
+	 NlMath::Vector3D extend;
 	//rotation in radiant
-	NlMath::Vector3D rotation;
+	 NlMath::Vector3D rotation;
 	
 	OBBCollider();
 	OBBCollider(NlMath::Vector3D _center, 

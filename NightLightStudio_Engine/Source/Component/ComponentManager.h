@@ -11,6 +11,10 @@
 
 #include "LocalVector.h"
 
+namespace NS_COMPONENT
+{
+
+
 // max children per parent // this can be technically be dynamic, but I will smash my head against the wall
 #define MAX_CHILDREN 32
 
@@ -199,7 +203,7 @@ enum COMPONENTSETNAMES
 //								struct ComponentData
 //
 
-class ENGINE_API ComponentManager : public MySystem, public Singleton<ComponentManager>
+class ComponentManager : public MySystem, public Singleton<ComponentManager>
 {
 	friend Singleton<ComponentManager>;
 
@@ -279,9 +283,10 @@ public:
 	class ComponentSetManager // builds objects into component sets
 	{
 
-		class EntityHandle; // fwd decl
+		
 
 	public: // !
+		class EntityHandle; // fwd decl
 		ComponentSet* compSet; // it is bound to a component set
 	public:
 		ComponentSetManager() = default;
@@ -339,6 +344,21 @@ public:
 					AttachComponent((*find).second, entityId, newComp) // <- pass in index, not uid
 					);
 			}
+		}
+
+		template<typename T>
+		T* AddComponent(EntityHandle ent)
+		{
+			//T comp; // not efficient but future me can deal with it
+			//return compSetMgr->AttachComponent<T>(*this, comp);
+
+			// not efficient but future me can deal with it
+			T* comp = reinterpret_cast<T*>(malloc(sizeof(T)));
+			if (comp == nullptr) throw;
+			memset(comp, 0, sizeof(T));
+			T* returnComp = AttachComponent<T>(ent, *comp);
+			free(reinterpret_cast<void*>(comp));
+			return returnComp;
 		}
 
 	private:
@@ -535,6 +555,21 @@ public:
 			{
 				compSetMgr->AttachComponent<T>(*this, comp);
 				return *this;
+			}
+
+			template<typename T>
+			T* AddComponent()
+			{
+				//T comp; // not efficient but future me can deal with it
+				//return compSetMgr->AttachComponent<T>(*this, comp);
+
+				// not efficient but future me can deal with it
+				T* comp = reinterpret_cast<T*>(malloc(sizeof(T)));
+				if (comp == nullptr) throw;
+				memset(comp, 0, sizeof(T));
+				T* returnComp = compSetMgr->AttachComponent<T>(*this, *comp);
+				free(reinterpret_cast<void*>(comp));
+				return returnComp;
 			}
 
 			///////////////////////////////////////////////////////////////////////////////////////
@@ -779,6 +814,12 @@ public:
 
 	void Exit() override;
 
+	// clear container // param int container id
+	void Clear(COMPONENTSETNAMES id);
+
+	// clear all containers
+	void Clear();
+
 	////
 
 
@@ -841,36 +882,11 @@ public:
 };
 
 
+} // NS
 
 
 
+#include "ComponentManagerTypedefs.h"
 
 
 
-
-
-
-
-
-
-typedef ComponentManager::ComponentSetManager::EntityHandle Entity;
-
-typedef ComponentManager::ComponentSetManager::Iterator ComponentIterator;
-
-typedef ComponentManager::ComponentSetManager::Iterator::IteratorState ComponentIteratorState;
-
-static ComponentManager* SYS_COMPONENT = ComponentManager::GetInstance();
-
-//extern ComponentManager G_COMPMGR;
-
-// Entity component manager
-static ComponentManager::ComponentSetManager* G_ECMANAGER = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
-
-// Entity component manager UI
-static ComponentManager::ComponentSetManager* G_ECMANAGER_UI = SYS_COMPONENT->getComponentSetMgr(COMPONENT_UI);
-
-// Entity component manager Prefabs
-static ComponentManager::ComponentSetManager* G_ECMANAGER_PREFABS = SYS_COMPONENT->getComponentSetMgr(COMPONENT_PREFABS);
-
-// for some reason gfx becomes black screen with this
-//static ComponentManager::ComponentSetManager* G_UICOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
