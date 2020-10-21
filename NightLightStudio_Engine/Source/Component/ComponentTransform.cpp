@@ -29,10 +29,16 @@ glm::mat4 ComponentTransform::GetModelMatrix()
 	return (Translate * Rotate * Scale);
 }
 
-void ComponentTransform::Read()
+void ComponentTransform::Read(Value& val)
 {
+	auto pos = val["Position"].GetArray();
+
+	_position.x = pos[0].GetFloat();
+	_position.y = pos[1].GetFloat();
+	_position.z = pos[2].GetFloat();
 }
 
-void ComponentTransform::Write()
+Value ComponentTransform::Write()
 {
+	return Value();
 }

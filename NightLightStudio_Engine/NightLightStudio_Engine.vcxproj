@@ -174,6 +174,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="ISerializable.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Source\Audio\SystemAudio.h" />
     <ClInclude Include="Source\Collision\CollisionMathLib.h" />

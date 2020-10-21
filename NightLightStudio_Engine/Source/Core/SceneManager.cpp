@@ -5,9 +5,10 @@
 
 #include <filesystem>
 
-using Ent_Handle = ComponentManager::ComponentSetManager::EntityHandle;
+//using Ent_Handle = ComponentManager::ComponentSetManager::EntityHandle;
 
 namespace fs = std::filesystem;
+
 namespace NS_SCENE
 {
 	SceneManager::~SceneManager()
@@ -78,6 +79,10 @@ namespace NS_SCENE
 	}
 
 
+	void SceneManager::GameExit()
+	{
+	}
+
 	void SceneManager::Free()
 	{
 		for (const auto& pars : scene_list)
@@ -123,27 +128,40 @@ namespace NS_SCENE
 		current_scene = next_scene;
 	}
 
+	// Helper function that is not declared in class due to Entity not declared in .h
+	void ComponentsCreation(Value& Comp_list, Entity& entity)
+	{
+		for (auto itr = Comp_list.MemberBegin(); itr != Comp_list.MemberEnd(); ++itr)
+		{
+		
+			std::string component_name = itr->name.GetString();
+			std::cout << "~~ Component: " << component_name << std::endl;
+			if (component_name == "TransformComponent")
+			{
+				
+				TransformComponent trans_com;
+				trans_com.Read(Comp_list["TransformComponent"]);
+
+				G_ECMANAGER->AttachComponent<TransformComponent>(entity, trans_com);
+				std::cout << "~~~~ Transform: " << trans_com << std::endl;
+			}
+
+		}
+	}
+
 	void SceneManager::EntityListCreation(Value& Ent_list)
 	{
 		for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
 		{
 			std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
-			Ent_Handle ent_handle = G_ECMANAGER->BuildEntity();
+			Entity ent_handle = G_ECMANAGER->BuildEntity();
 			Value& Component_list = Ent_list[itr->name.GetString()];
 
-			for (auto itr2 = Component_list.MemberBegin(); itr2 != Component_list.MemberEnd(); ++itr2)
-			{
-				std::cout << "~~ Component: " << itr2->name.GetString() << std::endl;
-				if (itr2->name.GetString() == "TransformComponent")
-				{
-					
-
-				}
-
-			}
+			ComponentsCreation(Component_list, ent_handle);
 		}
-
 	}
+
+
 
 	void SceneManager::LoadScene(std::string scene_name)
 	{
