@@ -18,7 +18,7 @@
 
 namespace NS_GRAPHICS
 {
-    class ENGINE_API GraphicsSystem : public MySystem, public Singleton<GraphicsSystem>
+    class GraphicsSystem : public MySystem, public Singleton<GraphicsSystem>
     {
         GraphicsSystem();
 
