@@ -8,7 +8,7 @@
 namespace NS_GRAPHICS
 {
 	//Local Path For Custom Graphics Files
-	static std::string s_LocalPathName = "Resources\Mesh";
+	static std::string s_LocalPathName = "Resources\\Mesh\\";
 	static std::string s_MeshFileType = "mesh";
 
 	struct Mesh
@@ -18,6 +18,9 @@ namespace NS_GRAPHICS
 		//loads the fbx file into our custom mesh format. We will need some way to serialize and load in therefore
 		//this is needed. It will become Test1.mesh or something?
 		std::string _localFileName;
+
+		//Manual Input
+		std::string _textureFileName;
 
 		//////////////////////////////
 		/// New variables for interleaving data and reducing BOs
@@ -39,6 +42,7 @@ namespace NS_GRAPHICS
 			glm::vec3 _vNormals;
 		};
 
+		//Designer Manual Input
 		struct MaterialData
 		{
 			float _diffuse;
@@ -53,6 +57,9 @@ namespace NS_GRAPHICS
 		std::vector<VertexData> _vertexDatas;
 		std::vector<VerticeData> _verticeDatas;
 
+		//Still needed
+		std::vector<unsigned short> _indices;
+
 		GLuint VAO = NULL;
 		GLuint VBO = NULL;
 		GLuint EBO = NULL;
@@ -60,8 +67,9 @@ namespace NS_GRAPHICS
 		GLuint ModelMatrixBO = NULL;
 
 		//////////////////////////////
-
-		// ** TEMPORARY BEFORE NEW DATA INTEGRATION
+		/// ** TEMPORARY BEFORE NEW DATA INTEGRATION
+		/// OLD DATA VARIABLES
+		//////////////////////////////
 		GLuint CBO = NULL;			// Color Buffer object
 		GLuint UVBO = NULL;
 
@@ -72,14 +80,9 @@ namespace NS_GRAPHICS
 		std::vector<glm::vec3> _vertices;
 		std::vector<glm::vec2> _uv;
 		std::vector<glm::vec3> _normals;
-		std::vector<glm::vec3> _fNormals; //If ever need to calculate
 
-		//Still needed
-		std::vector<unsigned short> _indices;
-
-		unsigned _textureFileName;
-		
-		//std::vector<unsigned> _textures; // each face has its own texture
+		//If ever need to calculate
+		std::vector<glm::vec3> _fNormals;
 
 		Mesh() = default;
 		~Mesh() = default;
