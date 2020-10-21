@@ -31,9 +31,13 @@ namespace NS_GRAPHICS
 				if (pos !=std::string::npos)
 				{
 					fileName = _currentFile.substr(pos+1);
-					fileName.erase(fileName.find(".")+1);
+				}
+				else
+				{
+					fileName = _currentFile;
 				}
 				
+				fileName.erase(fileName.find(".") + 1);
 				newMesh->_localFileName = s_LocalPathName + fileName + s_MeshFileType;
 
 				//TEXTURE FILE NAME
@@ -101,6 +105,7 @@ namespace NS_GRAPHICS
 
 					//OLD WAY
 					newMesh->_vertices.push_back(vertex);
+					newMesh->_rgb.push_back({ 1.0f,1.0f,1.0f });
 
 					//NEW WAY
 					Mesh::VertexData newVertex{ vertex, {1.0f,1.0f,1.0f} };

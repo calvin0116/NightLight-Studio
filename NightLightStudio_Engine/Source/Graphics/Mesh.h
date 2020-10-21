@@ -67,6 +67,11 @@ namespace NS_GRAPHICS
 		GLuint ModelMatrixBO = NULL;
 
 		//////////////////////////////
+		/// ANIMATION STUFFS
+		//////////////////////////////
+		//FbxAnimStack _animStack;
+
+		//////////////////////////////
 		/// ** TEMPORARY BEFORE NEW DATA INTEGRATION
 		/// OLD DATA VARIABLES
 		//////////////////////////////
