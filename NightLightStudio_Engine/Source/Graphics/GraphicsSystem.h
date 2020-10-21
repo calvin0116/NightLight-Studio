@@ -90,6 +90,9 @@ namespace NS_GRAPHICS
         // Returns mesh ID
         unsigned TestCreateCube(const glm::vec3& rgb = glm::vec3(0.5f, 0.5f, 0.5f), const float& midExtent = 1.f);
 
+
+        void DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& rgb = glm::vec3(0.f,0.f,0.f));
+
         /////////////////////////////////////////////////////////////////////
 
         // Sets whole mesh color
