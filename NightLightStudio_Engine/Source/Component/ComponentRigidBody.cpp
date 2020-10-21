@@ -1,5 +1,8 @@
 #include "ComponentRigidBody.h"
 
+#include "Components.h"
+//#include "ComponentTransform.h"
+
 ComponentRigidBody::ComponentRigidBody() :
 	isStatic{ true }, 
 	mass{ 0 },

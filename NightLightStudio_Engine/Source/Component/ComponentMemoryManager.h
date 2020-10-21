@@ -4,6 +4,12 @@
 #include <map>
 #include <vector>
 
+
+namespace NS_COMPONENT
+{
+
+
+
 #define BLOCK_SIZE_DEFAULT 164 // temp
 
 
@@ -185,6 +191,8 @@ public:
 	// I hope no reaks
 	void freeAll();
 
+	void clearAll();
+
 
 private:
 	void expandContainer(ComponentType comT);
@@ -205,3 +213,5 @@ private:
 
 // ComponentMemoryManager END
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+} // NS

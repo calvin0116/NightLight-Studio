@@ -23,18 +23,18 @@ void LevelEditor::LE_AddArrowButton(const std::string& name, ImGuiDir dir, std::
     }
 }
 
-void LevelEditor::LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn, ImGuiSelectableFlags flag)
+void LevelEditor::LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn, ImGuiSelectableFlags flag, ImVec2 size)
 {
-    if (ImGui::Selectable(name.c_str(), isSelected, flag))
+    if (ImGui::Selectable(name.c_str(), isSelected, flag, size))
     {
         if (fn)
             fn();
     }
 }
 
-void LevelEditor::LE_AddSelectable(const std::string& name, bool* isSelectedPtr, std::function<void()> fn, ImGuiSelectableFlags flag)
+void LevelEditor::LE_AddSelectable(const std::string& name, bool* isSelectedPtr, std::function<void()> fn, ImGuiSelectableFlags flag, ImVec2 size)
 {
-    if (ImGui::Selectable(name.c_str(), isSelectedPtr, flag))
+    if (ImGui::Selectable(name.c_str(), isSelectedPtr, flag, size))
     {
         if (fn)
             fn();

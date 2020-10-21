@@ -43,6 +43,14 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	//// 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
+	//SYS_COMPONENT->Clear(NS_COMPONENT::COMPONENT_MAIN);
+	//SYS_COMPONENT->Clear();
+
+	//Entity newEntity = G_ECMANAGER->BuildEntity();
+	//ComponentCollider* OBBT = newEntity.AddComponent<ComponentCollider>();
+	//ComponentCollider* OBBT = G_ECMANAGER->AddComponent<ComponentCollider>(newEntity);
+	//ComponentCollider OBB1(COLLIDERS::OBB);
+	//*OBBT = OBB1;
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// Systems OnFirst start

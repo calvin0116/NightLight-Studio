@@ -16,6 +16,12 @@
 
 #include "../Component/LocalVector.h"
 
+
+namespace NS_COMPONENT
+{
+
+
+
 // local g var
 static int G_CURRIDMOD = 0;
 
@@ -1029,6 +1035,11 @@ void ComponentManager::AddComponentSet(COMPONENTSETNAMES idname, ComponentSet* c
 	ComponentSets.insert(std::pair<ContainerID, ComponentSet*>(newComponentSetID, compSet));
 
 	// can try using a vector // dun need this to be sorted
+	//ComponentSetManagers.try_emplace(idname, ComponentSetManager(compSet)); // idk this doesnt work?
+
+	//ComponentSetManagers.insert(std::pair<COMPONENTSETNAMES, ComponentSet *>((COMPONENTSETNAMES)newComponentSetID, compSet));
+	//ComponentSetManagers[idname].compSet = compSet;
+
 	ComponentSetManagers.try_emplace(idname, ComponentSetManager(compSet)); // idk this doesnt work?
 	ComponentSetManagers[idname].compSet = compSet;
 }
@@ -1523,10 +1534,42 @@ void ComponentManager::Free()
 	{
 		ComponentSet* cs = p.second;
 		cs->cmm.freeAll();
-		free(cs);
+		delete cs;
+		//free(cs);
 		p.second = nullptr;
 	}
 	ComponentSets.clear();
+}
+
+void ComponentManager::Clear(COMPONENTSETNAMES id)
+{
+	//if (id == COMPONENT_MAIN) {}
+
+	auto itr = ComponentSets.find((int)id);
+
+	if (itr == ComponentSets.end()) throw;
+
+	itr.operator*().second->cmm.clearAll();
+
+	//for (std::pair<ContainerID, ComponentSet*> p : ComponentSets)
+	//{
+	//	int index = p.first;
+	//	if (index == id)
+	//	{
+	//		ComponentSet* cs = p.second;
+	//		cs->cmm.freeAll();
+	//		break;
+	//	}
+	//}
+}
+
+void ComponentManager::Clear()
+{
+	for (std::pair<ContainerID, ComponentSet*> p : ComponentSets)
+	{
+		ComponentSet* cs = p.second;
+		cs->cmm.clearAll();
+	}
 }
 
 void ComponentManager::Exit()
@@ -2027,4 +2070,4 @@ void ComponentManager::Exit()
 	//mgrCom.Free();
 //}
 
-
+} // NS

@@ -9,6 +9,7 @@ class AssetInspector : public LE_WinBase_Derived<AssetInspector>
 	std::set<std::string> _ignoreFileTypes;
 	std::string _selectedFolderPath;
 	std::string _selectedFilePath;
+	std::string _dragDropFilePath;
 
 	std::vector<std::string> _GetAllDirectories(const std::string& path);
 	std::vector<std::string> _GetDirectories(const std::string& path);

@@ -206,9 +206,9 @@ public:
 	void LE_AddArrowButton(const std::string& name, ImGuiDir dir = ImGuiDir_Right, std::function<void()> fn = nullptr);
 	
 	// Adds a selectable that runs a function while selected. Input Boolean is unaffected.
-	void LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0);
+	void LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0, ImVec2 size = ImVec2(0, 0));
 	// Adds a selectable that runs a function while selected. Input Boolean is affected.
-	void LE_AddSelectable(const std::string& name, bool* isSelectedPtr, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0);
+	void LE_AddSelectable(const std::string& name, bool* isSelectedPtr, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0, ImVec2 size = ImVec2(0, 0));
 
 	// Adds an Input Int Property
 	void LE_AddInputIntProperty(const std::string& name, int& prop, std::function<void()> fn = nullptr,
@@ -341,7 +341,7 @@ public:
 		ImVec2 size = ImVec2(0,0), ImGuiPopupFlags popupFlag = 0, ImGuiWindowFlags winFlag = 0);
 
 	// Right click to open a Context Menu (Similar to a popup.)
-	void LE_AddContext(const std::string& name, std::function<void()> fn = nullptr, ImGuiPopupFlags popupFlag = 0);
+	void LE_AddContext(const std::string& name, std::function<void()> fn = nullptr, ImGuiPopupFlags popupFlag = 1);
 
 	// Opens a Modal Window. Default OK and Cancel options only
 	// fn represents the function to run within the Modal window

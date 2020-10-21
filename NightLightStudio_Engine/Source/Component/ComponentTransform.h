@@ -1,10 +1,9 @@
 #pragma once
 #include "..\\Math\Vector.h"
 #include "..\\Math\Matrix4x4.h"
-#include "Components.h"
 #include "..\glm\glm.hpp"
 
-class ComponentTransform : public IComponent
+typedef class ComponentTransform //: public IComponent
 {
 public:
 	//for collision check
@@ -22,4 +21,4 @@ public:
 	//read and write function for initialization from saved files
 	void Read();
 	void Write();
-};
+} TransformComponent;

@@ -1,10 +1,13 @@
 #pragma once
-#include "Components.h"
+
+
 #include "..\\Math\Vector.h"
-#include "ComponentTransform.h"
-#include "ComponentRigidBody.h"
+//#include "ComponentTransform.h"
+//#include "ComponentRigidBody.h"
 #include "..\\Collision\CollisionMathLib.h"
-#include "..\Core\MySystem.h"
+//#include "..\Core\MySystem.h"
+
+class ComponentTransform;
 
 enum class SIDES
 {
@@ -104,7 +107,7 @@ struct CapsuleCollider : public ICollider
 	void init(ComponentTransform* transform);
 };
 
-struct ComponentCollider : public IComponent
+typedef struct ComponentCollider //: public IComponent
 {
 	union Collider
 	{
@@ -130,7 +133,7 @@ struct ComponentCollider : public IComponent
 	void CollisionTimeReset();
 
 
-};
+}ColliderComponent;
 
 //enum TYPE_COL
 //{

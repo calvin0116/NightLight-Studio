@@ -8,7 +8,7 @@
 #include "ShaderSystem.h"
 #include "ModelLoader.h"
 #include "TextureLoader.h"
-#include "ModelManager.h"
+#include "MeshManager.h"
 #include "LightSystem.h"
 #include "DebugManager.h"
 #include "CameraSystem.h"
@@ -18,7 +18,7 @@
 
 namespace NS_GRAPHICS
 {
-    class ENGINE_API GraphicsSystem : public MySystem, public Singleton<GraphicsSystem>
+    class GraphicsSystem : public MySystem, public Singleton<GraphicsSystem>
     {
         GraphicsSystem();
 
@@ -90,6 +90,9 @@ namespace NS_GRAPHICS
         // Returns mesh ID
         unsigned TestCreateCube(const glm::vec3& rgb = glm::vec3(0.5f, 0.5f, 0.5f), const float& midExtent = 1.f);
 
+
+        void DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& rgb = glm::vec3(0.f,0.f,0.f));
+
         /////////////////////////////////////////////////////////////////////
 
         // Sets whole mesh color
@@ -114,7 +117,7 @@ namespace NS_GRAPHICS
         ShaderSystem* shaderManager;
         ModelLoader* modelLoader;
         TextureLoader* textureLoader;
-        ModelManager* modelManager;
+        MeshManager* meshManager;
         LightSystem* lightManager;
         DebugManager* debugManager;
         CameraSystem* cameraManager;
