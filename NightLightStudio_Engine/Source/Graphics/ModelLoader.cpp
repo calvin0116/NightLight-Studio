@@ -25,19 +25,65 @@ namespace NS_GRAPHICS
 				FbxMesh* mesh = node->GetMesh();
 				Mesh* newMesh = new Mesh();
 
-				////LOCAL FILE NAME
-				//std::string fileName;
-				//size_t pos = _currentFile.rfind("\\");
-				//if (pos !=std::string::npos)
-				//{
-				//	fileName = _currentFile.substr(pos);
-				//}
-				//else
-				//{
-
-				//}
+				//LOCAL FILE NAME
+				std::string fileName;
+				size_t pos = _currentFile.rfind("\\");
+				if (pos !=std::string::npos)
+				{
+					fileName = _currentFile.substr(pos+1);
+					fileName.erase(fileName.find(".")+1);
+				}
 				
-				//newMesh->_localFileName = s_LocalPathName + "." + s_MeshFileType;
+				newMesh->_localFileName = s_LocalPathName + fileName + s_MeshFileType;
+
+				//TEXTURE FILE NAME
+				//PROBABLY WONT BE AUTO
+				//MANUAL ATTACH OF TEXTURE NONE WILL BE PORTED OVER
+				//FbxGeometry* geom = (FbxGeometry*)mesh;
+				//FbxProperty property;
+				//
+				//if (geom->GetNode() != nullptr)
+				//{
+				//	////Just gets first texture for now
+				//	//FbxSurfaceMaterial* material = geom->GetNode()->GetSrcObject<FbxSurfaceMaterial>(0);
+				//	//property = material->FindProperty(FbxLayerElement::sTextureChannelNames[0]);
+
+				//	//FbxTexture* texture = property.GetSrcObject<FbxTexture>(0);
+				//	//FbxFileTexture* fileTexture = FbxCast<FbxFileTexture>(texture);
+
+				//	int mat = geom->GetNode()->GetSrcObjectCount<FbxSurfaceMaterial>();
+				//	for (int materialIndex = 0; materialIndex < mat; materialIndex++) {
+				//		FbxSurfaceMaterial* material = geom->GetNode()->GetSrcObject<FbxSurfaceMaterial>(materialIndex);
+
+				//		//go through all the possible textures
+				//		if (material) {
+
+				//			int textureIndex;
+				//			FBXSDK_FOR_EACH_TEXTURE(textureIndex)
+				//			{
+				//				property = material->FindProperty(FbxLayerElement::sTextureChannelNames[textureIndex]);
+
+				//				//FindAndDisplayTextureInfoByProperty(lProperty, lDisplayHeader, lMaterialIndex);
+				//				if (property.IsValid())
+				//				{
+				//					int textureCount = property.GetSrcObjectCount<FbxTexture>();
+				//					for (int id = 0; id < textureCount; ++id)
+				//					{
+				//						FbxTexture* texture = property.GetSrcObject<FbxTexture>(id);
+				//						if (texture)
+				//						{
+				//							FbxFileTexture* fileTexture = FbxCast<FbxFileTexture>(texture);
+				//							newMesh->_textureFileName = { fileTexture->GetRelativeFileName() };
+				//							break;
+				//						}
+				//					}
+				//				}
+				//			}
+
+				//		}//end if(lMaterial)
+
+				//	}// end for lMaterialIndex     
+				//}
 
 				//GET THE VERTEX DATA
 				const int vertexCount = mesh->GetControlPointsCount();
@@ -113,11 +159,6 @@ namespace NS_GRAPHICS
 								}
 							}
 							break;
-
-							case FbxGeometryElement::eByPolygon: // doesn't make much sense for UVs
-							case FbxGeometryElement::eAllSame:   // doesn't make much sense for UVs
-							case FbxGeometryElement::eNone:       // doesn't make much sense for UVs
-								break;
 							}
 						}
 
