@@ -70,11 +70,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)Bin\Debug</OutDir>
+    <OutDir>$(SolutionDir)Bin\Debug\</OutDir>
     <IntDir>$(SolutionDir)Bin-Int\Game\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)Bin\Release</OutDir>
+    <OutDir>$(SolutionDir)Bin\Release\</OutDir>
     <IntDir>$(SolutionDir)Bin-Int\Game\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

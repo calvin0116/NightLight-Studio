@@ -1,5 +1,7 @@
 #include "ComponentGraphics.h"
 
+#include "Components.h"
+
 ComponentGraphics::ComponentGraphics()
 	: isActive{ true },
 	MeshID{ NULL }

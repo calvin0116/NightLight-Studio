@@ -1,9 +1,8 @@
 #pragma once
 #include "..\\Math\Vector.h"
-#include "Components.h"
-#include "ComponentTransform.h"
 
-struct ComponentRigidBody : public IComponent
+
+typedef struct ComponentRigidBody //: public IComponent
 {
 	//velocity of the object
 	NlMath::Vector3D velocity;
@@ -23,4 +22,4 @@ struct ComponentRigidBody : public IComponent
 
 	void Read();
 	void Write();
-};
+} RigidBody, RigidBodyComponent;

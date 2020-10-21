@@ -1,7 +1,7 @@
 #pragma once
-#include "Components.h"
 
-class ComponentGraphics : public IComponent
+
+typedef class ComponentGraphics //: public IComponent
 {
 public:
 	// Temporarily make them public for easy access
@@ -24,4 +24,4 @@ public:
 	//read and write function for initialization from saved files
 	void Read();
 	void Write();
-};
+} GraphicsComponent;

@@ -239,7 +239,7 @@ void AssetInspector::Run()
                     });
 
                 ImVec2 size(100.0f, 100.0f);
-                float offset = 50.0f;
+                //float offset = 50.0f;
 
                 float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
 
@@ -284,18 +284,19 @@ void AssetInspector::Run()
                     const ImVec2 p1 = ImGui::GetItemRectMax();
                     ImDrawList* draw_list = ImGui::GetWindowDrawList();
                     ImGuiIO& io = ImGui::GetIO();
-                    ImTextureID my_tex_id = io.Fonts->TexID;
+                    //ImTextureID my_tex_id = io.Fonts->TexID;
 
                     draw_list->PushClipRect(p0, p1, true);
                     if (i < filesStart)
                         // Folder image goes here
                         //draw_list->AddImage(0, { p0.x + 20.0f, p0.y - 40.0f }, { p1.x - 20.0f, p1.y - 40.0f }, ImVec2(0,0), ImVec2(1,1), ImColor(252,186,3));
-                        draw_list->AddRectFilled({ p0.x + 20.0f, p0.y + 20.0f }, { p1.x - 20.0f, p1.y - 20.0f }, ImColor(255, 252, 54));
+                        draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(255, 252, 54));
                     else
                         // File image goes here
                         //draw_list->AddImage(0, { p0.x + 20.0f, p0.y - 40.0f }, { p1.x - 20.0f, p1.y - 40.0f });
-                        draw_list->AddRectFilled({ p0.x + 20.0f, p0.y + 20.0f }, { p1.x - 20.0f, p1.y - 20.0f }, ImColor(111, 111, 111));
-                    draw_list->AddText({ p0.x, p0.y + 90.0f }, IM_COL32_WHITE, _GetFilename(files[i]).c_str()); // Filename goes here
+                        draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(111, 111, 111));
+                    //draw_list->AddText({ p0.x, p0.y + 90.0f }, IM_COL32_WHITE, _GetFilename(files[i]).c_str()); // Filename goes here
+                    draw_list->AddText(io.Fonts->Fonts[0], 13.0f, { p0.x, p0.y + 65.0f }, IM_COL32_WHITE, _GetFilename(files[i]).c_str(), nullptr, size.x + 10.0f);
                     draw_list->PopClipRect();
 
                     // Get relative path

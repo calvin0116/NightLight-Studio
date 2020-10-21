@@ -29,8 +29,8 @@ namespace ImSequencer
         return overDel;
     }
 
-    static int min(int a, int b) { return (a < b) ? a : b; }
-    static int max(int a, int b) { return (a > b) ? a : b; }
+    //static int min(int a, int b) { return (a < b) ? a : b; }
+    //static int max(int a, int b) { return (a > b) ? a : b; }
 
     bool Sequencer(SequenceInterface *sequence, int *currentFrame, bool *expanded, int *selectedEntry, int *firstFrame, int sequenceOptions)
     {
@@ -80,7 +80,7 @@ namespace ImSequencer
         ImVector<CustomDraw> customDraws;
         ImVector<CustomDraw> compactCustomDraws;
         // zoom in/out
-        int frameOverCursor = 0;
+        //int frameOverCursor = 0;
         const int visibleFrameCount = (int)floorf((canvas_size.x - legendWidth) / framePixelWidth);
         const float barWidthRatio = ImMin(visibleFrameCount / (float)frameCount, 1.f);
         const float barWidthInPixels = barWidthRatio * (canvas_size.x - legendWidth);
@@ -227,7 +227,8 @@ namespace ImSequencer
 
             };
 
-            auto drawLineContent = [&](int i, int regionHeight) {
+            
+            auto drawLineContent = [&](int i, int) {
                 int px = (int)canvas_pos.x + int(i * framePixelWidth) + legendWidth - int(firstFrameUsed * framePixelWidth);
                 int tiretStart = int(contentMin.y);
                 int tiretEnd = int(contentMax.y);
@@ -239,6 +240,8 @@ namespace ImSequencer
                     draw_list->AddLine(ImVec2(float(px), float(tiretStart)), ImVec2(float(px), float(tiretEnd)), 0x30606060, 1);
                 }
             };
+            
+
             for (int i = sequence->GetFrameMin(); i <= sequence->GetFrameMax(); i += frameStep)
             {
                 drawLine(i, ItemHeight);
@@ -512,7 +515,7 @@ namespace ImSequencer
                 ImVec2 scrollBarD(scrollBarMin.x + legendWidth + barWidthInPixels + startFrameOffset, scrollBarMax.y - 2);
                 draw_list->AddRectFilled(scrollBarC, scrollBarD, (inScrollBar || MovingScrollBar) ? 0xFF606060 : 0xFF505050, 6);
 
-                float handleRadius = (scrollBarMax.y - scrollBarMin.y) / 2;
+                //float handleRadius = (scrollBarMax.y - scrollBarMin.y) / 2;
                 ImRect barHandleLeft(scrollBarC, ImVec2(scrollBarC.x + 14, scrollBarD.y));
                 ImRect barHandleRight(ImVec2(scrollBarD.x - 14, scrollBarC.y), scrollBarD);
 

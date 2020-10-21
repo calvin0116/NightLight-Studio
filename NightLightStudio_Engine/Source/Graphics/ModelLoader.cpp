@@ -14,7 +14,7 @@ namespace NS_GRAPHICS
 		_fbxManager->Destroy();
 	}
 
-	void ModelLoader::TransverseChild(FbxNode* node, Model*& model)
+	void ModelLoader::TransverseChild(FbxNode* node)
 	{
 		for (int i = 0; i < node->GetNodeAttributeCount(); ++i)
 		{
@@ -22,118 +22,153 @@ namespace NS_GRAPHICS
 
 			if (nodeType->GetAttributeType() == FbxNodeAttribute::eMesh)
 			{
-				Mesh* newMesh = new Mesh();
 				FbxMesh* mesh = node->GetMesh();
+				Mesh* newMesh = new Mesh();
+
+				////LOCAL FILE NAME
+				//std::string fileName;
+				//size_t pos = _currentFile.rfind("\\");
+				//if (pos !=std::string::npos)
+				//{
+				//	fileName = _currentFile.substr(pos);
+				//}
+				//else
+				//{
+
+				//}
+				
+				//newMesh->_localFileName = s_LocalPathName + "." + s_MeshFileType;
 
 				//GET THE VERTEX DATA
 				const int vertexCount = mesh->GetControlPointsCount();
 				FbxVector4* vertexs = mesh->GetControlPoints();
 				newMesh->_vertices.reserve(vertexCount);
+				newMesh->_vertexDatas.reserve(vertexCount);
 				FbxDouble3 scaling = node->LclScaling.Get();
 
 				for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
 				{
+					//Control point vertex
 					glm::vec3 vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
 										 (float)vertexs[vertexIndex][1] * (float)scaling[1],
 										 (float)vertexs[vertexIndex][2] * (float)scaling[2]};
 
+					//OLD WAY
 					newMesh->_vertices.push_back(vertex);
+
+					//NEW WAY
+					Mesh::VertexData newVertex{ vertex, {1.0f,1.0f,1.0f} };
+					newMesh->_vertexDatas.push_back(newVertex);
+
 				}
 
-				//GET THE INDICES
+				//GET THE INDICES, UV AND NORMALS
 				//Might update this part
 				const int totalBufferSize = mesh->GetPolygonVertexCount();
 				newMesh->_indices.reserve(totalBufferSize);
+				newMesh->_verticeDatas.reserve(totalBufferSize);
+
+				int vertexID = 0;
 				
 				const int polygonCount = mesh->GetPolygonCount();
 				for (int polygonIndex = 0; polygonIndex < polygonCount; ++polygonIndex)
 				{
 					const int verticeCount = mesh->GetPolygonSize(polygonIndex);
 					for (int verticeIndex = 0; verticeIndex < verticeCount; ++verticeIndex)
-					{
-						//newMesh->_vertices.push_back(vertex);
-						newMesh->_indices.push_back(mesh->GetPolygonVertex(polygonIndex, verticeIndex));
-					}
-				}
+					{					
+						int controlPointIndex = mesh->GetPolygonVertex(polygonIndex, verticeIndex);
 
-				//GET THE NORMALS
-				FbxGeometryElementNormal* normalElement = mesh->GetElementNormal();
+						Mesh::VerticeData verticeData;
 
-				if (normalElement)
-				{
-					//mapping mode is by control points. The mesh should be smooth and soft.
-					//we can get normals by retrieving each control point
-					if (normalElement->GetMappingMode() == FbxGeometryElement::eByControlPoint)
-					{
-						for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
+						for (int uv = 0; uv < mesh->GetElementUVCount(); ++uv)
 						{
-							int normalIndex = 0;
-							//reference mode is direct, the normal index is same as vertex index.
-							//get normals by the index of control vertex
-							if (normalElement->GetReferenceMode() == FbxGeometryElement::eDirect)
-								normalIndex = vertexIndex;
+							FbxGeometryElementUV* elementUV = mesh->GetElementUV(uv);
 
-							//reference mode is index-to-direct, get normals by the index-to-direct
-							if (normalElement->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)
-								normalIndex = normalElement->GetIndexArray().GetAt(vertexIndex);
-
-							//Got normals of each vertex.
-							FbxVector4 normal = normalElement->GetDirectArray().GetAt(normalIndex);
-
-							glm::vec3 vertex = { (float)normal[0],
-												 (float)normal[1],
-												 (float)normal[2]};
-
-							newMesh->_normals.push_back(vertex);
-						}
-					}
-					else if (normalElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
-					{
-
-						int indexPolygonVertex = 0;
-						//Let's get normals of each polygon, since the mapping mode of normal element is by polygon-vertex.
-						for (int polygonIndex = 0; polygonIndex < polygonCount; polygonIndex++)
-						{
-							//get polygon size, you know how many vertices in current polygon.
-							const int verticeCount = mesh->GetPolygonSize(polygonIndex);
-							//retrieve each vertex of current polygon.
-							for (int i = 0; i < verticeCount; i++)
+							switch (elementUV->GetMappingMode())
 							{
-								int normalIndex = 0;
-								//reference mode is direct, the normal index is same as indexPolygonVertex.
-								if (normalElement->GetReferenceMode() == FbxGeometryElement::eDirect)
-									normalIndex = indexPolygonVertex;
+							default:
+								break;
 
-								//reference mode is index-to-direct, get normals by the index-to-direct
-								if (normalElement->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)
-									normalIndex = normalElement->GetIndexArray().GetAt(indexPolygonVertex);
+							case FbxGeometryElement::eByPolygonVertex:
+							{
+								int uvIndex = mesh->GetTextureUVIndex(polygonIndex, verticeIndex);
+								switch (elementUV->GetReferenceMode())
+								{
+								case FbxGeometryElement::eDirect:
+								case FbxGeometryElement::eIndexToDirect:
+								{
+									FbxVector2 fbxUV = elementUV->GetDirectArray().GetAt(uvIndex);
 
-								//Got normals of each polygon-vertex.
-								FbxVector4 normal = normalElement->GetDirectArray().GetAt(normalIndex);
+									glm::vec2 currentUV = { fbxUV[0], fbxUV[1] };
+									
+									//OLD WAY
+									newMesh->_uv.push_back(currentUV);
 
-								glm::vec3 vertex = { (float)normal[0],
-													 (float)normal[1],
-													 (float)normal[2]};
+									//NEW WAY
+									verticeData._uv = currentUV;
+								}
+								break;
+								default:
+									break; // other reference modes not shown here!
+								}
+							}
+							break;
 
-								newMesh->_normals.push_back(vertex);
-
-								//std::cout << "Normals " << polygonIndex << ": " << vertex.x << " " << vertex.y << " " << vertex.z << std::endl;
-
-								++indexPolygonVertex;
+							case FbxGeometryElement::eByPolygon: // doesn't make much sense for UVs
+							case FbxGeometryElement::eAllSame:   // doesn't make much sense for UVs
+							case FbxGeometryElement::eNone:       // doesn't make much sense for UVs
+								break;
 							}
 						}
 
+						//GET THE NORMALS
+						FbxGeometryElementNormal* normalElement = mesh->GetElementNormal();
+
+						if (normalElement)
+						{
+							if (normalElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+							{
+								FbxVector4 fbxNormal; 
+
+								//reference mode is direct, the normal index is same as indexPolygonVertex.
+								if (normalElement->GetReferenceMode() == FbxGeometryElement::eDirect)
+								{
+									fbxNormal = normalElement->GetDirectArray().GetAt(vertexID);
+								}
+
+								//reference mode is index-to-direct, get normals by the index-to-direct
+								if (normalElement->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)
+								{
+									int index = normalElement->GetIndexArray().GetAt(vertexID);
+									fbxNormal = normalElement->GetDirectArray().GetAt(index);
+								}
+
+								glm::vec3 normal = { (float)fbxNormal[0],
+														(float)fbxNormal[1],
+														(float)fbxNormal[2] };
+
+								//OLD WAY
+								newMesh->_normals.push_back(normal);
+
+								//NEW WAY
+								verticeData._vNormals = normal;
+							}
+						}
+
+						newMesh->_indices.push_back((unsigned short)controlPointIndex);
+						newMesh->_verticeDatas.push_back(verticeData);
+						vertexID++;
 					}
 				}
 
 				mesh->Destroy();
-				model->_meshes.push_back(newMesh);
+				MeshManager::GetInstance().AddMesh(newMesh);
 			}	
 		}
 
 		for (int i = 0; i < node->GetChildCount(); i++)
 		{
-			TransverseChild(node->GetChild(i), model);
+			TransverseChild(node->GetChild(i));
 		}
 	}
 
@@ -164,7 +199,7 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	void ModelLoader::LoadFBX(const std::string& fileName, Model*& model)
+	void ModelLoader::LoadFBX(const std::string& fileName)
 	{
 		std::cout << "Loading FBX..." << std::endl;
 		if (_fbxScene)
@@ -172,6 +207,8 @@ namespace NS_GRAPHICS
 			_fbxScene->Destroy();
 			_fbxScene = NULL;
 		}
+
+		_currentFile = fileName;
 
 		// Create an importer using the SDK manager.
 		_fbxImport = FbxImporter::Create(_fbxManager, "");
@@ -217,12 +254,12 @@ namespace NS_GRAPHICS
 
 			if (parentNode)
 			{
-				TransverseChild(parentNode, model);
+				TransverseChild(parentNode);
 			}
 
 			for (int i = 0; i < root->GetChildCount(); i++)
 			{
-				TransverseChild(root->GetChild(i), model);
+				TransverseChild(root->GetChild(i));
 			}
 		}
 	}
