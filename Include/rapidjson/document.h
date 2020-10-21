@@ -15,6 +15,7 @@
 #ifndef RAPIDJSON_DOCUMENT_H_
 #define RAPIDJSON_DOCUMENT_H_
 
+#pragma warning( push, 4 )
 /*! \file document.h */
 
 #include "reader.h"
@@ -2729,4 +2730,6 @@ private:
 RAPIDJSON_NAMESPACE_END
 RAPIDJSON_DIAG_POP
 
+
+#pragma warning( pop )
 #endif // RAPIDJSON_DOCUMENT_H_

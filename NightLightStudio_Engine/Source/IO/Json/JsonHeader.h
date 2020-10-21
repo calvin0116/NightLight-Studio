@@ -10,4 +10,4 @@ Brief Description :
 using namespace rapidjson;
 
 //!!!!== Use for allocator only ==!!!!!//
-static Document global_doc;
+//static Document global_doc;

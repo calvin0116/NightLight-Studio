@@ -2,6 +2,7 @@
 #include <cmath>
 #include "Vector.h"
 
+
 namespace NlMath
 {
 	/**************************************************************************/
@@ -110,21 +111,31 @@ namespace NlMath
 	}
 
 
+	Vector3D& Vector3D::operator=(const glm::vec3& rhs)
+	{
+		x = rhs.x;
+		y = rhs.y;
+		z = rhs.z;
+
+		return *this;
+		// TODO: insert return statement here
+	}
+
 	//conversion operator is case we are using open gl, this converts my vector to glm vectors
-	//Vector3D::operator glm::vec2() const
-	//{
-	//	return glm::vec2(x, y);
-	//}
+	Vector3D::operator glm::vec2() const
+	{
+		return glm::vec2(x, y);
+	}
 
-	//Vector3D::operator glm::vec3() const
-	//{
-	//	return glm::vec3(x, y, z);
-	//}
+	Vector3D::operator glm::vec3() const
+	{
+		return glm::vec3(x, y, z);
+	}
 
-	//Vector3D::operator glm::vec4() const
-	//{
-	//	return glm::vec4(x, y, z, 1.0);
-	//}
+	Vector3D::operator glm::vec4() const
+	{
+		return glm::vec4(x, y, z, 1.0);
+	}
 
 
 
@@ -158,19 +169,18 @@ namespace NlMath
 		return Vector3D(lhs.x * rhs, lhs.y * rhs , lhs.z * rhs);
 	}
 
-	Vector3D operator*(const Vector3D& lhs, const Vector3D& rhs)
-	{
-		return Vector3D(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
-	}
-
-	/**************************************************************************/
-	/*!
-		3D vector multiplication with float operator
-	*/
-	/**************************************************************************/
 	Vector3D operator*(float lhs, const Vector3D& rhs)
 	{
 		return rhs * lhs;
+	}
+	/**************************************************************************/
+	/*!
+		3D vector Dot Product
+	*/
+	/**************************************************************************/
+	float operator*(const Vector3D& lhs, const Vector3D& rhs)
+	{
+		return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
 	}
 
 	/**************************************************************************/
@@ -199,14 +209,16 @@ namespace NlMath
 		In this function, pResult will be the unit vector of pVec0
 	*/
 	/**************************************************************************/
-	void Vector3DNormalize(Vector3D& pResult, const Vector3D& pVec0)
+	Vector3D Vector3DNormalize(const Vector3D& pVec0)
 	{
+		Vector3D pResult;
 		// find magnitude
-		float m = inverseSqrt(pVec0.x * pVec0.x + pVec0.y * pVec0.y + pVec0.z * pVec0.z);
+		float m = sqrt(pVec0.x * pVec0.x + pVec0.y * pVec0.y + pVec0.z * pVec0.z);
 		// get unit vector
-		pResult.x = pVec0.x * m;
-		pResult.y = pVec0.y * m;
-		pResult.z = pVec0.z * m;
+		pResult.x = pVec0.x / m;
+		pResult.y = pVec0.y / m;
+		pResult.z = pVec0.z / m;
+		return pResult;
 	}
 
 	/**************************************************************************/
@@ -267,9 +279,12 @@ namespace NlMath
 		This function returns the cross product between pVec0 and pVec1
 	*/
 	/**************************************************************************/
-	float Vector3DCrossProduct(const Vector3D& pVec0, const Vector3D& pVec1)
+	Vector3D Vector3DCrossProduct(const Vector3D& pVec0, const Vector3D& pVec1)
 	{
-		return pVec0.x * pVec1.y - pVec0.y * pVec1.x;
+		return Vector3D(
+			pVec0.y * pVec1.z - pVec0.z * pVec1.y, 
+			pVec0.z * pVec1.x - pVec0.x * pVec1.z, 
+			pVec0.x * pVec1.y - pVec0.y * pVec1.x);
 	}
 
 	/**************************************************************************/
@@ -279,90 +294,8 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D Vector3DProjection(const Vector3D& pVec0, const Vector3D& pVec1)
 	{
-		Vector3D normVec0;
-		Vector3DNormalize(normVec0, pVec0);
+		Vector3D normVec0 = Vector3DNormalize(pVec0);
 		Vector3D resultVector = normVec0 * Vector3DDotProduct(normVec0, pVec1);
 		return resultVector;
-	}
-
-	/**************************************************************************/
-	/*!
-		This function tells if two vectors are intersecting
-	*/
-	/**************************************************************************/
-	bool Vector3DIntersection(const Vector3D& p, const Vector3D& r, const Vector3D& q, const Vector3D& s)
-	{
-		//the instersection happens when (p + t r) × s = (q + u s) × s
-
-		//And since s x s = 0, this means
-		//t(r × s) = (q − p) × s
-
-		//And therefore, solving for t:
-		//t = (q − p) × s / (r × s)
-
-		//find t
-		float t = Vector3DCrossProduct(q - p, s) / Vector3DCrossProduct(r, s);
-
-		//In the same way, we can solve for u:
-
-		//(p + t r) × r = (q + u s) × r
-
-		//	u(s × r) = (p − q) × r
-
-		//	u = (p − q) × r / (s × r)
-
-		float u = Vector3DCrossProduct(p - q, r) / Vector3DCrossProduct(s, r);
-
-		//Now there are four cases :
-		//If r × s = 0 and (q − p) × r = 0, then the two lines are collinear.
-		if ((Vector3DCrossProduct(r, s) == 0) && (Vector3DCrossProduct(q - p, r) == 0))
-		{
-			//In this case, express the endpoints of the second segment(q and q + s) in terms of the equation of the first line segment(p + t r):
-			
-			float t0 = Vector3DDotProduct(q - p, r) / Vector3DDotProduct(r, r);
-
-			//t1 = (q + s − p) · r / (r · r) = t0 + s · r / (r · r)
-			float t1 = t0 + Vector3DDotProduct(s, r) / Vector3DDotProduct(r, r);
-
-			//If the interval between t0and t1 intersects the interval[0, 1] then the line segments are collinearand overlapping; otherwise they are collinearand disjoint.
-			if ((0 <= t0 && t0 <= 1) ||
-				(0 <= t1 && t1 <= 1))
-			{
-				return true;
-			}
-		}
-
-		//r × s = 0 and (q − p) × r ≠ 0, then the two lines are parallel and non-intersecting.
-		if ((Vector3DCrossProduct(r, s) == 0) && (Vector3DCrossProduct(q - p, r) != 0))
-		{
-			return false;
-		}
-
-		//If r × s ≠ 0 and 0 ≤ t ≤ 1 and 0 ≤ u ≤ 1, the two line segments meet at the point p + t r = q + u s.
-		if ((Vector3DCrossProduct(r, s) != 0) &&
-			(0 <= t && t <= 1) &&
-			(0 <= u && u <= 1))
-		{
-			return true;
-		}
-
-		return false;
-	}
-
-	float inverseSqrt(float number)
-	{
-		long i;
-		float x2, y;
-		const float threehalfs = 1.5F;
-
-		x2 = number * 0.5F;
-		y = number;
-		i = *(long*)&y;                       // evil floating point bit level hacking
-		i = 0x5f3759df - (i >> 1);               // what the fuck? 
-		y = *(float*)&i;
-		y = y * (threehalfs - (x2 * y * y));   // 1st iteration
-	//	y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
-
-		return y;
 	}
 }

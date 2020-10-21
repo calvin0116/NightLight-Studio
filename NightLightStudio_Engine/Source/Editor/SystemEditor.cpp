@@ -1,6 +1,10 @@
 #include "SystemEditor.h"
+#include "../Window/WndSystem.h"
 
-void SystemEditor::OnFirstStart()
+#ifdef _EDITOR
+
+SystemEditor::SystemEditor()
+	: _editor {}
 {
 }
 
@@ -10,20 +14,23 @@ void SystemEditor::Load()
 
 void SystemEditor::Init()
 {
+	_editor.Init(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
 }
 
-void SystemEditor::Update(float)
+void SystemEditor::Update()
 {
+	_editor.Update();
 }
 
 void SystemEditor::Exit()
 {
+	_editor.Exit();
+	DestroyInstance();
 }
 
 void SystemEditor::Free()
 {
 }
 
-void SystemEditor::Unload()
-{
-}
+#endif
+

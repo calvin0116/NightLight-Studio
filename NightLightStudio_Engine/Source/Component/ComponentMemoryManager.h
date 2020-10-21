@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 
-#define BLOCK_SIZE_DEFAULT 164
+#define BLOCK_SIZE_DEFAULT 164 // temp
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,6 +151,8 @@ public:
 
 		int getCurrentIndex();
 
+		int getCurrentObjIndex();
+
 	private:
 		// get the current element
 		char* getElement();
@@ -173,7 +175,7 @@ public:
 
 	MemConIterator begin(ComponentType comT);
 
-	int insertIntoContainer(ComponentType comT, char* obj);
+	int insertIntoContainer(ComponentType comT, const char* obj);
 
 	void removeFromContainer(ComponentType comT, int index);
 

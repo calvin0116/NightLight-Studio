@@ -131,7 +131,7 @@ int SystemAudio::Play3DOnce(const std::string& name, const NlMath::Vector3D& _po
   return retVal;
 }
 
-void SystemAudio::OnFirstStart()
+void SystemAudio::Load()
 {
   // Create FMOD System Once
   FMOD::System_Create(&_system);
@@ -149,31 +149,32 @@ void SystemAudio::OnFirstStart()
   _system->set3DSettings(1.0f, s_UNITS_PER_METER, 1.0f);
 }
 
-void SystemAudio::Load()
-{
-
-}
-
 void SystemAudio::Init()
 {
 
 }
 
-bool SystemAudio::Update()
+void SystemAudio::Update()
 {
   // position update here
   _system->update();
-  return true;
-}
-
-void SystemAudio::Exit()
-{
-}
-
-void SystemAudio::Unload()
-{
 }
 
 void SystemAudio::Free()
 {
+  // Release Channels
+  _bgm->release();
+  _sfx->release();
+
+  // Release DSPs
+  // Not implemented yet...
+}
+
+void SystemAudio::Exit()
+{
+  // Close and release system
+  _system->close();
+  _system->release();
+
+  DestroyInstance();
 }

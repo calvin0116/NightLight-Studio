@@ -383,3 +383,5 @@ NightLightStudio_Engine/dep/Mono/*
 !Bin/fmod.dll
 !Bin/fmod_vc.lib
 /Include/glm/out/build/x64-Debug
+/Include/glm/out/build/x64-Debug (default)
+NightLightStudio_Game/imgui.ini

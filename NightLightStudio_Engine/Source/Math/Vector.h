@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cmath>
 
+#include "../glm/glm.hpp"   
 namespace NlMath
 {
 #ifdef _MSC_VER
@@ -25,7 +26,7 @@ namespace NlMath
 
 		// Copy constructors
 		Vector3D(const Vector3D& rhs);
-	
+
 		// Assignment operators
 		Vector3D& operator += (const Vector3D& rhs);
 		Vector3D& operator -= (const Vector3D& rhs);
@@ -35,10 +36,11 @@ namespace NlMath
 		// Unary operators
 		Vector3D operator -() const;
 
-		//conversion operator is case we are using open gl, this converts my vector to glm vectors
-		//operator glm::vec2() const;
-		//operator glm::vec3() const;
-		//operator glm::vec4() const;
+		/*conversion operator is case we are using open gl, this converts my vector to glm vectors*/
+		Vector3D& operator = (const glm::vec3& rhs);
+		operator glm::vec2() const;
+		operator glm::vec3() const;
+		operator glm::vec4() const;
 		
 		float length();
 	} Vector3D, Vec2, Point2D, Pt2;
@@ -53,8 +55,8 @@ namespace NlMath
 	Vector3D operator + (const Vector3D& lhs, const Vector3D& rhs);
 	Vector3D operator - (const Vector3D& lhs, const Vector3D& rhs);
 	Vector3D operator * (const Vector3D& lhs, float rhs);
-	Vector3D operator * (const Vector3D& lhs, const Vector3D& rhs);
 	Vector3D operator * (float lhs, const Vector3D& rhs);
+	float operator * (const Vector3D& lhs, const Vector3D& rhs);
 	Vector3D operator / (const Vector3D& lhs, float rhs);
 	
 
@@ -68,10 +70,10 @@ namespace NlMath
 
 	/**************************************************************************/
 	/*!
-		In this function, pResult will be the unit vector of pVec0
+		In this function, function will return the unit vector of pVec0
 	 */
 	 /**************************************************************************/
-	void	Vector3DNormalize(Vector3D& pResult, const Vector3D& pVec0);
+	Vector3D	Vector3DNormalize(const Vector3D& pVec0);
 	
 	/**************************************************************************/
 	/*!
@@ -117,7 +119,7 @@ namespace NlMath
 		between pVec0 and pVec1
 	 */
 	 /**************************************************************************/
-	float	Vector3DCrossProduct(const Vector3D& pVec0, const Vector3D& pVec1);
+	Vector3D	Vector3DCrossProduct(const Vector3D& pVec0, const Vector3D& pVec1);
 
 	/**************************************************************************/
 	/*!
@@ -125,22 +127,6 @@ namespace NlMath
 	*/
 	/**************************************************************************/
 	Vector3D	Vector3DProjection(const Vector3D& pVec0, const Vector3D& pVec1);
-
-	/**************************************************************************/
-	/*!
-		This function tells if two vectors are intersecting
-	*/
-	/**************************************************************************/
-	bool	Vector3DIntersection(
-		const Vector3D& point0, const Vector3D& Vec0,
-		const Vector3D& point1, const Vector3D& Vec1);
-
-	/**************************************************************************/
-	/*!
-		fast inverse sqrt for normalizing
-	*/
-	/**************************************************************************/
-	float inverseSqrt(float);
 }
 	
 	

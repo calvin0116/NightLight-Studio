@@ -174,7 +174,7 @@ namespace NlMath
 
 		//creating result matrix
 		Matrix4x4 result;
-		for (size_t i = 0; i < 16; i++)
+		for (int i = 0; i < 16; i++)
 		{
 			result[i] = mtx[i].determinant();
 		}
@@ -192,25 +192,51 @@ namespace NlMath
 	}
 
 
-	//Matrix4x4::operator glm::mat4x4() const
-	//{
-	//	glm::mat4x4 tmp;
-	//	for (glm::mat4x4::length_type i = 0; i < 4; i++)
-	//	{
-	//		for (glm::mat4x4::length_type j = 0; j < 4; j++)
-	//		{
-	//			tmp[i][j] = m2[i][j];
-	//		}
-	//	}
+	Matrix4x4& Matrix4x4::operator=(const glm::mat4x4& rhs)
+	{
+		//first row
+		
+		m00 = rhs[0][0];
+		m01 = rhs[0][1];
+		m02 = rhs[0][2];
+		m03 = rhs[0][3];
+		//2nd row
+		m10 = rhs[1][0];
+		m11 = rhs[1][1];
+		m12 = rhs[1][2];
+		m13 = rhs[1][3];
+		//3rd row
+		m20 = rhs[2][0];
+		m21 = rhs[2][1];
+		m22 = rhs[2][2];
+		m23 = rhs[2][3];
+		//4th row
+		m30 = rhs[3][0];
+		m31 = rhs[3][1];
+		m32 = rhs[3][2];
+		m33 = rhs[3][3];
+		return *this;
+	}
+
+	Matrix4x4::operator glm::mat4x4() const
+	{
+		glm::mat4x4 tmp;
+		for (glm::mat4x4::length_type i = 0; i < 4; i++)
+		{
+			for (glm::mat4x4::length_type j = 0; j < 4; j++)
+			{
+				tmp[i][j] = m2[i][j];
+			}
+		}
 	
-	//	return tmp;
-	//}
+		return tmp;
+	}
 	
-	//Matrix4x4::operator glm::mat3x3() const
-	//{
-	//	glm::mat3x3 tmp{ m00,m01,m02,m10,m11,m12,m20,m21,m22 };
-	//	return tmp;
-	//}
+	Matrix4x4::operator glm::mat3x3() const
+	{
+		glm::mat3x3 tmp{ m00,m01,m02,m10,m11,m12,m20,m21,m22 };
+		return tmp;
+	}
 
 	std::ostream& operator<<(std::ostream& os, const Matrix4x4 mtx)
 	{
@@ -375,11 +401,11 @@ namespace NlMath
 		// 2nd row
 		pResult.m10 = 0;
 		pResult.m11 = cosAngle;
-		pResult.m12 = sinAngle;
+		pResult.m12 = -sinAngle;
 		pResult.m13 = 0;
 		// 3rd row
 		pResult.m20 = 0;
-		pResult.m21 = -sinAngle;
+		pResult.m21 = sinAngle;
 		pResult.m22 = cosAngle;
 		pResult.m23 = 0;
 		// 4th row
@@ -451,6 +477,29 @@ namespace NlMath
 		pResult.m31 = 0;
 		pResult.m32 = 0;
 		pResult.m33 = 1;
+	}
+
+
+	/**************************************************************************/
+	/*!
+		This matrix creates a rotation matrix from an "angle" vector whose value
+		is in radian. Save the resultant matrix in pResult.
+	 */
+	 /**************************************************************************/
+	void Mtx44RotRad(Matrix4x4& pResult, const Vector3D& angle)
+	{
+		//tmp matrix to store rotation
+		Matrix4x4 rot;
+		//rotate x
+		Mtx44RotXRad(pResult, angle.x);
+		//store rotate y
+		Mtx44RotYRad(rot, angle.y);
+		//rotate y
+		pResult = pResult * rot;
+		//store rotate z
+		Mtx44RotZRad(rot, angle.z);
+		//rotate z
+		pResult = pResult * rot;
 	}
 
 	/**************************************************************************/

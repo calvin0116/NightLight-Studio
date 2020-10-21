@@ -2,18 +2,13 @@
 #define SI_SYSTEM_INPUT_MOUSEPOS
 
 #include "..\..\framework.h"
+#include "..\glm\vec2.hpp"
 
 #include <Windows.h>
 #include <string>
 
 namespace SystemInput_ns
 {
-	struct ENGINE_API InputVec2
-	{
-		float _x;
-		float _y;
-	};
-
 	class ENGINE_API SystemMousePosition
 	{
 		POINT _mousePos;
@@ -21,14 +16,16 @@ namespace SystemInput_ns
 
 		bool _showCursor;
 
+		short _scrollDown;
+
 		POINT _clientRectSize;
 
 		//ONLY TO PREVENT CHECKING WHEN OUT OF WINDOW, MAY BE REMOVED/REPLACED
-		const HWND _window = GetForegroundWindow();
+		HWND _window = GetForegroundWindow();
 
 		// CURRENTLY BUILDING
-		InputVec2 ConvertToVec2(POINT pos);
-		InputVec2 Offset(InputVec2 pos, InputVec2 offset);
+		glm::vec2 ConvertToVec2(POINT pos);
+		glm::vec2 Offset(glm::vec2 pos, glm::vec2 offset);
 
 	public:
 		SystemMousePosition(bool showCursor = true);
@@ -38,14 +35,14 @@ namespace SystemInput_ns
 		bool Update(float dt = 0);
 
 		// Get Mouse Position Directly
-		POINT operator()();
+		glm::vec2 operator()();
 
 		// Get Mouse Position - (0,0) Begins in Bottom-Left Corner
-		POINT GetMousePos();
+		glm::vec2 GetMousePos();
 		// Get Mouse Position - (0,0) Begins in Top-Left Corner
-		POINT GetOriginalMousePos();
+		glm::vec2 GetOriginalMousePos();
 		// Get Mouse Movement vector - (0,0) Begins in Bottom-Left Corner
-		POINT GetMouseDragVec();
+		glm::vec2 GetMouseDragVec();
 
 		// Toggles if cursor is viewable or not
 		bool ToggleCursorVisible();
@@ -57,7 +54,14 @@ namespace SystemInput_ns
 		POINT GetClientRectSize();
 
 		// Gets the cursor's position in the client rect from 0.0 to 1.0 in xy coordinates, (0,0) Begins in Bottom-Left Corner
-		InputVec2 GetRelativeLocation();
+		glm::vec2 GetRelativeLocation();
+		glm::vec2 GetRelativeDragVec();
+
+		void SetWindow(HWND win);
+
+		void SetScroll(short scroll);
+		bool GetIfScrollUp();
+		bool GetIfScrollDown();
 	};
 }
 

@@ -43,14 +43,14 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Bin\</OutDir>
+    <OutDir>$(SolutionDir)Bin\Release</OutDir>
     <IntDir>$(SolutionDir)Bin-Int\Engine\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -80,7 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)Bin\</OutDir>
+    <OutDir>$(SolutionDir)Bin\Debug</OutDir>
     <IntDir>$(SolutionDir)Bin-Int\Engine\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -94,13 +94,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;NIGHTLIGHTSTUDIOENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;NIGHTLIGHTSTUDIOENGINE_EXPORTS;_WINDOWS;_USRDLL;FBXSDK_SHARED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>$(SolutionDir)Include\rapidjson;$(SolutionDir)Include\FMOD\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Include\rapidjson;$(SolutionDir)Include\FMOD\inc;$(SolutionDir)Include\FBX_SDK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -108,8 +109,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)Bin\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmod_vc.lib;glew32s.lib;soil.lib;libfbxsdk.lib;XINPUT9_1_0.LIB;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -134,20 +135,21 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;NIGHTLIGHTSTUDIOENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;NIGHTLIGHTSTUDIOENGINE_EXPORTS;_WINDOWS;_USRDLL;FBXSDK_SHARED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>$(SolutionDir)Include\rapidjson;$(SolutionDir)Include\FMOD\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Include\rapidjson;$(SolutionDir)Include\FMOD\inc;$(SolutionDir)Include\FBX_SDK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)Bin\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Bin\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>soil.lib;fmod_vc.lib;libfbxsdk.lib;opengl32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;XINPUT9_1_0.LIB;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -174,23 +176,56 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Source\Audio\SystemAudio.h" />
+    <ClInclude Include="Source\Collision\CollisionMathLib.h" />
+    <ClInclude Include="Source\Collision\CollisionResolver.h" />
+    <ClInclude Include="Source\Collision\SystemCollision.h" />
+    <ClInclude Include="Source\Component\ComponentAudio.h" />
     <ClInclude Include="Source\Component\ComponentCollider.h" />
+    <ClInclude Include="Source\Component\ComponentGraphics.h" />
     <ClInclude Include="Source\Component\ComponentManager.h" />
     <ClInclude Include="Source\Component\ComponentMemoryManager.h" />
     <ClInclude Include="Source\Component\ComponentRigidBody.h" />
     <ClInclude Include="Source\Component\Components.h" />
     <ClInclude Include="Source\Component\ComponentTest.h" />
     <ClInclude Include="Source\Component\ComponentTransform.h" />
+    <ClInclude Include="Source\Component\LocalVector.h" />
+    <ClInclude Include="Source\Component\MemoryThingy.h" />
     <ClInclude Include="Source\Core\DeltaTime.h" />
     <ClInclude Include="Source\Core\Engine.h" />
     <ClInclude Include="Source\Core\MySystem.h" />
+    <ClInclude Include="Source\Core\SceneManager.h" />
     <ClInclude Include="Source\Core\Singleton.h" />
     <ClInclude Include="Source\Core\SystemManager.h" />
     <ClInclude Include="Source\Core\ISystem.h" />
     <ClInclude Include="Source\Core\Systems.h" />
+    <ClInclude Include="Source\Editor\imgui\imconfig.h" />
+    <ClInclude Include="Source\Editor\imgui\imgui.h" />
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImCurveEdit.h" />
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImGradient.h" />
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImGuizmo.h" />
+    <ClInclude Include="Source\Editor\imgui\imguizmo\ImSequencer.h" />
+    <ClInclude Include="Source\Editor\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="Source\Editor\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="Source\Editor\imgui\imgui_internal.h" />
+    <ClInclude Include="Source\Editor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="Source\Editor\imgui\imstb_textedit.h" />
+    <ClInclude Include="Source\Editor\imgui\imstb_truetype.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
-    <ClInclude Include="Source\Graphics\CoreGraphics.h" />
-    <ClInclude Include="Source\Graphics\SystemGraphics.h" />
+    <ClInclude Include="Source\Graphics\Camera.h" />
+    <ClInclude Include="Source\Graphics\CameraSystem.h" />
+    <ClInclude Include="Source\Graphics\DebugManager.h" />
+    <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
+    <ClInclude Include="Source\Graphics\LightSystem.h" />
+    <ClInclude Include="Source\Graphics\Mesh.h" />
+    <ClInclude Include="Source\Graphics\Model.h" />
+    <ClInclude Include="Source\Graphics\ModelLoader.h" />
+    <ClInclude Include="Source\Graphics\ModelManager.h" />
+    <ClInclude Include="Source\Graphics\ShaderSystem.h" />
+    <ClInclude Include="Source\Graphics\TextureLoader.h" />
     <ClInclude Include="Source\Input\SI_Controller.h" />
     <ClInclude Include="Source\Input\SI_KeyPress.h" />
     <ClInclude Include="Source\Input\SI_MousePos.h" />
@@ -207,8 +242,10 @@
     <ClInclude Include="Source\Messaging\SystemBroadcaster.h" />
     <ClInclude Include="Source\Messaging\SystemIMessage.h" />
     <ClInclude Include="Source\Messaging\SystemReceiver.h" />
-    <ClInclude Include="Source\Physics\CollisionMathLib.h" />
+    <ClInclude Include="Source\Physics\ForceManager.h" />
     <ClInclude Include="Source\Physics\SystemPhysics.h" />
+    <ClInclude Include="Source\Window\WndSystem.h" />
+    <ClInclude Include="Source\Window\WndUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -218,7 +255,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Audio\SystemAudio.cpp" />
+    <ClCompile Include="Source\Collision\CollisionMathLib.cpp" />
+    <ClCompile Include="Source\Collision\CollisionResolver.cpp" />
+    <ClCompile Include="Source\Collision\SystemCollision.cpp" />
+    <ClCompile Include="Source\Component\ComponentAudio.cpp" />
     <ClCompile Include="Source\Component\ComponentCollider.cpp" />
+    <ClCompile Include="Source\Component\ComponentGraphics.cpp" />
     <ClCompile Include="Source\Component\ComponentManager.cpp" />
     <ClCompile Include="Source\Component\ComponentMemoryManager.cpp" />
     <ClCompile Include="Source\Component\ComponentRigidBody.cpp" />
@@ -226,11 +268,36 @@
     <ClCompile Include="Source\Component\ComponentTransform.cpp" />
     <ClCompile Include="Source\Core\DeltaTime.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
+    <ClCompile Include="Source\Core\SceneManager.cpp" />
     <ClCompile Include="Source\Core\SystemManager.cpp" />
     <ClCompile Include="Source\Core\Systems.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImGradient.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImGuizmo.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imguizmo\ImSequencer.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Console.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_DropDowns.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp" />
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
-    <ClCompile Include="Source\Graphics\CoreGraphics.cpp" />
-    <ClCompile Include="Source\Graphics\SystemGraphics.cpp" />
+    <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
+    <ClCompile Include="Source\Graphics\DebugManager.cpp" />
+    <ClCompile Include="Source\Graphics\GraphicsSystem.cpp" />
+    <ClCompile Include="Source\Graphics\LightSystem.cpp" />
+    <ClCompile Include="Source\Graphics\Mesh.cpp" />
+    <ClCompile Include="Source\Graphics\Model.cpp" />
+    <ClCompile Include="Source\Graphics\ModelLoader.cpp" />
+    <ClCompile Include="Source\Graphics\ModelManager.cpp" />
+    <ClCompile Include="Source\Graphics\ShaderSystem.cpp" />
+    <ClCompile Include="Source\Graphics\TextureLoader.cpp" />
     <ClCompile Include="Source\Input\SI_Controller.cpp" />
     <ClCompile Include="Source\Input\SI_KeyPress.cpp" />
     <ClCompile Include="Source\Input\SI_MousePos.cpp" />
@@ -243,8 +310,9 @@
     <ClCompile Include="Source\Math\Vector.cpp" />
     <ClCompile Include="Source\Messaging\SystemBroadcaster.cpp" />
     <ClCompile Include="Source\Messaging\SystemReceiver.cpp" />
-    <ClCompile Include="Source\Physics\CollisionMathLib.cpp" />
+    <ClCompile Include="Source\Physics\ForceManager.cpp" />
     <ClCompile Include="Source\Physics\SystemPhysics.cpp" />
+    <ClCompile Include="Source\Window\WndSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\Messaging\System_Messaging_Readme.txt" />

@@ -168,6 +168,11 @@ int ComponentMemoryManager::MemConIterator::getCurrentIndex()
 	return currentIndex;
 }
 
+int ComponentMemoryManager::MemConIterator::getCurrentObjIndex()
+{
+	return currentObjIndex;
+}
+
 char* ComponentMemoryManager::MemConIterator::getElement()
 {
 	return currentElement;
@@ -280,7 +285,7 @@ ComponentMemoryManager::MemConIterator ComponentMemoryManager::begin(ComponentMe
 	return newItr;
 }
 
-int ComponentMemoryManager::insertIntoContainer(ComponentMemoryManager::ComponentType comT, char* obj)
+int ComponentMemoryManager::insertIntoContainer(ComponentMemoryManager::ComponentType comT, const char* obj)
 {
 
 	ComponentMetaData* meta = findMeta(comT);
@@ -403,17 +408,26 @@ void ComponentMemoryManager::freeAll()
 
 		for (auto itv : *v)
 		{
-			free(reinterpret_cast<void*>(itv));
+			void* freeptr = reinterpret_cast<void*>(itv);
+			//free(reinterpret_cast<void*>(freeptr));
+			std::free(freeptr);
 		}
 
-		free(reinterpret_cast<void*>(v));
+		//free(reinterpret_cast<void*>(v));
+
+		v->clear();
+		delete v;
 	}
 
 	for (auto it = componentContainerBits.begin(); it != componentContainerBits.end(); ++it)
 	{
 		std::vector<char>* freePtr = (*it).second;
-		free(freePtr);
+		//free(freePtr);
+		delete freePtr;
 	}
+
+	componentContainers.clear();
+	componentContainerBits.clear();
 }
 
 

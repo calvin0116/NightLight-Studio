@@ -1,19 +1,39 @@
-#pragma once
+#ifndef SI_SYSTEM_EDITOR
+#define SI_SYSTEM_EDITOR
 
-class SystemEditor
+#include "../../framework.h"
+#include "../Core/MySystem.h"
+#include "LevelEditor/LevelEditor.h"
+
+#ifdef _EDITOR
+
+class SystemEditor : public MySystem, public Singleton<SystemEditor>
 {
+private:
+	friend Singleton<SystemEditor>;
+
+	LevelEditor _editor;
+
+protected:
+	ENGINE_API SystemEditor();
+	ENGINE_API ~SystemEditor() = default;
+
 public:
-	void OnFirstStart();
+	ENGINE_API void Load() override;
 
-	void Load();
+	ENGINE_API void Init() override;
 
-	void Init();
+	ENGINE_API void Update() override;
 
-	void Update(float dt);
+	ENGINE_API void Exit() override;
 
-	void Exit();
-
-	void Free();
-
-	void Unload();
+	ENGINE_API void Free() override;
 };
+
+//GLOBAL pointer to an instance of graphic system
+//== Good to have for every system so that you dont need to always get instance
+static SystemEditor* SYS_EDITOR = SystemEditor::GetInstance();
+
+#endif
+
+#endif

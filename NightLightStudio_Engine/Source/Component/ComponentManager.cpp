@@ -3,7 +3,21 @@
 
 #include <iostream>
 
-ComponentManager G_COMPMGR;
+#include <functional>
+
+
+
+#include "..//Component/Components.h"
+#include "..//Component/Components.h"
+#include "..//Component/ComponentTransform.h"
+#include "..//Component/ComponentRigidBody.h"
+#include "..//Component/ComponentCollider.h"
+#include "..//Component/ComponentGraphics.h"
+
+#include "../Component/LocalVector.h"
+
+// local g var
+static int G_CURRIDMOD = 0;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //// ComponentSetFactory
@@ -34,7 +48,7 @@ ComponentManager::ComponentSet* ComponentManager::ComponentSetFactory::Build()
 {
 	// build obj
 	size_t size = sizeof(ComponentManager::ComponentSet::ObjectData);
-	size += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * compSet->componentContainerIDs.size();
+	size += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * compSet->hashConIdMap.size();
 
 	// using default settings
 	ComponentMemoryManager::ComponentTypeSettings set;
@@ -43,6 +57,12 @@ ComponentManager::ComponentSet* ComponentManager::ComponentSetFactory::Build()
 
 	// save objContainerId // create obj container
 	compSet->objContainerId = compSet->cmm.createNewComponentType(set);
+	// container for childs
+	compSet->objContainerIdChilds = compSet->cmm.createNewComponentType(set);
+
+	// set
+	G_CURRIDMOD += IDRANGE;
+	compSet->idIndexModifier = G_CURRIDMOD;
 
 	// set to nullptr and return
 	ComponentManager::ComponentSet* returnCompSet = compSet;
@@ -63,7 +83,7 @@ ComponentManager::ComponentSetFactory::~ComponentSetFactory()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //// ComponentSetManager
 
-int ComponentManager::ComponentSetManager::BuildObject()
+ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::BuildEntity()
 {
 	// new obj instance
 	char* newObj = reinterpret_cast<char*>(malloc(compSet->objSize));
@@ -76,31 +96,97 @@ int ComponentManager::ComponentSetManager::BuildObject()
 	// insert the obj
 	int objId = compSet->cmm.insertIntoContainer(compSet->objContainerId, newObj);
 
+	// check
+	if (objId > IDRANGE_RT)
+	{
+		throw; // cannot, objects exceeded
+	}
+
 	// free the obj instance
 	free(reinterpret_cast<void*>(newObj));
 	// get the obj from the container
 	newObj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
 
 	// set the obj
-	reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(newObj)->objId = objId;
+	//reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(newObj)->objInd = objId;
+	ComponentManager::ComponentSet::ObjectData* newObj_o = reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(newObj);
+	newObj_o->objId = objId;
+	//newObj_o->parentObjId = -1; //it already is -1
+	newObj_o->children.numChild = 0;
+	newObj_o->children.numDecendants = 0;
+	newObj_o->children.childIDs.init();
+	newObj_o->children.generation = 0;
 
-	return objId;
+	//return objId + compSet->idIndexModifier;
+	return (EntityHandle(this, objId + compSet->idIndexModifier));
 }
 
-void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::ContainerID compId, int objId, void* newComp)
+int ComponentManager::ComponentSetManager::BuildChildObject()
+{
+	// new obj instance
+	char* newObj = reinterpret_cast<char*>(malloc(compSet->objSize));
+
+	if (newObj != nullptr)
+		memset(newObj, -1, compSet->objSize); // init
+	else
+		throw; // err
+
+	// insert the obj
+	int objId = compSet->cmm.insertIntoContainer(compSet->objContainerIdChilds, newObj);
+
+	// check
+	if (objId > IDRANGE_CH)
+	{
+		throw; // cannot, objects exceeded
+	}
+
+	// free the obj instance
+	free(reinterpret_cast<void*>(newObj));
+
+	// get the obj from the container
+	newObj = compSet->cmm.getElementAt(compSet->objContainerIdChilds, objId);
+
+	// set the obj
+	//reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(newObj)->objInd = objId;
+	ComponentManager::ComponentSet::ObjectData* newObj_o = reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(newObj);
+	newObj_o->objId = objId;
+	//newObj_o->parentObjId = -1; //it already is -1
+	newObj_o->children.numChild = 0;
+	newObj_o->children.numDecendants = 0;
+	newObj_o->children.childIDs.init();
+
+	return objId + compSet->idIndexModifier + IDRANGE_RT;
+
+	//return objId;
+}
+
+void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::ContainerID compId, int objId, const void* newComp)
 {
 	// insert the component
-	int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<char*>(newComp));
+	int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<const char*>(newComp));
 
 	// set object component data
-	ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
+
+	ComponentSet::ObjectData::ComponentData* compData = nullptr;
+
+	objId -= compSet->idIndexModifier; // // 
+	if (objId >= IDRANGE_RT)
+	{
+		objId -= IDRANGE_RT;
+		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId, true));
+	}
+	else
+	{
+		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
+	}
+	if (compData == nullptr) throw;
+
+	// !
 	compData->containerId = compId; // set container id
 	compData->compPtr = reinterpret_cast<void*>( // set component ptr within the container
 		compSet->cmm.getElementAt(compId, newCId)
 		);;
 	compData->containerIndex = newCId; // set component index within the container
-
-	// !
 
 
 	// return the component
@@ -110,7 +196,21 @@ void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::C
 void ComponentManager::ComponentSetManager::RemoveComponent(ComponentManager::ContainerID compId, int objId)
 {
 	// get the index
-	ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
+	objId -= compSet->idIndexModifier; // // 
+
+	ComponentSet::ObjectData::ComponentData* compData = nullptr;
+
+	if (objId >= IDRANGE_RT)
+	{
+		objId -= IDRANGE_RT;
+		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId, true));
+	}
+	else
+	{
+		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
+	}
+	if (compData == nullptr) throw;
+
 	int index = compData->containerIndex;
 
 	// remove
@@ -128,42 +228,273 @@ void ComponentManager::ComponentSetManager::RemoveComponent(ComponentManager::Co
 void ComponentManager::ComponentSetManager::UnBuildObject(int objId)
 {
 	// get the object
-	char* obj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
 
-	// uninit/free the components
-	for (int id : compSet->componentContainerIDs)
+	//int deletingObjId = objId;
+	objId -= compSet->idIndexModifier;
+
+	char* obj = nullptr;
+
+	bool isChild = false;
+
+	if (objId >= IDRANGE_RT)
 	{
-		// there is a better way to do it im just too lazy now
+		isChild = true;
+		// child
 
-		ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(id, objId));
+		objId -= IDRANGE_RT;
+		obj = compSet->cmm.getElementAt(compSet->objContainerIdChilds, objId);
 
-		if (compData->containerId != -1 && compData->containerIndex != -1) // skip if uninit
+		// uninit/free the components
+		for (auto p : compSet->hashConIdMapChilds)
 		{
-			// remove
-			compSet->cmm.removeFromContainer(compData->containerId, compData->containerIndex);
+			int currentId = p.second;
 
-			// !
+			// probably a better way to do this !!
 
+			ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(currentId, objId, true));
 
-			//reset
-			compData->containerId = -1;
-			compData->containerIndex = -1;
-			compData->compPtr = nullptr;
+			if (compData->containerId != -1 && compData->containerIndex != -1) // skip if uninit
+			{
+				// remove
+				compSet->cmm.removeFromContainer(compData->containerId, compData->containerIndex);
+
+				// !
+
+				//reset
+				compData->containerId = -1;
+				compData->containerIndex = -1;
+				compData->compPtr = nullptr;
+			}
 		}
 	}
+	else
+	{
+		// root
+
+		obj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
+
+		// uninit/free the components
+		for (auto p : compSet->hashConIdMap)
+		{
+			int currentId = p.second;
+
+			// probably a better way to do this !!
+
+			ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(currentId, objId));
+
+			if (compData->containerId != -1 && compData->containerIndex != -1) // skip if uninit
+			{
+				// remove
+				compSet->cmm.removeFromContainer(compData->containerId, compData->containerIndex);
+
+				// !
+
+				//reset
+				compData->containerId = -1;
+				compData->containerIndex = -1;
+				compData->compPtr = nullptr;
+			}
+		}
+	}
+	if (obj == nullptr) throw;
+
+	ComponentSet::ObjectData* objData = reinterpret_cast<ComponentSet::ObjectData*>(obj);
 
 	// uninit the obj
-	reinterpret_cast<ComponentSet::ObjectData*>(obj)->objId = -1;
+
+	objData->children.childIDs.clear(); 
+	objData->children.generation = -1;
+	objData->children.numChild = -1;
+
+
+
+
+	// set the parent
+	//ComponentSet::ObjectData* objRootParent = nullptr;
+	//if (objData->parentObjId != -1)
+	//{
+	//	int parentObjId = objData->parentObjId - compSet->idIndexModifier;
+	//	if (parentObjId >= IDRANGE_RT)
+	//	{
+	//		// child
+
+	//		parentObjId -= IDRANGE_RT;
+
+	//		objRootParent = reinterpret_cast<ComponentSet::ObjectData*>(
+	//			compSet->cmm.getElementAt(compSet->objContainerIdChilds, parentObjId)
+	//		);
+	//	}
+	//	else
+	//	{
+	//		//root
+	//		objRootParent = reinterpret_cast<ComponentSet::ObjectData*>(
+	//			compSet->cmm.getElementAt(compSet->objContainerId, parentObjId)
+	//			);
+	//	}
+	//	if (objRootParent == nullptr) throw;
+
+	//	--objRootParent->children.numChild;
+
+	//	// cant do this here
+	//	//auto itr = objRootParent->children.childIDs.begin();
+	//	//auto itrEnd = objRootParent->children.childIDs.end();
+	//	//while (itr != itrEnd)
+	//	//{
+	//	//	if (*itr == deletingObjId)
+	//	//	{
+	//	//		objRootParent->children.childIDs.erase(itr);
+	//	//		break;
+	//	//	}
+	//	//	++itr;
+	//	//}
+
+
+	//	//objRootParent->children.numDecendants; // TODO !!!
+
+	//}
+
+	objData->children.numDecendants = -1;
+	objData->parentObjId = -1;
+	objData->objId = -1;
+
 
 	// remove the object
-	compSet->cmm.removeFromContainer(compSet->objContainerId, objId);
+	if (isChild)
+	{
+		compSet->cmm.removeFromContainer(compSet->objContainerIdChilds, objId);
+	}
+	else
+	{
+		compSet->cmm.removeFromContainer(compSet->objContainerId, objId);
+	}
+}
+
+void ComponentManager::ComponentSetManager::FreeEntity(int objId)
+{
+	std::function<void(int)> delObj = [&](int thisid)
+	{
+		int getIndex = thisid;
+		// get the index
+		getIndex -= compSet->idIndexModifier; // // 
+
+		ComponentSet::ObjectData* objData = nullptr;
+
+		if (getIndex >= IDRANGE_RT)
+		{
+			// child
+
+			getIndex -= IDRANGE_RT;
+			objData = reinterpret_cast<ComponentSet::ObjectData*>(
+				compSet->cmm.getElementAt(compSet->objContainerIdChilds, getIndex)
+				);
+		}
+		else
+		{
+			// root
+
+			objData = reinterpret_cast<ComponentSet::ObjectData*>(
+				compSet->cmm.getElementAt(compSet->objContainerId, getIndex)
+				);
+		}
+		if (objData == nullptr) throw;
+		// get obj Data
+
+		for (int childId : objData->children.childIDs)
+		{
+			delObj(childId);
+		}
+		UnBuildObject(thisid); // delete childs first then del this
+	};
+
+
+	int deletingObjId = objId;
+	objId -= compSet->idIndexModifier;
+	char* obj = nullptr;
+	if (objId >= IDRANGE_RT)
+	{
+		// child
+
+		objId -= IDRANGE_RT;
+		obj = compSet->cmm.getElementAt(compSet->objContainerIdChilds, objId);
+
+	}
+	else
+	{
+		// root
+
+		obj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
+	}
+	if (obj == nullptr) throw;
+	ComponentSet::ObjectData* objData = reinterpret_cast<ComponentSet::ObjectData*>(obj);
+	int parentObjId = objData->parentObjId;
+	// need to get the parent obj
+
+	//ComponentSet::ObjectData* t = reinterpret_cast<ComponentSet::ObjectData*>(
+	//	compSet->cmm.getElementAt(compSet->objContainerId, parentObjId - compSet->idIndexModifier)
+	//	);
+
+	delObj(deletingObjId);
+
+	// delete child entry in parent !!
+	ComponentSet::ObjectData* objRootParent = nullptr;
+	if (parentObjId != -1)
+	{
+		parentObjId = parentObjId - compSet->idIndexModifier;
+		if (parentObjId >= IDRANGE_RT)
+		{
+			// child
+
+			parentObjId -= IDRANGE_RT;
+
+			objRootParent = reinterpret_cast<ComponentSet::ObjectData*>(
+				compSet->cmm.getElementAt(compSet->objContainerIdChilds, parentObjId)
+				);
+		}
+		else
+		{
+			//root
+			objRootParent = reinterpret_cast<ComponentSet::ObjectData*>(
+				compSet->cmm.getElementAt(compSet->objContainerId, parentObjId)
+				);
+		}
+		if (objRootParent == nullptr) throw;
+
+		auto itr = objRootParent->children.childIDs.begin();
+		auto itrend = objRootParent->children.childIDs.end();
+		while (itr != itrend)
+		{
+			if (*itr == deletingObjId)
+			{
+				objRootParent->children.childIDs.erase(itr);
+				break;
+			}
+			++itr;
+		}
+
+		--objRootParent->children.numChild;
+
+		//	//objRootParent->children.numDecendants; // TODO !!!
+	}
 }
 
 void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::ContainerID compId, int objId)
 {	
 	// get the index
-	ComponentSet::ObjectData::ComponentData* compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
+	objId -= compSet->idIndexModifier;
+
+	ComponentSet::ObjectData::ComponentData* compData;// = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
 	//int index = compData->containerIndex;
+
+	//
+	if (objId >= IDRANGE_RT)
+	{
+		objId -= IDRANGE_RT;
+		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId, true));
+	}
+	else
+	{
+		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
+	}
 
 	// compData->compPtr; // <-- 
 	if (compData->compPtr == nullptr)
@@ -177,9 +508,17 @@ void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::Cont
 	//return compSet->cmm.getElementAt(compId, index);
 }
 
-char* ComponentManager::ComponentSetManager::getObjectComponent(ComponentManager::ContainerID compId, int objId)
+char* ComponentManager::ComponentSetManager::getObjectComponent(ComponentManager::ContainerID compId, int objId, bool isChild)
 {
-	char* obj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
+	char* obj;
+	if (isChild)
+	{
+		obj = compSet->cmm.getElementAt(compSet->objContainerIdChilds, objId);
+	}
+	else
+	{
+		obj = compSet->cmm.getElementAt(compSet->objContainerId, objId);
+	}
 
 	// obj building
 	//size_t size = sizeof(ManagerComponent::ComponentSet::Object);
@@ -189,15 +528,15 @@ char* ComponentManager::ComponentSetManager::getObjectComponent(ComponentManager
 
 	// find the container id
 	int n = 0;
-	for (int id : compSet->componentContainerIDs)
+	for (int currentId : compSet->componentContainerIDs)
 	{
-		if (id == compId)
+		if (currentId == compId)
 			break;
 		++n;
 	}
 
 	// get the position of the component data
-	obj += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * n;
+	obj += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * (n/2);
 
 	// check
 	//ComponentSet::Object::Component* compData = reinterpret_cast<ComponentSet::Object::Component*>(getObjectComponent(compId, objId));
@@ -217,26 +556,76 @@ char* ComponentManager::ComponentSetManager::getObjectComponent(ComponentManager
 //////////////////////////
 
 
-ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetManager::begin(ContainerID comT)
+ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetManager::begin(ContainerID comT, ContainerID comTC)
 {
 	// comp itr
 	ComponentSetManager::Iterator newItr;
+
+	if (comTC == -1)
+	{
+		newItr.itrDoState = Iterator::IteratorState::ITR_ROOT;
+		newItr.itrCurrState = Iterator::IteratorState::ITR_ROOT;
+	}
+	else
+	{
+		newItr.memItrChild = compSet->cmm.begin(comTC);
+	}
+	if (comT == -1)
+	{
+		newItr.itrDoState = Iterator::IteratorState::ITR_CHILD;
+		newItr.itrCurrState = Iterator::IteratorState::ITR_CHILD;
+	}
+	else
+	{
+		newItr.memItr = compSet->cmm.begin(comT);
+	}
+	if (comTC != -1 && comT != -1)
+	{
+		newItr.itrDoState = Iterator::IteratorState::ITR_BOTH;
+		newItr.itrCurrState = Iterator::IteratorState::ITR_ROOT;
+		newItr.endRtObjIndex = compSet->cmm.end(comT).getCurrentObjIndex();
+	}
+
 	newItr.compSetMgr = this;
 	newItr.containerId = comT;
-	newItr.memItr = compSet->cmm.begin(comT);
-
-
+	newItr.containerIdChild = comTC;
+	
 	return newItr;
 }
 
-ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetManager::end(ContainerID comT)
+ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetManager::end(ContainerID comT, ContainerID comTC)
 {
 	// comp itr
 	ComponentSetManager::Iterator newItr;
+
+	if (comTC == -1)
+	{
+		newItr.itrDoState = Iterator::IteratorState::ITR_ROOT;
+		newItr.itrCurrState = Iterator::IteratorState::ITR_ROOT;
+	}
+	else
+	{
+		newItr.memItrChild = compSet->cmm.end(comTC);
+	}
+	if (comT == -1)
+	{
+		newItr.itrDoState = Iterator::IteratorState::ITR_CHILD;
+		newItr.itrCurrState = Iterator::IteratorState::ITR_CHILD;
+	}
+	else
+	{
+		newItr.memItr = compSet->cmm.end(comT);
+	}
+	if (comTC != -1 && comT != -1)
+	{
+		newItr.itrDoState = Iterator::IteratorState::ITR_BOTH;
+		newItr.itrCurrState = Iterator::IteratorState::ITR_CHILD;
+		newItr.endRtObjIndex = compSet->cmm.end(comT).getCurrentObjIndex();
+	}
+
 	newItr.compSetMgr = this;
 	newItr.containerId = comT;
-	newItr.memItr = compSet->cmm.end(comT);
-
+	newItr.containerIdChild = comTC;
 
 	return newItr;
 }
@@ -246,17 +635,21 @@ void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::Cont
 	if (itr.compSetMgr != this) // check if its the same mgr
 		throw;
 
-	ComponentManager::ComponentSetManager::Entity obj = getEntity(itr);
+	ComponentManager::ComponentSetManager::EntityHandle obj = getEntity(itr);
 	return obj.getComponent(compId);
 }
 
 int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 {
+	int containerId = itr.itrCurrState == Iterator::IteratorState::ITR_ROOT ? itr.containerId : itr.containerIdChild;
+	int objContainerId = itr.itrCurrState == Iterator::IteratorState::ITR_ROOT ? compSet->objContainerId : compSet->objContainerIdChilds;
+
 	int objId = -1;
 
+
 	//compSet->cmm.getElementAt(compSet->objContainerId, 0);
-	auto itrOb = compSet->cmm.begin(compSet->objContainerId);
-	auto itrObEnd = compSet->cmm.end(compSet->objContainerId);
+	auto itrOb = compSet->cmm.begin(objContainerId);
+	auto itrObEnd = compSet->cmm.end(objContainerId);
 	while (itrOb != itrObEnd)
 	{
 		char* obj = (*itrOb);
@@ -268,23 +661,34 @@ int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 
 		// find the container id
 		int n = 0;
-		for (int id : compSet->componentContainerIDs)
+		for (int currentId : compSet->componentContainerIDs)
 		{
-			if (id == itr.containerId)
+			if (currentId == containerId)
 				break;
 			++n;
 		}
 
 		// get the position of the component data
-		obj += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * n;
+		obj += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * (n/2);
 
 		//check
 		ComponentSet::ObjectData::ComponentData* comp = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(obj);
-		if (comp->containerIndex == itr.memItr.getCurrentIndex())
-		//if (comp->containerId == itr.containerId) //memItr.getCurrentIndex())
+		if (itr.itrCurrState == Iterator::IteratorState::ITR_ROOT)
 		{
-			objId = obj_o->objId;
-			break;
+			if (comp->containerIndex == itr.memItr.getCurrentIndex())
+			//if (comp->containerId == itr.containerId) //memItr.getCurrentIndex())
+			{
+				objId = obj_o->objId;
+				break;
+			}
+		}
+		else
+		{
+			if (comp->containerIndex == itr.memItrChild.getCurrentIndex())
+			{
+				objId = obj_o->objId;
+				break;
+			}
 		}
 
 		++itrOb;
@@ -292,31 +696,139 @@ int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 
 	if (objId == -1) throw;
 
-	return objId;
+	//return objId + compSet->idIndexModifier;
+	return itr.itrCurrState == Iterator::IteratorState::ITR_ROOT ? objId + compSet->idIndexModifier : objId + compSet->idIndexModifier + IDRANGE_RT;
 }
 
 //////////////////////////
-//// Object
+//// Entity
+////			ComponentManager::ComponentSetManager::Entity
 //////////////////////////
 
-ComponentManager::ComponentSetManager::Entity::Entity(ComponentSetManager* csm, int oid) : compSetMgr(csm), objId(oid)
+ComponentManager::ComponentSetManager::EntityHandle::EntityHandle(ComponentSetManager* csm, int oid) : compSetMgr(csm), objId(oid)
 {
 }
 
-void* ComponentManager::ComponentSetManager::Entity::getComponent(int compId)
+void* ComponentManager::ComponentSetManager::EntityHandle::getComponent(int compId)
 {
 	return compSetMgr->getComponent(compId, objId);
 }
 
+char* ComponentManager::ComponentSetManager::EntityHandle::getObj()
+{
+	// get the index first then get the container id then get the obj data
 
+	int objIndex = objId - compSetMgr->compSet->idIndexModifier;
+
+	if (objIndex >= IDRANGE_RT)
+	{
+		objIndex -= IDRANGE_RT;
+		char* obj = compSetMgr->compSet->cmm.getElementAt(compSetMgr->compSet->objContainerIdChilds, objIndex);
+		return obj;
+	}
+	else
+	{
+		char* obj = compSetMgr->compSet->cmm.getElementAt(compSetMgr->compSet->objContainerId, objIndex);
+		return obj;
+	}
+	// getElementAt is technically O(1), 
+	// though there is a search for container and its metadata, 
+	// but as long as the number of containers is small there shldnt be a huge impact
+	// number of containers is proportional to number of types of components
+}
+
+int ComponentManager::ComponentSetManager::EntityHandle::getId()
+{
+	return objId;
+}
+
+int ComponentManager::ComponentSetManager::EntityHandle::getGeneration()
+{
+	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
+	return obj->children.generation;
+}
+
+int ComponentManager::ComponentSetManager::EntityHandle::getNumChildren()
+{
+	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
+	return obj->children.numChild;
+}
+
+int ComponentManager::ComponentSetManager::EntityHandle::getNumDecendants()
+{
+	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
+	return obj->children.numDecendants;
+}
+
+ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::EntityHandle::makeChild()
+{
+
+	ComponentSet::ObjectData* objParent = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
+
+	///////////////// !!!
+	int childUid = compSetMgr->BuildChildObject();
+
+	//ComponentSet::ObjectData* objChild = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
+	ComponentManager::ComponentSetManager::EntityHandle entChi = compSetMgr->getEntity(childUid);
+	ComponentSet::ObjectData* objChild = reinterpret_cast<ComponentSet::ObjectData*>(
+		entChi.getObj()
+	);
+
+	objChild->children.generation = 1 + objParent->children.generation;
+
+	objParent->children.childIDs.push_back(childUid);
+
+
+	//++(objParent->children.numDecendants); // need to recursively update !!
+
+	++(objParent->children.numChild);
+
+	if (objParent->children.generation > 0)
+	{
+		// parent is not root
+		objChild->parentObjId = objParent->objId + compSetMgr->compSet->idIndexModifier + IDRANGE_RT;
+	}
+	else
+	{
+		// parent is root
+		objChild->parentObjId = objParent->objId + compSetMgr->compSet->idIndexModifier;
+	}
+
+
+
+	return EntityHandle(compSetMgr, childUid);
+}
+
+int ComponentManager::ComponentSetManager::EntityHandle::getParentId()
+{
+	ComponentSet::ObjectData* obj = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
+	return obj->parentObjId;
+}
+
+ComponentManager::ChildContainerT* ComponentManager::ComponentSetManager::EntityHandle::getChildren()
+{
+	ComponentSet::ObjectData* objParent = reinterpret_cast<ComponentSet::ObjectData*>(getObj());
+
+	return &(objParent->children.childIDs);
+}
+
+
+//// Entity END
 //////////////////////////
 
-ComponentManager::ComponentSetManager::Entity ComponentManager::ComponentSetManager::getEntity(Iterator itr)
+ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::getEntity(Iterator itr)
 {
-	Entity obj(this, this->getObjId(itr));
+	EntityHandle obj(this, this->getObjId(itr));
 	//obj.compSetMgr = this;
 	//obj.objId = this->getObjId(itr);
 
+	return obj;
+}
+
+ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::getEntity(int uid)
+{
+	// need to chk if uid valid // within range
+	EntityHandle obj(this, uid);
 	return obj;
 }
 
@@ -331,35 +843,171 @@ ComponentManager::ComponentSetManager::Entity ComponentManager::ComponentSetMana
 
 bool ComponentManager::ComponentSetManager::Iterator::operator==(ComponentManager::ComponentSetManager::Iterator& itr)
 {
+	switch (itrDoState)
+	{
+	case IteratorState::ITR_ROOT:
+		return (memItr == itr.memItr);
+		break;
 
-	return (memItr == itr.memItr); 
+	case IteratorState::ITR_CHILD:
+		return (memItrChild == itr.memItrChild);
+		break;
+
+	case IteratorState::ITR_BOTH:
+		if (itrCurrState == IteratorState::ITR_ROOT)
+		{
+			return false;
+		}
+		else if (itrCurrState == IteratorState::ITR_CHILD)
+		{
+			return (memItrChild == itr.memItrChild);
+		}
+		else
+			throw;
+		break;
+	}
+
+	throw;
 }
 
 bool ComponentManager::ComponentSetManager::Iterator::operator!=(ComponentManager::ComponentSetManager::Iterator& itr)
 {
+	switch (itrDoState)
+	{
+	case IteratorState::ITR_ROOT:
+		return (memItr != itr.memItr);
+		break;
 
-	return (memItr != itr.memItr); 
+	case IteratorState::ITR_CHILD:
+		return (memItrChild != itr.memItrChild);
+		break;
+
+	case IteratorState::ITR_BOTH:
+		if (itrCurrState == IteratorState::ITR_ROOT)
+		{
+			return true;
+		}
+		else if (itrCurrState == IteratorState::ITR_CHILD)
+		{
+			return (memItrChild != itr.memItrChild);
+		}
+		else
+			throw;
+		break;
+	}
+
+	throw;
 }
 
 void* ComponentManager::ComponentSetManager::Iterator::operator*()
 {
-	return reinterpret_cast<void*>(*memItr);
+	switch (itrDoState)
+	{
+	case IteratorState::ITR_ROOT:
+		return reinterpret_cast<void*>(*memItr);
+		break;
+
+	case IteratorState::ITR_CHILD:
+		return reinterpret_cast<void*>(*memItrChild);
+		break;
+
+	case IteratorState::ITR_BOTH:
+		if (itrCurrState == IteratorState::ITR_ROOT)
+		{
+			return reinterpret_cast<void*>(*memItr);
+		}
+		else if (itrCurrState == IteratorState::ITR_CHILD)
+		{
+			return reinterpret_cast<void*>(*memItrChild);
+		}
+		else
+			throw;
+		break;
+	}
+
+	throw;
+
 }
 
 ComponentManager::ComponentSetManager::Iterator& ComponentManager::ComponentSetManager::Iterator::operator++()
 {
-	++memItr;
+	switch (itrDoState)
+	{
+	case IteratorState::ITR_ROOT:
+		++memItr;
+		return *this;
+		break;
 
-	return *this;
+	case IteratorState::ITR_CHILD:
+		++memItrChild;
+		return *this;
+		break;
+
+	case IteratorState::ITR_BOTH:
+		if (itrCurrState == IteratorState::ITR_ROOT)
+		{
+			++memItr;
+			if (endRtObjIndex == memItr.getCurrentObjIndex())
+			{
+				itrCurrState = IteratorState::ITR_CHILD;
+			}
+			return *this;
+		}
+		else if (itrCurrState == IteratorState::ITR_CHILD)
+		{
+			++memItrChild;
+			return *this;
+		}
+		else
+			throw;
+		break;
+	}
+
+	throw;
 }
 
 ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetManager::Iterator::operator++(int)
 {
-	ComponentManager::ComponentSetManager::Iterator newItr = *this; // post
+	switch (itrDoState)
+	{
+	case IteratorState::ITR_ROOT:
+	{
+		ComponentManager::ComponentSetManager::Iterator newItr = *this; // post
+		++memItr;
+		return newItr;
+		break;
+	}
 
-	++memItr;
+	case IteratorState::ITR_CHILD:
+	{
+		ComponentManager::ComponentSetManager::Iterator newItr = *this; // post
+		++memItrChild;
+		return newItr;
+		break;
+	}
 
-	return newItr;
+	case IteratorState::ITR_BOTH:
+		ComponentManager::ComponentSetManager::Iterator newItr = *this; // post
+		if (itrCurrState == IteratorState::ITR_ROOT)
+		{
+			++memItr;
+			if (endRtObjIndex == memItr.getCurrentObjIndex())
+			{
+				itrCurrState = IteratorState::ITR_CHILD;
+			}
+			return newItr;
+		}
+		else if (itrCurrState == IteratorState::ITR_CHILD)
+		{
+			++memItrChild;
+			return newItr;
+		}
+		else
+			throw;
+		break;
+	}
+
+	throw;
 }
 
 //// ComponentManager::ComponentSet::Iterator END
@@ -368,7 +1016,7 @@ ComponentManager::ComponentSetManager::Iterator ComponentManager::ComponentSetMa
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ComponentManager::AddComponentSet(ComponentSet* compSet)
+void ComponentManager::AddComponentSet(COMPONENTSETNAMES idname, ComponentSet* compSet)
 {
 	// define new component type
 	ContainerID newComponentSetID = (int)ComponentSets.size();
@@ -379,6 +1027,494 @@ void ComponentManager::AddComponentSet(ComponentSet* compSet)
 	} // loop ends when id is not found -> unique id
 
 	ComponentSets.insert(std::pair<ContainerID, ComponentSet*>(newComponentSetID, compSet));
+
+	// can try using a vector // dun need this to be sorted
+	ComponentSetManagers.try_emplace(idname, ComponentSetManager(compSet)); // idk this doesnt work?
+	ComponentSetManagers[idname].compSet = compSet;
+}
+
+ComponentManager::ComponentSetManager* ComponentManager::getComponentSetMgr(COMPONENTSETNAMES idname)
+{	
+	ComponentSetManager* csm_p = &(ComponentSetManagers[idname]);
+	return csm_p;
+}
+
+void ComponentManager::ComponentCreation()
+{
+
+
+	// factory
+	ComponentManager::ComponentSetFactory comsetFac;
+
+	auto build = [&](COMPONENTSETNAMES id)
+	{
+		// Building another component set
+		comsetFac.StartBuild();
+
+		comsetFac.AddComponentContainer<ComponentTransform>();
+		comsetFac.AddComponentContainer<ComponentTest0>();
+		comsetFac.AddComponentContainer<ComponentCollider>();
+		comsetFac.AddComponentContainer<ComponentRigidBody>();
+		comsetFac.AddComponentContainer<ComponentGraphics>();
+		//comsetFac.AddComponentContainer<ComponentInput>();
+		//comsetFac.AddComponentContainer<ComponentLogic>();
+		//comsetFac.AddComponentContainer<ComponentCamera>();
+		//comsetFac.AddComponentContainer<ComponentLight>();
+
+
+		// builds the component set
+		ComponentManager::ComponentSet* cs = comsetFac.Build();
+		// adds the component set to the component manager
+		SYS_COMPONENT->AddComponentSet(id, cs);
+
+		return cs;
+	};
+
+	// init component set manager
+
+	build(COMPONENT_MAIN);
+	build(COMPONENT_UI);
+	build(COMPONENT_PREFABS);
+
+	//SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
+	//SYS_COMPONENT->getComponentSetMgr(COMPONENT_UI);
+	//G_MAINCOMPSET = build();
+	//G_UICOMPSET = build();
+}
+
+void ComponentManager::TestComponents()
+{
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	//// BUILD COMPONENT SAMPLE
+	{
+
+		// WHILE OBJECTS
+		// Start of creation and Entity
+		Entity newEntity = G_ECMANAGER->BuildEntity();
+
+		// WHILE COMPONENTS
+		// Creation
+		ComponentTest0 newCompComponentTest0
+		{
+			0,
+			"Hello World",
+			{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f}
+		};
+		G_ECMANAGER->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+		// WHILE COMPONENTS END
+		// WHILE OBJECTS END
+
+		// add 2nd obj 
+		newEntity = G_ECMANAGER->BuildEntity();
+
+		ComponentTransform compT;
+		compT._position.x = 1.11f;
+
+		G_ECMANAGER->AttachComponent<ComponentTransform>(newEntity, compT);
+
+		ComponentRigidBody compRB;
+		G_ECMANAGER->AttachComponent<ComponentRigidBody>(newEntity, compRB);
+
+		newCompComponentTest0.id = 1;
+		G_ECMANAGER->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+
+		// add 3rd obj 
+		newEntity = G_ECMANAGER->BuildEntity();
+		G_ECMANAGER->AttachComponent<ComponentRigidBody>(newEntity, compRB);
+
+
+		// add obj to another component set
+		newCompComponentTest0.id = 999;
+		newEntity = G_ECMANAGER_UI->BuildEntity();
+		G_ECMANAGER_UI->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+
+		//// add to another compset
+		newEntity = G_ECMANAGER_UI->BuildEntity();
+		newCompComponentTest0.id = 123;
+		G_ECMANAGER_UI->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+
+		///////////////////////////////
+		// hierarchical entity test
+		{
+			std::cout << std::endl;
+			std::cout << "/////////////////////////////////////" << std::endl;
+			std::cout << "// hierarchical entity test - LOAD" << std::endl;
+			std::cout << std::endl;
+
+			Entity entity = G_ECMANAGER_UI->getEntity(newEntity.getId());
+
+
+			int numChild = entity.getNumChildren();
+			int numDec = entity.getNumDecendants();
+			int parentuid = entity.getParentId();
+
+			std::cout << "numChild:" << numChild << std::endl;
+			std::cout << "numDec:" << numDec << std::endl;
+			std::cout << "parentuid:" << parentuid << std::endl;
+
+			Entity childEntity = entity.makeChild();
+			ComponentManager::ChildContainerT* childrens = entity.getChildren();
+
+			std::cout << std::endl;
+
+			int numChild_child = childEntity.getNumChildren();
+			int numDec_child = childEntity.getNumDecendants();
+			int parentuid_child = childEntity.getParentId();
+
+			std::cout << "numChild_child:" << childEntity.getId() << std::endl;
+			std::cout << "numChild_child:" << numChild_child << std::endl;
+			std::cout << "numDec_child:" << numDec_child << std::endl;
+			std::cout << "parentuid_child:" << parentuid_child << std::endl;
+
+			newCompComponentTest0.id = 54321;
+			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity, newCompComponentTest0);
+
+			std::cout << std::endl;
+			std::cout << "// hierarchical entity test - LOAD  END" << std::endl;
+			std::cout << "////////////////////////////////////" << std::endl;
+			std::cout << std::endl;
+		}
+		{
+			// make 2 more childs from the entity
+			Entity entity = G_ECMANAGER_UI->getEntity(newEntity.getId());
+			//entity.AttachComponent<ComponentTest0>();
+
+			// child1
+			Entity childEntity1 = entity.makeChild();
+			newCompComponentTest0.id = 5432;
+			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity1, newCompComponentTest0);
+
+
+			// make child of child - grandchild
+			Entity grandChildEntity0 = childEntity1.makeChild();
+			newCompComponentTest0.id = 777;
+			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(grandChildEntity0, newCompComponentTest0);
+
+
+			// child2
+			Entity childEntity2 = entity.makeChild();
+			newCompComponentTest0.id = 543;
+			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity2, newCompComponentTest0);
+		}
+		{
+			// adding more test objects
+
+			newEntity = G_ECMANAGER_UI->BuildEntity();
+			newCompComponentTest0.id = 1234;
+			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+
+			compT._position.x = 2.22f;
+			G_ECMANAGER_UI->AttachComponent<ComponentTransform>(newEntity, compT);
+
+			{
+				// adding childs
+				Entity entity = G_ECMANAGER_UI->getEntity(newEntity.getId());
+
+				// child1
+				Entity childEntity1 = entity.makeChild();
+				newCompComponentTest0.id = 7771;
+				G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity1, newCompComponentTest0);
+
+
+				// make child of child - grandchild
+				Entity grandChildEntity0 = childEntity1.makeChild();
+				newCompComponentTest0.id = 8881;
+				G_ECMANAGER_UI->AttachComponent<ComponentTest0>(grandChildEntity0, newCompComponentTest0);
+
+				// make 2nd grandchild
+				Entity grandChildEntity1 = childEntity1.makeChild();
+				newCompComponentTest0.id = 8882;
+				G_ECMANAGER_UI->AttachComponent<ComponentTest0>(grandChildEntity1, newCompComponentTest0);
+
+				compT._position.x = 3.33f;
+				G_ECMANAGER_UI->AttachComponent<ComponentTransform>(grandChildEntity1, compT);
+
+				// make 3rd grandchild
+				Entity grandChildEntity2 = childEntity1.makeChild();
+				newCompComponentTest0.id = 8883;
+				G_ECMANAGER_UI->AttachComponent<ComponentTest0>(grandChildEntity2, newCompComponentTest0);
+
+				// child2
+				Entity childEntity2 = entity.makeChild();
+				newCompComponentTest0.id = 7772;
+				G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity2, newCompComponentTest0);
+
+
+			}
+
+			newEntity = G_ECMANAGER_UI->BuildEntity();
+			newCompComponentTest0.id = 1235;
+			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+		}
+		// hierarchical entity test END
+		///////////////////////////////
+	}
+	//// BUILD COMPONENT END
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	//// GET COMPONENT SAMPLE
+	//{
+	//	std::cout << std::endl;
+	//	std::cout << "////////////////////////////////////" << std::endl;
+	//	std::cout << "// Component Sample" << std::endl;
+	//	std::cout << std::endl;
+
+
+
+	//	std::cout << std::endl;
+	//	std::cout << "// Component Sample END" << std::endl;
+	//	std::cout << "////////////////////////////////////" << std::endl;
+	//	std::cout << std::endl;
+	//}
+	{
+		std::cout << std::endl;
+		std::cout << "////////////////////////////////////" << std::endl;
+		std::cout << "// Test Components:" << std::endl;
+		std::cout << std::endl;
+
+		std::cout << std::endl;
+		std::cout << "// Test Iterator:" << std::endl;
+		std::cout << std::endl;
+
+		//
+
+		// G_UICOMPSET
+		// ComponentIteratorState::ITR_BOTH   // Iterate both root and child entities // this will iterate root first then child // child is not sorted by generation, not yet anyway
+		// ComponentIteratorState::ITR_ROOT   // Iterate both root only
+		// ComponentIteratorState::ITR_CHILD  // Iterate both child only
+
+		auto testItr = [&](ComponentIteratorState st)
+		{
+			auto itrT = G_ECMANAGER_UI->begin<ComponentTest0>(st);
+			auto itrTEnd = G_ECMANAGER_UI->end<ComponentTest0>(st);
+			while (itrT != itrTEnd)
+			{
+				// get the obj id
+				std::cout << "Object:" << G_ECMANAGER_UI->getObjId(itrT) << std::endl;
+
+				// get the transform component from the iterator
+				ComponentTest0* compR = G_ECMANAGER_UI->getComponent<ComponentTest0>(itrT);
+				std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
+
+				// get another component
+				ComponentTransform* compT = G_ECMANAGER_UI->getComponent<ComponentTransform>(itrT);
+
+				if (compT != nullptr) // nullptr -> uninitialised or deleted
+					std::cout << "Transform:" << compT->_position.x << std::endl;
+
+				// get entity
+				Entity entity = G_ECMANAGER_UI->getEntity(itrT);
+
+				std::cout << "ID: " << entity.getId() << std::endl;
+				std::cout << "Parent ID: " << entity.getParentId() << std::endl;
+				std::cout << "Generation: " << entity.getGeneration() << std::endl;
+
+				// can get component from entity too
+				ComponentTransform* compT1 = entity.getComponent<ComponentTransform>();
+				if (compT != compT1) throw;
+
+				std::cout << std::endl;
+
+				++itrT;
+			}
+		};
+		testItr(ComponentIteratorState::ITR_BOTH);
+		//testItr(ComponentIteratorState::ITR_ROOT);
+		//testItr(ComponentIteratorState::ITR_CHILD);
+
+
+		std::cout << std::endl;
+		std::cout << "// Test Iterator END" << std::endl;
+		std::cout << std::endl;
+
+
+		std::cout << std::endl;
+		std::cout << "// Test Get Components:" << std::endl;
+		std::cout << std::endl;
+
+		// G_MAINCOMPSET
+		auto itr = G_ECMANAGER->begin<ComponentTest0>();
+		auto itrEnd = G_ECMANAGER->end<ComponentTest0>();
+		while (itr != itrEnd)
+		{
+			// get the obj id
+			std::cout << "Object:" << G_ECMANAGER->getObjId(itr) << std::endl;
+
+			// get the transform component from the iterator
+			ComponentTest0* compR = G_ECMANAGER->getComponent<ComponentTest0>(itr);
+			std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
+
+			// get another component
+			ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+
+			if (compT != nullptr) // nullptr -> uninitialised or deleted
+				std::cout << "Transform:" << compT->_position.x << std::endl;
+
+			std::cout << std::endl;
+
+			++itr;
+		}
+
+		//
+		int toDel0 = -1;
+		int toDel1 = -1;
+		int toDel2 = -1;
+
+		auto print = [&]()
+		{
+			// G_UICOMPSET
+			itr = G_ECMANAGER_UI->begin<ComponentTest0>();
+			itrEnd = G_ECMANAGER_UI->end<ComponentTest0>();
+			while (itr != itrEnd)
+			{
+				// get the obj id
+				std::cout << std::endl;
+				std::cout << "Object:" << G_ECMANAGER_UI->getObjId(itr) << std::endl;
+
+				// get the transform component from the iterator
+				ComponentTest0* compR = reinterpret_cast<ComponentTest0*>(*itr);
+				std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
+
+				// get the entity from the iterator
+				Entity entity = G_ECMANAGER_UI->getEntity(itr);
+
+				// get transform component
+				ComponentTransform* compT = entity.getComponent<ComponentTransform>();
+				if (compT != nullptr) // nullptr -> uninitialised or deleted
+					std::cout << "Transform:" << compT->_position.x << std::endl;
+
+				// get id for remove
+				if (compR->id == 1234)
+				{
+					toDel1 = G_ECMANAGER_UI->getObjId(itr);
+				}
+
+				////////////
+				// childrens
+
+				// recursive fn to do to all children
+
+				std::function<void(ComponentManager::ChildContainerT*)> doChildrens = [&](ComponentManager::ChildContainerT* childrens)
+				{
+					for (int uid : *childrens)
+					{
+						Entity childEntity = G_ECMANAGER_UI->getEntity(uid);
+
+
+						std::cout << std::endl << "Print child:" << std::endl;
+
+						std::cout << "childEntity generation:" << childEntity.getGeneration() << std::endl;
+
+						std::cout << "childEntity id:" << childEntity.getId() << std::endl;
+						std::cout << "childEntity numChild:" << childEntity.getNumChildren() << std::endl;
+						std::cout << "childEntity numDec:" << childEntity.getNumDecendants() << std::endl;
+						std::cout << "childEntity parentuid:" << childEntity.getParentId() << std::endl;
+
+						compR = childEntity.getComponent<ComponentTest0>();
+						std::cout << "Child ComponentTest0:" << compR->id << " " << compR->c << std::endl;
+
+						// get id for remove
+						if (compR->id == 8882)
+						{
+							toDel0 = childEntity.getId();
+						}
+						if (compR->id == 5432)
+						{
+							toDel2 = childEntity.getId();
+						}
+
+						// get transform component
+						ComponentTransform* compT = childEntity.getComponent<ComponentTransform>();
+						if (compT != nullptr) // nullptr -> uninitialised or deleted
+							std::cout << "Transform:" << compT->_position.x << std::endl;
+
+						std::cout << std::endl;
+
+						// call recursive fn for each child
+						doChildrens(G_ECMANAGER_UI->getEntity(uid).getChildren());
+					}
+				};
+
+				doChildrens(entity.getChildren());
+
+				//
+				////////////
+
+				std::cout << "Object:" << G_ECMANAGER_UI->getObjId(itr) << " END" << std::endl;
+				std::cout << std::endl;
+
+				++itr;
+			}
+		};
+
+		print();
+
+		std::cout << std::endl;
+		std::cout << "// Test Get Components END" << std::endl;
+		std::cout << std::endl;
+
+
+
+
+
+		std::cout << std::endl;
+		std::cout << "// Test Remove Components:" << std::endl;
+		std::cout << std::endl;
+
+		G_ECMANAGER_UI->RemoveComponent<ComponentTransform>(toDel0);
+		//print();
+
+		G_ECMANAGER_UI->FreeEntity(toDel2);
+		//print();
+
+		G_ECMANAGER_UI->FreeEntity(toDel1);
+		print();
+
+		std::cout << std::endl;
+		std::cout << "// Test Remove Components END" << std::endl;
+		std::cout << std::endl;
+
+
+
+
+		std::cout << "// Test Components END" << std::endl;
+		std::cout << "////////////////////////////////////" << std::endl;
+		std::cout << std::endl;
+
+	}
+	//// GET COMPONENT END
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+}
+
+void ComponentManager::Init()
+{
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	// me test stuff
+	{
+		std::cout << std::endl;
+		std::cout << "/////////////////////////////////////" << std::endl;
+		std::cout << "//  me test stuff:" << std::endl;
+		std::cout << std::endl;
+		TestVector tv;
+		tv.testMyVector();
+		std::cout << std::endl;
+		std::cout << "//  me test stuff END" << std::endl;
+		std::cout << "/////////////////////////////////////" << std::endl;
+		std::cout << std::endl;
+	}
+	// me test stuff END
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	TestComponents();
+
+
 }
 
 void ComponentManager::Free()
@@ -388,93 +1524,17 @@ void ComponentManager::Free()
 		ComponentSet* cs = p.second;
 		cs->cmm.freeAll();
 		free(cs);
+		p.second = nullptr;
 	}
+	ComponentSets.clear();
+}
+
+void ComponentManager::Exit()
+{
+	DestroyInstance();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-// test
-
-bool ComponentManager::IteratorM::operator==(IteratorM& itr)
-{
-	return mci == itr.mci;
-}
-
-bool ComponentManager::IteratorM::operator!=(IteratorM& itr)
-{
-	return mci != itr.mci;
-}
-
-char* ComponentManager::IteratorM::operator*()
-{
-	return *mci;
-}
-
-ComponentManager::IteratorM& ComponentManager::IteratorM::operator++()
-{
-	++mci;
-	return *this;
-}
-
-ComponentManager::IteratorM ComponentManager::IteratorM::operator++(int)
-{
-	mci++;
-	return *this;
-}
-
-ComponentManager::IteratorM ComponentManager::end(ContainerID comT)
-{
-	IteratorM itr;
-	itr.mci = cmm.end(comT);
-	return itr;
-}
-
-ComponentManager::IteratorM ComponentManager::begin(ContainerID comT)
-{
-	IteratorM itr;
-	itr.mci = cmm.begin(comT);
-	return itr;
-}
-
-ComponentManager::ContainerID ComponentManager::createNewComponentType(ContainerSettings set)
-{
-	return cmm.createNewComponentType(set);
-}
-
-char* ComponentManager::getElementAt(ContainerID comT, int index)
-{
-	return cmm.getElementAt(comT, index);
-}
-
-int ComponentManager::insertIntoContainer(ContainerID comT, char* obj)
-{
-	return cmm.insertIntoContainer(comT, obj);
-}
-
-void ComponentManager::removeFromContainer(ContainerID comT, int index)
-{
-	cmm.removeFromContainer(comT, index);
-}
-
-void ComponentManager::removeFromContainer(IteratorM& itr)
-{
-	cmm.removeFromContainer(itr.mci);
-}
-
-void ComponentManager::freeAll()
-{
-	cmm.freeAll();
-}
-
-
-
 
 
 
@@ -484,183 +1544,270 @@ void ComponentManager::freeAll()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ////  Test Fns
+//// 
+
+// depreciated test below // just for my reference
+
+// test
+//
+//bool ComponentManager::IteratorM::operator==(IteratorM& itr)
+//{
+//	return mci == itr.mci;
+//}
+//
+//bool ComponentManager::IteratorM::operator!=(IteratorM& itr)
+//{
+//	return mci != itr.mci;
+//}
+//
+//char* ComponentManager::IteratorM::operator*()
+//{
+//	return *mci;
+//}
+//
+//ComponentManager::IteratorM& ComponentManager::IteratorM::operator++()
+//{
+//	++mci;
+//	return *this;
+//}
+//
+//ComponentManager::IteratorM ComponentManager::IteratorM::operator++(int)
+//{
+//	mci++;
+//	return *this;
+//}
+//
+//ComponentManager::IteratorM ComponentManager::end(ContainerID comT)
+//{
+//	IteratorM itr;
+//	itr.mci = cmm.end(comT);
+//	return itr;
+//}
+//
+//ComponentManager::IteratorM ComponentManager::begin(ContainerID comT)
+//{
+//	IteratorM itr;
+//	itr.mci = cmm.begin(comT);
+//	return itr;
+//}
+//
+//ComponentManager::ContainerID ComponentManager::createNewComponentType(ContainerSettings set)
+//{
+//	return cmm.createNewComponentType(set);
+//}
+//
+//char* ComponentManager::getElementAt(ContainerID comT, int index)
+//{
+//	return cmm.getElementAt(comT, index);
+//}
+//
+//int ComponentManager::insertIntoContainer(ContainerID comT, char* obj)
+//{
+//	return cmm.insertIntoContainer(comT, obj);
+//}
+//
+//void ComponentManager::removeFromContainer(ContainerID comT, int index)
+//{
+//	cmm.removeFromContainer(comT, index);
+//}
+//
+//void ComponentManager::removeFromContainer(IteratorM& itr)
+//{
+//	cmm.removeFromContainer(itr.mci);
+//}
+//
+//void ComponentManager::freeAll()
+//{
+//	cmm.freeAll();
+//}
+//
+//
 
 
-void ComponentManager::test0()
-{
-	struct ComponentT
-	{
-		float vert[4];
-		int id;
-	};
+///////////////////////////////////////////////////////////////////////////////////////////////////
+////  Test Fns
+//// 
 
-	struct ComponentT2
-	{
-		int id;
-		float vertT[16];
-		int t1;
-		int t2;
-		float vert[4];
-	};
+// depreciated test below // just for my reference
 
-	std::cout << "Hello World!\n";
+//
+//void ComponentManager::test0()
+//{
+//	struct ComponentT
+//	{
+//		float vert[4];
+//		int id;
+//	};
+//
+//	struct ComponentT2
+//	{
+//		int id;
+//		float vertT[16];
+//		int t1;
+//		int t2;
+//		float vert[4];
+//	};
+//
+//	std::cout << "Hello World!\n";
+//
+//	std::cout << sizeof(char) << "\n";
+//
+//	ComponentMemoryManager comMgr;
+//
+//	ComponentMemoryManager::ComponentTypeSettings csetT;
+//	csetT.elementSize = sizeof(ComponentT);
+//
+//	ComponentMemoryManager::ComponentType ctT = comMgr.createNewComponentType(csetT);
+//
+//
+//	for (int i = 0; i < 1000; ++i)
+//	{
+//		ComponentT newComp
+//		{
+//			{1.0f, 2.0f, 3.0f, 4.0f},
+//			i
+//		};
+//
+//		comMgr.insertIntoContainer(ctT, reinterpret_cast<char*>(&newComp));
+//	}
+//
+//	ComponentT* cT = reinterpret_cast<ComponentT*>(comMgr.getElementAt(ctT, 0));
+//
+//	std::cout << cT->id << std::endl;
+//	std::cout << cT->vert[0] << std::endl;
+//	std::cout << cT->vert[3] << std::endl;
+//
+//	comMgr.removeFromContainer(ctT, 159);
+//	comMgr.removeFromContainer(ctT, 784);
+//
+//	ComponentMemoryManager::MemConIterator itr = comMgr.begin(ctT);
+//	itr = comMgr.begin(ctT);
+//	auto itrEnd = comMgr.end(ctT);
+//	int i = 0;
+//
+//	while (itr != itrEnd)
+//	{
+//		ComponentT* testC = reinterpret_cast<ComponentT*>(*itr);
+//
+//		if (i != testC->id)
+//		{
+//			std::cout << testC->id << std::endl;
+//			std::cout << testC->vert[2] << std::endl;
+//
+//			++i;
+//		}
+//
+//		++i;
+//		++itr;
+//	}
+//
+//
+//	// DUN ANYHOW FREE !!!
+//	comMgr.freeAll();
+//}
 
-	std::cout << sizeof(char) << "\n";
+// depreciated
+//void ComponentManager::test1()
+//{
+	// depreciated
+	//struct ComponentT
+	//{
+	//	float vert[4];
+	//	int id;
+	//};
 
-	ComponentMemoryManager comMgr;
+	////ManagerComponent::ComponentType;
 
-	ComponentMemoryManager::ComponentTypeSettings csetT;
-	csetT.elementSize = sizeof(ComponentT);
+	//ComponentManager mgrCom;
 
-	ComponentMemoryManager::ComponentType ctT = comMgr.createNewComponentType(csetT);
+	////mgrCom.test();
+	////std::cout << "Test!\n";
 
+	//// settings
+	//ComponentManager::ContainerSettings set;
+	//// set component size
+	//set.elementSize = sizeof(ComponentT);
 
-	for (int i = 0; i < 1000; ++i)
-	{
-		ComponentT newComp
-		{
-			{1.0f, 2.0f, 3.0f, 4.0f},
-			i
-		};
+	//// create container // returns a container id
+	//ComponentManager::ContainerID container1 = mgrCom.createNewComponentType(set);
 
-		comMgr.insertIntoContainer(ctT, reinterpret_cast<char*>(&newComp));
-	}
+	//int n = 0;
 
-	ComponentT* cT = reinterpret_cast<ComponentT*>(comMgr.getElementAt(ctT, 0));
+	//for (int i = 0; i < 1000; ++i)
+	//{
+	//	// init a new component
+	//	ComponentT newComponent{ {1.11f, 2.22f, 3.33f, 4.44f}, i };
 
-	std::cout << cT->id << std::endl;
-	std::cout << cT->vert[0] << std::endl;
-	std::cout << cT->vert[3] << std::endl;
+	//	// insert the component
+	//	mgrCom.insertIntoContainer(container1, reinterpret_cast<char*>(&newComponent)); // can use templates ?
 
-	comMgr.removeFromContainer(ctT, 159);
-	comMgr.removeFromContainer(ctT, 784);
+	//	++n;
+	//}
 
-	ComponentMemoryManager::MemConIterator itr = comMgr.begin(ctT);
-	itr = comMgr.begin(ctT);
-	auto itrEnd = comMgr.end(ctT);
-	int i = 0;
+	//std::cout << "Obj created :" << n << std::endl;
 
-	while (itr != itrEnd)
-	{
-		ComponentT* testC = reinterpret_cast<ComponentT*>(*itr);
+	//// get component at index
+	//ComponentT* comT = reinterpret_cast<ComponentT*>((mgrCom.getElementAt(container1, 777)));
+	//std::cout << "Should read 777 :" << comT->id << std::endl;
 
-		if (i != testC->id)
-		{
-			std::cout << testC->id << std::endl;
-			std::cout << testC->vert[2] << std::endl;
+	//// del component at index
+	//mgrCom.removeFromContainer(container1, 777);
+	//std::cout << "mgrCom.removeFromContainer(container1, 777);" << std::endl;
 
-			++i;
-		}
+	//// get component at index
+	//comT = reinterpret_cast<ComponentT*>((mgrCom.getElementAt(container1, 777)));
+	//std::cout << "Should read 0, since removed :" << comT->id << std::endl;
 
-		++i;
-		++itr;
-	}
+	//// this index includes empty slots
 
+	//// iteration
+	//auto itr = mgrCom.begin(container1);
+	//auto itrEnd = mgrCom.end(container1);
+	//int i = 0;
+	//while (itr != itrEnd)
+	//{
+	//	comT = reinterpret_cast<ComponentT*>(*itr);
+	//	std::cout << comT->id << " ";
+	//	++itr;
+	//	++i;
+	//}
+	//std::cout << std::endl;
+	//std::cout << "1000 - 1 removed = 999 left:" << i << std::endl;
 
-	// DUN ANYHOW FREE !!!
-	comMgr.freeAll();
-}
+	//// remove with itr
+	//// iteration
+	//itr = mgrCom.begin(container1);
+	//itrEnd = mgrCom.end(container1);
+	//i = 0;
+	//while (itr != itrEnd)
+	//{
+	//	comT = reinterpret_cast<ComponentT*>(*itr);
+	//	std::cout << comT->id << " ";
 
-void ComponentManager::test1()
-{
-	struct ComponentT
-	{
-		float vert[4];
-		int id;
-	};
+	//	if (comT->id == 861)
+	//	{
+	//		std::cout << "\n Remove:" << comT->id << " \n";
+	//		mgrCom.removeFromContainer(itr);
+	//		itrEnd = mgrCom.end(container1); // need to update the end itr !!
+	//		std::cout << "\n After Remove:" << comT->id << " \n";
 
-	//ManagerComponent::ComponentType;
+	//		--i; // remove count
+	//	}
 
-	ComponentManager mgrCom;
-
-	//mgrCom.test();
-	//std::cout << "Test!\n";
-
-	// settings
-	ComponentManager::ContainerSettings set;
-	// set component size
-	set.elementSize = sizeof(ComponentT);
-
-	// create container // returns a container id
-	ComponentManager::ContainerID container1 = mgrCom.createNewComponentType(set);
-
-	int n = 0;
-
-	for (int i = 0; i < 1000; ++i)
-	{
-		// init a new component
-		ComponentT newComponent{ {1.11f, 2.22f, 3.33f, 4.44f}, i };
-
-		// insert the component
-		mgrCom.insertIntoContainer(container1, reinterpret_cast<char*>(&newComponent)); // can use templates ?
-
-		++n;
-	}
-
-	std::cout << "Obj created :" << n << std::endl;
-
-	// get component at index
-	ComponentT* comT = reinterpret_cast<ComponentT*>((mgrCom.getElementAt(container1, 777)));
-	std::cout << "Should read 777 :" << comT->id << std::endl;
-
-	// del component at index
-	mgrCom.removeFromContainer(container1, 777);
-	std::cout << "mgrCom.removeFromContainer(container1, 777);" << std::endl;
-
-	// get component at index
-	comT = reinterpret_cast<ComponentT*>((mgrCom.getElementAt(container1, 777)));
-	std::cout << "Should read 0, since removed :" << comT->id << std::endl;
-
-	// this index includes empty slots
-
-	// iteration
-	auto itr = mgrCom.begin(container1);
-	auto itrEnd = mgrCom.end(container1);
-	int i = 0;
-	while (itr != itrEnd)
-	{
-		comT = reinterpret_cast<ComponentT*>(*itr);
-		std::cout << comT->id << " ";
-		++itr;
-		++i;
-	}
-	std::cout << std::endl;
-	std::cout << "1000 - 1 removed = 999 left:" << i << std::endl;
-
-	// remove with itr
-	// iteration
-	itr = mgrCom.begin(container1);
-	itrEnd = mgrCom.end(container1);
-	i = 0;
-	while (itr != itrEnd)
-	{
-		comT = reinterpret_cast<ComponentT*>(*itr);
-		std::cout << comT->id << " ";
-
-		if (comT->id == 861)
-		{
-			std::cout << "\n Remove:" << comT->id << " \n";
-			mgrCom.removeFromContainer(itr);
-			itrEnd = mgrCom.end(container1); // need to update the end itr !!
-			std::cout << "\n After Remove:" << comT->id << " \n";
-
-			--i; // remove count
-		}
-
-		++itr;
-		++i;
-	}
-	std::cout << std::endl;
-	std::cout << "999 - 1 removed = 998 left:" << i << std::endl;
+	//	++itr;
+	//	++i;
+	//}
+	//std::cout << std::endl;
+	//std::cout << "999 - 1 removed = 998 left:" << i << std::endl;
 
 
 
-	// dun anyhow free
-	mgrCom.freeAll();
-}
+	//// dun anyhow free
+	//mgrCom.freeAll();
+//}
 
-void ComponentManager::test2()
-{
+//void ComponentManager::test2()
+//{
 	// depreciated
 
 	//struct ComponentT
@@ -878,6 +2025,6 @@ void ComponentManager::test2()
 
 
 	//mgrCom.Free();
-}
+//}
 
 

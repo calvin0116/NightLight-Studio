@@ -26,55 +26,64 @@ enum D_TYPE
 	D_INVALID
 };
 
-class ENGINE_API Parser
+class Parser
 {
 private:
 	//Document stuff
 	Document doc;
 	Document::AllocatorType* alloc;
 
-
 	std::string name;
 	std::string path;
 	std::string filepath;
 
     //Determine type for json member
-    D_TYPE DetermineType(Value::ConstMemberIterator itr);
+	ENGINE_API D_TYPE DetermineType(Value::ConstMemberIterator itr);
 	//Recursive function for PrintDataList()
-	void PrintData(Value::ConstMemberIterator itr, Value& val);
+	ENGINE_API void PrintData(Value::ConstMemberIterator itr, Value& val);
 public:
     //Constructer with input of file name to parse from
-	Parser(std::string name_, std::string path_);
+	ENGINE_API Parser(std::string name_, std::string path_);
+	ENGINE_API ~Parser();
 
     //Basic function to load/save data into the file
-	void Load();
-    void Save();
+	ENGINE_API void Load();		//Load from file
+	ENGINE_API void Save();		//Save to file
 
 	//To look at the data in raw form
-	void PrintDataList();
+	ENGINE_API void PrintDataList();
+	
+	//=================	Getter / Setter ============================// 
 	//Just to get back file name if needed
-	std::string GetName();
+	ENGINE_API std::string GetName();
+	ENGINE_API std::string GetPath();
+	ENGINE_API std::string GetFilePath();
+	ENGINE_API Document& GetDoc();
 
+
+	//===========Functionality for data manipulation=================//
 	//Add data into the initial json list
     template<typename d_type>
-    void AddData(std::string name, d_type data);
-
+	ENGINE_API void AddData(std::string name, d_type data);
 	//For known name change
 	template<typename d_type>
-	void ChangeData(std::string name, d_type data);
-	
+	ENGINE_API void ChangeData(std::string name, d_type data);
 	//For object access change
 	template<typename d_type>
-	void ChangeData(Value* val, std::string name, d_type data);
+	ENGINE_API void ChangeData(Value* val, std::string name, d_type data);
 	//Error checking to see if member is in json
-	bool CheckForMember(std::string mem_name);
+	ENGINE_API bool CheckForMember(std::string mem_name);
 	//Access by name
-
-	Value& operator[](std::string str)
+	ENGINE_API Value& operator[](std::string str)
 	{
 		return doc[str.c_str()];
 	}
 
+	ENGINE_API void CleanDoc()
+	{
+		//doc.Clear();
+		//alloc = nullptr;
+	}
 	//Access by count
 	//WIP
 	/*

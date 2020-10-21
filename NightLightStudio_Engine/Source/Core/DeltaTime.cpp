@@ -1,7 +1,8 @@
+
 #include "DeltaTime.h"
+#include  <iostream>
 
-
-DeltaTime delta_t;
+//DeltaTime delta_t;
 
 void DeltaTime::load()
 {
@@ -35,4 +36,10 @@ void DeltaTime::end()
 	fps = 1000.0f / ((dt + _prevdt) * 0.5f);
 
 	_prevdt = dt;
+	
+}
+
+void DeltaTime::Exit()
+{
+	DestroyInstance();
 }
