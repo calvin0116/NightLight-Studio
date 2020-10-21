@@ -1,6 +1,7 @@
 #pragma once
 #include "../FBX_SDK/fbxsdk.h"
-#include "Model.h"
+#include "Mesh.h"
+#include "MeshManager.h"
 
 namespace NS_GRAPHICS
 {
@@ -10,11 +11,12 @@ namespace NS_GRAPHICS
 		FbxScene* _fbxScene;
 		FbxImporter* _fbxImport;
 		FbxAxisSystem _axisSystem;
+		std::string _currentFile;
 
 		ModelLoader();
 		~ModelLoader();
 
-		void TransverseChild(FbxNode* node, Model*& model);
+		void TransverseChild(FbxNode* node);
 
 	public:
 		// Unique Singleton instance
@@ -27,6 +29,6 @@ namespace NS_GRAPHICS
 		void Init();
 
 		//void LoadFBX(const std::string& fileName, Mesh& mesh);
-		void LoadFBX(const std::string& fileName, Model*& model);
+		void LoadFBX(const std::string& fileName);
 	};
 }

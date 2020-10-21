@@ -1,29 +1,29 @@
-#include "ModelManager.h"
+#include "MeshManager.h"
 
 namespace NS_GRAPHICS
 {
-	ModelManager::ModelManager()
+	MeshManager::MeshManager()
 		: meshIDs{ 0 }
 	{
 
 	}
 
-	ModelManager::~ModelManager()
+	MeshManager::~MeshManager()
 	{
 
 	}
-	unsigned ModelManager::AddMesh(Mesh* const mesh)
+	unsigned MeshManager::AddMesh(Mesh* const mesh)
 	{
 		meshes.push_back(mesh);
 
 		return meshIDs++;
 	}
-	void ModelManager::Free()
+	void MeshManager::Free()
 	{
 		DumpMeshData();
 	}
 
-	void ModelManager::DumpMeshData()
+	void MeshManager::DumpMeshData()
 	{
 		for (auto& i : meshes)
 		{

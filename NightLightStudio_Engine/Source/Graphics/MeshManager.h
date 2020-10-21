@@ -8,10 +8,10 @@ namespace NS_GRAPHICS
 {
 	// Manages OpenGL Object IDs A.K.A Model "keys" for all graphics components
 	// DOES NOT CONTAIN MODELS THEMSELVES
-	class ModelManager
+	class MeshManager
 	{
-		ModelManager();
-		~ModelManager();
+		MeshManager();
+		~MeshManager();
 
 		// Value representing number of mesh IDs, used by components to track meshes
 		// Value returned in AddMesh() represents mesh ID of current mesh made
@@ -34,9 +34,9 @@ namespace NS_GRAPHICS
 
 	public:
 		// Unique Singleton instance
-		static ModelManager& GetInstance()
+		static MeshManager& GetInstance()
 		{
-			static ModelManager instance;
+			static MeshManager instance;
 			return instance;
 		}
 

@@ -21,7 +21,7 @@ namespace NS_GRAPHICS
 		: shaderManager{ nullptr },
 		modelLoader{ nullptr },
 		textureLoader{ nullptr },
-		modelManager{ nullptr },
+		meshManager{ nullptr },
 		lightManager{ nullptr },
 		debugManager{ nullptr },
 		cameraManager{ nullptr },
@@ -54,7 +54,7 @@ namespace NS_GRAPHICS
 	{
 		// Free all OpenGL objects before exit
 		// Includes VAO, VBO, EBO, ModelMatrixBO
-		modelManager->Free();
+		meshManager->Free();
 	}
 
 	void GraphicsSystem::Init()
@@ -70,7 +70,7 @@ namespace NS_GRAPHICS
 		shaderManager = &ShaderSystem::GetInstance();
 		modelLoader = &ModelLoader::GetInstance();
 		textureLoader = &TextureLoader::GetInstance();
-		modelManager = &ModelManager::GetInstance();
+		meshManager = &MeshManager::GetInstance();
 		lightManager = &LightSystem::GetInstance();
 		debugManager = &DebugManager::GetInstance();
 		cameraManager = &CameraSystem::GetInstance();
@@ -224,7 +224,7 @@ namespace NS_GRAPHICS
 
 		shaderManager->StartProgram(0);
 
-		for (auto& i : modelManager->meshes)
+		for (auto& i : meshManager->meshes)
 		{
 			// Provide rotation in radians
 			// test model matrix
@@ -254,7 +254,7 @@ namespace NS_GRAPHICS
 		{
 			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
 
-			Mesh* mesh = modelManager->meshes[graphicsComp->MeshID];
+			Mesh* mesh = meshManager->meshes[graphicsComp->MeshID];
 
 			// get transform component
 			ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
@@ -485,7 +485,7 @@ namespace NS_GRAPHICS
 		glBindBuffer(GL_ARRAY_BUFFER, NULL);
 		glBindVertexArray(NULL);*/
 		
-		unsigned currentid = modelManager->AddMesh(mesh);
+		unsigned currentid = meshManager->AddMesh(mesh);
 
 		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(currentid));
 	}
@@ -623,7 +623,7 @@ namespace NS_GRAPHICS
 		// Assign to mesh data manager and new graphics component
 		// Attach graphics component to object
 
-		return modelManager->AddMesh(mesh);
+		return meshManager->AddMesh(mesh);
 	}
 
 	void GraphicsSystem::SetMeshColor(Entity& entity, const glm::vec3& rgb)
@@ -639,7 +639,7 @@ namespace NS_GRAPHICS
 		}
 		
 		// Get pointer to current mesh
-		Mesh* mesh = modelManager->meshes[graphicsComp->MeshID];
+		Mesh* mesh = meshManager->meshes[graphicsComp->MeshID];
 
 		// Replace all rgb for every vertex in mesh
 		for (auto& i : mesh->_rgb)
