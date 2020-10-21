@@ -52,7 +52,7 @@ void FluffyUnicornEngine::Run()
 				if (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() != NS_SCENE::SC_NOCHANGE)
 				{
 					scene_running = false;
-					//If exit is being called
+					//If exit is being called -> Change scene to Scene Exit
 					if (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() == NS_SCENE::SC_EXIT)
 					{
 						engine_running = false;
