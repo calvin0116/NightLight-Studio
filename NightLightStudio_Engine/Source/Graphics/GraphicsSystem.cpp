@@ -85,9 +85,9 @@ namespace NS_GRAPHICS
 
 		cameraManager->Init();
 
-		/*Model* model = new Model();
-		modelLoader->LoadFBX("test.fbx",model);
-		delete model;*/
+		//Model* model = new Model();
+		modelLoader->LoadFBX("cylinder.fbx");
+		//delete model;
 
 		// Set default values for view matrix
 		// temporary solution before camera system implementation
