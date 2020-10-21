@@ -345,6 +345,21 @@ public:
 			}
 		}
 
+		template<typename T>
+		T* AddComponent(EntityHandle ent)
+		{
+			//T comp; // not efficient but future me can deal with it
+			//return compSetMgr->AttachComponent<T>(*this, comp);
+
+			// not efficient but future me can deal with it
+			T* comp = reinterpret_cast<T*>(malloc(sizeof(T)));
+			if (comp == nullptr) throw;
+			memset(comp, 0, sizeof(T));
+			T* returnComp = AttachComponent<T>(ent, *comp);
+			free(reinterpret_cast<void*>(comp));
+			return returnComp;
+		}
+
 	private:
 		// remove component from entity // helper
 		void RemoveComponent(ComponentManager::ContainerID compId, int entityId);
@@ -539,6 +554,21 @@ public:
 			{
 				compSetMgr->AttachComponent<T>(*this, comp);
 				return *this;
+			}
+
+			template<typename T>
+			T* AddComponent()
+			{
+				//T comp; // not efficient but future me can deal with it
+				//return compSetMgr->AttachComponent<T>(*this, comp);
+
+				// not efficient but future me can deal with it
+				T* comp = reinterpret_cast<T*>(malloc(sizeof(T)));
+				if (comp == nullptr) throw;
+				memset(comp, 0, sizeof(T));
+				T* returnComp = compSetMgr->AttachComponent<T>(*this, *comp);
+				free(reinterpret_cast<void*>(comp));
+				return returnComp;
 			}
 
 			///////////////////////////////////////////////////////////////////////////////////////
