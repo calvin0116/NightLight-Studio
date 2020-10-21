@@ -58,15 +58,15 @@ namespace NS_COLLISION
 		
 		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
 
-		ComponentCollider AABB1(COLLIDERS::AABB);
-		ComponentCollider AABB2(COLLIDERS::AABB);
-		cube1Test.AttachComponent<ComponentCollider>(AABB1);
-		cube2Test.AttachComponent<ComponentCollider>(AABB2);
+		//ComponentCollider AABB1(COLLIDERS::AABB);
+		//ComponentCollider AABB2(COLLIDERS::AABB);
+		//cube1Test.AttachComponent<ComponentCollider>(AABB1);
+		//cube2Test.AttachComponent<ComponentCollider>(AABB2);
 
-		//ComponentCollider OBB1(COLLIDERS::OBB);
-		//ComponentCollider OBB2(COLLIDERS::OBB);
-		//cube1Test.AttachComponent<ComponentCollider>(OBB1);
-		//cube2Test.AttachComponent<ComponentCollider>(OBB2);
+		ComponentCollider OBB1(COLLIDERS::OBB);
+		ComponentCollider OBB2(COLLIDERS::OBB);
+		cube1Test.AttachComponent<ComponentCollider>(OBB1);
+		cube2Test.AttachComponent<ComponentCollider>(OBB2);
 
 
 		

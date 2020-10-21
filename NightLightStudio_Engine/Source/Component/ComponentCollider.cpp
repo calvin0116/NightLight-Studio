@@ -73,7 +73,7 @@ OBBCollider::OBBCollider(NlMath::Vector3D _center, NlMath::Vector3D _extend, NlM
 
 void OBBCollider::init(ComponentTransform* transform)
 {
-	center = transform->_nextPos;
+	center = transform->_position;
 	extend = transform->_scale;
 	rotation = glm::radians(transform->_rotation);
 }
