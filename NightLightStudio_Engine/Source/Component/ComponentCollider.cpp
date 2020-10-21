@@ -1,7 +1,7 @@
 #pragma once
 #include "ComponentCollider.h"
 
-
+#include "Components.h"
 
 ComponentCollider::ComponentCollider(COLLIDERS _col)
 	: collisionTime{ FLT_MAX }, colliderType(_col)

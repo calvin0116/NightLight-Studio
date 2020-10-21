@@ -1,8 +1,7 @@
 #pragma once
 #include "LocalVector.h"  // replaces std::vector
-#include "Components.h"   // inherit required functions
 
-class ComponentAudio : public IComponent
+typedef class ComponentAudio //: public IComponent
 {
   struct ACData
   {
@@ -35,4 +34,4 @@ public:
 	//read and write function for initialization from saved files
 	void Read();
 	void Write();
-};
+} AudioComponent;

@@ -201,9 +201,6 @@
     <ClInclude Include="Source\Graphics\ModelLoader.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\ModelManager.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Graphics\ShaderSystem.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
@@ -223,9 +220,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\MemoryThingy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ComponentGraphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\imgui\imconfig.h">
@@ -288,8 +282,11 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\ComponentManagerTypedefs.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\Component\ComponentGraphics.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\MeshManager.h">
+      <Filter>Source Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -392,9 +389,6 @@
     <ClCompile Include="Source\Graphics\ModelLoader.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\ModelManager.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Graphics\ShaderSystem.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
@@ -472,6 +466,9 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\MeshManager.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
