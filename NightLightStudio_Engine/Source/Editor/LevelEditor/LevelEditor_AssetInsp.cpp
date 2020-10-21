@@ -82,7 +82,6 @@ std::string AssetInspector::_GetFileType(const std::string& path)
 void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
 {
     std::vector<std::string> dir = _GetDirectories(path);
-
     std::vector<std::string> files = _GetFilesInDir(path);
 
     // List of functions to run inside the tree node
@@ -93,11 +92,14 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
         {
             if (ImGui::IsItemClicked())
             {
-                if (p.size() > _selectedFolderPath.size())
+                if (p.size() >= _selectedFolderPath.size())
+                {
                     _selectedFolderPath = p;
+                }
                 else if (_selectedFolderPath != std::filesystem::current_path().string())
                 {
                     _selectedFolderPath = _EraseSubStr(p, _GetFilename(p));
+                    _selectedFilePath = "";
                 }
             }
         }, path)
@@ -133,13 +135,18 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
                         }
                     }, ImGuiSelectableFlags_AllowDoubleClick);
 
+                // On first click 
+                if (ImGui::IsItemClicked(0))
+                {
+                    // Get relative path
+                    _dragDropFilePath = _EraseSubStr(p, std::filesystem::current_path().string());
+                    _selectedFilePath = p;
+                }
 
-                // Get relative path
-                std::string relativePath = _EraseSubStr(p, std::filesystem::current_path().string());
                 // Gets Relative path from executable
-                _levelEditor->LE_AddDragDropSource("ASSET_FILEPATH", &relativePath,
+                _levelEditor->LE_AddDragDropSource("ASSET_FILEPATH", &_dragDropFilePath,
                     {
-                        [&]() {ImGui::Text(relativePath.c_str()); }
+                        [&]() {ImGui::Text(_dragDropFilePath.c_str()); }
                     });
             },
             files[i]
@@ -179,17 +186,13 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
 
     _levelEditor->LE_AddTreeNodes(_GetFilename(path), fns, f);
 
-    /*
-    if (ImGui::IsItemClicked())
-        _selectedFolderPath = path;
-    */
-
 }
 
 AssetInspector::AssetInspector()
     : _ignoreFileTypes{},
     _selectedFolderPath{ std::filesystem::current_path().string() },
-    _selectedFilePath{}
+    _selectedFilePath{},
+    _dragDropFilePath{}
 {
 }
 
@@ -209,6 +212,7 @@ void AssetInspector::Init()
 void AssetInspector::Run()
 {
     ImGui::Columns(2);
+
 
     //std::vector<std::string> dir = get_directories(std::filesystem::current_path().string());
     //std::vector<std::string> dir = _GetFilesInDir("../");
@@ -256,28 +260,34 @@ void AssetInspector::Run()
                     std::string name = "##empty";
                     name.append(std::to_string(i));
 
-                    if (ImGui::Selectable(name.c_str(), (_selectedFilePath == files[i]), ImGuiSelectableFlags_AllowDoubleClick, size))
+                    _levelEditor->LE_AddSelectable(name.c_str(), (_selectedFilePath == files[i]), [&]()
+                        {
+                            _selectedFilePath = files[i];
+                            // Run if double click
+                            if (ImGui::IsMouseDoubleClicked(0))
+                            {
+                                if (i >= filesStart)
+                                {
+#ifdef UNICODE
+                                    // Double click on Left inspector
+                                    std::wstring wsTmp(_selectedFilePath.begin(), _selectedFilePath.end());
+                                    ShellExecute(NULL, L"open", wsTmp.c_str(), NULL, NULL, SW_SHOW);
+#else
+                                    ShellExecute(NULL, "open", _selectedFilePath.c_str(), NULL, NULL, SW_SHOW);
+#endif
+                                }
+                                else
+                                {
+                                    _selectedFolderPath = files[i];
+                                    //ImGui::GetStateStorage()->SetInt(ImGui::GetID(_selectedFolderPath.c_str()), true);
+                                }
+                            }
+                        }, ImGuiSelectableFlags_AllowDoubleClick, size);
+
+                    if (i >= filesStart && ImGui::IsItemClicked(0))
                     {
                         _selectedFilePath = files[i];
-                        // Run if double click
-                        if (ImGui::IsMouseDoubleClicked(0))
-                        {
-                            if (i >= filesStart)
-                            {
-#ifdef UNICODE
-                                // Double click on Left inspector
-                                std::wstring wsTmp(_selectedFilePath.begin(), _selectedFilePath.end());
-                                ShellExecute(NULL, L"open", wsTmp.c_str(), NULL, NULL, SW_SHOW);
-#else
-                                ShellExecute(NULL, "open", _selectedFilePath.c_str(), NULL, NULL, SW_SHOW);
-#endif
-                            }
-                            else
-                            {
-                                _selectedFolderPath = files[i];
-                                //ImGui::GetStateStorage()->SetInt(ImGui::GetID(_selectedFolderPath.c_str()), true);
-                            }
-                        }
+                        _dragDropFilePath = _EraseSubStr(files[i], std::filesystem::current_path().string());
                     }
 
                     const ImVec2 p0 = ImGui::GetItemRectMin();
@@ -299,21 +309,23 @@ void AssetInspector::Run()
                     draw_list->AddText(io.Fonts->Fonts[0], 13.0f, { p0.x, p0.y + 65.0f }, IM_COL32_WHITE, _GetFilename(files[i]).c_str(), nullptr, size.x + 10.0f);
                     draw_list->PopClipRect();
 
-                    // Get relative path
-                    std::string relativePath = _EraseSubStr(files[i], std::filesystem::current_path().string());
-
-                    if (i >= filesStart)
+                    // Crashes when item is off-screen for some reason?
+                    if (ImGui::IsItemVisible())
                     {
-                        // Gets Relative path from executable
-                        _levelEditor->LE_AddDragDropSource("ASSET_FILEPATH", &relativePath,
-                            {
-                                [&]() {ImGui::Text(relativePath.c_str()); }
-                            });
+                        if (i >= filesStart)
+                        {
+                            // Gets Relative path from executable
+                            _levelEditor->LE_AddDragDropSource("ASSET_FILEPATH", &_dragDropFilePath,
+                                {
+                                    [&]()
+                                    {
+                                        ImGui::Text(_dragDropFilePath.c_str());
+                                    }
+                                });
+                        }
                     }
 
                     ImGui::EndGroup();
-
-                    _levelEditor->LE_AddTooltip(relativePath.c_str());
 
                     ImGuiStyle& style = ImGui::GetStyle();
                     float last_button_x2 = ImGui::GetItemRectMax().x;
@@ -323,7 +335,8 @@ void AssetInspector::Run()
 
 
                     ImGui::PopID();
-
+                    std::string relativePath = _EraseSubStr(files[i], std::filesystem::current_path().string());
+                    _levelEditor->LE_AddTooltip(relativePath.c_str());
                 }
             }
         }
