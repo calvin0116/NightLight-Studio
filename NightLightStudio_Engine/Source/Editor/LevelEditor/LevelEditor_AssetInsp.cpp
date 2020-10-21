@@ -92,7 +92,14 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
         [&](std::string p)
         {
             if (ImGui::IsItemClicked())
-                _selectedFolderPath = p;
+            {
+                if (p.size() > _selectedFolderPath.size())
+                    _selectedFolderPath = p;
+                else if (_selectedFolderPath != std::filesystem::current_path().string())
+                {
+                    _selectedFolderPath = _EraseSubStr(p, _GetFilename(p));
+                }
+            }
         }, path)
     };
 
@@ -104,7 +111,7 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
         fns.push_back(std::bind(
             [&](std::string p)
             {
-                _levelEditor->LE_AddSelectable(_GetFilename(p).c_str(), (_selectedFilePath == p), 
+                _levelEditor->LE_AddSelectable(_GetFilename(p).c_str(), (_selectedFilePath == p),
                     [&]()
                     {
                         // Selects the right folder
@@ -139,7 +146,7 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
                 ));
         std::string test = _GetFileType(files[i]);
     }
-    
+
     // For all folders. add recursive function to functions
     for (int i = 0; i < dir.size(); ++i)
     {
@@ -150,7 +157,7 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
                 _RecursiveDirectoryTree(p);
             },
             dir[i]
-        ));
+                ));
     }
 
     // Sets the flag for the tree node
@@ -158,8 +165,16 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
 
     if (_selectedFolderPath.find(path) != std::string::npos)
     {
-        ImGui::SetNextTreeNodeOpen(true);
-        f |= ImGuiTreeNodeFlags_Selected;
+        if (ImGui::GetID(_GetFilename(path).c_str()) == 0)
+            ImGui::SetNextTreeNodeOpen(true);
+
+        if (_selectedFolderPath.find(path) != std::string::npos)
+            f |= ImGuiTreeNodeFlags_Selected;
+    }
+
+    if (std::filesystem::current_path().string() == path)
+    {
+        f |= ImGuiTreeNodeFlags_DefaultOpen;
     }
 
     _levelEditor->LE_AddTreeNodes(_GetFilename(path), fns, f);
@@ -168,13 +183,13 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
     if (ImGui::IsItemClicked())
         _selectedFolderPath = path;
     */
-       
+
 }
 
 AssetInspector::AssetInspector()
     : _ignoreFileTypes{},
-      _selectedFolderPath {""},
-      _selectedFilePath {}
+    _selectedFolderPath{ std::filesystem::current_path().string() },
+    _selectedFilePath{}
 {
 }
 
@@ -184,7 +199,7 @@ AssetInspector::~AssetInspector()
 
 void AssetInspector::Init()
 {
-	ImGui::SetNextWindowBgAlpha(1.0f);
+    ImGui::SetNextWindowBgAlpha(1.0f);
 
     //_ignoreFileTypes.insert("cpp");
     //_ignoreFileTypes.insert("filters");
@@ -207,11 +222,22 @@ void AssetInspector::Run()
             }
         });
     ImGui::NextColumn();
-    
+
     _levelEditor->LE_AddChildWindow("FolderView", ImVec2(0, 0),
         {
             [&]()
             {
+                _levelEditor->LE_AddButton("Back##AssetInspector",
+                    [&]()
+                    {
+                        if (_selectedFolderPath.size() > std::filesystem::current_path().string().size())
+                        {
+                            _selectedFolderPath = _EraseSubStr(_selectedFolderPath, _GetFilename(_selectedFolderPath));
+                            while (*(std::end(_selectedFolderPath) - 1) == '\\')
+                                _selectedFolderPath.pop_back();
+                        }
+                    });
+
                 ImVec2 size(100.0f, 100.0f);
                 float offset = 50.0f;
 
@@ -291,7 +317,7 @@ void AssetInspector::Run()
                     ImGuiStyle& style = ImGui::GetStyle();
                     float last_button_x2 = ImGui::GetItemRectMax().x;
                     float next_button_x2 = last_button_x2 + style.ItemSpacing.x + size.x; // Expected position if next button was on same line
-                    if ((i+1) < files.size() && next_button_x2 < window_visible_x2)
+                    if ((i + 1) < files.size() && next_button_x2 < window_visible_x2)
                         ImGui::SameLine();
 
 
