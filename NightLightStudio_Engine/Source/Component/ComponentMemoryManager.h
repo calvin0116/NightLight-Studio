@@ -4,6 +4,12 @@
 #include <map>
 #include <vector>
 
+
+namespace NS_COMPONENT
+{
+
+
+
 #define BLOCK_SIZE_DEFAULT 164 // temp
 
 
@@ -205,3 +211,5 @@ private:
 
 // ComponentMemoryManager END
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+} // NS

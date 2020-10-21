@@ -16,6 +16,12 @@
 
 #include "../Component/LocalVector.h"
 
+
+namespace NS_COMPONENT
+{
+
+
+
 // local g var
 static int G_CURRIDMOD = 0;
 
@@ -2033,4 +2039,4 @@ void ComponentManager::Exit()
 	//mgrCom.Free();
 //}
 
-
+} // NS

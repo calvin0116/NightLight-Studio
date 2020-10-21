@@ -4,8 +4,8 @@
 #include "../Component/Components.h"
 
 #include <filesystem>
-
-using Ent_Handle = ComponentManager::ComponentSetManager::EntityHandle;
+// can use Entity
+using Ent_Handle = NS_COMPONENT::ComponentManager::ComponentSetManager::EntityHandle;
 
 namespace fs = std::filesystem;
 namespace NS_SCENE

@@ -11,6 +11,10 @@
 
 #include "LocalVector.h"
 
+namespace NS_COMPONENT
+{
+
+
 // max children per parent // this can be technically be dynamic, but I will smash my head against the wall
 #define MAX_CHILDREN 32
 
@@ -841,36 +845,11 @@ public:
 };
 
 
+} // NS
 
 
 
+#include "ComponentManagerTypedefs.h"
 
 
 
-
-
-
-
-
-
-typedef ComponentManager::ComponentSetManager::EntityHandle Entity;
-
-typedef ComponentManager::ComponentSetManager::Iterator ComponentIterator;
-
-typedef ComponentManager::ComponentSetManager::Iterator::IteratorState ComponentIteratorState;
-
-static ComponentManager* SYS_COMPONENT = ComponentManager::GetInstance();
-
-//extern ComponentManager G_COMPMGR;
-
-// Entity component manager
-static ComponentManager::ComponentSetManager* G_ECMANAGER = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
-
-// Entity component manager UI
-static ComponentManager::ComponentSetManager* G_ECMANAGER_UI = SYS_COMPONENT->getComponentSetMgr(COMPONENT_UI);
-
-// Entity component manager Prefabs
-static ComponentManager::ComponentSetManager* G_ECMANAGER_PREFABS = SYS_COMPONENT->getComponentSetMgr(COMPONENT_PREFABS);
-
-// for some reason gfx becomes black screen with this
-//static ComponentManager::ComponentSetManager* G_UICOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);

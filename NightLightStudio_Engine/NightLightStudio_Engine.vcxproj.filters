@@ -288,6 +288,9 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\ComponentManagerTypedefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
