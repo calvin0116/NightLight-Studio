@@ -1,7 +1,7 @@
 #pragma once
 #include "../../framework.h"
 
-class ENGINE_API ISystem
+class ISystem
 {
 public:
 	ISystem() {};

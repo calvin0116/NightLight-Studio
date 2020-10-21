@@ -203,7 +203,7 @@ enum COMPONENTSETNAMES
 //								struct ComponentData
 //
 
-class ENGINE_API ComponentManager : public MySystem, public Singleton<ComponentManager>
+class ComponentManager : public MySystem, public Singleton<ComponentManager>
 {
 	friend Singleton<ComponentManager>;
 
@@ -283,9 +283,10 @@ public:
 	class ComponentSetManager // builds objects into component sets
 	{
 
-		class EntityHandle; // fwd decl
+		
 
 	public: // !
+		class EntityHandle; // fwd decl
 		ComponentSet* compSet; // it is bound to a component set
 	public:
 		ComponentSetManager() = default;

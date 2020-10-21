@@ -7,7 +7,7 @@
 
 namespace NS_PHYSICS
 {
-	class ENGINE_API PhysicsSystem : public MySystem, public Singleton<PhysicsSystem>
+	class PhysicsSystem : public MySystem, public Singleton<PhysicsSystem>
 	{
 		NlMath::Vector3D _maxspeed;
 		float gravity;

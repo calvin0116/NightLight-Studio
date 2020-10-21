@@ -22,7 +22,7 @@ enum class S_PRIORITY
 	SP_EDITOR
 };
 
-class ENGINE_API MySystem : public ISystem
+class MySystem : public ISystem
 {
 protected:
 	int id;
