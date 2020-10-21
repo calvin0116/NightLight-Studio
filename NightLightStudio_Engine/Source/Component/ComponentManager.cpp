@@ -1029,6 +1029,11 @@ void ComponentManager::AddComponentSet(COMPONENTSETNAMES idname, ComponentSet* c
 	ComponentSets.insert(std::pair<ContainerID, ComponentSet*>(newComponentSetID, compSet));
 
 	// can try using a vector // dun need this to be sorted
+	//ComponentSetManagers.try_emplace(idname, ComponentSetManager(compSet)); // idk this doesnt work?
+
+	//ComponentSetManagers.insert(std::pair<COMPONENTSETNAMES, ComponentSet *>((COMPONENTSETNAMES)newComponentSetID, compSet));
+	//ComponentSetManagers[idname].compSet = compSet;
+
 	ComponentSetManagers.try_emplace(idname, ComponentSetManager(compSet)); // idk this doesnt work?
 	ComponentSetManagers[idname].compSet = compSet;
 }
@@ -1523,7 +1528,8 @@ void ComponentManager::Free()
 	{
 		ComponentSet* cs = p.second;
 		cs->cmm.freeAll();
-		free(cs);
+		delete cs;
+		//free(cs);
 		p.second = nullptr;
 	}
 	ComponentSets.clear();
