@@ -783,6 +783,12 @@ public:
 
 	void Exit() override;
 
+	// clear container // param int container id
+	void Clear(COMPONENTSETNAMES id);
+
+	// clear all containers
+	void Clear();
+
 	////
 
 

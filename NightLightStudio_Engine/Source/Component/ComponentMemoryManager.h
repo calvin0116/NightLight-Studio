@@ -191,6 +191,8 @@ public:
 	// I hope no reaks
 	void freeAll();
 
+	void clearAll();
+
 
 private:
 	void expandContainer(ComponentType comT);

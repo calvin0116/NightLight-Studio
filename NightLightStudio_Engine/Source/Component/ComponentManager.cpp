@@ -1541,6 +1541,37 @@ void ComponentManager::Free()
 	ComponentSets.clear();
 }
 
+void ComponentManager::Clear(COMPONENTSETNAMES id)
+{
+	//if (id == COMPONENT_MAIN) {}
+
+	auto itr = ComponentSets.find((int)id);
+
+	if (itr == ComponentSets.end()) throw;
+
+	itr.operator*().second->cmm.clearAll();
+
+	//for (std::pair<ContainerID, ComponentSet*> p : ComponentSets)
+	//{
+	//	int index = p.first;
+	//	if (index == id)
+	//	{
+	//		ComponentSet* cs = p.second;
+	//		cs->cmm.freeAll();
+	//		break;
+	//	}
+	//}
+}
+
+void ComponentManager::Clear()
+{
+	for (std::pair<ContainerID, ComponentSet*> p : ComponentSets)
+	{
+		ComponentSet* cs = p.second;
+		cs->cmm.clearAll();
+	}
+}
+
 void ComponentManager::Exit()
 {
 	DestroyInstance();

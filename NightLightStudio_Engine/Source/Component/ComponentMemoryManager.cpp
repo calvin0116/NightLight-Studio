@@ -434,6 +434,59 @@ void ComponentMemoryManager::freeAll()
 
 	componentContainers.clear();
 	componentContainerBits.clear();
+	componentTypes.clear();
+}
+
+void ComponentMemoryManager::clearAll()
+{
+	// del bit containers
+	for (auto it = componentContainerBits.begin(); it != componentContainerBits.end(); ++it)
+	{
+		std::vector<char>* freePtr = (*it).second;
+		//free(freePtr);
+		delete freePtr;
+	}
+	componentContainerBits.clear();
+
+	for (auto it = componentContainers.begin(); it != componentContainers.end(); ++it)
+	{
+		// get settings
+		int containerId = (*it).first;
+		auto findSet = componentTypes.find(containerId);
+		if (findSet == componentTypes.end()) throw;
+		ComponentMetaData* meta = &(findSet.operator*().second);
+
+
+		// reinit blocks
+		std::vector<char*>* v = (*it).second;
+		for (int i = 1; i < v->size(); ++i)
+		{
+			char* a = v->at(i);
+			void* freeptr = reinterpret_cast<void*>(a);
+			std::free(freeptr);
+		}
+		char* first = v->at(0);
+		v->clear();
+		v->push_back(first);
+		memset(first, meta->settings.initTo, meta->settings.elementSize * meta->settings.blockSize);
+
+
+		// init container bits
+		std::vector<char>* newBitContainer = new std::vector<char>;
+		int n = meta->settings.blockSize / 8 /*size of char*/;
+		++n;
+		for (int i = 0; i < n; ++i)
+		{
+			char newBits = 0;
+			newBitContainer->push_back(newBits);
+		}
+		componentContainerBits.insert(std::pair<ComponentType, std::vector<char>*>(containerId, newBitContainer));
+
+		// reset meta
+		meta->currentSize = 0;
+		meta->currentMaxSize = meta->settings.blockSize;
+	}
+
 }
 
 
