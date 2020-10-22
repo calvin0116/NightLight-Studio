@@ -5,6 +5,8 @@
 
 namespace NS_GRAPHICS
 {
+	static std::string s_FbxFileFormat = ".fbx";
+
 	class ModelLoader
 	{
 		FbxManager* _fbxManager;
@@ -16,7 +18,7 @@ namespace NS_GRAPHICS
 		ModelLoader();
 		~ModelLoader();
 
-		void TransverseChild(FbxNode* node);
+		void TransverseChild(FbxNode* node, Mesh*& newMesh, unsigned offset = 0);
 
 	public:
 		// Unique Singleton instance
@@ -29,6 +31,8 @@ namespace NS_GRAPHICS
 		void Init();
 
 		//void LoadFBX(const std::string& fileName, Mesh& mesh);
-		void LoadFBX(const std::string& fileName);
+		unsigned LoadFBX(const std::string& fileName, const std::string& customName = "");
+		unsigned LoadModel(const std::string& fileName, const std::string& customName = "");
+		unsigned LoadCustomMesh(const std::string& fileName, const std::string& customName ="");
 	};
 }

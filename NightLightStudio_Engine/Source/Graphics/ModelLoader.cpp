@@ -14,8 +14,10 @@ namespace NS_GRAPHICS
 		_fbxManager->Destroy();
 	}
 
-	void ModelLoader::TransverseChild(FbxNode* node)
+	void ModelLoader::TransverseChild(FbxNode* node, Mesh*& newMesh, unsigned offset)
 	{
+		offset = newMesh->_indices.size();
+
 		for (int i = 0; i < node->GetNodeAttributeCount(); ++i)
 		{
 			FbxNodeAttribute* nodeType = node->GetNodeAttributeByIndex(i);
@@ -23,22 +25,6 @@ namespace NS_GRAPHICS
 			if (nodeType->GetAttributeType() == FbxNodeAttribute::eMesh)
 			{
 				FbxMesh* mesh = node->GetMesh();
-				Mesh* newMesh = new Mesh();
-
-				//LOCAL FILE NAME
-				std::string fileName;
-				size_t pos = _currentFile.rfind("\\");
-				if (pos !=std::string::npos)
-				{
-					fileName = _currentFile.substr(pos+1);
-				}
-				else
-				{
-					fileName = _currentFile;
-				}
-				
-				fileName.erase(fileName.find(".") + 1);
-				newMesh->_localFileName = s_LocalPathName + fileName + s_MeshFileType;
 
 				//TEXTURE FILE NAME
 				//PROBABLY WONT BE AUTO
@@ -201,20 +187,19 @@ namespace NS_GRAPHICS
 							}
 						}
 
-						newMesh->_indices.push_back((unsigned short)controlPointIndex);
+						newMesh->_indices.push_back((unsigned short)controlPointIndex + offset);
 						newMesh->_verticeDatas.push_back(verticeData);
 						vertexID++;
 					}
 				}
 
 				mesh->Destroy();
-				MeshManager::GetInstance().AddMesh(newMesh);
 			}	
 		}
 
 		for (int i = 0; i < node->GetChildCount(); i++)
 		{
-			TransverseChild(node->GetChild(i));
+			TransverseChild(node->GetChild(i), newMesh, offset);
 		}
 	}
 
@@ -245,8 +230,10 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	void ModelLoader::LoadFBX(const std::string& fileName)
+	unsigned ModelLoader::LoadFBX(const std::string& fileName, const std::string& customName)
 	{
+		unsigned toReturn = 0; 
+
 		std::cout << "Loading FBX..." << std::endl;
 		if (_fbxScene)
 		{
@@ -255,6 +242,35 @@ namespace NS_GRAPHICS
 		}
 
 		_currentFile = fileName;
+
+		Mesh* newMesh = new Mesh();
+
+		//LOCAL FILE NAME
+		std::string name;
+		size_t pos = _currentFile.rfind("\\");
+		if (pos != std::string::npos)
+		{
+			//Get just the string after the last path
+			name = _currentFile.substr(pos + 1);
+		}
+		else
+		{
+			name = _currentFile;
+		}
+
+		name.erase(name.find("."));
+		newMesh->_localFileName = s_LocalPathName + name + s_MeshFileType;
+
+		if (customName.empty())
+		{
+			newMesh->_meshName = name;
+		}
+
+		else
+		{
+			newMesh->_meshName = customName;
+		}
+
 
 		// Create an importer using the SDK manager.
 		_fbxImport = FbxImporter::Create(_fbxManager, "");
@@ -293,6 +309,7 @@ namespace NS_GRAPHICS
 
 		// Recursively goes through the scene to get all the meshes
 		// Root nodes should not contain any attributes.
+		unsigned offset = 0;
 		FbxNode* root = _fbxScene->GetRootNode();
 		if (root)
 		{
@@ -300,13 +317,32 @@ namespace NS_GRAPHICS
 
 			if (parentNode)
 			{
-				TransverseChild(parentNode);
+				TransverseChild(parentNode, newMesh, offset);
 			}
 
 			for (int i = 0; i < root->GetChildCount(); i++)
 			{
-				TransverseChild(root->GetChild(i));
+				TransverseChild(root->GetChild(i), newMesh, offset);
 			}
 		}
+
+		return MeshManager::GetInstance().AddMesh(newMesh);
+	}
+	unsigned ModelLoader::LoadModel(const std::string& fileName, const std::string& customName)
+	{
+		if (fileName.find(s_MeshFileType) != std::string::npos)
+		{
+			return LoadCustomMesh(fileName, customName);
+		}
+		else
+		{
+			return LoadFBX(fileName, customName);
+		}
+	}
+	unsigned ModelLoader::LoadCustomMesh(const std::string& fileName, const std::string& customName)
+	{
+		//Gets rid of warning for now
+		(void)fileName;
+		return 0;
 	}
 }

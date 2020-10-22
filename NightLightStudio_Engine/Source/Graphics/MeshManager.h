@@ -42,6 +42,10 @@ namespace NS_GRAPHICS
 
 		std::vector<Mesh*> meshes;
 
+		//std::unordered_map<std::string, Mesh> meshes;
+
+		//graphicscomp->AttachMesh("Cylinder");
+
 		// Adds new mesh to vector of meshes and returns mesh ID
 		unsigned AddMesh(Mesh* const mesh);
 

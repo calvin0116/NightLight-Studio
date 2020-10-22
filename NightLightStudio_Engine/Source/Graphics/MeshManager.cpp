@@ -18,6 +18,7 @@ namespace NS_GRAPHICS
 
 		return meshIDs++;
 	}
+
 	void MeshManager::Free()
 	{
 		DumpMeshData();

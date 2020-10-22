@@ -85,9 +85,36 @@ namespace NS_GRAPHICS
 
 		cameraManager->Init();
 
-		//Model* model = new Model();
-		modelLoader->LoadFBX("cylinder.fbx");
-		//delete model;
+		//modelLoader->LoadFBX("cylinder.fbx", null);
+
+		//meshManager->AddMesh();
+
+		//Draw Cylinder FBX file 
+		unsigned index = modelLoader->LoadModel("cylinder.fbx");
+
+		Entity drawTest = G_ECMANAGER->BuildEntity();
+		ComponentTransform Transform1;
+		Transform1._position = { -100.0f,0.0f,0.0f };
+		drawTest.AttachComponent<ComponentTransform>(Transform1);
+		Mesh* mesh = meshManager->meshes[index];
+		
+		//Randomize cylinder colour for better 3d view
+		for (int i = 0; i < mesh->_rgb.size(); ++i)
+		{
+
+			mesh->_rgb[i] = glm::vec3((float)i / mesh->_rgb.size(), (mesh->_rgb.size() - (float)i)/ mesh->_rgb.size(), 0.0f);
+		}
+		InitMesh(drawTest, index);
+
+		//Draw sphere FBX file 
+		index = modelLoader->LoadModel("sphere.fbx");
+
+		Entity drawTest2 = G_ECMANAGER->BuildEntity();
+		ComponentTransform Transform2;
+		Transform2._position = { 10.0f,0.0f,0.0f };
+		drawTest2.AttachComponent<ComponentTransform>(Transform2);
+
+		InitMesh(drawTest2, index);
 
 		// Set default values for view matrix
 		// temporary solution before camera system implementation
@@ -147,7 +174,7 @@ namespace NS_GRAPHICS
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);
+			glDrawElements(GL_TRIANGLES, (unsigned)mesh->_indices.size(), GL_UNSIGNED_SHORT, 0);
 
 			itr++;
 		}
@@ -323,6 +350,71 @@ namespace NS_GRAPHICS
 		unsigned currentid = meshManager->AddMesh(mesh);
 
 		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(currentid));
+	}
+
+	void GraphicsSystem::InitMesh(Entity& entity, unsigned index)
+	{
+		Mesh* meshToDraw = meshManager->meshes[index];
+		glGenVertexArrays(1, &meshToDraw->VAO);
+		glGenBuffers(1, &meshToDraw->VBO);
+		glGenBuffers(1, &meshToDraw->EBO);
+		glGenBuffers(1, &meshToDraw->CBO);
+		glGenBuffers(1, &meshToDraw->UVBO);
+		glGenBuffers(1, &meshToDraw->ModelMatrixBO);
+
+		glBindVertexArray(meshToDraw->VAO);
+
+		// pos attribute
+		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw->VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * meshToDraw->_vertices.size(), &meshToDraw->_vertices[0], GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+		glEnableVertexAttribArray(0);
+
+
+		// uv attribute
+		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw->UVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * meshToDraw->_uv.size(), &meshToDraw->_uv[0], GL_STATIC_DRAW);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
+		glEnableVertexAttribArray(1);
+
+		// color attribute
+		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw->CBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * meshToDraw->_rgb.size(), &meshToDraw->_rgb[0], GL_STATIC_DRAW);
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+		glEnableVertexAttribArray(2);
+
+		// Indices
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshToDraw->EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * meshToDraw->_indices.size(), &meshToDraw->_indices[0], GL_STATIC_DRAW);
+
+		// Model Matrix
+		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw->ModelMatrixBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+		glEnableVertexAttribArray(5);
+		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+		glEnableVertexAttribArray(6);
+		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+
+		glVertexAttribDivisor(3, 1);
+		glVertexAttribDivisor(4, 1);
+		glVertexAttribDivisor(5, 1);
+		glVertexAttribDivisor(6, 1);
+
+		// Unbind buffers and array object
+		// Assign to mesh data manager and new graphics component
+		// Attach graphics component to object
+		/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
+		glBindBuffer(GL_ARRAY_BUFFER, NULL);
+		glBindVertexArray(NULL);*/
+
+		//unsigned currentid = meshManager->AddMesh(mesh);
+
+		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(index));
 	}
 
 	unsigned GraphicsSystem::TestCreateCube(const glm::vec3& rgb, const float& midExtent)
