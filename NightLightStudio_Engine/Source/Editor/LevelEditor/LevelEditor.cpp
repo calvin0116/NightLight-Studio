@@ -74,7 +74,6 @@ bool LevelEditor::Update(float)
     */
     LE_RunWindows();
 
-
     // Rendering
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -104,6 +103,15 @@ void LevelEditor::LE_AddChildWindow(const std::string& name, ImVec2 size, const 
     ImGui::EndChild();
 }
 
+std::vector<float>* LevelEditor::LE_GetSystemsUsage()
+{
+#ifdef LEVELEDITOR_PERFORMACE_METRICS
+    PerformanceMetrics* perf = dynamic_cast<PerformanceMetrics*>(std::find(std::begin(_editorWind), std::end(_editorWind), "Performance Metrics")->_ptr.get());
+    if (perf)
+        return perf->GetSystemsUsage();
+#endif
+    return nullptr;
+}
 
 
 void LevelEditor::LE_AddMenuOnly(const std::string& name, const std::function<void()> fn)

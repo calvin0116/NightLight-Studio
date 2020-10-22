@@ -6,12 +6,12 @@ PerformanceMetrics::PerformanceMetrics()
 	: _totalMem{}, _memInUse{}, _memSize{ BYTES },
 	_usage{}
 {
-	
+
 	MEMORYSTATUSEX memInfo;
 	memInfo.dwLength = sizeof(MEMORYSTATUSEX);
 	GlobalMemoryStatusEx(&memInfo);
 	_totalMem = memInfo.ullTotalPhys;
-	
+
 }
 
 PerformanceMetrics::~PerformanceMetrics()
@@ -38,7 +38,7 @@ void PerformanceMetrics::Run()
 		}, true);
 
 	// Memory Usage
-	_levelEditor->LE_AddChildWindow("Memory Usage", ImVec2(0, 125) ,
+	_levelEditor->LE_AddChildWindow("Memory Usage", ImVec2(0, 125),
 		{
 			[&]()
 			{
@@ -93,15 +93,77 @@ void PerformanceMetrics::Run()
 	// CPU Usage
 	_levelEditor->LE_AddChildWindow("CPU Usage", ImVec2(0, 60),
 		{
-			[&]() 
+			[&]()
 			{
 				_levelEditor->LE_AddText("CPU Usage: ");
 
 				_levelEditor->LE_AddProgressBar(_usage.GetUsage() / 100.0f, ImVec2(), std::to_string(_usage.GetUsage()).append(" %"));
 			}
 		}, true);
+
+	// System Usage
+	_levelEditor->LE_AddChildWindow("Systems Usage", ImVec2(0, 100),
+		{
+			[&]()
+			{
+				_levelEditor->LE_AddText("Systems Usage: ");
+
+				float total = 0;
+
+				for (int i = 0; i < _systemsUsage.size(); ++i)
+					total += _systemsUsage[i];
+
+				for (int i = 0; i < _systemsUsage.size(); ++i)
+				{
+					_systemsUsage[i] /= total;
+				}
+
+				/*
+					SP_TOOLS = 0,
+					SP_WINDOW,
+					SP_IO,
+					SP_INPUT,
+					SP_GRAPHICS,
+					SP_COLLISION,
+					SP_PHYSICS,
+					SP_AUDIO,
+					SP_SCENEMANAGER,
+					SP_COMPONENT,
+					SP_EDITOR
+					*/
+
+				std::vector<std::string> sysNamesManual =
+				{ "Editor", "Window", "IO", "Input", "Graphics", "Collision", "Physics", "Audio", "Scene Manager", "Components" };
+
+				//_levelEditor->LE_AddHistogram("Systems Use", _systemsUsage, false, 0, 0.0f, 100.0f, ImVec2(0, 50));
+				for (int i = 0; i < _systemsUsage.size(); ++i)
+				{
+					int sysNum = i - 1;
+					if (sysNum == -1)
+						sysNum = (int)_systemsUsage.size() - 1;
+
+					_levelEditor->LE_AddProgressBar(_systemsUsage[i]);
+					if (i < sysNamesManual.size())
+					{
+						ImGui::SameLine();
+						_levelEditor->LE_AddText(sysNamesManual[i]);
+						ImGui::SameLine();
+						_levelEditor->LE_AddText(std::to_string(_systemsUsage[i] * 100.0f).append("%%"));
+					}
+				}
+			}
+		}, true);
+
+	_systemsUsage.clear();
 }
 
 void PerformanceMetrics::Exit()
 {
 }
+
+std::vector<float>* PerformanceMetrics::GetSystemsUsage()
+{
+	return &_systemsUsage;
+}
+
+

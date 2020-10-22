@@ -32,5 +32,10 @@ void SystemEditor::Free()
 {
 }
 
+ENGINE_API std::vector<float>* SystemEditor::GetSystemsUsage()
+{
+	return _editor.LE_GetSystemsUsage();
+}
+
 #endif
 

@@ -180,6 +180,9 @@ public:
 		return retVec;
 	}
 
+	// ONLY USED FOR PERFORMANCE METRICS, DOES NOTHING OTHERWISE
+	std::vector<float>* LE_GetSystemsUsage();
+
 	/**********************************************************************/
 
 	/******************************* Menus ***************************************/
@@ -285,7 +288,7 @@ public:
 	// Shows a vector of floats as a line graph. If addData is true, automatically pushes back new data and pops the first (like a queue)
 	void LE_AddPlotLines(const std::string& name, std::vector<float>& graph, bool addData = false, const float& newData = 0);
 
-	void LE_AddHistogram(const std::string& name, std::vector<float>& graph, bool addData = false, const float& newData = 0);
+	void LE_AddHistogram(const std::string& name, std::vector<float>& graph, bool addData = false, const float& newData = 0, float min = 0, float max = 1, ImVec2 size = ImVec2());
 
 	void LE_AddProgressBar(float progress, ImVec2 size = ImVec2(0, 0), std::string overlay = {});
 

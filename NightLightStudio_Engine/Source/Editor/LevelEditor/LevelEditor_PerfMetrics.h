@@ -11,6 +11,8 @@ class PerformanceMetrics : public LE_WinBase_Derived<PerformanceMetrics>
 	size_t _totalMem;
 	float _memInUse;
 
+	std::vector<float> _systemsUsage;
+
 	enum MEM_SIZE
 	{
 		BYTES,
@@ -28,6 +30,8 @@ public:
 	void Run() override;
 
 	void Exit() override;
+
+	std::vector<float>* GetSystemsUsage();
 };
 
 #endif
