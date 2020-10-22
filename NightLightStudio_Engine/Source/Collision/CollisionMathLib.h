@@ -27,7 +27,7 @@ namespace NlMath
 
 	bool PlaneToPlane(const PlaneCollider& tPlane1, const PlaneCollider& tPlane2);
 
-	bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2);
+	bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2, Vector3D& normal);
 
 	bool CapsuleToCapsule(const CapsuleCollider& tCap1, const CapsuleCollider& tCap2);
 

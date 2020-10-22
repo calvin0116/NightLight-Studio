@@ -99,7 +99,8 @@ namespace NS_PHYSICS
 				
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_D))
 			{
-				compT->_position.x += 1 *realDt;
+				compR->velocity.x += 1 * realDt;
+				//compT->_position.x += 1 *realDt;
 				
 			}
 
@@ -107,38 +108,38 @@ namespace NS_PHYSICS
 
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_A))
 			{
-
-				compT->_position.x += -1 * realDt;
+				compR->velocity.x -= 1 * realDt;
+				//compT->_position.x += -1 * realDt;
 			}
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_DOWN", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]() {});
 
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_S))
 			{
-
-				compT->_position.y += -1 * realDt;
+				compR->velocity.y -= 1 * realDt;
+				//compT->_position.y += -1 * realDt;
 			}
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_UP", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]() {});
 
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_W))
 			{
-
-				compT->_position.y += 1 * realDt;
+				compR->velocity.y += 1 * realDt;
+				//compT->_position.y += 1 * realDt;
 			}
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_FRONT", SystemInput_ns::IKEY_Q, "Q", SystemInput_ns::OnHold, [this]() {});
 
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_Q))
 			{
-
-				compT->_position.z += 1 * realDt;
+				compR->velocity.z += 1 * realDt;
+				//compT->_position.z += 1 * realDt;
 			}
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_BACK", SystemInput_ns::IKEY_E, "E", SystemInput_ns::OnHold, [this]() {});
 
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_E))
 			{
-
-				compT->_position.z += -1 * realDt;
+				compR->velocity.z -=  1 * realDt;
+				//compT->_position.z += -1 * realDt;
 			}
 			/// </Testing>//////////////////////////////////////////////////////////////////////////////////////////
 		}

@@ -285,7 +285,7 @@ namespace NlMath
         }
     }
 
-    bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2)
+    bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2, Vector3D& normal)
     {
             //axis view explaination: (value going from negative to positive)
             //x going from left to right
@@ -329,27 +329,62 @@ namespace NlMath
            //get distance vector between two box's center
            glm::vec3 centerDistance = tBox2.center - tBox1.center;
            
-           // check if there's a separating plane in between the selected axes
-           auto getSeparatingPlane = [=](const glm::vec3& normal)
+           //to get the smallest seperating axis
+           auto compare = [](const std::pair<float, glm::vec3> lhs, const std::pair<float, glm::vec3> rhs)
            {
-               float check1 = fabs(glm::dot(centerDistance , normal));
-           
-               return (fabs(glm::dot(centerDistance , normal)) >
-                  fabs(glm::dot((normalX1 * tBox1.extend.x), normal)) +
-                  fabs(glm::dot((normalY1 * tBox1.extend.y), normal)) +
-                  fabs(glm::dot((normalZ1 * tBox1.extend.z), normal)) +
-                  fabs(glm::dot((normalX2 * tBox2.extend.x), normal)) +
-                  fabs(glm::dot((normalY2 * tBox2.extend.y), normal)) +
-                  fabs(glm::dot((normalZ2 * tBox2.extend.z), normal)));
+               return lhs.first > rhs.first;
            };
-    
-           return !(
+
+           std::priority_queue < std::pair<float, glm::vec3>, std::vector<std::pair<float, glm::vec3>>, decltype(compare)>  checkList(compare);
+
+           // check if there's a separating plane in between the selected axes
+           auto getSeparatingPlane = [&](const glm::vec3& normal)
+           {
+               std::pair<float, glm::vec3> tmp;
+               tmp.first = (fabs(glm::dot(centerDistance, normal)) -
+                         (fabs(glm::dot((normalX1 * tBox1.extend.x), normal)) +
+                       fabs(glm::dot((normalY1 * tBox1.extend.y), normal)) +
+                       fabs(glm::dot((normalZ1 * tBox1.extend.z), normal)) +
+                       fabs(glm::dot((normalX2 * tBox2.extend.x), normal)) +
+                       fabs(glm::dot((normalY2 * tBox2.extend.y), normal)) +
+                       fabs(glm::dot((normalZ2 * tBox2.extend.z), normal))));
+               bool check = (tmp.first > 0);
+               tmp.first = fabs(tmp.first);;
+               tmp.second = normal;
+               checkList.push(tmp);
+
+               return check;
+           };
+
+
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalX1), normalX1));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalY1), normalY1));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalZ1), normalZ1));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalX2), normalX2));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalY2), normalY2));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalZ2), normalZ2));
+
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalX1, normalX2)), glm::cross(normalX1, normalX2)));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalX1, normalY2)), glm::cross(normalX1, normalX2)));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalX1, normalZ2)), glm::cross(normalX1, normalX2)));
+           //                                                                                                                   
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalY1, normalX2)), glm::cross(normalY1, normalX2)));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalY1, normalY2)), glm::cross(normalY1, normalY2)));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalY1, normalZ2)), glm::cross(normalY1, normalZ2)));
+           //                                                                                                                   
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalZ1, normalX2)), glm::cross(normalZ1, normalX2)));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalZ1, normalY2)), glm::cross(normalZ1, normalY2)));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalZ1, normalZ2)), glm::cross(normalZ1, normalZ2)));
+
+
+
+           bool check = !(
                getSeparatingPlane(normalX1) ||
                getSeparatingPlane(normalY1) ||
                getSeparatingPlane(normalZ1) ||
                getSeparatingPlane(normalX2) ||
                getSeparatingPlane(normalY2) ||
-               getSeparatingPlane(normalZ2)||
+               getSeparatingPlane(normalZ2) ||
            
                getSeparatingPlane(glm::cross(normalX1, normalX2)) ||
                getSeparatingPlane(glm::cross(normalX1, normalY2)) ||
@@ -362,8 +397,10 @@ namespace NlMath
                getSeparatingPlane(glm::cross(normalZ1, normalX2)) ||
                getSeparatingPlane(glm::cross(normalZ1, normalY2)) ||
                getSeparatingPlane(glm::cross(normalZ1, normalZ2)));
-         
-     
+
+               normal = checkList.top().second;
+
+           return check;
     }
     bool CapsuleToCapsule(const CapsuleCollider& tCap1, const CapsuleCollider& tCap2)
     {

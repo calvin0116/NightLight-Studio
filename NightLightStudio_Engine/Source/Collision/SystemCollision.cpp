@@ -29,9 +29,9 @@ namespace NS_COLLISION
 		
 
 		Rigid1.isStatic = false;
-		Transform1._rotation.x = 45;
-		Transform1._rotation.y = 90;
-		Transform1._rotation.z = 45;	 
+		//Transform1._rotation.x = 45;
+		//Transform1._rotation.y = 90;
+		//Transform1._rotation.z = 45;	 
 
 		cube1Test.AttachComponent<ComponentTransform>(Transform1);
 		cube1Test.AttachComponent<ComponentRigidBody>(Rigid1);
@@ -46,10 +46,10 @@ namespace NS_COLLISION
 		
 
 		Transform2._position = glm::vec3(2.5f, 0.0f, 0.f);
-		Transform2._rotation.x = 45;
-		Transform2._rotation.y = 45;
-		Transform2._rotation.z = 45;
-		Transform2._scale.x = 2;
+		//Transform2._rotation.x = 45;
+		//Transform2._rotation.y = 45;
+		//Transform2._rotation.z = 45;
+		//Transform2._scale.x = 2;
 
 
 		cube2Test.AttachComponent<ComponentTransform>(Transform2);
@@ -59,15 +59,15 @@ namespace NS_COLLISION
 		
 		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
 
-		//ComponentCollider AABB1(COLLIDERS::AABB);
-		//ComponentCollider AABB2(COLLIDERS::AABB);
-		//cube1Test.AttachComponent<ComponentCollider>(AABB1);
-		//cube2Test.AttachComponent<ComponentCollider>(AABB2);
+		ComponentCollider AABB1(COLLIDERS::AABB);
+		ComponentCollider AABB2(COLLIDERS::AABB);
+		cube1Test.AttachComponent<ComponentCollider>(AABB1);
+		cube2Test.AttachComponent<ComponentCollider>(AABB2);
 
-		ComponentCollider OBB1(COLLIDERS::OBB);
-		ComponentCollider OBB2(COLLIDERS::OBB);
-		cube1Test.AttachComponent<ComponentCollider>(OBB1);
-		cube2Test.AttachComponent<ComponentCollider>(OBB2);
+		//ComponentCollider OBB1(COLLIDERS::OBB);
+		//ComponentCollider OBB2(COLLIDERS::OBB);
+		//cube1Test.AttachComponent<ComponentCollider>(OBB1);
+		//cube2Test.AttachComponent<ComponentCollider>(OBB2);
 
 
 		
@@ -143,9 +143,9 @@ namespace NS_COLLISION
 
 				//test code, to be romoved
 				/////////////////////////////////////////////////////////////////////////////////////////
-				comTrans1->_rotation.x += 1;
-				comTrans1->_rotation.y += 1;
-				comTrans1->_rotation.z += 1;
+				//comTrans1->_rotation.x += 1;
+				//comTrans1->_rotation.y += 1;
+				//comTrans1->_rotation.z += 1;
 				/////////////////////////////////////////////////////////////////////////////////////////
 			}
 		}
@@ -275,8 +275,14 @@ namespace NS_COLLISION
 			{
 				OBBCollider* a = &(Collider1->collider.obb);
 				OBBCollider* b = &(Collider2->collider.obb);
+				NlMath::Vector3D normal;
+				bool check = NlMath::OBBToOBB(*a, *b, normal);
+				NlMath::Vector3D start = a->center;
+				NlMath::Vector3D end = normal*10 + start;
+				NS_GRAPHICS::SYS_GRAPHICS->DrawLine(start,end, glm::vec3(0.5f, 0.5f, 1.f));
+				
 
-				return NlMath::OBBToOBB(*a, *b);
+				return check;
 
 			}
 		}
