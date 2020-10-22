@@ -44,8 +44,8 @@ void LevelEditor::LE_MainMenuBar()
             editorNames.push_back(_editorWind[i]._name);
             funcs.push_back(std::bind([&](bool* isOpen) {*isOpen = true; }, &_editorWind[i]._isOpen));
         }
-        //LE_AddMenuWithItems("Windows", editorNames, {}, funcs);
-        LE_AddMenuOnly("Windows", [&](){ LE_AddMenuWithItems("SecondWindows", editorNames, {}, funcs);});
+        LE_AddMenuWithItems("Windows", editorNames, {}, funcs);
+        //LE_AddMenuOnly("Windows", [&](){ LE_AddMenuWithItems("SecondWindows", editorNames, {}, funcs);});
 
         ImGui::EndMenuBar();
     }

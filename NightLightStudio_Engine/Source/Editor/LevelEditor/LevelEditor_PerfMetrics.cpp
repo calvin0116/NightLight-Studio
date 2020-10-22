@@ -102,13 +102,13 @@ void PerformanceMetrics::Run()
 		}, true);
 
 	// System Usage
-	_levelEditor->LE_AddChildWindow("Systems Usage", ImVec2(0, 100),
+	_levelEditor->LE_AddChildWindow("Systems Usage", ImVec2(0, 0),
 		{
 			[&]()
 			{
-				_levelEditor->LE_AddText("Systems Usage: ");
-
 				float total = 0;
+
+				std::vector<float> orig = _systemsUsage;
 
 				for (int i = 0; i < _systemsUsage.size(); ++i)
 					total += _systemsUsage[i];
@@ -117,6 +117,10 @@ void PerformanceMetrics::Run()
 				{
 					_systemsUsage[i] /= total;
 				}
+
+				_levelEditor->LE_AddText("Systems Usage: ");
+				ImGui::SameLine();
+				_levelEditor->LE_AddText(std::to_string(total/1000.0f).append(" ms Per Update"));
 
 				/*
 					SP_TOOLS = 0,
@@ -142,13 +146,13 @@ void PerformanceMetrics::Run()
 					if (sysNum == -1)
 						sysNum = (int)_systemsUsage.size() - 1;
 
-					_levelEditor->LE_AddProgressBar(_systemsUsage[i]);
+					_levelEditor->LE_AddProgressBar(_systemsUsage[i], ImVec2(100, 0));
 					if (i < sysNamesManual.size())
 					{
 						ImGui::SameLine();
 						_levelEditor->LE_AddText(sysNamesManual[i]);
 						ImGui::SameLine();
-						_levelEditor->LE_AddText(std::to_string(_systemsUsage[i] * 100.0f).append("%%"));
+						_levelEditor->LE_AddText(std::to_string(_systemsUsage[i] * 100.0f).append("%% :: ").append(std::to_string(orig[i]/1000.0f)).append(" ms"));
 					}
 				}
 			}
