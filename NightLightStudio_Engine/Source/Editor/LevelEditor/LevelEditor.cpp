@@ -1,6 +1,7 @@
 #include "LevelEditor.h"
 #include "LevelEditor_Console.h"
 #include "LevelEditor_AssetInsp.h"
+#include "LevelEditor_PerfMetrics.h"
 
 LevelEditor::LevelEditor() : _window{ nullptr }
 {
@@ -15,7 +16,8 @@ void LevelEditor::Init(HWND window)
     // CREATE WINDOWS HERE
     //LE_CreateWindow<TestCase>("Test", false, 0);
     LE_CreateWindow<ConsoleLog>("Console", false, 0);
-    LE_CreateWindow<AssetInspector>("AssetInspector", true);
+    LE_CreateWindow<AssetInspector>("Asset Inspector", true);
+    LE_CreateWindow<PerformanceMetrics>("Performance Metrics", true);
 
 
     _window = window;
@@ -51,6 +53,7 @@ bool LevelEditor::Update(float)
     // Run the MainMenubar
     LE_MainMenuBar();
 
+    /*
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     ImGui::ShowDemoWindow(&show_demo_window);
 
@@ -68,7 +71,7 @@ bool LevelEditor::Update(float)
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::End();
     }
-
+    */
     LE_RunWindows();
 
 
@@ -185,16 +188,22 @@ void LevelEditor::LE_RunWindows()
             // Runs only if there is a window class attached to the window
             if (_editorWind[i]._ptr)
             {
-                ImGui::PushID(_editorWind[i]._name.c_str());
+                //ImGui::PushID(_editorWind[i]._name.c_str());
                 // Initializes window
                 _editorWind[i]._ptr->Init();
                 if (ImGui::Begin(_editorWind[i]._name.c_str(), &_editorWind[i]._isOpen, _editorWind[i]._flag))
                 {
+                    if (ImGui::IsWindowCollapsed())
+                    {
+                        ImGui::End();
+                        //ImGui::PopID();
+                        continue;
+                    }
+
                     _editorWind[i]._ptr->Run();
                 }
                 ImGui::End();
-
-                ImGui::PopID();
+                //ImGui::PopID();
             }
         }
     }

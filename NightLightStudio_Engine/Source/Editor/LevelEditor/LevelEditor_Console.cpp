@@ -3,6 +3,7 @@
 void ConsoleLog::Init()
 {
 	ImGui::SetNextWindowBgAlpha(1.0f);
+	ImGui::SetNextWindowSize(ImVec2(320, 320), ImGuiCond_FirstUseEver);
 }
 
 void ConsoleLog::Run()

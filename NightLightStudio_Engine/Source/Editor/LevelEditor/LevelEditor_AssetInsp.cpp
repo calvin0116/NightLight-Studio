@@ -5,17 +5,6 @@
 
 #include <shellapi.h>
 
-std::vector<std::string> AssetInspector::_GetAllDirectories(const std::string& path)
-{
-    if (path.empty())
-        return {};
-    std::vector<std::string> r;
-    for (auto& p : std::filesystem::recursive_directory_iterator(path))
-        if (p.is_directory())
-            r.push_back(p.path().string());
-    return r;
-}
-
 std::vector<std::string> AssetInspector::_GetDirectories(const std::string& path)
 {
     if (path.empty())
@@ -81,8 +70,8 @@ std::string AssetInspector::_GetFileType(const std::string& path)
 
 void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
 {
-    std::vector<std::string> dir = _GetDirectories(path);
-    std::vector<std::string> files = _GetFilesInDir(path);
+    std::vector<std::string> dir = _allDirDirs[path];
+    std::vector<std::string> files = _allDirFiles[path];
 
     // List of functions to run inside the tree node
     std::vector<std::function<void()>> fns =
@@ -104,6 +93,7 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
             }
         }, path)
     };
+
 
     // For all files functions
     for (int i = 0; i < files.size(); ++i)
@@ -151,8 +141,8 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
             },
             files[i]
                 ));
-        std::string test = _GetFileType(files[i]);
     }
+
 
     // For all folders. add recursive function to functions
     for (int i = 0; i < dir.size(); ++i)
@@ -179,21 +169,29 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
             f |= ImGuiTreeNodeFlags_Selected;
     }
 
-    if (std::filesystem::current_path().string() == path)
-    {
-        f |= ImGuiTreeNodeFlags_DefaultOpen;
-    }
-
     _levelEditor->LE_AddTreeNodes(_GetFilename(path), fns, f);
 
 }
 
+void AssetInspector::_RefreshDirectories(const std::string& path)
+{
+    _allDirFiles[path] = _GetFilesInDir(path);
+    _allDirDirs[path] = _GetDirectories(path);
+
+    for (int i = 0; i < _allDirDirs[path].size(); ++i)
+    {
+        _RefreshDirectories(_allDirDirs[path][i]);
+    }
+}
+
 AssetInspector::AssetInspector()
-    : _ignoreFileTypes{},
+    : _allDirFiles{}, _allDirDirs{},
+    _ignoreFileTypes{},
     _selectedFolderPath{ std::filesystem::current_path().string() },
     _selectedFilePath{},
     _dragDropFilePath{}
 {
+    _RefreshDirectories(std::filesystem::current_path().string());
 }
 
 AssetInspector::~AssetInspector()
@@ -203,7 +201,7 @@ AssetInspector::~AssetInspector()
 void AssetInspector::Init()
 {
     ImGui::SetNextWindowBgAlpha(1.0f);
-
+    ImGui::SetWindowSize(ImVec2(640, 320), ImGuiCond_FirstUseEver);
     //_ignoreFileTypes.insert("cpp");
     //_ignoreFileTypes.insert("filters");
     //_ignoreFileTypes.insert("user");
@@ -242,14 +240,22 @@ void AssetInspector::Run()
                         }
                     });
 
+                ImGui::SameLine();
+
+                _levelEditor->LE_AddButton("Refresh Inspector##AssetInspector",
+                    [&]()
+                    {
+                        _RefreshDirectories(std::filesystem::current_path().string());
+                    });
+
                 ImVec2 size(100.0f, 100.0f);
                 //float offset = 50.0f;
 
                 float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
 
-                std::vector<std::string> files = _GetDirectories(_selectedFolderPath);
+                std::vector<std::string> files = _allDirDirs[_selectedFolderPath];
                 int filesStart = (int)files.size();
-                std::vector<std::string> temp = _GetFilesInDir(_selectedFolderPath);
+                std::vector<std::string> temp = _allDirFiles[_selectedFolderPath];
                 files.insert(std::end(files), std::begin(temp), std::end(temp));
 
                 for (int i = 0; i < files.size(); ++i)

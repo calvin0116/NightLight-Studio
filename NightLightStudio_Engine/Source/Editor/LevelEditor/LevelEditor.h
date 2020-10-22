@@ -204,6 +204,9 @@ public:
 
 	// Adds a directional button that runs a function
 	void LE_AddArrowButton(const std::string& name, ImGuiDir dir = ImGuiDir_Right, std::function<void()> fn = nullptr);
+
+	// Adds a radio button that runs a function
+	void LE_AddRadioButton(const std::string& name, bool active = false, std::function<void()> fn = nullptr);
 	
 	// Adds a selectable that runs a function while selected. Input Boolean is unaffected.
 	void LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0, ImVec2 size = ImVec2(0, 0));

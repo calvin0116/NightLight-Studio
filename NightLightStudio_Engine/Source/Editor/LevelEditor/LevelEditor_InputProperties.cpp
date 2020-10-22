@@ -23,6 +23,15 @@ void LevelEditor::LE_AddArrowButton(const std::string& name, ImGuiDir dir, std::
     }
 }
 
+void LevelEditor::LE_AddRadioButton(const std::string& name, bool active, std::function<void()> fn)
+{
+    if (ImGui::RadioButton(name.c_str(), active))
+    {
+        if (fn)
+            fn();
+    }
+}
+
 void LevelEditor::LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn, ImGuiSelectableFlags flag, ImVec2 size)
 {
     if (ImGui::Selectable(name.c_str(), isSelected, flag, size))
