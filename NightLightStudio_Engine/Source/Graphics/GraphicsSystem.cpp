@@ -111,7 +111,7 @@ namespace NS_GRAPHICS
 
 		Entity drawTest2 = G_ECMANAGER->BuildEntity();
 		ComponentTransform Transform2;
-		Transform2._position = { 10.0f,0.0f,0.0f };
+		Transform2._position = { 100.0f,0.0f,0.0f };
 		drawTest2.AttachComponent<ComponentTransform>(Transform2);
 
 		InitMesh(drawTest2, index);

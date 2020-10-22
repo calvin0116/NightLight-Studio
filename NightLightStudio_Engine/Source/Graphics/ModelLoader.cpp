@@ -16,8 +16,6 @@ namespace NS_GRAPHICS
 
 	void ModelLoader::TransverseChild(FbxNode* node, Mesh*& newMesh, unsigned offset)
 	{
-		offset = newMesh->_indices.size();
-
 		for (int i = 0; i < node->GetNodeAttributeCount(); ++i)
 		{
 			FbxNodeAttribute* nodeType = node->GetNodeAttributeByIndex(i);
@@ -187,13 +185,15 @@ namespace NS_GRAPHICS
 							}
 						}
 
-						newMesh->_indices.push_back((unsigned short)controlPointIndex + offset);
+						newMesh->_indices.push_back((unsigned short)controlPointIndex);
 						newMesh->_verticeDatas.push_back(verticeData);
 						vertexID++;
 					}
 				}
 
 				mesh->Destroy();
+				offset = (unsigned)newMesh->_vertexDatas.size();
+				std::cout << offset << std::endl;
 			}	
 		}
 
@@ -232,8 +232,6 @@ namespace NS_GRAPHICS
 
 	unsigned ModelLoader::LoadFBX(const std::string& fileName, const std::string& customName)
 	{
-		unsigned toReturn = 0; 
-
 		std::cout << "Loading FBX..." << std::endl;
 		if (_fbxScene)
 		{
@@ -342,7 +340,7 @@ namespace NS_GRAPHICS
 	unsigned ModelLoader::LoadCustomMesh(const std::string& fileName, const std::string& customName)
 	{
 		//Gets rid of warning for now
-		(void)fileName;
+		(void)fileName, customName;
 		return 0;
 	}
 }
