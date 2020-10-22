@@ -60,7 +60,17 @@ namespace NS_COLLISION
 		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
 
 		ComponentCollider AABB1(COLLIDERS::AABB);
-		ComponentCollider AABB2(COLLIDERS::AABB);
+		//ComponentCollider AABB2(COLLIDERS::AABB);
+
+		//ComponentCollider AABB1(COLLIDERS::OBB);
+		//ComponentCollider AABB2(COLLIDERS::OBB);
+
+		//ComponentCollider AABB1(COLLIDERS::SPHERE);
+		ComponentCollider AABB2(COLLIDERS::SPHERE);
+
+		//ComponentCollider AABB1(COLLIDERS::CAPSULE);
+		//ComponentCollider AABB2(COLLIDERS::CAPSULE);
+
 		cube1Test.AttachComponent<ComponentCollider>(AABB1);
 		cube2Test.AttachComponent<ComponentCollider>(AABB2);
 
@@ -224,10 +234,16 @@ namespace NS_COLLISION
 		ComponentCollider* Collider1, ComponentCollider* Collider2, 
 		ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2)
 	{
+
+
+
+
 		if (Collider1->colliderType == COLLIDERS::AABB)
 		{
 			if (Collider2->colliderType == COLLIDERS::AABB)
 			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// AABB to AABB
 				AABBCollider * a = &(Collider1->collider.aabb);
 				AABBCollider * b = &(Collider2->collider.aabb);
 
@@ -235,57 +251,312 @@ namespace NS_COLLISION
 				newEvent.colidingSide = NlMath::AABB_AABBCollision(*a, *b);
 				if (newEvent.colidingSide == SIDES::NO_COLLISION)
 				{
-					return false;
+					return false; // no collision return false
 				}
+				// yes collision add to collision event and return true
 				newEvent.rigid1 = Rigid1;
 				newEvent.rigid2 = Rigid2;
+				newEvent.collisionType = COLRESTYPE::AABB_AABB;
 				colResolver.addCollisionEvent(newEvent);
 				return true;
-				
+				//// AABB to AABB END
+				///////////////////////////////////////////////////////////////////////////////////
 			}
-			//if (Collider2->colliderType == COLLIDERS::CAPSULE)
-			//{
-			//	AABBCollider* a = reinterpret_cast<AABBCollider*>(Collider1);
-			//	CapsuleCollider* b = reinterpret_cast<CapsuleCollider*>(Collider2);
-			//	//return NlMath::AABBtoAABB(*a, *b);
-			//}
-			//if (Collider2->colliderType == COLLIDERS::OBB)
-			//{
-			//	AABBCollider* a = reinterpret_cast<AABBCollider*>(Collider1);
-			//	OBBCollider* b = reinterpret_cast<OBBCollider*>(Collider2);
-			//	//return NlMath::AABBtoAABB(*a, *b);
-			//}
+			if (Collider2->colliderType == COLLIDERS::SPHERE)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// AABB to SPHERE
+				AABBCollider* a = &Collider1->collider.aabb;
+				SphereCollider* b = &Collider2->collider.sphere;
+
+				CollisionEvent newEvent;
+				newEvent.colidingSide = NlMath::AABB_SphereCollision(*a, *b, newEvent.collisionNormal);
+				if (newEvent.colidingSide == SIDES::NO_COLLISION)
+				{
+					return false; // no collision return false
+				}
+				// yes collision add to collision event and return true
+				newEvent.rigid1 = Rigid1;
+				newEvent.rigid2 = Rigid2;
+				newEvent.collisionType = COLRESTYPE::AABB_SPHERE;
+				colResolver.addCollisionEvent(newEvent);
+				return true;
+				//// AABB to SPHERE END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
+			if (Collider2->colliderType == COLLIDERS::CAPSULE)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// AABB to CAPSULE
+				AABBCollider* a = &Collider1->collider.aabb;
+				CapsuleCollider* b = &Collider2->collider.capsule;
+
+				CollisionEvent newEvent;
+				newEvent.colidingSide = NlMath::AABBToCapsule(*a, *b, newEvent.collisionNormal);
+				if (newEvent.colidingSide == SIDES::NO_COLLISION)
+				{
+					return false; // no collision return false
+				}
+				// yes collision add to collision event and return true
+				newEvent.rigid1 = Rigid1;
+				newEvent.rigid2 = Rigid2;
+				newEvent.collisionType = COLRESTYPE::AABB_CAPSULE;
+				colResolver.addCollisionEvent(newEvent);
+				return true;
+				//// AABB to CAPSULE END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
+			if (Collider2->colliderType == COLLIDERS::OBB)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// AABB to OBB
+
+				//AABBCollider* a = reinterpret_cast<AABBCollider*>(Collider1);
+				//OBBCollider* b = reinterpret_cast<OBBCollider*>(Collider2);
+				//return NlMath::AABBtoAABB(*a, *b);
+
+				//// AABB to OBB END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
 			//if (Collider2->colliderType == COLLIDERS::PLANE)
 			//{
 			//	AABBCollider* a = reinterpret_cast<AABBCollider*>(Collider1);
 			//	PlaneCollider* b = reinterpret_cast<PlaneCollider*>(Collider2);
 			//	//return NlMath::AABBtoAABB(*a, *b);
 			//}
-			//if (Collider2->colliderType == COLLIDERS::SPHERE)
-			//{
-			//	AABBCollider* a = reinterpret_cast<AABBCollider*>(Collider1);
-			//	SphereCollider* b = reinterpret_cast<SphereCollider*>(Collider2);
-			//	//return NlMath::AABBtoAABB(*a, *b);
-			//}
+		}
+		if (Collider1->colliderType == COLLIDERS::SPHERE)
+		{
 
+			if (Collider2->colliderType == COLLIDERS::AABB)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// SPHERE to AABB
+				SphereCollider* a = &Collider1->collider.sphere;
+				AABBCollider* b = &Collider2->collider.aabb;
+
+				CollisionEvent newEvent;
+				newEvent.colidingSide = NlMath::AABB_SphereCollision(*b, *a, newEvent.collisionNormal);
+				if (newEvent.colidingSide == SIDES::NO_COLLISION)
+				{
+					return false; // no collision return false
+				}
+				// yes collision add to collision event and return true
+				newEvent.rigid1 = Rigid1;
+				newEvent.rigid2 = Rigid2;
+				newEvent.collisionType = COLRESTYPE::SPHERE_AABB;
+				colResolver.addCollisionEvent(newEvent);
+				return true;
+				//// SPHERE to AABB END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
+			if (Collider2->colliderType == COLLIDERS::SPHERE)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// SPHERE to SPHERE
+				SphereCollider* a = &Collider1->collider.sphere;
+				SphereCollider* b = &Collider2->collider.sphere;
+
+				NlMath::Vector3D distance = NlMath::Sphere_SphereCollision(*a, *b);
+
+				if (distance.x == 0.0f && distance.y == 0.0f && distance.z == 0.0f)
+				{
+					return false; // no collision return false
+				}
+
+				// yes collision add to collision event and return true
+
+				CollisionEvent newEvent;
+
+				// get nroamel
+				newEvent.collisionNormal = -distance;
+
+				// add rigid body
+				newEvent.rigid1 = Rigid1;
+				newEvent.rigid2 = Rigid2;
+
+				// set type
+				newEvent.collisionType = COLRESTYPE::SPHERE_SPHERE;
+
+				// add event
+				colResolver.addCollisionEvent(newEvent);
+
+				// return true
+				return true;
+				//// SPHERE to SPHERE END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
+			if (Collider2->colliderType == COLLIDERS::CAPSULE)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// SPHERE to CAPSULE
+				SphereCollider* a = &Collider1->collider.sphere;
+				CapsuleCollider* b = &Collider2->collider.capsule;
+
+				// TODO !!! SPHERE to CAPSULE
+
+				//// SPHERE to CAPSULE END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
+			if (Collider2->colliderType == COLLIDERS::OBB)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// SPHERE to OBB
+
+				//// SPHERE to OBB END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
+		}
+		if (Collider1->colliderType == COLLIDERS::CAPSULE)
+		{
+
+			if (Collider2->colliderType == COLLIDERS::AABB)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// CAPSULE to AABB
+				CapsuleCollider* a = &Collider1->collider.capsule;
+				AABBCollider* b = &Collider2->collider.aabb;
+
+				CollisionEvent newEvent;
+				newEvent.colidingSide = NlMath::AABBToCapsule(*b, *a, newEvent.collisionNormal);
+				if (newEvent.colidingSide == SIDES::NO_COLLISION)
+				{
+					return false; // no collision return false
+				}
+				// yes collision add to collision event and return true
+				newEvent.rigid1 = Rigid1;
+				newEvent.rigid2 = Rigid2;
+				newEvent.collisionType = COLRESTYPE::CAPSULE_AABB;
+				colResolver.addCollisionEvent(newEvent);
+				return true;
+				//// CAPSULE to AABB END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
+			if (Collider2->colliderType == COLLIDERS::SPHERE)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// CAPSULE to SPHERE
+				CapsuleCollider* a = &Collider1->collider.capsule;
+				SphereCollider* b = &Collider2->collider.sphere;
+
+				// TODO !!! SPHERE to CAPSULE
+
+				//// CAPSULE to SPHERE END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
+			if (Collider2->colliderType == COLLIDERS::CAPSULE)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// CAPSULE to CAPSULE
+				CapsuleCollider* a = &Collider1->collider.capsule;
+				CapsuleCollider* b = &Collider2->collider.capsule;
+
+				CollisionEvent newEvent;
+				bool check = NlMath::CapsuleToCapsule(*a, *b, newEvent.collisionNormal);
+				if (check == false)
+				{
+					return false;// no collision return false
+				}
+
+				// yes collision add to collision event and return true
+
+				// im not sure if the nroamel is correct !!!
+
+				// add rigid body
+				newEvent.rigid1 = Rigid1;
+				newEvent.rigid2 = Rigid2;
+
+				// set type
+				newEvent.collisionType = COLRESTYPE::CAPSULE_CAPSULE;
+
+				// add event
+				colResolver.addCollisionEvent(newEvent);
+
+				// return true
+				return true;
+				//// CAPSULE to CAPSULE END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
+			if (Collider2->colliderType == COLLIDERS::OBB)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// CAPSULE to OBB
+
+				//// CAPSULE to OBB END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
 		}
 		if (Collider1->colliderType == COLLIDERS::OBB)
 		{
 			if (Collider2->colliderType == COLLIDERS::OBB)
 			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// OBB to OBB
+
 				OBBCollider* a = &(Collider1->collider.obb);
 				OBBCollider* b = &(Collider2->collider.obb);
+
 				NlMath::Vector3D normal;
 				bool check = NlMath::OBBToOBB(*a, *b, normal);
+
+				// debug lines?
 				NlMath::Vector3D start = a->center;
-				NlMath::Vector3D end = normal*10 + start;
-				NS_GRAPHICS::SYS_GRAPHICS->DrawLine(start,end, glm::vec3(0.5f, 0.5f, 1.f));
-				
+				NlMath::Vector3D end = normal * 10 + start;
+				NS_GRAPHICS::SYS_GRAPHICS->DrawLine(start, end, glm::vec3(0.5f, 0.5f, 1.f));
 
-				return check;
+				if (check == false)
+				{
+					return false;// no collision return false
+				}
 
+				// yes collision add to collision event and return true
+
+				CollisionEvent newEvent;
+
+				// get nroamel
+				newEvent.collisionNormal = normal;
+
+				// add rigid body
+				newEvent.rigid1 = Rigid1;
+				newEvent.rigid2 = Rigid2;
+
+				// set type
+				newEvent.collisionType = COLRESTYPE::OBB_OBB;
+
+				// add event
+				colResolver.addCollisionEvent(newEvent);
+
+				// return true
+				return true;
+				//// OBB to OBB END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
+			if (Collider2->colliderType == COLLIDERS::AABB)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// OBB to AABB
+
+				//// OBB to AABB END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
+			if (Collider2->colliderType == COLLIDERS::SPHERE)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// OBB to SPHERE
+
+				//// OBB to SPHERE END
+				///////////////////////////////////////////////////////////////////////////////////
+			}
+			if (Collider2->colliderType == COLLIDERS::CAPSULE)
+			{
+				///////////////////////////////////////////////////////////////////////////////////
+				//// OBB to CAPSULE
+
+				//// OBB to CAPSULE END
+				///////////////////////////////////////////////////////////////////////////////////
 			}
 		}
+
 		return false;
 	}
 }
