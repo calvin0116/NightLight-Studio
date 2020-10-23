@@ -3,6 +3,9 @@
 
 #include "Components.h"
 
+#include "../../glm/gtc/matrix_transform.hpp"
+#include "../../glm/gtc/quaternion.hpp"
+
 ComponentCollider::ComponentCollider(COLLIDERS _col)
 	: collisionTime{ FLT_MAX }, colliderType(_col)
 {
@@ -38,7 +41,7 @@ void SphereCollider::init(ComponentTransform* transform)
 	center.y = transform->_position.y;
 	center.z = transform->_position.z;
 
-	radius = transform->_scale.x;
+	radius = transform->_scale.x * colliderScale.x;
 }
 
 //// Sphere END
@@ -60,8 +63,17 @@ AABBCollider::AABBCollider(NlMath::Vector3D VecMax, NlMath::Vector3D VecMin)
 
 void AABBCollider::init(ComponentTransform* transform)
 {
-	vecMax = transform->_position + transform->_scale;
-	vecMin= transform->_position - transform->_scale;
+	glm::vec3 colscale(
+		transform->_scale.x * colliderScale.x,
+		transform->_scale.y * colliderScale.y,
+		transform->_scale.z * colliderScale.z
+	);
+
+	vecMax = transform->_position + colscale;
+	vecMin= transform->_position - colscale;
+
+	//vecMax = transform->_position + transform->_scale;
+	//vecMin= transform->_position - transform->_scale;
 }
 
 //// AABB END
@@ -83,8 +95,15 @@ OBBCollider::OBBCollider(NlMath::Vector3D _center, NlMath::Vector3D _extend, NlM
 
 void OBBCollider::init(ComponentTransform* transform)
 {
+	glm::vec3 colscale(
+		transform->_scale.x * colliderScale.x,
+		transform->_scale.y * colliderScale.y,
+		transform->_scale.z * colliderScale.z
+	);
+
 	center = transform->_position;
-	extend = transform->_scale;
+	//extend = transform->_scale;
+	extend = colscale;
 	rotation = glm::radians(transform->_rotation);
 }
 
@@ -126,15 +145,39 @@ CapsuleCollider::CapsuleCollider(NlMath::Vector3D _tip, NlMath::Vector3D _base, 
 
 void CapsuleCollider::init(ComponentTransform* transform)
 {
-	radius = transform->_scale.x;
+	glm::vec3 colscale(
+		transform->_scale.x * colliderScale.x,
+		transform->_scale.y * colliderScale.y,
+		transform->_scale.z * colliderScale.z
+	);
 
-	tip = transform->_position;
-	base = transform->_position;
+	radius = colscale.x;
 
-	tip.y += transform->_scale.y * 0.5f;
-	base.y += -transform->_scale.y * 0.5f;
+	//tip = transform->_position;
+	//base = transform->_position;
+	//tip.y += transform->_scale.y * 0.5f;
+	//base.y += -transform->_scale.y * 0.5f;
+
+	//tip = NlMath::Vector3D(0.0f, 0.5f, 0.0f);
+	//base = NlMath::Vector3D(0.0f, -0.5f, 0.0f);
+	tip = NlMath::Vector3D(0.0f, 1.0f, 0.0f);
+	base = NlMath::Vector3D(0.0f, -1.0f, 0.0f);
 
 	rotation = glm::radians(transform->_rotation);
+
+	// get transform mtx // use mat3 ??
+	glm::mat4 translate = glm::translate(glm::mat4(1.f), transform->_position);
+
+	glm::quat quaternion(glm::radians(transform->_rotation));
+	glm::mat4 rotate = glm::mat4_cast(quaternion);
+
+	glm::mat4 scale = glm::scale(glm::mat4(1.f), colscale);
+
+	glm::mat4 tmtx(translate * rotate * scale);
+
+	// apply transform mtx
+	tip = tmtx * tip;
+	base = tmtx * base;
 }
 
 //// Capsule END

@@ -303,6 +303,9 @@
     <ClInclude Include="Source\Editor\LevelEditor\CpuUsage.h">
       <Filter>Source Files\Editor\Helper</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Collision\CollisionDebugLines.h">
+      <Filter>Source Files\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

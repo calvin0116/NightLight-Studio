@@ -9,11 +9,42 @@ namespace NlMath
 {
     Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint)
     {
-        //construct linesegment AB
-        Vector3D AB = segmentPointB - segmentPointA;
-        //find projection
-        float t = Vector3DDotProduct(CheckPoint - segmentPointA, AB) / Vector3DDotProduct(AB, AB);
-        return segmentPointA + t * AB;
+
+		// ref : https://math.stackexchange.com/questions/2193720/find-a-point-on-a-line-segment-which-is-the-closest-to-other-point-not-on-the-li
+		Vector3D v = segmentPointB - segmentPointA;
+		Vector3D u = segmentPointA - CheckPoint;
+		float vu = v * u;
+		float vv = v * v;
+		float t = -vu / vv;
+		auto vectorToSegment = [&](float _t, Vector3D _p)
+		{
+			return Vector3D(
+				(1 - _t) * segmentPointA.x + _t * segmentPointB.x - _p.x,
+				(1 - _t) * segmentPointA.y + _t * segmentPointB.y - _p.y,
+				(1 - _t) * segmentPointA.z + _t * segmentPointB.z - _p.z
+			);
+		};
+		if (t >= 0 && t <= 1) 
+			return vectorToSegment(t, Vector3D(0.0f, 0.0f, 0.0f));
+		Vector3D g0 = vectorToSegment(0, CheckPoint);
+		Vector3D g1 = vectorToSegment(1, CheckPoint);
+		float g0sq = g0 * g0;
+		float g1sq = g1 * g1;
+
+		if (g0sq <= g1sq)
+		{
+			return segmentPointA;
+		}
+		else
+		{
+			return segmentPointB;
+		}
+
+        ////construct linesegment AB
+        //Vector3D AB = segmentPointB - segmentPointA;
+        ////find projection
+        //float t = Vector3DDotProduct(CheckPoint - segmentPointA, AB) / Vector3DDotProduct(AB, AB);
+        //return segmentPointA + t * AB;
     }
 
     bool PointInAABB(const AABBCollider& tBox, const NlMath::Vector3D& vecPoint)
@@ -202,6 +233,40 @@ namespace NlMath
 
     SIDES AABB_SphereCollision(const AABBCollider& tBox1, const SphereCollider& tSpr2, NlMath::Vector3D& circleColNormal)
     {
+		// ref: https://stackoverflow.com/questions/28343716/sphere-intersection-test-of-aabb
+		// check for aabb sphere
+		bool check;
+		float dmin = 0;
+		if (tSpr2.center.x < tBox1.vecMin.x)
+		{
+			dmin += (tSpr2.center.x - tBox1.vecMin.x) * (tSpr2.center.x - tBox1.vecMin.x);
+		}
+		else if (tSpr2.center.x > tBox1.vecMax.x)
+		{
+			dmin += (tSpr2.center.x - tBox1.vecMax.x) * (tSpr2.center.x - tBox1.vecMax.x);
+		}
+		if (tSpr2.center.y < tBox1.vecMin.y)
+		{
+			dmin += (tSpr2.center.y - tBox1.vecMin.y) * (tSpr2.center.y - tBox1.vecMin.y);
+		}
+		else if (tSpr2.center.y > tBox1.vecMax.y)
+		{
+			dmin += (tSpr2.center.y - tBox1.vecMax.y) * (tSpr2.center.y - tBox1.vecMax.y);
+		}
+		if (tSpr2.center.z < tBox1.vecMin.z)
+		{
+			dmin += (tSpr2.center.z - tBox1.vecMin.z) * (tSpr2.center.z - tBox1.vecMin.z);
+		}
+		else if (tSpr2.center.z > tBox1.vecMax.z)
+		{
+			dmin += (tSpr2.center.z - tBox1.vecMax.z) * (tSpr2.center.z - tBox1.vecMax.z);
+		}
+		if (dmin <= (tSpr2.radius * tSpr2.radius))
+		{
+			// need to return the aabb collision side ... cont fn
+		}
+		else  return SIDES::NO_COLLISION; // no collide
+
         //axis view explaination: (value going from negative to positive)
         //x going from left to right
         //y going from bottom to top
@@ -230,7 +295,7 @@ namespace NlMath
         //total penetration depth
         NlMath::Vector3D penetrationDepth = totalExtend - absCtrDistance;
 
-        if (penetrationDepth.x <= 0 || penetrationDepth.y <= 0 || penetrationDepth.z <= 0)
+        if (penetrationDepth.x <= 0 || penetrationDepth.y <= 0 || penetrationDepth.z <= 0) // prob unnecessary now since no col check above
         {
             return SIDES::NO_COLLISION;
         }
@@ -409,18 +474,18 @@ namespace NlMath
         //start by finding the normal of the capsule 1, which is the tip - base
         Vector3D normal1 = Vector3DNormalize(tCap1.tip - tCap1.base);
         //find the vector to reach the center of circle
-        Vector3D lineOffSet1 = normal1 * tCap1.radius;
+        //Vector3D lineOffSet1 = normal1 * tCap1.radius;
         //find the center of tip circle and base circle
-        Vector3D baseCircleCtr1 = tCap1.base + lineOffSet1;
-        Vector3D tipCircleCtr1 = tCap1.tip + lineOffSet1;
+        Vector3D baseCircleCtr1 = tCap1.base/* + lineOffSet1*/;
+        Vector3D tipCircleCtr1 = tCap1.tip/* + lineOffSet1*/;
 
         //repeat to find the normal of the capsule 2, which is the tip - base
         Vector3D normal2 = Vector3DNormalize(tCap2.tip - tCap2.base);
         //find the vector to reach the center of circle
-        Vector3D lineOffSet2 = normal2 * tCap2.radius;
+        //Vector3D lineOffSet2 = normal2 * tCap2.radius;
         //find the center of tip circle and base circle
-        Vector3D baseCircleCtr2 = tCap2.base + lineOffSet2;
-        Vector3D tipCircleCtr2 = tCap2.tip + lineOffSet2;
+        Vector3D baseCircleCtr2 = tCap2.base/* + lineOffSet2*/;
+        Vector3D tipCircleCtr2 = tCap2.tip/* + lineOffSet2*/;
 
         // vectors between line endpoints:
         Vector3D dis0 = baseCircleCtr2 - baseCircleCtr1;

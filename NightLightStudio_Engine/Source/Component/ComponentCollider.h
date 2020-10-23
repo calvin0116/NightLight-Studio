@@ -63,7 +63,8 @@ enum class COLLIDERS
 
 struct ICollider
 {
-
+	NlMath::Vector3D colliderScale;
+	ICollider() : colliderScale(1.0f, 1.0f, 1.0f) {}
 };
 
 struct PlaneCollider : public ICollider
