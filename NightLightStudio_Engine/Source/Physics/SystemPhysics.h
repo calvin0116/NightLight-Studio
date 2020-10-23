@@ -4,13 +4,16 @@
 #include "../../framework.h"
 #include "../Math/Vector.h"
 #include "../Core/DeltaTime.h"
+#include "ForceManager.h"
 
 namespace NS_PHYSICS
 {
 	class PhysicsSystem : public MySystem, public Singleton<PhysicsSystem>
 	{
+		ForceManager _forceManager;
 		NlMath::Vector3D _maxspeed;
 		float gravity;
+		
 		friend Singleton<PhysicsSystem>;
 		
 	public:
