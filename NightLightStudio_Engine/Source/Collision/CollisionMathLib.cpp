@@ -9,11 +9,42 @@ namespace NlMath
 {
     Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint)
     {
-        //construct linesegment AB
-        Vector3D AB = segmentPointB - segmentPointA;
-        //find projection
-        float t = Vector3DDotProduct(CheckPoint - segmentPointA, AB) / Vector3DDotProduct(AB, AB);
-        return segmentPointA + t * AB;
+
+		// ref : https://math.stackexchange.com/questions/2193720/find-a-point-on-a-line-segment-which-is-the-closest-to-other-point-not-on-the-li
+		Vector3D v = segmentPointB - segmentPointA;
+		Vector3D u = segmentPointA - CheckPoint;
+		float vu = v * u;
+		float vv = v * v;
+		float t = -vu / vv;
+		auto vectorToSegment = [&](float _t, Vector3D _p)
+		{
+			return Vector3D(
+				(1 - _t) * segmentPointA.x + _t * segmentPointB.x - _p.x,
+				(1 - _t) * segmentPointA.y + _t * segmentPointB.y - _p.y,
+				(1 - _t) * segmentPointA.z + _t * segmentPointB.z - _p.z
+			);
+		};
+		if (t >= 0 && t <= 1) 
+			return vectorToSegment(t, Vector3D(0.0f, 0.0f, 0.0f));
+		Vector3D g0 = vectorToSegment(0, CheckPoint);
+		Vector3D g1 = vectorToSegment(1, CheckPoint);
+		float g0sq = g0 * g0;
+		float g1sq = g1 * g1;
+
+		if (g0sq <= g1sq)
+		{
+			return segmentPointA;
+		}
+		else
+		{
+			return segmentPointB;
+		}
+
+        ////construct linesegment AB
+        //Vector3D AB = segmentPointB - segmentPointA;
+        ////find projection
+        //float t = Vector3DDotProduct(CheckPoint - segmentPointA, AB) / Vector3DDotProduct(AB, AB);
+        //return segmentPointA + t * AB;
     }
 
     bool PointInAABB(const AABBCollider& tBox, const NlMath::Vector3D& vecPoint)

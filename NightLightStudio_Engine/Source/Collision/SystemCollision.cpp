@@ -34,9 +34,9 @@ namespace NS_COLLISION
 		
 
 		Rigid1.isStatic = false;
-		Transform1._rotation.x = 45;
-		Transform1._rotation.y = 45;
-		Transform1._rotation.z = 45;	 
+		//Transform1._rotation.x = 45;
+		//Transform1._rotation.y = 45;
+		//Transform1._rotation.z = 45;
 		Transform1._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
 		cube1Test.AttachComponent<ComponentTransform>(Transform1);
@@ -52,9 +52,9 @@ namespace NS_COLLISION
 		
 
 		Transform2._position = glm::vec3(2.5f, 0.0f, 0.f);
-		//Transform2._rotation.x = 45;
-		//Transform2._rotation.y = 45;
-		//Transform2._rotation.z = 45;
+		Transform2._rotation.x = 45;
+		Transform2._rotation.y = 45;
+		Transform2._rotation.z = 45;
 		Transform2._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
 
