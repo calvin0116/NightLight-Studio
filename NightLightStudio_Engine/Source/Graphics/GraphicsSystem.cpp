@@ -166,6 +166,8 @@ namespace NS_GRAPHICS
 		// Passes if the fragment's depth value is less than the stored depth value.
 		// This is the default, but we will call this function to be explicit
 		glDepthFunc(GL_LESS);
+
+		SetLineThickness();
 	}
 
 	void GraphicsSystem::Exit()
@@ -463,7 +465,12 @@ namespace NS_GRAPHICS
 	//	return meshManager->AddMesh(mesh);
 	//}
 
-	void GraphicsSystem::DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& rgb)
+void GraphicsSystem::SetLineThickness(const float& thickness)
+{
+	glLineWidth(thickness);
+}
+
+void GraphicsSystem::DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& rgb)
 	{
 		shaderManager->StartProgram(0);
 
