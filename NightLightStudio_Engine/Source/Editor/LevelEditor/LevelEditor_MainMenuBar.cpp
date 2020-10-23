@@ -47,6 +47,13 @@ void LevelEditor::LE_MainMenuBar()
         LE_AddMenuWithItems("Windows", editorNames, {}, funcs);
         //LE_AddMenuOnly("Windows", [&](){ LE_AddMenuWithItems("SecondWindows", editorNames, {}, funcs);});
 
+        ImVec2 size = viewport->GetWorkSize();
+        ImGui::SetCursorPosX(size.x / 2.0f);
+        LE_AddCheckbox("PLAY##MMBAR", &_runEngine, [&]()
+            {
+                // START/STOP ENGINE RUN HERE
+            });
+
         ImGui::EndMenuBar();
     }
 
