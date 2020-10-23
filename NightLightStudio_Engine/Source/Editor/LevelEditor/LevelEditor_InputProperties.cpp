@@ -50,6 +50,15 @@ void LevelEditor::LE_AddSelectable(const std::string& name, bool* isSelectedPtr,
     }
 }
 
+void LevelEditor::LE_AddCheckbox(const std::string& name, bool* isSelected, std::function<void()> fn)
+{
+    if (ImGui::Checkbox(name.c_str(), isSelected))
+    {
+        if (fn)
+            fn();
+    }
+}
+
 void LevelEditor::LE_AddInputIntProperty(const std::string& name, int& prop, std::function<void()> fn, ImGuiInputTextFlags flag)
 {
     if (ImGui::InputInt(name.c_str(), &prop, 1, 100, flag))

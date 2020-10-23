@@ -82,7 +82,7 @@ void MySystemManager::Update()
 		elapsed.QuadPart = end.QuadPart - start.QuadPart;
 		elapsed.QuadPart *= 1000000;
 		elapsed.QuadPart /= freq.QuadPart;
-		SYS_EDITOR->GetSystemsUsage()->push_back(elapsed.QuadPart);
+		SYS_EDITOR->GetSystemsUsage()->push_back((float)elapsed.QuadPart);
 		//auto t2 = std::chrono::high_resolution_clock::now();
 		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 		//SYS_EDITOR->GetSystemsUsage()->push_back(duration);

@@ -3,7 +3,7 @@
 #include "psapi.h"
 
 PerformanceMetrics::PerformanceMetrics()
-	: _totalMem{}, _memInUse{}, _memSize{ BYTES },
+	: _totalMem{}, _memInUse{}, _memSize{ MEGABYTES },
 	_usage{}
 {
 

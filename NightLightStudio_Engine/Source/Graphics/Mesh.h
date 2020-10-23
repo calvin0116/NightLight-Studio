@@ -9,7 +9,7 @@ namespace NS_GRAPHICS
 {
 	//Local Path For Custom Graphics Files
 	static std::string s_LocalPathName = "Resources\\Mesh\\";
-	static std::string s_MeshFileType = "mesh";
+	static std::string s_MeshFileType = ".mesh";
 
 	struct Mesh
 	{
@@ -21,6 +21,7 @@ namespace NS_GRAPHICS
 
 		//Manual Input
 		std::string _textureFileName;
+		std::string _meshName;
 
 		//////////////////////////////
 		/// New variables for interleaving data and reducing BOs
