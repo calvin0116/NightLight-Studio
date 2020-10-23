@@ -9,11 +9,42 @@ namespace NlMath
 {
     Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint)
     {
-        //construct linesegment AB
-        Vector3D AB = segmentPointB - segmentPointA;
-        //find projection
-        float t = Vector3DDotProduct(CheckPoint - segmentPointA, AB) / Vector3DDotProduct(AB, AB);
-        return segmentPointA + t * AB;
+
+		// ref : https://math.stackexchange.com/questions/2193720/find-a-point-on-a-line-segment-which-is-the-closest-to-other-point-not-on-the-li
+		Vector3D v = segmentPointB - segmentPointA;
+		Vector3D u = segmentPointA - CheckPoint;
+		float vu = v * u;
+		float vv = v * v;
+		float t = -vu / vv;
+		auto vectorToSegment = [&](float _t, Vector3D _p)
+		{
+			return Vector3D(
+				(1 - _t) * segmentPointA.x + _t * segmentPointB.x - _p.x,
+				(1 - _t) * segmentPointA.y + _t * segmentPointB.y - _p.y,
+				(1 - _t) * segmentPointA.z + _t * segmentPointB.z - _p.z
+			);
+		};
+		if (t >= 0 && t <= 1) 
+			return vectorToSegment(t, Vector3D(0.0f, 0.0f, 0.0f));
+		Vector3D g0 = vectorToSegment(0, CheckPoint);
+		Vector3D g1 = vectorToSegment(1, CheckPoint);
+		float g0sq = g0 * g0;
+		float g1sq = g1 * g1;
+
+		if (g0sq <= g1sq)
+		{
+			return segmentPointA;
+		}
+		else
+		{
+			return segmentPointB;
+		}
+
+        ////construct linesegment AB
+        //Vector3D AB = segmentPointB - segmentPointA;
+        ////find projection
+        //float t = Vector3DDotProduct(CheckPoint - segmentPointA, AB) / Vector3DDotProduct(AB, AB);
+        //return segmentPointA + t * AB;
     }
 
     bool PointInAABB(const AABBCollider& tBox, const NlMath::Vector3D& vecPoint)
@@ -443,18 +474,18 @@ namespace NlMath
         //start by finding the normal of the capsule 1, which is the tip - base
         Vector3D normal1 = Vector3DNormalize(tCap1.tip - tCap1.base);
         //find the vector to reach the center of circle
-        Vector3D lineOffSet1 = normal1 * tCap1.radius;
+        //Vector3D lineOffSet1 = normal1 * tCap1.radius;
         //find the center of tip circle and base circle
-        Vector3D baseCircleCtr1 = tCap1.base + lineOffSet1;
-        Vector3D tipCircleCtr1 = tCap1.tip + lineOffSet1;
+        Vector3D baseCircleCtr1 = tCap1.base/* + lineOffSet1*/;
+        Vector3D tipCircleCtr1 = tCap1.tip/* + lineOffSet1*/;
 
         //repeat to find the normal of the capsule 2, which is the tip - base
         Vector3D normal2 = Vector3DNormalize(tCap2.tip - tCap2.base);
         //find the vector to reach the center of circle
-        Vector3D lineOffSet2 = normal2 * tCap2.radius;
+        //Vector3D lineOffSet2 = normal2 * tCap2.radius;
         //find the center of tip circle and base circle
-        Vector3D baseCircleCtr2 = tCap2.base + lineOffSet2;
-        Vector3D tipCircleCtr2 = tCap2.tip + lineOffSet2;
+        Vector3D baseCircleCtr2 = tCap2.base/* + lineOffSet2*/;
+        Vector3D tipCircleCtr2 = tCap2.tip/* + lineOffSet2*/;
 
         // vectors between line endpoints:
         Vector3D dis0 = baseCircleCtr2 - baseCircleCtr1;

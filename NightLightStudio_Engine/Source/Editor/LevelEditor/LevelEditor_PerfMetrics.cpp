@@ -38,7 +38,7 @@ void PerformanceMetrics::Run()
 		}, true);
 
 	// Memory Usage
-	_levelEditor->LE_AddChildWindow("Memory Usage", ImVec2(0, 125),
+	_levelEditor->LE_AddCollapsingHeader("Memory Usage",
 		{
 			[&]()
 			{
@@ -88,10 +88,10 @@ void PerformanceMetrics::Run()
 
 				_levelEditor->LE_AddProgressBar(_memInUse / _totalMem);
 			}
-		}, true);
+		});
 
 	// CPU Usage
-	_levelEditor->LE_AddChildWindow("CPU Usage", ImVec2(0, 60),
+	_levelEditor->LE_AddCollapsingHeader("CPU Usage",
 		{
 			[&]()
 			{
@@ -99,10 +99,10 @@ void PerformanceMetrics::Run()
 
 				_levelEditor->LE_AddProgressBar(_usage.GetUsage() / 100.0f, ImVec2(), std::to_string(_usage.GetUsage()).append(" %"));
 			}
-		}, true);
+		});
 
 	// System Usage
-	_levelEditor->LE_AddChildWindow("Systems Usage", ImVec2(0, 0),
+	_levelEditor->LE_AddCollapsingHeader("Systems Usage",
 		{
 			[&]()
 			{
@@ -156,7 +156,7 @@ void PerformanceMetrics::Run()
 					}
 				}
 			}
-		}, true);
+		});
 
 	_systemsUsage.clear();
 }

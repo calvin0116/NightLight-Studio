@@ -308,7 +308,106 @@ Mesh CreateSphere(int stacks, int slices)
 	//return CreateCube(stacks, slices);
 }
 
+Mesh CreateCylinder(int stacks, int slices)
+{
+	//@todo: IMPLEMENT ME
+	// geometric modelling pg 48
 
+	// cylindrical coordinate system
+	const float radius = 0.5; // normalised -0.5 to 0.5
+	//float alpha = 0; // 0 to 2pi
+	//float height = 0; // -0.5 to 0.5
+	//float x = radius * sin(alpha);
+	//float y = height;
+	//float z = radius * cos(alpha);
+
+	Mesh mesh;
+
+	// build tube
+	for (int i = 0; i <= stacks; ++i)
+	{
+		float row = (float)i / stacks;
+
+		for (int j = 0; j <= slices; ++j)
+		{
+			float col = (float)j / slices;
+			float alpha = col * TWO_PI;
+
+			// cr8 vertex
+			Vertex v;
+
+			// pos
+			v.pos = Vec3(
+				radius * sin(alpha),
+				row - radius,
+				radius * cos(alpha)
+			);
+
+			// nrm
+			v.nrm = Vec3(
+				v.pos.x / radius,
+				0.0f,
+				v.pos.z / radius
+			);
+
+			// tex
+			v.uv = Vec2(col, row);
+
+			// add vertex to mesh
+			addVertex(mesh, v);
+		}
+	}
+
+	// build index buffer
+	BuildIndexBuffer(stacks, slices, mesh);
+
+	//// build top and bottom caps // pg 56
+	//// will not reuse vertices alr generated in tube
+	//// top vertex
+	//Vertex vTop;
+	//// pos
+	//vTop.pos = Vec3(0.0f, 0.5f, 0.0f);
+	//vTop.nrm = Vec3(0.0f, 0.0f, 1.0f);
+	//vTop.uv = Vec2(0.0f, 0.0f);
+
+	//int vTopInd = mesh.vertexBuffer.size();
+	//int topSliceIndexStart = stacks * slices;
+	//// no of stacks-1 = stacks
+
+	//// for every slice add the index
+	//for (int i = 0; i <= slices; ++i)
+	//{
+	//	addIndex(mesh, vTopInd);
+	//	addIndex(mesh, topSliceIndexStart + i);
+	//	addIndex(mesh, topSliceIndexStart + i + 1);
+	//}
+
+	//// bot vertex
+	//Vertex vBot;
+	//// pos
+	//vBot.pos = Vec3(0.0f, -0.5f, 0.0f);
+	//vBot.nrm = Vec3(0.0f, 0.0f, -1.0f);
+	//vBot.uv = Vec2(0.0f, 0.0f);
+
+	//int vBotInd = mesh.vertexBuffer.size() + 1;
+
+	//// for every slice add the index
+	//for (int i = 0; i <= slices; ++i)
+	//{
+	//	addIndex(mesh, vBotInd);
+	//	addIndex(mesh, i);
+	//	addIndex(mesh, i + 1);
+	//}
+
+	//// add top and bot vertex to mesh
+	//addVertex(mesh, vTop);
+	//addVertex(mesh, vBot);
+
+	return mesh;
+
+	//REMOVE THIS
+	//return CreateCube(stacks, slices);
+}
 
 
 

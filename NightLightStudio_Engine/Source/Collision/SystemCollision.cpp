@@ -9,6 +9,8 @@
 
 #include "CollisionDebugLines.h"
 
+#include <algorithm> // std max
+
 #define MESH_MAX_LOD 18
 #define MESH_MIN_LOD -20
 
@@ -34,9 +36,9 @@ namespace NS_COLLISION
 		
 
 		Rigid1.isStatic = false;
-		//Transform1._rotation.x = 45;
-		//Transform1._rotation.y = 90;
-		//Transform1._rotation.z = 45;	 
+		Transform1._rotation.x = 45;
+		Transform1._rotation.y = 45;
+		Transform1._rotation.z = 45;
 		Transform1._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
 		cube1Test.AttachComponent<ComponentTransform>(Transform1);
@@ -52,9 +54,9 @@ namespace NS_COLLISION
 		
 
 		Transform2._position = glm::vec3(2.5f, 0.0f, 0.f);
-		//Transform2._rotation.x = 45;
-		//Transform2._rotation.y = 45;
-		//Transform2._rotation.z = 45;
+		Transform2._rotation.x = -45;
+		//Transform2._rotation.y = -45;
+		Transform2._rotation.z = -45;
 		Transform2._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
 
@@ -71,11 +73,11 @@ namespace NS_COLLISION
 		//ComponentCollider AABB1(COLLIDERS::OBB);
 		//ComponentCollider AABB2(COLLIDERS::OBB);
 
-		ComponentCollider AABB1(COLLIDERS::SPHERE);
-		ComponentCollider AABB2(COLLIDERS::SPHERE);
+		//ComponentCollider AABB1(COLLIDERS::SPHERE);
+		//ComponentCollider AABB2(COLLIDERS::SPHERE);
 
-		//ComponentCollider AABB1(COLLIDERS::CAPSULE);
-		//ComponentCollider AABB2(COLLIDERS::CAPSULE);
+		ComponentCollider AABB1(COLLIDERS::CAPSULE);
+		ComponentCollider AABB2(COLLIDERS::CAPSULE);
 
 		AABB1.collider.aabb.colliderScale = NlMath::Vector3D(2.0f, 2.0f, 2.0f);
 		AABB2.collider.aabb.colliderScale = NlMath::Vector3D(2.0f, 2.0f, 2.0f);
@@ -642,19 +644,55 @@ namespace NS_COLLISION
 		switch (comCol->colliderType)
 		{
 		case COLLIDERS::AABB:
-			mesh = NS_COLDEBUGTEST::CreateCube(1 + meshlod, 1 + meshlod);
+			mesh = NS_COLDEBUGTEST::CreateCube(std::max(1 + meshlod, 1), std::max(1 + meshlod, 1));
 			break;
 		case COLLIDERS::SPHERE:
-			mesh = NS_COLDEBUGTEST::CreateSphere(8 + meshlod, 8 + meshlod);
+			mesh = NS_COLDEBUGTEST::CreateSphere(std::max(8 + meshlod, 1), std::max(8 + meshlod, 1));
 			break;
 		case COLLIDERS::CAPSULE:
+		{
+
+			mesh = NS_COLDEBUGTEST::CreateCylinder(std::max((1 + (int)(meshlod * 0.25f)), 1), std::max(8 + meshlod, 1));
+			NS_COLDEBUGTEST::Mesh mesh2;
+			NS_COLDEBUGTEST::Mesh mesh3;
+			mesh2 = NS_COLDEBUGTEST::CreateSphere(std::max(8 + meshlod, 1), std::max(8 + meshlod, 1));
+			mesh3 = NS_COLDEBUGTEST::CreateSphere(std::max(8 + meshlod, 1), std::max(8 + meshlod, 1));
+			
+			glm::vec3 capSphereScale(
+				comCol->collider.capsule.radius * comCol->collider.capsule.colliderScale.x,
+				comCol->collider.capsule.radius * comCol->collider.capsule.colliderScale.y,
+				comCol->collider.capsule.radius * comCol->collider.capsule.colliderScale.z
+			);
+
+
+			NS_COLDEBUGTEST::TransformMesh(
+				mesh2, 
+				comCol->collider.capsule.tip, 
+				//glm::vec3(0.0f, 0.0f, 0.0f),
+				comTrans->_rotation,
+				capSphereScale
+			);
+			NS_COLDEBUGTEST::TransformMesh(
+				mesh3, 
+				comCol->collider.capsule.base, 
+				//glm::vec3(0.0f, 0.0f, 0.0f), 
+				comTrans->_rotation,
+				capSphereScale
+			);
+
+			NS_COLDEBUGTEST::DrawMesh(mesh2, color, lod);
+
+			NS_COLDEBUGTEST::DrawMesh(mesh3, color, lod);
+
+		}
 			break;
 		case COLLIDERS::OBB:
-			mesh = NS_COLDEBUGTEST::CreateCube(1 + meshlod, 1 + meshlod);
+			mesh = NS_COLDEBUGTEST::CreateCube(std::max(1 + meshlod, 1), std::max(1 + meshlod, 1));
 			break;
 		}
 		
 		NS_COLDEBUGTEST::TransformMesh(mesh, comTrans->_position, comTrans->_rotation, colscale);
+
 
 		NS_COLDEBUGTEST::DrawMesh(mesh, color, lod);
 
