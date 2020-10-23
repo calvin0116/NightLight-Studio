@@ -9,6 +9,8 @@
 
 #include "CollisionDebugLines.h"
 
+#include <algorithm> // std max
+
 #define MESH_MAX_LOD 18
 #define MESH_MIN_LOD -20
 
@@ -642,19 +644,19 @@ namespace NS_COLLISION
 		switch (comCol->colliderType)
 		{
 		case COLLIDERS::AABB:
-			mesh = NS_COLDEBUGTEST::CreateCube(1 + meshlod, 1 + meshlod);
+			mesh = NS_COLDEBUGTEST::CreateCube(std::max(1 + meshlod, 1), std::max(1 + meshlod, 1));
 			break;
 		case COLLIDERS::SPHERE:
-			mesh = NS_COLDEBUGTEST::CreateSphere(8 + meshlod, 8 + meshlod);
+			mesh = NS_COLDEBUGTEST::CreateSphere(std::max(8 + meshlod, 1), std::max(8 + meshlod, 1));
 			break;
 		case COLLIDERS::CAPSULE:
 		{
 
-			mesh = NS_COLDEBUGTEST::CreateCylinder(1 + meshlod * 0.25f, 8 + meshlod);
+			mesh = NS_COLDEBUGTEST::CreateCylinder(std::max((1 + (int)(meshlod * 0.25f)), 1), std::max(8 + meshlod, 1));
 			NS_COLDEBUGTEST::Mesh mesh2;
 			NS_COLDEBUGTEST::Mesh mesh3;
-			mesh2 = NS_COLDEBUGTEST::CreateSphere(8 + meshlod, 8 + meshlod);
-			mesh3 = NS_COLDEBUGTEST::CreateSphere(8 + meshlod, 8 + meshlod);
+			mesh2 = NS_COLDEBUGTEST::CreateSphere(std::max(8 + meshlod, 1), std::max(8 + meshlod, 1));
+			mesh3 = NS_COLDEBUGTEST::CreateSphere(std::max(8 + meshlod, 1), std::max(8 + meshlod, 1));
 			
 			glm::vec3 capSphereScale(
 				comCol->collider.capsule.radius * comCol->collider.capsule.colliderScale.x,
@@ -685,7 +687,7 @@ namespace NS_COLLISION
 		}
 			break;
 		case COLLIDERS::OBB:
-			mesh = NS_COLDEBUGTEST::CreateCube(1 + meshlod, 1 + meshlod);
+			mesh = NS_COLDEBUGTEST::CreateCube(std::max(1 + meshlod, 1), std::max(1 + meshlod, 1));
 			break;
 		}
 		
