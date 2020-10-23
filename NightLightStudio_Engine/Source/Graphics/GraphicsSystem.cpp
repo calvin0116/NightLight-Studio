@@ -90,13 +90,13 @@ namespace NS_GRAPHICS
 		//meshManager->AddMesh();
 
 		//Draw Cylinder FBX file 
-		unsigned index = modelLoader->LoadModel("cylinder.fbx");
+		modelLoader->LoadModel("cylinder.fbx");
 
 		Entity drawTest = G_ECMANAGER->BuildEntity();
 		ComponentTransform Transform1;
 		Transform1._position = { -100.0f,0.0f,0.0f };
 		drawTest.AttachComponent<ComponentTransform>(Transform1);
-		Mesh* mesh = meshManager->meshes[index];
+		Mesh* mesh = meshManager->meshes[0];
 		
 		//Randomize cylinder colour for better 3d view
 		for (int i = 0; i < mesh->_rgb.size(); ++i)
@@ -104,17 +104,28 @@ namespace NS_GRAPHICS
 
 			mesh->_rgb[i] = glm::vec3((float)i / mesh->_rgb.size(), (mesh->_rgb.size() - (float)i)/ mesh->_rgb.size(), 0.0f);
 		}
-		InitMesh(drawTest, index);
+		InitMesh(drawTest, 0);
 
 		//Draw sphere FBX file 
-		index = modelLoader->LoadModel("sphere.fbx");
+		modelLoader->LoadModel("sphere.fbx");
 
 		Entity drawTest2 = G_ECMANAGER->BuildEntity();
 		ComponentTransform Transform2;
 		Transform2._position = { 100.0f,0.0f,0.0f };
 		drawTest2.AttachComponent<ComponentTransform>(Transform2);
+		//Randomize cylinder colour for better 3d view
+		Mesh* mesh2 = meshManager->meshes[1];
+		for (int i = 0; i < mesh2->_rgb.size(); ++i)
+		{
+			mesh2->_rgb[i] = glm::vec3((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
+		}
 
-		InitMesh(drawTest2, index);
+		InitMesh(drawTest2, 1);
+
+		std::vector<glm::vec3> vectTest;
+
+		//TEST VECTOR MAX SIZE
+		std::cout << "TEST MAX SIZE: " << vectTest.max_size() << std::endl;
 
 		// Set default values for view matrix
 		// temporary solution before camera system implementation
