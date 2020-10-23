@@ -32,6 +32,8 @@ namespace NS_GRAPHICS
 		*/
 		unsigned meshIDs;
 
+
+
 	public:
 		// Unique Singleton instance
 		static MeshManager& GetInstance()
