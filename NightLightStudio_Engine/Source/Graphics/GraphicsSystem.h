@@ -87,6 +87,12 @@ namespace NS_GRAPHICS
         void CreateCube(Entity& entity, const glm::vec3& rgb = glm::vec3(0.5f, 0.5f, 1.0f), const float& midExtent = 0.5f);
         void InitMesh(Entity& entity, unsigned index = 0);
 
+        // Uses preloaded meshes to load sphere mesh instances
+        void CreateSphere(Entity& entity, const glm::vec3& rgb);
+
+        // uses preloaded meshes to load cylinder mesh instances
+        void CreateCylinder(Entity& entity, const glm::vec3& rgb);
+
         // Testing for drawing cube without component system
         // Returns mesh ID
         unsigned TestCreateCube(const glm::vec3& rgb = glm::vec3(0.5f, 0.5f, 0.5f), const float& midExtent = 1.f);

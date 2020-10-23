@@ -90,42 +90,59 @@ namespace NS_GRAPHICS
 		//meshManager->AddMesh();
 
 		//Draw Cylinder FBX file 
-		modelLoader->LoadModel("cylinder.fbx");
+		modelLoader->LoadModel("cylinder.fbx", "cylinder");
 
-		Entity drawTest = G_ECMANAGER->BuildEntity();
-		ComponentTransform Transform1;
-		Transform1._position = { -100.0f,0.0f,0.0f };
-		drawTest.AttachComponent<ComponentTransform>(Transform1);
-		Mesh* mesh = meshManager->meshes[0];
-		
-		//Randomize cylinder colour for better 3d view
-		for (int i = 0; i < mesh->_rgb.size(); ++i)
-		{
+		//Entity drawTest = G_ECMANAGER->BuildEntity();
+		//ComponentTransform Transform1;
+		//Transform1._position = { -100.0f,0.0f,0.0f };
+		//drawTest.AttachComponent<ComponentTransform>(Transform1);
+		//Mesh* mesh = meshManager->meshes[0];
+		//
+		////Randomize cylinder colour for better 3d view
+		//for (int i = 0; i < mesh->_rgb.size(); ++i)
+		//{
 
-			mesh->_rgb[i] = glm::vec3((float)i / mesh->_rgb.size(), (mesh->_rgb.size() - (float)i)/ mesh->_rgb.size(), 0.0f);
-		}
-		InitMesh(drawTest, 0);
+		//	mesh->_rgb[i] = glm::vec3((float)i / mesh->_rgb.size(), (mesh->_rgb.size() - (float)i)/ mesh->_rgb.size(), 0.0f);
+		//}
+		//InitMesh(drawTest, 0);
 
 		//Draw sphere FBX file 
-		modelLoader->LoadModel("sphere.fbx");
+		modelLoader->LoadModel("sphere.fbx", "sphere");
 
-		Entity drawTest2 = G_ECMANAGER->BuildEntity();
+		/*Entity drawTest2 = G_ECMANAGER->BuildEntity();
 		ComponentTransform Transform2;
 		Transform2._position = { 100.0f,0.0f,0.0f };
-		drawTest2.AttachComponent<ComponentTransform>(Transform2);
+		drawTest2.AttachComponent<ComponentTransform>(Transform2);*/
 		//Randomize cylinder colour for better 3d view
-		Mesh* mesh2 = meshManager->meshes[1];
+		/*Mesh* mesh2 = meshManager->meshes[1];
 		for (int i = 0; i < mesh2->_rgb.size(); ++i)
 		{
 			mesh2->_rgb[i] = glm::vec3((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
-		}
+		}*/
 
-		InitMesh(drawTest2, 1);
+		//InitMesh(drawTest2, 1);
 
-		std::vector<glm::vec3> vectTest;
+		//std::vector<glm::vec3> vectTest;
 
-		//TEST VECTOR MAX SIZE
-		std::cout << "TEST MAX SIZE: " << vectTest.max_size() << std::endl;
+		//////////////////////////////////////
+		// TEST DRAW LOADED MODELS
+		/*Entity testdrawSphere = G_ECMANAGER->BuildEntity();
+		ComponentTransform testtransformsphere;
+		testtransformsphere._position = { 100.f, 0.f,0.f };
+		testdrawSphere.AttachComponent<ComponentTransform>(testtransformsphere);
+
+		CreateSphere(testdrawSphere, glm::vec3(1.f,0.f,1.f));
+
+		Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
+		ComponentTransform testtransformcylinder;
+		testtransformcylinder._position = { 200.f, 0.f,0.f };
+		testdrawCylinder.AttachComponent<ComponentTransform>(testtransformcylinder);
+
+		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));*/
+
+
+		////TEST VECTOR MAX SIZE
+		//std::cout << "TEST MAX SIZE: " << vectTest.max_size() << std::endl;
 
 		// Set default values for view matrix
 		// temporary solution before camera system implementation
@@ -426,6 +443,20 @@ namespace NS_GRAPHICS
 		//unsigned currentid = meshManager->AddMesh(mesh);
 
 		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(index));
+	}
+
+	void GraphicsSystem::CreateSphere(Entity& entity, const glm::vec3& rgb)
+	{
+		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(meshManager->AddMesh("sphere")));
+
+		SetMeshColor(entity, rgb);
+	}
+
+	void GraphicsSystem::CreateCylinder(Entity& entity, const glm::vec3& rgb)
+	{
+		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(meshManager->AddMesh("cylinder")));
+
+		SetMeshColor(entity, rgb);
 	}
 
 	unsigned GraphicsSystem::TestCreateCube(const glm::vec3& rgb, const float& midExtent)

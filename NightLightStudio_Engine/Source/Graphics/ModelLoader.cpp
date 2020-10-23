@@ -237,7 +237,7 @@ namespace NS_GRAPHICS
 				}
 
 				mesh->Destroy();
-				MeshManager::GetInstance().AddMesh(newMesh);
+				MeshManager::GetInstance().AddLoadedMesh(newMesh, customName);
 				++(*meshIndex);
 			}	
 		}

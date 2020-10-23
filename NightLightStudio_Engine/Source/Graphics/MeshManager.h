@@ -3,6 +3,7 @@
 #include "../../framework.h"
 #include "Mesh.h"
 #include "../Window/WndUtils.h"
+#include <unordered_map>
 
 namespace NS_GRAPHICS
 {
@@ -32,8 +33,6 @@ namespace NS_GRAPHICS
 		*/
 		unsigned meshIDs;
 
-
-
 	public:
 		// Unique Singleton instance
 		static MeshManager& GetInstance()
@@ -42,14 +41,27 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
+		// Object Mesh Instances
+		// Used for actual drawing
 		std::vector<Mesh*> meshes;
+
+		// Loaded Meshes
+		std::unordered_map<std::string, Mesh*> meshlist;
 
 		//std::unordered_map<std::string, Mesh> meshes;
 
 		//graphicscomp->AttachMesh("Cylinder");
 
-		// Adds new mesh to vector of meshes and returns mesh ID
+		// Adds new mesh instance to vector of mesh instances and returns mesh ID
 		unsigned AddMesh(Mesh* const mesh);
+
+		// Adds new mesh instance to vector of mesh instances and returns mesh ID
+		// Takes in mesh key for mesh list
+	    unsigned AddMesh(const std::string& meshkey);
+
+		// Adds loaded mesh into master list, requires name as key and context
+		// E.g.
+		void AddLoadedMesh(Mesh* mesh, const std::string& meshKey);
 
 		void Free();
 
