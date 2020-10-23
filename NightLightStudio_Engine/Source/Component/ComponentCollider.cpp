@@ -158,8 +158,10 @@ void CapsuleCollider::init(ComponentTransform* transform)
 	//tip.y += transform->_scale.y * 0.5f;
 	//base.y += -transform->_scale.y * 0.5f;
 
-	tip = NlMath::Vector3D(0.0f, 0.5f, 0.0f);
-	base = NlMath::Vector3D(0.0f, -0.5f, 0.0f);
+	//tip = NlMath::Vector3D(0.0f, 0.5f, 0.0f);
+	//base = NlMath::Vector3D(0.0f, -0.5f, 0.0f);
+	tip = NlMath::Vector3D(0.0f, 1.0f, 0.0f);
+	base = NlMath::Vector3D(0.0f, -1.0f, 0.0f);
 
 	rotation = glm::radians(transform->_rotation);
 
