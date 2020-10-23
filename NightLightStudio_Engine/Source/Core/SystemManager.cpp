@@ -68,21 +68,30 @@ void MySystemManager::Update()
 	for (auto my_sys : Systems)
 	{
 #ifdef _EDITOR
+		std::vector<float>* sysUsage = SYS_EDITOR->GetSystemsUsage();
+
 		LARGE_INTEGER start, end, elapsed;
 		LARGE_INTEGER freq;
 
-		QueryPerformanceFrequency(&freq);
-		QueryPerformanceCounter(&start);
+		if (sysUsage)
+		{
+			QueryPerformanceFrequency(&freq);
+			QueryPerformanceCounter(&start);
+		}
 		//auto t1 = std::chrono::high_resolution_clock::now();
 #endif
 		my_sys.second->Update();
 
 #ifdef _EDITOR
-		QueryPerformanceCounter(&end);
-		elapsed.QuadPart = end.QuadPart - start.QuadPart;
-		elapsed.QuadPart *= 1000000;
-		elapsed.QuadPart /= freq.QuadPart;
-		SYS_EDITOR->GetSystemsUsage()->push_back((float)elapsed.QuadPart);
+
+		if (sysUsage)
+		{
+			QueryPerformanceCounter(&end);
+			elapsed.QuadPart = end.QuadPart - start.QuadPart;
+			elapsed.QuadPart *= 1000000;
+			elapsed.QuadPart /= freq.QuadPart;
+			sysUsage->push_back((float)elapsed.QuadPart);
+		}
 		//auto t2 = std::chrono::high_resolution_clock::now();
 		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 		//SYS_EDITOR->GetSystemsUsage()->push_back(duration);
