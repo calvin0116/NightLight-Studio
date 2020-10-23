@@ -23,6 +23,15 @@ void LevelEditor::LE_AddArrowButton(const std::string& name, ImGuiDir dir, std::
     }
 }
 
+void LevelEditor::LE_AddRadioButton(const std::string& name, bool active, std::function<void()> fn)
+{
+    if (ImGui::RadioButton(name.c_str(), active))
+    {
+        if (fn)
+            fn();
+    }
+}
+
 void LevelEditor::LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn, ImGuiSelectableFlags flag, ImVec2 size)
 {
     if (ImGui::Selectable(name.c_str(), isSelected, flag, size))
@@ -35,6 +44,15 @@ void LevelEditor::LE_AddSelectable(const std::string& name, bool isSelected, std
 void LevelEditor::LE_AddSelectable(const std::string& name, bool* isSelectedPtr, std::function<void()> fn, ImGuiSelectableFlags flag, ImVec2 size)
 {
     if (ImGui::Selectable(name.c_str(), isSelectedPtr, flag, size))
+    {
+        if (fn)
+            fn();
+    }
+}
+
+void LevelEditor::LE_AddCheckbox(const std::string& name, bool* isSelected, std::function<void()> fn)
+{
+    if (ImGui::Checkbox(name.c_str(), isSelected))
     {
         if (fn)
             fn();
@@ -180,14 +198,14 @@ void LevelEditor::LE_AddPlotLines(const std::string& name, std::vector<float>& g
     ImGui::PlotLines(name.c_str(), graph.data(), (int)graph.size());
 }
 
-void LevelEditor::LE_AddHistogram(const std::string& name, std::vector<float>& graph, bool addData, const float& newData)
+void LevelEditor::LE_AddHistogram(const std::string& name, std::vector<float>& graph, bool addData, const float& newData, float min, float max, ImVec2 size)
 {
     if (addData)
     {
         graph.erase(std::begin(graph));
         graph.push_back(newData);
     }
-    ImGui::PlotHistogram(name.c_str(), graph.data(), (int)graph.size());
+    ImGui::PlotHistogram(name.c_str(), graph.data(), (int)graph.size(), 0, NULL, min, max, size);
 }
 
 void LevelEditor::LE_AddProgressBar(float progress, ImVec2 size, std::string overlay)

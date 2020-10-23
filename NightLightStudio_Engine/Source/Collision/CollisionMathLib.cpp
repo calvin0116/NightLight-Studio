@@ -402,7 +402,7 @@ namespace NlMath
 
            return check;
     }
-    bool CapsuleToCapsule(const CapsuleCollider& tCap1, const CapsuleCollider& tCap2)
+    bool CapsuleToCapsule(const CapsuleCollider& tCap1, const CapsuleCollider& tCap2, Vector3D& normal)
     {
         //Capsule collision is made up of 2 circles, one at tip and the other at base
         
@@ -459,6 +459,140 @@ namespace NlMath
         float penetration_depth = tCap1.radius + tCap2.radius - len;
         bool intersects = penetration_depth > 0;
 
+		// normal ?
+		normal = penetration_normal;
+
         return intersects;
     }
+	SIDES AABBToCapsule(const AABBCollider& tBox1, const CapsuleCollider& tCap2, NlMath::Vector3D& nromal)
+	{
+		//                MAX
+		//      C--------D
+		//    /        / |
+		//  /        /   |
+		// A--------B    |
+		// |        |    |
+		// |        |    /
+		// |        |  /
+		// |________|/
+		// MIN
+
+		// all 8 vertices
+		Vector3D topA = Vector3D(tBox1.vecMin.x, tBox1.vecMax.y, tBox1.vecMin.z);
+		Vector3D topB = Vector3D(tBox1.vecMax.x, tBox1.vecMax.y, tBox1.vecMin.z);
+		Vector3D topC = Vector3D(tBox1.vecMin.x, tBox1.vecMax.y, tBox1.vecMax.z);
+		Vector3D topD = Vector3D(tBox1.vecMax.x, tBox1.vecMax.y, tBox1.vecMax.z);
+
+		Vector3D botA = Vector3D(tBox1.vecMin.x, tBox1.vecMin.y, tBox1.vecMin.z);
+		Vector3D botB = Vector3D(tBox1.vecMax.x, tBox1.vecMin.y, tBox1.vecMin.z);
+		Vector3D botC = Vector3D(tBox1.vecMin.x, tBox1.vecMin.y, tBox1.vecMax.z);
+		Vector3D botD = Vector3D(tBox1.vecMax.x, tBox1.vecMin.y, tBox1.vecMax.z);
+
+		// check all vertices for closest point to the capsule
+		Vector3D closestPointOnCapsuleLine[8];
+		closestPointOnCapsuleLine[0] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, topA);
+		closestPointOnCapsuleLine[1] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, topB);
+		closestPointOnCapsuleLine[2] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, topC);
+		closestPointOnCapsuleLine[3] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, topD);
+		closestPointOnCapsuleLine[4] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, botA);
+		closestPointOnCapsuleLine[5] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, botB);
+		closestPointOnCapsuleLine[6] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, botC);
+		closestPointOnCapsuleLine[7] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, botD);
+
+		// get sq dist
+		float dist[8];
+		for (int i = 0; i < 8; ++i)
+		{
+			dist[i] = closestPointOnCapsuleLine[i] * closestPointOnCapsuleLine[i];
+		}
+
+		// find smallest dist
+		int smallestDistIndex = 0;
+		float smallestDistance = dist[0];
+		for (int i = 0; i < 7; ++i)
+		{
+			if (dist[i] > dist[i + 1])
+			{
+				smallestDistIndex = i + 1;
+				smallestDistance = dist[i + 1];
+			}
+		}
+
+		// test aabb to spehere using sphere on closest point on capsule linesegment
+
+		SphereCollider closestsphere;
+		closestsphere.center = closestPointOnCapsuleLine[smallestDistIndex];
+		closestsphere.radius = tCap2.radius;
+
+		return AABB_SphereCollision(tBox1, closestsphere, nromal);
+		//return SIDES::NO_COLLISION;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	//// 2D
+	// some 2d checks we may or may not need in the future
+	// we can change them to 3d if we need them
+	bool Point_Rectangle_2D(Vec2 point, Vec2 rectVertA, Vec2 rectVertB, Vec2 rectVertC, Vec2 rectVertD)
+	{
+		Vec2 AP = point - rectVertA;
+		Vec2 AB = rectVertB - rectVertA;
+		float AP_AB = AP * AB;
+		float AB_AB = AB * AB;
+		Vec2 AD = rectVertD - rectVertA;
+		float AP_AD = AP * AD;
+		float AD_AD = AD * AD;
+		// 0 <= AP.AB <= AB.AB and 0 <= AP.AD <= AD.AD
+		return (
+			0 <= AP_AB &&
+			AP_AB <= AB_AB &&
+			0 <= AP_AD &&
+			AP_AD <= AD_AD
+			);
+	}
+	bool Line_Circle_2D(Vec2 circleCenter, float circleRadius, Vec2 rectVertA, Vec2 rectVertB)
+	{
+		// https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
+
+		Vec2 d = rectVertB - rectVertA;
+		Vec2 f = rectVertA - circleCenter;
+
+		float a = d * d;
+		float b = 2 * f * d;
+		float c = f * f - circleRadius * circleRadius;
+
+		float discriminant = b * b - 4 * a * c; // b^2 - 4ac
+
+		if (discriminant < 0) return false; // no intersection
+
+		discriminant = sqrt(discriminant);
+
+		// time of intersection
+		float t1 = (-b - discriminant) / (2 * a);
+		if (t1 >= 0 && t1 <= 1)
+		{
+			// within the toi
+			return true;
+		}
+
+		float t2 = (-b + discriminant) / (2 * a);
+		if (t2 >= 0 && t2 <= 1)
+		{
+			// inside sphere or past the sphere
+			return true;
+		}
+
+		return false;
+	}
+	bool Circle_Rectangle_2D(Vec2 circleCenter, float circleRadius, Vec2 rectVertA, Vec2 rectVertB, Vec2 rectVertC, Vec2 rectVertD)
+	{
+		return(
+			Point_Rectangle_2D(circleCenter, rectVertA, rectVertB, rectVertC, rectVertD) ||
+			Line_Circle_2D(circleCenter, circleRadius, rectVertA, rectVertB) ||
+			Line_Circle_2D(circleCenter, circleRadius, rectVertB, rectVertC) ||
+			Line_Circle_2D(circleCenter, circleRadius, rectVertC, rectVertD) ||
+			Line_Circle_2D(circleCenter, circleRadius, rectVertD, rectVertA)
+			);
+	}
+	//// 2D END
+	///////////////////////////////////////////////////////////////////////////////////////////////
 }

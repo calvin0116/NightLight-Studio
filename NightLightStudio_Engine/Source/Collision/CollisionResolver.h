@@ -7,6 +7,9 @@
 
 struct CollisionEvent
 {
+	// Type of collision
+	COLRESTYPE collisionType = COLRESTYPE::COLRESTYPE_ERR;
+
 	//for OBB angular physics, aabb dont use this
 	bool rotationEnabledEvent = false;
 	NlMath::Vector3D collisionPoint;
@@ -28,4 +31,8 @@ struct CollsionResolver
 	void resolveCollision();
 
 	void clear();
+
+private:
+	// helper functions
+	void resolveEventNormally/*like you know with the NORMAL*/(const CollisionEvent& _event);
 };

@@ -28,11 +28,11 @@ public:
 	LE_WindowBase() = default;
 	virtual ~LE_WindowBase() = default;
 
-	// Put your SetNextWindow stuff here
+	// Initializes at the start of a loop: THIS CAN BE CONSIDERED PRE-RUN; Runs functions before the window begins to run
 	virtual void Init() {}
-	// Main function to run
+	// Runs the function internally within
 	virtual void Run() {}
-	// Exit function
+	// Exit function: Considerd an AFTER-RUN. Runs functions after the window has ended.
 	virtual void Exit() {}
 	// Cloning
 	virtual LE_WindowBase* Clone() const = 0;
@@ -52,14 +52,9 @@ public:
 
 class LevelEditor
 {
-	/***** TO REMOVE/REPLACE *****/
-	HWND _window; 
-	bool show_demo_window = true;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	bool isOpen = false;
-	/***** TO REMOVE/REPLACE *****/
+	HWND _window;
 
-	bool _windowBG = true;
+	bool _runEngine;
 
 	struct LEWindow
 	{
@@ -180,6 +175,9 @@ public:
 		return retVec;
 	}
 
+	// ONLY USED FOR PERFORMANCE METRICS, DOES NOTHING OTHERWISE
+	std::vector<float>* LE_GetSystemsUsage();
+
 	/**********************************************************************/
 
 	/******************************* Menus ***************************************/
@@ -204,11 +202,16 @@ public:
 
 	// Adds a directional button that runs a function
 	void LE_AddArrowButton(const std::string& name, ImGuiDir dir = ImGuiDir_Right, std::function<void()> fn = nullptr);
+
+	// Adds a radio button that runs a function
+	void LE_AddRadioButton(const std::string& name, bool active = false, std::function<void()> fn = nullptr);
 	
 	// Adds a selectable that runs a function while selected. Input Boolean is unaffected.
 	void LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0, ImVec2 size = ImVec2(0, 0));
 	// Adds a selectable that runs a function while selected. Input Boolean is affected.
 	void LE_AddSelectable(const std::string& name, bool* isSelectedPtr, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0, ImVec2 size = ImVec2(0, 0));
+
+	void LE_AddCheckbox(const std::string& name, bool* isSelected, std::function<void()> fn = nullptr);
 
 	// Adds an Input Int Property
 	void LE_AddInputIntProperty(const std::string& name, int& prop, std::function<void()> fn = nullptr,
@@ -282,7 +285,7 @@ public:
 	// Shows a vector of floats as a line graph. If addData is true, automatically pushes back new data and pops the first (like a queue)
 	void LE_AddPlotLines(const std::string& name, std::vector<float>& graph, bool addData = false, const float& newData = 0);
 
-	void LE_AddHistogram(const std::string& name, std::vector<float>& graph, bool addData = false, const float& newData = 0);
+	void LE_AddHistogram(const std::string& name, std::vector<float>& graph, bool addData = false, const float& newData = 0, float min = 0, float max = 1, ImVec2 size = ImVec2());
 
 	void LE_AddProgressBar(float progress, ImVec2 size = ImVec2(0, 0), std::string overlay = {});
 
