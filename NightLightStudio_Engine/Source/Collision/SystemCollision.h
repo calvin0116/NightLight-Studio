@@ -40,6 +40,18 @@ namespace NS_COLLISION
 		
 		bool CheckCollision(ComponentCollider* Collider1, ComponentCollider* Collider2, ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2);
 
+	private:
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//// Line Mesh
+
+		int MeshLod;
+		bool doDrawLineMesh;
+
+		void DrawLineMesh(ComponentTransform* comTrans, ComponentCollider* comCol, int lod = 0, glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f));
+
+		//// Line Mesh END
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	};
 
 	static CollisionSystem* SYS_COLLISION = CollisionSystem::GetInstance();

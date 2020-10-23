@@ -7,9 +7,14 @@
 #include "../Component/ComponentRigidBody.h"
 #include "../Input/SystemInput.h"
 
+#include "CollisionDebugLines.h"
+
+#define MESH_MAX_LOD 18
+#define MESH_MIN_LOD -20
+
 namespace NS_COLLISION
 {
-	CollisionSystem::CollisionSystem()
+	CollisionSystem::CollisionSystem() : MeshLod(0), doDrawLineMesh(true)
 	{
 	}
 	void CollisionSystem::Load()
@@ -32,6 +37,7 @@ namespace NS_COLLISION
 		//Transform1._rotation.x = 45;
 		//Transform1._rotation.y = 90;
 		//Transform1._rotation.z = 45;	 
+		Transform1._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
 		cube1Test.AttachComponent<ComponentTransform>(Transform1);
 		cube1Test.AttachComponent<ComponentRigidBody>(Rigid1);
@@ -49,7 +55,7 @@ namespace NS_COLLISION
 		//Transform2._rotation.x = 45;
 		//Transform2._rotation.y = 45;
 		//Transform2._rotation.z = 45;
-		//Transform2._scale.x = 2;
+		Transform2._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
 
 		cube2Test.AttachComponent<ComponentTransform>(Transform2);
@@ -59,17 +65,20 @@ namespace NS_COLLISION
 		
 		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
 
-		ComponentCollider AABB1(COLLIDERS::AABB);
+		//ComponentCollider AABB1(COLLIDERS::AABB);
 		//ComponentCollider AABB2(COLLIDERS::AABB);
 
 		//ComponentCollider AABB1(COLLIDERS::OBB);
 		//ComponentCollider AABB2(COLLIDERS::OBB);
 
-		//ComponentCollider AABB1(COLLIDERS::SPHERE);
+		ComponentCollider AABB1(COLLIDERS::SPHERE);
 		ComponentCollider AABB2(COLLIDERS::SPHERE);
 
 		//ComponentCollider AABB1(COLLIDERS::CAPSULE);
 		//ComponentCollider AABB2(COLLIDERS::CAPSULE);
+
+		AABB1.collider.aabb.colliderScale = NlMath::Vector3D(2.0f, 2.0f, 2.0f);
+		AABB2.collider.aabb.colliderScale = NlMath::Vector3D(2.0f, 2.0f, 2.0f);
 
 		cube1Test.AttachComponent<ComponentCollider>(AABB1);
 		cube2Test.AttachComponent<ComponentCollider>(AABB2);
@@ -103,6 +112,34 @@ namespace NS_COLLISION
 
 	void CollisionSystem::Update()
 	{
+		///////////////////////////////////////////////////////////////////////////////////////////////
+		//// TestMesh Key Input
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_INC", SystemInput_ns::IKEY_PGUP, "PGUP", SystemInput_ns::OnHold, [this]() {});
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_PGUP))
+		{
+			MeshLod++;
+			if (MeshLod > MESH_MAX_LOD) MeshLod = MESH_MAX_LOD;
+		}
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_DEC", SystemInput_ns::IKEY_PGDWN, "PGDWN", SystemInput_ns::OnHold, [this]() {});
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_PGDWN))
+		{
+			MeshLod--;
+			if (MeshLod < MESH_MIN_LOD) MeshLod = MESH_MIN_LOD;
+		}
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_DEF", SystemInput_ns::IKEY_END, "END", SystemInput_ns::OnHold, [this]() {});
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_END))
+		{
+			MeshLod = 0; 
+		}
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_TOG", SystemInput_ns::IKEY_HOME, "HOME", SystemInput_ns::OnPress, [this]() {});
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_HOME))
+		{
+			doDrawLineMesh = !doDrawLineMesh;
+		}
+		//// TestMesh Key Input END
+		///////////////////////////////////////////////////////////////////////////////////////////////
+
+
 		auto itr1 = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd1 = G_ECMANAGER->end<ComponentCollider>();
 
@@ -137,6 +174,10 @@ namespace NS_COLLISION
 				ComponentRigidBody* comRigid2 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr2);
 
 				UpdateCollisionBoxPos(comCol1, comTrans1);
+				
+
+
+
 
 				//check for collision, also create collision event in CheckCollision if there is collision
 				if (CheckCollision(comCol1, comCol2, comRigid1, comRigid2))
@@ -144,11 +185,35 @@ namespace NS_COLLISION
 					// store collision event
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(1.0f, 0.0f, 1.f));
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(0.8f, 0.0f, 1.f));
+
+					///////////////////////////////////////////////////////////////////////////////////////////////
+					//// Draw Test mesh
+					if (doDrawLineMesh)
+					{
+						// get trans2
+						ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
+						DrawLineMesh(comTrans1, comCol1, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
+						DrawLineMesh(comTrans2, comCol2, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
+					}
+					//// Draw Test mesh
+					///////////////////////////////////////////////////////////////////////////////////////////////
 				}
 				else
 				{
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(0.5f, 0.5f, 1.f));
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(1.0f, 0.0f, 1.f));
+
+					///////////////////////////////////////////////////////////////////////////////////////////////
+					//// Draw Test mesh
+					if (doDrawLineMesh)
+					{
+						// get trans2
+						ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
+						DrawLineMesh(comTrans1, comCol1, MeshLod);
+						DrawLineMesh(comTrans2, comCol2, MeshLod);
+					}
+					//// Draw Test mesh
+					///////////////////////////////////////////////////////////////////////////////////////////////
 				}
 
 				//test code, to be romoved
@@ -558,5 +623,40 @@ namespace NS_COLLISION
 		}
 
 		return false;
+	}
+
+
+	void CollisionSystem::DrawLineMesh(ComponentTransform* comTrans, ComponentCollider* comCol, int lod, glm::vec3 color)
+	{
+		glm::vec3 colscale(
+			comTrans->_scale.x * comCol->collider.aabb.colliderScale.x * 2.0f,
+			comTrans->_scale.y * comCol->collider.aabb.colliderScale.y * 2.0f,
+			comTrans->_scale.z * comCol->collider.aabb.colliderScale.z * 2.0f
+		);
+
+		if (lod < MESH_MIN_LOD) lod = MESH_MIN_LOD;
+		if (lod > MESH_MAX_LOD) lod = MESH_MAX_LOD;
+		int meshlod = lod / 2;
+
+		NS_COLDEBUGTEST::Mesh mesh;
+		switch (comCol->colliderType)
+		{
+		case COLLIDERS::AABB:
+			mesh = NS_COLDEBUGTEST::CreateCube(1 + meshlod, 1 + meshlod);
+			break;
+		case COLLIDERS::SPHERE:
+			mesh = NS_COLDEBUGTEST::CreateSphere(8 + meshlod, 8 + meshlod);
+			break;
+		case COLLIDERS::CAPSULE:
+			break;
+		case COLLIDERS::OBB:
+			mesh = NS_COLDEBUGTEST::CreateCube(1 + meshlod, 1 + meshlod);
+			break;
+		}
+		
+		NS_COLDEBUGTEST::TransformMesh(mesh, comTrans->_position, comTrans->_rotation, colscale);
+
+		NS_COLDEBUGTEST::DrawMesh(mesh, color, lod);
+
 	}
 }

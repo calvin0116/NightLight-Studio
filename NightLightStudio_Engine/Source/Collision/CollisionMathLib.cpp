@@ -202,6 +202,40 @@ namespace NlMath
 
     SIDES AABB_SphereCollision(const AABBCollider& tBox1, const SphereCollider& tSpr2, NlMath::Vector3D& circleColNormal)
     {
+		// ref: https://stackoverflow.com/questions/28343716/sphere-intersection-test-of-aabb
+		// check for aabb sphere
+		bool check;
+		float dmin = 0;
+		if (tSpr2.center.x < tBox1.vecMin.x)
+		{
+			dmin += (tSpr2.center.x - tBox1.vecMin.x) * (tSpr2.center.x - tBox1.vecMin.x);
+		}
+		else if (tSpr2.center.x > tBox1.vecMax.x)
+		{
+			dmin += (tSpr2.center.x - tBox1.vecMax.x) * (tSpr2.center.x - tBox1.vecMax.x);
+		}
+		if (tSpr2.center.y < tBox1.vecMin.y)
+		{
+			dmin += (tSpr2.center.y - tBox1.vecMin.y) * (tSpr2.center.y - tBox1.vecMin.y);
+		}
+		else if (tSpr2.center.y > tBox1.vecMax.y)
+		{
+			dmin += (tSpr2.center.y - tBox1.vecMax.y) * (tSpr2.center.y - tBox1.vecMax.y);
+		}
+		if (tSpr2.center.z < tBox1.vecMin.z)
+		{
+			dmin += (tSpr2.center.z - tBox1.vecMin.z) * (tSpr2.center.z - tBox1.vecMin.z);
+		}
+		else if (tSpr2.center.z > tBox1.vecMax.z)
+		{
+			dmin += (tSpr2.center.z - tBox1.vecMax.z) * (tSpr2.center.z - tBox1.vecMax.z);
+		}
+		if (dmin <= (tSpr2.radius * tSpr2.radius))
+		{
+			// need to return the aabb collision side ... cont fn
+		}
+		else  return SIDES::NO_COLLISION; // no collide
+
         //axis view explaination: (value going from negative to positive)
         //x going from left to right
         //y going from bottom to top
@@ -230,7 +264,7 @@ namespace NlMath
         //total penetration depth
         NlMath::Vector3D penetrationDepth = totalExtend - absCtrDistance;
 
-        if (penetrationDepth.x <= 0 || penetrationDepth.y <= 0 || penetrationDepth.z <= 0)
+        if (penetrationDepth.x <= 0 || penetrationDepth.y <= 0 || penetrationDepth.z <= 0) // prob unnecessary now since no col check above
         {
             return SIDES::NO_COLLISION;
         }
