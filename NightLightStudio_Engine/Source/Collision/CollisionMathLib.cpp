@@ -474,18 +474,18 @@ namespace NlMath
         //start by finding the normal of the capsule 1, which is the tip - base
         Vector3D normal1 = Vector3DNormalize(tCap1.tip - tCap1.base);
         //find the vector to reach the center of circle
-        Vector3D lineOffSet1 = normal1 * tCap1.radius;
+        //Vector3D lineOffSet1 = normal1 * tCap1.radius;
         //find the center of tip circle and base circle
-        Vector3D baseCircleCtr1 = tCap1.base + lineOffSet1;
-        Vector3D tipCircleCtr1 = tCap1.tip + lineOffSet1;
+        Vector3D baseCircleCtr1 = tCap1.base/* + lineOffSet1*/;
+        Vector3D tipCircleCtr1 = tCap1.tip/* + lineOffSet1*/;
 
         //repeat to find the normal of the capsule 2, which is the tip - base
         Vector3D normal2 = Vector3DNormalize(tCap2.tip - tCap2.base);
         //find the vector to reach the center of circle
-        Vector3D lineOffSet2 = normal2 * tCap2.radius;
+        //Vector3D lineOffSet2 = normal2 * tCap2.radius;
         //find the center of tip circle and base circle
-        Vector3D baseCircleCtr2 = tCap2.base + lineOffSet2;
-        Vector3D tipCircleCtr2 = tCap2.tip + lineOffSet2;
+        Vector3D baseCircleCtr2 = tCap2.base/* + lineOffSet2*/;
+        Vector3D tipCircleCtr2 = tCap2.tip/* + lineOffSet2*/;
 
         // vectors between line endpoints:
         Vector3D dis0 = baseCircleCtr2 - baseCircleCtr1;
