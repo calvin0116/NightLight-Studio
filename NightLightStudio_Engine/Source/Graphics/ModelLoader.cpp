@@ -128,9 +128,10 @@ namespace NS_GRAPHICS
 				for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
 				{
 					//Control point vertex
+					//0,2,1 as FBX exported it as X Z Y over X Y Z
 					glm::vec3 vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
-										 (float)vertexs[vertexIndex][1] * (float)scaling[1],
-										 (float)vertexs[vertexIndex][2] * (float)scaling[2]};
+										 (float)vertexs[vertexIndex][2] * (float)scaling[2],
+										 (float)vertexs[vertexIndex][1] * (float)scaling[1]};
 
 					//OLD WAY
 					newMesh->_vertices.push_back(vertex);

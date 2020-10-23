@@ -12,6 +12,8 @@
 // Comment away for whichever is required
 // Only either one should be running at a time
 
+#include <fstream> //Temporary
+
 #define DRAW_WITH_COMPONENTS
 
 namespace NS_GRAPHICS
@@ -136,13 +138,26 @@ namespace NS_GRAPHICS
 
 		CreateSphere(testdrawSphere, glm::vec3(1.f,0.f,1.f));*/
 
-		/*Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
+		Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformcylinder;
 		testtransformcylinder._position = { 0.f, 0.f,0.f };
+		testtransformcylinder._rotation = { 0.f, 0.f,0.f };
 		testdrawCylinder.AttachComponent<ComponentTransform>(testtransformcylinder);
 
-		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));*/
+		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));
 
+		std::ofstream logFile;
+		logFile.open("cylinder.txt");
+
+		int MeshSize = meshManager->meshlist["cylinder"]->_vertices.size();
+		for (int i=0; i < MeshSize; ++i)
+		{
+			logFile << "Vertex: X: " << meshManager->meshlist["cylinder"]->_vertices[i].x << " Y: " << 
+										meshManager->meshlist["cylinder"]->_vertices[i].y << " Z: " <<
+										meshManager->meshlist["cylinder"]->_vertices[i].z << "\n";
+		}
+
+		logFile.close();
 
 		////TEST VECTOR MAX SIZE
 		//std::cout << "TEST MAX SIZE: " << vectTest.max_size() << std::endl;
