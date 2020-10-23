@@ -129,9 +129,20 @@ namespace NS_GRAPHICS
 				{
 					//Control point vertex
 					//0,2,1 as FBX exported it as X Z Y over X Y Z
-					glm::vec3 vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
-										 (float)vertexs[vertexIndex][2] * (float)scaling[2],
-										 (float)vertexs[vertexIndex][1] * (float)scaling[1]};
+					glm::vec3 vertex;
+					if (fileName.find(s_FbxFileFormat) != std::string::npos)
+					{
+						vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
+								   (float)vertexs[vertexIndex][2] * (float)scaling[2],
+								   (float)vertexs[vertexIndex][1] * (float)scaling[1]};
+					}
+
+					else
+					{
+						vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
+								   (float)vertexs[vertexIndex][1] * (float)scaling[1],
+								   (float)vertexs[vertexIndex][2] * (float)scaling[2]};
+					}
 
 					//OLD WAY
 					newMesh->_vertices.push_back(vertex);
