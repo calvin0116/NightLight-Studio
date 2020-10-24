@@ -38,6 +38,14 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
 		SetConsoleTitleA("DEBUGGING CONSOLE");
 		std::cout << "Debug Console Initialized." << std::endl;
+
+		//Prevent closing from console window to show unnecessary mem leak
+		HWND hwnd = ::GetConsoleWindow();
+		if (hwnd != NULL)
+		{
+			HMENU hMenu = ::GetSystemMenu(hwnd, FALSE);
+			if (hMenu != NULL) DeleteMenu(hMenu, SC_CLOSE, MF_BYCOMMAND);
+		}
 	}
 #endif
 

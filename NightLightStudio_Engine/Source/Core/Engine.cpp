@@ -78,11 +78,13 @@ void FluffyUnicornEngine::Run()
 		SYS_MAN->GameExit();
 		//SYS_SCENE_MANAGER->ExitScene();
 	}
-    SYS_MAN->Free();
+
 }
 
 void FluffyUnicornEngine::Exit()
 {
+	SYS_MAN->Free();
+
 	DELTA_T->Exit();
 	CONFIG_DATA->Exit();
 	//SYS_MAN->Free();
