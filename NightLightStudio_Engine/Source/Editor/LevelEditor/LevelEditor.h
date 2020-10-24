@@ -98,18 +98,18 @@ public:
 	// Use to create a new Window to use
 	template <typename T,
 		std::enable_if_t<std::is_base_of<LE_WindowBase, T>::value, int> = 0>
-	void LE_CreateWindow(const std::string& name, bool isOpenByDefault = false, ImGuiWindowFlags flag = ImGuiWindowFlags_None)
+		void LE_CreateWindow(const std::string& name, bool isOpenByDefault = false, const ImGuiWindowFlags& flag = ImGuiWindowFlags_None)
 	{
 		LE_WindowBase* ptr = T().Clone();
 		ptr->AddEditor(this);
 		_editorWind.emplace_back(LEWindow(name, isOpenByDefault, flag, ptr));
 	}
 
-	void LE_AddChildWindow(const std::string& name, ImVec2 size = ImVec2(0, 0), 
-		const std::vector<std::function<void()>>& fns = {}, bool border = false, ImGuiWindowFlags flag = 0);
+	void LE_AddChildWindow(const std::string& name, ImVec2 size = ImVec2(0, 0),
+		const std::vector<std::function<void()>>& fns = {}, bool border = false, const ImGuiWindowFlags& flag = 0);
 	template <typename T>
 	void LE_AddChildWindow(const std::string& name, ImVec2 size = ImVec2(0, 0),
-		const std::vector<void(T::*)()>& fns = {}, T* obj = nullptr, bool border = false, ImGuiWindowFlags flag = 0)
+		const std::vector<void(T::*)()>& fns = {}, T* obj = nullptr, bool border = false, const ImGuiWindowFlags& flag = 0)
 	{
 		ImGui::BeginChild(name.c_str(), size, border, flag);
 
@@ -141,13 +141,13 @@ public:
 		assert(win);
 		if (fn)
 			(win->*fn)(arg);
-		
+
 	}
 
 	/**********************************************************************/
 
 	// std::function<void()> Mostly, use either helper functions OR lambdas
-	
+
 	/******************************* Helper Functions ***************************************/
 
 	// Use to bind member functions into std::functions
@@ -185,11 +185,11 @@ public:
 	// Adds only a menu
 	// Let function be menu with items to create a secondary inner menu
 	// or just another menu only
-	void LE_AddMenuOnly(const std::string& name, const std::function<void()> fn = nullptr);
+	void LE_AddMenuOnly(const std::string& name, const std::function<void()>& fn = nullptr);
 
 	// Adds a menu and a list of menu items
-	void LE_AddMenuWithItems(const std::string& name, std::vector<std::string> menuItems = {}, 
-		std::vector<std::string> shortcuts = {}, const std::vector<std::function<void()>>& menuItemFunc = {});
+	void LE_AddMenuWithItems(const std::string& name, const std::vector<std::string>& menuItems = {},
+		const std::vector<std::string>& shortcuts = {}, const std::vector<std::function<void()>>& menuItemFunc = {});
 
 	/**********************************************************************/
 
@@ -198,53 +198,53 @@ public:
 	void LE_AddText(const std::string& text);
 
 	// Adds a button that runs a function
-	void LE_AddButton(const std::string& name, std::function<void()> fn = nullptr, ImVec2 size = ImVec2(0, 0));
+	void LE_AddButton(const std::string& name, const std::function<void()>& fn = nullptr, const ImVec2& size = ImVec2(0, 0));
 
 	// Adds a directional button that runs a function
-	void LE_AddArrowButton(const std::string& name, ImGuiDir dir = ImGuiDir_Right, std::function<void()> fn = nullptr);
+	void LE_AddArrowButton(const std::string& name, const ImGuiDir& dir = ImGuiDir_Right, const std::function<void()>& fn = nullptr);
 
 	// Adds a radio button that runs a function
-	void LE_AddRadioButton(const std::string& name, bool active = false, std::function<void()> fn = nullptr);
-	
-	// Adds a selectable that runs a function while selected. Input Boolean is unaffected.
-	void LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0, ImVec2 size = ImVec2(0, 0));
-	// Adds a selectable that runs a function while selected. Input Boolean is affected.
-	void LE_AddSelectable(const std::string& name, bool* isSelectedPtr, std::function<void()> fn = nullptr, ImGuiSelectableFlags flag = 0, ImVec2 size = ImVec2(0, 0));
+	void LE_AddRadioButton(const std::string& name, bool active = false, const std::function<void()>& fn = nullptr);
 
-	void LE_AddCheckbox(const std::string& name, bool* isSelected, std::function<void()> fn = nullptr);
+	// Adds a selectable that runs a function while selected. Input Boolean is unaffected.
+	void LE_AddSelectable(const std::string& name, bool isSelected, const std::function<void()>& fn = nullptr, const ImGuiSelectableFlags& flag = 0, const ImVec2& size = ImVec2(0, 0));
+	// Adds a selectable that runs a function while selected. Input Boolean is affected.
+	void LE_AddSelectable(const std::string& name, bool* isSelectedPtr, const std::function<void()>& fn = nullptr, const ImGuiSelectableFlags& flag = 0, const ImVec2& size = ImVec2(0, 0));
+
+	void LE_AddCheckbox(const std::string& name, bool* isSelected, const std::function<void()>& fn = nullptr);
 
 	// Adds an Input Int Property
-	void LE_AddInputIntProperty(const std::string& name, int& prop, std::function<void()> fn = nullptr,
-		ImGuiInputTextFlags flag = ImGuiInputTextFlags_EnterReturnsTrue);
-	void LE_AddInputInt2Property(const std::string& name, int& prop1, int& prop2, std::function<void()> fn = nullptr,
-		ImGuiInputTextFlags flag = ImGuiInputTextFlags_EnterReturnsTrue);
-	void LE_AddInputInt3Property(const std::string& name, int& prop1, int& prop2, int& prop3, std::function<void()> fn = nullptr,
-		ImGuiInputTextFlags flag = ImGuiInputTextFlags_EnterReturnsTrue);
+	void LE_AddInputIntProperty(const std::string& name, int& prop, const std::function<void()>& fn = nullptr,
+		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
+	void LE_AddInputInt2Property(const std::string& name, int& prop1, int& prop2, const std::function<void()>& fn = nullptr,
+		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
+	void LE_AddInputInt3Property(const std::string& name, int& prop1, int& prop2, int& prop3, const std::function<void()>& fn = nullptr,
+		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
 
 	// Adds an Input Float Property, default precision is 3 decimal places
-	void LE_AddInputFloatProperty(const std::string& name, float& prop, std::function<void()> fn = nullptr,
-		ImGuiInputTextFlags flag = ImGuiInputTextFlags_EnterReturnsTrue);
-	void LE_AddInputFloat2Property(const std::string& name, float& prop1, float& prop2, std::function<void()> fn = nullptr,
-		ImGuiInputTextFlags flag = ImGuiInputTextFlags_EnterReturnsTrue);
-	void LE_AddInputFloat3Property(const std::string& name, float& prop1, float& prop2, float& prop3, std::function<void()> fn = nullptr,
-		ImGuiInputTextFlags flag = ImGuiInputTextFlags_EnterReturnsTrue);
+	void LE_AddInputFloatProperty(const std::string& name, float& prop, const std::function<void()>& fn = nullptr,
+		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
+	void LE_AddInputFloat2Property(const std::string& name, float& prop1, float& prop2, const std::function<void()>& fn = nullptr,
+		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
+	void LE_AddInputFloat3Property(const std::string& name, float& prop1, float& prop2, float& prop3, const std::function<void()>& fn = nullptr,
+		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
 
 	// Adds a Slider Int Property.
-	void LE_AddSliderIntProperty(const std::string& name, int& prop, int min, int max, 
-		ImGuiInputTextFlags flag = ImGuiInputTextFlags_EnterReturnsTrue);
+	void LE_AddSliderIntProperty(const std::string& name, int& prop, int min, int max,
+		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
 	// Adds a Slider Float Property.
-	void LE_AddSliderFloatProperty(const std::string& name, float& prop, float min, float max, 
-		ImGuiInputTextFlags flag = ImGuiInputTextFlags_EnterReturnsTrue);
+	void LE_AddSliderFloatProperty(const std::string& name, float& prop, float min, float max,
+		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
 
 	// Adds a Textbox Input.
-	void LE_AddInputText(const std::string& name, std::string& text, unsigned maxLen, 
-		ImGuiInputTextFlags flag = ImGuiInputTextFlags_EnterReturnsTrue,
-		std::function<void()> fn = nullptr, int(*callback)(ImGuiInputTextCallbackData*)  = nullptr, void* obj = nullptr);
+	void LE_AddInputText(const std::string& name, std::string& text, unsigned maxLen,
+		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue,
+		const std::function<void()>& fn = nullptr, int(*callback)(ImGuiInputTextCallbackData*) = nullptr, void* obj = nullptr);
 
 	// Adds a multiline Textbox Input.
-	void LE_AddInputMultiText(const std::string& name, std::string& text, unsigned maxLen, ImVec2 size = ImVec2(0,0),
-		ImGuiInputTextFlags flag = ImGuiInputTextFlags_EnterReturnsTrue,
-		std::function<void()> fn = nullptr, int(*callback)(ImGuiInputTextCallbackData*) = nullptr, void* obj = nullptr);
+	void LE_AddInputMultiText(const std::string& name, std::string& text, unsigned maxLen, ImVec2 size = ImVec2(0, 0),
+		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue,
+		const std::function<void()>& fn = nullptr, int(*callback)(ImGuiInputTextCallbackData*) = nullptr, void* obj = nullptr);
 
 
 	// Color Editor. Red Green Blue
@@ -253,9 +253,9 @@ public:
 	void LE_AddColorEdit4(const std::string& name, float& r, float& g, float& b, float& a);
 
 	// Adds an image.
-	void LE_AddImage(const ImTextureID& id, const ImVec2& size, 
-		const ImVec2& minUV = ImVec2(0,0), const ImVec2& maxUV = ImVec2(1,1), 
-		const ImVec4& tintCol = ImVec4(1,1,1,1), const ImVec4& borderCol = ImVec4(0,0,0,0));
+	void LE_AddImage(const ImTextureID& id, const ImVec2& size,
+		const ImVec2& minUV = ImVec2(0, 0), const ImVec2& maxUV = ImVec2(1, 1),
+		const ImVec4& tintCol = ImVec4(1, 1, 1, 1), const ImVec4& borderCol = ImVec4(0, 0, 0, 0));
 
 	/**********************************************************************/
 
@@ -264,7 +264,7 @@ public:
 	// Adds a drop-down list of selectable items. Data represents which item is picked.
 	void LE_AddCombo(const std::string& name, int& data, const std::vector<std::string> options);
 
-	void LE_AddCollapsingHeader(const std::string& name, const std::vector<std::function<void()>> fns = {});
+	void LE_AddCollapsingHeader(const std::string& name, const std::vector<std::function<void()>>& fns = {});
 
 	void LE_AddTreeNodes(const std::string& name, const std::vector<std::function<void()>> fns = {}, ImGuiTreeNodeFlags flag = 0);
 
@@ -274,7 +274,7 @@ public:
 
 	// Put after the thing you want to have a tooltip
 	// Allowed to add additional stuff to run in tooltip
-	void LE_AddTooltip(const std::string& tip, std::function<void()> fn = nullptr);
+	void LE_AddTooltip(const std::string& tip, const std::function<void()>& fn = nullptr);
 	// Default Help Marker - Only shows a tooltip for help
 	void LE_AddHelpMarker(const std::string& tip);
 
@@ -287,7 +287,7 @@ public:
 
 	void LE_AddHistogram(const std::string& name, std::vector<float>& graph, bool addData = false, const float& newData = 0, float min = 0, float max = 1, ImVec2 size = ImVec2());
 
-	void LE_AddProgressBar(float progress, ImVec2 size = ImVec2(0, 0), std::string overlay = {});
+	void LE_AddProgressBar(float progress, const ImVec2& size = ImVec2(0, 0), std::string overlay = {});
 
 	/**********************************************************************/
 
@@ -299,7 +299,7 @@ public:
 	// Please indicate type in angled brackets to be safe - eg. String literals are NOT strings "xxx" =/= std::string
 	// Place this after the item you want to drag from
 	template <typename T>
-	void LE_AddDragDropSource(const std::string& id, T* data, std::function<void()> fn = nullptr, ImGuiDragDropFlags flag = 0)
+	void LE_AddDragDropSource(const std::string& id, T* data, const std::function<void()>& fn = nullptr, const ImGuiDragDropFlags& flag = 0)
 	{
 		// Our buttons are both drag sources and drag targets here!
 		if (ImGui::BeginDragDropSource(flag))
@@ -320,7 +320,7 @@ public:
 	// the fn determines what will be done with the data
 	// Place this after the item you want to drag to
 	template <typename T>
-	void LE_AddDragDropTarget(const std::string& id, std::function<void(const T*)> fn = nullptr, ImGuiDragDropFlags flag = 0)
+	void LE_AddDragDropTarget(const std::string& id, const std::function<void(const T*)>& fn = nullptr, const ImGuiDragDropFlags& flag = 0)
 	{
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -340,27 +340,27 @@ public:
 	/******************************* Popups ***************************************/
 
 	// Adds a button that runs a popup.
-	void LE_AddPopupButton(const std::string& name, std::function<void()> fn = nullptr, 
-		ImVec2 size = ImVec2(0,0), ImGuiPopupFlags popupFlag = 0, ImGuiWindowFlags winFlag = 0);
+	void LE_AddPopupButton(const std::string& name, const std::function<void()>& fn = nullptr,
+		const ImVec2& size = ImVec2(0, 0), const ImGuiPopupFlags& popupFlag = 0, const ImGuiWindowFlags& winFlag = 0);
 
 	// Right click to open a Context Menu (Similar to a popup.)
-	void LE_AddContext(const std::string& name, std::function<void()> fn = nullptr, ImGuiPopupFlags popupFlag = 1);
+	void LE_AddContext(const std::string& name, const std::function<void()>& fn = nullptr, const ImGuiPopupFlags& popupFlag = 1);
 
 	// Opens a Modal Window. Default OK and Cancel options only
 	// fn represents the function to run within the Modal window
 	// buttonFn is a pair<string, void()> that determines the button functions at the end; Default all in the same line
-	void LE_AddModal(const std::string& name, std::function<void()> fn = nullptr, 
-		std::vector < std::pair<std::string, std::function<void()>>>  buttonFn = {},
-		ImVec2 size = ImVec2(0, 0), ImGuiPopupFlags popupFlag = 0, ImGuiWindowFlags winFlag= 0);
+	void LE_AddModal(const std::string& name, const std::function<void()>& fn = nullptr,
+		const std::vector < std::pair<std::string, std::function<void()>>>& buttonFn = {},
+		const ImVec2& size = ImVec2(0, 0), const ImGuiPopupFlags& popupFlag = 0, const ImGuiWindowFlags& winFlag = 0);
 
 	// Runs if hovering over previous
-	void LE_AddHover(std::function<void()> fn = nullptr);
+	void LE_AddHover(const std::function<void()>& fn = nullptr);
 
 	/**********************************************************************/
 
 	/******************************* Others ***************************************/
 
-	void LE_AddStyleVar(ImGuiStyleVar var, float val, std::function<void()> fn = nullptr);
+	void LE_AddStyleVar(const ImGuiStyleVar& var, const float& val, const std::function<void()>& fn = nullptr);
 
 	/**********************************************************************/
 };
