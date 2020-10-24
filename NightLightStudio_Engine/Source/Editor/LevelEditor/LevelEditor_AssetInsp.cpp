@@ -70,8 +70,8 @@ std::string AssetInspector::_GetFileType(const std::string& path)
 
 void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
 {
-    std::vector<std::string> dir = _allDirDirs[path];
-    std::vector<std::string> files = _allDirFiles[path];
+    const std::vector<std::string>& dir = _allDirDirs[path];
+    const std::vector<std::string>& files = _allDirFiles[path];
 
     // List of functions to run inside the tree node
     // First function for Tree node specifically
@@ -101,7 +101,8 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
     {
         if (_ignoreFileTypes.find(_GetFileType(files[i])) != std::end(_ignoreFileTypes))
             continue;
-        fns.push_back(std::bind(
+        fns.push_back(
+            std::bind(
             [&](std::string p)
             {
                 _levelEditor->LE_AddSelectable(_GetFilename(p), (_selectedFilePath == p),
@@ -257,7 +258,7 @@ void AssetInspector::Run()
 
                 std::vector<std::string> files = _allDirDirs[_selectedFolderPath];
                 int filesStart = (int)files.size();
-                std::vector<std::string> temp = _allDirFiles[_selectedFolderPath];
+                const std::vector<std::string>& temp = _allDirFiles[_selectedFolderPath];
                 files.insert(std::end(files), std::begin(temp), std::end(temp));
 
                 for (int i = 0; i < files.size(); ++i)

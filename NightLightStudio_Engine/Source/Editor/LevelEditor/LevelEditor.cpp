@@ -94,10 +94,10 @@ void LevelEditor::LE_AddChildWindow(const std::string& name, ImVec2 size, const 
 {
     ImGui::BeginChild(name.c_str(), size, border, flag);
 
-    for (unsigned i = 0; i < fns.size(); ++i)
+    for (std::function<void()> i : fns)
     {
-        if (fns[i])
-            fns[i]();
+        if (i)
+            i();
     }
 
     ImGui::EndChild();

@@ -113,10 +113,10 @@ public:
 	{
 		ImGui::BeginChild(name.c_str(), size, border, flag);
 
-		for (unsigned i = 0; i < fns.size(); ++i)
+		for (std::function<void()> i : fns)
 		{
-			if (fns[i] && obj)
-				(obj->*(fns[i]))();
+			if (i)
+				i();
 		}
 		ImGui::EndChild();
 	}
@@ -167,9 +167,9 @@ public:
 		std::vector<std::function<void()>> retVec;
 		if (obj)
 		{
-			for (unsigned i = 0; i < fn.size(); ++i)
+			for (auto i : fn)
 			{
-				retVec.push_back(std::bind(fn[i], obj));
+				retVec.push_back(std::bind(i, obj));
 			}
 		}
 		return retVec;

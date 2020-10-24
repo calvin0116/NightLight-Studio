@@ -26,6 +26,29 @@ namespace NS_COLLISION
 	{
 		colResolver.clear();
 
+		///////////////////////////////////////////////////////////////////////////////////////////////
+		//// TestMesh Key Input
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_INC", SystemInput_ns::IKEY_PGUP, "PGUP", SystemInput_ns::OnHold, [this]() 
+			{
+				MeshLod++;
+				if (MeshLod > MESH_MAX_LOD) MeshLod = MESH_MAX_LOD;
+			});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_DEC", SystemInput_ns::IKEY_PGDWN, "PGDWN", SystemInput_ns::OnHold, [this]()
+			{
+				MeshLod--;
+				if (MeshLod < MESH_MIN_LOD) MeshLod = MESH_MIN_LOD;
+			});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_DEF", SystemInput_ns::IKEY_END, "END", SystemInput_ns::OnPress, [this]()
+			{
+				MeshLod = 0;
+			});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_TOG", SystemInput_ns::IKEY_HOME, "HOME", SystemInput_ns::OnPress, [this]() 
+			{
+				doDrawLineMesh = !doDrawLineMesh;
+			});
+		//// TestMesh Key Input END
+		///////////////////////////////////////////////////////////////////////////////////////////////
+
 
 		//test code, to be removed
 		//////////////////////////////////////////////////////////////////////////////////////
@@ -117,34 +140,6 @@ namespace NS_COLLISION
 
 	void CollisionSystem::Update()
 	{
-		///////////////////////////////////////////////////////////////////////////////////////////////
-		//// TestMesh Key Input
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_INC", SystemInput_ns::IKEY_PGUP, "PGUP", SystemInput_ns::OnHold, [this]() {});
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_PGUP))
-		{
-			MeshLod++;
-			if (MeshLod > MESH_MAX_LOD) MeshLod = MESH_MAX_LOD;
-		}
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_DEC", SystemInput_ns::IKEY_PGDWN, "PGDWN", SystemInput_ns::OnHold, [this]() {});
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_PGDWN))
-		{
-			MeshLod--;
-			if (MeshLod < MESH_MIN_LOD) MeshLod = MESH_MIN_LOD;
-		}
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_DEF", SystemInput_ns::IKEY_END, "END", SystemInput_ns::OnHold, [this]() {});
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_END))
-		{
-			MeshLod = 0; 
-		}
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_TOG", SystemInput_ns::IKEY_HOME, "HOME", SystemInput_ns::OnPress, [this]() {});
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_HOME))
-		{
-			doDrawLineMesh = !doDrawLineMesh;
-		}
-		//// TestMesh Key Input END
-		///////////////////////////////////////////////////////////////////////////////////////////////
-
-
 		auto itr1 = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd1 = G_ECMANAGER->end<ComponentCollider>();
 
