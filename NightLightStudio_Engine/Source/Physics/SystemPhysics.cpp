@@ -5,8 +5,8 @@
 #include "../Component/ComponentRigidBody.h"
 #include "../Input/SystemInput.h"
 
-//#define USEVEL 0
-#define USEVEL 1
+#define USEVEL 0
+//#define USEVEL 1
 
 namespace NS_PHYSICS
 {

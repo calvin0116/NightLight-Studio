@@ -128,9 +128,21 @@ namespace NS_GRAPHICS
 				for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
 				{
 					//Control point vertex
-					glm::vec3 vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
-										 (float)vertexs[vertexIndex][1] * (float)scaling[1],
-										 (float)vertexs[vertexIndex][2] * (float)scaling[2]};
+					//0,2,1 as FBX exported it as X Z Y over X Y Z
+					glm::vec3 vertex;
+					if (fileName.find(s_FbxFileFormat) != std::string::npos)
+					{
+						vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
+								   (float)vertexs[vertexIndex][2] * (float)scaling[2],
+								   (float)vertexs[vertexIndex][1] * (float)scaling[1]};
+					}
+
+					else
+					{
+						vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
+								   (float)vertexs[vertexIndex][1] * (float)scaling[1],
+								   (float)vertexs[vertexIndex][2] * (float)scaling[2]};
+					}
 
 					//OLD WAY
 					newMesh->_vertices.push_back(vertex);
@@ -237,7 +249,7 @@ namespace NS_GRAPHICS
 				}
 
 				mesh->Destroy();
-				MeshManager::GetInstance().AddMesh(newMesh);
+				MeshManager::GetInstance().AddLoadedMesh(newMesh, customName);
 				++(*meshIndex);
 			}	
 		}

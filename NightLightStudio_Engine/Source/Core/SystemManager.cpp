@@ -63,26 +63,90 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 }
 
-void MySystemManager::Update()
+void MySystemManager::FixedUpdate()
 {
+#ifdef _EDITOR
+	int i = 0;
+#endif
+
 	for (auto my_sys : Systems)
 	{
 #ifdef _EDITOR
-		LARGE_INTEGER start, end, elapsed;
-		LARGE_INTEGER freq;
+		std::vector<float>* sysUsage = SYS_EDITOR->GetSystemsUsage();
 
-		QueryPerformanceFrequency(&freq);
-		QueryPerformanceCounter(&start);
+		LARGE_INTEGER start{}, end{}, elapsed{};
+		LARGE_INTEGER freq{};
+
+		if (sysUsage)
+		{
+			QueryPerformanceFrequency(&freq);
+			QueryPerformanceCounter(&start);
+		}
+		//auto t1 = std::chrono::high_resolution_clock::now();
+#endif
+
+		my_sys.second->FixedUpdate();
+
+#ifdef _EDITOR
+
+		if (sysUsage)
+		{
+			QueryPerformanceCounter(&end);
+			elapsed.QuadPart = end.QuadPart - start.QuadPart;
+			elapsed.QuadPart *= 1000000;
+			elapsed.QuadPart /= freq.QuadPart;
+
+			if (sysUsage->size() > i)
+				sysUsage->at(i) += (float)elapsed.QuadPart;
+			else
+				sysUsage->push_back((float)elapsed.QuadPart);
+			++i;
+		}
+		//auto t2 = std::chrono::high_resolution_clock::now();
+		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+		//SYS_EDITOR->GetSystemsUsage()->push_back(duration);
+#endif
+	}
+}
+
+void MySystemManager::Update()
+{
+#ifdef _EDITOR
+	int i = 0;
+#endif
+
+	for (auto my_sys : Systems)
+	{
+#ifdef _EDITOR
+		std::vector<float>* sysUsage = SYS_EDITOR->GetSystemsUsage();
+
+		LARGE_INTEGER start{}, end{}, elapsed{};
+		LARGE_INTEGER freq{};
+
+		if (sysUsage)
+		{
+			QueryPerformanceFrequency(&freq);
+			QueryPerformanceCounter(&start);
+		}
 		//auto t1 = std::chrono::high_resolution_clock::now();
 #endif
 		my_sys.second->Update();
 
 #ifdef _EDITOR
-		QueryPerformanceCounter(&end);
-		elapsed.QuadPart = end.QuadPart - start.QuadPart;
-		elapsed.QuadPart *= 1000000;
-		elapsed.QuadPart /= freq.QuadPart;
-		SYS_EDITOR->GetSystemsUsage()->push_back((float)elapsed.QuadPart);
+
+		if (sysUsage)
+		{
+			QueryPerformanceCounter(&end);
+			elapsed.QuadPart = end.QuadPart - start.QuadPart;
+			elapsed.QuadPart *= 1000000;
+			elapsed.QuadPart /= freq.QuadPart;
+
+			if (sysUsage->size() > i)
+				sysUsage->at(i) += (float)elapsed.QuadPart;
+			else
+				sysUsage->push_back((float)elapsed.QuadPart);
+			++i;
+		}
 		//auto t2 = std::chrono::high_resolution_clock::now();
 		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 		//SYS_EDITOR->GetSystemsUsage()->push_back(duration);

@@ -63,7 +63,8 @@ enum class COLLIDERS
 
 struct ICollider
 {
-
+	NlMath::Vector3D colliderScale;
+	ICollider() : colliderScale(1.0f, 1.0f, 1.0f) {}
 };
 
 struct PlaneCollider : public ICollider
@@ -143,7 +144,7 @@ typedef struct ComponentCollider //: public IComponent
 		AABBCollider	aabb;
 		OBBCollider		obb;
 		CapsuleCollider capsule;
-		Collider() {};
+		Collider() : aabb() { };
 	};
 
 	//MyVector preCollisionData;

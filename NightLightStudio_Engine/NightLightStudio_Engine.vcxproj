@@ -178,6 +178,7 @@
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Source\Audio\SystemAudio.h" />
+    <ClInclude Include="Source\Collision\CollisionDebugLines.h" />
     <ClInclude Include="Source\Collision\CollisionMathLib.h" />
     <ClInclude Include="Source\Collision\CollisionResolver.h" />
     <ClInclude Include="Source\Collision\SystemCollision.h" />
