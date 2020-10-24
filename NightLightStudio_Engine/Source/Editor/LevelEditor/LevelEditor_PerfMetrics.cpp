@@ -1,5 +1,5 @@
 #include "LevelEditor_PerfMetrics.h"
-
+#include "../../Component/Components.h"
 #include "psapi.h"
 
 PerformanceMetrics::PerformanceMetrics()
@@ -26,6 +26,26 @@ void PerformanceMetrics::Init()
 
 void PerformanceMetrics::Run()
 {
+	/*
+	auto itr = G_ECMANAGER->begin<ComponentTransform>();
+	auto itrend = G_ECMANAGER->end<ComponentTransform>();
+	for (; itr != itrend; ++itr)
+	{
+		ComponentTransform* comp = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+		if (comp->name)
+		{
+			_levelEditor->LE_AddText(comp->name);
+		}
+		else
+		{
+			_levelEditor->LE_AddText("Object");
+			std::string pos = std::string("X: ").append(std::to_string(comp->_position.x));
+			pos.append(" Y: ").append(std::to_string(comp->_position.y));
+			pos.append(" Z: ").append(std::to_string(comp->_position.z));
+			_levelEditor->LE_AddText(pos);
+		}
+	}
+	*/
 	// Framerate
 	_levelEditor->LE_AddChildWindow("FrameRate", ImVec2(0, 30),
 		{

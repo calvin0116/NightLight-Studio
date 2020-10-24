@@ -92,14 +92,14 @@ void LevelEditor::Exit()
     ImGui::DestroyContext();
 }
 
-void LevelEditor::LE_AddChildWindow(const std::string& name, ImVec2 size, const std::vector<std::function<void()>>& fns, bool border, ImGuiWindowFlags flag)
+void LevelEditor::LE_AddChildWindow(const std::string& name, ImVec2 size, const std::vector<std::function<void()>>& fns, bool border, const ImGuiWindowFlags& flag)
 {
     ImGui::BeginChild(name.c_str(), size, border, flag);
 
-    for (unsigned i = 0; i < fns.size(); ++i)
+    for (std::function<void()> i : fns)
     {
-        if (fns[i])
-            fns[i]();
+        if (i)
+            i();
     }
 
     ImGui::EndChild();
@@ -112,15 +112,15 @@ std::vector<float>* LevelEditor::LE_GetSystemsUsage()
     if (it != std::end(_editorWind))
     {
         PerformanceMetrics* perf = dynamic_cast<PerformanceMetrics*>(it->_ptr.get());
-            if (perf)
-                return perf->GetSystemsUsage();
+        if (perf)
+            return perf->GetSystemsUsage();
     }
 #endif
     return nullptr;
 }
 
 
-void LevelEditor::LE_AddMenuOnly(const std::string& name, const std::function<void()> fn)
+void LevelEditor::LE_AddMenuOnly(const std::string& name, const std::function<void()>& fn)
 {
     if (ImGui::BeginMenu(name.c_str()))
     {
@@ -130,8 +130,8 @@ void LevelEditor::LE_AddMenuOnly(const std::string& name, const std::function<vo
     }
 }
 
-void LevelEditor::LE_AddMenuWithItems(const std::string& name, std::vector<std::string> menuItems,
-    std::vector<std::string> shortcuts, const std::vector<std::function<void()>>& menuItemFunc)
+void LevelEditor::LE_AddMenuWithItems(const std::string& name, const std::vector<std::string>& menuItems,
+    const std::vector<std::string>& shortcuts, const std::vector<std::function<void()>>& menuItemFunc)
 {
     if (ImGui::BeginMenu(name.c_str()))
     {
@@ -152,7 +152,7 @@ void LevelEditor::LE_AddMenuWithItems(const std::string& name, std::vector<std::
     }
 }
 
-void LevelEditor::LE_AddTooltip(const std::string& tip, std::function<void()> fn)
+void LevelEditor::LE_AddTooltip(const std::string& tip, const std::function<void()>& fn)
 {
     if (ImGui::IsItemHovered())
     {
@@ -163,7 +163,7 @@ void LevelEditor::LE_AddTooltip(const std::string& tip, std::function<void()> fn
         if (fn)
             fn();
 
-       // ImGui::EndTooltip();
+        // ImGui::EndTooltip();
     }
 }
 
@@ -181,7 +181,7 @@ void LevelEditor::LE_AddHelpMarker(const std::string& tip)
     }
 }
 
-void LevelEditor::LE_AddStyleVar(ImGuiStyleVar var, float val, std::function<void()> fn)
+void LevelEditor::LE_AddStyleVar(const ImGuiStyleVar& var, const float& val, const std::function<void()>& fn)
 {
     ImGui::PushStyleVar(var, val);
 
@@ -207,13 +207,6 @@ void LevelEditor::LE_RunWindows()
                 _editorWind[i]._ptr->Init();
                 if (ImGui::Begin(_editorWind[i]._name.c_str(), &_editorWind[i]._isOpen, _editorWind[i]._flag))
                 {
-                    if (ImGui::IsWindowCollapsed())
-                    {
-                        ImGui::End();
-                        //ImGui::PopID();
-                        continue;
-                    }
-
                     _editorWind[i]._ptr->Run();
                 }
                 ImGui::End();

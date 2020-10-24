@@ -161,18 +161,16 @@ namespace SystemInput_ns
 		template <typename T, typename U>
 		ENGINE_API void CreateNewEvent(std::string name, unsigned int button, CTRLTrigger trig, void(T::* func)(), U* obj)
 		{
-			_buttonEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>>
-				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>(button, trig, CtrlEvent_MemberFunc(func, obj)))));
-
-			_buttonStates.emplace(button, 0);
+			if (_buttonEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>>
+				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>(button, trig, CtrlEvent_MemberFunc(func, obj))))).second)
+				_buttonStates.emplace(button, 0);
 		}
 		// Creates new Event (Static Functions)
 		ENGINE_API void CreateNewEvent(std::string name, unsigned int button, CTRLTrigger trig, CONTROLLER_EVENT func = nullptr)
 		{
-			_buttonEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>>
-				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>(button, trig, func))));
-
-			_buttonStates.emplace(button, 0);
+			if (_buttonEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>>
+				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>(button, trig, func)))).second)
+				_buttonStates.emplace(button, 0);
 		}
 
 		// Creates new Trigger Event (Member Functions)
