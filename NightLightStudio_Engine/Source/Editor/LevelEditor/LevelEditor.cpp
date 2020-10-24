@@ -19,7 +19,7 @@ void LevelEditor::Init(HWND window)
     LE_CreateWindow<ConsoleLog>("Console", false, 0);
     LE_CreateWindow<AssetInspector>("Asset Inspector", true);
     LE_CreateWindow<PerformanceMetrics>("Performance Metrics", true);
-    LE_CreateWindow<HeirarchyInspector>("Asset Inspector", true);
+    LE_CreateWindow<HeirarchyInspector>("Heirarchy Inspector", true);
 
 
     _window = window;

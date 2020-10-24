@@ -11,8 +11,6 @@ void HeirarchyInspector::Run()
 {
 	ImGuiWindowFlags window_flags = 0;
 	ImVec4 tranform_bar = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-	ImGui::Begin("Hierarchy", nullptr, window_flags);
 	// List box
 
 	char search_buf[256];
@@ -123,8 +121,6 @@ void HeirarchyInspector::Run()
 		//EntityManager::GetInstance().del
 		//std::cout << "Delete is here" << std::endl;
 	}*/
-
-	ImGui::End();
 }
 
 void HeirarchyInspector::Exit()
