@@ -37,7 +37,7 @@ private:
 public:
 	ENGINE_API Config()
 		:config_d{}
-		, parser{ "config", json_path }
+		, parser{ "Config", json_path }
 	{
 	};
 
@@ -51,14 +51,13 @@ public:
 	ENGINE_API void Init()
 	{
 		std::cout << "Parser::Loading of data" << std::endl;
-		Value& wind_val = parser["config"]["window"];
+		Value& wind_val = parser["window"];
 
 		config_d.height = wind_val["height"].GetInt();
 		config_d.width = wind_val["width"].GetInt();
 		config_d.toFullScreen = wind_val["fullscreen"].GetBool();
 
-		Value& config_val = parser["config"]["settings"];
-
+		Value& config_val = parser["settings"];
 		config_d.startscene = config_val["startscene"].GetString();
 	};
 

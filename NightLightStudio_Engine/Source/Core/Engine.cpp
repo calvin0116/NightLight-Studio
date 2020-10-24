@@ -43,9 +43,13 @@ void FluffyUnicornEngine::Run()
 				DELTA_T->start();
 
 				//Exit if update fails
-				//Need help to remove this for messaging system
-
-				SYS_MAN->FixedUpdate();			
+				//Fixed update
+				while (DELTA_T->accumulatedTime >= DELTA_T->fixed_dt)
+				{
+					DELTA_T->accumulatedTime -= DELTA_T->fixed_dt;
+					++DELTA_T->currentNumberOfSteps;
+					SYS_MAN->FixedUpdate();
+				}
 				SYS_MAN->Update();
 
 				//Check for changing of scene
@@ -86,7 +90,7 @@ void FluffyUnicornEngine::Exit()
 	
 	SYS_MAN->Exit();
 
-	// ==== Manaul singleton deletion ========//
+	// ==== Manaul singleton deletion (debugging purpose)========//
 	/*
 	NS_WINDOW::SYS_WINDOW->DestroyInstance();
 	NS_GRAPHICS::SYS_GRAPHICS->DestroyInstance();

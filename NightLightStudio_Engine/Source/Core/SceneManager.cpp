@@ -122,7 +122,8 @@ namespace NS_SCENE
 
 	void SceneManager::ExitScene()
 	{
-		scene_list[current_scene]->CleanDoc();
+		//scene_list[current_scene]->CleanDoc();
+		//G_ECMANAGER->
 		current_scene = next_scene;
 	}
 
@@ -178,8 +179,12 @@ namespace NS_SCENE
 	void SceneManager::SaveScene()
 	{
 		//Save scene
-		Parser* scene = scene_list[current_scene];
-		scene->Save();
+		//Parser* scene = scene_list[current_scene];
+		Parser scene = Parser("TestJson" , scene_parser.GetPath() );
+		
+		//G_ECMANAGER->
+		scene.Save();
+		//scene.Save();
 	}
 
 	bool SceneManager::CheckIfSceneExist(std::string& scene_name)

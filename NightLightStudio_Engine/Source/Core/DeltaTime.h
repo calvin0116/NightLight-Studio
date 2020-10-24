@@ -13,14 +13,13 @@ constexpr auto FPS_60 = 16.0f; // in ms
 class DeltaTime : public Singleton<DeltaTime>
 {
 	friend Singleton<DeltaTime>;
-
+public:
 	float fixed_dt = FPS_60;
 	float _prevdt = 0.0f;
 
 	float accumulatedTime = 0.0f;
 	clock_t t_start = 0;
 
-public:
 	float dt = 0.0f;
 	float fps = 0.0f;
 	int currentNumberOfSteps = 0;
