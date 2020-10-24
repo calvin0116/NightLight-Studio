@@ -219,6 +219,7 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Heirarchy.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_TemplateFuncs.hpp" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
