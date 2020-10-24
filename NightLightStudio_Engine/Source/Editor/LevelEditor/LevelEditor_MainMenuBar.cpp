@@ -42,7 +42,10 @@ void LevelEditor::LE_MainMenuBar()
         for (unsigned i = 0; i < _editorWind.size(); ++i)
         {
             editorNames.push_back(_editorWind[i]._name);
-            funcs.push_back([this, &i]() {(_editorWind[i]._isOpen) = true; });
+            funcs.push_back([this, i]() 
+                {
+                (_editorWind[i]._isOpen) = true; 
+                });
         }
         LE_AddMenuWithItems("Windows", editorNames, {}, funcs);
         //LE_AddMenuOnly("Windows", [&](){ LE_AddMenuWithItems("SecondWindows", editorNames, {}, funcs);});

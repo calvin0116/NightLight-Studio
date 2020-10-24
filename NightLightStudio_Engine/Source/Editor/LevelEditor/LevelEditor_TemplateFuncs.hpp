@@ -186,7 +186,8 @@ inline void LevelEditor::LE_AddInputText(const std::string& name, std::string& t
 
     delete[] toStr;
 
-    fn();
+    if (runFN)
+        fn();
 }
 
 template<typename TFunc>

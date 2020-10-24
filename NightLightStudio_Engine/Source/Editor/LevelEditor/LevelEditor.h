@@ -96,10 +96,17 @@ public:
 	/******************************* Windows ***************************************/
 
 	// Use to create a new Window to use
+	// Init is used before running ImGui::Begin
+	// Run is considered the "update" loop
+	// Exit is used after running ImGui::End
+	// This will handle ImGui's Begin and End calls automatically
 	template <typename T,
 		std::enable_if_t<std::is_base_of<LE_WindowBase, T>::value, int> = 0>
 		void LE_CreateWindow(const std::string& name, bool isOpenByDefault = false, const ImGuiWindowFlags& flag = ImGuiWindowFlags_None);
 	
+	// Creates a Child Window within the current Window
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddChildWindow(const std::string& name, ImVec2 size = ImVec2(0, 0),
 		TFunc fn = []() {}, bool border = false, const ImGuiWindowFlags& flag = 0);
@@ -126,14 +133,18 @@ public:
 
 	/******************************* Menus ***************************************/
 
-	// Adds only a menu
-	// Let function be menu with items to create a secondary inner menu
-	// or just another menu only
+	// Creates ONLY a Menu within the Window
+	// Use this for more control over the Menu (Adding additional menus within)
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddMenuOnly(const std::string& name, TFunc fn = []() {});
 	void LE_AddMenuOnly(const std::string& name) { LE_AddMenuOnly(name, []() {}); }
 
-	// Adds a menu and a list of menu items
+	// Creates a Menu with given Items and Functions to run them
+	// This will run in Order, so if there is an empty item, give it an empty lambda or nullptr
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	void LE_AddMenuWithItems(const std::string& name, const std::vector<std::string>& menuItems = {},
 		const std::vector<std::string>& shortcuts = {}, const std::vector<std::function<void()>>& menuItemFunc = {});
 
@@ -143,53 +154,69 @@ public:
 	// Adds a textbox
 	void LE_AddText(const std::string& text);
 
-	// Adds a button that runs a function
+	// Adds a button that runs a given function.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddButton(const std::string& name, TFunc fn = []() {}, const ImVec2& size = ImVec2(0, 0));
 	void LE_AddButton(const std::string& name, const ImVec2& size = ImVec2(0, 0)) { LE_AddButton(name, []() {}, size); }
 
-	// Adds a directional button that runs a function
+	// Adds a directional button that runs a given function.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddArrowButton(const std::string& name, const ImGuiDir& dir = ImGuiDir_Right, TFunc fn = []() {});
 	void LE_AddArrowButton(const std::string& name, const ImGuiDir& dir = ImGuiDir_Right) { LE_AddArrowButton(name, dir, []() {}); }
 
-	// Adds a radio button that runs a function
+	// Adds a radio button that runs a given function.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddRadioButton(const std::string& name, bool active = false, TFunc fn = []() {});
 	void LE_AddRadioButton(const std::string& name, bool active = false) { LE_AddRadioButton(name, active, []() {}); }
 
 	// Adds a selectable that runs a function while selected. Input Boolean is unaffected.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddSelectable(const std::string& name, bool isSelected, TFunc fn = []() {}, const ImGuiSelectableFlags& flag = 0, const ImVec2& size = ImVec2(0, 0));
 	void LE_AddSelectable(const std::string& name, bool isSelected, const ImGuiSelectableFlags& flag = 0, const ImVec2& size = ImVec2(0, 0))
 	{ LE_AddSelectable(name, isSelected, []() {}, flag, size); }
 	// Adds a selectable that runs a function while selected. Input Boolean is affected.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddSelectable(const std::string& name, bool* isSelectedPtr, TFunc fn = []() {}, const ImGuiSelectableFlags& flag = 0, const ImVec2& size = ImVec2(0, 0));
 	void LE_AddSelectable(const std::string& name, bool* isSelectedPtr, const ImGuiSelectableFlags& flag = 0, const ImVec2& size = ImVec2(0, 0))
 	{ LE_AddSelectable(name, isSelectedPtr, []() {}, flag, size); }
 
-	// Adds a Checkbox.
+	// Adds a Checkbox. This will automatically toggle the given pointer's value.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddCheckbox(const std::string& name, bool* isSelected, TFunc fn = []() {});
 	void LE_AddCheckbox(const std::string& name, bool* isSelected)
 	{ LE_AddCheckbox(name, isSelected, []() {}); }
 
-	// Adds an Input Int Property
+	// Adds an Input Int Property.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddInputIntProperty(const std::string& name, int& prop, TFunc fn = []() {},
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
 	void LE_AddInputIntProperty(const std::string& name, int& prop,
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue)
 	{ LE_AddInputIntProperty(name, prop, []() {}, flag); }
-	// Adds an Input with 2 Int Property
+	// Adds an Input with 2 Int Properties.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddInputInt2Property(const std::string& name, int& prop1, int& prop2, TFunc fn = []() {},
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
 	void LE_AddInputInt2Property(const std::string& name, int& prop1, int& prop2,
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue)
 	{ LE_AddInputInt2Property(name, prop1, prop2, []() {}, flag); }
-	// Adds an Input with 3 Int Property
+	// Adds an Input with 3 Int Properties.
 	template <typename TFunc>
 	void LE_AddInputInt3Property(const std::string& name, int& prop1, int& prop2, int& prop3, TFunc fn = []() {},
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
@@ -197,21 +224,29 @@ public:
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue)
 	{ LE_AddInputInt3Property(name, prop1, prop2, prop3, []() {}, flag); }
 
-	// Adds an Input Float Property, default precision is 3 decimal places
+	// Adds an Input Float Property, default precision is 3 decimal places.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddInputFloatProperty(const std::string& name, float& prop, TFunc fn = []() {},
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
 	void LE_AddInputFloatProperty(const std::string& name, float& prop,
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue)
 	{ LE_AddInputFloatProperty(name, prop, []() {}, flag); }
-	// Adds an Input Float Property, default precision is 3 decimal places
+
+	// Adds an Input Float Property, default precision is 3 decimal places.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddInputFloat2Property(const std::string& name, float& prop1, float& prop2, TFunc fn = []() {},
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
 	void LE_AddInputFloat2Property(const std::string& name, float& prop1, float& prop2,
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue)
 	{ LE_AddInputFloat2Property(name, prop1, prop2, []() {}, flag); }
-	// Adds an Input Float Property, default precision is 3 decimal places
+
+	// Adds an Input Float Property, default precision is 3 decimal places.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddInputFloat3Property(const std::string& name, float& prop1, float& prop2, float& prop3, TFunc fn = []() {},
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
@@ -227,6 +262,8 @@ public:
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue);
 
 	// Adds a Textbox Input.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddInputText(const std::string& name, std::string& text, unsigned maxLen,
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue,
@@ -237,6 +274,8 @@ public:
 	{ LE_AddInputText(name, text, maxLen, flag, []() {}, callback, obj); }
 
 	// Adds a multiline Textbox Input.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddInputMultiText(const std::string& name, std::string& text, unsigned maxLen, ImVec2 size = ImVec2(0, 0),
 		const ImGuiInputTextFlags& flag = ImGuiInputTextFlags_EnterReturnsTrue,
@@ -265,12 +304,16 @@ public:
 	void LE_AddCombo(const std::string& name, int& data, const std::vector<std::string> options);
 
 	// Adds a collapsing Header.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddCollapsingHeader(const std::string& name, TFunc fn = []() {});
 	void LE_AddCollapsingHeader(const std::string& name)
 	{ LE_AddCollapsingHeader(name, []() {}); }
 
 	// Adds a tree node.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddTreeNodes(const std::string& name, TFunc fn = []() {}, ImGuiTreeNodeFlags flag = 0);
 	void LE_AddTreeNodes(const std::string& name, ImGuiTreeNodeFlags flag = 0)
@@ -280,6 +323,8 @@ public:
 
 	/******************************* Hover ***************************************/
 	// Adds a tooltip. Hover over object to see.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddTooltip(const std::string& tip, TFunc fn = []() {});
 	void LE_AddTooltip(const std::string& tip) { LE_AddTooltip(tip, []() {}); }
@@ -309,6 +354,8 @@ public:
 	// fn is any additional actions to be taken during drag drop
 	// Please indicate type in angled brackets to be safe - eg. String literals are NOT strings "xxx" =/= std::string
 	// Place this after the item you want to drag from
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename T, typename TFunc>
 	void LE_AddDragDropSource(const std::string& id, T* data, TFunc fn = []() {}, const ImGuiDragDropFlags& flag = 0);
 	template <typename T>
@@ -320,6 +367,8 @@ public:
 	// Please be very careful with Drag Drop source and Target
 	// the fn determines what will be done with the data
 	// Place this after the item you want to drag to
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename T, typename TFunc>
 	void LE_AddDragDropTarget(const std::string& id, TFunc fn = [](const T*) {}, const ImGuiDragDropFlags& flag = 0);
 	template <typename T>
@@ -330,6 +379,8 @@ public:
 	/******************************* Popups ***************************************/
 
 	// Adds a button that runs a popup.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddPopupButton(const std::string& name, TFunc fn = []() {},
 		const ImVec2& size = ImVec2(0, 0), const ImGuiPopupFlags& popupFlag = 0, const ImGuiWindowFlags& winFlag = 0);
@@ -338,6 +389,8 @@ public:
 	{ LE_AddPopupButton(name, []() {}, size, popupFlag, winFlag); }
 
 	// Right click to open a Context Menu (Similar to a popup.)
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddContext(const std::string& name, TFunc fn = []() {}, const ImGuiPopupFlags& popupFlag = 1);
 	void LE_AddContext(const std::string& name, const ImGuiPopupFlags& popupFlag = 1)
@@ -350,7 +403,9 @@ public:
 		const std::vector < std::pair< std::string, std::function<void()> > > & buttonFn = {},
 		const ImVec2& size = ImVec2(0, 0), const ImGuiPopupFlags& popupFlag = 0, const ImGuiWindowFlags& winFlag = 0);
 
-	// Runs if hovering over previous
+	// Runs if hovering over previous item.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddHover(TFunc fn = []() {});
 	void LE_AddHover() { LE_AddHover([]() {}); }
@@ -360,6 +415,8 @@ public:
 	/******************************* Others ***************************************/
 
 	// Adds a style var.
+	// Runs fn between this ImGui's Begin and End
+	// Ignore and put the next value or an empty lambda if you do not plan to have any functions running
 	template <typename TFunc>
 	void LE_AddStyleVar(const ImGuiStyleVar& var, const float& val, TFunc fn = []() {});
 	void LE_AddStyleVar(const ImGuiStyleVar& var, const float& val)
