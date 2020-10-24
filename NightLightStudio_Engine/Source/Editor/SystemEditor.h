@@ -28,6 +28,8 @@ public:
 	ENGINE_API void Exit() override;
 
 	ENGINE_API void Free() override;
+
+	ENGINE_API std::vector<float>* GetSystemsUsage();
 };
 
 //GLOBAL pointer to an instance of graphic system

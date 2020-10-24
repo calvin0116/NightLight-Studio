@@ -2,10 +2,14 @@
 #include "..\\Math\Vector.h"
 #include "..\\Math\Matrix4x4.h"
 #include "..\glm\glm.hpp"
+#include "../../framework.h"
+#include "../../ISerializable.h"
 
-typedef class ComponentTransform //: public IComponent
+typedef class ComponentTransform  : public ISerializable//: public IComponent
 {
 public:
+	//Name
+	char* name;
 	//for collision check
 	NlMath::Vector3D _nextPos;
 
@@ -19,6 +23,17 @@ public:
 	glm::mat4 GetModelMatrix();
 
 	//read and write function for initialization from saved files
-	void Read();
-	void Write();
+	void	Read(Value& val);
+	Value	Write();
+
+
 } TransformComponent;
+
+//Operator overloading for cout
+inline std::ostream& operator<<(std::ostream& os, const ComponentTransform& ct)
+{
+	os << "Position:" << ct._position.x << "," << ct._position.y << "," << ct._position.z << std::endl;
+	os << "Rotation:" << ct._rotation.x << "," << ct._rotation.y << "," << ct._rotation.z << std::endl;
+	os << "Scale:" << ct._scale.x << "," << ct._scale.y << "," << ct._scale.z << std::endl;
+	return os;
+}

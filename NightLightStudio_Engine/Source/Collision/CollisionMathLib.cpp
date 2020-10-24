@@ -2,17 +2,49 @@
 #include <queue>
 
 #include "CollisionMathLib.h"
-
+#include "../../glm/gtc/matrix_transform.hpp"
+#include "../../glm/gtx/euler_angles.hpp"
 
 namespace NlMath
 {
     Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint)
     {
-        //construct linesegment AB
-        Vector3D AB = segmentPointB - segmentPointA;
-        //find projection
-        float t = Vector3DDotProduct(CheckPoint - segmentPointA, AB) / Vector3DDotProduct(AB, AB);
-        return segmentPointA + t * AB;
+
+		// ref : https://math.stackexchange.com/questions/2193720/find-a-point-on-a-line-segment-which-is-the-closest-to-other-point-not-on-the-li
+		Vector3D v = segmentPointB - segmentPointA;
+		Vector3D u = segmentPointA - CheckPoint;
+		float vu = v * u;
+		float vv = v * v;
+		float t = -vu / vv;
+		auto vectorToSegment = [&](float _t, Vector3D _p)
+		{
+			return Vector3D(
+				(1 - _t) * segmentPointA.x + _t * segmentPointB.x - _p.x,
+				(1 - _t) * segmentPointA.y + _t * segmentPointB.y - _p.y,
+				(1 - _t) * segmentPointA.z + _t * segmentPointB.z - _p.z
+			);
+		};
+		if (t >= 0 && t <= 1) 
+			return vectorToSegment(t, Vector3D(0.0f, 0.0f, 0.0f));
+		Vector3D g0 = vectorToSegment(0, CheckPoint);
+		Vector3D g1 = vectorToSegment(1, CheckPoint);
+		float g0sq = g0 * g0;
+		float g1sq = g1 * g1;
+
+		if (g0sq <= g1sq)
+		{
+			return segmentPointA;
+		}
+		else
+		{
+			return segmentPointB;
+		}
+
+        ////construct linesegment AB
+        //Vector3D AB = segmentPointB - segmentPointA;
+        ////find projection
+        //float t = Vector3DDotProduct(CheckPoint - segmentPointA, AB) / Vector3DDotProduct(AB, AB);
+        //return segmentPointA + t * AB;
     }
 
     bool PointInAABB(const AABBCollider& tBox, const NlMath::Vector3D& vecPoint)
@@ -201,6 +233,40 @@ namespace NlMath
 
     SIDES AABB_SphereCollision(const AABBCollider& tBox1, const SphereCollider& tSpr2, NlMath::Vector3D& circleColNormal)
     {
+		// ref: https://stackoverflow.com/questions/28343716/sphere-intersection-test-of-aabb
+		// check for aabb sphere
+		bool check;
+		float dmin = 0;
+		if (tSpr2.center.x < tBox1.vecMin.x)
+		{
+			dmin += (tSpr2.center.x - tBox1.vecMin.x) * (tSpr2.center.x - tBox1.vecMin.x);
+		}
+		else if (tSpr2.center.x > tBox1.vecMax.x)
+		{
+			dmin += (tSpr2.center.x - tBox1.vecMax.x) * (tSpr2.center.x - tBox1.vecMax.x);
+		}
+		if (tSpr2.center.y < tBox1.vecMin.y)
+		{
+			dmin += (tSpr2.center.y - tBox1.vecMin.y) * (tSpr2.center.y - tBox1.vecMin.y);
+		}
+		else if (tSpr2.center.y > tBox1.vecMax.y)
+		{
+			dmin += (tSpr2.center.y - tBox1.vecMax.y) * (tSpr2.center.y - tBox1.vecMax.y);
+		}
+		if (tSpr2.center.z < tBox1.vecMin.z)
+		{
+			dmin += (tSpr2.center.z - tBox1.vecMin.z) * (tSpr2.center.z - tBox1.vecMin.z);
+		}
+		else if (tSpr2.center.z > tBox1.vecMax.z)
+		{
+			dmin += (tSpr2.center.z - tBox1.vecMax.z) * (tSpr2.center.z - tBox1.vecMax.z);
+		}
+		if (dmin <= (tSpr2.radius * tSpr2.radius))
+		{
+			// need to return the aabb collision side ... cont fn
+		}
+		else  return SIDES::NO_COLLISION; // no collide
+
         //axis view explaination: (value going from negative to positive)
         //x going from left to right
         //y going from bottom to top
@@ -229,7 +295,7 @@ namespace NlMath
         //total penetration depth
         NlMath::Vector3D penetrationDepth = totalExtend - absCtrDistance;
 
-        if (penetrationDepth.x <= 0 || penetrationDepth.y <= 0 || penetrationDepth.z <= 0)
+        if (penetrationDepth.x <= 0 || penetrationDepth.y <= 0 || penetrationDepth.z <= 0) // prob unnecessary now since no col check above
         {
             return SIDES::NO_COLLISION;
         }
@@ -284,268 +350,142 @@ namespace NlMath
         }
     }
 
-    bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2)
+    bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2, Vector3D& normal)
     {
-        ////axis view explaination: (value going from negative to positive)
-        ////x going from left to right
-        ////y going from back(into the screen) to front(out of the screen)
-        ////z going from bottom to top
+            //axis view explaination: (value going from negative to positive)
+            //x going from left to right
+            //y going from back(into the screen) to front(out of the screen)
+            //z going from bottom to top
+ 
+           glm::vec4 _normalX1(1, 0, 0, 0);
+           glm::vec4 _normalY1(0, 1, 0, 0);
+           glm::vec4 _normalZ1(0, 0, 1, 0);
+           //Mtx44RotRad(rotationalMtx, tBox1.rotation);
+           
+           glm::quat Quaternion(tBox1.rotation);
+           glm::mat4 Rotate = glm::mat4_cast(Quaternion);
 
-        //Matrix4x4 rotationalMtx;
-        //
-        ////setting up normals for Box1
-        //Vector3D normalX1(1, 0, 0);
-        //Vector3D normalY1(0, 1, 0);
-        //Vector3D normalZ1(0, 0, 1);
-        //Mtx44RotRad(rotationalMtx, tBox1.rotation);
-        ////rotate normals to correct position
-        //normalX1 = rotationalMtx * normalX1;
-        //normalY1 = rotationalMtx * normalY1;
-        //normalZ1 = rotationalMtx * normalZ1;
-        //
-        ////setting up normals for Box2
-        //Vector3D normalX2(1, 0, 0);
-        //Vector3D normalY2(0, 1, 0);
-        //Vector3D normalZ2(0, 0, 1);
-        //Mtx44RotRad(rotationalMtx, tBox2.rotation);
-        ////rotate normals to correct position
-        //normalX2 = rotationalMtx * normalX2;
-        //normalY2 = rotationalMtx * normalY2;
-        //normalZ2 = rotationalMtx * normalZ2;
+           //rotate normals to correct position
+           _normalX1 = Rotate * _normalX1;
+           _normalY1 = Rotate * _normalY1;
+           _normalZ1 = Rotate * _normalZ1;
+           
+           //setting up normals for Box2
+           glm::vec4 _normalX2(1, 0, 0, 0);
+           glm::vec4 _normalY2(0, 1, 0, 0);
+           glm::vec4 _normalZ2(0, 0, 1, 0);
+           
+           glm::quat Quaternion2(tBox2.rotation);
+           Rotate = glm::mat4_cast(Quaternion2);
+           
+           //rotate normals to correct position
+           _normalX2 = Rotate * _normalX2;
+           _normalY2 = Rotate * _normalY2;
+           _normalZ2 = Rotate * _normalZ2;
 
-        ////get distance vector between two box's center
-        //Vector3D centerDistance = tBox2.center - tBox1.center;
+           glm::vec3 normalX1 = _normalX1;
+           glm::vec3 normalY1 = _normalY1;
+           glm::vec3 normalZ1 = _normalZ1;
+           
+           glm::vec3 normalX2 = _normalX2;
+           glm::vec3 normalY2 = _normalY2;
+           glm::vec3 normalZ2 = _normalZ2;
 
-        //// check if there's a separating plane in between the selected axes
-        //auto getSeparatingPlane = [=](const Vector3D& normal)
-        //{
-        //    float check1 = fabs(centerDistance * normal);
+           //get distance vector between two box's center
+           glm::vec3 centerDistance = tBox2.center - tBox1.center;
+           
+           //to get the smallest seperating axis
+           auto compare = [](const std::pair<float, glm::vec3> lhs, const std::pair<float, glm::vec3> rhs)
+           {
+               return lhs.first > rhs.first;
+           };
 
-        //    float check2 = fabs((normalX1 * tBox1.extend.x) * normal);
-        //    float check3 = fabs((normalY1 * tBox1.extend.y) * normal);
-        //    float check4 = fabs((normalZ1 * tBox1.extend.z) * normal);
-        //    float check5 = fabs((normalX2 * tBox2.extend.x) * normal);
-        //    float check6 = fabs((normalY2 * tBox2.extend.y) * normal);
-        //    float check7 = fabs((normalZ2 * tBox2.extend.z) * normal);
+           std::priority_queue < std::pair<float, glm::vec3>, std::vector<std::pair<float, glm::vec3>>, decltype(compare)>  checkList(compare);
 
-        //    float check8 = check2 + check3 + check4 + check5 + check6 + check7;
+           // check if there's a separating plane in between the selected axes
+           auto getSeparatingPlane = [&](const glm::vec3& normal)
+           {
+               std::pair<float, glm::vec3> tmp;
+               tmp.first = (fabs(glm::dot(centerDistance, normal)) -
+                         (fabs(glm::dot((normalX1 * tBox1.extend.x), normal)) +
+                       fabs(glm::dot((normalY1 * tBox1.extend.y), normal)) +
+                       fabs(glm::dot((normalZ1 * tBox1.extend.z), normal)) +
+                       fabs(glm::dot((normalX2 * tBox2.extend.x), normal)) +
+                       fabs(glm::dot((normalY2 * tBox2.extend.y), normal)) +
+                       fabs(glm::dot((normalZ2 * tBox2.extend.z), normal))));
+               bool check = (tmp.first > 0);
+               tmp.first = fabs(tmp.first);;
+               tmp.second = normal;
+               checkList.push(tmp);
 
-        //    return (fabs(centerDistance * normal) >
-        //            (fabs((normalX1 * tBox1.extend.x) * normal) +
-        //            fabs((normalY1 * tBox1.extend.y) * normal) +
-        //            fabs((normalZ1 * tBox1.extend.z) * normal) +
-        //            fabs((normalX2 * tBox2.extend.x) * normal) +
-        //            fabs((normalY2 * tBox2.extend.y) * normal) +
-        //            fabs((normalZ2 * tBox2.extend.z) * normal)));
-        //};
-
-        //bool check1 = getSeparatingPlane(normalX1);
-        //bool check2 = getSeparatingPlane(normalY1);
-        //bool check3 = getSeparatingPlane(normalZ1);
-        //bool check4 = getSeparatingPlane(normalX2);
-        //bool check5 = getSeparatingPlane(normalY2);
-        //bool check6 = getSeparatingPlane(normalZ2);
-
-        //bool check7 =getSeparatingPlane(Vector3DCrossProduct(normalX1, normalX2));
-        //bool check8 =getSeparatingPlane(Vector3DCrossProduct(normalX1, normalY2));
-        //bool check9 =getSeparatingPlane(Vector3DCrossProduct(normalX1, normalZ2));
-        //                                                       
-        //bool check10 =getSeparatingPlane(Vector3DCrossProduct(normalY1, normalX2));
-        //bool check11 =getSeparatingPlane(Vector3DCrossProduct(normalY1, normalY2));
-        //bool check12 =getSeparatingPlane(Vector3DCrossProduct(normalY1, normalZ2));
-        //                                                         
-        //bool check13 =getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalX2));
-        //bool check14 =getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalY2));
-        //bool check15 =getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalZ2));
-
-        //return !(
-        //    getSeparatingPlane(normalX1) ||
-        //    getSeparatingPlane(normalY1) ||
-        //    getSeparatingPlane(normalZ1) ||
-        //    getSeparatingPlane(normalX2) ||
-        //    getSeparatingPlane(normalY2) ||
-        //    getSeparatingPlane(normalZ2) ||
-        //    
-        //    getSeparatingPlane(Vector3DCrossProduct(normalX1, normalX2)) ||
-        //    getSeparatingPlane(Vector3DCrossProduct(normalX1, normalY2)) ||
-        //    getSeparatingPlane(Vector3DCrossProduct(normalX1, normalZ2)) ||
-
-        //    getSeparatingPlane(Vector3DCrossProduct(normalY1,normalX2)) ||
-        //    getSeparatingPlane(Vector3DCrossProduct(normalY1,normalY2)) ||
-        //    getSeparatingPlane(Vector3DCrossProduct(normalY1,normalZ2)) ||
-
-        //    getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalX2)) ||
-        //    getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalY2)) ||
-        //    getSeparatingPlane(Vector3DCrossProduct(normalZ1,normalZ2)));
-
-        //axis view explaination: (value going from negative to positive)
-        //x going from left to right
-        //y going from back(into the screen) to front(out of the screen)
-        //z going from bottom to top
-
-        Matrix4x4 rotationalMtx;
-
-        //setting up normals for Box1
-        Vector3D normalX1(1, 0, 0);
-        Vector3D normalY1(0, 1, 0);
-        Vector3D normalZ1(0, 0, 1);
-        Mtx44RotRad(rotationalMtx, tBox1.rotation);
-        //rotate normals to correct position
-        normalX1 = rotationalMtx * normalX1;
-        normalY1 = rotationalMtx * normalY1;
-        normalZ1 = rotationalMtx * normalZ1;
-
-        //setting up normals for Box2
-        Vector3D normalX2(1, 0, 0);
-        Vector3D normalY2(0, 1, 0);
-        Vector3D normalZ2(0, 0, 1);
-        Mtx44RotRad(rotationalMtx, tBox2.rotation);
-        //rotate normals to correct position
-        normalX2 = rotationalMtx * normalX2;
-        normalY2 = rotationalMtx * normalY2;
-        normalZ2 = rotationalMtx * normalZ2;
-
-        //get distance vector between two box's center
-        Vector3D t = tBox2.center - tBox1.center;
-
-        std::vector<NlMath::Vector3D> mAxes;
-        mAxes.push_back(normalX1);
-        mAxes.push_back(normalY1);
-        mAxes.push_back(normalZ1);
-        std::vector<NlMath::Vector3D> mAxes2;
-        mAxes2.push_back(normalX2);
-        mAxes2.push_back(normalY2);
-        mAxes2.push_back(normalZ2);
-        std::vector<float> mExtents;
-        mExtents.push_back(tBox1.extend.x);
-        mExtents.push_back(tBox1.extend.y);
-        mExtents.push_back(tBox1.extend.z);
-        std::vector<float> mExtents2;
-        mExtents2.push_back(tBox2.extend.x);
-        mExtents2.push_back(tBox2.extend.y);
-        mExtents2.push_back(tBox2.extend.z);
-        float ra, rb;
-        NlMath::Matrix4x4 R, AbsR;
-        NlMath::Vector3D vec;
-
-        // matrix[i][j] = matrix3D[j+i*width]
-
-        // Compute rotation matrix expressing other OBB in this one's coordinate frame
-        for (size_t i = 0; i < 3; ++i)
-        {
-            for (size_t j = 0; j < 3; ++j)
-            {
-                R[j + i * 4] = mAxes[i]*mAxes2[j];
-            }
-        }
-
-        // Compute translation vector t
-        //auto t = other.mCenter - mCenter;
-
-        // Bring translation into this OBB's coordinate frame
-        t = NlMath::Vector3D(t*mAxes[0]), t*mAxes[1], t*mAxes[2];
-
-        // Compute common subexpressions. Epsilon counteract arithmetic errors
-        // when two edges are parallel and their cross product is null (or near)
-        for (size_t i = 0; i < 3; ++i)
-            for (size_t j = 0; j < 3; ++j)
-                AbsR[j + i * 4] = fabs(R[j + i * 4]) + 0.001f;
-
-        // Test axes L = A0, L = A1, L = A2
-        for (size_t i = 0; i < 3; ++i)
-        {
-            ra = mExtents[i];
-            rb = mExtents2[0] * AbsR[0 + i * 4] + mExtents2[1] * AbsR[1 + i * 4] + mExtents2[2] * AbsR[2 + i * 4];
-
-            if (fabs(t[i]) > ra + rb) return false;
-        }
-
-        // Test axes L = B0, L = B1, L = B2
-        for (size_t i = 0; i < 3; ++i)
-        {
-            ra = mExtents[0] * AbsR[i] + mExtents[1] * AbsR[i + 4] + mExtents[2] * AbsR[i + 8];
-            rb = mExtents2[i];
-
-            if (fabs(t[0] * R[i] + t[1] * R[i + 4] + t[2] * R[i + 8]) > ra + rb) return false;
-        }
-
-        //// Since no separating axis is found, the OBBs must be intersecting
-        //if (fastCheck) return true;
-
-        //// Other 8 axes
-
-        //============== A0
-        // Test axis L = A0 x B0
-        ra = mExtents[1] * AbsR[8] + mExtents[2] * AbsR[4];
-        rb = mExtents2[1] * AbsR[2] + mExtents2[2] * AbsR[1];
-        if (fabs(t[2] * R[4] - t[1] * R[8]) > ra + rb) return false;
-
-        // Test axis L = A0 x B1
-        ra = mExtents[1] * AbsR[9] + mExtents[2] * AbsR[5];
-        rb = mExtents2[0] * AbsR[2] + mExtents2[2] * AbsR[0];
-        if (fabs(t[2] * R[5] - t[1] * R[9]) > ra + rb) return false;
-
-        // Test axis L = A0 x B2
-        ra = mExtents[1] * AbsR[10] + mExtents[2] * AbsR[6];
-        rb = mExtents2[0] * AbsR[1] + mExtents2[1] * AbsR[0];
-        if (fabs(t[2] * R[6] - t[1] * R[10]) > ra + rb) return false;
-
-        //============== A1
-        // Test axis L = A1 x B0
-        ra = mExtents[0] * AbsR[8] + mExtents[2] * AbsR[0];
-        rb = mExtents2[1] * AbsR[6] + mExtents2[2] * AbsR[5];
-        if (fabs(t[0] * R[8] - t[2] * R[0]) > ra + rb) return false;
-
-        // Test axis L = A1 x B1
-        ra = mExtents[0] * AbsR[9] + mExtents[2] * AbsR[1];
-        rb = mExtents2[0] * AbsR[6] + mExtents2[2] * AbsR[4];
-        if (fabs(t[0] * R[9] - t[2] * R[1]) > ra + rb) return false;
-
-        // Test axis L = A1 x B2
-        ra = mExtents[0] * AbsR[10] + mExtents[2] * AbsR[2];
-        rb = mExtents2[0] * AbsR[5] + mExtents2[1] * AbsR[4];
-        if (fabs(t[0] * R[10] - t[2] * R[2]) > ra + rb) return false;
-
-        //============== A2
-        // Test axis L = A2 x B0
-        ra = mExtents[0] * AbsR[4] + mExtents[1] * AbsR[0];
-        rb = mExtents2[1] * AbsR[10] + mExtents2[2] * AbsR[9];
-        if (fabs(t[1] * R[0] - t[0] * R[4]) > ra + rb) return false;
-
-        // Test axis L = A2 x B1
-        ra = mExtents[0] * AbsR[5] + mExtents[1] * AbsR[1];
-        rb = mExtents2[0] * AbsR[10] + mExtents2[2] * AbsR[8];
-        if (fabs(t[1] * R[1] - t[0] * R[5]) > ra + rb) return false;
-
-        // Test axis L = A2 x B2
-        ra = mExtents[0] * AbsR[6] + mExtents[1] * AbsR[2];
-        rb = mExtents2[0] * AbsR[9] + mExtents2[1] * AbsR[8];
-        if (fabs(t[1] * R[2] - t[0] * R[6]) > ra + rb) return false;
-
-        // Since no separating axis is found, the OBBs must be intersecting
-        return true;
+               return check;
+           };
 
 
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalX1), normalX1));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalY1), normalY1));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalZ1), normalZ1));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalX2), normalX2));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalY2), normalY2));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalZ2), normalZ2));
+
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalX1, normalX2)), glm::cross(normalX1, normalX2)));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalX1, normalY2)), glm::cross(normalX1, normalX2)));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalX1, normalZ2)), glm::cross(normalX1, normalX2)));
+           //                                                                                                                   
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalY1, normalX2)), glm::cross(normalY1, normalX2)));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalY1, normalY2)), glm::cross(normalY1, normalY2)));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalY1, normalZ2)), glm::cross(normalY1, normalZ2)));
+           //                                                                                                                   
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalZ1, normalX2)), glm::cross(normalZ1, normalX2)));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalZ1, normalY2)), glm::cross(normalZ1, normalY2)));
+           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalZ1, normalZ2)), glm::cross(normalZ1, normalZ2)));
+
+
+
+           bool check = !(
+               getSeparatingPlane(normalX1) ||
+               getSeparatingPlane(normalY1) ||
+               getSeparatingPlane(normalZ1) ||
+               getSeparatingPlane(normalX2) ||
+               getSeparatingPlane(normalY2) ||
+               getSeparatingPlane(normalZ2) ||
+           
+               getSeparatingPlane(glm::cross(normalX1, normalX2)) ||
+               getSeparatingPlane(glm::cross(normalX1, normalY2)) ||
+               getSeparatingPlane(glm::cross(normalX1, normalZ2)) ||
+           
+               getSeparatingPlane(glm::cross(normalY1, normalX2)) ||
+               getSeparatingPlane(glm::cross(normalY1, normalY2)) ||
+               getSeparatingPlane(glm::cross(normalY1, normalZ2)) ||
+           
+               getSeparatingPlane(glm::cross(normalZ1, normalX2)) ||
+               getSeparatingPlane(glm::cross(normalZ1, normalY2)) ||
+               getSeparatingPlane(glm::cross(normalZ1, normalZ2)));
+
+               normal = checkList.top().second;
+
+           return check;
     }
-    bool CapsuleToCapsule(const CapsuleCollider& tCap1, const CapsuleCollider& tCap2)
+    bool CapsuleToCapsule(const CapsuleCollider& tCap1, const CapsuleCollider& tCap2, Vector3D& normal)
     {
         //Capsule collision is made up of 2 circles, one at tip and the other at base
         
         //start by finding the normal of the capsule 1, which is the tip - base
         Vector3D normal1 = Vector3DNormalize(tCap1.tip - tCap1.base);
         //find the vector to reach the center of circle
-        Vector3D lineOffSet1 = normal1 * tCap1.radius;
+        //Vector3D lineOffSet1 = normal1 * tCap1.radius;
         //find the center of tip circle and base circle
-        Vector3D baseCircleCtr1 = tCap1.base + lineOffSet1;
-        Vector3D tipCircleCtr1 = tCap1.tip + lineOffSet1;
+        Vector3D baseCircleCtr1 = tCap1.base/* + lineOffSet1*/;
+        Vector3D tipCircleCtr1 = tCap1.tip/* + lineOffSet1*/;
 
         //repeat to find the normal of the capsule 2, which is the tip - base
         Vector3D normal2 = Vector3DNormalize(tCap2.tip - tCap2.base);
         //find the vector to reach the center of circle
-        Vector3D lineOffSet2 = normal2 * tCap2.radius;
+        //Vector3D lineOffSet2 = normal2 * tCap2.radius;
         //find the center of tip circle and base circle
-        Vector3D baseCircleCtr2 = tCap2.base + lineOffSet2;
-        Vector3D tipCircleCtr2 = tCap2.tip + lineOffSet2;
+        Vector3D baseCircleCtr2 = tCap2.base/* + lineOffSet2*/;
+        Vector3D tipCircleCtr2 = tCap2.tip/* + lineOffSet2*/;
 
         // vectors between line endpoints:
         Vector3D dis0 = baseCircleCtr2 - baseCircleCtr1;
@@ -584,6 +524,140 @@ namespace NlMath
         float penetration_depth = tCap1.radius + tCap2.radius - len;
         bool intersects = penetration_depth > 0;
 
+		// normal ?
+		normal = penetration_normal;
+
         return intersects;
     }
+	SIDES AABBToCapsule(const AABBCollider& tBox1, const CapsuleCollider& tCap2, NlMath::Vector3D& nromal)
+	{
+		//                MAX
+		//      C--------D
+		//    /        / |
+		//  /        /   |
+		// A--------B    |
+		// |        |    |
+		// |        |    /
+		// |        |  /
+		// |________|/
+		// MIN
+
+		// all 8 vertices
+		Vector3D topA = Vector3D(tBox1.vecMin.x, tBox1.vecMax.y, tBox1.vecMin.z);
+		Vector3D topB = Vector3D(tBox1.vecMax.x, tBox1.vecMax.y, tBox1.vecMin.z);
+		Vector3D topC = Vector3D(tBox1.vecMin.x, tBox1.vecMax.y, tBox1.vecMax.z);
+		Vector3D topD = Vector3D(tBox1.vecMax.x, tBox1.vecMax.y, tBox1.vecMax.z);
+
+		Vector3D botA = Vector3D(tBox1.vecMin.x, tBox1.vecMin.y, tBox1.vecMin.z);
+		Vector3D botB = Vector3D(tBox1.vecMax.x, tBox1.vecMin.y, tBox1.vecMin.z);
+		Vector3D botC = Vector3D(tBox1.vecMin.x, tBox1.vecMin.y, tBox1.vecMax.z);
+		Vector3D botD = Vector3D(tBox1.vecMax.x, tBox1.vecMin.y, tBox1.vecMax.z);
+
+		// check all vertices for closest point to the capsule
+		Vector3D closestPointOnCapsuleLine[8];
+		closestPointOnCapsuleLine[0] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, topA);
+		closestPointOnCapsuleLine[1] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, topB);
+		closestPointOnCapsuleLine[2] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, topC);
+		closestPointOnCapsuleLine[3] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, topD);
+		closestPointOnCapsuleLine[4] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, botA);
+		closestPointOnCapsuleLine[5] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, botB);
+		closestPointOnCapsuleLine[6] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, botC);
+		closestPointOnCapsuleLine[7] = ClosestPointOnLineSegment(tCap2.base, tCap2.tip, botD);
+
+		// get sq dist
+		float dist[8];
+		for (int i = 0; i < 8; ++i)
+		{
+			dist[i] = closestPointOnCapsuleLine[i] * closestPointOnCapsuleLine[i];
+		}
+
+		// find smallest dist
+		int smallestDistIndex = 0;
+		float smallestDistance = dist[0];
+		for (int i = 0; i < 7; ++i)
+		{
+			if (dist[i] > dist[i + 1])
+			{
+				smallestDistIndex = i + 1;
+				smallestDistance = dist[i + 1];
+			}
+		}
+
+		// test aabb to spehere using sphere on closest point on capsule linesegment
+
+		SphereCollider closestsphere;
+		closestsphere.center = closestPointOnCapsuleLine[smallestDistIndex];
+		closestsphere.radius = tCap2.radius;
+
+		return AABB_SphereCollision(tBox1, closestsphere, nromal);
+		//return SIDES::NO_COLLISION;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	//// 2D
+	// some 2d checks we may or may not need in the future
+	// we can change them to 3d if we need them
+	bool Point_Rectangle_2D(Vec2 point, Vec2 rectVertA, Vec2 rectVertB, Vec2 rectVertC, Vec2 rectVertD)
+	{
+		Vec2 AP = point - rectVertA;
+		Vec2 AB = rectVertB - rectVertA;
+		float AP_AB = AP * AB;
+		float AB_AB = AB * AB;
+		Vec2 AD = rectVertD - rectVertA;
+		float AP_AD = AP * AD;
+		float AD_AD = AD * AD;
+		// 0 <= AP.AB <= AB.AB and 0 <= AP.AD <= AD.AD
+		return (
+			0 <= AP_AB &&
+			AP_AB <= AB_AB &&
+			0 <= AP_AD &&
+			AP_AD <= AD_AD
+			);
+	}
+	bool Line_Circle_2D(Vec2 circleCenter, float circleRadius, Vec2 rectVertA, Vec2 rectVertB)
+	{
+		// https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
+
+		Vec2 d = rectVertB - rectVertA;
+		Vec2 f = rectVertA - circleCenter;
+
+		float a = d * d;
+		float b = 2 * f * d;
+		float c = f * f - circleRadius * circleRadius;
+
+		float discriminant = b * b - 4 * a * c; // b^2 - 4ac
+
+		if (discriminant < 0) return false; // no intersection
+
+		discriminant = sqrt(discriminant);
+
+		// time of intersection
+		float t1 = (-b - discriminant) / (2 * a);
+		if (t1 >= 0 && t1 <= 1)
+		{
+			// within the toi
+			return true;
+		}
+
+		float t2 = (-b + discriminant) / (2 * a);
+		if (t2 >= 0 && t2 <= 1)
+		{
+			// inside sphere or past the sphere
+			return true;
+		}
+
+		return false;
+	}
+	bool Circle_Rectangle_2D(Vec2 circleCenter, float circleRadius, Vec2 rectVertA, Vec2 rectVertB, Vec2 rectVertC, Vec2 rectVertD)
+	{
+		return(
+			Point_Rectangle_2D(circleCenter, rectVertA, rectVertB, rectVertC, rectVertD) ||
+			Line_Circle_2D(circleCenter, circleRadius, rectVertA, rectVertB) ||
+			Line_Circle_2D(circleCenter, circleRadius, rectVertB, rectVertC) ||
+			Line_Circle_2D(circleCenter, circleRadius, rectVertC, rectVertD) ||
+			Line_Circle_2D(circleCenter, circleRadius, rectVertD, rectVertA)
+			);
+	}
+	//// 2D END
+	///////////////////////////////////////////////////////////////////////////////////////////////
 }

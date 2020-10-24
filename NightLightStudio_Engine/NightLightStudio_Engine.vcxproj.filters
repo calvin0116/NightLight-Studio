@@ -67,6 +67,9 @@
     <Filter Include="Source Files\Collision">
       <UniqueIdentifier>{ea29ae5f-d5a4-468d-89e8-d0bdb8743ebd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Editor\Helper">
+      <UniqueIdentifier>{3a18ec3b-fe41-41a3-b18c-b0bec2eea290}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -288,6 +291,21 @@
     <ClInclude Include="Source\Graphics\MeshManager.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="ISerializable.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentManagerTypedefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\CpuUsage.h">
+      <Filter>Source Files\Editor\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\CollisionDebugLines.h">
+      <Filter>Source Files\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -469,6 +487,12 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\MeshManager.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\CpuUsage.cpp">
+      <Filter>Source Files\Editor\Helper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

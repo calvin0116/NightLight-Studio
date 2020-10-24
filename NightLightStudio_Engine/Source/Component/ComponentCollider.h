@@ -20,6 +20,33 @@ enum class SIDES
 	BACK
 };
 
+enum class COLRESTYPE
+{
+	AABB_AABB,
+	AABB_SPHERE,
+	AABB_CAPSULE,
+	//AABB_OBB,
+
+	SPHERE_AABB,
+	SPHERE_SPHERE,
+	SPHERE_CAPSULE,
+	//SPHERE_OBB,
+
+	CAPSULE_AABB,
+	CAPSULE_SPHERE,
+	CAPSULE_CAPSULE,
+	//CAPSULE_OBB,
+
+	//OBB_AABB,
+	//OBB_SPHERE,
+	//OBB_CAPSULE,
+	OBB_OBB,
+
+	//PLANE?
+
+	COLRESTYPE_ERR // error
+};
+
 enum class COLLIDERS
 {
 	PLANE = 0,
@@ -36,7 +63,8 @@ enum class COLLIDERS
 
 struct ICollider
 {
-
+	NlMath::Vector3D colliderScale;
+	ICollider() : colliderScale(1.0f, 1.0f, 1.0f) {}
 };
 
 struct PlaneCollider : public ICollider
@@ -75,10 +103,10 @@ struct AABBCollider : public ICollider
 
 struct OBBCollider : public ICollider
 {
-	NlMath::Vector3D center;
-	NlMath::Vector3D extend;
+	 NlMath::Vector3D center;
+	 NlMath::Vector3D extend;
 	//rotation in radiant
-	NlMath::Vector3D rotation;
+	 NlMath::Vector3D rotation;
 	
 	OBBCollider();
 	OBBCollider(NlMath::Vector3D _center, 
@@ -116,7 +144,7 @@ typedef struct ComponentCollider //: public IComponent
 		AABBCollider	aabb;
 		OBBCollider		obb;
 		CapsuleCollider capsule;
-		Collider() {};
+		Collider() : aabb() { };
 	};
 
 	//MyVector preCollisionData;

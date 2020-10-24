@@ -5,6 +5,9 @@
 #include "../Component/ComponentRigidBody.h"
 #include "../Input/SystemInput.h"
 
+#define USEVEL 0
+//#define USEVEL 1
+
 namespace NS_PHYSICS
 {
 	PhysicsSystem::PhysicsSystem()
@@ -99,46 +102,64 @@ namespace NS_PHYSICS
 				
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_D))
 			{
-				
-				compR->velocity.x = 1;
+#if USEVEL == 0
+				compT->_position.x += 1 *realDt;
+#else
+				compR->velocity.x += 1 * realDt;
+#endif
 			}
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]() {});
 
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_A))
 			{
-
-				compR->velocity.x = -1;
+#if USEVEL == 0
+				compT->_position.x += -1 * realDt;
+#else
+				compR->velocity.x -= 1 * realDt;
+#endif
 			}
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_DOWN", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]() {});
 
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_S))
 			{
-
-				compR->velocity.y = -1;
+#if USEVEL == 0
+				compT->_position.y += -1 * realDt;
+#else
+				compR->velocity.y -= 1 * realDt;
+#endif
 			}
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_UP", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]() {});
 
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_W))
 			{
-
-				compR->velocity.y = 1;
+#if USEVEL == 0
+				compT->_position.y += 1 * realDt;
+#else
+				compR->velocity.y += 1 * realDt;
+#endif
 			}
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_FRONT", SystemInput_ns::IKEY_Q, "Q", SystemInput_ns::OnHold, [this]() {});
 
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_Q))
 			{
-
-				compR->velocity.z = 1;
+#if USEVEL == 0
+				compT->_position.z += 1 * realDt;
+#else
+				compR->velocity.z += 1 * realDt;
+#endif
 			}
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_BACK", SystemInput_ns::IKEY_E, "E", SystemInput_ns::OnHold, [this]() {});
 
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_E))
 			{
-
-				compR->velocity.z = -1;
+#if USEVEL == 0
+				compT->_position.z += -1 * realDt;
+#else
+				compR->velocity.z -=  1 * realDt;
+#endif
 			}
 			/// </Testing>//////////////////////////////////////////////////////////////////////////////////////////
 		}

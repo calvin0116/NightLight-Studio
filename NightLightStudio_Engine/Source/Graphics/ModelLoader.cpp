@@ -14,7 +14,7 @@ namespace NS_GRAPHICS
 		_fbxManager->Destroy();
 	}
 
-	void ModelLoader::TransverseChild(FbxNode* node)
+	void ModelLoader::TransverseChild(FbxNode* node, int* meshIndex, const std::string& fileName, const std::string& customName)
 	{
 		for (int i = 0; i < node->GetNodeAttributeCount(); ++i)
 		{
@@ -25,16 +25,49 @@ namespace NS_GRAPHICS
 				FbxMesh* mesh = node->GetMesh();
 				Mesh* newMesh = new Mesh();
 
-				//LOCAL FILE NAME
-				std::string fileName;
-				size_t pos = _currentFile.rfind("\\");
-				if (pos !=std::string::npos)
+				//CHECKS FOR THE FILE NAME
+				std::string name;
+				size_t pos = fileName.rfind("\\");
+				//Get just the string after the last path
+				if (pos != std::string::npos)
 				{
-					fileName = _currentFile.substr(pos+1);
-					fileName.erase(fileName.find(".")+1);
+					name = fileName.substr(pos + 1);
 				}
-				
-				newMesh->_localFileName = s_LocalPathName + fileName + s_MeshFileType;
+				else
+				{
+					name = fileName;
+				}
+
+				//LOCAL FILE NAME
+				name.erase(name.find("."));
+				//CONVERSION TO CUSTOM FORMAT
+				newMesh->_localFileName = s_LocalPathName + name + s_MeshFileType;
+
+				//MESH NAME
+				if (customName.empty())
+				{
+					if (*meshIndex)
+					{
+						newMesh->_meshName = name + std::to_string(*meshIndex + 1);
+					}
+					else
+					{
+						newMesh->_meshName = name;
+					}
+				}
+
+				else
+				{
+					if (*meshIndex)
+					{
+						newMesh->_meshName = customName + std::to_string(*meshIndex + 1);
+					}
+					else
+					{
+						newMesh->_meshName = customName;
+					}
+
+				}
 
 				//TEXTURE FILE NAME
 				//PROBABLY WONT BE AUTO
@@ -95,12 +128,25 @@ namespace NS_GRAPHICS
 				for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
 				{
 					//Control point vertex
-					glm::vec3 vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
-										 (float)vertexs[vertexIndex][1] * (float)scaling[1],
-										 (float)vertexs[vertexIndex][2] * (float)scaling[2]};
+					//0,2,1 as FBX exported it as X Z Y over X Y Z
+					glm::vec3 vertex;
+					if (fileName.find(s_FbxFileFormat) != std::string::npos)
+					{
+						vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
+								   (float)vertexs[vertexIndex][2] * (float)scaling[2],
+								   (float)vertexs[vertexIndex][1] * (float)scaling[1]};
+					}
+
+					else
+					{
+						vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
+								   (float)vertexs[vertexIndex][1] * (float)scaling[1],
+								   (float)vertexs[vertexIndex][2] * (float)scaling[2]};
+					}
 
 					//OLD WAY
 					newMesh->_vertices.push_back(vertex);
+					newMesh->_rgb.push_back({ 1.0f,1.0f,1.0f });
 
 					//NEW WAY
 					Mesh::VertexData newVertex{ vertex, {1.0f,1.0f,1.0f} };
@@ -203,13 +249,14 @@ namespace NS_GRAPHICS
 				}
 
 				mesh->Destroy();
-				MeshManager::GetInstance().AddMesh(newMesh);
+				MeshManager::GetInstance().AddLoadedMesh(newMesh, customName);
+				++(*meshIndex);
 			}	
 		}
 
 		for (int i = 0; i < node->GetChildCount(); i++)
 		{
-			TransverseChild(node->GetChild(i));
+			TransverseChild(node->GetChild(i), meshIndex, fileName, customName);
 		}
 	}
 
@@ -240,7 +287,7 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	void ModelLoader::LoadFBX(const std::string& fileName)
+	void ModelLoader::LoadFBX(const std::string& fileName, const std::string& customName)
 	{
 		std::cout << "Loading FBX..." << std::endl;
 		if (_fbxScene)
@@ -248,8 +295,6 @@ namespace NS_GRAPHICS
 			_fbxScene->Destroy();
 			_fbxScene = NULL;
 		}
-
-		_currentFile = fileName;
 
 		// Create an importer using the SDK manager.
 		_fbxImport = FbxImporter::Create(_fbxManager, "");
@@ -288,6 +333,7 @@ namespace NS_GRAPHICS
 
 		// Recursively goes through the scene to get all the meshes
 		// Root nodes should not contain any attributes.
+		int offset = 0;
 		FbxNode* root = _fbxScene->GetRootNode();
 		if (root)
 		{
@@ -295,13 +341,29 @@ namespace NS_GRAPHICS
 
 			if (parentNode)
 			{
-				TransverseChild(parentNode);
+				TransverseChild(parentNode, &offset, fileName, customName);
 			}
 
 			for (int i = 0; i < root->GetChildCount(); i++)
 			{
-				TransverseChild(root->GetChild(i));
+				TransverseChild(root->GetChild(i), &offset, fileName, customName);
 			}
 		}
+	}
+	void ModelLoader::LoadModel(const std::string& fileName, const std::string& customName)
+	{
+		if (fileName.find(s_MeshFileType) != std::string::npos)
+		{
+			LoadCustomMesh(fileName, customName);
+		}
+		else
+		{
+			LoadFBX(fileName, customName);
+		}
+	}
+	void ModelLoader::LoadCustomMesh(const std::string& fileName, const std::string& customName)
+	{
+		//Gets rid of warning for now
+		(void)fileName, customName;
 	}
 }

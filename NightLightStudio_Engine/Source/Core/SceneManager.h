@@ -58,14 +58,15 @@ namespace NS_SCENE
 		//Entity creation for scene using Json data
 		void EntityListCreation(Value& Ent_list);
 		//Component creation for entitiy using Json data
-		//void ComponentsCreation(Value& Ent_list, E)
+		//void ComponentsCreation(Value& Comp_list, Entity& entity);
 	public:
 		//==================System function =================//
 		void Load() override;	//Load resources and scenes config
 
-		void GameLoad();
-		void GameInit();		//Init current scene
+		void GameLoad() override;
+		void GameInit() override;		//Init current scene
 
+		void GameExit() override;
 		void Free() override;	//Destroy current system
 		void Exit() override;
 

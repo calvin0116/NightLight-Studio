@@ -5,7 +5,7 @@ void LevelEditor::LE_AddText(const std::string& text)
     ImGui::Text(text.c_str());
 }
 
-void LevelEditor::LE_AddButton(const std::string& name, std::function<void()> fn, ImVec2 size)
+void LevelEditor::LE_AddButton(const std::string& name, const std::function<void()>& fn, const ImVec2& size)
 {
     if (ImGui::Button(name.c_str(), size))
     {
@@ -14,7 +14,7 @@ void LevelEditor::LE_AddButton(const std::string& name, std::function<void()> fn
     }
 }
 
-void LevelEditor::LE_AddArrowButton(const std::string& name, ImGuiDir dir, std::function<void()> fn)
+void LevelEditor::LE_AddArrowButton(const std::string& name, const ImGuiDir& dir, const std::function<void()>& fn)
 {
     if (ImGui::ArrowButton(name.c_str(), dir))
     {
@@ -23,32 +23,50 @@ void LevelEditor::LE_AddArrowButton(const std::string& name, ImGuiDir dir, std::
     }
 }
 
-void LevelEditor::LE_AddSelectable(const std::string& name, bool isSelected, std::function<void()> fn, ImGuiSelectableFlags flag)
+void LevelEditor::LE_AddRadioButton(const std::string& name, bool active, const std::function<void()>& fn)
 {
-    if (ImGui::Selectable(name.c_str(), isSelected, flag))
+    if (ImGui::RadioButton(name.c_str(), active))
     {
         if (fn)
             fn();
     }
 }
 
-void LevelEditor::LE_AddSelectable(const std::string& name, bool* isSelectedPtr, std::function<void()> fn, ImGuiSelectableFlags flag)
+void LevelEditor::LE_AddSelectable(const std::string& name, bool isSelected, const std::function<void()>& fn, const ImGuiSelectableFlags& flag, const ImVec2& size)
 {
-    if (ImGui::Selectable(name.c_str(), isSelectedPtr, flag))
+    if (ImGui::Selectable(name.c_str(), isSelected, flag, size))
     {
         if (fn)
             fn();
     }
 }
 
-void LevelEditor::LE_AddInputIntProperty(const std::string& name, int& prop, std::function<void()> fn, ImGuiInputTextFlags flag)
+void LevelEditor::LE_AddSelectable(const std::string& name, bool* isSelectedPtr, const std::function<void()>& fn, const ImGuiSelectableFlags& flag, const ImVec2& size)
+{
+    if (ImGui::Selectable(name.c_str(), isSelectedPtr, flag, size))
+    {
+        if (fn)
+            fn();
+    }
+}
+
+void LevelEditor::LE_AddCheckbox(const std::string& name, bool* isSelected, const std::function<void()>& fn)
+{
+    if (ImGui::Checkbox(name.c_str(), isSelected))
+    {
+        if (fn)
+            fn();
+    }
+}
+
+void LevelEditor::LE_AddInputIntProperty(const std::string& name, int& prop, const std::function<void()>& fn, const ImGuiInputTextFlags& flag)
 {
     if (ImGui::InputInt(name.c_str(), &prop, 1, 100, flag))
         if (fn)
             fn();
 }
 
-void LevelEditor::LE_AddInputInt2Property(const std::string& name, int& prop1, int& prop2, std::function<void()> fn, ImGuiInputTextFlags flag)
+void LevelEditor::LE_AddInputInt2Property(const std::string& name, int& prop1, int& prop2, const std::function<void()>& fn, const ImGuiInputTextFlags& flag)
 {
     int arr[2] = { prop1, prop2 };
     if (ImGui::InputInt2(name.c_str(), arr, flag))
@@ -57,7 +75,7 @@ void LevelEditor::LE_AddInputInt2Property(const std::string& name, int& prop1, i
     prop1 = arr[0];
     prop2 = arr[1];
 }
-void LevelEditor::LE_AddInputInt3Property(const std::string& name, int& prop1, int& prop2, int& prop3, std::function<void()> fn, ImGuiInputTextFlags flag)
+void LevelEditor::LE_AddInputInt3Property(const std::string& name, int& prop1, int& prop2, int& prop3, const std::function<void()>& fn, const ImGuiInputTextFlags& flag)
 {
     int arr[3] = { prop1, prop2, prop3 };
     if (ImGui::InputInt3(name.c_str(), arr, flag))
@@ -68,14 +86,14 @@ void LevelEditor::LE_AddInputInt3Property(const std::string& name, int& prop1, i
     prop3 = arr[2];
 }
 
-void LevelEditor::LE_AddInputFloatProperty(const std::string& name, float& prop, std::function<void()> fn, ImGuiInputTextFlags flag)
-{ 
+void LevelEditor::LE_AddInputFloatProperty(const std::string& name, float& prop, const std::function<void()>& fn, const ImGuiInputTextFlags& flag)
+{
     if (ImGui::InputFloat(name.c_str(), &prop, 1, 100, 3, flag))
         if (fn)
             fn();
 }
 
-void LevelEditor::LE_AddInputFloat2Property(const std::string& name, float& prop1, float& prop2, std::function<void()> fn, ImGuiInputTextFlags flag)
+void LevelEditor::LE_AddInputFloat2Property(const std::string& name, float& prop1, float& prop2, const std::function<void()>& fn, const ImGuiInputTextFlags& flag)
 {
     float arr[2] = { prop1, prop2 };
     if (ImGui::InputFloat2(name.c_str(), arr, 3, flag))
@@ -85,7 +103,7 @@ void LevelEditor::LE_AddInputFloat2Property(const std::string& name, float& prop
     prop2 = arr[1];
 }
 
-void LevelEditor::LE_AddInputFloat3Property(const std::string& name, float& prop1, float& prop2, float& prop3, std::function<void()> fn, ImGuiInputTextFlags flag)
+void LevelEditor::LE_AddInputFloat3Property(const std::string& name, float& prop1, float& prop2, float& prop3, const std::function<void()>& fn, const ImGuiInputTextFlags& flag)
 {
     float arr[3] = { prop1, prop2, prop3 };
     if (ImGui::InputFloat3(name.c_str(), arr, 3, flag))
@@ -96,19 +114,19 @@ void LevelEditor::LE_AddInputFloat3Property(const std::string& name, float& prop
     prop3 = arr[2];
 }
 
-void LevelEditor::LE_AddSliderIntProperty(const std::string& name, int& prop, int min, int max, ImGuiInputTextFlags flag)
+void LevelEditor::LE_AddSliderIntProperty(const std::string& name, int& prop, int min, int max, const ImGuiInputTextFlags& flag)
 {
-    ImGui::SliderInt(name.c_str(), &prop, min, max, "%d",flag);
+    ImGui::SliderInt(name.c_str(), &prop, min, max, "%d", flag);
 }
 
-void LevelEditor::LE_AddSliderFloatProperty(const std::string& name, float& prop, float min, float max, ImGuiInputTextFlags flag)
+void LevelEditor::LE_AddSliderFloatProperty(const std::string& name, float& prop, float min, float max, const ImGuiInputTextFlags& flag)
 {
     ImGui::SliderFloat(name.c_str(), &prop, min, max, "%.3f", flag);
 }
 
-void LevelEditor::LE_AddInputText(const std::string& name, std::string& text, unsigned maxLen, 
-    ImGuiInputTextFlags flag,
-    std::function<void()> fn, int(*callback)(ImGuiInputTextCallbackData*), void* obj)
+void LevelEditor::LE_AddInputText(const std::string& name, std::string& text, unsigned maxLen,
+    const ImGuiInputTextFlags& flag,
+    const std::function<void()>& fn, int(*callback)(ImGuiInputTextCallbackData*), void* obj)
 {
     char* toStr = new char[maxLen];
 
@@ -129,8 +147,8 @@ void LevelEditor::LE_AddInputText(const std::string& name, std::string& text, un
 }
 
 void LevelEditor::LE_AddInputMultiText(const std::string& name, std::string& text, unsigned maxLen, ImVec2 size,
-    ImGuiInputTextFlags flag,
-    std::function<void()> fn, int(*callback)(ImGuiInputTextCallbackData*), void* obj)
+    const ImGuiInputTextFlags& flag,
+    const std::function<void()>& fn, int(*callback)(ImGuiInputTextCallbackData*), void* obj)
 {
     char* toStr = new char[maxLen];
 
@@ -180,17 +198,17 @@ void LevelEditor::LE_AddPlotLines(const std::string& name, std::vector<float>& g
     ImGui::PlotLines(name.c_str(), graph.data(), (int)graph.size());
 }
 
-void LevelEditor::LE_AddHistogram(const std::string& name, std::vector<float>& graph, bool addData, const float& newData)
+void LevelEditor::LE_AddHistogram(const std::string& name, std::vector<float>& graph, bool addData, const float& newData, float min, float max, ImVec2 size)
 {
     if (addData)
     {
         graph.erase(std::begin(graph));
         graph.push_back(newData);
     }
-    ImGui::PlotHistogram(name.c_str(), graph.data(), (int)graph.size());
+    ImGui::PlotHistogram(name.c_str(), graph.data(), (int)graph.size(), 0, NULL, min, max, size);
 }
 
-void LevelEditor::LE_AddProgressBar(float progress, ImVec2 size, std::string overlay)
+void LevelEditor::LE_AddProgressBar(float progress, const ImVec2& size, std::string overlay)
 {
     // clamps values
     if (progress < 0.0f)
@@ -207,7 +225,8 @@ void LevelEditor::LE_AddProgressBar(float progress, ImVec2 size, std::string ove
     //ImGui::ProgressBar((progress), ImVec2(0.f, 0.f), overlay.c_str());
 }
 
-void LevelEditor::LE_AddPopupButton(const std::string& name, std::function<void()> fn, ImVec2 size, ImGuiPopupFlags popupFlag, ImGuiWindowFlags winFlag)
+void LevelEditor::LE_AddPopupButton(const std::string& name, const std::function<void()>& fn, const ImVec2& size,
+    const ImGuiPopupFlags& popupFlag, const ImGuiWindowFlags& winFlag)
 {
     LE_AddButton(name,
         [&]()
@@ -223,7 +242,7 @@ void LevelEditor::LE_AddPopupButton(const std::string& name, std::function<void(
     }
 }
 
-void LevelEditor::LE_AddContext(const std::string& name, std::function<void()> fn, ImGuiPopupFlags popupFlag)
+void LevelEditor::LE_AddContext(const std::string& name, const std::function<void()>& fn, const ImGuiPopupFlags& popupFlag)
 {
     if (ImGui::BeginPopupContextItem(name.c_str(), popupFlag))
     {
@@ -234,7 +253,8 @@ void LevelEditor::LE_AddContext(const std::string& name, std::function<void()> f
     }
 }
 
-void LevelEditor::LE_AddModal(const std::string& name, std::function<void()> fn, std::vector<std::pair<std::string, std::function<void()>>> buttonFn, ImVec2 size, ImGuiPopupFlags popupFlag, ImGuiWindowFlags winFlag)
+void LevelEditor::LE_AddModal(const std::string& name, const std::function<void()>& fn, const std::vector<std::pair<std::string, std::function<void()>>>& buttonFn,
+    const ImVec2& size, const ImGuiPopupFlags& popupFlag, const ImGuiWindowFlags& winFlag)
 {
     // Always center this window when appearing
     ImVec2 center(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f);
@@ -265,7 +285,7 @@ void LevelEditor::LE_AddModal(const std::string& name, std::function<void()> fn,
         {
             for (unsigned i = 0; i < buttonFn.size(); ++i)
             {
-                if (ImGui::Button(buttonFn[i].first.c_str(), ImVec2(120,0)))
+                if (ImGui::Button(buttonFn[i].first.c_str(), ImVec2(120, 0)))
                 {
                     if (buttonFn[i].second)
                         buttonFn[i].second();
@@ -284,7 +304,7 @@ void LevelEditor::LE_AddModal(const std::string& name, std::function<void()> fn,
     }
 }
 
-void LevelEditor::LE_AddHover(std::function<void()> fn)
+void LevelEditor::LE_AddHover(const std::function<void()>& fn)
 {
     if (ImGui::IsItemHovered())
     {
