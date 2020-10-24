@@ -309,6 +309,9 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_TemplateFuncs.hpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Heirarchy.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -496,6 +499,9 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\CpuUsage.cpp">
       <Filter>Source Files\Editor\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Heirarchy.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

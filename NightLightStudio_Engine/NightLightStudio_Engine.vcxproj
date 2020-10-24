@@ -218,6 +218,7 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Heirarchy.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_TemplateFuncs.hpp" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h" />
@@ -293,6 +294,7 @@
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Console.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_DropDowns.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Heirarchy.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.cpp" />

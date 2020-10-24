@@ -24,9 +24,8 @@ public:
 
 	//read and write function for initialization from saved files
 	void	Read(Value& val);
-	Value	Write();
-
-
+	Value	Write();			
+	Value&	Write(Value& val);	// Ovewrite data that has alr have a memory slot
 } TransformComponent;
 
 //Operator overloading for cout

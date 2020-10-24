@@ -2,6 +2,7 @@
 #include "LevelEditor_Console.h"
 #include "LevelEditor_AssetInsp.h"
 #include "LevelEditor_PerfMetrics.h"
+#include "LevelEditor_Heirarchy.h"
 
 LevelEditor::LevelEditor() : _window{ nullptr }, _runEngine{ false }
 {
@@ -18,6 +19,7 @@ void LevelEditor::Init(HWND window)
     LE_CreateWindow<ConsoleLog>("Console", false, 0);
     LE_CreateWindow<AssetInspector>("Asset Inspector", true);
     LE_CreateWindow<PerformanceMetrics>("Performance Metrics", true);
+    LE_CreateWindow<HeirarchyInspector>("Asset Inspector", true);
 
 
     _window = window;
