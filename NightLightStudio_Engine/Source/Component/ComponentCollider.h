@@ -144,7 +144,7 @@ typedef struct ComponentCollider //: public IComponent
 		AABBCollider	aabb;
 		OBBCollider		obb;
 		CapsuleCollider capsule;
-		Collider() {};
+		Collider() : aabb() { };
 	};
 
 	//MyVector preCollisionData;
