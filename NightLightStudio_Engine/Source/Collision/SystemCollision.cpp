@@ -70,17 +70,20 @@ namespace NS_COLLISION
 		//ComponentCollider AABB1(COLLIDERS::AABB);
 		//ComponentCollider AABB2(COLLIDERS::AABB);
 
-		//ComponentCollider AABB1(COLLIDERS::OBB);
-		//ComponentCollider AABB2(COLLIDERS::OBB);
+		ComponentCollider AABB1(COLLIDERS::OBB);
+		ComponentCollider AABB2(COLLIDERS::OBB);
 
 		//ComponentCollider AABB1(COLLIDERS::SPHERE);
 		//ComponentCollider AABB2(COLLIDERS::SPHERE);
 
-		ComponentCollider AABB1(COLLIDERS::CAPSULE);
-		ComponentCollider AABB2(COLLIDERS::CAPSULE);
+		//ComponentCollider AABB1(COLLIDERS::CAPSULE);
+		//ComponentCollider AABB2(COLLIDERS::CAPSULE);
 
-		AABB1.collider.aabb.colliderScale = NlMath::Vector3D(2.0f, 2.0f, 2.0f);
-		AABB2.collider.aabb.colliderScale = NlMath::Vector3D(2.0f, 2.0f, 2.0f);
+		//AABB1.collider.aabb.colliderScale = NlMath::Vector3D(2.0f, 2.0f, 2.0f);
+		//AABB2.collider.aabb.colliderScale = NlMath::Vector3D(2.0f, 2.0f, 2.0f);
+
+		//AABB1.collider.aabb.colliderScale = NlMath::Vector3D(1.0f, 1.0f, 1.0f);
+		//AABB2.collider.aabb.colliderScale = NlMath::Vector3D(1.0f, 1.0f, 1.0f);
 
 		cube1Test.AttachComponent<ComponentCollider>(AABB1);
 		cube2Test.AttachComponent<ComponentCollider>(AABB2);
@@ -188,34 +191,34 @@ namespace NS_COLLISION
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(1.0f, 0.0f, 1.f));
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(0.8f, 0.0f, 1.f));
 
-					///////////////////////////////////////////////////////////////////////////////////////////////
-					//// Draw Test mesh
-					//if (doDrawLineMesh)
-					//{
-					//	// get trans2
-					//	ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
-					//	DrawLineMesh(comTrans1, comCol1, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
-					//	DrawLineMesh(comTrans2, comCol2, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
-					//}
-					//// Draw Test mesh
-					///////////////////////////////////////////////////////////////////////////////////////////////
+					/////////////////////////////////////////////////////////////////////////////////////////////
+					// Draw Test mesh
+					if (doDrawLineMesh)
+					{
+						// get trans2
+						ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
+						DrawLineMesh(comTrans1, comCol1, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
+						DrawLineMesh(comTrans2, comCol2, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
+					}
+					// Draw Test mesh
+					/////////////////////////////////////////////////////////////////////////////////////////////
 				}
 				else
 				{
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(0.5f, 0.5f, 1.f));
 					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(1.0f, 0.0f, 1.f));
 
-					/////////////////////////////////////////////////////////////////////////////////////////////////
-					////// Draw Test mesh
-					//if (doDrawLineMesh)
-					//{
-					//	// get trans2
-					//	ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
-					//	DrawLineMesh(comTrans1, comCol1, MeshLod);
-					//	DrawLineMesh(comTrans2, comCol2, MeshLod);
-					//}
-					//// Draw Test mesh
 					///////////////////////////////////////////////////////////////////////////////////////////////
+					//// Draw Test mesh
+					if (doDrawLineMesh)
+					{
+						// get trans2
+						ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
+						DrawLineMesh(comTrans1, comCol1, MeshLod);
+						DrawLineMesh(comTrans2, comCol2, MeshLod);
+					}
+					// Draw Test mesh
+					/////////////////////////////////////////////////////////////////////////////////////////////
 				}
 
 				//test code, to be romoved
