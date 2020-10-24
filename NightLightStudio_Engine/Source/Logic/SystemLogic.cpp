@@ -1,32 +1,35 @@
 #include "SystemLogic.h"
+#include "..\Mono\MonoWrapper.h" // Mono functions wrapped
 
-void SystemLogic::OnFirstStart()
+namespace NS_LOGIC
 {
-}
 
-void SystemLogic::Load()
-{
-	//Start up Scripting system??
-}
+  void SystemLogic::Load()
+  {
+    MonoWrapper::InitMono();
+  }
 
-void SystemLogic::Init()
-{
-	//Get resource??
-}
+  void SystemLogic::Init()
+  {
+    //Start up Scripting system??
+  }
 
-void SystemLogic::Update(float )
-{
-	//Run Script?
-}
+  void SystemLogic::FixedUpdate()
+  {
 
-void SystemLogic::Exit()
-{
-}
+  }
 
-void SystemLogic::Free()
-{
-}
+  void SystemLogic::Update()
+  {
+    //Run Script?
+  }
 
-void SystemLogic::Unload()
-{
+  void SystemLogic::Free()
+  {
+  }
+
+  void SystemLogic::Exit()
+  {
+    DestroyInstance();
+  }
 }

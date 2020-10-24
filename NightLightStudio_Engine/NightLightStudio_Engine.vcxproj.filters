@@ -306,6 +306,9 @@
     <ClInclude Include="Source\Collision\CollisionDebugLines.h">
       <Filter>Source Files\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Mono\MonoWrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -493,6 +496,9 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\CpuUsage.cpp">
       <Filter>Source Files\Editor\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\MonoWrapper.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

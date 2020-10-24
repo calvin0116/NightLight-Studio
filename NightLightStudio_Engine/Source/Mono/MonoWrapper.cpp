@@ -7,6 +7,7 @@
 #include <mono/metadata/debug-helpers.h>
 #include <mono/metadata/mono-gc.h>
 
+#include <iostream> // testing remove after
 
 namespace MonoWrapper 
 {
@@ -15,8 +16,8 @@ namespace MonoWrapper
   MonoDomain* InitMono()
   {
     //File directory settings
-    mono_set_dirs("Mono\\lib",
-      "Mono\\etc");
+    mono_set_dirs("..\\Bin\\Mono\\lib",
+      "..\\Bin\\Mono\\etc");
 
     //Set path where mono will look for assemblies
     //but it dosent work, just specify full path for assembly related stuff
@@ -93,23 +94,23 @@ namespace MonoWrapper
     }
     else
     {
-      // PRINT_WARNING("Script Compilation failed");
+      printf("Script Compilation failed");
     }
     return bSucceeded;
   }
     
-  MonoImage* ReloadScripts_()
-  {
-    UnloadScriptDomain();
+  //MonoImage* ReloadScripts_()
+  //{
+  //  UnloadScriptDomain();
 
-    CompileScripts();
+  //  CompileScripts();
 
-    LoadScriptDomain();
-      
-    OpenDLL();
+  //  LoadScriptDomain();
+  //    
+  //  OpenDLL();
 
-    return currImage;
-  }
+  //  return currImage;
+  //}
 
   bool ReloadScripts()
   {
