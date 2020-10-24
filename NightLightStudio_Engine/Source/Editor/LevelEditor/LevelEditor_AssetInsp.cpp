@@ -245,6 +245,8 @@ void AssetInspector::Run()
                 _levelEditor->LE_AddButton("Refresh Inspector##AssetInspector",
                     [&]()
                     {
+                        _allDirFiles.clear();
+                        _allDirDirs.clear();
                         _RefreshDirectories(std::filesystem::current_path().string());
                     });
 
