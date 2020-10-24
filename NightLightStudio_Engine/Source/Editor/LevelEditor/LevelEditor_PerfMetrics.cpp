@@ -137,7 +137,7 @@ void PerformanceMetrics::Run()
 					*/
 
 				std::vector<std::string> sysNamesManual =
-				{ "Editor", "Window", "IO", "Input", "Graphics", "Collision", "Physics", "Audio", "Scene Manager", "Components" };
+				{ "Window", "IO", "Input", "Graphics", "Collision", "Physics", "Audio", "Scene Manager", "Components", "Editor" };
 
 				//_levelEditor->LE_AddHistogram("Systems Use", _systemsUsage, false, 0, 0.0f, 100.0f, ImVec2(0, 50));
 				for (int i = 0; i < _systemsUsage.size(); ++i)
@@ -158,7 +158,8 @@ void PerformanceMetrics::Run()
 			}
 		});
 
-	_systemsUsage.clear();
+	for (float& i : _systemsUsage)
+		i = 0;
 }
 
 void PerformanceMetrics::Exit()
