@@ -37,7 +37,7 @@ namespace NS_COLLISION
 
 		Rigid1.isStatic = false;
 		Transform1._rotation.x = 45;
-		Transform1._rotation.y = 45;
+		Transform1._rotation.y = 40;
 		Transform1._rotation.z = 45;
 		Transform1._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
@@ -46,7 +46,7 @@ namespace NS_COLLISION
 		
 
 
-		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test, glm::vec3(0.5f, 0.5f, 1.f));
+		//NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test, glm::vec3(0.5f, 0.5f, 1.f));
 
 		Entity cube2Test = G_ECMANAGER->BuildEntity();
 		ComponentTransform Transform2;
@@ -55,7 +55,7 @@ namespace NS_COLLISION
 
 		Transform2._position = glm::vec3(2.5f, 0.0f, 0.f);
 		Transform2._rotation.x = -45;
-		//Transform2._rotation.y = -45;
+		Transform2._rotation.y = -45;
 		Transform2._rotation.z = -45;
 		Transform2._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
@@ -65,7 +65,7 @@ namespace NS_COLLISION
 		
 		
 		
-		NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
+		//NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
 
 		//ComponentCollider AABB1(COLLIDERS::AABB);
 		//ComponentCollider AABB2(COLLIDERS::AABB);
@@ -188,8 +188,8 @@ namespace NS_COLLISION
 				if (CheckCollision(comCol1, comCol2, comRigid1, comRigid2))
 				{
 					// store collision event
-					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(1.0f, 0.0f, 1.f));
-					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(0.8f, 0.0f, 1.f));
+					//NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(1.0f, 0.0f, 1.f));
+					//NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(0.8f, 0.0f, 1.f));
 
 					/////////////////////////////////////////////////////////////////////////////////////////////
 					// Draw Test mesh
@@ -205,8 +205,8 @@ namespace NS_COLLISION
 				}
 				else
 				{
-					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(0.5f, 0.5f, 1.f));
-					NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(1.0f, 0.0f, 1.f));
+					//NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(0.5f, 0.5f, 1.f));
+					//NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(1.0f, 0.0f, 1.f));
 
 					///////////////////////////////////////////////////////////////////////////////////////////////
 					//// Draw Test mesh
@@ -571,7 +571,7 @@ namespace NS_COLLISION
 
 				// debug lines?
 				NlMath::Vector3D start = a->center;
-				NlMath::Vector3D end = normal * 10 + start;
+				NlMath::Vector3D end = normal  + start;
 				NS_GRAPHICS::SYS_GRAPHICS->DrawLine(start, end, glm::vec3(0.5f, 0.5f, 1.f));
 
 				if (check == false)
