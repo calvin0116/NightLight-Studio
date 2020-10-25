@@ -10,7 +10,7 @@ typedef NS_COMPONENT::ComponentManager::ComponentSetManager::Iterator::IteratorS
 
 static NS_COMPONENT::ComponentManager* SYS_COMPONENT = NS_COMPONENT::ComponentManager::GetInstance();
 
-static std::map<int, std::string> EntityName;
+//static std::map<int, std::string> EntityName;
 //extern ComponentManager G_COMPMGR;
 
 // Entity component manager

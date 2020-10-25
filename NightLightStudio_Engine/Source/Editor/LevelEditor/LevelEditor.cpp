@@ -88,8 +88,11 @@ bool LevelEditor::Update(float)
 
 void LevelEditor::Exit()
 {
+#ifdef _EDITOR
     //Added by Teck Wei for singleton destruction
     LE_ECHELPER->DestroyInstance();
+#endif // _EDITOR
+
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
     //ImGui_ImplGlfw_Shutdown();

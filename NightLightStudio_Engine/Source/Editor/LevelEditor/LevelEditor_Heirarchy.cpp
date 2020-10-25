@@ -32,12 +32,12 @@ void HeirarchyInspector::Run()
 		char buf[100];
 		sprintf_s(buf, "%i. %s", n, ent.second.c_str());
 		//Check if any the object has been selected
-
+#ifdef _EDITOR
 		if (ImGui::Selectable(buf, LE_ECHELPER->selected_ents[ent.first]))
 		{
 
 		}
-
+#endif // _EDITOR	
 		++n;
 	}
 	/*
@@ -139,6 +139,7 @@ void HeirarchyInspector::InitBeforeRun()
 	hasInit = true;
 
 	int n = 1;
+#ifdef _EDITOR
 	//EntityName
 	for (auto& ent : NS_SCENE::SYS_SCENE_MANAGER->EntityName)
 	{
@@ -149,4 +150,6 @@ void HeirarchyInspector::InitBeforeRun()
 		LE_ECHELPER->selected_ents[ent.first] = false;
 		++n;
 	}
+#endif // _EDITOR
+
 }
