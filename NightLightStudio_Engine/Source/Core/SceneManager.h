@@ -9,7 +9,8 @@
 namespace NS_SCENE
 {
 	using FILE_NAME = std::string;
-	const std::string EXIT_SCENCE = "Exit_Scene";
+
+	const std::string EXIT_SCENCE = "Exit_Scene";	//Change to this scene to exit through scene manaager
 
 	enum SCENE_CHANGE
 	{

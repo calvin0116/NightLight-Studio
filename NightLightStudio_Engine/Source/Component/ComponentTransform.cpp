@@ -31,14 +31,55 @@ glm::mat4 ComponentTransform::GetModelMatrix()
 
 void ComponentTransform::Read(Value& val)
 {
-	auto pos = val["Position"].GetArray();
+	//Error checking for json data
+	if (val.FindMember("Position") == val.MemberEnd())
+		std::cout << "No position data has been found" << std::endl;
+	else
+	{
+		auto pos = val["Position"].GetArray();
 
-	_position.x = pos[0].GetFloat();
-	_position.y = pos[1].GetFloat();
-	_position.z = pos[2].GetFloat();
+		_position.x = pos[0].GetFloat();
+		_position.y = pos[1].GetFloat();
+		_position.z = pos[2].GetFloat();
+	}
+
+
+	if (val.FindMember("Scale") == val.MemberEnd())
+		std::cout << "No Scale data has been found" << std::endl;
+	else
+	{
+		auto scale = val["Scale"].GetArray();
+
+		_scale.x = scale[0].GetFloat();
+		_scale.y = scale[1].GetFloat();
+		_scale.z = scale[2].GetFloat();
+	}
+
+	if (val.FindMember("Rotate") == val.MemberEnd())
+		std::cout << "No Rotate data has been found" << std::endl;
+	else
+	{
+		auto rotate = val["Rotate"].GetArray();
+
+		_rotation.x = rotate[0].GetFloat();
+		_rotation.y = rotate[1].GetFloat();
+		_rotation.z = rotate[2].GetFloat();
+	}
 }
 
 Value ComponentTransform::Write()
 {
-	return Value();
+	Value val;
+	//val.AddMember("Position:" , _position, );
+
+
+	return val;
+}
+
+Value& ComponentTransform::Write(Value& val)
+{
+	// TODO: insert return statement here
+	
+
+	return val;
 }

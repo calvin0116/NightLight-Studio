@@ -101,6 +101,7 @@ namespace NS_SCENE
 		Parser* scene = scene_list[current_scene];
 		scene->Load();
 		to_change_scene = SC_NOCHANGE;
+
 		//~~!Create object using data
 		std::cout << "Loading Scene: " << current_scene << std::endl;
 		if (scene->CheckForMember("Objects"))
@@ -122,7 +123,8 @@ namespace NS_SCENE
 
 	void SceneManager::ExitScene()
 	{
-		scene_list[current_scene]->CleanDoc();
+		//scene_list[current_scene]->CleanDoc();
+		//G_ECMANAGER->
 		current_scene = next_scene;
 	}
 
@@ -135,15 +137,26 @@ namespace NS_SCENE
 			std::string component_name = itr->name.GetString();
 			std::cout << "~~ Component: " << component_name << std::endl;
 			if (component_name == "TransformComponent")
-			{
-				
+			{		
 				TransformComponent trans_com;
-				trans_com.Read(Comp_list["TransformComponent"]);
+				trans_com.Read(Comp_list[component_name.c_str()]);
 
 				G_ECMANAGER->AttachComponent<TransformComponent>(entity, trans_com);
-				std::cout << "~~~~ Transform: " << trans_com << std::endl;
+				
+				std::cout << "~~~~ Transform: " << std::endl << trans_com;
+				std::cout << "~~~~~~~~~~~~~~ " << std::endl;
+				continue;
 			}
+			//~~! Add your own component creation here ~~!//
+			if (component_name == "ColliderComponent")
+			{
+				/*
+				ColliderComponent col_com;
+				col_com.Read(Comp_list[component_name.c_str()]);
 
+				G_ECMANAGER->AttachComponent<TransformComponent>(entity, col_com);
+				*/
+			}
 		}
 	}
 
@@ -154,6 +167,10 @@ namespace NS_SCENE
 			std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
 			Entity ent_handle = G_ECMANAGER->BuildEntity();
 			Value& Component_list = Ent_list[itr->name.GetString()];
+
+			std::cout << ent_handle.getId() - 1000000 << std::endl;
+			EntityName[ent_handle.getId() - 1000000] = itr->name.GetString();
+			//EntityName.emplace(std::make_pair(ent_handle.getId(), itr->name.GetString()));
 
 			ComponentsCreation(Component_list, ent_handle);
 		}
@@ -178,8 +195,12 @@ namespace NS_SCENE
 	void SceneManager::SaveScene()
 	{
 		//Save scene
-		Parser* scene = scene_list[current_scene];
-		scene->Save();
+		//Parser* scene = scene_list[current_scene];
+		Parser scene = Parser("TestJson" , scene_parser.GetPath() );
+		
+		//G_ECMANAGER->
+		scene.Save();
+		//scene.Save();
 	}
 
 	bool SceneManager::CheckIfSceneExist(std::string& scene_name)
