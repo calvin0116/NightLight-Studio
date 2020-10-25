@@ -1,17 +1,30 @@
 #include "SystemLogic.h"
 #include "..\Mono\MonoWrapper.h" // Mono functions wrapped
 
+#include "../Input/SystemInput.h" // For testing
+
 namespace NS_LOGIC
 {
 
   void SystemLogic::Load()
   {
     MonoWrapper::InitMono();
+    MonoWrapper::ReloadScripts();
   }
 
   void SystemLogic::Init()
   {
     //Start up Scripting system??
+    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ReloadScripts", SystemInput_ns::IKEY_END, "ScriptReload", SystemInput_ns::OnRelease, [this]()
+      {
+        //Only if mouse wheel + alt button is pressed, camera will move.
+        //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
+        if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_END))
+        {
+          printf("Recompiling...\n");
+          MonoWrapper::ReloadScripts();
+        }
+      });
   }
 
   void SystemLogic::FixedUpdate()

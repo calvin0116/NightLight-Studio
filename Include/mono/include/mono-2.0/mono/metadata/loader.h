@@ -68,10 +68,10 @@ mono_lookup_internal_call (MonoMethod *method);
 MONO_API const char*
 mono_lookup_icall_symbol (MonoMethod *m);
 
-MONO_API MONO_RT_EXTERNAL_ONLY void
+MONO_API void
 mono_dllmap_insert (MonoImage *assembly, const char *dll, const char *func, const char *tdll, const char *tfunc);
 
-MONO_API MONO_RT_EXTERNAL_ONLY void*
+MONO_API void*
 mono_lookup_pinvoke_call (MonoMethod *method, const char **exc_class, const char **exc_arg);
 
 MONO_API void

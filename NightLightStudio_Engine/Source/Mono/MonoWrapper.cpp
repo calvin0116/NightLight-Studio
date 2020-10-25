@@ -7,8 +7,6 @@
 #include <mono/metadata/debug-helpers.h>
 #include <mono/metadata/mono-gc.h>
 
-#include <iostream> // testing remove after
-
 namespace MonoWrapper 
 {
   MonoImage* currImage = nullptr;
@@ -38,7 +36,7 @@ namespace MonoWrapper
 
     //Set current domain to new domain
     if (!mono_domain_set(newDomain, false))
-      printf("Error setting new domain");
+      printf("Error setting new domain\n");
 
     return mono_domain_get();
   }
@@ -59,7 +57,7 @@ namespace MonoWrapper
     {
       //Switch to root domain
       if (!mono_domain_set(mono_get_root_domain(), false))
-        printf("Error setting root domain");
+        printf("Error setting root domain\n");
         
       //Unload script domain
       mono_domain_unload(currDomain);
@@ -67,12 +65,17 @@ namespace MonoWrapper
     mono_gc_collect(mono_gc_max_generation());
   }
 
+  void Compile(std::string compileCommand)
+  {
+    system(compileCommand.c_str());
+  }
+
   bool CompileScripts()
   {
     bool bSucceeded = true;
     static const std::string compileCommand =
       std::string(MONO_COMPILER_PATH) + std::string(" -recurse:") + std::string(SCRIPTS_PATH) +
-      std::string("\\*.cs -unsafe -target:library -out:") + std::string(DLL_NAME) + 
+      std::string("\\*.cs -unsafe -target:library -out:") + std::string(DLL_NAME) +
       std::string(" 2>&1");
 
     //Compile the scripts
@@ -85,16 +88,16 @@ namespace MonoWrapper
       printf("Compilation output: ");
       while (fgets(buffer, static_cast<int>(sizeof(buffer)), compileOutput) != nullptr)
       {
-        printf(buffer);
+        printf("%s\n", buffer);
         bSucceeded = false;
       }
-      printf("Compilation completed");
+      printf("Compilation completed\n");
 
       _pclose(compileOutput);
     }
     else
     {
-      printf("Script Compilation failed");
+      printf("Script Compilation failed\n");
     }
     return bSucceeded;
   }
@@ -133,7 +136,7 @@ namespace MonoWrapper
     if (status != MONO_IMAGE_OK || assembly == nullptr)
     {
       mono_assembly_close(assembly);
-      printf("Failed to open assembly");
+      printf("Failed to open assembly\n");
       return nullptr;
     }
 
@@ -141,7 +144,7 @@ namespace MonoWrapper
     if (status != MONO_IMAGE_OK || currImage == nullptr)
     {
       mono_image_close(currImage);
-      printf("Failed to open image");
+      printf("Failed to open image\n");
       return nullptr;
     }
       

@@ -13,14 +13,11 @@
 
 MONO_BEGIN_DECLS
 
-MONO_API MONO_RT_EXTERNAL_ONLY MonoDomain * 
+MONO_API MonoDomain * 
 mono_jit_init              (const char *file);
 
-MONO_API MONO_RT_EXTERNAL_ONLY MonoDomain * 
-mono_jit_init_version      (const char *root_domain_name, const char *runtime_version);
-
 MONO_API MonoDomain * 
-mono_jit_init_version_for_test_only      (const char *root_domain_name, const char *runtime_version);
+mono_jit_init_version      (const char *root_domain_name, const char *runtime_version);
 
 MONO_API int
 mono_jit_exec              (MonoDomain *domain, MonoAssembly *assembly, 
@@ -102,16 +99,6 @@ MONO_API void
 mono_jit_parse_options     (int argc, char * argv[]);
 
 MONO_API char*       mono_get_runtime_build_info    (void);
-
-MONO_API MONO_RT_EXTERNAL_ONLY void
-mono_set_use_llvm (mono_bool use_llvm);
-
-MONO_API MONO_RT_EXTERNAL_ONLY void
-mono_aot_register_module (void **aot_info);
-
-MONO_API MONO_RT_EXTERNAL_ONLY
-MonoDomain* mono_jit_thread_attach (MonoDomain *domain);
-
 
 MONO_END_DECLS
 

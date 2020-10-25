@@ -2,9 +2,9 @@
 #include <mono/jit/jit.h>
 #include <string>             // std::string
 
-#define MONO_COMPILER_PATH "Include\\mono\\bin\\mcs"
-#define SCRIPTS_PATH "NightLightStudio_Game\\Asset\\Scripts"
-#define DLL_NAME "Unicorn.dll"
+#define MONO_COMPILER_PATH "..\\Bin\\Mono\\bin\\mcs"
+#define SCRIPTS_PATH "Asset\\Scripts"
+#define DLL_NAME "TheGame.dll"
 
 namespace MonoWrapper
 {

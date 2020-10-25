@@ -22,11 +22,7 @@ typedef struct _MonoReflectionEvent MONO_RT_MANAGED_ATTR MonoReflectionEvent;
 typedef struct _MonoReflectionType MONO_RT_MANAGED_ATTR MonoReflectionType;
 typedef struct _MonoDelegate MONO_RT_MANAGED_ATTR MonoDelegate;
 typedef struct _MonoThreadsSync MonoThreadsSync;
-#ifdef ENABLE_NETCORE
-typedef struct _MonoInternalThread MONO_RT_MANAGED_ATTR MonoThread;
-#else
 typedef struct _MonoThread MONO_RT_MANAGED_ATTR MonoThread;
-#endif
 typedef struct _MonoDynamicAssembly MonoDynamicAssembly;
 typedef struct _MonoDynamicImage MonoDynamicImage;
 typedef struct _MonoReflectionMethodBody MONO_RT_MANAGED_ATTR MonoReflectionMethodBody;
@@ -391,7 +387,7 @@ MONO_API MONO_RT_EXTERNAL_ONLY mono_bool mono_gc_reference_queue_add (MonoRefere
 /* GC write barriers support */
 MONO_API MONO_RT_EXTERNAL_ONLY void mono_gc_wbarrier_set_field     (MonoObject *obj, void* field_ptr, MonoObject* value);
 MONO_API MONO_RT_EXTERNAL_ONLY void mono_gc_wbarrier_set_arrayref  (MonoArray *arr, void* slot_ptr, MonoObject* value);
-MONO_API MONO_RT_EXTERNAL_ONLY void mono_gc_wbarrier_arrayref_copy (void* dest_ptr, /*const*/ void* src_ptr, int count);
+MONO_API MONO_RT_EXTERNAL_ONLY void mono_gc_wbarrier_arrayref_copy (void* dest_ptr, void* src_ptr, int count);
 MONO_API MONO_RT_EXTERNAL_ONLY void mono_gc_wbarrier_generic_store (void* ptr, MonoObject* value);
 MONO_API MONO_RT_EXTERNAL_ONLY void mono_gc_wbarrier_generic_store_atomic (void *ptr, MonoObject *value);
 MONO_API MONO_RT_EXTERNAL_ONLY void mono_gc_wbarrier_generic_nostore (void* ptr);
