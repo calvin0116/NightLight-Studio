@@ -14,7 +14,7 @@ namespace NS_GRAPHICS
 		_fbxManager->Destroy();
 	}
 
-	void ModelLoader::TransverseChild(FbxNode* node, int* meshIndex, const std::string& fileName, const std::string& customName)
+	void ModelLoader::TransverseChild(FbxNode* node, Model*& model, int* meshIndex, const std::string& fileName, const std::string& customName)
 	{
 		for (int i = 0; i < node->GetNodeAttributeCount(); ++i)
 		{
@@ -158,7 +158,7 @@ namespace NS_GRAPHICS
 				//Might update this part
 				const int totalBufferSize = mesh->GetPolygonVertexCount();
 				newMesh->_indices.reserve(totalBufferSize);
-				newMesh->_verticeDatas.reserve(totalBufferSize);
+				newMesh->_fragmentDatas.reserve(totalBufferSize);
 
 				int vertexID = 0;
 				
@@ -170,7 +170,7 @@ namespace NS_GRAPHICS
 					{					
 						int controlPointIndex = mesh->GetPolygonVertex(polygonIndex, verticeIndex);
 
-						Mesh::VerticeData verticeData;
+						Mesh::FragmentData fragmentData;
 
 						for (int uv = 0; uv < mesh->GetElementUVCount(); ++uv)
 						{
@@ -197,7 +197,7 @@ namespace NS_GRAPHICS
 									newMesh->_uv.push_back(currentUV);
 
 									//NEW WAY
-									verticeData._uv = currentUV;
+									fragmentData._uv = currentUV;
 								}
 								break;
 								default:
@@ -238,25 +238,30 @@ namespace NS_GRAPHICS
 								newMesh->_normals.push_back(normal);
 
 								//NEW WAY
-								verticeData._vNormals = normal;
+								fragmentData._vNormals = normal;
 							}
 						}
 
 						newMesh->_indices.push_back((unsigned short)controlPointIndex);
-						newMesh->_verticeDatas.push_back(verticeData);
+						newMesh->_fragmentDatas.push_back(fragmentData);
 						vertexID++;
 					}
 				}
 
 				mesh->Destroy();
-				MeshManager::GetInstance().AddLoadedMesh(newMesh, customName);
+
+				//OLD WAY
+				MeshManager::GetInstance().AddLoadedMesh(newMesh, newMesh->_meshName);
+
+				//NEW WAY
+				model->_meshes.push_back(newMesh);
 				++(*meshIndex);
 			}	
 		}
 
 		for (int i = 0; i < node->GetChildCount(); i++)
 		{
-			TransverseChild(node->GetChild(i), meshIndex, fileName, customName);
+			TransverseChild(node->GetChild(i), model, meshIndex, fileName, customName);
 		}
 	}
 
@@ -287,7 +292,7 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	void ModelLoader::LoadFBX(const std::string& fileName, const std::string& customName)
+	void ModelLoader::LoadFBX(Model*& model, const std::string& fileName, const std::string& customName)
 	{
 		std::cout << "Loading FBX..." << std::endl;
 		if (_fbxScene)
@@ -341,29 +346,59 @@ namespace NS_GRAPHICS
 
 			if (parentNode)
 			{
-				TransverseChild(parentNode, &offset, fileName, customName);
+				TransverseChild(parentNode, model,&offset, fileName, customName);
 			}
 
 			for (int i = 0; i < root->GetChildCount(); i++)
 			{
-				TransverseChild(root->GetChild(i), &offset, fileName, customName);
+				TransverseChild(root->GetChild(i), model, &offset, fileName, customName);
 			}
 		}
 	}
 	void ModelLoader::LoadModel(const std::string& fileName, const std::string& customName)
 	{
-		if (fileName.find(s_MeshFileType) != std::string::npos)
+		Model* model = new Model();
+
+		//Checks for the file name
+		std::string name;
+		size_t pos = fileName.rfind("\\");
+		//Get just the string after the last path
+		if (pos != std::string::npos)
 		{
-			LoadCustomMesh(fileName, customName);
+			name = fileName.substr(pos + 1);
 		}
 		else
 		{
-			LoadFBX(fileName, customName);
+			name = fileName;
 		}
+
+		//Trim the extension to get the file name
+		name.erase(name.find("."));
+
+		//Model name if empty use file name
+		if (customName.empty())
+		{
+			model->_modelName = name;
+		}
+		else
+		{
+			model->_modelName = customName;
+		}
+
+		//Loads the correct function based on extension
+		if (fileName.find(s_MeshFileType) != std::string::npos)
+		{
+			LoadCustomMesh(model, fileName, customName);
+		}
+		else
+		{
+			LoadFBX(model, fileName, customName);
+		}
+		MeshManager::GetInstance().AddLoadedModel(model, model->_modelName);
 	}
-	void ModelLoader::LoadCustomMesh(const std::string& fileName, const std::string& customName)
+	void ModelLoader::LoadCustomMesh(Model*& model, const std::string& fileName, const std::string& customName)
 	{
 		//Gets rid of warning for now
-		(void)fileName, customName;
+		(void)model, fileName, customName;
 	}
 }

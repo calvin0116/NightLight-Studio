@@ -36,7 +36,7 @@ namespace NS_GRAPHICS
 			glm::vec3 _rgb;
 		};
 
-		struct VerticeData
+		struct FragmentData
 		{
 			glm::vec2 _uv;
 			glm::vec3 _vNormals;
@@ -60,9 +60,7 @@ namespace NS_GRAPHICS
 		};
 
 		std::vector<VertexData> _vertexDatas;
-
-		// Stores UV and normals as structs
-		std::vector<VerticeData> _verticeDatas;
+		std::vector<FragmentData> _fragmentDatas;
 
 		MaterialData _materialData;
 
