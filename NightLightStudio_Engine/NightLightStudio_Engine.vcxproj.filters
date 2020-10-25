@@ -318,6 +318,9 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_ECHelper.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Graphics\Lights.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

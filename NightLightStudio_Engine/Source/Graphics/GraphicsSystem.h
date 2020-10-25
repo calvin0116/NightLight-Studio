@@ -85,7 +85,6 @@ namespace NS_GRAPHICS
         // Attaches graphics component to given object ID
         // Object ID MUST BE VALID, else undefined behavior
         void CreateCube(Entity& entity, const glm::vec3& rgb = glm::vec3(0.5f, 0.5f, 1.0f));
-        void InitMesh(Entity& entity, unsigned index = 0);
 
         // Uses preloaded meshes to load sphere mesh instances
         void CreateSphere(Entity& entity, const glm::vec3& rgb = glm::vec3(0.5f, 0.5f, 1.0f));
@@ -106,10 +105,10 @@ namespace NS_GRAPHICS
         void SetMeshColor(Entity& entity, const glm::vec3& rgb);
 
         // Loads and stores mesh in local storage, calls mesh loader
-        void LoadMesh(const std::string& path);
+        void LoadMesh(const std::string& path, const std::string& name = "");
 
         // Links mesh to specified entity for rendering
-        void AttachMesh(Entity& entity, const unsigned& meshID);
+        void AttachMesh(Entity& entity, const std::string& meshName);
 
         // Unlinks mesh to specified entity for rendering, if any
         void DetachMesh(Entity& entity);

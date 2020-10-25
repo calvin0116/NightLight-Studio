@@ -33,8 +33,7 @@ namespace NS_GRAPHICS
 		struct VertexData
 		{
 			glm::vec3 _position;
-			glm::vec3 _rgb;	
-			// Indices should be stored separately as per default
+			glm::vec3 _rgb;
 		};
 
 		struct VerticeData
@@ -43,20 +42,29 @@ namespace NS_GRAPHICS
 			glm::vec3 _vNormals;
 		};
 
-		//Designer Manual Input
+		// Designer Manual Input
 		struct MaterialData
 		{
-			float _diffuse;
-			float _ambient;
-			float _specular;
-			float _emissive;
-			float _shininess;
-			float _reflectivity;
-			float _opacity;
+			glm::vec3 _diffuse;  // Base color
+			glm::vec3 _ambient;  // Reflective color under ambient lighting
+			glm::vec3 _specular; // Highlight color
+			float _shininess;    // Scattering / radius of specularity
+
+			MaterialData()
+				: _diffuse{ 0.5f,0.5f,0.5f },
+				_ambient{ 1.f, 1.f, 1.f }, 
+				_specular{ 1.f,1.f,1.f },
+				_shininess{ 1.f } {}
+
+			~MaterialData() {}
 		};
 
 		std::vector<VertexData> _vertexDatas;
+
+		// Stores UV and normals as structs
 		std::vector<VerticeData> _verticeDatas;
+
+		MaterialData _materialData;
 
 		//Still needed
 		std::vector<unsigned short> _indices;
@@ -66,6 +74,8 @@ namespace NS_GRAPHICS
 		GLuint EBO = NULL;
 		
 		GLuint ModelMatrixBO = NULL;
+
+		GLuint MBO = NULL; // Material buffer object
 
 		//////////////////////////////
 		/// ANIMATION STUFFS

@@ -6,8 +6,6 @@ namespace NS_GRAPHICS
 {
 	class ShaderSystem
 	{
-		
-
 		unsigned max_shaders = 4;
 
 		struct ShaderFile
