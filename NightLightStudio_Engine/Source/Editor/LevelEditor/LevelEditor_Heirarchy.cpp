@@ -22,7 +22,7 @@ void HeirarchyInspector::Run()
 	static int index_selected = -1;
 	int n = 1;
 	//EntityName
-	for (auto& ent : EntityName)
+	for (auto& ent :  EntityName)
 	{
 		char buf[100];
 		sprintf_s(buf, "%i. %s", n, ent.second.c_str());

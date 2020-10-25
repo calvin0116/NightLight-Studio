@@ -7,8 +7,10 @@ typedef NS_COMPONENT::ComponentManager::ComponentSetManager::Iterator ComponentI
 
 typedef NS_COMPONENT::ComponentManager::ComponentSetManager::Iterator::IteratorState ComponentIteratorState;
 
+
 static NS_COMPONENT::ComponentManager* SYS_COMPONENT = NS_COMPONENT::ComponentManager::GetInstance();
 
+static std::map<int, std::string> EntityName;
 //extern ComponentManager G_COMPMGR;
 
 // Entity component manager
@@ -24,5 +26,5 @@ static NS_COMPONENT::ComponentManager::ComponentSetManager* G_ECMANAGER_PREFABS 
 //static ComponentManager::ComponentSetManager* G_UICOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
 
 //Storing of entity name according to object id
-static std::map<int, std::string> EntityName;
+
 

@@ -793,6 +793,8 @@ public:
 	std::map<ContainerID, ComponentSet*> ComponentSets;
 
 	std::map<COMPONENTSETNAMES, ComponentSetManager> ComponentSetManagers;
+
+
 	//
 	//////////////////////////
 
