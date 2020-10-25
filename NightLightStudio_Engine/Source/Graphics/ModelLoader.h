@@ -2,6 +2,7 @@
 #include "../FBX_SDK/fbxsdk.h"
 #include "Mesh.h"
 #include "MeshManager.h"
+#include "Model.h"
 
 namespace NS_GRAPHICS
 {
@@ -17,7 +18,7 @@ namespace NS_GRAPHICS
 		ModelLoader();
 		~ModelLoader();
 
-		void TransverseChild(FbxNode* node, int* meshIndex, const std::string& fileName, const std::string& customName = "");
+		void TransverseChild(FbxNode* node, Model*& model, int* meshIndex, const std::string& fileName, const std::string& customName = "");
 
 	public:
 		// Unique Singleton instance
@@ -30,8 +31,8 @@ namespace NS_GRAPHICS
 		void Init();
 
 		//void LoadFBX(const std::string& fileName, Mesh& mesh);
-		void LoadFBX(const std::string& fileName, const std::string& customName = "");
+		void LoadFBX(Model*& model, const std::string& fileName, const std::string& customName = "");
 		void LoadModel(const std::string& fileName, const std::string& customName = "");
-		void LoadCustomMesh(const std::string& fileName, const std::string& customName ="");
+		void LoadCustomMesh(Model*& model, const std::string& fileName, const std::string& customName ="");
 	};
 }

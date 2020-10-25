@@ -295,10 +295,11 @@ public:
 		{
 		}
 
+		
 		// build a new entity
 		// returns entity id
-		EntityHandle BuildEntity();
-
+		// Added default naming as Entity_<id>
+		EntityHandle BuildEntity(std::string name = "Entity_");
 	private:
 
 		// build a new child Entity

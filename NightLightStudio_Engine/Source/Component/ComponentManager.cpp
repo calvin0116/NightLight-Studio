@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include <functional>
-
+#include <string>
 
 
 #include "..//Component/Components.h"
@@ -16,6 +16,7 @@
 
 #include "../Component/LocalVector.h"
 
+#include "../Core/SceneManager.h"
 
 namespace NS_COMPONENT
 {
@@ -89,7 +90,7 @@ ComponentManager::ComponentSetFactory::~ComponentSetFactory()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //// ComponentSetManager
 
-ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::BuildEntity()
+ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::BuildEntity(std::string name)
 {
 	// new obj instance
 	char* newObj = reinterpret_cast<char*>(malloc(compSet->objSize));
@@ -123,9 +124,20 @@ ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentS
 	newObj_o->children.childIDs.init();
 	newObj_o->children.generation = 0;
 
+	//===Added by Teck Wei for name getting====//
+	static int unknown_ent_id = 0;
+	if (name == "Entity_")
+	{
+		name.append(std::to_string(unknown_ent_id));
+		++unknown_ent_id;
+	}
+	NS_SCENE::SYS_SCENE_MANAGER->EntityName[objId] = name;
+	//----------------------------------------//
 	//return objId + compSet->idIndexModifier;
+
 	return (EntityHandle(this, objId + compSet->idIndexModifier));
 }
+
 
 int ComponentManager::ComponentSetManager::BuildChildObject()
 {

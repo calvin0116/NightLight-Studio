@@ -4,6 +4,9 @@
 #include "LevelEditor_PerfMetrics.h"
 #include "LevelEditor_Heirarchy.h"
 
+//Added by Teck Wei
+#include "LevelEditor_ECHelper.h"
+
 LevelEditor::LevelEditor() : _window{ nullptr }, _runEngine{ false }
 {
 }
@@ -85,6 +88,8 @@ bool LevelEditor::Update(float)
 
 void LevelEditor::Exit()
 {
+    //Added by Teck Wei for singleton destruction
+    LE_ECHELPER->DestroyInstance();
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
     //ImGui_ImplGlfw_Shutdown();

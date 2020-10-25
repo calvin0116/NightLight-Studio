@@ -312,6 +312,12 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Heirarchy.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Mono\MonoWrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_ECHelper.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -502,6 +508,9 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Heirarchy.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\MonoWrapper.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

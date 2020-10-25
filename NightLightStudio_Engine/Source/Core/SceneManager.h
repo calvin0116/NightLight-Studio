@@ -61,6 +61,9 @@ namespace NS_SCENE
 		//Component creation for entitiy using Json data
 		//void ComponentsCreation(Value& Comp_list, Entity& entity);
 	public:
+		//Storing of entity name according to object id
+		std::map<int, std::string> EntityName;
+
 		//==================System function =================//
 		void Load() override;	//Load resources and scenes config
 

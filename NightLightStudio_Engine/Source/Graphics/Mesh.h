@@ -37,7 +37,7 @@ namespace NS_GRAPHICS
 			// Indices should be stored separately as per default
 		};
 
-		struct VerticeData
+		struct FragmentData
 		{
 			glm::vec2 _uv;
 			glm::vec3 _vNormals;
@@ -46,17 +46,17 @@ namespace NS_GRAPHICS
 		//Designer Manual Input
 		struct MaterialData
 		{
-			float _diffuse;
-			float _ambient;
-			float _specular;
-			float _emissive;
+			glm::vec3 _diffuse;
+			glm::vec3 _ambient;
+			glm::vec3 _specular;
+			//float _emissive;
 			float _shininess;
-			float _reflectivity;
-			float _opacity;
+			//float _reflectivity;
+			//float _opacity;
 		};
 
 		std::vector<VertexData> _vertexDatas;
-		std::vector<VerticeData> _verticeDatas;
+		std::vector<FragmentData> _fragmentDatas;
 
 		//Still needed
 		std::vector<unsigned short> _indices;

@@ -416,6 +416,10 @@ namespace NlMath
                bool check = (tmp.first > 0);
                tmp.first = fabs(tmp.first);;
                tmp.second = normal;
+               if ((-0.001f < normal.x && normal.x < 0.001f) && (-0.001f < normal.y && normal.y < 0.001f) && (-0.001f < normal.z && normal.z < 0.001f))
+               {
+                   return check;
+               }
                checkList.push(tmp);
 
                return check;
