@@ -11,35 +11,33 @@ void ConsoleLog::Run()
 	//for (unsigned i = 0; i < _inputItems.size(); ++i)
 	//	_levelEditor->LE_AddText(_inputItems[i].c_str());
 
-	_levelEditor->LE_AddButton("Debug Log", [&]() { AddLog("Test Debug Log"); });
+	_levelEditor->LE_AddButton("Debug Log", [this]() { AddLog("Test Debug Log"); });
 	ImGui::SameLine();
-	_levelEditor->LE_AddButton("Clear Log", [&]() { ClearLog(); });
+	_levelEditor->LE_AddButton("Clear Log", [this]() { ClearLog(); });
 
 	_levelEditor->LE_AddChildWindow("ConsoleLog", ImVec2(0, -(ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing())),
+		[this]()
 		{
-			[&]()
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
+
+			for (int i = 0; i < _inputItems.size(); i++)
 			{
-				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
+				const char* item = _inputItems[i].c_str();
 
-				for (int i = 0; i < _inputItems.size(); i++)
-				{
-					const char* item = _inputItems[i].c_str();
-
-					// Normally you would store more information in your item than just a string.
-					// (e.g. make Items[] an array of structure, store color/type etc.)
-					ImVec4 color;
-					bool has_color = false;
-					if (strstr(item, "[error]")) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
-					else if (strncmp(item, "# ", 2) == 0) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
-					if (has_color)
-						ImGui::PushStyleColor(ImGuiCol_Text, color);
-					ImGui::TextUnformatted(item);
-					if (has_color)
-						ImGui::PopStyleColor();
-				}
-
-				ImGui::PopStyleVar();
+				// Normally you would store more information in your item than just a string.
+				// (e.g. make Items[] an array of structure, store color/type etc.)
+				ImVec4 color;
+				bool has_color = false;
+				if (strstr(item, "[error]")) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
+				else if (strncmp(item, "# ", 2) == 0) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
+				if (has_color)
+					ImGui::PushStyleColor(ImGuiCol_Text, color);
+				ImGui::TextUnformatted(item);
+				if (has_color)
+					ImGui::PopStyleColor();
 			}
+
+			ImGui::PopStyleVar();
 		}, true, ImGuiWindowFlags_HorizontalScrollbar);
 
 	ImGui::Separator();
@@ -47,7 +45,7 @@ void ConsoleLog::Run()
 	ImGui::SameLine();
 	ImGuiInputTextFlags inputFlag = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory;
 	_levelEditor->LE_AddInputText("##Input", _inputBuffer, 100, inputFlag,
-		[&]() 
+		[this]() 
 		{
 			if (_inputBuffer != "")
 			{

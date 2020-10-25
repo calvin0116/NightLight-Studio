@@ -23,12 +23,6 @@ void DeltaTime::start()
 	// fps is limited in system gfx
 
 	accumulatedTime += dt;
-
-	while (accumulatedTime >= fixed_dt)
-	{
-		accumulatedTime -= fixed_dt;
-		++currentNumberOfSteps;
-	}
 }
 
 void DeltaTime::end()

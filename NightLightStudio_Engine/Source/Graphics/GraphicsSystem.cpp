@@ -146,7 +146,7 @@ namespace NS_GRAPHICS
 
 		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));
 
-		std::ofstream logFile;
+		/*std::ofstream logFile;
 		logFile.open("cylinder.txt");
 
 		int MeshSize = meshManager->meshlist["cylinder"]->_vertices.size();
@@ -157,7 +157,7 @@ namespace NS_GRAPHICS
 										meshManager->meshlist["cylinder"]->_vertices[i].z << "\n";
 		}
 
-		logFile.close();
+		logFile.close();*/
 
 		////TEST VECTOR MAX SIZE
 		//std::cout << "TEST MAX SIZE: " << vectTest.max_size() << std::endl;
