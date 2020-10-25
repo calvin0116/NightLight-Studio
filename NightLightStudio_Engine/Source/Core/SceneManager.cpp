@@ -40,10 +40,12 @@ namespace NS_SCENE
 			//Ways to access different info of the path
 			//std::cout << cur_path_name << std::endl;
 			//std::cout << cur_path_name.stem() << std::endl;
-			std::cout << cur_path_name.parent_path() << std::endl;
+			//std::cout << cur_path_name.parent_path() << std::endl;
 
 			//Insert Scene Name with its relative path
 			scene_list[cur_path_name.stem().string()] = new Parser(cur_path_name.stem().string(), cur_path_name.parent_path().string());
+			//Individual files in Scene folder
+			std::cout << cur_path_name.stem().string() << std::endl;
 		}
 
 		/*
@@ -101,7 +103,7 @@ namespace NS_SCENE
 		Parser* scene = scene_list[current_scene];
 		scene->Load();
 		to_change_scene = SC_NOCHANGE;
-
+		
 		//~~!Create object using data
 		std::cout << "Loading Scene: " << current_scene << std::endl;
 		if (scene->CheckForMember("Objects"))
@@ -165,11 +167,11 @@ namespace NS_SCENE
 		for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
 		{
 			std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
-			Entity ent_handle = G_ECMANAGER->BuildEntity();
+			Entity ent_handle = G_ECMANAGER->BuildEntity(itr->name.GetString());
 			Value& Component_list = Ent_list[itr->name.GetString()];
 
-			std::cout << ent_handle.getId() - 1000000 << std::endl;
-			EntityName[ent_handle.getId() - 1000000] = itr->name.GetString();
+			//std::cout << ent_handle.getId() - 1000000 << std::endl;
+			//EntityName[ent_handle.getId()] = itr->name.GetString();
 			//EntityName.emplace(std::make_pair(ent_handle.getId(), itr->name.GetString()));
 
 			ComponentsCreation(Component_list, ent_handle);

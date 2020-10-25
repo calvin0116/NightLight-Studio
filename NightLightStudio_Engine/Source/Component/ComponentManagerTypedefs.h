@@ -23,6 +23,5 @@ static NS_COMPONENT::ComponentManager::ComponentSetManager* G_ECMANAGER_PREFABS 
 // for some reason gfx becomes black screen with this
 //static ComponentManager::ComponentSetManager* G_UICOMPSET = SYS_COMPONENT->getComponentSetMgr(COMPONENT_MAIN);
 
-//Storing of entity name according to object id
-static std::map<int, std::string> EntityName;
+
 

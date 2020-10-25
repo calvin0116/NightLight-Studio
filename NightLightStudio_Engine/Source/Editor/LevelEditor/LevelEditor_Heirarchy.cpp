@@ -1,5 +1,7 @@
 #include "LevelEditor_Heirarchy.h"
 #include "../../Component/ComponentManager.h"
+#include "../../Core/SceneManager.h"
+#include "LevelEditor_ECHelper.h"
 
 void HeirarchyInspector::Init()
 {
@@ -9,6 +11,9 @@ void HeirarchyInspector::Init()
 
 void HeirarchyInspector::Run()
 {
+	if (!hasInit)
+		InitBeforeRun();
+
 	ImGuiWindowFlags window_flags = 0;
 	ImVec4 tranform_bar = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	// List box
@@ -22,13 +27,13 @@ void HeirarchyInspector::Run()
 	static int index_selected = -1;
 	int n = 1;
 	//EntityName
-	for (auto& ent : EntityName)
+	for (auto& ent : NS_SCENE::SYS_SCENE_MANAGER->EntityName)
 	{
 		char buf[100];
 		sprintf_s(buf, "%i. %s", n, ent.second.c_str());
 		//Check if any the object has been selected
-		
-		if (ImGui::Selectable(buf, true))
+
+		if (ImGui::Selectable(buf, LE_ECHELPER->selected_ents[ent.first]))
 		{
 
 		}
@@ -125,4 +130,23 @@ void HeirarchyInspector::Run()
 
 void HeirarchyInspector::Exit()
 {
+	//Exit not called?
+	//LE_ECHELPER->DestroyInstance();
+}
+
+void HeirarchyInspector::InitBeforeRun()
+{
+	hasInit = true;
+
+	int n = 1;
+	//EntityName
+	for (auto& ent : NS_SCENE::SYS_SCENE_MANAGER->EntityName)
+	{
+		//Set level editor id to be able to get Object id
+		LE_ECHELPER->le_id_to_object_id[n] = ent.first;
+
+		//Set Selected for all to false at start
+		LE_ECHELPER->selected_ents[ent.first] = false;
+		++n;
+	}
 }
