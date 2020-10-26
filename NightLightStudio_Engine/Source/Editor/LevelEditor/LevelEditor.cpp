@@ -5,7 +5,9 @@
 #include "LevelEditor_Heirarchy.h"
 
 //Added by Teck Wei
+#ifdef _EDITOR
 #include "LevelEditor_ECHelper.h"
+#endif
 
 LevelEditor::LevelEditor() : _window{ nullptr }, _runEngine{ false }
 {
@@ -95,9 +97,10 @@ void LevelEditor::Exit()
     for (auto& i : _editorWind)
         if (i._ptr)
             i._ptr->End();
-
+#ifdef _EDITOR
     //Added by Teck Wei for singleton destruction
     LE_ECHELPER->DestroyInstance();
+#endif
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
     //ImGui_ImplGlfw_Shutdown();

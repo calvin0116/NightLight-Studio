@@ -1,6 +1,17 @@
 #include "LevelEditor.h"
 #include <iostream>
 
+std::string GetFileType(const std::string& path)
+{
+    char sep = '.';
+    size_t i = path.rfind(sep, path.length());
+    if (i != std::string::npos) {
+        return(path.substr(i + 1, path.length() - i));
+    }
+
+    return {};
+}
+
 void LevelEditor::LE_MainMenuBar()
 {
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
@@ -72,6 +83,10 @@ void LevelEditor::LE_MainMenuBar()
         [this](std::string* str)
         {
             std::cout << (*str) << std::endl;
+            if (GetFileType(*str) == "fbx")
+            {
+
+            }
         });
 
     ImGui::End();
