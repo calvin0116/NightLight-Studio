@@ -255,9 +255,6 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Editor\imgui\imguizmo\ImCurveEdit.h">
       <Filter>Source Files\Editor\imgui\imguizmo</Filter>
     </ClInclude>

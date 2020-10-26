@@ -124,6 +124,9 @@ public:
 	template <typename T, typename Y>
 	void LE_AccessWindowFunc(const std::string& name, void(T::* fn)(const Y&), const Y& arg);
 
+	// Sets a Windows Flag. Please use in Start.
+	void LE_SetWindowFlag(const std::string& name, const ImGuiWindowFlags& flag);
+
 	/**********************************************************************/
 
 	// std::function<void()> Mostly, use either helper functions OR lambdas

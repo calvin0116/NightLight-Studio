@@ -105,6 +105,16 @@ void LevelEditor::Exit()
     ImGui::DestroyContext();
 }
 
+void LevelEditor::LE_SetWindowFlag(const std::string& name, const ImGuiWindowFlags& flag)
+{
+    for (auto& i : _editorWind)
+        if (i._name == name)
+        {
+            i._flag = flag;
+            break;
+        }
+}
+
 std::vector<float>* LevelEditor::LE_GetSystemsUsage()
 {
 #ifdef LEVELEDITOR_PERFORMANCE_METRICS
