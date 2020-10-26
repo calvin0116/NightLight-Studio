@@ -2,8 +2,6 @@
 #include "../../../framework.h"
 #include "../../Core/Singleton.h"
 
-#ifdef _EDITOR
-
 class LE_ECHelper: public Singleton<LE_ECHelper>
 {
 protected:
@@ -18,6 +16,7 @@ public:
 	//First = level editor id, second = entity id
 	std::map<int, int> le_id_to_object_id;
 };
+#ifdef _EDITOR
 
 static LE_ECHelper* LE_ECHELPER = LE_ECHelper::GetInstance();
 
