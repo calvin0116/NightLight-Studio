@@ -42,6 +42,7 @@ namespace NlMath
 
 	SIDES AABBToCapsule(const AABBCollider& tCap1, const CapsuleCollider& tCap2, NlMath::Vector3D& nromal);
 
+	bool CapsuleToSphere(const CapsuleCollider& tCap1, const SphereCollider& tSpr2, Vector3D& normal);
 
 
 	// some 2d checks we may or may not need in the future

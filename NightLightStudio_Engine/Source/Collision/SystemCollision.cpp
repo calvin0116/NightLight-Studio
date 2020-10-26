@@ -464,6 +464,33 @@ namespace NS_COLLISION
 				CapsuleCollider* b = &Collider2->collider.capsule;
 
 				// TODO !!! SPHERE to CAPSULE
+				NlMath::Vector3D normal;
+				bool check = NlMath::CapsuleToSphere(*b, *a, normal);
+
+				if (check == false)
+				{
+					return false; // no collision return false
+				}
+
+				// yes collision add to collision event and return true
+
+				CollisionEvent newEvent;
+
+				// get nroamel
+				newEvent.collisionNormal = -normal;
+
+				// add rigid body
+				newEvent.rigid1 = Rigid1;
+				newEvent.rigid2 = Rigid2;
+
+				// set type
+				newEvent.collisionType = COLRESTYPE::SPHERE_CAPSULE;
+
+				// add event
+				colResolver.addCollisionEvent(newEvent);
+
+				// return true
+				return true;
 
 				//// SPHERE to CAPSULE END
 				///////////////////////////////////////////////////////////////////////////////////
@@ -510,6 +537,35 @@ namespace NS_COLLISION
 				SphereCollider* b = &Collider2->collider.sphere;
 
 				// TODO !!! SPHERE to CAPSULE
+				NlMath::Vector3D normal;
+				bool check = NlMath::CapsuleToSphere(*a, *b, normal);
+
+				if (check == false)
+				{
+					return false; // no collision return false
+				}
+
+				// yes collision add to collision event and return true
+
+				CollisionEvent newEvent;
+
+				// get nroamel
+				newEvent.collisionNormal = -normal;
+
+				// add rigid body
+				newEvent.rigid1 = Rigid1;
+				newEvent.rigid2 = Rigid2;
+
+				// set type
+				newEvent.collisionType = COLRESTYPE::SPHERE_CAPSULE;
+
+				// add event
+				colResolver.addCollisionEvent(newEvent);
+
+				// return true
+				return true;
+
+
 
 				//// CAPSULE to SPHERE END
 				///////////////////////////////////////////////////////////////////////////////////
@@ -662,9 +718,9 @@ namespace NS_COLLISION
 			mesh3 = NS_COLDEBUGTEST::CreateSphere(std::max(8 + meshlod, 1), std::max(8 + meshlod, 1));
 			
 			glm::vec3 capSphereScale(
-				comCol->collider.capsule.radius * comCol->collider.capsule.colliderScale.x,
-				comCol->collider.capsule.radius * comCol->collider.capsule.colliderScale.y,
-				comCol->collider.capsule.radius * comCol->collider.capsule.colliderScale.z
+				comCol->collider.capsule.colliderScale.x,
+				comCol->collider.capsule.colliderScale.x,
+				comCol->collider.capsule.colliderScale.x
 			);
 
 

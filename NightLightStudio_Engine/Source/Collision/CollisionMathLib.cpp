@@ -593,6 +593,23 @@ namespace NlMath
 		//return SIDES::NO_COLLISION;
 	}
 
+	bool CapsuleToSphere(const CapsuleCollider& tCap1, const SphereCollider& tSpr2, Vector3D& normal)
+	{
+		Vector3D closestPoint = ClosestPointOnLineSegment(tCap1.base, tCap1.tip, tSpr2.center);
+
+		SphereCollider capsuleSphere;
+		capsuleSphere.center = closestPoint;
+		capsuleSphere.radius = tCap1.radius;
+		normal = Sphere_SphereCollision(capsuleSphere, tSpr2);
+
+		if (normal.x == 0.0f && normal.y == 0.0f && normal.z == 0.0f)
+		{
+			return false; // no collision return false
+		}
+		
+		return true;
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//// 2D
 	// some 2d checks we may or may not need in the future
