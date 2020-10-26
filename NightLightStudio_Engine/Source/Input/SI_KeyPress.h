@@ -273,18 +273,6 @@ namespace SystemInput_ns
 		// Returns nullptr if unable to find
 		ENGINE_API INPUT_EVENT GetInputEvent(const std::string& name, std::string identifier);
 
-		// All keys are now registered
-		// Use at your own peril
-		ENGINE_API void ALL_THE_KEYS();
-
-		// All keys are now deregistered
-		// Use at your own peril
-		ENGINE_API void NO_KEYS();
-
-		// Restores Event Keys so that they will be checked - In case you use NO_KEYS for some reason
-		// Completely untested, but it should work
-		ENGINE_API void RestoreEventKeys();
-
 		ENGINE_API void SetWindow(HWND win);
 	};
 }
