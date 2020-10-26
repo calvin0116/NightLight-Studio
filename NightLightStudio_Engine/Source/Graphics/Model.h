@@ -9,6 +9,7 @@ namespace NS_GRAPHICS
 	{
 		GLuint ModelMatrixBO = NULL; // Buffer Object ID for Model Matrix
 
+		std::string _fileName;
 		std::string _modelName;
 		std::vector<Mesh*> _meshes;
 

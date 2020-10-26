@@ -14,6 +14,11 @@
 
 #include <fstream> //Temporary
 
+#ifdef _DEBUG
+#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DEBUG_NEW
+#endif
+
 #define DRAW_WITH_COMPONENTS
 
 namespace NS_GRAPHICS

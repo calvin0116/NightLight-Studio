@@ -26,9 +26,7 @@ namespace NS_GRAPHICS
 		//////////////////////////////
 		/// New variables for interleaving data and reducing BOs
 		/// VERTEX DATA IS THE CONTROL POINTS. In Fbx SDK term.
-		/// While VerticeData is the vertices data per face. Ex. 1 Cube have 8 control points
-		/// but 6 faces of 6 vertices with a combined of 36 data. Normals and UVs falls within
-		/// VerticeData
+		/// While FragmentData is the data needed for caluclating light and texture. 
 		////////////////////////////// 
 		struct VertexData
 		{
@@ -59,6 +57,7 @@ namespace NS_GRAPHICS
 			~MaterialData() {}
 		};
 
+		//Vertex Data might not be needed
 		std::vector<VertexData> _vertexDatas;
 		std::vector<FragmentData> _fragmentDatas;
 
@@ -83,6 +82,7 @@ namespace NS_GRAPHICS
 		//////////////////////////////
 		/// ** TEMPORARY BEFORE NEW DATA INTEGRATION
 		/// OLD DATA VARIABLES
+		/// #Some of the old stuff like _vertices might be used instead of _vertexDatas
 		//////////////////////////////
 		GLuint CBO = NULL;			// Color Buffer object
 		GLuint UVBO = NULL;

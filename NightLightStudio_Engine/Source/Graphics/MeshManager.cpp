@@ -1,6 +1,11 @@
 #include "MeshManager.h"
 #include "../glm/mat4x4.hpp"
 
+#ifdef _DEBUG
+#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DEBUG_NEW
+#endif
+
 namespace NS_GRAPHICS
 {
 	MeshManager::MeshManager()
@@ -258,7 +263,7 @@ namespace NS_GRAPHICS
 				
 				//Same variable as mesh list mesh pointer therefore commented out
 				//Uncomment in future when the mesh pointer is pointing to valid thing
-				//delete del;
+				delete del;
 			}
 
 			delete n.second;

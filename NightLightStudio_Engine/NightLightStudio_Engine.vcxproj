@@ -235,6 +235,7 @@
     <ClInclude Include="Source\Graphics\MeshManager.h" />
     <ClInclude Include="Source\Graphics\ShaderSystem.h" />
     <ClInclude Include="Source\Graphics\TextureLoader.h" />
+    <ClInclude Include="Source\Graphics\TextureManager.h" />
     <ClInclude Include="Source\Input\SI_Controller.h" />
     <ClInclude Include="Source\Input\SI_KeyPress.h" />
     <ClInclude Include="Source\Input\SI_MousePos.h" />
@@ -311,6 +312,7 @@
     <ClCompile Include="Source\Graphics\MeshManager.cpp" />
     <ClCompile Include="Source\Graphics\ShaderSystem.cpp" />
     <ClCompile Include="Source\Graphics\TextureLoader.cpp" />
+    <ClCompile Include="Source\Graphics\TextureManager.cpp" />
     <ClCompile Include="Source\Input\SI_Controller.cpp" />
     <ClCompile Include="Source\Input\SI_KeyPress.cpp" />
     <ClCompile Include="Source\Input\SI_MousePos.cpp" />
