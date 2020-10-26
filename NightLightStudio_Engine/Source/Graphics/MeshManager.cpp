@@ -213,7 +213,6 @@ namespace NS_GRAPHICS
 
 			delete i;
 		}
-
 		
 		for (auto& j : meshlist)
 		{
@@ -227,6 +226,42 @@ namespace NS_GRAPHICS
 			glDeleteVertexArrays(1, &j.second->VAO);
 
 			delete j.second;
+		}
+
+		for (auto& m : _models)
+		{
+			for (auto& mesh : m->_meshes)
+			{
+				glDeleteBuffers(1, &mesh->VBO);
+				glDeleteBuffers(1, &mesh->UVBO);
+				glDeleteBuffers(1, &mesh->CBO);
+				glDeleteBuffers(1, &mesh->EBO);
+				glDeleteBuffers(1, &mesh->ModelMatrixBO);
+				glDeleteVertexArrays(1, &mesh->VAO);
+
+				delete mesh;
+			}
+
+			delete m;
+		}
+
+		for (auto& n : _modelList)
+		{
+			for (auto& del : n.second->_meshes)
+			{
+				glDeleteBuffers(1, &del->VBO);
+				glDeleteBuffers(1, &del->UVBO);
+				glDeleteBuffers(1, &del->CBO);
+				glDeleteBuffers(1, &del->EBO);
+				glDeleteBuffers(1, &del->ModelMatrixBO);
+				glDeleteVertexArrays(1, &del->VAO);
+				
+				//Same variable as mesh list mesh pointer therefore commented out
+				//Uncomment in future when the mesh pointer is pointing to valid thing
+				//delete del;
+			}
+
+			delete n.second;
 		}
 	}
 }
