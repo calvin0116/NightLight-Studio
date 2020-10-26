@@ -140,16 +140,11 @@ namespace SystemInput_ns
 		ENGINE_API bool CTRLButtonDown(unsigned int buttonDown);
 
 		// Checks if button is presssed
-		// CHECKS ONLY IF REGISTERED AS PART OF AN EVENT
 		ENGINE_API bool GetIfButtonPress(unsigned int buttonPressed);
 		// Checks if button is held
-		// CHECKS ONLY IF REGISTERED AS PART OF AN EVENT
 		ENGINE_API bool GetIfButtonHeld(unsigned int buttonPressed);
 		// Checks if button is released
-		// CHECKS ONLY IF REGISTERED AS PART OF AN EVENT
 		ENGINE_API bool GetIfButtonRelease(unsigned int buttonPressed);
-		// Enables all buttons
-		ENGINE_API void ALLBUTTONS();
 
 
 		// Left Trigger = 0, Right Trigger = 1, all other values default to Left
@@ -157,34 +152,16 @@ namespace SystemInput_ns
 		// Left Analog Stick = 0, Right Analog Stick = 1, all other values default to Left
 		ENGINE_API ControllerVec2 GetAnalog(int lr = 0);
 
-		// Creates new Event (Member Functions)
-		template <typename T, typename U>
-		ENGINE_API void CreateNewEvent(std::string name, unsigned int button, CTRLTrigger trig, void(T::* func)(), U* obj)
-		{
-			_buttonEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>>
-				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>(button, trig, CtrlEvent_MemberFunc(func, obj)))));
 
-			_buttonStates.emplace(button, 0);
-		}
-		// Creates new Event (Static Functions)
+		// Creates new Event (std::function)
 		ENGINE_API void CreateNewEvent(std::string name, unsigned int button, CTRLTrigger trig, CONTROLLER_EVENT func = nullptr)
 		{
-			_buttonEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>>
-				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>(button, trig, func))));
-
-			_buttonStates.emplace(button, 0);
+			if (_buttonEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>>
+				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_EVENT>(button, trig, func)))).second)
+				_buttonStates.emplace(button, 0);
 		}
 
-		// Creates new Trigger Event (Member Functions)
-		// lr -> Left Trigger = 0, Right Trigger = 1
-		template <typename T, typename U>
-		ENGINE_API void CreateNewTriggerEvent(std::string name, unsigned int lr, void(T::* func)(float), U* obj)
-		{
-			_triggerEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_TRIGGER_EVENT>>
-				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_TRIGGER_EVENT>
-					(lr, OnCTRLDefault, CtrlEventTrigger_MemberFunc(func, obj)))));
-		}
-		// Creates new Event (Static Functions)
+		// Creates new Event (std::function)
 		// lr -> Left Trigger = 0, Right Trigger = 1
 		ENGINE_API void CreateNewTriggerEvent(std::string name, unsigned int lr, CONTROLLER_TRIGGER_EVENT func = nullptr)
 		{
@@ -192,16 +169,7 @@ namespace SystemInput_ns
 				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_TRIGGER_EVENT>(lr, OnCTRLDefault, func))));
 		}
 
-		// Creates new Analog Event (Member Functions)
-		// lr -> Left Analog Stick = 0, Right Analog Stick = 1
-		template <typename T, typename U>
-		ENGINE_API void CreateNewAnalogEvent(std::string name, unsigned int lr, void(T::* func)(float, float), U* obj)
-		{
-			_analogEvents.emplace(std::pair<std::string, CONTROLLER_BASE_EVENT<CONTROLLER_ANALOG_EVENT>>
-				(std::make_pair(name, CONTROLLER_BASE_EVENT<CONTROLLER_ANALOG_EVENT>
-					(lr, OnCTRLDefault, CtrlEventAnalog_MemberFunc(func, obj)))));
-		}
-		// Creates new Event (Static Functions)
+		// Creates new Event (std::function)
 		// lr -> Left Analog Stick = 0, Right Analog Stick = 1
 		ENGINE_API void CreateNewAnalogEvent(std::string name, unsigned int lr, CONTROLLER_ANALOG_EVENT func = nullptr)
 		{

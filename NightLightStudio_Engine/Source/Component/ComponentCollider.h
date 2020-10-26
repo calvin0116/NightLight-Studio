@@ -139,7 +139,7 @@ typedef struct ComponentCollider //: public IComponent
 {
 	union Collider
 	{
-		PlaneCollider	plane;
+		PlaneCollider	 plane;
 		SphereCollider	sphere;
 		AABBCollider	aabb;
 		OBBCollider		obb;

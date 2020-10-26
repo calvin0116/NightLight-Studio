@@ -1,19 +1,24 @@
 #pragma once
+#include "..\Core\MySystem.h"
 
-class SystemLogic
+namespace NS_LOGIC
 {
-public:
-	void OnFirstStart();
+  class SystemLogic : public MySystem, public Singleton<SystemLogic>
+  {
+    friend Singleton<SystemLogic>;
+  public:
+    // System functions
+    void Load() override;
+    // void EarlyInit() override {};
+    void Init() override;
+    //void LateInit() override {};
 
-	void Load();
+    void FixedUpdate() override;
+    void Update() override;
 
-	void Init();
+    void Free();
+    void Exit() override;
+  };
 
-	void Update(float dt);
-
-	void Exit();
-
-	void Free();
-
-	void Unload();
-};
+  static SystemLogic* SYS_LOGIC = SystemLogic::GetInstance();
+}

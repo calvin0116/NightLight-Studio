@@ -223,23 +223,20 @@ namespace SystemInput_ns
 		template <typename T, typename U>
 		ENGINE_API void CreateNewEvent(const std::string& name, unsigned int keycode, std::string identifier, Trigger val, void(T::* func)(), U* obj)
 		{
-			_events.emplace(std::pair<std::string, InputEventStruct>(name, InputEventStruct(keycode, identifier, val, InputEvent_MemberFunc(func, obj))));
-
-			IncrementKeyUsed(keycode);
+			if (_events.emplace(std::pair<std::string, InputEventStruct>(name, InputEventStruct(keycode, identifier, val, InputEvent_MemberFunc(func, obj)))).second)
+				IncrementKeyUsed(keycode);
 		}
 		// Creates new Event (Static Functions)
 		ENGINE_API void CreateNewEvent(const std::string& name, unsigned int keycode, std::string identifier, Trigger val, INPUT_EVENT func)
 		{
-			_events.emplace(std::pair<std::string, InputEventStruct>(name, InputEventStruct(keycode, identifier, val, func)));
-
-			IncrementKeyUsed(keycode);
+			if (_events.emplace(std::pair<std::string, InputEventStruct>(name, InputEventStruct(keycode, identifier, val, func))).second)
+				IncrementKeyUsed(keycode);
 		}
 		// Creates new Event (Empty Event)
 		ENGINE_API void CreateNewEvent(const std::string& name, unsigned int keycode)
 		{
-			_events.emplace(std::pair<std::string, InputEventStruct>(name, InputEventStruct(keycode)));
-
-			IncrementKeyUsed(keycode);
+			if (_events.emplace(std::pair<std::string, InputEventStruct>(name, InputEventStruct(keycode))).second)
+				IncrementKeyUsed(keycode);
 		}
 
 
@@ -275,18 +272,6 @@ namespace SystemInput_ns
 		// Gets the Function that the Event runs
 		// Returns nullptr if unable to find
 		ENGINE_API INPUT_EVENT GetInputEvent(const std::string& name, std::string identifier);
-
-		// All keys are now registered
-		// Use at your own peril
-		ENGINE_API void ALL_THE_KEYS();
-
-		// All keys are now deregistered
-		// Use at your own peril
-		ENGINE_API void NO_KEYS();
-
-		// Restores Event Keys so that they will be checked - In case you use NO_KEYS for some reason
-		// Completely untested, but it should work
-		ENGINE_API void RestoreEventKeys();
 
 		ENGINE_API void SetWindow(HWND win);
 	};

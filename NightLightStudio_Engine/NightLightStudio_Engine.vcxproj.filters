@@ -306,6 +306,21 @@
     <ClInclude Include="Source\Collision\CollisionDebugLines.h">
       <Filter>Source Files\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_TemplateFuncs.hpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Heirarchy.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\MonoWrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_ECHelper.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Lights.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -493,6 +508,12 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\CpuUsage.cpp">
       <Filter>Source Files\Editor\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Heirarchy.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\MonoWrapper.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

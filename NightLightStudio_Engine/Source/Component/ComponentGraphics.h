@@ -10,6 +10,8 @@ public:
 
 	unsigned MeshID;
 
+	unsigned textureID; // Temporarily only diffuse texture
+
 	// Default constructor
 	ComponentGraphics();
 
