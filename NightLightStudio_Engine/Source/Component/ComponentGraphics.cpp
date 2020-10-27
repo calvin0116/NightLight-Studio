@@ -4,13 +4,13 @@
 
 ComponentGraphics::ComponentGraphics()
 	: isActive{ true },
-	MeshID{ NULL }
+	MeshID{ NULL }, _textureFileName{}, _textureID{ NULL }
 {
 }
 
 ComponentGraphics::ComponentGraphics(const unsigned& meshID)
 	: isActive{ true },
-	MeshID{ meshID }
+	MeshID{ meshID }, _textureFileName{}, _textureID{ NULL }
 {
 }
 

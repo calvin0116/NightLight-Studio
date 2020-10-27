@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 
 typedef class ComponentGraphics //: public IComponent
 {
@@ -8,9 +8,11 @@ public:
 
 	bool isActive; // Temporarily set to true at beginning
 
+	//Serializing doesnt really save IDS? i think might have to add in a file name as well
 	unsigned MeshID;
 
-	unsigned textureID; // Temporarily only diffuse texture
+	std::string _textureFileName;
+	unsigned _textureID; // Temporarily only diffuse texture
 
 	// Default constructor
 	ComponentGraphics();
