@@ -3,10 +3,21 @@
 #include "../../Core/SceneManager.h"
 #include "LevelEditor_ECHelper.h"
 
+#include "../../Input/SystemInput.h"
+
+inline size_t findCaseInsensitive(std::string data, std::string toSearch, size_t pos = 0)
+{
+	std::transform(data.begin(), data.end(), data.begin(), ::tolower);
+	std::transform(toSearch.begin(), toSearch.end(), toSearch.begin(), ::tolower);
+	return data.find(toSearch, pos);
+}
+
 void HeirarchyInspector::Init()
 {
 	ImGui::SetNextWindowBgAlpha(1.0f);
 	ImGui::SetWindowSize(ImVec2(640, 320), ImGuiCond_FirstUseEver);
+
+	selected_index = -1;
 }
 
 void HeirarchyInspector::Run()
@@ -15,9 +26,22 @@ void HeirarchyInspector::Run()
 		InitBeforeRun();
 
 	ImGuiWindowFlags window_flags = 0;
-	ImVec4 tranform_bar = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	// List box
+	//ImVec4 tranform_bar = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	/*
+	if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_DOWN))
+	{
+		if(selected_index != -1)
+			LE_ECHELPER->selected_ents[selected_index] = false;
 
+		if (selected_index < NS_SCENE::SYS_SCENE_MANAGER->EntityName.size())
+			++selected_index;
+		else
+			selected_index = 0;
+
+		LE_ECHELPER->selected_ents[selected_index] = true;
+
+	}*/
+	// List box
 	char search_buf[256];
 	static std::string search = "";
 	strcpy_s(search_buf, 32, search.c_str());
@@ -29,6 +53,13 @@ void HeirarchyInspector::Run()
 	//EntityName
 	for (auto& ent : NS_SCENE::SYS_SCENE_MANAGER->EntityName)
 	{
+		//Check if entity is related to the search string inserted
+		if (search != "" && findCaseInsensitive(ent.second.c_str(), search) == std::string::npos)
+		{
+			++n;
+			continue;
+		}
+
 		char buf[100];
 		sprintf_s(buf, "%i. %s", n, ent.second.c_str());
 		//Check if any the object has been selected
@@ -154,3 +185,5 @@ void HeirarchyInspector::InitBeforeRun()
 #endif // _EDITOR
 
 }
+
+

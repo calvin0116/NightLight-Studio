@@ -6,6 +6,8 @@ class HeirarchyInspector : public LE_WinBase_Derived<HeirarchyInspector>
 {
 private:
 	bool hasInit;
+
+	int selected_index;
 public :
 	HeirarchyInspector() 
 		:hasInit{false}
