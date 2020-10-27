@@ -1,6 +1,11 @@
 #include "ModelLoader.h"
 #include "../../framework.h"
 
+#ifdef _DEBUG
+#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DEBUG_NEW
+#endif
+
 namespace NS_GRAPHICS
 {
 	ModelLoader::ModelLoader() : _fbxManager{ nullptr }, _fbxScene{ nullptr }, _fbxImport{ nullptr },
@@ -23,7 +28,13 @@ namespace NS_GRAPHICS
 			if (nodeType->GetAttributeType() == FbxNodeAttribute::eMesh)
 			{
 				FbxMesh* mesh = node->GetMesh();
+
+				//Old way of loading fbx
 				Mesh* newMesh = new Mesh();
+
+				//New way of loading fbx
+				//Ignore naming
+				Mesh* newMeshNew = new Mesh();
 
 				//CHECKS FOR THE FILE NAME
 				std::string name;
@@ -41,18 +52,27 @@ namespace NS_GRAPHICS
 				//LOCAL FILE NAME
 				name.erase(name.find("."));
 				//CONVERSION TO CUSTOM FORMAT
+				//OLD
 				newMesh->_localFileName = s_LocalPathName + name + s_MeshFileType;
+				//NEW
+				newMeshNew->_localFileName = s_LocalPathName + name + s_MeshFileType;
 
 				//MESH NAME
 				if (customName.empty())
 				{
 					if (*meshIndex)
 					{
+						//OLD
 						newMesh->_meshName = name + std::to_string(*meshIndex + 1);
+						//NEW
+						newMeshNew->_meshName = name + std::to_string(*meshIndex + 1);
 					}
 					else
 					{
+						//OLD
 						newMesh->_meshName = name;
+						//NEW
+						newMeshNew->_meshName = name;
 					}
 				}
 
@@ -60,11 +80,17 @@ namespace NS_GRAPHICS
 				{
 					if (*meshIndex)
 					{
+						//OLD
 						newMesh->_meshName = customName + std::to_string(*meshIndex + 1);
+						//NEW
+						newMeshNew->_meshName = customName + std::to_string(*meshIndex + 1);
 					}
 					else
 					{
+						//OLD
 						newMesh->_meshName = customName;
+						//NEW
+						newMeshNew->_meshName = customName;
 					}
 
 				}
@@ -121,8 +147,13 @@ namespace NS_GRAPHICS
 				//GET THE VERTEX DATA
 				const int vertexCount = mesh->GetControlPointsCount();
 				FbxVector4* vertexs = mesh->GetControlPoints();
+				//OLD
 				newMesh->_vertices.reserve(vertexCount);
 				newMesh->_vertexDatas.reserve(vertexCount);
+				//NEW
+				newMeshNew->_vertices.reserve(vertexCount);
+				newMeshNew->_vertexDatas.reserve(vertexCount);
+
 				FbxDouble3 scaling = node->LclScaling.Get();
 
 				for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
@@ -144,7 +175,10 @@ namespace NS_GRAPHICS
 								   (float)vertexs[vertexIndex][2] * (float)scaling[2]};
 					}
 
-					//OLD WAY
+					/////////////////////////////////
+					/// Mesh Way
+					/////////////////////////////////
+					//OLD WAY 
 					newMesh->_vertices.push_back(vertex);
 					newMesh->_rgb.push_back({ 1.0f,1.0f,1.0f });
 
@@ -152,13 +186,27 @@ namespace NS_GRAPHICS
 					Mesh::VertexData newVertex{ vertex, {1.0f,1.0f,1.0f} };
 					newMesh->_vertexDatas.push_back(newVertex);
 
+					/////////////////////////////////
+					/// Model Way
+					/////////////////////////////////
+					//OLD WAY
+					newMeshNew->_vertices.push_back(vertex);
+					newMeshNew->_rgb.push_back({ 1.0f,1.0f,1.0f });
+
+					//NEW WAY
+					newMeshNew->_vertexDatas.push_back(newVertex);
+
 				}
 
 				//GET THE INDICES, UV AND NORMALS
 				//Might update this part
 				const int totalBufferSize = mesh->GetPolygonVertexCount();
+				//OLD WAY
 				newMesh->_indices.reserve(totalBufferSize);
 				newMesh->_fragmentDatas.reserve(totalBufferSize);
+				//NEW WAY
+				newMeshNew->_indices.reserve(totalBufferSize);
+				newMeshNew->_fragmentDatas.reserve(totalBufferSize);
 
 				int vertexID = 0;
 				
@@ -195,6 +243,7 @@ namespace NS_GRAPHICS
 									
 									//OLD WAY
 									newMesh->_uv.push_back(currentUV);
+									newMeshNew->_uv.push_back(currentUV);
 
 									//NEW WAY
 									fragmentData._uv = currentUV;
@@ -236,14 +285,25 @@ namespace NS_GRAPHICS
 
 								//OLD WAY
 								newMesh->_normals.push_back(normal);
+								newMeshNew->_normals.push_back(normal);
 
 								//NEW WAY
 								fragmentData._vNormals = normal;
 							}
 						}
 
+						/////////////////////////////////
+						/// Mesh Way
+						/////////////////////////////////
 						newMesh->_indices.push_back((unsigned short)controlPointIndex);
 						newMesh->_fragmentDatas.push_back(fragmentData);
+
+						/////////////////////////////////
+						/// Model Way
+						/////////////////////////////////
+						newMeshNew->_indices.push_back((unsigned short)controlPointIndex);
+						newMeshNew->_fragmentDatas.push_back(fragmentData);
+
 						vertexID++;
 					}
 				}
@@ -254,7 +314,7 @@ namespace NS_GRAPHICS
 				MeshManager::GetInstance().AddLoadedMesh(newMesh, newMesh->_meshName);
 
 				//NEW WAY
-				model->_meshes.push_back(newMesh);
+				model->_meshes.push_back(newMeshNew);
 				++(*meshIndex);
 			}	
 		}
@@ -374,6 +434,7 @@ namespace NS_GRAPHICS
 
 		//Trim the extension to get the file name
 		name.erase(name.find("."));
+		model->_fileName = s_LocalPathName + name + s_MeshFileType;
 
 		//Model name if empty use file name
 		if (customName.empty())

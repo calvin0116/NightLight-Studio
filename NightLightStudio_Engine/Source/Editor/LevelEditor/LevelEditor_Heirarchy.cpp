@@ -38,6 +38,7 @@ void HeirarchyInspector::Run()
 
 		}
 #endif // _EDITOR	
+
 		++n;
 	}
 	/*
@@ -136,10 +137,10 @@ void HeirarchyInspector::Exit()
 
 void HeirarchyInspector::InitBeforeRun()
 {
+#ifdef _EDITOR
 	hasInit = true;
 
 	int n = 1;
-#ifdef _EDITOR
 	//EntityName
 	for (auto& ent : NS_SCENE::SYS_SCENE_MANAGER->EntityName)
 	{

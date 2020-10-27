@@ -42,48 +42,29 @@ namespace SystemInput_ns
 	bool SystemController::GetIfButtonPress(unsigned int buttonPressed)
 	{
 		decltype(_buttonStates)::iterator it = _buttonStates.find(buttonPressed);
-		if (it != std::end(_buttonStates) && it->second == OnCTRLPress)
-			return true;
+		if (it != std::end(_buttonStates))
+			return (it->second == OnCTRLPress);
 		else
-			return false;
+			_buttonStates.emplace(buttonPressed, 0);
+		return false;
 	}
 	bool SystemController::GetIfButtonHeld(unsigned int buttonPressed)
 	{
 		decltype(_buttonStates)::iterator it = _buttonStates.find(buttonPressed);
-		if (it != std::end(_buttonStates) && it->second == OnCTRLHold)
-			return true;
+		if (it != std::end(_buttonStates))
+			return (it->second == OnCTRLHold);
 		else
-			return false;
+			_buttonStates.emplace(buttonPressed, 0);
+		return false;
 	}
 	bool SystemController::GetIfButtonRelease(unsigned int buttonPressed)
 	{
 		decltype(_buttonStates)::iterator it = _buttonStates.find(buttonPressed);
-		if (it != std::end(_buttonStates) && it->second == OnCTRLRelease)
-			return true;
+		if (it != std::end(_buttonStates))
+			return (it->second == OnCTRLRelease);
 		else
-			return false;
-	}
-
-	void SystemController::ALLBUTTONS()
-	{
-		_buttonStates.emplace(GAMEPAD_A, 0);
-		_buttonStates.emplace(GAMEPAD_B, 0);
-		_buttonStates.emplace(GAMEPAD_X, 0);
-		_buttonStates.emplace(GAMEPAD_Y, 0);
-
-		_buttonStates.emplace(GAMEPAD_DPAD_UP, 0);
-		_buttonStates.emplace(GAMEPAD_DPAD_DOWN, 0);
-		_buttonStates.emplace(GAMEPAD_DPAD_LEFT, 0);
-		_buttonStates.emplace(GAMEPAD_DPAD_RIGHT, 0);
-
-		_buttonStates.emplace(GAMEPAD_SHOULDER_LEFT, 0);
-		_buttonStates.emplace(GAMEPAD_SHOULDER_RIGHT, 0);
-
-		_buttonStates.emplace(GAMEPAD_THUMB_LEFT, 0);
-		_buttonStates.emplace(GAMEPAD_THUMB_RIGHT, 0);
-
-		_buttonStates.emplace(GAMEPAD_BACK, 0);
-		_buttonStates.emplace(GAMEPAD_START, 0);
+			_buttonStates.emplace(buttonPressed, 0);
+		return false;
 	}
 
 	float SystemController::GetTrigger(int lr)

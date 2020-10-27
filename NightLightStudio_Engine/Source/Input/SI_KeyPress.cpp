@@ -98,19 +98,27 @@ namespace SystemInput_ns
 
 	bool SystemKeyPress::GetKeyPress(unsigned int keycode)
 	{
+		if (_usedKeyCodes.find(keycode) == std::end(_usedKeyCodes))
+			IncrementKeyUsed(keycode);
 		return (_keyboardPressState[keycode] & OnPress);
 	}
 	bool SystemKeyPress::GetKeyHold(unsigned int keycode)
 	{
+		if (_usedKeyCodes.find(keycode) == std::end(_usedKeyCodes))
+			IncrementKeyUsed(keycode);
 		return (_keyboardPressState[keycode] & OnHold);
 	}
 	bool SystemKeyPress::GetKeyRelease(unsigned int keycode)
 	{
+		if (_usedKeyCodes.find(keycode) == std::end(_usedKeyCodes))
+			IncrementKeyUsed(keycode);
 		return (_keyboardPressState[keycode] & OnRelease);
 	}
 
 	bool SystemKeyPress::GetKeyToggle(unsigned int keycode)
 	{
+		if (_usedKeyCodes.find(keycode) != std::end(_usedKeyCodes))
+			IncrementKeyUsed(keycode);
 		return (_keyboardState[keycode] & KeyToggled);
 	}
 
@@ -164,29 +172,6 @@ namespace SystemInput_ns
 				return secTemp->second.first;
 		}
 		return nullptr;
-	}
-
-	void SystemKeyPress::ALL_THE_KEYS()
-	{
-		for (unsigned i = 0; i < IKEY_FINAL_VALUE; ++i)
-		{
-			_usedKeyCodes[i]++;
-		}
-	}
-
-	void SystemKeyPress::NO_KEYS()
-	{
-		_usedKeyCodes.clear();
-	}
-
-	void SystemKeyPress::RestoreEventKeys()
-	{
-		std::map<const std::string, InputEventStruct>::iterator temp = _events.begin();
-
-		for (auto& it : _events)
-		{
-			_usedKeyCodes[it.second._keycode];
-		}
 	}
 
 	void SystemKeyPress::SetWindow(HWND win)

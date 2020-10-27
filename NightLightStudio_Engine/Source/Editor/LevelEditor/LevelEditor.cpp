@@ -46,6 +46,10 @@ void LevelEditor::Init(HWND window)
     //ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplWin32_Init(window);
     ImGui_ImplOpenGL3_Init("#version 130");
+
+    for (auto& i : _editorWind)
+        if (i._ptr)
+            i._ptr->Start();
 }
 
 bool LevelEditor::Update(float)
@@ -88,16 +92,29 @@ bool LevelEditor::Update(float)
 
 void LevelEditor::Exit()
 {
+    for (auto& i : _editorWind)
+        if (i._ptr)
+            i._ptr->End();
 #ifdef _EDITOR
     //Added by Teck Wei for singleton destruction
     LE_ECHELPER->DestroyInstance();
-#endif // _EDITOR
+#endif
 
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
     //ImGui_ImplGlfw_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
+}
+
+void LevelEditor::LE_SetWindowFlag(const std::string& name, const ImGuiWindowFlags& flag)
+{
+    for (auto& i : _editorWind)
+        if (i._name == name)
+        {
+            i._flag = flag;
+            break;
+        }
 }
 
 std::vector<float>* LevelEditor::LE_GetSystemsUsage()
@@ -152,23 +169,17 @@ void LevelEditor::LE_AddHelpMarker(const std::string& tip)
 
 void LevelEditor::LE_RunWindows()
 {
-    for (unsigned i = 0; i < _editorWind.size(); ++i)
+    for (auto& i : _editorWind)
     {
-        // Runs only if window is open
-        if (_editorWind[i]._isOpen)
+        if (i._isOpen)
         {
-            // Runs only if there is a window class attached to the window
-            if (_editorWind[i]._ptr)
+            if (i._ptr)
             {
-                //ImGui::PushID(_editorWind[i]._name.c_str());
-                // Initializes window
-                _editorWind[i]._ptr->Init();
-                if (ImGui::Begin(_editorWind[i]._name.c_str(), &_editorWind[i]._isOpen, _editorWind[i]._flag))
-                {
-                    _editorWind[i]._ptr->Run();
-                }
+                i._ptr->Init();
+                if (ImGui::Begin(i._name.c_str(), &i._isOpen, i._flag))
+                    i._ptr->Run();
                 ImGui::End();
-                //ImGui::PopID();
+                i._ptr->Exit();
             }
         }
     }

@@ -26,15 +26,12 @@ namespace NS_GRAPHICS
 		//////////////////////////////
 		/// New variables for interleaving data and reducing BOs
 		/// VERTEX DATA IS THE CONTROL POINTS. In Fbx SDK term.
-		/// While VerticeData is the vertices data per face. Ex. 1 Cube have 8 control points
-		/// but 6 faces of 6 vertices with a combined of 36 data. Normals and UVs falls within
-		/// VerticeData
+		/// While FragmentData is the data needed for caluclating light and texture. 
 		////////////////////////////// 
 		struct VertexData
 		{
 			glm::vec3 _position;
-			glm::vec3 _rgb;	
-			// Indices should be stored separately as per default
+			glm::vec3 _rgb;
 		};
 
 		struct FragmentData
@@ -43,20 +40,28 @@ namespace NS_GRAPHICS
 			glm::vec3 _vNormals;
 		};
 
-		//Designer Manual Input
+		// Designer Manual Input
 		struct MaterialData
 		{
-			glm::vec3 _diffuse;
-			glm::vec3 _ambient;
-			glm::vec3 _specular;
-			//float _emissive;
-			float _shininess;
-			//float _reflectivity;
-			//float _opacity;
+			glm::vec3 _diffuse;  // Base color
+			glm::vec3 _ambient;  // Reflective color under ambient lighting
+			glm::vec3 _specular; // Highlight color
+			float _shininess;    // Scattering / radius of specularity
+
+			MaterialData()
+				: _diffuse{ 0.5f,0.5f,0.5f },
+				_ambient{ 1.f, 1.f, 1.f }, 
+				_specular{ 1.f,1.f,1.f },
+				_shininess{ 1.f } {}
+
+			~MaterialData() {}
 		};
 
+		//Vertex Data might not be needed
 		std::vector<VertexData> _vertexDatas;
 		std::vector<FragmentData> _fragmentDatas;
+
+		MaterialData _materialData;
 
 		//Still needed
 		std::vector<unsigned short> _indices;
@@ -67,6 +72,8 @@ namespace NS_GRAPHICS
 		
 		GLuint ModelMatrixBO = NULL;
 
+		GLuint MBO = NULL; // Material buffer object
+
 		//////////////////////////////
 		/// ANIMATION STUFFS
 		//////////////////////////////
@@ -75,6 +82,7 @@ namespace NS_GRAPHICS
 		//////////////////////////////
 		/// ** TEMPORARY BEFORE NEW DATA INTEGRATION
 		/// OLD DATA VARIABLES
+		/// #Some of the old stuff like _vertices might be used instead of _vertexDatas
 		//////////////////////////////
 		GLuint CBO = NULL;			// Color Buffer object
 		GLuint UVBO = NULL;

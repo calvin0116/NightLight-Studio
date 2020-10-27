@@ -28,12 +28,16 @@ public:
 	LE_WindowBase() = default;
 	virtual ~LE_WindowBase() = default;
 
-	// Initializes at the start of a loop: THIS CAN BE CONSIDERED PRE-RUN; Runs functions before the window begins to run
+	// Starts the Window - Runs once only
+	virtual void Start() {}
+	// Initializes the Window Loop. Runs before Run() and ImGui::Begin();
 	virtual void Init() {}
-	// Runs the function internally within
+	// Runs the Window. Main functions found here.
 	virtual void Run() {}
-	// Exit function: Considerd an AFTER-RUN. Runs functions after the window has ended.
+	// Exits the Window Loop. Runs after Run() and ImGui::End();
 	virtual void Exit() {}
+	// Ends the Window - Runs once on destruction only.
+	virtual void End() {}
 	// Cloning
 	virtual LE_WindowBase* Clone() const = 0;
 };
@@ -119,6 +123,9 @@ public:
 	// Runs another window's function. One parameter.
 	template <typename T, typename Y>
 	void LE_AccessWindowFunc(const std::string& name, void(T::* fn)(const Y&), const Y& arg);
+
+	// Sets a Windows Flag. Please use in Start.
+	void LE_SetWindowFlag(const std::string& name, const ImGuiWindowFlags& flag);
 
 	/**********************************************************************/
 

@@ -222,12 +222,12 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Heirarchy.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_TemplateFuncs.hpp" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.h" />
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
+    <ClInclude Include="Source\Graphics\Lights.h" />
     <ClInclude Include="Source\Graphics\LightSystem.h" />
     <ClInclude Include="Source\Graphics\Mesh.h" />
     <ClInclude Include="Source\Graphics\Model.h" />
@@ -235,6 +235,7 @@
     <ClInclude Include="Source\Graphics\MeshManager.h" />
     <ClInclude Include="Source\Graphics\ShaderSystem.h" />
     <ClInclude Include="Source\Graphics\TextureLoader.h" />
+    <ClInclude Include="Source\Graphics\TextureManager.h" />
     <ClInclude Include="Source\Input\SI_Controller.h" />
     <ClInclude Include="Source\Input\SI_KeyPress.h" />
     <ClInclude Include="Source\Input\SI_MousePos.h" />
@@ -311,6 +312,7 @@
     <ClCompile Include="Source\Graphics\MeshManager.cpp" />
     <ClCompile Include="Source\Graphics\ShaderSystem.cpp" />
     <ClCompile Include="Source\Graphics\TextureLoader.cpp" />
+    <ClCompile Include="Source\Graphics\TextureManager.cpp" />
     <ClCompile Include="Source\Input\SI_Controller.cpp" />
     <ClCompile Include="Source\Input\SI_KeyPress.cpp" />
     <ClCompile Include="Source\Input\SI_MousePos.cpp" />

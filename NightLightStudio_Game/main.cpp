@@ -4,6 +4,14 @@
 #include <stdlib.h>  
 #include <crtdbg.h>  
 
+/// FOR THOSE INTERESTED: INCLUDING THIS ON TOP OF YOUR C++ FILES WILL GIVE YOU WHERE THE MEMORY LEAK OCCURS
+/*
+#ifdef _DEBUG
+#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DEBUG_NEW
+#endif
+*/
+
 //int main()
 //{
 //	FluffyUnicornEngine engine;
@@ -60,6 +68,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 #ifdef _DEBUG
 	FreeConsole();
 #endif
+
+	//NOTE: FOR ME TO SEE MEMORY LEAK
+	//PS COMPUTER CMI
+	//AUTO DUMPING DOESNT WORK FOR ME
+	//UNCOMMENT TO SEE MORE LEAKS FOR ME
+	//_CrtDumpMemoryLeaks();
 
 	return 0;
 }

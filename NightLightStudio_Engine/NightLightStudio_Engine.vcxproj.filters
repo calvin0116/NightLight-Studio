@@ -255,9 +255,6 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_WindowClass.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Editor\imgui\imguizmo\ImCurveEdit.h">
       <Filter>Source Files\Editor\imgui\imguizmo</Filter>
     </ClInclude>
@@ -317,6 +314,12 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_ECHelper.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Lights.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\TextureManager.h">
+      <Filter>Source Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -511,6 +514,9 @@
     </ClCompile>
     <ClCompile Include="Source\Mono\MonoWrapper.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\TextureManager.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

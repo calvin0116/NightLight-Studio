@@ -77,6 +77,10 @@ namespace NS_GRAPHICS
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 		glBindBufferRange(GL_UNIFORM_BUFFER, 0, viewProj_uniformBlockLocation, 0, 128);
+
+
+		// Set uniform locations for lighting shader
+		/* TO DO */
 	}
 
 	bool ShaderSystem::CompileLoadedShaders()
@@ -170,6 +174,7 @@ namespace NS_GRAPHICS
 
 		// Shader path example: ../Resources/Shaders/default.vertxs
 		LoadShader(std::string("../Resources/Shaders/default.vert"),std::string("../Resources/Shaders/uniformsolid.frag"));
+		LoadShader(std::string("../Resources/Shaders/withlights.vert"),std::string("../Resources/Shaders/withlights.frag"));
 		//LoadShader("","");
 		//LoadShader("","");
 		//LoadShader("","");
