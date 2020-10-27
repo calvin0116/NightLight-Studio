@@ -273,12 +273,6 @@
     <ClInclude Include="Source\Collision\CollisionMathLib.h">
       <Filter>Source Files\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Collision\CollisionResolver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Physics\ForceManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
@@ -320,6 +314,12 @@
     </ClInclude>
     <ClInclude Include="Source\Graphics\TextureManager.h">
       <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\CollisionResolver.h">
+      <Filter>Source Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\ForceManager.h">
+      <Filter>Source Files\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -491,12 +491,6 @@
     <ClCompile Include="Source\Component\ComponentAudio.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Collision\CollisionResolver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Physics\ForceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>
@@ -517,6 +511,12 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\TextureManager.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics\ForceManager.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\CollisionResolver.cpp">
+      <Filter>Source Files\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
