@@ -31,6 +31,7 @@ namespace NS_GRAPHICS
 		lightManager{ nullptr },
 		debugManager{ nullptr },
 		cameraManager{ nullptr },
+		textureManager{ nullptr },
 		hasInit{ false },
 		debugDrawing{ false },
 		projectionMatrix{ glm::mat4(1.0f) },
@@ -80,6 +81,7 @@ namespace NS_GRAPHICS
 		lightManager = &LightSystem::GetInstance();
 		debugManager = &DebugManager::GetInstance();
 		cameraManager = &CameraSystem::GetInstance();
+		textureManager = &TextureManager::GetInstance();
 
 		modelLoader->Init();
 		
@@ -101,7 +103,8 @@ namespace NS_GRAPHICS
 		modelLoader->LoadModel("sphere.fbx", "sphere");
 
 		//////////////////////////////////////
-		// TEST DRAW LOADED MODELS
+		/// TEST DRAW LOADED MODELS
+		//////////////////////////////////////
 		/*Entity testdrawSphere = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformsphere;
 		testtransformsphere._position = { 0.f, 0.f,0.f };
@@ -132,6 +135,11 @@ namespace NS_GRAPHICS
 
 		////TEST VECTOR MAX SIZE
 		//std::cout << "TEST MAX SIZE: " << vectTest.max_size() << std::endl;
+
+		////////////////////////
+		/// Text Texture Loader
+		////////////////////////
+		//textureLoader->LoadTexture("Test.jpg");
 
 		// Set default values for projection matrix
 		SetProjectionMatrix();
@@ -363,6 +371,6 @@ namespace NS_GRAPHICS
 	void GraphicsSystem::DetachMesh(Entity& entity)
 	{
 		if (entity.getComponent<ComponentGraphics>() != nullptr)
-			entity.getComponent<ComponentGraphics>()->MeshID = -1;
+			entity.getComponent<ComponentGraphics>()->MeshID = (unsigned)-1;
 	}
 }

@@ -216,7 +216,7 @@ namespace NS_GRAPHICS
 		return true;
 	}
 
-	unsigned TextureLoader::LoadTexture(const std::string & file)
+	bool TextureLoader::LoadTexture(const std::string & file)
 	{
 		//Generate a texture Id for use and bind it to the active texture unit
 		unsigned texture;
@@ -245,6 +245,8 @@ namespace NS_GRAPHICS
 
 		//Unbind textureID from active texture unit once done with loading
 		glBindTexture(GL_TEXTURE_2D, 0);
+
+		TextureManager::GetInstance().AddTexture(texture, file);
 
 		return texture;
 	}

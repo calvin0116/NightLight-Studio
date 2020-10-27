@@ -20,7 +20,6 @@ namespace NS_GRAPHICS
 		std::string _localFileName;
 
 		//Manual Input
-		std::string _textureFileName;
 		std::string _meshName;
 
 		//////////////////////////////

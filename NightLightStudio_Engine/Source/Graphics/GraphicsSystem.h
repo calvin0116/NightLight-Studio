@@ -12,6 +12,7 @@
 #include "LightSystem.h"
 #include "DebugManager.h"
 #include "CameraSystem.h"
+#include "TextureManager.h"
 
 #include "../glm/glm.hpp"   // glm::mat4
 
@@ -127,6 +128,7 @@ namespace NS_GRAPHICS
         LightSystem* lightManager;
         DebugManager* debugManager;
         CameraSystem* cameraManager;
+        TextureManager* textureManager;
         //Renderer* renderer;
 
         // Should NOT be calculated every frame

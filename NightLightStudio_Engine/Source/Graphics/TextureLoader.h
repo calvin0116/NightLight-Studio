@@ -2,6 +2,7 @@
 #include <string>
 #include "../Window/WndUtils.h"
 #include "../../SOIL/SOIL.h"
+#include "TextureManager.h"
 
 namespace NS_GRAPHICS
 {
@@ -64,6 +65,6 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
-		unsigned LoadTexture(const std::string& file);
+		bool LoadTexture(const std::string& file);
 	};
 }
