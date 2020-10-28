@@ -8,6 +8,8 @@ Parser::Parser(std::string name_, std::string path_)
 	path = path_ + "/";
 
 	alloc = &doc.GetAllocator();
+
+    filepath = path + name + ".json";
 }
 
 Parser::~Parser()
@@ -18,7 +20,7 @@ Parser::~Parser()
 void Parser::Load()
 {
 	//StringBuffer s;
-	filepath = path + name + ".json";
+
 		//assert_path + "config.json";
 
 	//Read in the data from the file
