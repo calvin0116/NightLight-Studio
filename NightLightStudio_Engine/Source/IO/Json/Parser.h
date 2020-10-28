@@ -33,6 +33,7 @@ private:
 	Document doc;
 	Document::AllocatorType* alloc;
 
+	//File related strings
 	std::string name;
 	std::string path;
 	std::string filepath;
@@ -69,6 +70,7 @@ public:
 	template<typename d_type>
 	ENGINE_API void ChangeData(std::string name, d_type data);
 	//For object access change
+	//Helper that can be use to add one value object to another value object
 	template<typename d_type>
 	ENGINE_API void ChangeData(Value* val, std::string name, d_type data);
 	//Error checking to see if member is in json
@@ -81,7 +83,7 @@ public:
 
 	ENGINE_API void CleanDoc()
 	{
-		//doc.Clear();
+		doc.RemoveAllMembers();
 		//alloc = nullptr;
 	}
 	//Access by count
@@ -95,6 +97,28 @@ public:
 
 	}*/
 };
+
+//==============Example for Json Insertion=============================//
+/*
+	//Adding variable in json
+	parser->AddData("Variable int", 1);
+	parser->AddData("Variable float", 2.5);
+
+	//Adding object with variable into the json
+	Value* val = new Value;
+	val->SetObject();
+	parser->ChangeData(val, "Variable in object", 2);
+
+	//Adding object variable into object into json
+	Value* val2 = new Value;
+	val2->SetObject();
+	parser->ChangeData(val2, "Variable in object of object", 5);
+
+	parser->ChangeData(val, "Object in object2", val2->GetObject());
+	delete val2;
+	parser->AddData("obj", val);
+*/
+//==============================================================//
 
 #include "Parser.hpp"
 #endif // !PARSER_h

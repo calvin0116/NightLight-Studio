@@ -3,6 +3,7 @@
 #include "../Component/ComponentManager.h"
 #include "../Component/Components.h"
 
+#include "../Input/SystemInput.h"
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -32,11 +33,11 @@ namespace NS_SCENE
 		//As of now is "../Resources/JsonFile/" + "Scene"
 		scenes_path = scene_parser.GetPath() + scene_parser["SceneFolder"].GetString();
 
+		int index = 0; 
 		//Get Scene Path
 		for (const auto& entry : fs::directory_iterator(scenes_path))
 		{
 			fs::path cur_path_name = entry.path();
-
 			//Ways to access different info of the path
 			//std::cout << cur_path_name << std::endl;
 			//std::cout << cur_path_name.stem() << std::endl;
@@ -46,6 +47,10 @@ namespace NS_SCENE
 			scene_list[cur_path_name.stem().string()] = new Parser(cur_path_name.stem().string(), cur_path_name.parent_path().string());
 			//Individual files in Scene folder
 			std::cout << cur_path_name.stem().string() << std::endl;
+
+			//Store index with string
+			scene_indexes[index] = cur_path_name.stem().string();
+			++index;
 		}
 
 		/*
@@ -73,6 +78,28 @@ namespace NS_SCENE
 		InitScene();
 	}
 
+	void SceneManager::Update()
+	{
+		//Exit button that uses scene
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ESCAPE))
+		{
+			SetNextScene(EXIT_SCENCE);
+		}
+		/*
+		//Set next scene according to index 
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_F))
+		{
+			//SetNextScene();
+			if (scene_index < scene_list.size())
+				++scene_index;
+			else
+				scene_index = 0;
+
+			SetNextScene(scene_indexes[scene_index]);
+		}
+		*/
+	}
+
 	SCENE_CHANGE SceneManager::CheckChangeScene()
 	{
 		return to_change_scene;
@@ -81,6 +108,7 @@ namespace NS_SCENE
 
 	void SceneManager::GameExit()
 	{
+		ExitScene();
 	}
 
 	void SceneManager::Free()
@@ -125,7 +153,7 @@ namespace NS_SCENE
 
 	void SceneManager::ExitScene()
 	{
-		//scene_list[current_scene]->CleanDoc();
+		scene_list[current_scene]->CleanDoc();
 		//G_ECMANAGER->
 		current_scene = next_scene;
 	}
@@ -200,9 +228,17 @@ namespace NS_SCENE
 		//Parser* scene = scene_list[current_scene];
 		Parser scene = Parser("TestJson" , scene_parser.GetPath() );
 		
-		//G_ECMANAGER->
+		//Add Objects objects
+		scene.AddData("Objects", D_TYPE::D_OBJECT);
+		for (auto ent : EntityName)
+		{
+			//Add Entity json data
+			scene.AddData(ent.second, D_TYPE::D_OBJECT);
+			//~~!! Need to know what component the Entity have and loop through them
+
+		}
+
 		scene.Save();
-		//scene.Save();
 	}
 
 	bool SceneManager::CheckIfSceneExist(std::string& scene_name)
@@ -241,6 +277,7 @@ namespace NS_SCENE
 	void SceneManager::SetNextScene(std::string scene_name)
 	{
 		next_scene = scene_name;
+		std::cout << "Switching to: " << scene_name << "....." << std::endl;
 
 		if (scene_name == EXIT_SCENCE)
 			to_change_scene = SC_EXIT;

@@ -77,19 +77,24 @@ Document& Parser::GetDoc()
 
 bool Parser::CheckForMember(std::string mem_name)
 {
+    PrintDataList();
     //Check for first layer
     if (doc.HasMember(mem_name.c_str()))
         return true;
 
     for (auto itr = doc.MemberBegin(); itr != doc.MemberEnd(); ++itr)
     {
-        for (Value::ConstMemberIterator itr2 = doc[itr->name.GetString()].MemberBegin(); itr2 != doc[itr->name.GetString()].MemberEnd(); ++itr2)
+        Value& val = doc[itr->name.GetString()];
+        if (val.IsObject())
         {
-            //See if variable name is the same
-            if (mem_name == itr2->name.GetString())
+            for (Value::ConstMemberIterator itr2 = val.MemberBegin(); itr2 != val.MemberEnd(); ++itr2)
             {
-                std::cout << "Member found" << std::endl;
-                return true;
+                //See if variable name is the same
+                if (mem_name == itr2->name.GetString())
+                {
+                    std::cout << "Member found" << std::endl;
+                    return true;
+                }
             }
         }
     }
