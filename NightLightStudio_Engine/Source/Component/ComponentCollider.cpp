@@ -12,6 +12,10 @@ ComponentCollider::ComponentCollider(COLLIDERS _col)
 
 }
 
+ComponentCollider::ComponentCollider() : collisionTime{ FLT_MAX }, colliderType(COLLIDERS::AABB) // default this
+{
+}
+
 void ComponentCollider::CollisionTimeReset()
 {
 	collisionTime = FLT_MAX;

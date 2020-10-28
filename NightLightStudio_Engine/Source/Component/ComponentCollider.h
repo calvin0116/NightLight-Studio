@@ -135,7 +135,7 @@ struct CapsuleCollider : public ICollider
 	void init(ComponentTransform* transform);
 };
 
-typedef struct ComponentCollider //: public IComponent
+typedef struct ComponentCollider : public ISerializable//: public IComponent
 {
 	union Collider
 	{
@@ -157,6 +157,8 @@ typedef struct ComponentCollider //: public IComponent
 	Collider collider;
 
 	ComponentCollider(COLLIDERS col);
+
+	ComponentCollider();
 
 	void CollisionTimeReset();
 
