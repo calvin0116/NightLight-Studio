@@ -3,6 +3,7 @@
 
 #include "LevelEditor.h"
 #include "CpuUsage.h"
+#include <chrono>
 
 class PerformanceMetrics : public LE_WinBase_Derived<PerformanceMetrics>
 {
@@ -12,6 +13,13 @@ class PerformanceMetrics : public LE_WinBase_Derived<PerformanceMetrics>
 	float _memInUse;
 
 	std::vector<float> _systemsUsage;
+	std::vector<float> _systemsUsageShow;
+
+	std::chrono::steady_clock::time_point _startTime;
+	std::chrono::steady_clock::time_point _endTime;
+	float _elapsedTime;
+
+	float _timePassed;
 
 	enum MEM_SIZE
 	{

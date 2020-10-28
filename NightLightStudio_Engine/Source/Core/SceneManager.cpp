@@ -98,6 +98,11 @@ namespace NS_SCENE
 			SetNextScene(scene_indexes[scene_index]);
 		}
 		*/
+
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_S))
+		{
+			SaveScene();
+		}
 	}
 
 	SCENE_CHANGE SceneManager::CheckChangeScene()
@@ -226,18 +231,44 @@ namespace NS_SCENE
 	{
 		//Save scene
 		//Parser* scene = scene_list[current_scene];
-		Parser scene = Parser("TestJson" , scene_parser.GetPath() );
+		std::string output_filename = "Output";
+
+		Parser scene = Parser(output_filename, scene_parser.GetPath() );
 		
+		struct stat buffer;
+		if (stat(scene.GetFilePath().c_str(), &buffer) != 0)
+		{
+			std::cout << "file does not exist, creating file....." << std::endl;
+			//Creates file
+			std::ofstream MyFile(scene.GetFilePath().c_str());
+
+			MyFile << "{\n}";
+		}
+		scene.Load();
+		scene.CleanDoc();
+
 		//Add Objects objects
-		scene.AddData("Objects", D_TYPE::D_OBJECT);
+		Value* obj_val = new Value;
+		obj_val->SetObject();
+
+
 		for (auto ent : EntityName)
 		{
+			Value* ent_val = new Value;
+			ent_val->SetObject();
 			//Add Entity json data
-			scene.AddData(ent.second, D_TYPE::D_OBJECT);
+			//scene.ChangeData(ent_val, "Variable in object of object", 5);
+			scene.PrintDataList();
 			//~~!! Need to know what component the Entity have and loop through them
+			scene.ChangeData(obj_val, ent.second.c_str(), ent_val->GetObject());
 
+			delete ent_val;
 		}
+		scene.AddData("Objects", obj_val);
 
+		//delete obj_val;
+
+		scene.PrintDataList();
 		scene.Save();
 	}
 
