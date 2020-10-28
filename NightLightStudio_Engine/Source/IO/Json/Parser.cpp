@@ -18,6 +18,7 @@ Parser::~Parser()
 void Parser::Load()
 {
 	//StringBuffer s;
+    //../Resource/Json/Config
 	filepath = path + name + ".json";
 		//assert_path + "config.json";
 
