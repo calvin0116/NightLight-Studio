@@ -6,6 +6,8 @@
 
 #include <functional>
 
+#include "..//Component/Components.h"
+
 #define DOTEST 1
 
 // Do not touch
@@ -52,6 +54,52 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	//ComponentCollider* OBBT = G_ECMANAGER->AddComponent<ComponentCollider>(newEntity);
 	//ComponentCollider OBB1(COLLIDERS::OBB);
 	//*OBBT = OBB1;
+
+
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	////// sample for iterating ISerializable in entity
+
+	//// create a sample entity here
+	//Entity newEntity = G_ECMANAGER->BuildEntity();
+	//newEntity.AttachComponent<ComponentTransform>();
+	//newEntity.AttachComponent<ComponentCollider>();
+
+	////newEntity.AttachComponent<ComponentTest0>();
+	////newEntity.AttachComponent<ComponentRigidBody>();
+	////newEntity.AttachComponent<ComponentGraphics>(); 
+	//// uninit graphics component will crash at graphics.cpp line 178 Mesh* mesh = meshManager->meshes[graphicsComp->MeshID];
+	//// the id not init apparently
+
+	/////////////////////////////////////////////////////////////////////////////////////
+	//// using iterator
+	//auto con = newEntity.getEntityComponentContainer();
+	//auto itr = con.begin();
+	//auto itrEnd = con.end();
+	//while (itr != itrEnd)
+	//{
+	//	ISerializable* comp = (*itr);
+	//	comp->Write();
+	//	++itr; // rmb to increment itr
+	//}
+	//// using iterator END
+	/////////////////////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////////////////////////////////
+	//// using for each
+	//for (ISerializable* comp : newEntity.getEntityComponentContainer())
+	//{
+	//	(void)comp;
+	//	comp->Write();
+	//}
+	//// using for each END
+	/////////////////////////////////////////////////////////////////////////////////////
+
+	////// sample for iterating ISerializable in entity END
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// Systems OnFirst start
