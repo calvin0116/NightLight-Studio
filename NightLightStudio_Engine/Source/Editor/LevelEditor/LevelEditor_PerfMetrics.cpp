@@ -4,7 +4,8 @@
 
 PerformanceMetrics::PerformanceMetrics()
 	: _totalMem{}, _memInUse{}, _memSize{ MEGABYTES },
-	_usage{}
+	_usage{}, _timePassed{ 0 }, _startTime{ std::chrono::steady_clock::now() }, _endTime{ std::chrono::steady_clock::now() },
+	_elapsedTime{0}
 {
 
 	MEMORYSTATUSEX memInfo;
@@ -22,6 +23,14 @@ void PerformanceMetrics::Init()
 {
 	ImGui::SetNextWindowBgAlpha(1.0f);
 	ImGui::SetNextWindowSize(ImVec2(640, 320), ImGuiCond_FirstUseEver);
+
+	_endTime = std::chrono::steady_clock::now();
+	_elapsedTime += std::chrono::duration_cast<std::chrono::microseconds>(_endTime - _startTime).count() / 1000000.0f;
+	if (_elapsedTime > 0.5f)
+	{
+		_elapsedTime = 0.0f;
+		_systemsUsageShow = _systemsUsage;
+	}
 }
 
 void PerformanceMetrics::Run()
@@ -123,14 +132,14 @@ void PerformanceMetrics::Run()
 		{
 			float total = 0;
 
-			std::vector<float> orig = _systemsUsage;
+			std::vector<float> orig = _systemsUsageShow;
 
-			for (int i = 0; i < _systemsUsage.size(); ++i)
-				total += _systemsUsage[i];
+			for (int i = 0; i < orig.size(); ++i)
+				total += orig[i];
 
-			for (int i = 0; i < _systemsUsage.size(); ++i)
+			for (int i = 0; i < orig.size(); ++i)
 			{
-				_systemsUsage[i] /= total;
+				orig[i] /= total;
 			}
 
 			_levelEditor->LE_AddText("Systems Usage: ");
@@ -152,22 +161,22 @@ void PerformanceMetrics::Run()
 				*/
 
 			std::vector<std::string> sysNamesManual =
-			{ "Window", "IO", "Input", "Graphics", "Collision", "Physics", "Audio", "Scene Manager", "Components", "Editor" };
+			{ "Window", "IO", "Input", "Graphics", "Collision", "Physics", "Audio", "Scene Manager", "Components", "Editor", "Scripting" };
 
 			//_levelEditor->LE_AddHistogram("Systems Use", _systemsUsage, false, 0, 0.0f, 100.0f, ImVec2(0, 50));
-			for (int i = 0; i < _systemsUsage.size(); ++i)
+			for (int i = 0; i < orig.size(); ++i)
 			{
 				int sysNum = i - 1;
 				if (sysNum == -1)
-					sysNum = (int)_systemsUsage.size() - 1;
+					sysNum = (int)orig.size() - 1;
 
-				_levelEditor->LE_AddProgressBar(_systemsUsage[i], ImVec2(100, 0));
+				_levelEditor->LE_AddProgressBar(orig[i], ImVec2(100, 0));
 				if (i < sysNamesManual.size())
 				{
 					ImGui::SameLine();
 					_levelEditor->LE_AddText(sysNamesManual[i]);
 					ImGui::SameLine();
-					_levelEditor->LE_AddText(std::to_string(_systemsUsage[i] * 100.0f).append("%% :: ").append(std::to_string(orig[i] / 1000.0f)).append(" ms"));
+					_levelEditor->LE_AddText(std::to_string(orig[i] * 100.0f).append("%% :: ").append(std::to_string(_systemsUsageShow[i] / 1000.0f)).append(" ms"));
 				}
 			}
 		});
@@ -179,6 +188,7 @@ void PerformanceMetrics::Run()
 
 void PerformanceMetrics::Exit()
 {
+	_startTime = std::chrono::steady_clock::now();
 }
 
 std::vector<float>* PerformanceMetrics::GetSystemsUsage()
