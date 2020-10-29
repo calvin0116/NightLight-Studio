@@ -63,7 +63,7 @@ void HeirarchyInspector::Run()
 		char buf[100];
 		sprintf_s(buf, "%i. %s", n, ent.second.c_str());
 		//Check if any the object has been selected
-#ifdef _EDITOR
+
 		if (ImGui::Selectable(buf, LE_ECHELPER->SelectedEntities()[ent.first] ) )
 		{
 			LE_ECHELPER->SelectEntity(ent.first);
@@ -73,7 +73,6 @@ void HeirarchyInspector::Run()
 		{
 			//std::cout << ent.first << ". not selected: " << LE_ECHELPER->SelectedEntity()[ent.first] << std::endl;
 		}
-#endif // _EDITOR	
 
 		++n;
 	}

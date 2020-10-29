@@ -9,6 +9,7 @@
 #include <iostream>
 #include "DeltaTime.h"
 
+#include "../Editor/LevelEditor/LevelEditor_ECHelper.h"
 
 void FluffyUnicornEngine::Init(HINSTANCE& hInstance)
 {
@@ -84,6 +85,9 @@ void FluffyUnicornEngine::Run()
 
 void FluffyUnicornEngine::Exit()
 {
+	//Added by Teck Wei for singleton destruction
+	LE_ECHELPER->DestroyInstance();
+
 	SYS_MAN->Free();
 
 	DELTA_T->Exit();

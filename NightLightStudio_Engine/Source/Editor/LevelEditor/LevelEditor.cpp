@@ -103,10 +103,6 @@ void LevelEditor::Exit()
     for (auto& i : _editorWind)
         if (i._ptr)
             i._ptr->End();
-#ifdef _EDITOR
-    //Added by Teck Wei for singleton destruction
-    LE_ECHELPER->DestroyInstance();
-#endif
 
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
