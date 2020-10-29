@@ -56,6 +56,10 @@ namespace NlMath
 		operator glm::mat4x4() const;
 		operator glm::mat3x3() const;
 
+		Vector3D Column0() const;
+		Vector3D Column1() const;
+		Vector3D Column2() const;
+
 	} Matrix4x4, Matrix4x4, Mtx44;
 
 	Matrix4x4 operator * (const Matrix4x4& lhs, const Matrix4x4& rhs);
@@ -154,7 +158,7 @@ namespace NlMath
 		and saves it in pResult
 	 */
 	 /**************************************************************************/
-	void Mtx44Transpose(Matrix4x4& pResult, const Matrix4x4& pMtx);
+	Matrix4x4 Mtx44Transpose(const Matrix4x4& pMtx);
 
 	/**************************************************************************/
 	/*!
