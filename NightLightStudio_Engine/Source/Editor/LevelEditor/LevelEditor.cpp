@@ -3,6 +3,7 @@
 #include "LevelEditor_AssetInsp.h"
 #include "LevelEditor_PerfMetrics.h"
 #include "LevelEditor_Heirarchy.h"
+#include "../imgui/imguizmo/ImGuizmo.h"
 
 //Added by Teck Wei
 #include "LevelEditor_ECHelper.h"
@@ -58,9 +59,15 @@ bool LevelEditor::Update(float)
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+    ImGuizmo::BeginFrame();
 
     // Run the MainMenubar
     LE_MainMenuBar();
+    
+    // Only for testing
+    if (_runEngine)
+    // Run the Scene Editor
+    LE_SceneEditor();
 
     /*
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).

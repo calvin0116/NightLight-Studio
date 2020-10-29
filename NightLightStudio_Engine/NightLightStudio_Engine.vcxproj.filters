@@ -518,6 +518,9 @@
     <ClCompile Include="Source\Collision\CollisionResolver.cpp">
       <Filter>Source Files\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\Messaging\System_Messaging_Readme.txt">
