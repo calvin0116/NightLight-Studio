@@ -14,8 +14,6 @@ typedef class ComponentAudio //: public IComponent
     bool        _loop           = false;
     // Sound is 3D
     bool        _is3D           = false;
-    // Update sound's position, only used for 3D sounds
-    bool        _updatePos      = false;
     // user defined name defined in load component
     std::string _name           = "";
     // channelID given by SystemAudio, used for bgms and loops only.

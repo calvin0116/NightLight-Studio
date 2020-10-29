@@ -3,6 +3,8 @@
 #include "../Component/Components.h" // G_ECMANAGER
 //#include "../Component/ComponentAudio.h" // Audio Component Data
 
+#include "../Input/SystemInput.h" // For testing
+
 const float SystemAudio::s_UNITS_PER_METER = 100.0f;
 
 void SystemAudio::LoadSound(const std::string& _soundPath, const std::string& _name)
@@ -98,6 +100,7 @@ int SystemAudio::Play3DLoop(const std::string& _name, const int _id)
         //FMOD_VECTOR fmodVel = { 100.0f, 0.0f, 0.0f };
         _channels[retVal]->set3DAttributes(&_fmodPos, nullptr);
         _channels[retVal]->setPaused(false);
+        _objIDs[retVal] = _id;
 
         //// Setting group channel
         //ErrorCheck(it->second.second->setChannelGroup(BGM));
@@ -124,6 +127,37 @@ void SystemAudio::Play3DOnce(const std::string& name, const int _id)
         _channels[retVal]->setMode(FMOD_3D);
         glm::vec3 _pos = G_ECMANAGER->getEntity(_id).getComponent<TransformComponent>()->_position;
         _fmodPos = { _pos.x, _pos.y, _pos.z };
+        _channels[retVal]->set3DAttributes(&_fmodPos, nullptr);
+        _channels[retVal]->setPaused(false);
+        _objIDs[retVal] = _id;
+        //ErrorCheck(temp->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 5.0f * m_fUnitsPerMeter));
+        //FMOD_VECTOR fmodPos = { _pos.x, _pos.y, _pos.z };
+    /*    _channels[retVal]->set3DAttributes(&fmodPos, nullptr);
+        _channels[retVal]->setPaused(false);*/
+        //// Setting group channel
+        //ErrorCheck(it->second.second->setChannelGroup(SFX));
+        break;
+      }
+    }
+  }
+}
+
+// Overloaded function for testing only! do not use this!
+void SystemAudio::Play3DOnce(const std::string& name, float x, float y, float z)
+{
+  MyAudioMap::iterator it = _sounds.find(name);
+  if (it != _sounds.end())
+  {
+    for (int retVal = 0; retVal < s_MAX_CHANNELS; ++retVal)
+    {
+      bool isPlaying;
+      _channels[retVal]->isPlaying(&isPlaying);
+      if (!isPlaying)
+      {
+        _system->playSound(it->second, _sfx, true, _channels + retVal);
+        _channels[retVal]->setMode(FMOD_LOOP_OFF);
+        _channels[retVal]->setMode(FMOD_3D);
+        _fmodPos = { x, y, z };
         _channels[retVal]->set3DAttributes(&_fmodPos, nullptr);
         _channels[retVal]->setPaused(false);
         //ErrorCheck(temp->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 5.0f * m_fUnitsPerMeter));
@@ -158,6 +192,33 @@ void SystemAudio::Load()
 
 void SystemAudio::Init()
 {
+  // For testing
+  LoadSound("Asset\\Sounds\\TestAudio.ogg", "test");
+
+  // Numpad 0 = Normal both speakers
+  SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TestAudio", SystemInput_ns::IKEY_NUMPAD_0, "AudioTest", SystemInput_ns::OnRelease, [this]()
+    {
+      if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_0))
+      {
+        PlayOnce("test");
+      }
+    });
+  // Numpad 1 = 3D BGM on left side
+  SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Test1Audio", SystemInput_ns::IKEY_NUMPAD_1, "Audio1Test", SystemInput_ns::OnRelease, [this]()
+    {
+      if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_1))
+      {
+        Play3DOnce("test", -1.0f, 0.0f, 0.0f);
+      }
+    });
+  // Numpad 2 = 3D BGM on right side
+  SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Test2Audio", SystemInput_ns::IKEY_NUMPAD_2, "Audio2Test", SystemInput_ns::OnRelease, [this]()
+    {
+      if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_2))
+      {
+        Play3DOnce("test", 1.0f, 0.0f, 0.0f);
+      }
+    });
 }
 
 void SystemAudio::GameLoad()
@@ -212,16 +273,18 @@ void SystemAudio::Update()
   // position update here
   _system->update();
   // Update 3D positions
-  for (FMOD::Channel* chnls : _channels)
+  for (int i = 0; i < s_MAX_CHANNELS; ++i)
   {
     bool isPlaying;
-    chnls->isPlaying(&isPlaying);
     FMOD_MODE fMode;
-    chnls->getMode(&fMode);
-    if (fMode == FMOD_3D)
-    {
-
-    }
+    _channels[i]->isPlaying(&isPlaying);
+    _channels[i]->getMode(&fMode);
+    if (!isPlaying || fMode != FMOD_3D)
+      continue;
+    glm::vec3 _pos = G_ECMANAGER->getEntity(_objIDs[i]).getComponent<TransformComponent>()->_position;
+    _fmodPos = { _pos.x, _pos.y, _pos.z };
+    // Set position
+    _channels[i]->set3DAttributes(&_fmodPos, nullptr);
   }
 }
 
