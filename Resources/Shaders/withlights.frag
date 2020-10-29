@@ -54,11 +54,11 @@ layout (std140) uniform LightCalcBlock
     int pLights_Num;
     int sLights_Num;
 
+    vec3 viewPos;
+
     DirLight dLights[MAX_LIGHTS];
     PointLight pLights[MAX_LIGHTS];
     SpotLight sLights[MAX_LIGHTS];
-
-    vec3 viewPos;
 };
 
 // Function declarations

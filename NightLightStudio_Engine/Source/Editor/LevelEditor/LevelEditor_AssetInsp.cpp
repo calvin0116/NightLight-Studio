@@ -5,69 +5,6 @@
 
 #include <shellapi.h>
 
-std::vector<std::string> AssetInspector::_GetDirectories(const std::string& path)
-{
-    if (path.empty())
-        return {};
-    std::vector<std::string> r;
-    for (auto& p : std::filesystem::directory_iterator(path))
-        if (p.is_directory())
-            r.push_back(p.path().string());
-    return r;
-}
-
-std::vector<std::string> AssetInspector::_GetFilesInDir(const std::string& path)
-{
-    if (path.empty())
-        return {};
-    std::vector<std::string> r;
-    for (const auto& p : std::filesystem::directory_iterator(path))
-        if (!p.is_directory())
-            r.push_back(p.path().string());
-    return r;
-}
-
-std::string AssetInspector::_EraseSubStr(const std::string& str, const std::string& toErase)
-{
-    std::string mainStr = str;
-    // Search for the substring in string
-    size_t pos = mainStr.find(toErase);
-    if (pos != std::string::npos)
-    {
-        // If found then erase it from string
-        mainStr.erase(pos, toErase.length());
-    }
-
-    return mainStr;
-}
-
-std::string AssetInspector::_GetFilename(const std::string& path)
-{
-    char sep = '/';
-
-#ifdef _WIN32
-    sep = '\\';
-#endif
-
-    size_t i = path.rfind(sep, path.length());
-    if (i != std::string::npos) {
-        return(path.substr(i + 1, path.length() - i));
-    }
-
-    return {};
-}
-
-std::string AssetInspector::_GetFileType(const std::string& path)
-{
-    char sep = '.';
-    size_t i = path.rfind(sep, path.length());
-    if (i != std::string::npos) {
-        return(path.substr(i + 1, path.length() - i));
-    }
-
-    return {};
-}
-
 void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
 {
     const std::vector<std::string>& dir = _allDirDirs[path];
@@ -78,14 +15,14 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
 
     if (_selectedFolderPath.find(path) != std::string::npos)
     {
-        if (ImGui::GetID(_GetFilename(path).c_str()) == 0)
+        if (ImGui::GetID(LE_GetFilename(path).c_str()) == 0)
             ImGui::SetNextTreeNodeOpen(true);
 
         if (_selectedFolderPath.find(path) != std::string::npos)
             f |= ImGuiTreeNodeFlags_Selected;
     }
 
-    _levelEditor->LE_AddTreeNodes(_GetFilename(path),
+    _levelEditor->LE_AddTreeNodes(LE_GetFilename(path),
         [this, &path, &dir, &files]()
         {
             if (ImGui::IsItemClicked())
@@ -96,7 +33,7 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
                 }
                 else if (_selectedFolderPath != _currentFilePath)
                 {
-                    _selectedFolderPath = _EraseSubStr(path, _GetFilename(path));
+                    _selectedFolderPath = LE_EraseSubStr(path, LE_GetFilename(path));
                     _selectedFilePath = "";
                 }
             }
@@ -104,13 +41,13 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
             // For all files functions
             for (int i = 0; i < files.size(); ++i)
             {
-                if (_ignoreFileTypes.find(_GetFileType(files[i])) != std::end(_ignoreFileTypes))
+                if (_ignoreFileTypes.find(LE_GetFileType(files[i])) != std::end(_ignoreFileTypes))
                     continue;
-                _levelEditor->LE_AddSelectable(_GetFilename(files[i]), (_selectedFilePath == files[i]),
+                _levelEditor->LE_AddSelectable(LE_GetFilename(files[i]), (_selectedFilePath == files[i]),
                     [&]()
                     {
                         // Selects the right folder
-                        std::string temp = _EraseSubStr(files[i], _GetFilename(files[i]));
+                        std::string temp = LE_EraseSubStr(files[i], LE_GetFilename(files[i]));
                         temp.erase(std::end(temp) - 1);
 
                         _selectedFolderPath = temp;
@@ -132,7 +69,7 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
                 if (ImGui::IsItemClicked(0))
                 {
                     // Get relative path
-                    _dragDropFilePath = _EraseSubStr(files[i], _currentFilePath);
+                    _dragDropFilePath = LE_EraseSubStr(files[i], _currentFilePath);
                     _selectedFilePath = files[i];
                 }
 
@@ -153,8 +90,8 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
 
 void AssetInspector::_RefreshDirectories(const std::string& path)
 {
-    _allDirFiles[path] = _GetFilesInDir(path);
-    _allDirDirs[path] = _GetDirectories(path);
+    _allDirFiles[path] = LE_GetFilesInDir(path);
+    _allDirDirs[path] = LE_GetDirectories(path);
 
     for (int i = 0; i < _allDirDirs[path].size(); ++i)
     {
@@ -207,7 +144,7 @@ void AssetInspector::Run()
                 {
                     if (_selectedFolderPath.size() > _currentFilePath.size())
                     {
-                        _selectedFolderPath = _EraseSubStr(_selectedFolderPath, _GetFilename(_selectedFolderPath));
+                        _selectedFolderPath = LE_EraseSubStr(_selectedFolderPath, LE_GetFilename(_selectedFolderPath));
                         while (*(std::end(_selectedFolderPath) - 1) == '\\')
                             _selectedFolderPath.pop_back();
                     }
@@ -271,7 +208,7 @@ void AssetInspector::Run()
                     if (i >= filesStart && ImGui::IsItemClicked(0))
                     {
                         _selectedFilePath = files[i];
-                        _dragDropFilePath = _EraseSubStr(files[i], _currentFilePath);
+                        _dragDropFilePath = LE_EraseSubStr(files[i], _currentFilePath);
                     }
 
                     const ImVec2 p0 = ImGui::GetItemRectMin();
@@ -280,17 +217,19 @@ void AssetInspector::Run()
                     ImGuiIO& io = ImGui::GetIO();
                     //ImTextureID my_tex_id = io.Fonts->TexID;
 
+                    //unsigned val = 1;
+
                     draw_list->PushClipRect(p0, p1, true);
                     if (i < filesStart)
                         // Folder image goes here
-                        //draw_list->AddImage(0, { p0.x + 20.0f, p0.y - 40.0f }, { p1.x - 20.0f, p1.y - 40.0f }, ImVec2(0,0), ImVec2(1,1), ImColor(252,186,3));
+                        //draw_list->AddImage((void*)(intptr_t)val, { p0.x + 20.0f, p0.y - 40.0f }, { p1.x - 20.0f, p1.y - 40.0f }, ImVec2(0,0), ImVec2(1,1), ImColor(252,186,3));
                         draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(255, 252, 54));
                     else
                         // File image goes here
-                        //draw_list->AddImage(0, { p0.x + 20.0f, p0.y - 40.0f }, { p1.x - 20.0f, p1.y - 40.0f });
+                        //draw_list->AddImage((void*)(intptr_t)val, { p0.x + 20.0f, p0.y - 40.0f }, { p1.x - 20.0f, p1.y - 40.0f });
                         draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(111, 111, 111));
                     //draw_list->AddText({ p0.x, p0.y + 90.0f }, IM_COL32_WHITE, _GetFilename(files[i]).c_str()); // Filename goes here
-                    draw_list->AddText(io.Fonts->Fonts[0], 13.0f, { p0.x, p0.y + 65.0f }, IM_COL32_WHITE, _GetFilename(files[i]).c_str(), nullptr, size.x + 10.0f);
+                    draw_list->AddText(io.Fonts->Fonts[0], 13.0f, { p0.x, p0.y + 65.0f }, IM_COL32_WHITE, LE_GetFilename(files[i]).c_str(), nullptr, size.x + 10.0f);
                     draw_list->PopClipRect();
 
                     // Crashes when item is off-screen for some reason? Set to not visible for optimization and prevent crashes above
@@ -316,7 +255,7 @@ void AssetInspector::Run()
 
 
                 ImGui::PopID();
-                std::string relativePath = _EraseSubStr(files[i], _currentFilePath);
+                std::string relativePath = LE_EraseSubStr(files[i], _currentFilePath);
                 _levelEditor->LE_AddTooltip(relativePath);
             }
         }, true);

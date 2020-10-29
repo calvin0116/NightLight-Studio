@@ -80,6 +80,9 @@ namespace NS_GRAPHICS
         // fov must be given in degrees
         void SetProjectionMatrix(const float& fov = 45.f, const float& aspect_ratio = 1.78f, const float& near_plane = 0.01f, const float& far_plane = 1000.f);
 
+        // Updates uniform light variables based on active light components for all shaders
+        void UpdateLights();
+
         /////////////////////////////////////////////////////////////////////
         ////// DEBUG FUNCTIONS
         // Creates a basic cube based on given data
@@ -116,10 +119,8 @@ namespace NS_GRAPHICS
 
     private:
 
-        unsigned testCubeID;
-
-        bool hasInit;
-        bool debugDrawing;
+        bool _hasInit;
+        bool _debugDrawing;
 
         ShaderSystem* shaderManager;
         ModelLoader* modelLoader;
@@ -132,10 +133,10 @@ namespace NS_GRAPHICS
         //Renderer* renderer;
 
         // Should NOT be calculated every frame
-        glm::mat4 projectionMatrix;
+        glm::mat4 _projectionMatrix;
 
         //temporary view matrix, to be removed after camera system implementation
-        glm::mat4 viewMatrix;
+        glm::mat4 _viewMatrix;
     };
 
     //GLOBAL pointer to an instance of graphic system

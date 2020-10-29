@@ -18,14 +18,14 @@ namespace NS_GRAPHICS
 	{
 
 	}
-	unsigned MeshManager::AddMesh(Mesh* const mesh)
+	int MeshManager::AddMesh(Mesh* const mesh)
 	{
 		meshes.push_back(mesh);
 
 		return meshIDs++;
 	}
 
-	unsigned MeshManager::AddMesh(const std::string& meshkey)
+	int MeshManager::AddMesh(const std::string& meshkey)
 	{
 		auto check = meshlist.find(meshkey);
 
@@ -105,14 +105,14 @@ namespace NS_GRAPHICS
 		meshlist.insert({ meshKey, std::move(mesh) });
 	}
 
-	unsigned MeshManager::AddModel(Model* const model)
+	int MeshManager::AddModel(Model* const model)
 	{
 		_models.push_back(model);
 
 		return _modelIDs++;
 	}
 
-	unsigned MeshManager::AddModel(const std::string& modelkey)
+	int MeshManager::AddModel(const std::string& modelkey)
 	{
 		auto check = _modelList.find(modelkey);
 

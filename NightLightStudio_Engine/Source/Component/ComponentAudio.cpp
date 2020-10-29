@@ -1,6 +1,6 @@
 #include "ComponentAudio.h"
 
-#include "Components.h"   // inherit required functions
+//#include "Components.h"   // inherit required functions
 
 ComponentAudio::ComponentAudio() : _isActive(false)
 {

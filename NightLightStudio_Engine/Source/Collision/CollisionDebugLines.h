@@ -488,6 +488,10 @@ void DrawMesh(Mesh& mesh, glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f), int lod
 		// camera vector dot normal > 0 -> no cull
 		// need camera vector to do backface culling
 
+		(void)v0;
+		(void)v1;
+		(void)v2;
+
 		return true;
 	};
 

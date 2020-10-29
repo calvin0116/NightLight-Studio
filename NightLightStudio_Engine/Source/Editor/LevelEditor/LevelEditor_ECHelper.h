@@ -75,8 +75,6 @@ public:
 	}
 
 };
-#ifdef _EDITOR
 
 static LE_ECHelper* LE_ECHELPER = LE_ECHelper::GetInstance();
 
-#endif //  

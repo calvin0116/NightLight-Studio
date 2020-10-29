@@ -118,12 +118,9 @@ public:
 	void LE_AddChildWindow(const std::string& name, ImVec2 size = ImVec2(0, 0), bool border = false, const ImGuiWindowFlags& flag = 0)
 	{ LE_AddChildWindow(name, size, []() {}, border, flag); }
 
-	// Runs another window's function. No parameters.
-	template <typename T, typename Y>
-	void LE_AccessWindowFunc(const std::string& name, void(T::* fn)());
-	// Runs another window's function. One parameter.
-	template <typename T, typename Y>
-	void LE_AccessWindowFunc(const std::string& name, void(T::* fn)(const Y&), const Y& arg);
+	// Runs another window's function.
+	template <typename T, typename... Y, typename TReturn>
+	TReturn LE_AccessWindowFunc(const std::string& name, TReturn(T::* fn)(Y...), Y&&... arg);
 
 	// Sets a Windows Flag. Please use in Start.
 	void LE_SetWindowFlag(const std::string& name, const ImGuiWindowFlags& flag);
@@ -432,6 +429,16 @@ public:
 
 	/**********************************************************************/
 };
+
+std::vector<std::string> LE_GetDirectories(const std::string& path);
+
+std::vector<std::string> LE_GetFilesInDir(const std::string& path);
+
+std::string LE_EraseSubStr(const std::string& str, const std::string& toErase);
+
+std::string LE_GetFilename(const std::string& path);
+
+std::string LE_GetFileType(const std::string& path);
 
 #include "LevelEditor_TemplateFuncs.hpp"
 
