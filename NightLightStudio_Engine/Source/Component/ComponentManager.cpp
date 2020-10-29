@@ -199,6 +199,9 @@ void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::C
 	}
 	if (compData == nullptr) throw;
 
+	if (/*compData->compPtr != nullptr || */compData->containerId != -1 || compData->containerIndex != -1)
+		throw; // check for double allocation
+
 	// !
 	compData->containerId = compId; // set container id
 	compData->compPtr = reinterpret_cast<void*>( // set component ptr within the container

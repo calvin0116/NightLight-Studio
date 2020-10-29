@@ -65,8 +65,8 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	//Entity newEntity = G_ECMANAGER->BuildEntity();
 	//newEntity.AttachComponent<ComponentTransform>();
 	//newEntity.AttachComponent<ComponentCollider>();
+	//newEntity.AttachComponent<ComponentCollider>();
 
-	//newEntity.RemoveComponent<ComponentCollider>();
 	//newEntity.RemoveComponent<ComponentCollider>();
 
 	////newEntity.AttachComponent<ComponentTest0>();
