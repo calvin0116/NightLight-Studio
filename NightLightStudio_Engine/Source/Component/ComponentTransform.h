@@ -2,6 +2,7 @@
 #include "..\\Math\Vector.h"
 #include "..\\Math\Matrix4x4.h"
 #include "..\glm\glm.hpp"
+#include "..\glm\gtc\type_ptr.hpp"
 #include "../../framework.h"
 #include "../../ISerializable.h"
 

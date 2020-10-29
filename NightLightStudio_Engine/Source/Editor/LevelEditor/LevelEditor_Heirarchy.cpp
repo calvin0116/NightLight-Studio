@@ -64,9 +64,14 @@ void HeirarchyInspector::Run()
 		sprintf_s(buf, "%i. %s", n, ent.second.c_str());
 		//Check if any the object has been selected
 #ifdef _EDITOR
-		if (ImGui::Selectable(buf, LE_ECHELPER->selected_ents[ent.first]))
+		if (ImGui::Selectable(buf, LE_ECHELPER->SelectedEntities()[ent.first] ) )
 		{
-
+			LE_ECHELPER->SelectEntity(ent.first);
+			std::cout << ent.first << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.first] << std::endl;
+		}
+		else
+		{
+			//std::cout << ent.first << ". not selected: " << LE_ECHELPER->SelectedEntity()[ent.first] << std::endl;
 		}
 #endif // _EDITOR	
 
@@ -176,10 +181,10 @@ void HeirarchyInspector::InitBeforeRun()
 	for (auto& ent : NS_SCENE::SYS_SCENE_MANAGER->EntityName)
 	{
 		//Set level editor id to be able to get Object id
-		LE_ECHELPER->le_id_to_object_id[n] = ent.first;
+		LE_ECHELPER->LevelEditorId_EntityIdMap()[n] = ent.first;
 
 		//Set Selected for all to false at start
-		LE_ECHELPER->selected_ents[ent.first] = false;
+		LE_ECHELPER->InsertEntityForSelection(ent.first);
 		++n;
 	}
 #endif // _EDITOR

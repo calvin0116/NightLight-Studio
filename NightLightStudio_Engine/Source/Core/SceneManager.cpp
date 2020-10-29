@@ -99,7 +99,8 @@ namespace NS_SCENE
 		}
 		*/
 
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_S))
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_S)
+			&& SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_CTRL))
 		{
 			SaveScene();
 		}
@@ -162,6 +163,16 @@ namespace NS_SCENE
 		//G_ECMANAGER->
 		current_scene = next_scene;
 	}
+	
+	//!! Type T Must have ISerialisable and a Component 
+	
+	template <typename T>
+	void CreateAndWriteComp(Value& Comp_list, Entity& entity, std::string& component_name)
+	{
+		T comp;
+		static_cast<ISerializable*>(&comp)->Read(Comp_list[component_name.c_str()]);
+		G_ECMANAGER->AttachComponent<T>(entity, comp);
+	}
 
 	//~~~! Helper function that is not declared in class due to Entity not declared in .h
 	void ComponentsCreation(Value& Comp_list, Entity& entity)
@@ -173,21 +184,22 @@ namespace NS_SCENE
 			std::cout << "~~ Component: " << component_name << std::endl;
 			if (component_name == "TransformComponent")
 			{
-				//CreateAndWrite<TransformComponent>(Comp_list, component_name, entity);
-
+				CreateAndWriteComp<TransformComponent>(Comp_list, entity, component_name);
+				/*
 				TransformComponent trans_com;
 				trans_com.Read(Comp_list[component_name.c_str()]);
 
 				G_ECMANAGER->AttachComponent<TransformComponent>(entity, trans_com);
-				
+				*/
+				/*
 				std::cout << "~~~~ Transform: " << std::endl << trans_com;
-				std::cout << "~~~~~~~~~~~~~~ " << std::endl;
+				std::cout << "~~~~~~~~~~~~~~ " << std::endl;*/
 				continue;
 			}
 			//~~! Add your own component creation here ~~!//
 			if (component_name == "ColliderComponent")
 			{
-				//CreateAndWrite<ColliderComponent>(Comp_list, component_name, entity);
+				CreateAndWriteComp<ColliderComponent>(Comp_list, entity, component_name);
 				/*
 				ColliderComponent col_com;
 				col_com.Read(Comp_list[component_name.c_str()]);
@@ -234,6 +246,7 @@ namespace NS_SCENE
 
 	void SceneManager::SaveScene()
 	{
+		std::cout << "Saving scene....." << std::endl;
 		//Save scene
 		//Parser* scene = scene_list[current_scene];
 		std::string output_filename = "Output";
@@ -280,7 +293,7 @@ namespace NS_SCENE
 
 		//delete obj_val;
 
-		scene.PrintDataList();
+		//scene.PrintDataList();
 		scene.Save();
 	}
 
