@@ -67,6 +67,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	//newEntity.AttachComponent<ComponentCollider>();
 
 	//newEntity.RemoveComponent<ComponentCollider>();
+	//newEntity.RemoveComponent<ComponentCollider>();
 
 	////newEntity.AttachComponent<ComponentTest0>();
 	////newEntity.AttachComponent<ComponentRigidBody>();

@@ -229,6 +229,9 @@ void ComponentManager::ComponentSetManager::RemoveComponent(ComponentManager::Co
 	}
 	if (compData == nullptr) throw;
 
+	if (compData->containerId == -1 || compData->containerIndex == -1)
+		throw; // prevent double remove causing undefined behaviour
+
 	int index = compData->containerIndex;
 
 	// remove
