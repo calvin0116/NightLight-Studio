@@ -81,6 +81,7 @@ namespace NS_GRAPHICS
         void SetProjectionMatrix(const float& fov = 45.f, const float& aspect_ratio = 1.78f, const float& near_plane = 0.01f, const float& far_plane = 1000.f);
 
         // Updates uniform light variables based on active light components for all shaders
+        // Temporarily hard set 1 type of light each
         void UpdateLights();
 
         /////////////////////////////////////////////////////////////////////

@@ -6,6 +6,9 @@
 #define new DEBUG_NEW
 #endif
 
+#define DRAW_WITH_LIGHT
+//#define DRAW_WITH_COMPONENTS
+
 namespace NS_GRAPHICS
 {
 	MeshManager::MeshManager()
@@ -39,7 +42,9 @@ namespace NS_GRAPHICS
 			mesh->_indices = check->second->_indices;
 			mesh->_rgb = check->second->_rgb;
 			mesh->_uv = check->second->_uv;
+			mesh->_normals = check->second->_normals;
 
+#ifdef DRAW_WITH_COMPONENTS
 			glGenVertexArrays(1, &mesh->VAO);
 			glGenBuffers(1, &mesh->VBO);
 			glGenBuffers(1, &mesh->EBO);
@@ -89,6 +94,58 @@ namespace NS_GRAPHICS
 			glVertexAttribDivisor(4, 1);
 			glVertexAttribDivisor(5, 1);
 			glVertexAttribDivisor(6, 1);
+#endif
+
+#ifdef DRAW_WITH_LIGHT
+			glGenVertexArrays(1, &mesh->VAO);
+			glGenBuffers(1, &mesh->VBO);
+			glGenBuffers(1, &mesh->UVBO);
+			glGenBuffers(1, &mesh->NBO);
+			glGenBuffers(1, &mesh->EBO);
+			glGenBuffers(1, &mesh->ModelMatrixBO);
+
+			glBindVertexArray(mesh->VAO);
+
+			// pos attribute
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * mesh->_vertices.size(), &mesh->_vertices[0], GL_STATIC_DRAW);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+			glEnableVertexAttribArray(0);
+
+			// uv
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->UVBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * mesh->_uv.size(), &mesh->_uv[0], GL_STATIC_DRAW);
+			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
+			glEnableVertexAttribArray(1);
+
+			// norm
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->NBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * mesh->_normals.size(), &mesh->_normals[0], GL_STATIC_DRAW);
+			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+			glEnableVertexAttribArray(2);
+
+			// Indices
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * mesh->_indices.size(), &mesh->_indices[0], GL_STATIC_DRAW);
+
+			// Model Matrix
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+
+			glEnableVertexAttribArray(3);
+			glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+			glEnableVertexAttribArray(4);
+			glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+			glEnableVertexAttribArray(5);
+			glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+			glEnableVertexAttribArray(6);
+			glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+
+			glVertexAttribDivisor(3, 1);
+			glVertexAttribDivisor(4, 1);
+			glVertexAttribDivisor(5, 1);
+			glVertexAttribDivisor(6, 1);
+#endif
 
 			return AddMesh(mesh);
 		}

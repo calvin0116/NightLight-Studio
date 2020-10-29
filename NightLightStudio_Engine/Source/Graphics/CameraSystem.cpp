@@ -195,4 +195,8 @@ namespace NS_GRAPHICS
 		// Temporarily returns sole camera, will change to handle multiple cameras
 		return _camera.GetViewMatrix();
 	}
+	glm::vec3 CameraSystem::GetCurrentCameraPosition()
+	{
+		return _camera.GetPosition();
+	}
 }

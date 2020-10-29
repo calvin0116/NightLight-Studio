@@ -5,46 +5,89 @@ namespace NS_GRAPHICS
 {
 	LightSystem::LightSystem()
 	{
-		dLights.reserve(s_MaxLights);
+		lightblock = new LightBlock();
+
+		/*dLights.reserve(s_MaxLights);
 		sLights.reserve(s_MaxLights);
-		pLights.reserve(s_MaxLights);
+		pLights.reserve(s_MaxLights);*/
 	}
 
 	LightSystem::~LightSystem()
 	{
-		for (auto& d : dLights)
+		/*for (auto& d : dLights)
 			delete d;
 
 		for (auto& s : sLights)
 			delete s;
 
 		for (auto& p : pLights)
-			delete p;
+			delete p;*/
+
+		delete lightblock;
+	}
+
+	void LightSystem::Init()
+	{
+		// Test add 1 light of each type
+		// TEST
+		AddDirLight();
+		//AddPointLight(100.f);
+		//AddSpotLight();
+	}
+
+	LightBlock*& LightSystem::GetLightBlock()
+	{
+		return lightblock;
 	}
 
 	int LightSystem::AddDirLight(const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
 	{
-		dLights.push_back(new DirLight(direction, ambient, diffuse, specular));
+		//dLights.push_back(new DirLight(direction, ambient, diffuse, specular));
+		
+		//return static_cast<int>(dLights.size() - 1);
 
-		return static_cast<int>(dLights.size() - 1);
+		lightblock->_dLights[lightblock->_dLights_Num]._direction = direction;
+		lightblock->_dLights[lightblock->_dLights_Num]._ambient = ambient;
+		lightblock->_dLights[lightblock->_dLights_Num]._diffuse = diffuse;
+		lightblock->_dLights[lightblock->_dLights_Num]._specular = specular;
+
+		return lightblock->_dLights_Num++;
 	}
 
 	int LightSystem::AddPointLight(const float& attenuation, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
 	{
-		pLights.push_back(new PointLight(attenuation, ambient, diffuse, specular));
+		//pLights.push_back(new PointLight(attenuation, ambient, diffuse, specular));
 
-		return static_cast<int>(pLights.size() - 1);
+		//return static_cast<int>(pLights.size() - 1);
+
+		lightblock->_pLights[lightblock->_pLights_Num]._attenuation = attenuation;
+		lightblock->_pLights[lightblock->_pLights_Num]._ambient = ambient;
+		lightblock->_pLights[lightblock->_pLights_Num]._diffuse = diffuse;
+		lightblock->_pLights[lightblock->_pLights_Num]._specular = specular;
+
+		return lightblock->_pLights_Num++;
 	}
 
 	int LightSystem::AddSpotLight(const glm::vec3& direction, const float& cutoff, const float& outercutoff,
 									const float& attenuation, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
 	{
-		sLights.push_back(new SpotLight(direction, cutoff, outercutoff, attenuation, ambient, diffuse, specular));
+		//sLights.push_back(new SpotLight(direction, cutoff, outercutoff, attenuation, ambient, diffuse, specular));
 
-		return static_cast<int>(sLights.size() - 1);
+		//return static_cast<int>(sLights.size() - 1);
+
+		lightblock->_sLights[lightblock->_sLights_Num]._direction = direction;
+		lightblock->_sLights[lightblock->_sLights_Num]._cutOff = cutoff;
+		lightblock->_sLights[lightblock->_sLights_Num]._outerCutOff = outercutoff;
+		lightblock->_sLights[lightblock->_sLights_Num]._attenuation = attenuation;
+		lightblock->_sLights[lightblock->_sLights_Num]._ambient = ambient;
+		lightblock->_sLights[lightblock->_sLights_Num]._diffuse = diffuse;
+		lightblock->_sLights[lightblock->_sLights_Num]._specular = specular;
+
+		return lightblock->_sLights_Num++;
 	}
 	void LightSystem::AttachLightComponent(Entity& entity, Lights lightType)
 	{
+		// Ensure that previous light is deleted before assigning new light type
 		switch (lightType)
 		{
 		case Lights::DIRECTIONAL:
@@ -98,16 +141,16 @@ namespace NS_GRAPHICS
 		entity, lightType;
 	}
 
-	DirLight*& LightSystem::GetDirLight(const int& id)
+	DirLight& LightSystem::GetDirLight(const int& id)
 	{
-		return dLights[id];
+		return lightblock->_dLights[id];
 	}
-	SpotLight*& LightSystem::GetSpotLight(const int& id)
+	SpotLight& LightSystem::GetSpotLight(const int& id)
 	{
-		return sLights[id];
+		return lightblock->_sLights[id];
 	}
-	PointLight*& LightSystem::GetPointLight(const int& id)
+	PointLight& LightSystem::GetPointLight(const int& id)
 	{
-		return pLights[id];
+		return lightblock->_pLights[id];
 	}
 }

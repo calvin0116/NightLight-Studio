@@ -39,5 +39,7 @@ namespace NS_GRAPHICS
 		void AckUpdate();
 
 		glm::mat4 GetViewMatrix();
+
+		glm::vec3 GetCurrentCameraPosition();
 	};
 }

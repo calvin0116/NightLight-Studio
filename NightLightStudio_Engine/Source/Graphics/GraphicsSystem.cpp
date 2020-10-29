@@ -19,7 +19,8 @@
 #define new DEBUG_NEW
 #endif
 
-#define DRAW_WITH_COMPONENTS
+//#define DRAW_WITH_COMPONENTS
+#define DRAW_WITH_LIGHTS
 
 namespace NS_GRAPHICS
 {
@@ -52,6 +53,9 @@ namespace NS_GRAPHICS
 			SetViewMatrix();
 			cameraManager->AckUpdate();
 		}
+
+		// Update lights
+		UpdateLights();
 
 		Render();
 	}
@@ -93,6 +97,8 @@ namespace NS_GRAPHICS
 
 		cameraManager->Init();
 
+		lightManager->Init();
+
 		modelLoader->LoadModel("box.fbx", "box");
 
 		//Draw Cylinder FBX file 
@@ -101,15 +107,17 @@ namespace NS_GRAPHICS
 		//Draw sphere FBX file 
 		modelLoader->LoadModel("sphere.fbx", "sphere");
 
+		//std::cout << "light block size: " <<  sizeof(LightBlock) << std::endl;
+
 		//////////////////////////////////////
 		/// TEST DRAW LOADED MODELS
 		//////////////////////////////////////
-		/*Entity testdrawSphere = G_ECMANAGER->BuildEntity();
+		Entity testdrawSphere = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformsphere;
-		testtransformsphere._position = { 0.f, 0.f,0.f };
+		testtransformsphere._position = { 3.f, 0.f,0.f };
 		testdrawSphere.AttachComponent<ComponentTransform>(testtransformsphere);
 
-		CreateSphere(testdrawSphere, glm::vec3(1.f,0.f,1.f));*/
+		CreateSphere(testdrawSphere, glm::vec3(0.f,1.f,1.f));
 
 		/*Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformcylinder;
@@ -197,6 +205,41 @@ namespace NS_GRAPHICS
 
 		shaderManager->StopProgram();
 #endif
+
+#ifdef DRAW_WITH_LIGHTS
+		shaderManager->StartProgram(1);
+
+		auto itr = G_ECMANAGER->begin<ComponentGraphics>();
+		auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
+		while (itr != itrEnd)
+		{
+			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
+
+			Mesh* mesh = meshManager->meshes[graphicsComp->MeshID];
+
+			// get transform component
+			ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
+
+			glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
+
+			glBindVertexArray(mesh->VAO);
+
+			// Update model and uniform for material
+			glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &mesh->_materialData._ambient[0]); // ambient
+			glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &mesh->_materialData._diffuse[0]); // diffuse
+			glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &mesh->_materialData._specular[0]); // specular
+			glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), mesh->_materialData._shininess);
+
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+			glDrawElements(GL_TRIANGLES, (unsigned)mesh->_indices.size(), GL_UNSIGNED_SHORT, 0);
+
+			itr++;
+		}
+
+		shaderManager->StopProgram();
+#endif
 	}
 
 	void GraphicsSystem::ToggleDebugDraw(const bool& set)
@@ -224,8 +267,15 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::UpdateLights()
 	{
+		// Update light uniform block(CPU)
+		// Update view/camera position in light uniform block
+		LightBlock* lightblock = lightManager->GetLightBlock();
 
+		lightblock->_viewPos = cameraManager->GetCurrentCameraPosition();
 
+		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetLightUniformLocation());
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(LightBlock), &*lightblock);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
 	void GraphicsSystem::CreateCube(Entity& entity, const glm::vec3& rgb)
@@ -359,6 +409,10 @@ namespace NS_GRAPHICS
 		{
 			i = rgb;
 		}
+
+		// Set diffuse and ambient to selected rgb
+		mesh->_materialData._ambient = rgb;
+		mesh->_materialData._diffuse = rgb;
 
 		// No need to perform glBufferSubData here, update() will perform communication with GPU data
 	}
