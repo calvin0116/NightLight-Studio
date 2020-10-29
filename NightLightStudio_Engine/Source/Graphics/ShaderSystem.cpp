@@ -5,12 +5,12 @@
 namespace NS_GRAPHICS
 {
 	ShaderSystem::ShaderSystem()
-		: viewProj_uniformBlockLocation{ NULL }
+		: viewProj_uniformBlockLocation{ NULL }, lights_uniformBlockLocation{ NULL }
 	{
 		// Reserve memory to avoid expensive allocations (Reduces load time)
-		files.reserve(max_shaders);
-		programs.reserve(max_shaders);
-		uniform_locations.reserve(max_shaders);
+		files.reserve(s_max_shaders);
+		programs.reserve(s_max_shaders);
+		uniform_locations.reserve(s_max_shaders);
 	}
 
 	ShaderSystem::~ShaderSystem()
@@ -20,6 +20,10 @@ namespace NS_GRAPHICS
 		{
 			glDeleteProgram(i);
 		}
+
+		// Delete uniform location buffers
+		glDeleteBuffers(1, &viewProj_uniformBlockLocation);
+		glDeleteBuffers(1, &lights_uniformBlockLocation);
 	}
 
 	void ShaderSystem::LoadShader(const std::string& fp_vertex, const std::string& fp_frag)
@@ -60,27 +64,35 @@ namespace NS_GRAPHICS
 		for (int i = 0; i < quantity; ++i)
 		{
 			// Getting the uniform location for view and projection matrix for uniform block for each unique program
-			GLuint uniform_block_index = NULL;
+			GLuint matrix_uniform_block_index = NULL;
+			GLuint lights_uniform_block_index = NULL;
 
-			uniform_block_index = glGetUniformBlockIndex(programs[i], "Matrices");
+			matrix_uniform_block_index = glGetUniformBlockIndex(programs[i], "Matrices");
+			lights_uniform_block_index = glGetUniformBlockIndex(programs[i], "LightCalcBlock");
 
 			// Bind found uniform block index to program
-			glUniformBlockBinding(programs[i], uniform_block_index, 0);
+			glUniformBlockBinding(programs[i], matrix_uniform_block_index, 0);
+			glUniformBlockBinding(programs[i], lights_uniform_block_index, 1);
 
-			uniform_locations.push_back(uniform_block_index);
+			uniform_locations.push_back(matrix_uniform_block_index);
+			lights_uniform_locations.push_back(lights_uniform_block_index);
 		}
 
 		// Setup single uniform buffer for all programs based on binded uniform block indices
 		glGenBuffers(1, &viewProj_uniformBlockLocation);
 		glBindBuffer(GL_UNIFORM_BUFFER, viewProj_uniformBlockLocation);
-		glBufferData(GL_UNIFORM_BUFFER, 128, NULL, GL_STATIC_DRAW); // allocate enough for 2 matrices
+		glBufferData(GL_UNIFORM_BUFFER, s_view_projection_buffer_size, NULL, GL_STATIC_DRAW); // allocate enough for 2 matrices
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-		glBindBufferRange(GL_UNIFORM_BUFFER, 0, viewProj_uniformBlockLocation, 0, 128);
-
+		glBindBufferRange(GL_UNIFORM_BUFFER, 0, viewProj_uniformBlockLocation, 0, s_view_projection_buffer_size);
 
 		// Set uniform locations for lighting shader
-		/* TO DO */
+		glGenBuffers(1, &lights_uniformBlockLocation);
+		glBindBuffer(GL_UNIFORM_BUFFER, lights_uniformBlockLocation);
+		glBufferData(GL_UNIFORM_BUFFER, s_lights_buffer_size, NULL, GL_STATIC_DRAW); // allocate enough for lights variables
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+		glBindBufferRange(GL_UNIFORM_BUFFER, 1, lights_uniformBlockLocation, 0, s_lights_buffer_size);
 	}
 
 	bool ShaderSystem::CompileLoadedShaders()
@@ -195,5 +207,9 @@ namespace NS_GRAPHICS
 	const GLuint& ShaderSystem::GetViewProjectionUniformLocation()
 	{
 		return viewProj_uniformBlockLocation;
+	}
+	const GLuint& ShaderSystem::GetLightUniformLocation()
+	{
+		return lights_uniformBlockLocation;
 	}
 }

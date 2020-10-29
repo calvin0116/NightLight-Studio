@@ -3,18 +3,18 @@
 #include "Components.h"
 
 ComponentGraphics::ComponentGraphics()
-	: isActive{ true },
+	: _isActive{ true },
 	MeshID{ NULL }, _textureFileName{}, _textureID{ NULL }
 {
 }
 
-ComponentGraphics::ComponentGraphics(const unsigned& meshID)
-	: isActive{ true },
+ComponentGraphics::ComponentGraphics(const int& meshID)
+	: _isActive{ true },
 	MeshID{ meshID }, _textureFileName{}, _textureID{ NULL }
 {
 }
 
-void ComponentGraphics::AssignMeshID(const unsigned& meshID)
+void ComponentGraphics::AttachMesh(const int& meshID)
 {
 	MeshID = meshID;
 }

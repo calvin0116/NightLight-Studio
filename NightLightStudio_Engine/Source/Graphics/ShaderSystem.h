@@ -6,7 +6,9 @@ namespace NS_GRAPHICS
 {
 	class ShaderSystem
 	{
-		unsigned max_shaders = 4;
+		static const unsigned s_max_shaders = 4;
+		static const unsigned s_view_projection_buffer_size = 128; // Inclusive of padding
+		static const unsigned s_lights_buffer_size = 5184; // Inclusive of padding
 
 		struct ShaderFile
 		{
@@ -36,9 +38,11 @@ namespace NS_GRAPHICS
 		std::vector<ShaderFile> files;
 		std::vector<GLuint> programs;
 		std::vector<GLuint> uniform_locations; // Uniform block ID for View & Projection Matrix
+		std::vector<GLuint> lights_uniform_locations; // Uniform block ID for LightCalcBlock
 		////////////////////////////////////////
 
 		GLuint viewProj_uniformBlockLocation;
+		GLuint lights_uniformBlockLocation;
 
 	public:
 
@@ -62,5 +66,9 @@ namespace NS_GRAPHICS
 		// Gets the uniform location of the current program
 		// If currentProgram is 0(no bound program), -1 will be returned(largest possible unsigned)
 		const GLuint& GetViewProjectionUniformLocation();
+
+		// Gets the uniform location of the current program
+		// If currentProgram is 0(no bound program), -1 will be returned(largest possible unsigned)
+		const GLuint& GetLightUniformLocation();
 	};
 }

@@ -6,10 +6,11 @@ typedef class ComponentGraphics //: public IComponent
 public:
 	// Temporarily make them public for easy access
 
-	bool isActive; // Temporarily set to true at beginning
+	bool _isActive; // Temporarily set to true at beginning
 
 	//Serializing doesnt really save IDS? i think might have to add in a file name as well
-	unsigned MeshID;
+	int MeshID; // value is -1 if no mesh is assigned
+	std::string _meshFileName;
 
 	std::string _textureFileName;
 	unsigned _textureID; // Temporarily only diffuse texture
@@ -18,9 +19,9 @@ public:
 	ComponentGraphics();
 
 	// Parametrized constructor 
-	ComponentGraphics(const unsigned& meshID);
+	ComponentGraphics(const int& meshID);
 
-	void AssignMeshID(const unsigned& meshID);
+	void AttachMesh(const int& meshID);
 
 	// Destructor, destroy all OpenGL objects via graphics system
 	~ComponentGraphics();
