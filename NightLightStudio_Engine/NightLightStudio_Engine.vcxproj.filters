@@ -322,7 +322,7 @@
       <Filter>Source Files\Physics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentLight.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Component</Filter>
     <ClInclude Include="Source\Collision\Contact.h">
       <Filter>Source Files\Collision</Filter>
     </ClInclude>
@@ -524,7 +524,7 @@
       <Filter>Source Files\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentLight.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Component</Filter>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>

@@ -77,15 +77,25 @@ namespace NS_GRAPHICS
 
 	void LightSystem::DetachLightComponent(Entity& entity)
 	{
-		if (entity.getComponent<ComponentLight>() != nullptr)
+		ComponentLight* lightcomponent = entity.getComponent<ComponentLight>();
+
+		if (lightcomponent != nullptr)
 		{
 			// Delete current light from local data
+			NS_GRAPHICS::Lights lightType = lightcomponent->_type;
+
+
 
 			// Delete component
-			//entity.
-			entity.getComponent<ComponentLight>()->_lightID = -1;
+			entity.RemoveComponent<ComponentLight>();
 		}
 			
+	}
+
+	void LightSystem::ChangeLightType(Entity& entity, Lights lightType)
+	{
+		// TO DO
+		entity, lightType;
 	}
 
 	DirLight*& LightSystem::GetDirLight(const int& id)
