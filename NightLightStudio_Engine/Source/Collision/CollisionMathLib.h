@@ -8,6 +8,7 @@
 #include "..\\Component\ComponentRigidBody.h"
 #include "..\\Math\Vector.h"
 #include "..\\Math\Matrix4x4.h"
+#include "Contact.h"
 
 enum class SIDES;
 struct PlaneCollider;
@@ -15,6 +16,8 @@ struct AABBCollider;
 struct SphereCollider;
 struct OBBCollider;
 struct CapsuleCollider;
+struct Manifold;
+struct ClipVertex;
 
 namespace NlMath
 {
@@ -27,7 +30,7 @@ namespace NlMath
 
 	bool PlaneToPlane(const PlaneCollider& tPlane1, const PlaneCollider& tPlane2);
 
-	bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2, Vector3D& normal);
+	bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2);
 
 	bool CapsuleToCapsule(const CapsuleCollider& tCap1, const CapsuleCollider& tCap2, Vector3D& normal);
 
@@ -44,15 +47,30 @@ namespace NlMath
 
 	bool CapsuleToSphere(const CapsuleCollider& tCap1, const SphereCollider& tSpr2, Vector3D& normal);
 
+	///////////////////////////////////////////////OBB checks Support functions/////////////////////////////////////////////////////////////
+	bool OBB_OBBCollision(const OBBCollider& tBox1, const OBBCollider& tBox2, Manifold& contact);
 
+	void ComputeIncidentFace(const OBBCollider& itx, Vec3 n, ClipVertex* out);
+
+	void ComputeReferenceEdgesAndBasis(const OBBCollider& rtx, Vec3 n, unsigned int axis, unsigned char* out, Matrix4x4* basis, Vec3* e);
+
+	unsigned int q3Orthographic(float sign, float e, unsigned int axis, unsigned int clipEdge, ClipVertex* in, unsigned int inCount, ClipVertex* out);
+
+	unsigned int Clip(const Vec3& rPos, const Vec3& e, unsigned char* clipEdges, const Matrix4x4& basis, ClipVertex* incident, ClipVertex* outVerts, float* outDepths);
+
+	void SupportEdge(const OBBCollider& tx, Vec3 n, Vec3* aOut, Vec3* bOut);
+
+	void EdgesContact(Vec3* CA, Vec3* CB, const Vec3& PA, const Vec3& QA, const Vec3& PB, const Vec3& QB);
+
+	///////////////////////////////////////////////OBB checks Support functions end/////////////////////////////////////////////////////////////
 	// some 2d checks we may or may not need in the future
 	// we can change them to 3d if we need them
 
-	bool Point_Rectangle_2D(Vec2 point, Vec2 rectVertA, Vec2 rectVertB, Vec2 rectVertC, Vec2 rectVertD);
+	bool Point_Rectangle_2D(Vec3 point, Vec3 rectVertA, Vec3 rectVertB, Vec3 rectVertC, Vec3 rectVertD);
 
-	bool Line_Circle_2D(Vec2 circleCenter, float circleRadius, Vec2 rectVertA, Vec2 rectVertB);
+	bool Line_Circle_2D(Vec3 circleCenter, float circleRadius, Vec3 rectVertA, Vec3 rectVertB);
 	
-	bool Circle_Rectangle_2D(Vec2 circleCenter, float circleRadius, Vec2 rectVertA, Vec2 rectVertB, Vec2 rectVertC, Vec2 rectVertD);
+	bool Circle_Rectangle_2D(Vec3 circleCenter, float circleRadius, Vec3 rectVertA, Vec3 rectVertB, Vec3 rectVertC, Vec3 rectVertD);
 }
 
 

@@ -1,23 +1,24 @@
 #pragma once
 #include "LocalVector.h"  // replaces std::vector
 
+// Only BGM will use this the most.3D sound will follow this component's ObjID pos by default.
 typedef class ComponentAudio //: public IComponent
 {
   struct ACData
   {
     // Is the sound active
     bool        _isActive       = false;
-    // Play on scene start
-    bool        _playOnStart    = false;
-    // Loop the sound
+    // Play on scene start, this should always be true as there is no other use for audio otherwise (Probably).
+    bool        _playOnStart    = true;
+    // Is looping
     bool        _loop           = false;
     // Sound is 3D
     bool        _is3D           = false;
-    // user defined name, must be unique
+    // Update sound's position, only used for 3D sounds
+    bool        _updatePos      = false;
+    // user defined name defined in load component
     std::string _name           = "";
-    // path of sound
-    std::string _path           = "";
-    // channelID given by SystemAudio
+    // channelID given by SystemAudio, used for bgms and loops only.
     int         _channel        = -1;
   };
 

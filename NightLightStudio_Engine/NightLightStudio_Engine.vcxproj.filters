@@ -321,6 +321,9 @@
     <ClInclude Include="Source\Physics\ForceManager.h">
       <Filter>Source Files\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Collision\Contact.h">
+      <Filter>Source Files\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -516,6 +519,12 @@
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Collision\CollisionResolver.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\Contact.cpp">
       <Filter>Source Files\Collision</Filter>
     </ClCompile>
   </ItemGroup>

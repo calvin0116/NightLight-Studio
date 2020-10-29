@@ -19,7 +19,7 @@ class LocalVector
 public:
 
 	LocalVector() :
-		data{0},
+		data{},
 		currentSize(0)
 	{
 	}

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -181,10 +181,12 @@
     <ClInclude Include="Source\Collision\CollisionDebugLines.h" />
     <ClInclude Include="Source\Collision\CollisionMathLib.h" />
     <ClInclude Include="Source\Collision\CollisionResolver.h" />
+    <ClInclude Include="Source\Collision\Contact.h" />
     <ClInclude Include="Source\Collision\SystemCollision.h" />
     <ClInclude Include="Source\Component\ComponentAudio.h" />
     <ClInclude Include="Source\Component\ComponentCollider.h" />
     <ClInclude Include="Source\Component\ComponentGraphics.h" />
+    <ClInclude Include="Source\Component\ComponentLoadAudio.h" />
     <ClInclude Include="Source\Component\ComponentManager.h" />
     <ClInclude Include="Source\Component\ComponentManagerTypedefs.h" />
     <ClInclude Include="Source\Component\ComponentMemoryManager.h" />
@@ -268,10 +270,12 @@
     <ClCompile Include="Source\Audio\SystemAudio.cpp" />
     <ClCompile Include="Source\Collision\CollisionMathLib.cpp" />
     <ClCompile Include="Source\Collision\CollisionResolver.cpp" />
+    <ClCompile Include="Source\Collision\Contact.cpp" />
     <ClCompile Include="Source\Collision\SystemCollision.cpp" />
     <ClCompile Include="Source\Component\ComponentAudio.cpp" />
     <ClCompile Include="Source\Component\ComponentCollider.cpp" />
     <ClCompile Include="Source\Component\ComponentGraphics.cpp" />
+    <ClCompile Include="Source\Component\ComponentLoadAudio.cpp" />
     <ClCompile Include="Source\Component\ComponentManager.cpp" />
     <ClCompile Include="Source\Component\ComponentMemoryManager.cpp" />
     <ClCompile Include="Source\Component\ComponentRigidBody.cpp" />
@@ -301,6 +305,7 @@
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.cpp" />
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
     <ClCompile Include="Source\Graphics\DebugManager.cpp" />

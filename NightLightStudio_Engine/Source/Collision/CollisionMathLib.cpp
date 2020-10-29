@@ -5,6 +5,15 @@
 #include "../../glm/gtc/matrix_transform.hpp"
 #include "../../glm/gtx/euler_angles.hpp"
 
+#define InFront( a ) \
+	((a) < float( 0.0 ))
+
+#define Behind( a ) \
+	((a) >= float( 0.0 ))
+
+#define On( a ) \
+	((a) < float( 0.005 ) && (a) > -float( 0.005 ))
+
 namespace NlMath
 {
     Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint)
@@ -78,41 +87,41 @@ namespace NlMath
 
     }
 
-    bool PlaneToPlane(const PlaneCollider& tPlane1, const PlaneCollider& tPlane2)
+    bool PlaneToPlane(const PlaneCollider& /*tPlane1*/, const PlaneCollider& /*tPlane2*/)
     {
-        Matrix4x4 rotationalMtx;
+        //Matrix4x4 rotationalMtx;
 
-        //setting up normals for plane1
-        Vector3D normalX1(1, 0, 0);
-        Vector3D normalY1(0, 1, 0);
-        Vector3D normalZ1(0, 0, 1);
-        Mtx44RotRad(rotationalMtx, tPlane1.rotation);
-        //rotate normals to correct position
-        normalX1 = rotationalMtx * normalX1;
-        normalY1 = rotationalMtx * normalY1;
-        normalZ1 = rotationalMtx * normalZ1;
+        ////setting up normals for plane1
+        //Vector3D normalX1(1, 0, 0);
+        //Vector3D normalY1(0, 1, 0);
+        //Vector3D normalZ1(0, 0, 1);
+        //Mtx44RotRad(rotationalMtx, tPlane1.rotation);
+        ////rotate normals to correct position
+        //normalX1 = rotationalMtx * normalX1;
+        //normalY1 = rotationalMtx * normalY1;
+        //normalZ1 = rotationalMtx * normalZ1;
 
-        //setting up normals for plane2
-        Vector3D normalX2(1, 0, 0);
-        Vector3D normalY2(0, 1, 0);
-        Vector3D normalZ2(0, 0, 1);
-        Mtx44RotRad(rotationalMtx, tPlane2.rotation);
-        //rotate normals to correct position
-        normalX2 = rotationalMtx * normalX2;
-        normalY2 = rotationalMtx * normalY2;
-        normalZ2 = rotationalMtx * normalZ2;
+        ////setting up normals for plane2
+        //Vector3D normalX2(1, 0, 0);
+        //Vector3D normalY2(0, 1, 0);
+        //Vector3D normalZ2(0, 0, 1);
+        //Mtx44RotRad(rotationalMtx, tPlane2.rotation);
+        ////rotate normals to correct position
+        //normalX2 = rotationalMtx * normalX2;
+        //normalY2 = rotationalMtx * normalY2;
+        //normalZ2 = rotationalMtx * normalZ2;
 
-        Vector3D nearPoint;
-        Vector3D farPoint;
-        Vector3D maxDistance;
-        Vector3D maxDistanceToCtr;
-        float farLength = -FLT_MAX;
-        float nearLength = FLT_MAX;
+        //Vector3D nearPoint;
+        //Vector3D farPoint;
+        //Vector3D maxDistance;
+        //Vector3D maxDistanceToCtr;
+        //float farLength = -FLT_MAX;
+        //float nearLength = FLT_MAX;
 
-        float tmpLength = 0;
+        //float tmpLength = 0;
 
-        maxDistance = tPlane1.center + normalX1 * tPlane1.extend.x + normalZ1 * tPlane1.extend.z;
-        maxDistanceToCtr = tPlane1.center - maxDistance;
+        //maxDistance = tPlane1.center + normalX1 * tPlane1.extend.x + normalZ1 * tPlane1.extend.z;
+        //maxDistanceToCtr = tPlane1.center - maxDistance;
 
 
 
@@ -235,7 +244,6 @@ namespace NlMath
     {
 		// ref: https://stackoverflow.com/questions/28343716/sphere-intersection-test-of-aabb
 		// check for aabb sphere
-		bool check;
 		float dmin = 0;
 		if (tSpr2.center.x < tBox1.vecMin.x)
 		{
@@ -350,126 +358,56 @@ namespace NlMath
         }
     }
 
-    bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2, Vector3D& normal)
+    bool OBBToOBB(const OBBCollider& tBox1, const OBBCollider& tBox2)
     {
             //axis view explaination: (value going from negative to positive)
             //x going from left to right
             //y going from back(into the screen) to front(out of the screen)
             //z going from bottom to top
  
-           glm::vec4 _normalX1(1, 0, 0, 0);
-           glm::vec4 _normalY1(0, 1, 0, 0);
-           glm::vec4 _normalZ1(0, 0, 1, 0);
-           //Mtx44RotRad(rotationalMtx, tBox1.rotation);
-           
-           glm::quat Quaternion(tBox1.rotation);
-           glm::mat4 Rotate = glm::mat4_cast(Quaternion);
+           Vec3 normalX1 = tBox1.rotation.Column0();
+           Vec3 normalY1 = tBox1.rotation.Column1();
+           Vec3 normalZ1 = tBox1.rotation.Column2();
 
-           //rotate normals to correct position
-           _normalX1 = Rotate * _normalX1;
-           _normalY1 = Rotate * _normalY1;
-           _normalZ1 = Rotate * _normalZ1;
-           
            //setting up normals for Box2
-           glm::vec4 _normalX2(1, 0, 0, 0);
-           glm::vec4 _normalY2(0, 1, 0, 0);
-           glm::vec4 _normalZ2(0, 0, 1, 0);
-           
-           glm::quat Quaternion2(tBox2.rotation);
-           Rotate = glm::mat4_cast(Quaternion2);
-           
-           //rotate normals to correct position
-           _normalX2 = Rotate * _normalX2;
-           _normalY2 = Rotate * _normalY2;
-           _normalZ2 = Rotate * _normalZ2;
-
-           glm::vec3 normalX1 = _normalX1;
-           glm::vec3 normalY1 = _normalY1;
-           glm::vec3 normalZ1 = _normalZ1;
-           
-           glm::vec3 normalX2 = _normalX2;
-           glm::vec3 normalY2 = _normalY2;
-           glm::vec3 normalZ2 = _normalZ2;
+           Vec3 normalX2 = tBox2.rotation.Column0();
+           Vec3 normalY2 = tBox2.rotation.Column1();
+           Vec3 normalZ2 = tBox2.rotation.Column2();
 
            //get distance vector between two box's center
-           glm::vec3 centerDistance = tBox2.center - tBox1.center;
+           Vec3 centerDistance = tBox2.center - tBox1.center;
            
-           //to get the smallest seperating axis
-           auto compare = [](const std::pair<float, glm::vec3> lhs, const std::pair<float, glm::vec3> rhs)
-           {
-               return lhs.first > rhs.first;
-           };
-
-           std::priority_queue < std::pair<float, glm::vec3>, std::vector<std::pair<float, glm::vec3>>, decltype(compare)>  checkList(compare);
-
            // check if there's a separating plane in between the selected axes
-           auto getSeparatingPlane = [&](const glm::vec3& normal)
+           auto getSeparatingPlane = [&](const Vec3& normal)
            {
-               std::pair<float, glm::vec3> tmp;
-               tmp.first = (fabs(glm::dot(centerDistance, normal)) -
-                         (fabs(glm::dot((normalX1 * tBox1.extend.x), normal)) +
-                       fabs(glm::dot((normalY1 * tBox1.extend.y), normal)) +
-                       fabs(glm::dot((normalZ1 * tBox1.extend.z), normal)) +
-                       fabs(glm::dot((normalX2 * tBox2.extend.x), normal)) +
-                       fabs(glm::dot((normalY2 * tBox2.extend.y), normal)) +
-                       fabs(glm::dot((normalZ2 * tBox2.extend.z), normal))));
-               bool check = (tmp.first > 0);
-               tmp.first = fabs(tmp.first);;
-               tmp.second = normal;
-               if ((-0.001f < normal.x && normal.x < 0.001f) && (-0.001f < normal.y && normal.y < 0.001f) && (-0.001f < normal.z && normal.z < 0.001f))
-               {
-                   return check;
-               }
-               checkList.push(tmp);
-
-               return check;
+               return (fabs(centerDistance* normal) >
+                         (fabs((normalX1 * tBox1.extend.x)* normal)) +
+                       fabs((normalY1 * tBox1.extend.y)* normal) +
+                       fabs((normalZ1 * tBox1.extend.z)* normal) +
+                       fabs((normalX2 * tBox2.extend.x)* normal) +
+                       fabs((normalY2 * tBox2.extend.y)* normal) +
+                       fabs((normalZ2 * tBox2.extend.z)* normal));
            };
 
-
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalX1), normalX1));
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalY1), normalY1));
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalZ1), normalZ1));
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalX2), normalX2));
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalY2), normalY2));
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(normalZ2), normalZ2));
-
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalX1, normalX2)), glm::cross(normalX1, normalX2)));
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalX1, normalY2)), glm::cross(normalX1, normalX2)));
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalX1, normalZ2)), glm::cross(normalX1, normalX2)));
-           //                                                                                                                   
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalY1, normalX2)), glm::cross(normalY1, normalX2)));
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalY1, normalY2)), glm::cross(normalY1, normalY2)));
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalY1, normalZ2)), glm::cross(normalY1, normalZ2)));
-           //                                                                                                                   
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalZ1, normalX2)), glm::cross(normalZ1, normalX2)));
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalZ1, normalY2)), glm::cross(normalZ1, normalY2)));
-           //checkList.push(std::pair<float, glm::vec3>(getSeparatingPlane(glm::cross(normalZ1, normalZ2)), glm::cross(normalZ1, normalZ2)));
-
-
-
-           bool check = !(
+           return !(
                getSeparatingPlane(normalX1) ||
                getSeparatingPlane(normalY1) ||
                getSeparatingPlane(normalZ1) ||
                getSeparatingPlane(normalX2) ||
                getSeparatingPlane(normalY2) ||
                getSeparatingPlane(normalZ2) ||
-           
-               getSeparatingPlane(glm::cross(normalX1, normalX2)) ||
-               getSeparatingPlane(glm::cross(normalX1, normalY2)) ||
-               getSeparatingPlane(glm::cross(normalX1, normalZ2)) ||
-           
-               getSeparatingPlane(glm::cross(normalY1, normalX2)) ||
-               getSeparatingPlane(glm::cross(normalY1, normalY2)) ||
-               getSeparatingPlane(glm::cross(normalY1, normalZ2)) ||
-           
-               getSeparatingPlane(glm::cross(normalZ1, normalX2)) ||
-               getSeparatingPlane(glm::cross(normalZ1, normalY2)) ||
-               getSeparatingPlane(glm::cross(normalZ1, normalZ2)));
-
-               normal = checkList.top().second;
-
-           return check;
+                                                               
+               getSeparatingPlane(Vector3DCrossProduct(normalX1, normalX2)) ||
+               getSeparatingPlane(Vector3DCrossProduct(normalX1, normalY2)) ||
+               getSeparatingPlane(Vector3DCrossProduct(normalX1, normalZ2)) ||
+                                              
+               getSeparatingPlane(Vector3DCrossProduct(normalY1, normalX2)) ||
+               getSeparatingPlane(Vector3DCrossProduct(normalY1, normalY2)) ||
+               getSeparatingPlane(Vector3DCrossProduct(normalY1, normalZ2)) ||
+                                              
+               getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalX2)) ||
+               getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalY2)) ||
+               getSeparatingPlane(Vector3DCrossProduct(normalZ1, normalZ2)));
     }
     bool CapsuleToCapsule(const CapsuleCollider& tCap1, const CapsuleCollider& tCap2, Vector3D& normal)
     {
@@ -618,13 +556,13 @@ namespace NlMath
 	//// 2D
 	// some 2d checks we may or may not need in the future
 	// we can change them to 3d if we need them
-	bool Point_Rectangle_2D(Vec2 point, Vec2 rectVertA, Vec2 rectVertB, Vec2 rectVertC, Vec2 rectVertD)
+	bool Point_Rectangle_2D(Vec3 point, Vec3 rectVertA, Vec3 rectVertB, Vec3 /*rectVertC*/, Vec3 rectVertD)
 	{
-		Vec2 AP = point - rectVertA;
-		Vec2 AB = rectVertB - rectVertA;
+		Vec3 AP = point - rectVertA;
+		Vec3 AB = rectVertB - rectVertA;
 		float AP_AB = AP * AB;
 		float AB_AB = AB * AB;
-		Vec2 AD = rectVertD - rectVertA;
+		Vec3 AD = rectVertD - rectVertA;
 		float AP_AD = AP * AD;
 		float AD_AD = AD * AD;
 		// 0 <= AP.AB <= AB.AB and 0 <= AP.AD <= AD.AD
@@ -635,12 +573,12 @@ namespace NlMath
 			AP_AD <= AD_AD
 			);
 	}
-	bool Line_Circle_2D(Vec2 circleCenter, float circleRadius, Vec2 rectVertA, Vec2 rectVertB)
+	bool Line_Circle_2D(Vec3 circleCenter, float circleRadius, Vec3 rectVertA, Vec3 rectVertB)
 	{
 		// https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
 
-		Vec2 d = rectVertB - rectVertA;
-		Vec2 f = rectVertA - circleCenter;
+		Vec3 d = rectVertB - rectVertA;
+		Vec3 f = rectVertA - circleCenter;
 
 		float a = d * d;
 		float b = 2 * f * d;
@@ -669,7 +607,7 @@ namespace NlMath
 
 		return false;
 	}
-	bool Circle_Rectangle_2D(Vec2 circleCenter, float circleRadius, Vec2 rectVertA, Vec2 rectVertB, Vec2 rectVertC, Vec2 rectVertD)
+	bool Circle_Rectangle_2D(Vec3 circleCenter, float circleRadius, Vec3 rectVertA, Vec3 rectVertB, Vec3 rectVertC, Vec3 rectVertD)
 	{
 		return(
 			Point_Rectangle_2D(circleCenter, rectVertA, rectVertB, rectVertC, rectVertD) ||
@@ -681,4 +619,682 @@ namespace NlMath
 	}
 	//// 2D END
 	///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //TEST
+
+    bool OBB_OBBCollision(const OBBCollider& tBox1, const OBBCollider& tBox2, Manifold& manifold)
+    {
+        //axis view explaination: (value going from negative to positive)
+        //x going from left to right
+        //y going from back(into the screen) to front(out of the screen)
+        //z going from bottom to top
+
+        Vec3 normalX1(1, 0, 0);
+        Vec3 normalY1(0, 1, 0);
+        Vec3 normalZ1(0, 0, 1);
+
+        //rotate normals to correct position
+        normalX1 = tBox1.rotation * normalX1;
+        normalY1 = tBox1.rotation * normalY1;
+        normalZ1 = tBox1.rotation * normalZ1;
+
+
+        //setting up normals for Box2
+        Vec3 normalX2(1, 0, 0);
+        Vec3 normalY2(0, 1, 0);
+        Vec3 normalZ2(0, 0, 1);
+
+        //rotate normals to correct position
+        normalX2 = tBox2.rotation * normalX2;
+        normalY2 = tBox2.rotation * normalY2;
+        normalZ2 = tBox2.rotation * normalZ2;
+
+        // box2's frame in box1's space
+        Mtx44 C = NlMath::Mtx44Transpose(tBox1.rotation) * tBox2.rotation;
+
+        Mtx44 absC;
+        bool parallel = false;
+        const float kCosTol = float(1.0e-6);
+        for (unsigned int i = 0; i < 3; ++i)
+        {
+            for (unsigned int j = 0; j < 3; ++j)
+            {
+                float val = std::fabs(C.m2[i][j]);
+                absC.m2[i][j] = val;
+
+                if (val + kCosTol >= float(1.0))
+                    parallel = true;
+            }
+        }
+
+        //get distance vector between two box's center in box1's space
+        Vec3 centerDistance = tBox2.center - tBox1.center;
+
+        // Query states
+        float penetrationDepth;
+        float aMax = -FLT_MAX;
+        float bMax = -FLT_MAX;
+        float eMax = -FLT_MAX;
+        unsigned int aAxis = ~0;
+        unsigned int bAxis = ~0;
+        unsigned int eAxis = ~0;
+        Vec3 nA;
+        Vec3 nB;
+        Vec3 nE;
+
+        // check if there's a separating plane in between the selected axes
+
+        auto getSeparatingPlane = [=](const Vec3& normal)
+        {
+            return (fabs((centerDistance * normal)) -
+                (fabs(((normalX1 * tBox1.extend.x) * normal)) +
+                    fabs(((normalY1 * tBox1.extend.y) * normal)) +
+                    fabs(((normalZ1 * tBox1.extend.z) * normal)) +
+                    fabs(((normalX2 * tBox2.extend.x) * normal)) +
+                    fabs(((normalY2 * tBox2.extend.y) * normal)) +
+                    fabs(((normalZ2 * tBox2.extend.z) * normal))));
+        };
+
+        auto TrackFaceAxis = [&](unsigned int* axis, unsigned int n, float s, float* sMax, const Vec3& normal, Vec3* axisNormal)
+        {
+            //no collision if penetration is positive
+            if (s > float(0.0))
+                return true;
+
+            if (s > * sMax)
+            {
+                *sMax = s;
+                *axis = n;
+                *axisNormal = normal;
+            }
+
+            return false;
+        };
+
+        // box 1's x axis
+        penetrationDepth = getSeparatingPlane(normalX1);
+        if (TrackFaceAxis(&aAxis, 0, penetrationDepth, &aMax, tBox1.rotation.Row0(), &nA))
+            return false;
+
+        // box 1's y axis
+        penetrationDepth = getSeparatingPlane(normalY1);
+        if (TrackFaceAxis(&aAxis, 1, penetrationDepth, &aMax, tBox1.rotation.Row1(), &nA))
+            return false;
+
+        // box 1's z axis
+        penetrationDepth = getSeparatingPlane(normalZ1);
+        if (TrackFaceAxis(&aAxis, 2, penetrationDepth, &aMax, tBox1.rotation.Row2(), &nA))
+            return false;
+
+        // box 2's x axis
+        penetrationDepth = getSeparatingPlane(normalX2);
+        if (TrackFaceAxis(&aAxis, 3, penetrationDepth, &aMax, tBox2.rotation.Row0(), &nA))
+            return false;
+
+        // box 2's y axis
+        penetrationDepth = getSeparatingPlane(normalY2);
+        if (TrackFaceAxis(&aAxis, 4, penetrationDepth, &aMax, tBox2.rotation.Row1(), &nA))
+            return false;
+
+        // box 2's z axis
+        penetrationDepth = getSeparatingPlane(normalZ2);
+        if (TrackFaceAxis(&aAxis, 5, penetrationDepth, &aMax, tBox2.rotation.Row2(), &nA))
+            return false;
+
+        if (!parallel)
+        {
+            Vec3 tmp;
+            // Edge axis checks
+
+            tmp = Vector3DCrossProduct(normalX1, normalX2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 6, penetrationDepth, &aMax, Vec3(float(0.0), -C.m2[0][2], C.m2[0][1]), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalX1, normalY2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 7, penetrationDepth, &aMax, Vec3(float(0.0), -C.m2[1][2], C.m2[1][1]), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalX1, normalZ2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 8, penetrationDepth, &aMax, Vec3(float(0.0), -C.m2[2][2], C.m2[2][1]), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalY1, normalX2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 9, penetrationDepth, &aMax, Vec3(C.m2[0][2], float(0.0), -C.m2[0][0]), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalY1, normalY2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 10, penetrationDepth, &aMax, Vec3(C.m2[1][2], float(0.0), -C.m2[1][0]), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalY1, normalZ2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 11, penetrationDepth, &aMax, Vec3(C.m2[2][2], float(0.0), -C.m2[2][0]), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalZ1, normalX2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 12, penetrationDepth, &aMax, Vec3(-C.m2[0][1], C.m2[0][0], float(0.0)), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalZ1, normalY2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 13, penetrationDepth, &aMax, Vec3(-C.m2[0][1], C.m2[0][0], float(0.0)), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalZ1, normalZ2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 14, penetrationDepth, &aMax, Vec3(-C.m2[2][1], C.m2[2][0], float(0.0)), &nA))
+                return false;
+        }
+
+        // Artificial axis bias to improve frame coherence
+        const float kRelTol = float(0.95);
+        const float kAbsTol = float(0.01);
+        unsigned int axis;
+        float sMax;
+        Vec3 n;
+        float faceMax = aMax > bMax ? aMax : bMax;
+        if (kRelTol * eMax > faceMax + kAbsTol)
+        {
+            axis = eAxis;
+            sMax = eMax;
+            n = nE;
+        }
+
+        else
+        {
+            if (kRelTol * bMax > aMax + kAbsTol)
+            {
+                axis = bAxis;
+                sMax = bMax;
+                n = nB;
+            }
+
+            else
+            {
+                axis = aAxis;
+                sMax = aMax;
+                n = nA;
+            }
+        }
+
+        if ((n * (tBox2.center - tBox1.center)) < float(0.0))
+            n = -n;
+
+        if (axis == ~0)
+            return false;
+
+        if (axis < 6)
+        {
+            OBBCollider rtx;
+            OBBCollider itx;
+
+            bool flip;
+
+            if (axis < 3)
+            {
+                rtx = tBox1;
+                itx = tBox2;
+                flip = false;
+            }
+
+            else
+            {
+                rtx = tBox2;
+                itx = tBox1;
+                flip = true;
+                n = -n;
+            }
+
+
+            // Compute reference and incident edge information necessary for clipping
+            ClipVertex incident[4];
+            ComputeIncidentFace(itx, n, incident);
+            unsigned char clipEdges[4];
+            Matrix4x4 basis;
+            Vec3 e;
+            ComputeReferenceEdgesAndBasis(rtx, n, axis, clipEdges, &basis, &e);
+
+            // Clip the incident face against the reference face side planes
+            ClipVertex out[8];
+            float depths[8];
+            unsigned int outNum;
+            outNum = Clip(rtx.center, e, clipEdges, basis, incident, out, depths);
+
+            if (outNum)
+            {
+                manifold.contactCount = outNum;
+                manifold.normal = flip ? -n : n;
+
+                for (unsigned int i = 0; i < outNum; ++i)
+                {
+                    Contact* contact = manifold.contacts + i;
+
+                    FeaturePair pair = out[i].f;
+
+                    if (flip)
+                    {
+                        std::swap(pair.inI, pair.inR);
+                        std::swap(pair.outI, pair.outR);
+                    }
+
+                    contact->fp = out[i].f;
+                    contact->position = out[i].v;
+                    contact->penetration = depths[i];
+                }
+            }
+        }
+
+        else
+        {
+            n = tBox1.rotation * n;
+
+            if (n * (tBox2.center - tBox1.center) < float(0.0))
+                n = -n;
+
+            Vec3 PA, QA;
+            Vec3 PB, QB;
+            SupportEdge(tBox1, n, &PA, &QA);
+            SupportEdge(tBox2, -n, &PB, &QB);
+
+            Vec3 CA, CB;
+            EdgesContact(&CA, &CB, PA, QA, PB, QB);
+
+            manifold.normal = n;
+            manifold.contactCount = 1;
+
+            Contact* c = manifold.contacts;
+            FeaturePair pair;
+            pair.key = axis;
+            c->fp = pair;
+            c->penetration = sMax;
+            c->position = (CA + CB) * float(0.5);
+        }
+
+        return true;
+
+    }
+
+
+    void NlMath::ComputeIncidentFace(const OBBCollider& itx, Vec3 n, ClipVertex* out)
+    {
+        n = -(itx.rotation* n);
+        Vec3 absN = n.abs();
+        Vec3 e = itx.extend;
+    
+        if (absN.x > absN.y && absN.x > absN.z)
+        {
+            if (n.x > float(0.0))
+            {
+                out[0].v.set(e.x, e.y, -e.z);
+                out[1].v.set(e.x, e.y, e.z);
+                out[2].v.set(e.x, -e.y, e.z);
+                out[3].v.set(e.x, -e.y, -e.z);
+    
+                out[0].f.inI = 9;
+                out[0].f.outI = 1;
+                out[1].f.inI = 1;
+                out[1].f.outI = 8;
+                out[2].f.inI = 8;
+                out[2].f.outI = 7;
+                out[3].f.inI = 7;
+                out[3].f.outI = 9;
+            }
+    
+            else
+            {
+                out[0].v.set(-e.x, -e.y, e.z);
+                out[1].v.set(-e.x, e.y, e.z);
+                out[2].v.set(-e.x, e.y, -e.z);
+                out[3].v.set(-e.x, -e.y, -e.z);
+    
+                out[0].f.inI = 5;
+                out[0].f.outI = 11;
+                out[1].f.inI = 11;
+                out[1].f.outI = 3;
+                out[2].f.inI = 3;
+                out[2].f.outI = 10;
+                out[3].f.inI = 10;
+                out[3].f.outI = 5;
+            }
+        }
+    
+        else if (absN.y > absN.x && absN.y > absN.z)
+        {
+            if (n.y > float(0.0))
+            {
+                out[0].v.set(-e.x, e.y, e.z);
+                out[1].v.set(e.x, e.y, e.z);
+                out[2].v.set(e.x, e.y, -e.z);
+                out[3].v.set(-e.x, e.y, -e.z);
+    
+                out[0].f.inI = 3;
+                out[0].f.outI = 0;
+                out[1].f.inI = 0;
+                out[1].f.outI = 1;
+                out[2].f.inI = 1;
+                out[2].f.outI = 2;
+                out[3].f.inI = 2;
+                out[3].f.outI = 3;
+            }
+    
+            else
+            {
+                out[0].v.set(e.x, -e.y, e.z);
+                out[1].v.set(-e.x, -e.y, e.z);
+                out[2].v.set(-e.x, -e.y, -e.z);
+                out[3].v.set(e.x, -e.y, -e.z);
+    
+                out[0].f.inI = 7;
+                out[0].f.outI = 4;
+                out[1].f.inI = 4;
+                out[1].f.outI = 5;
+                out[2].f.inI = 5;
+                out[2].f.outI = 6;
+                out[3].f.inI = 5;
+                out[3].f.outI = 6;
+            }
+        }
+    
+        else
+        {
+            if (n.z > float(0.0))
+            {
+                out[0].v.set(-e.x, e.y, e.z);
+                out[1].v.set(-e.x, -e.y, e.z);
+                out[2].v.set(e.x, -e.y, e.z);
+                out[3].v.set(e.x, e.y, e.z);
+    
+                out[0].f.inI = 0;
+                out[0].f.outI = 11;
+                out[1].f.inI = 11;
+                out[1].f.outI = 4;
+                out[2].f.inI = 4;
+                out[2].f.outI = 8;
+                out[3].f.inI = 8;
+                out[3].f.outI = 0;
+            }
+    
+            else
+            {
+                out[0].v.set(e.x, -e.y, -e.z);
+                out[1].v.set(-e.x, -e.y, -e.z);
+                out[2].v.set(-e.x, e.y, -e.z);
+                out[3].v.set(e.x, e.y, -e.z);
+    
+                out[0].f.inI = 9;
+                out[0].f.outI = 6;
+                out[1].f.inI = 6;
+                out[1].f.outI = 10;
+                out[2].f.inI = 10;
+                out[2].f.outI = 2;
+                out[3].f.inI = 2;
+                out[3].f.outI = 9;
+            }
+        }
+    
+        for (unsigned int i = 0; i < 4; ++i)
+            out[i].v = itx.rotation * out[i].v + itx.center;
+    }
+
+    void ComputeReferenceEdgesAndBasis(const OBBCollider& rtx, Vec3 n, unsigned int axis, unsigned char* out, Matrix4x4* basis, Vec3* e)
+    {
+        n = rtx.rotation * n;
+    
+        if (axis >= 3)
+            axis -= 3;
+    
+        switch (axis)
+        {
+        case 0:
+            if (n.x > float(0.0))
+            {
+                out[0] = 1;
+                out[1] = 8;
+                out[2] = 7;
+                out[3] = 9;
+    
+                e->set(rtx.extend.y, rtx.extend.z, rtx.extend.x);
+                basis->SetRows(rtx.rotation.Row1(), rtx.rotation.Row2(), rtx.rotation.Row0());
+            }
+    
+            else
+            {
+                out[0] = 11;
+                out[1] = 3;
+                out[2] = 10;
+                out[3] = 5;
+    
+                e->set(rtx.extend.z, rtx.extend.y, rtx.extend.x);
+                basis->SetRows(rtx.rotation.Row2(), rtx.rotation.Row1(), -rtx.rotation.Row0());
+            }
+            break;
+    
+        case 1:
+            if (n.y > float(0.0))
+            {
+                out[0] = 0;
+                out[1] = 1;
+                out[2] = 2;
+                out[3] = 3;
+    
+                e->set(rtx.extend.z, rtx.extend.x, rtx.extend.y);
+                basis->SetRows(rtx.rotation.Row2(), rtx.rotation.Row0(), rtx.rotation.Row1());
+            }
+    
+            else
+            {
+                out[0] = 4;
+                out[1] = 5;
+                out[2] = 6;
+                out[3] = 7;
+    
+                e->set(rtx.extend.z, rtx.extend.x, rtx.extend.y);
+                basis->SetRows(rtx.rotation.Row2(), -rtx.rotation.Row0(), -rtx.rotation.Row1());
+            }
+            break;
+    
+        case 2:
+            if (n.z > float(0.0))
+            {
+                out[0] = 11;
+                out[1] = 4;
+                out[2] = 8;
+                out[3] = 0;
+    
+                e->set(rtx.extend.y, rtx.extend.x, rtx.extend.z);
+                basis->SetRows(-rtx.rotation.Row1(), rtx.rotation.Row0(), rtx.rotation.Row2());
+            }
+    
+            else
+            {
+                out[0] = 6;
+                out[1] = 10;
+                out[2] = 2;
+                out[3] = 9;
+    
+                e->set(rtx.extend.y, rtx.extend.x, rtx.extend.z);
+                basis->SetRows(-rtx.rotation.Row1(), -rtx.rotation.Row0(), -rtx.rotation.Row2());
+            }
+            break;
+        }
+    }
+    
+    unsigned int q3Orthographic(float sign, float e, unsigned int axis, unsigned int clipEdge, ClipVertex* in, unsigned int inCount, ClipVertex* out)
+    {
+        unsigned int outCount = 0;
+        ClipVertex a = in[inCount - 1];
+    
+        for (unsigned int i = 0; i < inCount; ++i)
+        {
+            ClipVertex b = in[i];
+    
+            float da = sign * a.v[axis] - e;
+            float db = sign * b.v[axis] - e;
+    
+            ClipVertex cv;
+    
+            // B
+            if (((InFront(da) && InFront(db)) || On(da) || On(db)))
+            {
+                assert(outCount < 8);
+                out[outCount++] = b;
+            }
+    
+            // I
+            else if (InFront(da) && Behind(db))
+            {
+                cv.f = b.f;
+                cv.v = a.v + (b.v - a.v) * (da / (da - db));
+                cv.f.outR = clipEdge;
+                cv.f.outI = 0;
+                assert(outCount < 8);
+                out[outCount++] = cv;
+            }
+    
+            // I, B
+            else if (Behind(da) && InFront(db))
+            {
+                cv.f = a.f;
+                cv.v = a.v + (b.v - a.v) * (da / (da - db));
+                cv.f.inR = clipEdge;
+                cv.f.inI = 0;
+                assert(outCount < 8);
+                out[outCount++] = cv;
+    
+                assert(outCount < 8);
+                out[outCount++] = b;
+            }
+    
+            a = b;
+        }
+    
+        return outCount;
+    }
+    
+    unsigned int Clip(const Vec3& rPos, const Vec3& e, unsigned char* clipEdges, const Matrix4x4& basis, ClipVertex* incident, ClipVertex* outVerts, float* outDepths)
+    {
+        unsigned int inCount = 4;
+        unsigned int outCount;
+        ClipVertex in[8];
+        ClipVertex out[8];
+    
+        for (unsigned int i = 0; i < 4; ++i)
+            in[i].v = basis* (incident[i].v - rPos);
+    
+        outCount = q3Orthographic(float(1.0), e.x, 0, clipEdges[0], in, inCount, out);
+    
+        if (!outCount)
+            return 0;
+    
+        inCount = q3Orthographic(float(1.0), e.y, 1, clipEdges[1], out, outCount, in);
+    
+        if (!inCount)
+            return 0;
+    
+        outCount = q3Orthographic(float(-1.0), e.x, 0, clipEdges[2], in, inCount, out);
+    
+        if (!outCount)
+            return 0;
+    
+        inCount = q3Orthographic(float(-1.0), e.y, 1, clipEdges[3], out, outCount, in);
+    
+        // Keep incident vertices behind the reference face
+        outCount = 0;
+        for (unsigned int i = 0; i < inCount; ++i)
+        {
+            float d = in[i].v.z - e.z;
+    
+            if (d <= float(0.0))
+            {
+                outVerts[outCount].v = (basis* in[i].v) + rPos;
+                outVerts[outCount].f = in[i].f;
+                outDepths[outCount++] = d;
+            }
+        }
+    
+        return outCount;
+    }
+    void SupportEdge(const OBBCollider& tx, Vec3 n, Vec3* aOut, Vec3* bOut)
+    {
+        n = tx.rotation * n;
+        Vec3 absN = n.abs();
+        Vec3 a, b;
+
+        // x > y
+        if (absN.x > absN.y)
+        {
+            // x > y > z
+            if (absN.y > absN.z)
+            {
+                a.set(tx.extend.x, tx.extend.y, tx.extend.z);
+                b.set(tx.extend.x, tx.extend.y, -tx.extend.z);
+            }
+
+            // x > z > y || z > x > y
+            else
+            {
+                a.set(tx.extend.x, tx.extend.y, tx.extend.z);
+                b.set(tx.extend.x, -tx.extend.y, tx.extend.z);
+            }
+        }
+
+        // y > x
+        else
+        {
+            // y > x > z
+            if (absN.x > absN.z)
+            {
+                a.set(tx.extend.x, tx.extend.y, tx.extend.z);
+                b.set(tx.extend.x, tx.extend.y, -tx.extend.z);
+            }
+
+            // z > y > x || y > z > x
+            else
+            {
+                a.set(tx.extend.x, tx.extend.y, tx.extend.z);
+                b.set(-tx.extend.x, tx.extend.y, tx.extend.z);
+            }
+        }
+
+        float signx = (n.x >= float(0.0)) ? float(1.0) : float(-1.0);
+        float signy = (n.y >= float(0.0)) ? float(1.0) : float(-1.0);
+        float signz = (n.z >= float(0.0)) ? float(1.0) : float(-1.0);
+
+        a.x *= signx;
+        a.y *= signy;
+        a.z *= signz;
+        b.x *= signx;
+        b.y *= signy;
+        b.z *= signz;
+
+        *aOut = tx.rotation * a + tx.center;
+        *bOut = tx.rotation * b + tx.center;
+    }
+
+    void EdgesContact(Vec3* CA, Vec3* CB, const Vec3& PA, const Vec3& QA, const Vec3& PB, const Vec3& QB)
+    {
+        Vec3 DA = QA - PA;
+        Vec3 DB = QB - PB;
+        Vec3 r = PA - PB;
+        float a = (DA * DA);
+        float e = (DB * DB);
+        float f = (DB * r);
+        float c = (DA * r);
+
+        float b = (DA* DB);
+        float denom = a * e - b * b;
+
+        float TA = (b * f - c * e) / denom;
+        float TB = (b * TA + f) / e;
+
+        *CA = PA + DA * TA;
+        *CB = PB + DB * TB;
+    }
 }
