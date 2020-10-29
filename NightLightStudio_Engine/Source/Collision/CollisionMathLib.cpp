@@ -5,6 +5,15 @@
 #include "../../glm/gtc/matrix_transform.hpp"
 #include "../../glm/gtx/euler_angles.hpp"
 
+#define InFront( a ) \
+	((a) < float( 0.0 ))
+
+#define Behind( a ) \
+	((a) >= float( 0.0 ))
+
+#define On( a ) \
+	((a) < float( 0.005 ) && (a) > -float( 0.005 ))
+
 namespace NlMath
 {
     Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint)
@@ -614,7 +623,7 @@ namespace NlMath
 
     //TEST
 
-    bool OBB_OBBCollision(const OBBCollider& tBox1, const OBBCollider& tBox2, Manifold& contact)
+    bool OBB_OBBCollision(const OBBCollider& tBox1, const OBBCollider& tBox2, Manifold& manifold)
     {
         //axis view explaination: (value going from negative to positive)
         //x going from left to right
@@ -687,8 +696,9 @@ namespace NlMath
                     fabs(((normalZ2 * tBox2.extend.z) * normal))));
         };
 
-        auto q3TrackFaceAxis = [&](unsigned int* axis, unsigned int n, float s, float* sMax, const Vec3& normal, Vec3* axisNormal)
+        auto TrackFaceAxis = [&](unsigned int* axis, unsigned int n, float s, float* sMax, const Vec3& normal, Vec3* axisNormal)
         {
+            //no collision if penetration is positive
             if (s > float(0.0))
                 return true;
 
@@ -702,32 +712,589 @@ namespace NlMath
             return false;
         };
 
-        // a's x axis
+        // box 1's x axis
         penetrationDepth = getSeparatingPlane(normalX1);
-        if (q3TrackFaceAxis(&aAxis, 0, penetrationDepth, &aMax, normalX1, &nA))
+        if (TrackFaceAxis(&aAxis, 0, penetrationDepth, &aMax, tBox1.rotation.Row0(), &nA))
             return false;
 
+        // box 1's y axis
+        penetrationDepth = getSeparatingPlane(normalY1);
+        if (TrackFaceAxis(&aAxis, 1, penetrationDepth, &aMax, tBox1.rotation.Row1(), &nA))
+            return false;
 
-        //bool check = !(
-        //    getSeparatingPlane(normalX1) ||
-        //    getSeparatingPlane(normalY1) ||
-        //    getSeparatingPlane(normalZ1) ||
-        //    getSeparatingPlane(normalX2) ||
-        //    getSeparatingPlane(normalY2) ||
-        //    getSeparatingPlane(normalZ2) ||
-        //
-        //    getSeparatingPlane(glm::cross(normalX1, normalX2)) ||
-        //    getSeparatingPlane(glm::cross(normalX1, normalY2)) ||
-        //    getSeparatingPlane(glm::cross(normalX1, normalZ2)) ||
-        //
-        //    getSeparatingPlane(glm::cross(normalY1, normalX2)) ||
-        //    getSeparatingPlane(glm::cross(normalY1, normalY2)) ||
-        //    getSeparatingPlane(glm::cross(normalY1, normalZ2)) ||
-        //
-        //    getSeparatingPlane(glm::cross(normalZ1, normalX2)) ||
-        //    getSeparatingPlane(glm::cross(normalZ1, normalY2)) ||
-        //    getSeparatingPlane(glm::cross(normalZ1, normalZ2)));
+        // box 1's z axis
+        penetrationDepth = getSeparatingPlane(normalZ1);
+        if (TrackFaceAxis(&aAxis, 2, penetrationDepth, &aMax, tBox1.rotation.Row2(), &nA))
+            return false;
 
-        //return check;
+        // box 2's x axis
+        penetrationDepth = getSeparatingPlane(normalX2);
+        if (TrackFaceAxis(&aAxis, 3, penetrationDepth, &aMax, tBox2.rotation.Row0(), &nA))
+            return false;
+
+        // box 2's y axis
+        penetrationDepth = getSeparatingPlane(normalY2);
+        if (TrackFaceAxis(&aAxis, 4, penetrationDepth, &aMax, tBox2.rotation.Row1(), &nA))
+            return false;
+
+        // box 2's z axis
+        penetrationDepth = getSeparatingPlane(normalZ2);
+        if (TrackFaceAxis(&aAxis, 5, penetrationDepth, &aMax, tBox2.rotation.Row2(), &nA))
+            return false;
+
+        if (!parallel)
+        {
+            Vec3 tmp;
+            // Edge axis checks
+
+            tmp = Vector3DCrossProduct(normalX1, normalX2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 6, penetrationDepth, &aMax, Vec3(float(0.0), -C.m2[0][2], C.m2[0][1]), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalX1, normalY2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 7, penetrationDepth, &aMax, Vec3(float(0.0), -C.m2[1][2], C.m2[1][1]), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalX1, normalZ2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 8, penetrationDepth, &aMax, Vec3(float(0.0), -C.m2[2][2], C.m2[2][1]), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalY1, normalX2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 9, penetrationDepth, &aMax, Vec3(C.m2[0][2], float(0.0), -C.m2[0][0]), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalY1, normalY2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 10, penetrationDepth, &aMax, Vec3(C.m2[1][2], float(0.0), -C.m2[1][0]), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalY1, normalZ2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 11, penetrationDepth, &aMax, Vec3(C.m2[2][2], float(0.0), -C.m2[2][0]), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalZ1, normalX2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 12, penetrationDepth, &aMax, Vec3(-C.m2[0][1], C.m2[0][0], float(0.0)), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalZ1, normalY2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 13, penetrationDepth, &aMax, Vec3(-C.m2[0][1], C.m2[0][0], float(0.0)), &nA))
+                return false;
+
+            tmp = Vector3DCrossProduct(normalZ1, normalZ2);
+            penetrationDepth = getSeparatingPlane(tmp);
+            if (TrackFaceAxis(&aAxis, 14, penetrationDepth, &aMax, Vec3(-C.m2[2][1], C.m2[2][0], float(0.0)), &nA))
+                return false;
+        }
+
+        // Artificial axis bias to improve frame coherence
+        const float kRelTol = float(0.95);
+        const float kAbsTol = float(0.01);
+        unsigned int axis;
+        float sMax;
+        Vec3 n;
+        float faceMax = aMax > bMax ? aMax : bMax;
+        if (kRelTol * eMax > faceMax + kAbsTol)
+        {
+            axis = eAxis;
+            sMax = eMax;
+            n = nE;
+        }
+
+        else
+        {
+            if (kRelTol * bMax > aMax + kAbsTol)
+            {
+                axis = bAxis;
+                sMax = bMax;
+                n = nB;
+            }
+
+            else
+            {
+                axis = aAxis;
+                sMax = aMax;
+                n = nA;
+            }
+        }
+
+        if ((n * (tBox2.center - tBox1.center)) < float(0.0))
+            n = -n;
+
+        if (axis == ~0)
+            return false;
+
+        if (axis < 6)
+        {
+            OBBCollider rtx;
+            OBBCollider itx;
+
+            bool flip;
+
+            if (axis < 3)
+            {
+                rtx = tBox1;
+                itx = tBox2;
+                flip = false;
+            }
+
+            else
+            {
+                rtx = tBox2;
+                itx = tBox1;
+                flip = true;
+                n = -n;
+            }
+
+
+            // Compute reference and incident edge information necessary for clipping
+            ClipVertex incident[4];
+            ComputeIncidentFace(itx, n, incident);
+            unsigned char clipEdges[4];
+            Matrix4x4 basis;
+            Vec3 e;
+            ComputeReferenceEdgesAndBasis(rtx, n, axis, clipEdges, &basis, &e);
+
+            // Clip the incident face against the reference face side planes
+            ClipVertex out[8];
+            float depths[8];
+            unsigned int outNum;
+            outNum = Clip(rtx.center, e, clipEdges, basis, incident, out, depths);
+
+            if (outNum)
+            {
+                manifold.contactCount = outNum;
+                manifold.normal = flip ? -n : n;
+
+                for (unsigned int i = 0; i < outNum; ++i)
+                {
+                    Contact* contact = manifold.contacts + i;
+
+                    FeaturePair pair = out[i].f;
+
+                    if (flip)
+                    {
+                        std::swap(pair.inI, pair.inR);
+                        std::swap(pair.outI, pair.outR);
+                    }
+
+                    contact->fp = out[i].f;
+                    contact->position = out[i].v;
+                    contact->penetration = depths[i];
+                }
+            }
+        }
+
+        else
+        {
+            n = tBox1.rotation * n;
+
+            if (n * (tBox2.center - tBox1.center) < float(0.0))
+                n = -n;
+
+            Vec3 PA, QA;
+            Vec3 PB, QB;
+            SupportEdge(tBox1, n, &PA, &QA);
+            SupportEdge(tBox2, -n, &PB, &QB);
+
+            Vec3 CA, CB;
+            EdgesContact(&CA, &CB, PA, QA, PB, QB);
+
+            manifold.normal = n;
+            manifold.contactCount = 1;
+
+            Contact* c = manifold.contacts;
+            FeaturePair pair;
+            pair.key = axis;
+            c->fp = pair;
+            c->penetration = sMax;
+            c->position = (CA + CB) * float(0.5);
+        }
+
+        return true;
+
+    }
+
+
+    void NlMath::ComputeIncidentFace(const OBBCollider& itx, Vec3 n, ClipVertex* out)
+    {
+        n = -(itx.rotation* n);
+        Vec3 absN = n.abs();
+        Vec3 e = itx.extend;
+    
+        if (absN.x > absN.y && absN.x > absN.z)
+        {
+            if (n.x > float(0.0))
+            {
+                out[0].v.set(e.x, e.y, -e.z);
+                out[1].v.set(e.x, e.y, e.z);
+                out[2].v.set(e.x, -e.y, e.z);
+                out[3].v.set(e.x, -e.y, -e.z);
+    
+                out[0].f.inI = 9;
+                out[0].f.outI = 1;
+                out[1].f.inI = 1;
+                out[1].f.outI = 8;
+                out[2].f.inI = 8;
+                out[2].f.outI = 7;
+                out[3].f.inI = 7;
+                out[3].f.outI = 9;
+            }
+    
+            else
+            {
+                out[0].v.set(-e.x, -e.y, e.z);
+                out[1].v.set(-e.x, e.y, e.z);
+                out[2].v.set(-e.x, e.y, -e.z);
+                out[3].v.set(-e.x, -e.y, -e.z);
+    
+                out[0].f.inI = 5;
+                out[0].f.outI = 11;
+                out[1].f.inI = 11;
+                out[1].f.outI = 3;
+                out[2].f.inI = 3;
+                out[2].f.outI = 10;
+                out[3].f.inI = 10;
+                out[3].f.outI = 5;
+            }
+        }
+    
+        else if (absN.y > absN.x && absN.y > absN.z)
+        {
+            if (n.y > float(0.0))
+            {
+                out[0].v.set(-e.x, e.y, e.z);
+                out[1].v.set(e.x, e.y, e.z);
+                out[2].v.set(e.x, e.y, -e.z);
+                out[3].v.set(-e.x, e.y, -e.z);
+    
+                out[0].f.inI = 3;
+                out[0].f.outI = 0;
+                out[1].f.inI = 0;
+                out[1].f.outI = 1;
+                out[2].f.inI = 1;
+                out[2].f.outI = 2;
+                out[3].f.inI = 2;
+                out[3].f.outI = 3;
+            }
+    
+            else
+            {
+                out[0].v.set(e.x, -e.y, e.z);
+                out[1].v.set(-e.x, -e.y, e.z);
+                out[2].v.set(-e.x, -e.y, -e.z);
+                out[3].v.set(e.x, -e.y, -e.z);
+    
+                out[0].f.inI = 7;
+                out[0].f.outI = 4;
+                out[1].f.inI = 4;
+                out[1].f.outI = 5;
+                out[2].f.inI = 5;
+                out[2].f.outI = 6;
+                out[3].f.inI = 5;
+                out[3].f.outI = 6;
+            }
+        }
+    
+        else
+        {
+            if (n.z > float(0.0))
+            {
+                out[0].v.set(-e.x, e.y, e.z);
+                out[1].v.set(-e.x, -e.y, e.z);
+                out[2].v.set(e.x, -e.y, e.z);
+                out[3].v.set(e.x, e.y, e.z);
+    
+                out[0].f.inI = 0;
+                out[0].f.outI = 11;
+                out[1].f.inI = 11;
+                out[1].f.outI = 4;
+                out[2].f.inI = 4;
+                out[2].f.outI = 8;
+                out[3].f.inI = 8;
+                out[3].f.outI = 0;
+            }
+    
+            else
+            {
+                out[0].v.set(e.x, -e.y, -e.z);
+                out[1].v.set(-e.x, -e.y, -e.z);
+                out[2].v.set(-e.x, e.y, -e.z);
+                out[3].v.set(e.x, e.y, -e.z);
+    
+                out[0].f.inI = 9;
+                out[0].f.outI = 6;
+                out[1].f.inI = 6;
+                out[1].f.outI = 10;
+                out[2].f.inI = 10;
+                out[2].f.outI = 2;
+                out[3].f.inI = 2;
+                out[3].f.outI = 9;
+            }
+        }
+    
+        for (unsigned int i = 0; i < 4; ++i)
+            out[i].v = itx.rotation * out[i].v + itx.center;
+    }
+
+    void ComputeReferenceEdgesAndBasis(const OBBCollider& rtx, Vec3 n, unsigned int axis, unsigned char* out, Matrix4x4* basis, Vec3* e)
+    {
+        n = rtx.rotation * n;
+    
+        if (axis >= 3)
+            axis -= 3;
+    
+        switch (axis)
+        {
+        case 0:
+            if (n.x > float(0.0))
+            {
+                out[0] = 1;
+                out[1] = 8;
+                out[2] = 7;
+                out[3] = 9;
+    
+                e->set(rtx.extend.y, rtx.extend.z, rtx.extend.x);
+                basis->SetRows(rtx.rotation.Row1(), rtx.rotation.Row2(), rtx.rotation.Row0());
+            }
+    
+            else
+            {
+                out[0] = 11;
+                out[1] = 3;
+                out[2] = 10;
+                out[3] = 5;
+    
+                e->set(rtx.extend.z, rtx.extend.y, rtx.extend.x);
+                basis->SetRows(rtx.rotation.Row2(), rtx.rotation.Row1(), -rtx.rotation.Row0());
+            }
+            break;
+    
+        case 1:
+            if (n.y > float(0.0))
+            {
+                out[0] = 0;
+                out[1] = 1;
+                out[2] = 2;
+                out[3] = 3;
+    
+                e->set(rtx.extend.z, rtx.extend.x, rtx.extend.y);
+                basis->SetRows(rtx.rotation.Row2(), rtx.rotation.Row0(), rtx.rotation.Row1());
+            }
+    
+            else
+            {
+                out[0] = 4;
+                out[1] = 5;
+                out[2] = 6;
+                out[3] = 7;
+    
+                e->set(rtx.extend.z, rtx.extend.x, rtx.extend.y);
+                basis->SetRows(rtx.rotation.Row2(), -rtx.rotation.Row0(), -rtx.rotation.Row1());
+            }
+            break;
+    
+        case 2:
+            if (n.z > float(0.0))
+            {
+                out[0] = 11;
+                out[1] = 4;
+                out[2] = 8;
+                out[3] = 0;
+    
+                e->set(rtx.extend.y, rtx.extend.x, rtx.extend.z);
+                basis->SetRows(-rtx.rotation.Row1(), rtx.rotation.Row0(), rtx.rotation.Row2());
+            }
+    
+            else
+            {
+                out[0] = 6;
+                out[1] = 10;
+                out[2] = 2;
+                out[3] = 9;
+    
+                e->set(rtx.extend.y, rtx.extend.x, rtx.extend.z);
+                basis->SetRows(-rtx.rotation.Row1(), -rtx.rotation.Row0(), -rtx.rotation.Row2());
+            }
+            break;
+        }
+    }
+    
+    unsigned int q3Orthographic(float sign, float e, unsigned int axis, unsigned int clipEdge, ClipVertex* in, unsigned int inCount, ClipVertex* out)
+    {
+        unsigned int outCount = 0;
+        ClipVertex a = in[inCount - 1];
+    
+        for (unsigned int i = 0; i < inCount; ++i)
+        {
+            ClipVertex b = in[i];
+    
+            float da = sign * a.v[axis] - e;
+            float db = sign * b.v[axis] - e;
+    
+            ClipVertex cv;
+    
+            // B
+            if (((InFront(da) && InFront(db)) || On(da) || On(db)))
+            {
+                assert(outCount < 8);
+                out[outCount++] = b;
+            }
+    
+            // I
+            else if (InFront(da) && Behind(db))
+            {
+                cv.f = b.f;
+                cv.v = a.v + (b.v - a.v) * (da / (da - db));
+                cv.f.outR = clipEdge;
+                cv.f.outI = 0;
+                assert(outCount < 8);
+                out[outCount++] = cv;
+            }
+    
+            // I, B
+            else if (Behind(da) && InFront(db))
+            {
+                cv.f = a.f;
+                cv.v = a.v + (b.v - a.v) * (da / (da - db));
+                cv.f.inR = clipEdge;
+                cv.f.inI = 0;
+                assert(outCount < 8);
+                out[outCount++] = cv;
+    
+                assert(outCount < 8);
+                out[outCount++] = b;
+            }
+    
+            a = b;
+        }
+    
+        return outCount;
+    }
+    
+    unsigned int Clip(const Vec3& rPos, const Vec3& e, unsigned char* clipEdges, const Matrix4x4& basis, ClipVertex* incident, ClipVertex* outVerts, float* outDepths)
+    {
+        unsigned int inCount = 4;
+        unsigned int outCount;
+        ClipVertex in[8];
+        ClipVertex out[8];
+    
+        for (unsigned int i = 0; i < 4; ++i)
+            in[i].v = basis* (incident[i].v - rPos);
+    
+        outCount = q3Orthographic(float(1.0), e.x, 0, clipEdges[0], in, inCount, out);
+    
+        if (!outCount)
+            return 0;
+    
+        inCount = q3Orthographic(float(1.0), e.y, 1, clipEdges[1], out, outCount, in);
+    
+        if (!inCount)
+            return 0;
+    
+        outCount = q3Orthographic(float(-1.0), e.x, 0, clipEdges[2], in, inCount, out);
+    
+        if (!outCount)
+            return 0;
+    
+        inCount = q3Orthographic(float(-1.0), e.y, 1, clipEdges[3], out, outCount, in);
+    
+        // Keep incident vertices behind the reference face
+        outCount = 0;
+        for (unsigned int i = 0; i < inCount; ++i)
+        {
+            float d = in[i].v.z - e.z;
+    
+            if (d <= float(0.0))
+            {
+                outVerts[outCount].v = (basis* in[i].v) + rPos;
+                outVerts[outCount].f = in[i].f;
+                outDepths[outCount++] = d;
+            }
+        }
+    
+        return outCount;
+    }
+    void SupportEdge(const OBBCollider& tx, Vec3 n, Vec3* aOut, Vec3* bOut)
+    {
+        n = tx.rotation * n;
+        Vec3 absN = n.abs();
+        Vec3 a, b;
+
+        // x > y
+        if (absN.x > absN.y)
+        {
+            // x > y > z
+            if (absN.y > absN.z)
+            {
+                a.set(tx.extend.x, tx.extend.y, tx.extend.z);
+                b.set(tx.extend.x, tx.extend.y, -tx.extend.z);
+            }
+
+            // x > z > y || z > x > y
+            else
+            {
+                a.set(tx.extend.x, tx.extend.y, tx.extend.z);
+                b.set(tx.extend.x, -tx.extend.y, tx.extend.z);
+            }
+        }
+
+        // y > x
+        else
+        {
+            // y > x > z
+            if (absN.x > absN.z)
+            {
+                a.set(tx.extend.x, tx.extend.y, tx.extend.z);
+                b.set(tx.extend.x, tx.extend.y, -tx.extend.z);
+            }
+
+            // z > y > x || y > z > x
+            else
+            {
+                a.set(tx.extend.x, tx.extend.y, tx.extend.z);
+                b.set(-tx.extend.x, tx.extend.y, tx.extend.z);
+            }
+        }
+
+        float signx = (n.x >= float(0.0)) ? float(1.0) : float(-1.0);
+        float signy = (n.y >= float(0.0)) ? float(1.0) : float(-1.0);
+        float signz = (n.z >= float(0.0)) ? float(1.0) : float(-1.0);
+
+        a.x *= signx;
+        a.y *= signy;
+        a.z *= signz;
+        b.x *= signx;
+        b.y *= signy;
+        b.z *= signz;
+
+        *aOut = tx.rotation * a + tx.center;
+        *bOut = tx.rotation * b + tx.center;
+    }
+
+    void EdgesContact(Vec3* CA, Vec3* CB, const Vec3& PA, const Vec3& QA, const Vec3& PB, const Vec3& QB)
+    {
+        Vec3 DA = QA - PA;
+        Vec3 DB = QB - PB;
+        Vec3 r = PA - PB;
+        float a = (DA * DA);
+        float e = (DB * DB);
+        float f = (DB * r);
+        float c = (DA * r);
+
+        float b = (DA* DB);
+        float denom = a * e - b * b;
+
+        float TA = (b * f - c * e) / denom;
+        float TB = (b * TA + f) / e;
+
+        *CA = PA + DA * TA;
+        *CB = PB + DB * TB;
     }
 }

@@ -253,6 +253,29 @@ namespace NlMath
 		return Vector3D(m02,m12,m22);
 	}
 
+	Vector3D Matrix4x4::Row0() const
+	{
+		return Vector3D(m00,m01,m02);
+	}
+
+	Vector3D Matrix4x4::Row1() const
+	{
+		return Vector3D(m10,m11,m12);
+	}
+
+	Vector3D Matrix4x4::Row2() const
+	{
+		return Vector3D(m20,m21,m22);
+	}
+
+	void Matrix4x4::SetRows(const Vec3 x, const Vec3 y, const Vec3 z)
+	{
+		m00 = x.x;	 m01 = x.y;	m02 = x.z;	m03 = 0;
+		m10 = y.x;		 m11 = y.y;		m12 = y.z;		m13 = 0;
+		m20 = z.x;	 m21 = z.y;	m22 = z.z;		m23 = 0;
+		m30 = 0;		m31 = 0;		m32 = 0;		m33 = 1;
+	}
+
 	std::ostream& operator<<(std::ostream& os, const Matrix4x4 mtx)
 	{
 		os  << "(" << mtx.m00 << ", " << mtx.m01 << ", " << mtx.m02 << ", " << mtx.m03 << ")" << std::endl

@@ -615,12 +615,19 @@ namespace NS_COLLISION
 				OBBCollider* a = &(Collider1->collider.obb);
 				OBBCollider* b = &(Collider2->collider.obb);
 
-				return NlMath::OBBToOBB(*a, *b);
+				Manifold tmp;
+
+				//return NlMath::OBBToOBB(*a, *b);
+				bool check =  NlMath::OBB_OBBCollision(*a, *b, tmp);
 
 				//// debug lines?
 				//NlMath::Vector3D start = a->center;
 				//NlMath::Vector3D end = normal  + start;
-				//NS_GRAPHICS::SYS_GRAPHICS->DrawLine(start, end, glm::vec3(0.5f, 0.5f, 1.f));
+				NlMath::Vector3D test(0.1);
+
+					NS_GRAPHICS::SYS_GRAPHICS->DrawLine(a->center,  a->center+ tmp.normal);
+
+				return check;
 
 				//// yes collision add to collision event and return true
 
