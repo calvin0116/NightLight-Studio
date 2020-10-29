@@ -1,8 +1,6 @@
 #ifndef _SYSTEM_RECEIVER
 #define _SYSTEM_RECEIVER
 
-#include "../../framework.h"
-
 #include "SystemIMessage.h"
 #include <map>
 #include <functional>
@@ -65,11 +63,11 @@ namespace SystemMessaging
 
 		// SFINAE, Ensures function MUST HAVE a parameter that uses IMessage as a Base Type
 		// Default Functions
-		
+
 		// Attach a handle (Static Function) to the Receiver
 		template <typename T,
 			class = typename std::enable_if<std::is_base_of<IMessage, T>::value>::type>
-		void AttachHandler(const std::string& messageId, void(*handler)(T&))
+			void AttachHandler(const std::string& messageId, void(*handler)(T&))
 		{
 			_handleMap.emplace(std::pair<std::string, MESSAGE_HANDLER>(messageId, Message_BindToFunc(handler)));
 			GlobalRegister(messageId);
@@ -82,10 +80,20 @@ namespace SystemMessaging
 			_handleMap.emplace(std::pair<std::string, MESSAGE_HANDLER>(messageId, BindMemFuncOneParam(handler, obj)));
 			GlobalRegister(messageId);
 		}
-		// Attach a handle (Function) to the Receiver
+
+		// Attach a handle to the Receiver
 		void AttachHandler(const std::string& messageId, MESSAGE_HANDLER handler)
 		{
 			_handleMap.emplace(std::pair<std::string, MESSAGE_HANDLER>(messageId, handler));
+			GlobalRegister(messageId);
+		}
+
+		// Attach a handle (Lambda) to the Receiver
+		template <typename T, typename TFunc>
+		void AttachHandler(const std::string& messageId, TFunc handler)
+		{
+			MESSAGE_HANDLER ret = [&handler](IMessage& msg) { handler(static_cast<T&>(msg)); };
+			_handleMap.emplace(std::pair<std::string, MESSAGE_HANDLER>(messageId, ret));
 			GlobalRegister(messageId);
 		}
 
@@ -93,8 +101,10 @@ namespace SystemMessaging
 		void RemoveHandler(const std::string& messageID);
 		// Gets the Function associated with a handle
 		MESSAGE_HANDLER GetHandler(const std::string& messageId);
-		
+
 		// Sends a message to all Broadcasts that have this Receiver Registered
+		// This EXCLUDES global Broadcast to avoid double sending
+		// Use SendToSpecificBroadcast for Global Broadcast
 		void SendToAllBroadcast(IMessage& msg);
 		// Sends a message to a Specific Broadcast
 		void SendToSpecificBroadcast(std::string brdID, IMessage& msg);
@@ -102,7 +112,7 @@ namespace SystemMessaging
 		// Returns ID to this Receiver
 		std::string GetID();
 
-		~SystemReceiver();
+		virtual ~SystemReceiver();
 	};
 }
 

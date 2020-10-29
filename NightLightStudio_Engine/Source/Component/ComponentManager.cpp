@@ -180,8 +180,8 @@ int ComponentManager::ComponentSetManager::BuildChildObject()
 
 void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::ContainerID compId, int objId, const void* newComp)
 {
-	// insert the component
-	int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<const char*>(newComp));
+	//// insert the component
+	//int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<const char*>(newComp));
 
 	// set object component data
 
@@ -201,6 +201,9 @@ void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::C
 
 	if (/*compData->compPtr != nullptr || */compData->containerId != -1 || compData->containerIndex != -1)
 		throw; // check for double allocation
+
+	// insert the component // shifted the insert component AFTER the check 
+	int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<const char*>(newComp));
 
 	// !
 	compData->containerId = compId; // set container id

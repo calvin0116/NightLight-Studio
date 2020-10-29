@@ -6,17 +6,17 @@ namespace SystemMessaging
 {
 	void SystemReceiver::GlobalRegister(const std::string& msgId)
 	{
-		GLOBAL_SYSTEM_BROADCAST.Register(msgId, *this);
+		GLOBAL_SYSTEM_BROADCAST.Register(msgId, this);
 	}
 	void SystemReceiver::GlobalUnregister(const std::string& msgId)
 	{
-		GLOBAL_SYSTEM_BROADCAST.Unregister(msgId, *this);
+		GLOBAL_SYSTEM_BROADCAST.Unregister(msgId, this);
 	}
 
-	SystemReceiver::SystemReceiver() : _id { "\n" }
+	SystemReceiver::SystemReceiver() : _id{ "\n" }
 	{
 	}
-	SystemReceiver::SystemReceiver(std::string id) : _id { id }
+	SystemReceiver::SystemReceiver(std::string id) : _id{ id }
 	{
 	}
 
@@ -38,8 +38,9 @@ namespace SystemMessaging
 	{
 		for (std::pair<SystemBroadcast*, unsigned> i : _allRegBroadcasters)
 		{
-			if (i.second)
-				i.first->ProcessMessage(msg);
+			if (i.first->GetID() != GLOBAL_SYSTEM_BROADCAST.GetID())
+				if (i.second)
+					i.first->ProcessMessage(msg);
 		}
 	}
 
@@ -63,12 +64,12 @@ namespace SystemMessaging
 	// Removes itself automatically from all Broadcasters
 	SystemReceiver::~SystemReceiver()
 	{
-		std::for_each(std::begin(_allRegBroadcasters), std::end(_allRegBroadcasters), 
-			[=](std::pair<SystemBroadcast*, unsigned> obs) 
+		std::for_each(std::begin(_allRegBroadcasters), std::end(_allRegBroadcasters),
+			[=](std::pair<SystemBroadcast*, unsigned> obs)
 			{
 				for (decltype(_handleMap)::iterator i = std::begin(_handleMap); i != std::end(_handleMap); ++i)
 				{
-					obs.first->Unregister(i->first, *this);
+					obs.first->Unregister(i->first, this);
 				}
 			});
 	}

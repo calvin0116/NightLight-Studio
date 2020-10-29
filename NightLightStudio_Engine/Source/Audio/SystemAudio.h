@@ -22,12 +22,13 @@ class SystemAudio : public MySystem, public  Singleton<SystemAudio>
 
   // to store sound handles
   MyAudioMap          _sounds;
-  // to store listener position
+  // to store listener position, default at 0,0,0
   FMOD_VECTOR         _listenerPos;
   // to convert positions
   FMOD_VECTOR         _fmodPos;
   // to store channel handles
   FMOD::Channel*      _channels[s_MAX_CHANNELS]{nullptr};
+  int                 _objIDs[s_MAX_CHANNELS]{0};
   // FMOD system
   FMOD::System*       _system;
 
@@ -37,6 +38,8 @@ class SystemAudio : public MySystem, public  Singleton<SystemAudio>
   FMOD::ChannelGroup* _sfx;
 
   void  LoadSound(const std::string& _soundPath, const std::string& _name);
+  // Overloaded function for testing only! Do not use this function!
+  void  Play3DOnce(const std::string& name, float x, float y, float z);
 public: // Suppose to be private and use messaging, but since SystemAudio is singleton might as well make it public.
   // Audio System functions
   void  Pause(const int _channelID);

@@ -49,6 +49,9 @@ namespace NS_GRAPHICS
 		// Detaches and deletes light component attached to entity if it exists
 		void DetachLightComponent(Entity& entity);
 		
+		// TO DO: All getters and setters should be done in system
+		void ChangeLightType(Entity& entity, Lights lightType);
+		
 		DirLight*& GetDirLight(const int& id);
 		SpotLight*& GetSpotLight(const int& id);
 		PointLight*& GetPointLight(const int& id);
