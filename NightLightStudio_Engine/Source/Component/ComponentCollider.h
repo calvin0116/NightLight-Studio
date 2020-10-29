@@ -78,7 +78,7 @@ struct PlaneCollider : public ICollider
 		NlMath::Vector3D _extend = NlMath::Vector3D(1, 1, 1),
 		NlMath::Vector3D _rotation = NlMath::Vector3D(0, 0, 0));
 
-	void init(ComponentTransform* transform);
+	void posUpdate(ComponentTransform* transform);
 };
 
 struct SphereCollider : public ICollider
@@ -88,7 +88,7 @@ struct SphereCollider : public ICollider
 	SphereCollider();
 	SphereCollider(NlMath::Vector3D Point, float Radius);
 
-	void init(ComponentTransform* transform);
+	void posUpdate(ComponentTransform* transform);
 };
 
 struct AABBCollider : public ICollider
@@ -98,7 +98,7 @@ struct AABBCollider : public ICollider
 	AABBCollider();
 	AABBCollider(NlMath::Vector3D VecMax, NlMath::Vector3D VecMin);
 
-	void init(ComponentTransform* transform);
+	void posUpdate(ComponentTransform* transform);
 };
 
 struct OBBCollider : public ICollider
@@ -106,14 +106,14 @@ struct OBBCollider : public ICollider
 	 NlMath::Vector3D center;
 	 NlMath::Vector3D extend;
 	//rotation in radiant
-	 NlMath::Vector3D rotation;
+	 NlMath::Matrix4x4 rotation;
 	
 	OBBCollider();
 	OBBCollider(NlMath::Vector3D _center, 
 		NlMath::Vector3D _extend = NlMath::Vector3D(1, 1, 1),
 		NlMath::Vector3D _rotation = NlMath::Vector3D(0, 0, 0));
 
-	void init(ComponentTransform* transform);
+	void posUpdate(ComponentTransform* transform);
 
 };
 
@@ -132,10 +132,10 @@ struct CapsuleCollider : public ICollider
 		float _radius = 1,
 		NlMath::Vector3D _rotation = NlMath::Vector3D(0, 0, 0));
 
-	void init(ComponentTransform* transform);
+	void posUpdate(ComponentTransform* transform);
 };
 
-typedef struct ComponentCollider //: public IComponent
+typedef struct ComponentCollider : public ISerializable//: public IComponent
 {
 	union Collider
 	{
@@ -157,6 +157,8 @@ typedef struct ComponentCollider //: public IComponent
 	Collider collider;
 
 	ComponentCollider(COLLIDERS col);
+
+	ComponentCollider();
 
 	void CollisionTimeReset();
 

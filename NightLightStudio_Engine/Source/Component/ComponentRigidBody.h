@@ -1,8 +1,9 @@
 #pragma once
 #include "..\\Math\Vector.h"
 
+#include "..\\..\ISerializable.h"
 
-typedef struct ComponentRigidBody //: public IComponent
+typedef struct ComponentRigidBody : public ISerializable //: public IComponent
 {
 	//velocity of the object
 	NlMath::Vector3D velocity;
@@ -20,6 +21,8 @@ typedef struct ComponentRigidBody //: public IComponent
 
 
 
-	void Read();
-	void Write();
+	virtual void	Read(Value&) { };
+	virtual Value	Write() { return Value(); };
+	virtual Value& Write(Value& val) { return val; };
+
 } RigidBody, RigidBodyComponent;

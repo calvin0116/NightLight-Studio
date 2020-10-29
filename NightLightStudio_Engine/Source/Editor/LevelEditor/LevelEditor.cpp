@@ -3,6 +3,7 @@
 #include "LevelEditor_AssetInsp.h"
 #include "LevelEditor_PerfMetrics.h"
 #include "LevelEditor_Heirarchy.h"
+#include "../imgui/imguizmo/ImGuizmo.h"
 
 //Added by Teck Wei
 #include "LevelEditor_ECHelper.h"
@@ -58,9 +59,15 @@ bool LevelEditor::Update(float)
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+    ImGuizmo::BeginFrame();
 
     // Run the MainMenubar
     LE_MainMenuBar();
+    
+    // Only for testing
+    if (_runEngine)
+    // Run the Scene Editor
+    LE_SceneEditor();
 
     /*
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
@@ -183,4 +190,69 @@ void LevelEditor::LE_RunWindows()
             }
         }
     }
+}
+
+#include <filesystem>
+
+std::vector<std::string> LE_GetDirectories(const std::string& path)
+{
+    if (path.empty())
+        return {};
+    std::vector<std::string> r;
+    for (auto& p : std::filesystem::directory_iterator(path))
+        if (p.is_directory())
+            r.push_back(p.path().string());
+    return r;
+}
+
+std::vector<std::string> LE_GetFilesInDir(const std::string& path)
+{
+    if (path.empty())
+        return {};
+    std::vector<std::string> r;
+    for (const auto& p : std::filesystem::directory_iterator(path))
+        if (!p.is_directory())
+            r.push_back(p.path().string());
+    return r;
+}
+
+std::string LE_EraseSubStr(const std::string& str, const std::string& toErase)
+{
+    std::string mainStr = str;
+    // Search for the substring in string
+    size_t pos = mainStr.find(toErase);
+    if (pos != std::string::npos)
+    {
+        // If found then erase it from string
+        mainStr.erase(pos, toErase.length());
+    }
+
+    return mainStr;
+}
+
+std::string LE_GetFilename(const std::string& path)
+{
+    char sep = '/';
+
+#ifdef _WIN32
+    sep = '\\';
+#endif
+
+    size_t i = path.rfind(sep, path.length());
+    if (i != std::string::npos) {
+        return(path.substr(i + 1, path.length() - i));
+    }
+
+    return {};
+}
+
+std::string LE_GetFileType(const std::string& path)
+{
+    char sep = '.';
+    size_t i = path.rfind(sep, path.length());
+    if (i != std::string::npos) {
+        return(path.substr(i + 1, path.length() - i));
+    }
+
+    return {};
 }

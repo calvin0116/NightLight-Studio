@@ -98,6 +98,11 @@ namespace NS_SCENE
 			SetNextScene(scene_indexes[scene_index]);
 		}
 		*/
+
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_S))
+		{
+			SaveScene();
+		}
 	}
 
 	SCENE_CHANGE SceneManager::CheckChangeScene()
@@ -158,7 +163,7 @@ namespace NS_SCENE
 		current_scene = next_scene;
 	}
 
-	// Helper function that is not declared in class due to Entity not declared in .h
+	//~~~! Helper function that is not declared in class due to Entity not declared in .h
 	void ComponentsCreation(Value& Comp_list, Entity& entity)
 	{
 		for (auto itr = Comp_list.MemberBegin(); itr != Comp_list.MemberEnd(); ++itr)
@@ -167,7 +172,9 @@ namespace NS_SCENE
 			std::string component_name = itr->name.GetString();
 			std::cout << "~~ Component: " << component_name << std::endl;
 			if (component_name == "TransformComponent")
-			{		
+			{
+				//CreateAndWrite<TransformComponent>(Comp_list, component_name, entity);
+
 				TransformComponent trans_com;
 				trans_com.Read(Comp_list[component_name.c_str()]);
 
@@ -180,12 +187,14 @@ namespace NS_SCENE
 			//~~! Add your own component creation here ~~!//
 			if (component_name == "ColliderComponent")
 			{
+				//CreateAndWrite<ColliderComponent>(Comp_list, component_name, entity);
 				/*
 				ColliderComponent col_com;
 				col_com.Read(Comp_list[component_name.c_str()]);
 
 				G_ECMANAGER->AttachComponent<TransformComponent>(entity, col_com);
 				*/
+
 			}
 		}
 	}
@@ -194,11 +203,12 @@ namespace NS_SCENE
 	{
 		for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
 		{
-			std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
-			Entity ent_handle = G_ECMANAGER->BuildEntity(itr->name.GetString());
-			Value& Component_list = Ent_list[itr->name.GetString()];
+			std::cout << "Entity Name: " << itr->name.GetString() << std::endl;		
+			Entity ent_handle = G_ECMANAGER->BuildEntity(itr->name.GetString());		//Build entity
+			
+			Value& Component_list = Ent_list[itr->name.GetString()];					//Get component list
 
-			//std::cout << ent_handle.getId() - 1000000 << std::endl;
+			//std::cout << ent_handle.getId() << std::endl;
 			//EntityName[ent_handle.getId()] = itr->name.GetString();
 			//EntityName.emplace(std::make_pair(ent_handle.getId(), itr->name.GetString()));
 
@@ -226,18 +236,51 @@ namespace NS_SCENE
 	{
 		//Save scene
 		//Parser* scene = scene_list[current_scene];
-		Parser scene = Parser("TestJson" , scene_parser.GetPath() );
+		std::string output_filename = "Output";
+
+		Parser scene = Parser(output_filename, scene_parser.GetPath() );
 		
+		struct stat buffer;
+		if (stat(scene.GetFilePath().c_str(), &buffer) != 0)
+		{
+			std::cout << "file does not exist, creating file....." << std::endl;
+			//Creates file
+			std::ofstream MyFile(scene.GetFilePath().c_str());
+
+			MyFile << "{\n}";
+		}
+		scene.Load();
+		scene.CleanDoc();
+
 		//Add Objects objects
-		scene.AddData("Objects", D_TYPE::D_OBJECT);
+		Value* obj_val = new Value;
+		obj_val->SetObject();
+
+		//Entity loop
 		for (auto ent : EntityName)
 		{
+			Value* ent_val = new Value;
+			ent_val->SetObject();
 			//Add Entity json data
-			scene.AddData(ent.second, D_TYPE::D_OBJECT);
+			//scene.ChangeData(ent_val, "Variable in object of object", 5);
+			//scene.PrintDataList();
 			//~~!! Need to know what component the Entity have and loop through them
+			//Component Loop
+			/*
+			for(ISerializable* comp : EntityCompontlist)
+			{ 
+				comp.Write();
+			}*/
 
+			scene.ChangeData(obj_val, ent.second.c_str(), ent_val->GetObject());
+
+			delete ent_val;
 		}
+		scene.AddData("Objects", obj_val);
 
+		//delete obj_val;
+
+		scene.PrintDataList();
 		scene.Save();
 	}
 

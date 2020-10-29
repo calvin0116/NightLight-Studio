@@ -2355,8 +2355,14 @@ namespace ImGuizmo
             }
             if (visible)
             {
+                /*
                ImU32 col = 0xFF808080;
                col = (fmodf(fabsf(f), 10.f) < FLT_EPSILON) ? 0xFF909090 : col;
+               col = (fabsf(f) < FLT_EPSILON) ? 0xFF404040 : col;
+               */
+                // ONLY TO SEE COLORS
+               ImU32 col = 0xFF8080C0;
+               col = (fmodf(fabsf(f), 10.f) < FLT_EPSILON) ? 0xFF9090FF : col;
                col = (fabsf(f) < FLT_EPSILON) ? 0xFF404040 : col;
 
                float thickness = 1.f;
