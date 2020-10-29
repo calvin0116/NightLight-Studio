@@ -194,26 +194,26 @@ namespace NlMath
 
 	Matrix4x4& Matrix4x4::operator=(const glm::mat4x4& rhs)
 	{
-		//first row
+		//first col
 		
 		m00 = rhs[0][0];
-		m01 = rhs[0][1];
-		m02 = rhs[0][2];
-		m03 = rhs[0][3];
-		//2nd row
-		m10 = rhs[1][0];
-		m11 = rhs[1][1];
-		m12 = rhs[1][2];
-		m13 = rhs[1][3];
-		//3rd row
-		m20 = rhs[2][0];
-		m21 = rhs[2][1];
+		m10 = rhs[0][1];
+		m20 = rhs[0][2];
+		m30 = rhs[0][3];
+		//2nd col
+		m01 = rhs[1][0];
+		m11= rhs[1][1];
+		m21 = rhs[1][2];
+		m31 = rhs[1][3];
+		//3rd col
+		m02 = rhs[2][0];
+		m12 = rhs[2][1];
 		m22 = rhs[2][2];
-		m23 = rhs[2][3];
-		//4th row
-		m30 = rhs[3][0];
-		m31 = rhs[3][1];
-		m32 = rhs[3][2];
+		m32 = rhs[2][3];
+		//4th col
+		m03 = rhs[3][0];
+		m13 = rhs[3][1];
+		m23 = rhs[3][2];
 		m33 = rhs[3][3];
 		return *this;
 	}
@@ -236,6 +236,21 @@ namespace NlMath
 	{
 		glm::mat3x3 tmp{ m00,m01,m02,m10,m11,m12,m20,m21,m22 };
 		return tmp;
+	}
+
+	Vector3D Matrix4x4::Column0() const
+	{
+		return Vector3D(m00,m10,m20);
+	}
+
+	Vector3D Matrix4x4::Column1() const
+	{
+		return Vector3D(m01,m11,m21);
+	}
+
+	Vector3D Matrix4x4::Column2() const
+	{
+		return Vector3D(m02,m12,m22);
 	}
 
 	std::ostream& operator<<(std::ostream& os, const Matrix4x4 mtx)
@@ -544,8 +559,9 @@ namespace NlMath
 		and saves it in pResult
 	*/
 	/**************************************************************************/
-	void Mtx44Transpose(Matrix4x4& pResult, const Matrix4x4& pMtx)
+	Matrix4x4 Mtx44Transpose(const Matrix4x4& pMtx)
 	{
+		Matrix4x4 pResult;
 		// 1st row
 		pResult.m00 = pMtx.m00;
 		pResult.m01 = pMtx.m10;
@@ -566,6 +582,8 @@ namespace NlMath
 		pResult.m31 = pMtx.m13;
 		pResult.m32 = pMtx.m23;
 		pResult.m33 = pMtx.m33;
+
+		return pResult;
 	}
 
 	/**************************************************************************/
@@ -591,7 +609,7 @@ namespace NlMath
 		Matrix4x4 mtx = pMtx.cofactor();
 
 		// transpose mtx
-		Mtx44Transpose(pResult, mtx);
+		pResult = Mtx44Transpose(mtx);
 
 		// 1/det
 		det = 1.0f / det;
