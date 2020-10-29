@@ -57,22 +57,22 @@ namespace NS_GRAPHICS
 		//graphicscomp->AttachMesh("Cylinder");
 
 		// Adds new mesh instance to vector of mesh instances and returns mesh ID
-		unsigned AddMesh(Mesh* const mesh);
+		int AddMesh(Mesh* const mesh);
 
 		// Adds new mesh instance to vector of mesh instances and returns mesh ID
 		// Takes in mesh key for mesh list
-	    unsigned AddMesh(const std::string& meshkey);
+	    int AddMesh(const std::string& meshkey);
 
 		// Adds loaded mesh into master list, requires name as key and context
 		// E.g.
 		void AddLoadedMesh(Mesh* mesh, const std::string& meshKey);
 
 		// Adds new model instance to vector of model instances and returns model ID
-		unsigned AddModel(Model* const model);
+		int AddModel(Model* const model);
 
 		// Adds new model instance to vector of model instances and returns model ID
 		// Takes in model key for model list
-		unsigned AddModel(const std::string& modelkey);
+		int AddModel(const std::string& modelkey);
 
 		// Adds loaded model into master list, requires name as key and context
 		// E.g.
