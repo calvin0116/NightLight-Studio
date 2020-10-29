@@ -1,5 +1,8 @@
 #include "SystemAudio.h"
 
+#include "../Component/Components.h" // G_ECMANAGER
+//#include "../Component/ComponentAudio.h" // Audio Component Data
+
 const float SystemAudio::s_UNITS_PER_METER = 100.0f;
 
 void SystemAudio::LoadSound(const std::string& _soundPath, const std::string& _name)
@@ -73,7 +76,8 @@ void SystemAudio::PlayOnce(const std::string& _name)
   }
 }
 
-int SystemAudio::Play3DLoop(const std::string& _name, const NlMath::Vector3D& _pos)
+// Name of sound to loop and entity ID's position to follow
+int SystemAudio::Play3DLoop(const std::string& _name, const int _id)
 {
   MyAudioMap::iterator it = _sounds.find(_name);
   int retVal = -1;
@@ -88,10 +92,11 @@ int SystemAudio::Play3DLoop(const std::string& _name, const NlMath::Vector3D& _p
         _system->playSound(it->second, _bgm, true, _channels + retVal);
         _channels[retVal]->setMode(FMOD_LOOP_NORMAL);
         _channels[retVal]->setMode(FMOD_3D);
+         glm::vec3 _pos = G_ECMANAGER->getEntity(_id).getComponent<TransformComponent>()->_position;
         //m_Channels[retVal]->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 100.0f * m_fUnitsPerMeter);
-        FMOD_VECTOR fmodPos = { _pos.x, _pos.y, _pos.z };
-        FMOD_VECTOR fmodVel = { 100.0f, 0.0f, 0.0f };
-        _channels[retVal]->set3DAttributes(&fmodPos, &fmodVel);
+        _fmodPos = { _pos.x, _pos.y, _pos.z };
+        //FMOD_VECTOR fmodVel = { 100.0f, 0.0f, 0.0f };
+        _channels[retVal]->set3DAttributes(&_fmodPos, nullptr);
         _channels[retVal]->setPaused(false);
 
         //// Setting group channel
@@ -103,13 +108,12 @@ int SystemAudio::Play3DLoop(const std::string& _name, const NlMath::Vector3D& _p
   return retVal;
 }
 
-int SystemAudio::Play3DOnce(const std::string& name, const NlMath::Vector3D& _pos)
+void SystemAudio::Play3DOnce(const std::string& name, const int _id)
 {
   MyAudioMap::iterator it = _sounds.find(name);
-  int retVal = -1;
   if (it != _sounds.end())
   {
-    for (retVal = 0; retVal < s_MAX_CHANNELS; ++retVal)
+    for (int retVal = 0; retVal < s_MAX_CHANNELS; ++retVal)
     {
       bool isPlaying;
       _channels[retVal]->isPlaying(&isPlaying);
@@ -118,17 +122,20 @@ int SystemAudio::Play3DOnce(const std::string& name, const NlMath::Vector3D& _po
         _system->playSound(it->second, _sfx, true, _channels + retVal);
         _channels[retVal]->setMode(FMOD_LOOP_OFF);
         _channels[retVal]->setMode(FMOD_3D);
-        //ErrorCheck(temp->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 5.0f * m_fUnitsPerMeter));
-        FMOD_VECTOR fmodPos = { _pos.x, _pos.y, _pos.z };
-        _channels[retVal]->set3DAttributes(&fmodPos, nullptr);
+        glm::vec3 _pos = G_ECMANAGER->getEntity(_id).getComponent<TransformComponent>()->_position;
+        _fmodPos = { _pos.x, _pos.y, _pos.z };
+        _channels[retVal]->set3DAttributes(&_fmodPos, nullptr);
         _channels[retVal]->setPaused(false);
+        //ErrorCheck(temp->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 5.0f * m_fUnitsPerMeter));
+        //FMOD_VECTOR fmodPos = { _pos.x, _pos.y, _pos.z };
+    /*    _channels[retVal]->set3DAttributes(&fmodPos, nullptr);
+        _channels[retVal]->setPaused(false);*/
         //// Setting group channel
         //ErrorCheck(it->second.second->setChannelGroup(SFX));
         break;
       }
     }
   }
-  return retVal;
 }
 
 void SystemAudio::Load()
@@ -151,13 +158,71 @@ void SystemAudio::Load()
 
 void SystemAudio::Init()
 {
+}
 
+void SystemAudio::GameLoad()
+{
+  auto itr = G_ECMANAGER->begin<ComponentLoadAudio>();
+  auto itrEnd = G_ECMANAGER->end<ComponentLoadAudio>();
+  for (; itr != itrEnd; ++itr)
+  {
+    // Load the following audios from load audio component
+    ComponentLoadAudio* myComp = G_ECMANAGER->getComponent<ComponentLoadAudio>(itr);
+    for (const auto& [path, name] : myComp->_sounds)
+      LoadSound(path, name);
+  }
+}
+
+void SystemAudio::GameInit()
+{
+  auto itr = G_ECMANAGER->begin<AudioComponent>();
+  auto itrEnd = G_ECMANAGER->end<AudioComponent>();
+  for (; itr != itrEnd; ++itr)
+  {
+    AudioComponent* myComp = G_ECMANAGER->getComponent<AudioComponent>(itr);
+    // Component not active, skip it
+    if (!myComp->_isActive)
+      continue;
+    // It is active, loop through the sounds available
+    for (AudioComponent::Data& data : myComp->_sounds)
+    {
+      if (data._isActive && data._playOnStart)
+      {
+        if (data._loop)
+        {
+          if (data._is3D)
+            Play3DLoop(data._name, G_ECMANAGER->getObjId(itr));
+          else
+            PlayBGM(data._name);
+        }
+        else
+        {
+          if (data._is3D)
+            Play3DOnce(data._name, G_ECMANAGER->getObjId(itr));
+          else
+            PlayOnce(data._name);
+        }
+      }
+    }
+  }
 }
 
 void SystemAudio::Update()
 {
   // position update here
   _system->update();
+  // Update 3D positions
+  for (FMOD::Channel* chnls : _channels)
+  {
+    bool isPlaying;
+    chnls->isPlaying(&isPlaying);
+    FMOD_MODE fMode;
+    chnls->getMode(&fMode);
+    if (fMode == FMOD_3D)
+    {
+
+    }
+  }
 }
 
 void SystemAudio::Free()

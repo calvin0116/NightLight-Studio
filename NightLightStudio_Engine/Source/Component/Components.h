@@ -7,6 +7,7 @@
 
 //Component List Includes
 #include "ComponentAudio.h"
+#include "ComponentLoadAudio.h" // List of audio to load per scene, dunno where else to put, so creating component for it first.
 #include "ComponentCollider.h"
 #include "ComponentTransform.h"
 #include "ComponentGraphics.h"
