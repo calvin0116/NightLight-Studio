@@ -60,6 +60,12 @@ namespace NlMath
 		Vector3D Column1() const;
 		Vector3D Column2() const;
 
+		Vector3D Row0() const;
+		Vector3D Row1() const;
+		Vector3D Row2() const;
+
+		void SetRows(const Vec3 x, const Vec3 y, const Vec3 z);
+
 	} Matrix4x4, Matrix4x4, Mtx44;
 
 	Matrix4x4 operator * (const Matrix4x4& lhs, const Matrix4x4& rhs);

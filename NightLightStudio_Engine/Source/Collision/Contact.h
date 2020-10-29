@@ -56,3 +56,14 @@ struct Manifold
 	Manifold* next;
 	Manifold* prev;
 };
+
+struct ClipVertex
+{
+	ClipVertex()
+	{
+		f.key = ~0;
+	}
+
+	NlMath::Vec3 v;
+	FeaturePair f;
+};

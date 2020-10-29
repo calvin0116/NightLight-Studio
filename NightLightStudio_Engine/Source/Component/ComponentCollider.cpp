@@ -100,6 +100,14 @@ OBBCollider::OBBCollider(NlMath::Vector3D _center, NlMath::Vector3D _extend, NlM
 	rotation = Rotate;
 }
 
+OBBCollider& OBBCollider::operator=(const OBBCollider& rhs)
+{
+	center = rhs.center;
+	rotation = rhs.rotation;
+	extend = rhs.extend;
+	return *this;
+}
+
 void OBBCollider::posUpdate(ComponentTransform* transform)
 {
 	glm::vec3 colscale(

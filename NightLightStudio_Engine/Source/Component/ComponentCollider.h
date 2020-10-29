@@ -112,6 +112,8 @@ struct OBBCollider : public ICollider
 	OBBCollider(NlMath::Vector3D _center, 
 		NlMath::Vector3D _extend = NlMath::Vector3D(1, 1, 1),
 		NlMath::Vector3D _rotation = NlMath::Vector3D(0, 0, 0));
+	
+	OBBCollider& operator=(const OBBCollider& rhs);
 
 	void posUpdate(ComponentTransform* transform);
 

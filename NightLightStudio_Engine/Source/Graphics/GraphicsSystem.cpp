@@ -32,11 +32,10 @@ namespace NS_GRAPHICS
 		debugManager{ nullptr },
 		cameraManager{ nullptr },
 		textureManager{ nullptr },
-		hasInit{ false },
-		debugDrawing{ false },
-		projectionMatrix{ glm::mat4(1.0f) },
-		viewMatrix{ glm::mat4(1.0f) },
-		testCubeID{ NULL }
+		_hasInit{ false },
+		_debugDrawing{ false },
+		_projectionMatrix{ glm::mat4(1.0f) },
+		_viewMatrix{ glm::mat4(1.0f) }
 	{
 	}
 
@@ -202,7 +201,7 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::ToggleDebugDraw(const bool& set)
 	{
-		debugDrawing = set;
+		_debugDrawing = set;
 	}
 
 	void GraphicsSystem::SetViewMatrix()
@@ -215,12 +214,18 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::SetProjectionMatrix(const float& fov, const float& aspect_ratio, const float& near_plane, const float& far_plane)
 	{
-		projectionMatrix = glm::perspective(glm::radians(fov), aspect_ratio, near_plane, far_plane);
+		_projectionMatrix = glm::perspective(glm::radians(fov), aspect_ratio, near_plane, far_plane);
 
 		// Update only if changes are made
 		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetViewProjectionUniformLocation());
-		glBufferSubData(GL_UNIFORM_BUFFER, 64, 64, glm::value_ptr(projectionMatrix));
+		glBufferSubData(GL_UNIFORM_BUFFER, 64, 64, glm::value_ptr(_projectionMatrix));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	}
+
+	void GraphicsSystem::UpdateLights()
+	{
+
+
 	}
 
 	void GraphicsSystem::CreateCube(Entity& entity, const glm::vec3& rgb)
@@ -371,6 +376,6 @@ namespace NS_GRAPHICS
 	void GraphicsSystem::DetachMesh(Entity& entity)
 	{
 		if (entity.getComponent<ComponentGraphics>() != nullptr)
-			entity.getComponent<ComponentGraphics>()->MeshID = (unsigned)-1;
+			entity.getComponent<ComponentGraphics>()->MeshID = -1;
 	}
 }

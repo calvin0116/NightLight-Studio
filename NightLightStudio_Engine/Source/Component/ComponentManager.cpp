@@ -180,8 +180,8 @@ int ComponentManager::ComponentSetManager::BuildChildObject()
 
 void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::ContainerID compId, int objId, const void* newComp)
 {
-	// insert the component
-	int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<const char*>(newComp));
+	//// insert the component
+	//int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<const char*>(newComp));
 
 	// set object component data
 
@@ -198,6 +198,12 @@ void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::C
 		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
 	}
 	if (compData == nullptr) throw;
+
+	if (/*compData->compPtr != nullptr || */compData->containerId != -1 || compData->containerIndex != -1)
+		throw; // check for double allocation
+
+	// insert the component // shifted the insert component AFTER the check 
+	int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<const char*>(newComp));
 
 	// !
 	compData->containerId = compId; // set container id
@@ -228,6 +234,9 @@ void ComponentManager::ComponentSetManager::RemoveComponent(ComponentManager::Co
 		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
 	}
 	if (compData == nullptr) throw;
+
+	if (compData->containerId == -1 || compData->containerIndex == -1)
+		throw; // prevent double remove causing undefined behaviour
 
 	int index = compData->containerIndex;
 
@@ -1069,7 +1078,7 @@ void ComponentManager::ComponentCreation()
 	// factory
 	ComponentManager::ComponentSetFactory comsetFac;
 
-	auto build = [&](COMPONENTSETNAMES id)
+	auto build = [&](COMPONENTSETNAMES _id)
 	{
 		// Building another component set
 		comsetFac.StartBuild();
@@ -1090,7 +1099,7 @@ void ComponentManager::ComponentCreation()
 		// builds the component set
 		ComponentManager::ComponentSet* cs = comsetFac.Build();
 		// adds the component set to the component manager
-		SYS_COMPONENT->AddComponentSet(id, cs);
+		SYS_COMPONENT->AddComponentSet(_id, cs);
 
 		return cs;
 	};
@@ -1186,6 +1195,7 @@ void ComponentManager::TestComponents()
 
 			Entity childEntity = entity.makeChild();
 			ComponentManager::ChildContainerT* childrens = entity.getChildren();
+			(void)childrens;
 
 			std::cout << std::endl;
 
@@ -1561,11 +1571,11 @@ void ComponentManager::Free()
 	ComponentSets.clear();
 }
 
-void ComponentManager::Clear(COMPONENTSETNAMES id)
+void ComponentManager::Clear(COMPONENTSETNAMES _id)
 {
 	//if (id == COMPONENT_MAIN) {}
 
-	auto itr = ComponentSets.find((int)id);
+	auto itr = ComponentSets.find((int)_id);
 
 	if (itr == ComponentSets.end()) throw;
 

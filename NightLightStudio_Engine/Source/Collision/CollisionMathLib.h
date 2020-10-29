@@ -17,6 +17,7 @@ struct SphereCollider;
 struct OBBCollider;
 struct CapsuleCollider;
 struct Manifold;
+struct ClipVertex;
 
 namespace NlMath
 {
@@ -46,7 +47,22 @@ namespace NlMath
 
 	bool CapsuleToSphere(const CapsuleCollider& tCap1, const SphereCollider& tSpr2, Vector3D& normal);
 
+	///////////////////////////////////////////////OBB checks Support functions/////////////////////////////////////////////////////////////
 	bool OBB_OBBCollision(const OBBCollider& tBox1, const OBBCollider& tBox2, Manifold& contact);
+
+	void ComputeIncidentFace(const OBBCollider& itx, Vec3 n, ClipVertex* out);
+
+	void ComputeReferenceEdgesAndBasis(const OBBCollider& rtx, Vec3 n, unsigned int axis, unsigned char* out, Matrix4x4* basis, Vec3* e);
+
+	unsigned int q3Orthographic(float sign, float e, unsigned int axis, unsigned int clipEdge, ClipVertex* in, unsigned int inCount, ClipVertex* out);
+
+	unsigned int Clip(const Vec3& rPos, const Vec3& e, unsigned char* clipEdges, const Matrix4x4& basis, ClipVertex* incident, ClipVertex* outVerts, float* outDepths);
+
+	void SupportEdge(const OBBCollider& tx, Vec3 n, Vec3* aOut, Vec3* bOut);
+
+	void EdgesContact(Vec3* CA, Vec3* CB, const Vec3& PA, const Vec3& QA, const Vec3& PB, const Vec3& QB);
+
+	///////////////////////////////////////////////OBB checks Support functions end/////////////////////////////////////////////////////////////
 	// some 2d checks we may or may not need in the future
 	// we can change them to 3d if we need them
 

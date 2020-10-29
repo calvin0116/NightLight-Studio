@@ -110,6 +110,18 @@ namespace NlMath
 		return Vector3DLength(*this);
 	}
 
+	void Vector3D::set(float _x, float _y, float _z)
+	{
+		x = _x;
+		y = _y;
+		z = _z;
+	}
+
+	Vector3D Vector3D::abs() const
+	{
+		return Vector3D(fabs(x), fabs(y), fabs(z));
+	}
+
 
 	Vector3D& Vector3D::operator=(const glm::vec3& rhs)
 	{
