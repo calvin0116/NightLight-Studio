@@ -15,7 +15,7 @@ typedef struct TranslationalMomentum
 {
 	NlMath::Vector3D direction = 0;
 	float magnitute = 0;
-} ;
+} TransMom;
 
 typedef struct RotationalForce
 {
@@ -28,7 +28,7 @@ typedef struct RotationalMomentum
 	float radius = 0;
 	float mass = 0;
 	NlMath::Vector3D angularMomentum;
-} ;
+}RotMom ;
 
 
 class ForceManager

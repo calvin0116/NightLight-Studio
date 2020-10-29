@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 
-typedef class ComponentGraphics //: public IComponent
+#include "..\\..\\ISerializable.h"
+
+typedef class ComponentGraphics : public ISerializable//: public IComponent
 {
 public:
 	// Temporarily make them public for easy access
@@ -27,6 +29,7 @@ public:
 	~ComponentGraphics();
 
 	//read and write function for initialization from saved files
-	void Read();
-	void Write();
+	virtual void	Read(Value& ) {  };
+	virtual Value	Write() { return Value(); };
+	virtual Value& Write(Value& val) { return val; };
 } GraphicsComponent;

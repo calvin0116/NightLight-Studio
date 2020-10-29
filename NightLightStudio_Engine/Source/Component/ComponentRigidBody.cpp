@@ -17,10 +17,3 @@ ComponentRigidBody::~ComponentRigidBody()
 {
 }
 
-void ComponentRigidBody::Read()
-{
-}
-
-void ComponentRigidBody::Write()
-{
-}

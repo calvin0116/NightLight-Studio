@@ -11,6 +11,8 @@
 
 #include "LocalVector.h"
 
+#include "..\..\\ISerializable.h"
+
 namespace NS_COMPONENT
 {
 
@@ -216,7 +218,81 @@ public:
 
 	ComponentMemoryManager cmm;
 
-	class ComponentSet; // fwd decl
+	//class ComponentSet; // fwd decl
+	class ComponentSetFactory; 
+	class ComponentSetManager; 
+
+	class ComponentSet
+	{
+		//public:
+		friend ComponentSetFactory; // allows factory to build
+		friend ComponentSetManager; // allows mgr to mg
+		friend ComponentManager;
+
+		ComponentMemoryManager cmm; // contains container for object and containers for components
+
+		ComponentManager::ContainerID objContainerId; // container id for obj
+		ComponentManager::ContainerID objContainerIdChilds; // container id for obj childs
+
+		std::vector<ComponentManager::ContainerID> componentContainerIDs; // container id for comp
+		size_t objSize; // sizeof of the obj class -> [obj] [Components] * componentSize
+
+		int idIndexModifier;
+
+		// maps typeid to container id
+		std::map<size_t, ComponentManager::ContainerID> hashConIdMap; // std::type_info.hash_code() , id
+		std::map<size_t, ComponentManager::ContainerID> hashConIdMapChilds; // std::type_info.hash_code() , id
+
+		//std::map<ComponentManager::ContainerID, std::map<int, int>> compObjIndMap; // maps comp to obj id // O(log n)
+
+		class ObjectData
+		{
+		public:
+			friend ComponentSetFactory; // allows factory to build
+			friend ComponentSetManager; // allows factory to build
+
+			int objId; // unique id of the object
+
+			int parentObjId;
+
+			struct ChildData
+			{
+				int generation;
+				int numDecendants;
+				int numChild;
+				//int childIDs[MAX_CHILDREN];
+				//LocalVector<int, MAX_CHILDREN> childIDs;
+				ChildContainerT childIDs;
+				ChildData() :
+					generation(0),
+					numDecendants(0),
+					numChild(0),
+					childIDs()
+				{};
+			};
+
+			ChildData children;
+
+			struct ComponentData // representation of a component
+			{
+				ComponentManager::ContainerID containerId; // id of the container
+				int containerIndex; // index of component within the container
+				void* compPtr; // pointer to the component
+			};
+		};
+
+	public:
+		ComponentSet() :
+			cmm(),
+			objContainerId(-1),
+			objContainerIdChilds(-1),
+			componentContainerIDs(),
+			idIndexModifier(0),
+			objSize(0)
+		{
+		}
+	};
+
 
 	class ComponentSetFactory
 	{
@@ -510,6 +586,139 @@ public:
 			ComponentSetManager* compSetMgr; // component set obj belongs to
 			int objId; // Entity Id
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// EntityComponentContainer
+// to enable this ->
+//			for (ISerializable& comp : entity.getEntityComponentContainer())
+//			{
+//
+//			}
+//
+//
+		public:
+			class EntityComponentContainer
+			{
+				ComponentSetManager* compSetMgr; // component set obj belongs to
+				int objId; // Entity Id
+				bool isChild;
+			public:
+
+				EntityComponentContainer(ComponentSetManager* _compSetMgr, int _objId, bool _isChild = false)
+					: compSetMgr(_compSetMgr), objId(_objId), isChild(_isChild) {}
+
+				struct EntityComponentContainerIterator
+				{
+					friend EntityComponentContainer;
+
+					ComponentSet::ObjectData::ComponentData* currentCompdata; // pointer to the data
+					int currentCompInd; // current index
+					int totalNumComp; // unnecessary var prob // maybe not
+
+
+				private:
+					void increment()
+					{
+						//void* voiddat = currentCompdata + 1;
+						//char* chdat = reinterpret_cast<char*>(currentCompdata); 
+						//chdat += sizeof(ComponentSet::ObjectData::ComponentData);
+						++currentCompInd;
+						++currentCompdata;
+					}
+
+				public:
+					ISerializable* operator*()
+					{
+						return reinterpret_cast<ISerializable*>(currentCompdata->compPtr);
+					}
+
+				private:
+					void incrementToNonEmptyElement()
+					{
+						//if (operator*() == nullptr || operator*() == (void*)0xFFFFFFFFFFFFFFFF)
+						//{
+						//}
+
+						while (operator*() == nullptr || operator*() == (void*)0xFFFFFFFFFFFFFFFF)
+						{
+							if (currentCompInd != totalNumComp)
+							{
+								increment();
+							}
+							else
+								break;
+						}
+					}
+
+				public:
+					void operator++()
+					{
+						increment();
+						incrementToNonEmptyElement();
+					}
+
+					bool operator!=(EntityComponentContainerIterator& ent)
+					{
+						return currentCompInd != ent.currentCompInd;
+					}
+				};
+
+
+				EntityComponentContainerIterator begin()
+				{
+					int objInd = objId - compSetMgr->compSet->idIndexModifier;
+					char* obj;
+					if (isChild)
+					{
+						obj = compSetMgr->compSet->cmm.getElementAt(compSetMgr->compSet->objContainerIdChilds, objInd - IDRANGE_RT);
+					}
+					else
+					{
+						obj = compSetMgr->compSet->cmm.getElementAt(compSetMgr->compSet->objContainerId, objInd);
+					}
+
+					// obj building
+					//size_t size = sizeof(ManagerComponent::ComponentSet::Object);
+					//size += sizeof(ManagerComponent::ComponentSet::Object::Component) * compSet->componentContainerIDs.size();
+
+					obj += sizeof(ComponentManager::ComponentSet::ObjectData);
+
+					EntityComponentContainerIterator returnItr;
+					
+					// find the no of components
+					//returnItr.totalNumComp = compSetMgr->compSet->componentContainerIDs.size() / 2;
+					returnItr.totalNumComp = compSetMgr->compSet->hashConIdMap.size();
+
+					if (returnItr.totalNumComp != (compSetMgr->compSet->componentContainerIDs.size() / 2)) throw; // shld be the same
+					
+					// set current index
+					returnItr.currentCompInd = 0; 
+					// set pointer
+					returnItr.currentCompdata = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(obj);
+
+					returnItr.incrementToNonEmptyElement();
+
+					return returnItr;
+				}
+
+				EntityComponentContainerIterator end()
+				{
+					EntityComponentContainerIterator returnItr;
+					returnItr.totalNumComp = compSetMgr->compSet->hashConIdMap.size();
+					returnItr.currentCompInd = returnItr.totalNumComp; // points to element after last
+					returnItr.currentCompdata = nullptr; // dunnid unless theres operator--
+					return returnItr;
+				}
+			};
+
+			EntityComponentContainer getEntityComponentContainer()
+			{
+				return EntityComponentContainer(compSetMgr, objId);
+			}
+
+		private:
+// EntityComponentContainer END
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		public:
 			// ctor
 			EntityHandle(ComponentSetManager* csm, int oid);
@@ -571,6 +780,12 @@ public:
 				T* returnComp = compSetMgr->AttachComponent<T>(*this, *comp);
 				free(reinterpret_cast<void*>(comp));
 				return returnComp;
+			}
+
+			template<typename T>
+			void RemoveComponent()
+			{
+				compSetMgr->RemoveComponent<T>(objId);
 			}
 
 			///////////////////////////////////////////////////////////////////////////////////////
@@ -716,79 +931,7 @@ public:
 		char* getObjectComponent(ComponentManager::ContainerID compId, int objId, bool isChild = false);
 
 	};
-
-	class ComponentSet
-	{
-	//public:
-		friend ComponentSetFactory; // allows factory to build
-		friend ComponentSetManager; // allows mgr to mg
-		friend ComponentManager;
-
-		ComponentMemoryManager cmm; // contains container for object and containers for components
-
-		ComponentManager::ContainerID objContainerId; // container id for obj
-		ComponentManager::ContainerID objContainerIdChilds; // container id for obj childs
-
-		std::vector<ComponentManager::ContainerID> componentContainerIDs; // container id for comp
-		size_t objSize; // sizeof of the obj class -> [obj] [Components] * componentSize
-
-		int idIndexModifier;
-
-		// maps typeid to container id
-		std::map<size_t, ComponentManager::ContainerID> hashConIdMap; // std::type_info.hash_code() , id
-		std::map<size_t, ComponentManager::ContainerID> hashConIdMapChilds; // std::type_info.hash_code() , id
-
-		//std::map<ComponentManager::ContainerID, std::map<int, int>> compObjIndMap; // maps comp to obj id // O(log n)
-
-		class ObjectData
-		{
-		public:
-			friend ComponentSetFactory; // allows factory to build
-			friend ComponentSetManager; // allows factory to build
-
-			int objId; // unique id of the object
-
-			int parentObjId;
-
-			struct ChildData
-			{
-				int generation;
-				int numDecendants;
-				int numChild;
-				//int childIDs[MAX_CHILDREN];
-				//LocalVector<int, MAX_CHILDREN> childIDs;
-				ChildContainerT childIDs;
-				ChildData() :
-					generation(0),
-					numDecendants(0),
-					numChild(0),
-					childIDs()
-				{};
-			};
-
-			ChildData children;
-
-			struct ComponentData // representation of a component
-			{
-				ComponentManager::ContainerID containerId; // id of the container
-				int containerIndex; // index of component within the container
-				void* compPtr; // pointer to the component
-			};
-		};
-
-	public:
-		ComponentSet() :
-			cmm(),
-			objContainerId(-1),
-			objContainerIdChilds(-1),
-			componentContainerIDs(),
-			idIndexModifier(0),
-			objSize(0)
-		{
-		}
-	};
-
-
+	
 	//////////////////////////
 	// ComponentManager vars
 	std::map<ContainerID, ComponentSet*> ComponentSets;

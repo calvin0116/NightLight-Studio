@@ -28,11 +28,13 @@ namespace NS_SCENE
 		Parser scene_parser;
 
 		//Scene manipulation
-		std::string current_scene;
-		std::string next_scene;
+		FILE_NAME current_scene;
+		FILE_NAME next_scene;
 		SCENE_CHANGE to_change_scene;
 		//bool to_exit;
 
+		int scene_index;		//For change scene test / change scene by index 
+		std::map<int, FILE_NAME> scene_indexes;
 		//Scene List
 		std::map<FILE_NAME, Parser*> scene_list;
 
@@ -46,7 +48,8 @@ namespace NS_SCENE
 			next_scene{},
 			to_change_scene{ SC_NOCHANGE },
 			scene_list{},
-			scenes_path{}
+			scenes_path{},
+			scene_index{0}
 		{}
 
 		~SceneManager();
@@ -69,6 +72,8 @@ namespace NS_SCENE
 
 		void GameLoad() override;
 		void GameInit() override;		//Init current scene
+
+		void Update() override;		//For testing without scipting
 
 		void GameExit() override;
 		void Free() override;	//Destroy current system

@@ -35,4 +35,4 @@ const std::string json_path = "../Resources/JsonFile/";
 
 #define ENGINE_API   __declspec( dllexport )
 
-#define _EDITOR
+//#define _EDITOR

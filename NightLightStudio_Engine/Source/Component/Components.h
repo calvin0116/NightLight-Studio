@@ -7,10 +7,13 @@
 
 //Component List Includes
 #include "ComponentAudio.h"
+#include "ComponentLoadAudio.h" // List of audio to load per scene, dunno where else to put, so creating component for it first.
 #include "ComponentCollider.h"
 #include "ComponentTransform.h"
 #include "ComponentGraphics.h"
 #include "ComponentRigidBody.h"
+
+#include "..\..\ISerializable.h"
 
 //extern ComponentManager::ComponentSetManager G_MAINCOMPSET;
 //extern ComponentManager::ComponentSetManager G_UICOMPSET;
@@ -30,7 +33,7 @@ struct IComponent
 };*/
 
 
-struct ComponentTest0
+struct ComponentTest0 : public ISerializable
 {
 	struct TestVar
 	{
@@ -40,6 +43,10 @@ struct ComponentTest0
 	char c[128];
 	float f[16];
 	LocalVector<TestVar, 4> data;
+
+	virtual void	Read(Value& val) { UNREFERENCED_PARAMETER(val); };
+	virtual Value	Write() { return Value(); };
+	virtual Value& Write(Value& val) { return val; };
 };
 /*
 struct ComponentInput

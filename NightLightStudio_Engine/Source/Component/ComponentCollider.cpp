@@ -12,6 +12,10 @@ ComponentCollider::ComponentCollider(COLLIDERS _col)
 
 }
 
+ComponentCollider::ComponentCollider() : collisionTime{ FLT_MAX }, colliderType(COLLIDERS::AABB) // default this
+{
+}
+
 void ComponentCollider::CollisionTimeReset()
 {
 	collisionTime = FLT_MAX;
@@ -34,7 +38,7 @@ SphereCollider::SphereCollider(NlMath::Vector3D Point, float Radius)
 {
 }
 
-void SphereCollider::init(ComponentTransform* transform)
+void SphereCollider::posUpdate(ComponentTransform* transform)
 {
 	
 	center.x = transform->_position.x;
@@ -61,7 +65,7 @@ AABBCollider::AABBCollider(NlMath::Vector3D VecMax, NlMath::Vector3D VecMin)
 {
 }
 
-void AABBCollider::init(ComponentTransform* transform)
+void AABBCollider::posUpdate(ComponentTransform* transform)
 {
 	glm::vec3 colscale(
 		transform->_scale.x * colliderScale.x,
@@ -84,16 +88,27 @@ void AABBCollider::init(ComponentTransform* transform)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //// OBB
 OBBCollider::OBBCollider()
-	: ICollider(), center(0), extend(0), rotation(0)
+	: ICollider(), center(0), extend(0), rotation(1)
 {
 }
 
 OBBCollider::OBBCollider(NlMath::Vector3D _center, NlMath::Vector3D _extend, NlMath::Vector3D _rotation)
-	: ICollider(), center(_center), extend(_extend), rotation(_rotation)
+	: ICollider(), center(_center), extend(_extend), rotation(1)
 {
+	glm::quat Quaternion(glm::radians((glm::vec3)_rotation));
+	glm::mat4 Rotate = glm::mat4_cast(Quaternion);
+	rotation = Rotate;
 }
 
-void OBBCollider::init(ComponentTransform* transform)
+OBBCollider& OBBCollider::operator=(const OBBCollider& rhs)
+{
+	center = rhs.center;
+	rotation = rhs.rotation;
+	extend = rhs.extend;
+	return *this;
+}
+
+void OBBCollider::posUpdate(ComponentTransform* transform)
 {
 	glm::vec3 colscale(
 		transform->_scale.x * colliderScale.x,
@@ -102,9 +117,11 @@ void OBBCollider::init(ComponentTransform* transform)
 	);
 
 	center = transform->_position;
-	//extend = transform->_scale;
 	extend = colscale;
-	rotation = glm::radians(transform->_rotation);
+	glm::quat Quaternion(glm::radians(transform->_rotation));
+	glm::mat4 Rotate = glm::mat4_cast(Quaternion);
+	rotation = Rotate;
+
 }
 
 //// OBB END
@@ -123,7 +140,7 @@ PlaneCollider::PlaneCollider(NlMath::Vector3D _point, NlMath::Vector3D _extend, 
 {
 }
 
-void PlaneCollider::init(ComponentTransform* transform)
+void PlaneCollider::posUpdate(ComponentTransform* transform)
 {
 }
 
@@ -143,7 +160,7 @@ CapsuleCollider::CapsuleCollider(NlMath::Vector3D _tip, NlMath::Vector3D _base, 
 {
 }
 
-void CapsuleCollider::init(ComponentTransform* transform)
+void CapsuleCollider::posUpdate(ComponentTransform* transform)
 {
 	glm::vec3 colscale(
 		transform->_scale.x * colliderScale.x,

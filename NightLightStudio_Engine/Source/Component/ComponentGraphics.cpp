@@ -22,11 +22,3 @@ void ComponentGraphics::AttachMesh(const int& meshID)
 ComponentGraphics::~ComponentGraphics()
 {
 }
-
-void ComponentGraphics::Read()
-{
-}
-
-void ComponentGraphics::Write()
-{
-}

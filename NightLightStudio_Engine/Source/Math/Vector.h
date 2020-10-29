@@ -43,7 +43,9 @@ namespace NlMath
 		operator glm::vec4() const;
 		
 		float length();
-	} Vector3D, Vec2, Point2D, Pt2;
+		void set(float _x, float _y, float _z);
+		Vector3D abs() const;
+	} Vector3D, Vec3, Point3D, Pt3;
 	
 	
 	#ifdef _MSC_VER

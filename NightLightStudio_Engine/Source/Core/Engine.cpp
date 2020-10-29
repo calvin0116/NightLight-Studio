@@ -32,11 +32,12 @@ void FluffyUnicornEngine::Run()
 	{
 		//=====Scene Layer====//
 		SYS_MAN->GameLoad();
+		scene_running = true;	//Re-initial scene running when exiting from scene
 		//SYS_SCENE_MANAGER->LoadScene();
 		while (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() == NS_SCENE::SC_NOCHANGE)	//Aka while scene not changed
 		{
 			SYS_MAN->GameInit();
-			//SYS_SCENE_MANAGER->InitScene();
+			//DELTA_T->end();			//To reset delta for scene change
 			while (scene_running)	//Scene / Game loop
 			{
 				//fps start

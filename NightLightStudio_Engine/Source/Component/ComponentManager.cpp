@@ -131,7 +131,7 @@ ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentS
 		name.append(std::to_string(unknown_ent_id));
 		++unknown_ent_id;
 	}
-	NS_SCENE::SYS_SCENE_MANAGER->EntityName[objId] = name;
+	NS_SCENE::SYS_SCENE_MANAGER->EntityName[objId + compSet->idIndexModifier] = name;
 	//----------------------------------------//
 	//return objId + compSet->idIndexModifier;
 
@@ -228,6 +228,9 @@ void ComponentManager::ComponentSetManager::RemoveComponent(ComponentManager::Co
 		compData = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(getObjectComponent(compId, objId));
 	}
 	if (compData == nullptr) throw;
+
+	if (compData->containerId == -1 || compData->containerIndex == -1)
+		throw; // prevent double remove causing undefined behaviour
 
 	int index = compData->containerIndex;
 
@@ -1079,6 +1082,8 @@ void ComponentManager::ComponentCreation()
 		comsetFac.AddComponentContainer<ComponentCollider>();
 		comsetFac.AddComponentContainer<ComponentRigidBody>();
 		comsetFac.AddComponentContainer<ComponentGraphics>();
+    comsetFac.AddComponentContainer<ComponentAudio>();
+    comsetFac.AddComponentContainer<ComponentLoadAudio>();
 		//comsetFac.AddComponentContainer<ComponentInput>();
 		//comsetFac.AddComponentContainer<ComponentLogic>();
 		//comsetFac.AddComponentContainer<ComponentCamera>();
@@ -1118,12 +1123,18 @@ void ComponentManager::TestComponents()
 
 		// WHILE COMPONENTS
 		// Creation
-		ComponentTest0 newCompComponentTest0
-		{
-			0,
-			"Hello World",
-			{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f}
-		};
+		ComponentTest0 newCompComponentTest0;
+		//{
+		//	0,
+		//	"Hello World",
+		//	{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f}
+		//}; 
+		// initialiser list stopped working after inheriting from Iser
+
+		newCompComponentTest0.id = 0;
+		newCompComponentTest0.c[0] = 'H';
+		newCompComponentTest0.f[0] = 1.11f;
+
 		G_ECMANAGER->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
 		// WHILE COMPONENTS END
 		// WHILE OBJECTS END

@@ -6,6 +6,7 @@
 #include "../Component/ComponentTransform.h"
 #include "../Component/ComponentRigidBody.h"
 #include "../Input/SystemInput.h"
+#include "Contact.h"
 
 #include "CollisionDebugLines.h"
 
@@ -261,31 +262,31 @@ namespace NS_COLLISION
 		case COLLIDERS::PLANE:
 		{
 			PlaneCollider* tmp = &(comCol->collider.plane);
-			tmp->init(comTrans);
+			tmp->posUpdate(comTrans);
 			break;
 		}
 		case COLLIDERS::SPHERE:
 		{
 			SphereCollider* tmp = &(comCol->collider.sphere);
-			tmp->init(comTrans);
+			tmp->posUpdate(comTrans);
 			break;
 		}
 		case COLLIDERS::AABB:
 		{
 			AABBCollider* tmp = &(comCol->collider.aabb);
-			tmp->init(comTrans);
+			tmp->posUpdate(comTrans);
 			break;
 		}
 		case COLLIDERS::OBB:
 		{
 			OBBCollider* tmp = &(comCol->collider.obb);
-			tmp->init(comTrans);
+			tmp->posUpdate(comTrans);
 			break;
 		}
 		case COLLIDERS::CAPSULE:
 		{
 			CapsuleCollider* tmp = &(comCol->collider.capsule);
-			tmp->init(comTrans);
+			tmp->posUpdate(comTrans);
 			break;
 		}
 		default:
@@ -299,9 +300,6 @@ namespace NS_COLLISION
 		ComponentCollider* Collider1, ComponentCollider* Collider2, 
 		ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2)
 	{
-
-
-
 
 		if (Collider1->colliderType == COLLIDERS::AABB)
 		{
@@ -617,35 +615,36 @@ namespace NS_COLLISION
 				OBBCollider* a = &(Collider1->collider.obb);
 				OBBCollider* b = &(Collider2->collider.obb);
 
-				NlMath::Vector3D normal;
-				bool check = NlMath::OBBToOBB(*a, *b, normal);
+				Manifold tmp;
 
-				// debug lines?
-				NlMath::Vector3D start = a->center;
-				NlMath::Vector3D end = normal  + start;
-				NS_GRAPHICS::SYS_GRAPHICS->DrawLine(start, end, glm::vec3(0.5f, 0.5f, 1.f));
+				//return NlMath::OBBToOBB(*a, *b);
+				bool check =  NlMath::OBB_OBBCollision(*a, *b, tmp);
 
-				if (check == false)
-				{
-					return false;// no collision return false
-				}
+				//// debug lines?
+				//NlMath::Vector3D start = a->center;
+				//NlMath::Vector3D end = normal  + start;
+				NlMath::Vector3D test(0.1);
 
-				// yes collision add to collision event and return true
+					NS_GRAPHICS::SYS_GRAPHICS->DrawLine(a->center,  a->center+ tmp.normal);
 
-				CollisionEvent newEvent;
+				return check;
 
-				// get nroamel
-				newEvent.collisionNormal = normal;
+				//// yes collision add to collision event and return true
 
-				// add rigid body
-				newEvent.rigid1 = Rigid1;
-				newEvent.rigid2 = Rigid2;
+				//CollisionEvent newEvent;
 
-				// set type
-				newEvent.collisionType = COLRESTYPE::OBB_OBB;
+				//// get nroamel
+				//newEvent.collisionNormal = normal;
 
-				// add event
-				colResolver.addCollisionEvent(newEvent);
+				//// add rigid body
+				//newEvent.rigid1 = Rigid1;
+				//newEvent.rigid2 = Rigid2;
+
+				//// set type
+				//newEvent.collisionType = COLRESTYPE::OBB_OBB;
+
+				//// add event
+				//colResolver.addCollisionEvent(newEvent);
 
 				// return true
 				return true;
