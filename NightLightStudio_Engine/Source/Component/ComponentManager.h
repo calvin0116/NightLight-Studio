@@ -686,7 +686,7 @@ public:
 					
 					// find the no of components
 					//returnItr.totalNumComp = compSetMgr->compSet->componentContainerIDs.size() / 2;
-					returnItr.totalNumComp = compSetMgr->compSet->hashConIdMap.size();
+					returnItr.totalNumComp = (int)compSetMgr->compSet->hashConIdMap.size();
 
 					if (returnItr.totalNumComp != (compSetMgr->compSet->componentContainerIDs.size() / 2)) throw; // shld be the same
 					
@@ -703,7 +703,7 @@ public:
 				EntityComponentContainerIterator end()
 				{
 					EntityComponentContainerIterator returnItr;
-					returnItr.totalNumComp = compSetMgr->compSet->hashConIdMap.size();
+					returnItr.totalNumComp = (int)compSetMgr->compSet->hashConIdMap.size();
 					returnItr.currentCompInd = returnItr.totalNumComp; // points to element after last
 					returnItr.currentCompdata = nullptr; // dunnid unless theres operator--
 					return returnItr;

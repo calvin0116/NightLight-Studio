@@ -1075,7 +1075,7 @@ void ComponentManager::ComponentCreation()
 	// factory
 	ComponentManager::ComponentSetFactory comsetFac;
 
-	auto build = [&](COMPONENTSETNAMES id)
+	auto build = [&](COMPONENTSETNAMES _id)
 	{
 		// Building another component set
 		comsetFac.StartBuild();
@@ -1096,7 +1096,7 @@ void ComponentManager::ComponentCreation()
 		// builds the component set
 		ComponentManager::ComponentSet* cs = comsetFac.Build();
 		// adds the component set to the component manager
-		SYS_COMPONENT->AddComponentSet(id, cs);
+		SYS_COMPONENT->AddComponentSet(_id, cs);
 
 		return cs;
 	};
@@ -1192,6 +1192,7 @@ void ComponentManager::TestComponents()
 
 			Entity childEntity = entity.makeChild();
 			ComponentManager::ChildContainerT* childrens = entity.getChildren();
+			(void)childrens;
 
 			std::cout << std::endl;
 
@@ -1567,11 +1568,11 @@ void ComponentManager::Free()
 	ComponentSets.clear();
 }
 
-void ComponentManager::Clear(COMPONENTSETNAMES id)
+void ComponentManager::Clear(COMPONENTSETNAMES _id)
 {
 	//if (id == COMPONENT_MAIN) {}
 
-	auto itr = ComponentSets.find((int)id);
+	auto itr = ComponentSets.find((int)_id);
 
 	if (itr == ComponentSets.end()) throw;
 
