@@ -58,45 +58,113 @@ Sends the message out to the various Receivers
 
 /*******************************************************************************************/
 
-TLDR;
+CODE EXAMPLE
 
-HOW 2 USE
-
-using namespace SystemMessaging;
-
-struct TestMessage : public IMessage 
+// THIS IS THE CLASS THAT HOLDS THE MESSAGE
+class MessageTest : public SystemMessaging::IMessage
 {
-	TestMessage(std::string str) : IMessage(str) {}
-	std::string str;
+public:
+	std::string text;
+	MessageTest(std::string id, std::string t) : IMessage(id), text{ t } {}
 };
-void tFunc(TestMessage& tmsg)
+
+// THIS IS A STATIC FUNCTION THAT WILL RUN ON RECEIVING THE MESSAGE
+void TestFunc(MessageTest& a)
 {
-	std::cout << tmsg.str << std::endl;
+	std::cout << a.text << std::endl;
 }
+
+// THIS IS THE CLASS (MEMBER FUNCTION) THAT WILL RUN ON RECEIVING THE MESSAGE
+class TestClass
+{
+public:
+	void TestFuncClass(MessageTest& a)
+	{
+		std::cout << "CLASS " << a.text << std::endl;
+	}
+};
 
 int main()
 {
-	// Init Observables and Listeners
-	SystemBroadcast brd{ "brd" };
-	SystemReceiver rec{ "rec" };
+	// Static function messages
+	MessageTest msgTest1("test", "1");
+	MessageTest msgTest2("test", "2");
+	MessageTest msgTest3("test", "3");
+	MessageTest msgTest4("test", "4");
+	MessageTest msgTest5("test", "5");
 
-	// Attaching ID to check
-	rec.AttachHandler("ID", tFunc);
-	brd.Register("ID", rec);
+	// Member function messages
+	MessageTest msgTest6("test2", "6");
+	MessageTest msgTest7("test2", "7");
+	MessageTest msgTest8("test2", "8");
+	MessageTest msgTest9("test2", "9");
+	MessageTest msgTest10("test2", "10");
 
-	// Sending message
-	TestMessage t{ "ID" };
-	t.str = "TEST MESSAGE";
+	// Lambda Messages
+	MessageTest msgTest11("test3", "11");
+	MessageTest msgTest12("test3", "12");
+	MessageTest msgTest13("test3", "13");
+	MessageTest msgTest14("test3", "14");
+	MessageTest msgTest15("test3", "15");
 
-	// Sends message to all listeners that use messages with its ID
-	brd.ProcessMessage(t);
+	// Class to call member function from
+	TestClass testClass;
 
-	return 0;
+	// Creating a Receiver
+	SystemMessaging::SystemReceiver r("ID");
+
+	// Attaching a function to a handler
+	// test, test2 and test3 are the Message_IDs that will trigger the respective functions
+	// Static Function
+	r.AttachHandler("test", TestFunc);
+	// Member Function
+	r.AttachHandler("test2", &TestClass::TestFuncClass, &testClass);
+	// Lambda
+	r.AttachHandler<MessageTest>("test3", [](MessageTest& a) { std::cout << "LAMBDA " << a.text << std::endl; });
+
+	// Creating a Broadcaster
+	SystemMessaging::SystemBroadcast b("Broadcast");
+
+	// Registering a Message_ID and its Receiver to a Broadcaster
+	b.Register("test", &r);
+	//b.Register("test2", &r);
+	b.Register("test3", &r);
+
+	// Registering a Message_ID and its Receiver to a Broadcaster by its ID
+	// In this case we will register via to the Global System Broadcaster
+	//GLOBAL_SYSTEM_BROADCAST.Register(b.GetID(), "test", &r);
+	GLOBAL_SYSTEM_BROADCAST.Register(b.GetID(), "test2", &r);
+	//GLOBAL_SYSTEM_BROADCAST.Register(b.GetID(), "test3", &r);
+
+	// Processes all the messages, in the order of:
+	// Global Send All messages
+	// Direct send to Broadcaster via Global
+	// Send to all Broadcaster registered on Receiver
+	// Send to Broadcaster via Receiver
+	// Send to Broadcaster Directly
+	GLOBAL_SYSTEM_BROADCAST.ProcessMessage(msgTest1);
+	GLOBAL_SYSTEM_BROADCAST.ProcessMessage(b.GetID(), msgTest2);
+	r.SendToAllBroadcast(msgTest3);
+	r.SendToSpecificBroadcast(GLOBAL_BROADCAST_ID, msgTest4);
+	b.ProcessMessage(msgTest5);
+
+	GLOBAL_SYSTEM_BROADCAST.ProcessMessage(msgTest6);
+	GLOBAL_SYSTEM_BROADCAST.ProcessMessage(b.GetID(), msgTest7);
+	r.SendToAllBroadcast(msgTest8);
+	r.SendToSpecificBroadcast(GLOBAL_BROADCAST_ID, msgTest9);
+	b.ProcessMessage(msgTest10);
+
+	GLOBAL_SYSTEM_BROADCAST.ProcessMessage(msgTest11);
+	GLOBAL_SYSTEM_BROADCAST.ProcessMessage(b.GetID(), msgTest12);
+	r.SendToAllBroadcast(msgTest13);
+	r.SendToSpecificBroadcast(GLOBAL_BROADCAST_ID, msgTest14);
+	b.ProcessMessage(msgTest15);
 }
 
 
 NOTE:
 There is an in-built GLOBAL_SYSTEM_BROADCAST in SystemBroadcast.h
 This will automatically register ALL Handlers that are attached to Receivers
+This will also automatically register ALL Broadcasters
 If you have attached a Handler to a Receiver, as long as you send out the appropriate message in
 the Global Broadcast, it will reach the Receiver (Assuming there are no conflicts between MessageIDs)
