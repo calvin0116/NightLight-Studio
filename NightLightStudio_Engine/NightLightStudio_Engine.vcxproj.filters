@@ -323,6 +323,7 @@
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentLight.h">
       <Filter>Source Files\Component</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Collision\Contact.h">
       <Filter>Source Files\Collision</Filter>
     </ClInclude>
@@ -525,6 +526,7 @@
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentLight.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>
