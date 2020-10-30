@@ -17,8 +17,8 @@ void InspectorWindow::Run()
 		itf |= ImGuiInputTextFlags_EnterReturnsTrue;
 
 		char buf[256];
-		strcpy_s(buf, 256, 
-			NS_SCENE::SYS_SCENE_MANAGER->EntityName[LE_ECHELPER->GetSelectedEntityID()].c_str() 
+		strcpy_s(buf, 256,
+			NS_SCENE::SYS_SCENE_MANAGER->EntityName[LE_ECHELPER->GetSelectedEntityID()].c_str()
 		);
 
 		if (ImGui::InputText("Name", buf, 256, itf))
@@ -29,9 +29,9 @@ void InspectorWindow::Run()
 		ImGui::Text("ID : ");
 
 		ImGui::SameLine(0, 10);
-		ImGui::Text( std::to_string(LE_ECHELPER->GetSelectedEntityID()).c_str() );
+		ImGui::Text(std::to_string(LE_ECHELPER->GetSelectedEntityID()).c_str());
 		// ============================================== END OF LINE =========================
-		//=========================Example for component layouut in inspected
+
 		TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
 		if (trans_comp != NULL)
 		{
@@ -39,7 +39,7 @@ void InspectorWindow::Run()
 			{
 				//float* rotation = &ent_selected->GetComponent<TransformComponent>().GetRotation().m[2];
 
-				ImGui::InputFloat3("Position", glm::value_ptr(trans_comp->_position) ); //,-100.f, 100.f); // Edit 3 floats representing a color
+				ImGui::InputFloat3("Position", glm::value_ptr(trans_comp->_position)); //,-100.f, 100.f); // Edit 3 floats representing a color
 				ImGui::InputFloat3("Scale", glm::value_ptr(trans_comp->_scale)); //, 0.0f, 100.f);
 				ImGui::InputFloat("Rotation Z", glm::value_ptr(trans_comp->_rotation));
 			}
@@ -60,28 +60,33 @@ void InspectorWindow::Run()
 			}
 		}
 
-    ComponentLoadAudio* aud_manager = ent.getComponent<ComponentLoadAudio>();
-    if (aud_manager != nullptr)
-    {
-      if (ImGui::CollapsingHeader("Audio Manager"))
-      {
-        if (ImGui::Button("Add Audio"))
-        {
+		ComponentLoadAudio* aud_manager = ent.getComponent<ComponentLoadAudio>();
+		if (aud_manager != nullptr)
+		{
+			if (ImGui::CollapsingHeader("Audio Manager"))
+			{
+				if (ImGui::Button("Add Audio"))
+				{
 
-        }
-        
+				}
 
-        for (auto& [path, name] : aud_manager->_sounds)
-        {
-          char buf[512];
-          char buf2[256];
-          strcpy_s(buf, 512, path);
-          strcpy_s(buf2, 256, name);
-          ImGui::InputText("", buf, 512);
-          ImGui::SameLine(0, 10);
-          ImGui::InputText("", buf2, 256);
-        }
-      }
-    }
+
+				for (auto& [path, name] : aud_manager->_sounds)
+				{
+					/*
+				  char buf[512];
+				  char buf2[256];
+				  strcpy_s(buf, 512, path.c_str());
+				  strcpy_s(buf2, 256, name.c_str());
+				  ImGui::InputText("##NAME", buf, 512);
+				  ImGui::SameLine(0, 10);
+				  ImGui::InputText("##OTHERNAME", buf2, 256);
+				  */
+					_levelEditor->LE_AddInputText("##PATH", path, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+					ImGui::SameLine(0, 10);
+					_levelEditor->LE_AddInputText("##NAME", name, 100, ImGuiInputTextFlags_EnterReturnsTrue);
+				}
+			}
+		}
 	}
 }

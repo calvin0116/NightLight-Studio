@@ -1,16 +1,9 @@
 #include "LevelEditor.h"
 #include <iostream>
-
-std::string GetFileType(const std::string& path)
-{
-    char sep = '.';
-    size_t i = path.rfind(sep, path.length());
-    if (i != std::string::npos) {
-        return(path.substr(i + 1, path.length() - i));
-    }
-
-    return {};
-}
+#include "../../IO/Json/Parser.h"
+#include "LevelEditor_AssetInsp.h"
+#include "../../Graphics/GraphicsSystem.h"
+#include "../../Component/Components.h"
 
 void LevelEditor::LE_MainMenuBar()
 {
@@ -24,18 +17,11 @@ void LevelEditor::LE_MainMenuBar()
     ImGuiIO& io = ImGui::GetIO();
     ImGuiViewport* viewport = ImGui::GetMainViewport();
 
-    ImGuiWindowFlags menuBar_winFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBackground;
-    menuBar_winFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    ImGuiWindowFlags menuBar_winFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_MenuBar  | ImGuiWindowFlags_NoNavFocus;
+    menuBar_winFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoBackground;
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-
-    // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-    // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-    // all active windows docked into it will lose their parent and become undocked.
-    // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
-    // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
     //************************************************* Main Menu Bar **************************************************//
     {
         ImGui::SetNextWindowPos(viewport->GetWorkPos());
@@ -74,10 +60,18 @@ void LevelEditor::LE_MainMenuBar()
 
         ImGui::End();
     }
+
+
+    // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
+    // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
+    // all active windows docked into it will lose their parent and become undocked.
+    // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
+    // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
     //************************************************* Dockspace Area **************************************************//
     {
-        ImGui::SetNextWindowPos(viewport->GetWorkPos());
-        ImGui::SetNextWindowSize(viewport->GetWorkSize());
+        ImGui::SetNextWindowPos(ImVec2(viewport->GetWorkPos().x, viewport->GetWorkPos().y + 30.0f));
+        ImGui::SetNextWindowSize(ImVec2(viewport->GetWorkSize().x, viewport->GetWorkSize().y - 30.0f));
         ImGui::SetNextWindowViewport(viewport->ID);
 
         ImGui::Begin("DockSpace Demo", nullptr, window_flags);
@@ -85,8 +79,7 @@ void LevelEditor::LE_MainMenuBar()
         // Used to accept DragDrops
         ImGui::BeginChild("DockSpace Child", ImVec2(0, 0), false, window_flags);
 
-        ImGui::PopStyleVar();
-        ImGui::PopStyleVar(2);
+        ImGui::PopStyleVar(3);
 
         // Sets dockspace for other objects
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
@@ -100,10 +93,36 @@ void LevelEditor::LE_MainMenuBar()
         LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
             [this](std::string* str)
             {
-                std::cout << (*str) << std::endl;
-                if (GetFileType(*str) == "fbx")
-                {
+                std::string data = *str;
+                std::transform(data.begin(), data.end(), data.begin(),
+                    [](unsigned char c) 
+                    { return (char)std::tolower(c); });
 
+                std::cout << data << std::endl;
+                if (LE_GetFileType(data) == "json")
+                {
+                    // Create Entity here
+                    /*
+                    std::string name = LE_EraseSubStr(LE_GetFilename(*str), ".json");
+                    std::string filepath = ".";
+                    filepath.append(LE_EraseSubStr(*str, LE_GetFilename(*str)));
+                    Parser(name, filepath).Load();
+                    */
+                }
+
+                if (LE_GetFileType(data) == "fbx")
+                {
+                    std::string fName = LE_EraseSubStr(LE_GetFilename(data), LE_GetFileType(data));
+                    fName.pop_back();
+
+                    Entity ent = G_ECMANAGER->BuildEntity();
+                    ComponentTransform transEnt;
+                    transEnt._position = { 0.f, 0.f,0.f };
+                    ent.AttachComponent<ComponentTransform>(transEnt);
+
+                    // Causes memory leaks - pls fix calvin
+                    NS_GRAPHICS::SYS_GRAPHICS->LoadMesh(data, fName);
+                    NS_GRAPHICS::SYS_GRAPHICS->AttachMesh(ent, fName);
                 }
             });
         ImGui::End();
