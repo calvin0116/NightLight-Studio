@@ -125,11 +125,11 @@ ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentS
 	newObj_o->children.generation = 0;
 
 	//===Added by Teck Wei for name getting====//
-	static int unknown_ent_id = 0;
+	//static int unknown_ent_id = 0;
 	if (name == "Entity_")
 	{
-		name.append(std::to_string(unknown_ent_id));
-		++unknown_ent_id;
+		name.append(std::to_string(compSet->unknown_ent_id));
+		++compSet->unknown_ent_id;
 	}
 	NS_SCENE::SYS_SCENE_MANAGER->EntityName[objId + compSet->idIndexModifier] = name;
 	//----------------------------------------//
@@ -1564,11 +1564,13 @@ void ComponentManager::Free()
 	{
 		ComponentSet* cs = p.second;
 		cs->cmm.freeAll();
+		cs->unknown_ent_id = 0;
 		delete cs;
 		//free(cs);
 		p.second = nullptr;
 	}
 	ComponentSets.clear();
+
 }
 
 void ComponentManager::Clear(COMPONENTSETNAMES _id)

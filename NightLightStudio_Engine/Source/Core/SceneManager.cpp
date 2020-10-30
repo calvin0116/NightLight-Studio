@@ -270,6 +270,8 @@ namespace NS_SCENE
 		obj_val->SetObject();
 
 		//Entity loop
+		//auto itr = G_ECMANAGER->begin<TransformComponent>();
+
 		for (auto ent : EntityName)
 		{
 			Value* ent_val = new Value;
