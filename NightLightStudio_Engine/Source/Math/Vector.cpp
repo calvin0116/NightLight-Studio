@@ -46,6 +46,7 @@ namespace NlMath
 	{
 		x += rhs.x;
 		y += rhs.y;
+		z += rhs.z;
 		return *this;
 	}
 
@@ -58,6 +59,7 @@ namespace NlMath
 	{
 		x -= rhs.x;
 		y -= rhs.y;
+		z -= rhs.z;
 		return *this;
 	}
 
@@ -70,6 +72,7 @@ namespace NlMath
 	{
 		x *= rhs;
 		y *= rhs;
+		z *= rhs;
 		return *this;
 	}
 
@@ -82,6 +85,7 @@ namespace NlMath
 	{
 		x /= rhs;
 		y /= rhs;
+		z /= rhs;
 		return *this;
 	}
 
