@@ -54,7 +54,7 @@ namespace NlMath
 
 	void ComputeReferenceEdgesAndBasis(const OBBCollider& rtx, Vec3 n, unsigned int axis, unsigned char* out, Matrix4x4* basis, Vec3* e);
 
-	unsigned int q3Orthographic(float sign, float e, unsigned int axis, unsigned int clipEdge, ClipVertex* in, unsigned int inCount, ClipVertex* out);
+	unsigned int Orthographic(float sign, float e, unsigned int axis, unsigned int clipEdge, ClipVertex* in, unsigned int inCount, ClipVertex* out);
 
 	unsigned int Clip(const Vec3& rPos, const Vec3& e, unsigned char* clipEdges, const Matrix4x4& basis, ClipVertex* incident, ClipVertex* outVerts, float* outDepths);
 
