@@ -1,5 +1,5 @@
 #pragma once
-#include <mono/metadata/object.h>
+#include <mono/metadata/object.h> //MonoString*
 
 
 namespace AudioBind
@@ -19,5 +19,5 @@ namespace AudioBind
   void csSetBGMVol(float _vol);
   void csSetSFXVol(float _vol);
   void csSetMASTERVol(float _vol);
-  void csPauseMASTER(bool _pause);
+  void csMASTERPause(bool _pause);
 }

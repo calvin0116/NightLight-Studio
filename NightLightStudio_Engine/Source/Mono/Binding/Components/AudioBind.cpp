@@ -1,6 +1,6 @@
 #include "AudioBind.h"
-#include "..\..\MonoWrapper.h"
-#include "..\..\..\Audio\SystemAudio.h"
+#include "..\..\MonoWrapper.h" // BindClassFunction
+#include "..\..\..\Audio\SystemAudio.h" // C++ source function
 
 
 namespace AudioBind
@@ -46,7 +46,7 @@ namespace AudioBind
     MonoWrapper::BindClassFunction(csSetMASTERVol, "SetMASTERVol",
       "Audio");
 
-    MonoWrapper::BindClassFunction(csPauseMASTER, "PauseMASTER",
+    MonoWrapper::BindClassFunction(csMASTERPause, "PauseMASTER",
       "Audio");
   }
 
@@ -117,6 +117,6 @@ namespace AudioBind
 
   void csMASTERPause(bool _pause)
   {
-    SYS_AUDIO->SetMASTERVol(_pause);
+    SYS_AUDIO->PauseAll(_pause);
   }
 }

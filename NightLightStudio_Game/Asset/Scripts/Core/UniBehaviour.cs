@@ -9,8 +9,8 @@ namespace Unicorn
     //Entity id
     private uint id = 0;
 
-    public virtual void Awake() { }
-    public virtual void Start() { }
+    // public virtual void Awake() { }
+    public virtual void Init() { }
     public virtual void Update(float dt) { }
     public virtual void FixedUpdate(float dt) { }
     public virtual void Exit() { }
