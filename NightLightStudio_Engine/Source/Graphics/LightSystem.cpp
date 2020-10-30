@@ -30,9 +30,10 @@ namespace NS_GRAPHICS
 	{
 		// Test add 1 light of each type
 		// TEST
-		AddDirLight();
-		//AddPointLight(100.f);
-		//AddSpotLight();
+		AddDirLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f)); // Somewhat working but looks hella weird
+		//AddPointLight(0.2f, glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f));
+		//AddSpotLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::cos(glm::radians(22.5f)), glm::cos(glm::radians(27.5f)),
+					//0.2f, glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(0.5f,0.5f,0.5f));
 	}
 
 	LightBlock*& LightSystem::GetLightBlock()
