@@ -53,7 +53,36 @@ void InspectorWindow::Run()
 			//1. Check collider type that it have
 			//2. Get the right collider type
 			//3. Insert name
-			std::string name = "AABBCollider";	//e.g.
+			std::string name = "Collider";	//e.g.
+			switch (col_comp->colliderType)
+			{
+				case COLLIDERS::PLANE :
+				{
+					name = "Plane " + name;
+					break;
+				}
+				case COLLIDERS::AABB:
+				{
+					name = "AABB " + name;
+					break;
+				}
+				case COLLIDERS::SPHERE:
+				{
+					name = "Sphere " + name;
+					break;
+				}
+				case COLLIDERS::OBB:
+				{
+					name = "OBB " + name;
+					break;
+				}
+				case COLLIDERS::CAPSULE:
+				{
+					name = "Capsule " + name;
+					break;
+				}
+			}
+
 			//4. May need loop to loop through all collider
 			if (ImGui::CollapsingHeader(name.c_str()))
 			{
@@ -108,6 +137,10 @@ void InspectorWindow::Run()
 			{
 				//_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 				//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+				ImGui::Checkbox("IsStatic", &rb->isStatic);
+				ImGui::InputFloat3("Force", rb->force.m);
+				ImGui::InputFloat3("Acceleration", rb->acceleration.m);
+				
 			}
 		}
 
@@ -146,7 +179,6 @@ void InspectorWindow::Run()
 					break;
 				}
 			}
-
 			if (next_lol == nullptr)
 			{
 				std::cout << "Component has already been created" << std::endl;
