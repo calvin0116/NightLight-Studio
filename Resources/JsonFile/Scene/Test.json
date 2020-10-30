@@ -13,21 +13,28 @@
 		"Plane" : {
 			"TransformComponent":{
 				"Position" : [5.0,2.0,1.0],
-				"Scale" : [10.0, 1.0, 10.0]
+				"Scale" : [10.0, 1.0, 10.0],
 				"Rotate" : [0.0, 0.0, 0.0]
 			},
 			"ColliderComponent":{
 				
+			},
+			"RigidBody" : {
+			
 			}
-		}
+		},
 		"Plane_2" : {
 			"TransformComponent":{
 				"Position" : [5.0,0.0,1.0],
-				"Scale" : [10.0, 1.0, 10.0]
+				"Scale" : [10.0, 1.0, 10.0],
 				"Rotate" : [0.0, 0.0, 0.0]
-			},
-			"ColliderComponent":{
-				
+			}
+		},
+		"Plane_3" : {
+			"TransformComponent":{
+				"Position" : [5.0,-2.0,1.0],
+				"Scale" : [10.0, 1.0, 10.0],
+				"Rotate" : [0.0, 0.0, 0.0]
 			}
 		}
 	}
