@@ -239,6 +239,8 @@ public:
 
 		int idIndexModifier;
 
+		int unknown_ent_id;
+
 		// maps typeid to container id
 		std::map<size_t, ComponentManager::ContainerID> hashConIdMap; // std::type_info.hash_code() , id
 		std::map<size_t, ComponentManager::ContainerID> hashConIdMapChilds; // std::type_info.hash_code() , id
@@ -288,6 +290,7 @@ public:
 			objContainerIdChilds(-1),
 			componentContainerIDs(),
 			idIndexModifier(0),
+			unknown_ent_id(0),
 			objSize(0)
 		{
 		}
@@ -358,8 +361,6 @@ public:
 
 	class ComponentSetManager // builds objects into component sets
 	{
-
-		
 
 	public: // !
 		class EntityHandle; // fwd decl
