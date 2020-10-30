@@ -5,6 +5,7 @@
 #include "../../Component/ComponentManager.h"
 #include "../../Component/Components.h"
 #include <set>
+
 void InspectorWindow::Run()
 {
 	//Check for valid Entity Id
@@ -196,9 +197,9 @@ void InspectorWindow::Run()
 				  ImGui::SameLine(0, 10);
 				  ImGui::InputText("##OTHERNAME", buf2, 256);
 				  */
-					_levelEditor->LE_AddInputText("##PATH", path, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+					ImGui::InputText("##AUDIOPATH", path, 512);
 					ImGui::SameLine(0, 10);
-					_levelEditor->LE_AddInputText("##NAME", name, 100, ImGuiInputTextFlags_EnterReturnsTrue);
+					ImGui::InputText("##AUDIONAME", name, 256);
 				}
 			}
 		}
