@@ -75,8 +75,8 @@ void InspectorWindow::Run()
         {
           char buf[512];
           char buf2[256];
-          strcpy_s(buf, 512, path.c_str());
-          strcpy_s(buf2, 256, name.c_str());
+          strcpy_s(buf, 512, path);
+          strcpy_s(buf2, 256, name);
           ImGui::InputText("", buf, 512);
           ImGui::SameLine(0, 10);
           ImGui::InputText("", buf2, 256);
