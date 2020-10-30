@@ -51,7 +51,7 @@ namespace NS_GRAPHICS
 				: _diffuse{ 0.5f,0.5f,0.5f },
 				_ambient{ 1.f, 1.f, 1.f }, 
 				_specular{ 1.f,1.f,1.f },
-				_shininess{ 1.f } {}
+				_shininess{ 32.f } {}
 
 			~MaterialData() {}
 		};

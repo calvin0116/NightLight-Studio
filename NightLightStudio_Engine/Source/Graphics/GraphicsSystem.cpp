@@ -114,18 +114,25 @@ namespace NS_GRAPHICS
 		//////////////////////////////////////
 		Entity testdrawSphere = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformsphere;
-		testtransformsphere._position = { 3.f, 0.f,0.f };
+		testtransformsphere._position = { 3.f, 3.f,0.f };
 		testdrawSphere.AttachComponent<ComponentTransform>(testtransformsphere);
 
 		CreateSphere(testdrawSphere, glm::vec3(0.f,1.f,1.f));
 
-		/*Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
+		/*Entity testdrawCube = G_ECMANAGER->BuildEntity();
+		ComponentTransform testtransformcube;
+		testtransformcube._position = { -3.f, 0.f,0.f };
+		testdrawCube.AttachComponent<ComponentTransform>(testtransformcube);
+
+		CreateCube(testdrawCube, glm::vec3(0.f, 1.f, 1.f));*/
+
+		Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformcylinder;
-		testtransformcylinder._position = { 0.f, 0.f,0.f };
+		testtransformcylinder._position = { 3.f, 0.f,0.f };
 		testtransformcylinder._rotation = { 0.f, 0.f,0.f };
 		testdrawCylinder.AttachComponent<ComponentTransform>(testtransformcylinder);
 
-		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));*/
+		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));
 
 		/*std::ofstream logFile;
 		logFile.open("cylinder.txt");

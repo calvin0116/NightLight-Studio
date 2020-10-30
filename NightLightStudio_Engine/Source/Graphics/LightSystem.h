@@ -7,7 +7,7 @@
 
 namespace NS_GRAPHICS
 {
-	static const size_t s_MaxLights = 30;
+	static const size_t s_MaxLights = 5;
 
 	struct LightBlock
 	{
@@ -66,7 +66,7 @@ namespace NS_GRAPHICS
 			const glm::vec3& diffuse = glm::vec3(1.f, 1.f, 1.f), const glm::vec3& specular = glm::vec3(1.f, 1.f, 1.f));
 
 		// Adds Point Light to scene, returns the id token for currently added light
-		int AddPointLight(const float& attenuation = 100.f, const glm::vec3& ambient = glm::vec3(1.f, 1.f, 1.f),
+		int AddPointLight(const float& attenuation = 0.2f, const glm::vec3& ambient = glm::vec3(1.f, 1.f, 1.f),
 			const glm::vec3& diffuse = glm::vec3(1.f, 1.f, 1.f), const glm::vec3& specular = glm::vec3(1.f, 1.f, 1.f));
 
 		// Adds Spot Light to scene, returns the id token for currently added light
