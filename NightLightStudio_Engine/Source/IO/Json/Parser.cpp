@@ -80,7 +80,7 @@ Document& Parser::GetDoc()
 
 bool Parser::CheckForMember(std::string mem_name)
 {
-    PrintDataList();
+    //PrintDataList();
     //Check for first layer
     if (doc.HasMember(mem_name.c_str()))
         return true;

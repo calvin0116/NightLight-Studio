@@ -85,22 +85,27 @@ namespace NS_SCENE
 		{
 			SetNextScene(EXIT_SCENCE);
 		}
-		/*
+		
 		//Set next scene according to index 
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_F))
+		//Ctrl + 1
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_1)
+			&& SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
 		{
+			
 			//SetNextScene();
-			if (scene_index < scene_list.size())
+			if (scene_index < scene_list.size()-1)
 				++scene_index;
 			else
 				scene_index = 0;
 
+			std::cout << "Going next scene........: " << scene_list.size() << std::endl;
+
 			SetNextScene(scene_indexes[scene_index]);
 		}
-		*/
-
+		
+		//Ctrl + S
 		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_S)
-			&& SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_CTRL))
+			&& SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
 		{
 			SaveScene();
 		}
@@ -139,6 +144,7 @@ namespace NS_SCENE
 		to_change_scene = SC_NOCHANGE;
 		
 		//~~!Create object using data
+		std::cout << "===============================================" << std::endl;
 		std::cout << "Loading Scene: " << current_scene << std::endl;
 		if (scene->CheckForMember("Objects"))
 		{
@@ -149,6 +155,7 @@ namespace NS_SCENE
 		{
 			std::cout << "Failed to find object to initailise....." << std::endl;
 		}
+		std::cout << "===============================================" << std::endl;
 	}
 
 	void SceneManager::InitScene()
@@ -194,10 +201,10 @@ namespace NS_SCENE
 				/*
 				std::cout << "~~~~ Transform: " << std::endl << trans_com;
 				std::cout << "~~~~~~~~~~~~~~ " << std::endl;*/
-				continue;
+				
 			}
 			//~~! Add your own component creation here ~~!//
-			if (component_name == "ColliderComponent")
+			else if (component_name == "ColliderComponent")
 			{
 				CreateAndWriteComp<ColliderComponent>(Comp_list, entity, component_name);
 				/*
@@ -206,7 +213,16 @@ namespace NS_SCENE
 
 				G_ECMANAGER->AttachComponent<TransformComponent>(entity, col_com);
 				*/
+			}
+			else if (component_name == "RigidBody")
+			{
+				CreateAndWriteComp<RigidBody>(Comp_list, entity, component_name);
+				/*
+				ColliderComponent col_com;
+				col_com.Read(Comp_list[component_name.c_str()]);
 
+				G_ECMANAGER->AttachComponent<TransformComponent>(entity, col_com);
+				*/
 			}
 		}
 	}
@@ -283,6 +299,16 @@ namespace NS_SCENE
 			for(ISerializable* comp : EntityCompontlist)
 			{ 
 				comp.Write();
+			}*/
+			Entity entity = G_ECMANAGER->getEntity(ent.first);
+			/*
+			for (ISerializable* ser : entity.getEntityComponentContainer())
+			{
+				
+				Value* comp_val = new Value;
+				*comp_val = ser->Write();
+				scene.ChangeData(ent_val, ent.second.c_str(), comp_val->GetObject());
+				
 			}*/
 
 			scene.ChangeData(obj_val, ent.second.c_str(), ent_val->GetObject());
