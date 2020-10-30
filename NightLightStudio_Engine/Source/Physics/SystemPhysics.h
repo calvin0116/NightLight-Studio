@@ -12,12 +12,15 @@ namespace NS_PHYSICS
 	{
 		ForceManager _forceManager;
 		NlMath::Vector3D _maxspeed;
-		float gravity;
 		
 		friend Singleton<PhysicsSystem>;
 		
 	public:
 		
+		ForceManager* getForceManager()
+		{
+			return &_forceManager;
+		}
 		
 		PhysicsSystem();
 
@@ -39,4 +42,5 @@ namespace NS_PHYSICS
 	};
 
 	static PhysicsSystem* SYS_PHYSICS = PhysicsSystem::GetInstance();
+	static ForceManager& USE_THE_FORCE = *(SYS_PHYSICS->getForceManager());
 }

@@ -60,6 +60,9 @@ namespace NS_COLLISION
 		
 
 		Rigid1.isStatic = false;
+		Rigid1.isGravity = true;
+		Rigid1.mass = 1.0f;
+
 		Transform1._rotation.x = 45;
 		Transform1._rotation.y = 40;
 		Transform1._rotation.z = 45;

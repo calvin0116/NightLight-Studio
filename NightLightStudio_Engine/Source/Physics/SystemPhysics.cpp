@@ -8,10 +8,14 @@
 #define USEVEL 0
 //#define USEVEL 1
 
+
 namespace NS_PHYSICS
 {
+
+	constexpr float MAX_SPEED = 10.0f;
+
 	PhysicsSystem::PhysicsSystem()
-		:_maxspeed(100), gravity(9.8f)
+		:_maxspeed(MAX_SPEED)
 	{
 	}
 
@@ -47,6 +51,12 @@ namespace NS_PHYSICS
 		}*/
 		/////////////////////////////////////////////////////////////////////////////////////////////////
 		//TA's example
+
+
+		// update the forces
+		_forceManager.updateTranslationalForces();
+
+
 		auto itr = G_ECMANAGER->begin<ComponentRigidBody>();
 		auto itrEnd = G_ECMANAGER->end<ComponentRigidBody>();
 
@@ -67,14 +77,6 @@ namespace NS_PHYSICS
 			//set previous position
 			compR->prevPos = compT->_position;
 
-			//set max speed
-			if (compR->velocity.x > _maxspeed.x)
-				compR->velocity.x = _maxspeed.x;
-			if (compR->velocity.y > _maxspeed.y)
-				compR->velocity.y = _maxspeed.y;
-			if (compR->velocity.z > _maxspeed.z)
-				compR->velocity.z = _maxspeed.z;
-
 			//deltatime, convert to second
 			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
 
@@ -85,10 +87,54 @@ namespace NS_PHYSICS
 				continue;
 
 
-			
-			compT->_position += (glm::vec3)compR->velocity * realDt;
+			// physics
+			// F = dp / dt
+			// dp = F * dt
+			// p = mv
+			// F = d mv / dt
+			// if mass is constant,
+			// F = m dv/dt
+			// a = dv/dt
+			// F = ma
+			// v = ds/dt
 
-			//predict the next position for collision check
+
+			// resolve forces 
+			compR->force = _forceManager.resolveTranslationalForces(*compR);
+
+
+			// update accleration // F = m dv/dt -> F = m a -> a = F / m
+			if (compR->mass < 0.0f)
+			{
+				// negaitve mass
+				throw;
+			}
+			if (compR->mass == 0.0f)
+			{
+				// zero mass
+				compR->mass = std::numeric_limits<float>::epsilon();
+			}
+			compR->acceleration = compR->force / compR->mass;
+
+			// do gravity
+			if (compR->isGravity)
+			{
+				compR->acceleration += compR->gravity;
+			}
+
+			// update velocity // a = dv/dt -> dv = a * dt
+			compR->velocity += compR->acceleration * realDt;
+			
+			// update position // v = ds/dt -> ds = v * dt
+
+			glm::vec3 changeInDisplacement = (glm::vec3)compR->velocity* realDt;
+
+			//if (abs(changeInDisplacement.x) > _maxspeed.x)
+			//	changeInDisplacement.x = _maxspeed.x;  // TODO
+
+			compT->_position += changeInDisplacement;
+
+			//predict the next position for collision check // is this being used?
 			compT->_nextPos = compT->_position + (glm::vec3)compR->velocity * realDt;
 			
 			//NLMath::Vector3d nextPosition =compT->_position = (glm::vec3)compR->velocity * realDt; // keep in rigid body

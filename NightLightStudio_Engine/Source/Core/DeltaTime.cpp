@@ -13,7 +13,7 @@ void DeltaTime::start()
 {
 	currentNumberOfSteps = 0;
 
-	dt = (float)clock() - t_start;
+	//dt = (float)clock() - t_start; // dt = fixed_dt
 	t_start = clock();
 
 	//while (dt < fixed_dt)
