@@ -7,7 +7,7 @@
 
 namespace NS_GRAPHICS
 {
-	static const size_t s_MaxLights = 5;
+	static const size_t s_MaxLights = 30;
 
 	struct LightBlock
 	{
@@ -24,6 +24,8 @@ namespace NS_GRAPHICS
 		DirLight _dLights[s_MaxLights];
 		PointLight _pLights[s_MaxLights];
 		SpotLight _sLights[s_MaxLights];
+
+		float _dummyPadding1 = 0.f;
 
 		LightBlock()
 			: _dLights_Num{ NULL },

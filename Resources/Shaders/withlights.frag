@@ -46,7 +46,7 @@ uniform vec3 specular;
 uniform float shininess;
 
 // Current maximum permitted lights per type
-#define MAX_LIGHTS 5
+#define MAX_LIGHTS 30
 
 layout (std140) uniform LightCalcBlock
 {

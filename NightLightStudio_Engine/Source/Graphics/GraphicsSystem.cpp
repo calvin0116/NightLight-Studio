@@ -114,7 +114,7 @@ namespace NS_GRAPHICS
 		//////////////////////////////////////
 		Entity testdrawSphere = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformsphere;
-		testtransformsphere._position = { 3.f, 3.f,0.f };
+		testtransformsphere._position = { 3.f, 0.f,0.f };
 		testdrawSphere.AttachComponent<ComponentTransform>(testtransformsphere);
 
 		CreateSphere(testdrawSphere, glm::vec3(0.f,1.f,1.f));
@@ -128,11 +128,26 @@ namespace NS_GRAPHICS
 
 		Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformcylinder;
-		testtransformcylinder._position = { 3.f, 0.f,0.f };
+		testtransformcylinder._position = { 3.f, 3.f,0.f };
 		testtransformcylinder._rotation = { 0.f, 0.f,0.f };
 		testdrawCylinder.AttachComponent<ComponentTransform>(testtransformcylinder);
 
 		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));
+
+		shaderManager->StartProgram(1);
+
+		GLint blockSize;
+
+		glGetActiveUniformBlockiv(shaderManager->GetCurrentProgramHandle(), 0,
+			GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
+
+		std::cout << "Light Uniform Block Size: " << blockSize << std::endl;
+		std::cout << "Light Uniform Block Size(CPU): " << sizeof(LightBlock) << std::endl;
+		std::cout << "Directional Light Size(CPU): " << sizeof(DirLight) << std::endl;
+		std::cout << "Spot Light Size(CPU): " << sizeof(SpotLight) << std::endl;
+		std::cout << "Point Light Size(CPU): " << sizeof(PointLight) << std::endl;
+
+		shaderManager->StopProgram();
 
 		/*std::ofstream logFile;
 		logFile.open("cylinder.txt");

@@ -20,7 +20,8 @@ public:
 	float accumulatedTime = 0.0f;
 	clock_t t_start = 0;
 
-	float dt = 0.0f;
+	//float dt = 0.0f;
+	float dt = fixed_dt;
 	float fps = 0.0f;
 	int currentNumberOfSteps = 0;
 

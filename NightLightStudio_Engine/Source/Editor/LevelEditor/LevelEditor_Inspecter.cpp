@@ -5,6 +5,7 @@
 #include "../../Component/ComponentManager.h"
 #include "../../Component/Components.h"
 #include <set>
+
 void InspectorWindow::Run()
 {
 	//Check for valid Entity Id
@@ -17,8 +18,8 @@ void InspectorWindow::Run()
 		itf |= ImGuiInputTextFlags_EnterReturnsTrue;
 
 		char buf[256];
-		strcpy_s(buf, 256, 
-			NS_SCENE::SYS_SCENE_MANAGER->EntityName[LE_ECHELPER->GetSelectedEntityID()].c_str() 
+		strcpy_s(buf, 256,
+			NS_SCENE::SYS_SCENE_MANAGER->EntityName[LE_ECHELPER->GetSelectedEntityID()].c_str()
 		);
 
 		if (ImGui::InputText("Name", buf, 256, itf))
@@ -29,17 +30,17 @@ void InspectorWindow::Run()
 		ImGui::Text("ID : ");
 
 		ImGui::SameLine(0, 10);
-		ImGui::Text( std::to_string(LE_ECHELPER->GetSelectedEntityID()).c_str() );
+		ImGui::Text(std::to_string(LE_ECHELPER->GetSelectedEntityID()).c_str());
 		// ============================================== END OF LINE =========================
 		/*
 		// Entity's tag(s)
 		std::set<std::string> tag_names;
-		
+
 		if (!ent_selected->HasEmptyTagList())
 			tag_names = ent_selected->GetTagList();
 		else
 			tag_names.emplace("Untagged");
-			
+
 		if (ImGui::BeginCombo("Tags", (*tag_names.begin()).c_str()))
 		{
 			// Display list of existing tags
@@ -138,14 +139,14 @@ void InspectorWindow::Run()
 			ImGui::EndCombo();
 		}
 		*/
-/*
-		// Entity's pickable state
-		ImGui::Checkbox("Pickable in Level Editor", &(ent_selected->GetPickableStatusRef()));
-		ImGui::Separator();
+		/*
+				// Entity's pickable state
+				ImGui::Checkbox("Pickable in Level Editor", &(ent_selected->GetPickableStatusRef()));
+				ImGui::Separator();
 
-		ImGui::Checkbox("SetActive", &(ent_selected->GetActiveStatusRef()));
-		*/
-		//=========================Example for component layouut in inspected
+				ImGui::Checkbox("SetActive", &(ent_selected->GetActiveStatusRef()));
+				*/
+				//=========================Example for component layouut in inspected
 		TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
 		if (trans_comp != NULL)
 		{
@@ -153,7 +154,7 @@ void InspectorWindow::Run()
 			{
 				//float* rotation = &ent_selected->GetComponent<TransformComponent>().GetRotation().m[2];
 
-				ImGui::InputFloat3("Position", glm::value_ptr(trans_comp->_position) ); //,-100.f, 100.f); // Edit 3 floats representing a color
+				ImGui::InputFloat3("Position", glm::value_ptr(trans_comp->_position)); //,-100.f, 100.f); // Edit 3 floats representing a color
 				ImGui::InputFloat3("Scale", glm::value_ptr(trans_comp->_scale)); //, 0.0f, 100.f);
 				ImGui::InputFloat("Rotation Z", glm::value_ptr(trans_comp->_rotation));
 			}
@@ -171,6 +172,35 @@ void InspectorWindow::Run()
 			if (ImGui::CollapsingHeader(name.c_str()))
 			{
 
+			}
+		}
+
+		ComponentLoadAudio* aud_manager = ent.getComponent<ComponentLoadAudio>();
+		if (aud_manager != nullptr)
+		{
+			if (ImGui::CollapsingHeader("Audio Manager"))
+			{
+				if (ImGui::Button("Add Audio"))
+				{
+
+				}
+
+
+				for (auto& [path, name] : aud_manager->_sounds)
+				{
+					/*
+				  char buf[512];
+				  char buf2[256];
+				  strcpy_s(buf, 512, path.c_str());
+				  strcpy_s(buf2, 256, name.c_str());
+				  ImGui::InputText("##NAME", buf, 512);
+				  ImGui::SameLine(0, 10);
+				  ImGui::InputText("##OTHERNAME", buf2, 256);
+				  */
+					ImGui::InputText("##AUDIOPATH", path, 512);
+					ImGui::SameLine(0, 10);
+					ImGui::InputText("##AUDIONAME", name, 256);
+				}
 			}
 		}
 	}

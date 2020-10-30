@@ -20,7 +20,12 @@
 			},
 			"RigidBody" : {
 			
-			}
+			},
+      "AudioManager":{
+        "ListOfSound": [ 
+          "Asset/Sounds/TestAudio.ogg"
+          ]
+      }
 		}
 	}
 }

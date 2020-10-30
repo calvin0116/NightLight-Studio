@@ -1,5 +1,6 @@
 #include "SystemLogic.h"
 #include "..\Mono\MonoWrapper.h" // Mono functions wrapped
+// #include "..\Mono\Binding\Binder.h" // Bind C++ to C# functions
 
 #include "../Input/SystemInput.h" // For testing
 
@@ -27,14 +28,30 @@ namespace NS_LOGIC
       });
   }
 
-  void SystemLogic::FixedUpdate()
+  void SystemLogic::GameLoad()
   {
+  }
 
+  void SystemLogic::GameInit()
+  {
+    // MonoBind::Bind();
+    // Init CS
+    // MonoMethod* m_Init = MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
   }
 
   void SystemLogic::Update()
   {
     //Run Script?
+  }
+
+  void SystemLogic::FixedUpdate()
+  {
+
+  }
+
+  void SystemLogic::GameExit()
+  {
+
   }
 
   void SystemLogic::Free()

@@ -239,6 +239,8 @@ public:
 
 		int idIndexModifier;
 
+		int unknown_ent_id;
+
 		// maps typeid to container id
 		std::map<size_t, ComponentManager::ContainerID> hashConIdMap; // std::type_info.hash_code() , id
 		std::map<size_t, ComponentManager::ContainerID> hashConIdMapChilds; // std::type_info.hash_code() , id
@@ -288,6 +290,7 @@ public:
 			objContainerIdChilds(-1),
 			componentContainerIDs(),
 			idIndexModifier(0),
+			unknown_ent_id(0),
 			objSize(0)
 		{
 		}
@@ -358,8 +361,6 @@ public:
 
 	class ComponentSetManager // builds objects into component sets
 	{
-
-		
 
 	public: // !
 		class EntityHandle; // fwd decl
@@ -576,6 +577,96 @@ public:
 		}
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ComponentSetManager::EntityContainer
+// to enable this ->
+//			for (Entity ent : entity.getEntityContainer())
+//			{
+//
+//			}
+//
+//
+	public:
+		class EntityContainer
+		{
+			ComponentSetManager* compSetMgr; // component set obj belongs to
+			bool isChild;
+		public:
+
+			EntityContainer(ComponentSetManager* _compSetMgr, bool _isChild = false)
+				: compSetMgr(_compSetMgr), isChild(_isChild) {}
+
+			struct EntityContainerIterator
+			{
+				friend EntityContainer;
+				friend EntityHandle;
+
+				ComponentSetManager* compSetMgr;
+				ComponentMemoryManager::MemConIterator memItr;
+				bool isChild;
+
+			public:
+				EntityHandle operator*()
+				{
+
+					ComponentManager::ComponentSet::ObjectData* currentObjdata = reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(*memItr);
+					int id = currentObjdata->objId + compSetMgr->compSet->idIndexModifier;
+					if (isChild) id += IDRANGE_RT;
+					return EntityHandle(compSetMgr, id);
+				}
+
+				void operator++()
+				{
+					++memItr;
+				}
+
+				bool operator!=(EntityContainerIterator& ent)
+				{
+					return memItr != ent.memItr;
+				}
+			};
+
+
+			EntityContainerIterator begin()
+			{
+				EntityContainerIterator itr;
+				itr.compSetMgr = compSetMgr;
+				itr.isChild = isChild;
+				if (isChild)
+				{
+					itr.memItr = compSetMgr->compSet->cmm.begin(compSetMgr->compSet->objContainerIdChilds);
+				}
+				else
+				{
+					itr.memItr = compSetMgr->compSet->cmm.begin(compSetMgr->compSet->objContainerId);
+				}
+				return itr;
+			}
+
+			EntityContainerIterator end()
+			{
+				EntityContainerIterator itr;
+				itr.compSetMgr = compSetMgr;
+				itr.isChild = isChild;
+				if (isChild)
+				{
+					itr.memItr = compSetMgr->compSet->cmm.end(compSetMgr->compSet->objContainerIdChilds);
+				}
+				else
+				{
+					itr.memItr = compSetMgr->compSet->cmm.end(compSetMgr->compSet->objContainerId);
+				}
+				return itr;
+			}
+		};
+
+		EntityContainer getEntityContainer()
+		{
+			return EntityContainer(this);
+		}
+
+// ComponentSetManager::EntityComponentContainer END
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 		// an abstraction of the entity
