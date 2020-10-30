@@ -11,11 +11,3 @@ ComponentLoadAudio::~ComponentLoadAudio()
 {
 
 }
-
-void ComponentLoadAudio::Read()
-{
-}
-
-void ComponentLoadAudio::Write()
-{
-}

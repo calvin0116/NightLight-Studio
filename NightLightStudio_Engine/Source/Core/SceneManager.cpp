@@ -217,13 +217,11 @@ namespace NS_SCENE
 			else if (component_name == "RigidBody")
 			{
 				CreateAndWriteComp<RigidBody>(Comp_list, entity, component_name);
-				/*
-				ColliderComponent col_com;
-				col_com.Read(Comp_list[component_name.c_str()]);
-
-				G_ECMANAGER->AttachComponent<TransformComponent>(entity, col_com);
-				*/
 			}
+      else if (component_name == "AudioManager")
+      {
+        CreateAndWriteComp<ComponentLoadAudio>(Comp_list, entity, component_name);
+      }
 		}
 	}
 
