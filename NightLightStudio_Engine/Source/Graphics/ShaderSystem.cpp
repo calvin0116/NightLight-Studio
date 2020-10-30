@@ -187,6 +187,7 @@ namespace NS_GRAPHICS
 		// Shader path example: ../Resources/Shaders/default.vertxs
 		LoadShader(std::string("../Resources/Shaders/default.vert"),std::string("../Resources/Shaders/uniformsolid.frag"));
 		LoadShader(std::string("../Resources/Shaders/withlights.vert"),std::string("../Resources/Shaders/withlights.frag"));
+		LoadShader(std::string("../Resources/Shaders/grid.vert"),std::string("../Resources/Shaders/grid.frag"));
 		//LoadShader("","");
 		//LoadShader("","");
 		//LoadShader("","");

@@ -21,6 +21,7 @@
 
 //#define DRAW_WITH_COMPONENTS
 #define DRAW_WITH_LIGHTS
+#define DRAW_DEBUG_GRID
 
 namespace NS_GRAPHICS
 {
@@ -173,8 +174,13 @@ namespace NS_GRAPHICS
 		// Set default values for projection matrix
 		SetProjectionMatrix();
 
+		debugManager->Init();
+
 		// Enable depth buffering
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Passes if the fragment's depth value is less than the stored depth value.
 		// This is the default, but we will call this function to be explicit
@@ -261,6 +267,12 @@ namespace NS_GRAPHICS
 		}
 
 		shaderManager->StopProgram();
+#endif
+
+#ifdef DRAW_DEBUG_GRID
+		SetLineThickness(0.2f);
+		debugManager->Render();
+		SetLineThickness();
 #endif
 	}
 
@@ -453,5 +465,10 @@ namespace NS_GRAPHICS
 	{
 		if (entity.getComponent<ComponentGraphics>() != nullptr)
 			entity.getComponent<ComponentGraphics>()->MeshID = -1;
+	}
+
+	glm::mat4 GraphicsSystem::GetInverseViewMatrix()
+	{
+		return (glm::inverse(cameraManager->GetViewMatrix()) * glm::inverse(_projectionMatrix));
 	}
 }

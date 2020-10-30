@@ -118,6 +118,8 @@ namespace NS_GRAPHICS
         // Unlinks mesh to specified entity for rendering, if any
         void DetachMesh(Entity& entity);
 
+        glm::mat4 GetInverseViewMatrix();
+
     private:
 
         bool _hasInit;
