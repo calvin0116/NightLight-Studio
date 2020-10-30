@@ -63,11 +63,11 @@ void InspectorWindow::Run()
 		ComponentLoadAudio* aud_manager = ent.getComponent<ComponentLoadAudio>();
 		if (aud_manager != nullptr)
 		{
+
 			if (ImGui::CollapsingHeader("Audio Manager"))
 			{
 				if (ImGui::Button("Add Audio"))
 				{
-
 				}
 
 
@@ -82,11 +82,77 @@ void InspectorWindow::Run()
 				  ImGui::SameLine(0, 10);
 				  ImGui::InputText("##OTHERNAME", buf2, 256);
 				  */
-					_levelEditor->LE_AddInputText("##PATH", path, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+					//_levelEditor->LE_AddInputText("##PATH", path, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 					ImGui::SameLine(0, 10);
-					_levelEditor->LE_AddInputText("##NAME", name, 100, ImGuiInputTextFlags_EnterReturnsTrue);
+					//_levelEditor->LE_AddInputText("##NAME", name, 100, ImGuiInputTextFlags_EnterReturnsTrue);
 				}
 			}
 		}
+
+
+		GraphicsComponent* graphics_comp = ent.getComponent<GraphicsComponent>();
+		if (graphics_comp != nullptr)
+		{
+			if (ImGui::CollapsingHeader("Graphics component"))
+			{
+				_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+				//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			}
+		}
+
+		RigidBody* rb = ent.getComponent<RigidBody>();
+		if (rb != nullptr)
+		{
+			if (ImGui::CollapsingHeader("Rigid Body"))
+			{
+				//_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+				//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			}
+		}
+
+		static int item_type = 0;
+		ImGui::Combo(" ", &item_type, "Add component\0  Collider\0  RigidBody\0  Audio\0 Graphics\0");
+
+		void* next_lol = nullptr;
+
+		if (ImGui::Button("Add Selected Component"))
+		{
+			switch (item_type)
+			{
+				case 1:
+				{
+					next_lol = ent.AddComponent<ColliderComponent>();
+					break;
+				}
+				case 2:
+				{
+					next_lol = ent.AddComponent<RigidBody>();
+					break;
+				}
+				case 3:
+				{
+					next_lol = ent.AddComponent<AudioComponent>();
+					break;
+				}
+				case 4:
+				{
+					next_lol = ent.AddComponent<AudioComponent>();
+					break;
+				}
+				case 5:
+				{
+					next_lol = ent.AddComponent<GraphicsComponent>();
+					break;
+				}
+			}
+
+			if (next_lol == nullptr)
+			{
+				std::cout << "Component has already been created" << std::endl;
+			}
+		}
+
+
+
 	}
 }

@@ -2,7 +2,7 @@
 #include "LevelEditor_Console.h"
 #include "LevelEditor_AssetInsp.h"
 #include "LevelEditor_PerfMetrics.h"
-#include "LevelEditor_Heirarchy.h"
+#include "LevelEditor_Hierarchy.h"
 #include "LevelEditor_Inspecter.h"
 #include "../imgui/imguizmo/ImGuizmo.h"
 
@@ -24,7 +24,7 @@ void LevelEditor::Init(HWND window)
     LE_CreateWindow<ConsoleLog>("Console", false, 0);
     LE_CreateWindow<AssetInspector>("Asset Inspector", true);
     LE_CreateWindow<PerformanceMetrics>("Performance Metrics", true);
-    LE_CreateWindow<HeirarchyInspector>("Heirarchy", true);
+    LE_CreateWindow<HierarchyInspector>("Heirarchy", true);
     LE_CreateWindow<InspectorWindow>("Inspector", true);
 
     _window = window;
@@ -70,10 +70,10 @@ bool LevelEditor::Update(float)
     // Run the Scene Editor
     LE_SceneEditor();
 
-    /*
+    bool show_demo_window = true;
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     ImGui::ShowDemoWindow(&show_demo_window);
-
+    /*
     // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
     {
         static float f = 0.0f;

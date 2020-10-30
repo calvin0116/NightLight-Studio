@@ -1,4 +1,4 @@
-#include "LevelEditor_Heirarchy.h"
+#include "LevelEditor_Hierarchy.h"
 #include "../../Component/ComponentManager.h"
 #include "../../Core/SceneManager.h"
 #include "LevelEditor_ECHelper.h"
@@ -12,7 +12,7 @@ inline size_t findCaseInsensitive(std::string data, std::string toSearch, size_t
 	return data.find(toSearch, pos);
 }
 
-void HeirarchyInspector::Init()
+void HierarchyInspector::Init()
 {
 	ImGui::SetNextWindowBgAlpha(1.0f);
 	ImGui::SetWindowSize(ImVec2(640, 320), ImGuiCond_FirstUseEver);
@@ -20,7 +20,7 @@ void HeirarchyInspector::Init()
 	selected_index = -1;
 }
 
-void HeirarchyInspector::Run()
+void HierarchyInspector::Run()
 {
 	if (!hasInit)
 		InitBeforeRun();
@@ -51,23 +51,25 @@ void HeirarchyInspector::Run()
 	static int index_selected = -1;
 	int n = 1;
 	//EntityName
-	for (auto& ent : NS_SCENE::SYS_SCENE_MANAGER->EntityName)
+	//for (auto& ent : NS_SCENE::SYS_SCENE_MANAGER->EntityName)
+	for (Entity ent : G_ECMANAGER->getEntityContainer())
 	{
+		std::string& ent_name = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
 		//Check if entity is related to the search string inserted
-		if (search != "" && findCaseInsensitive(ent.second.c_str(), search) == std::string::npos)
+		if (search != "" && findCaseInsensitive(ent_name, search) == std::string::npos)
 		{
 			++n;
 			continue;
 		}
 
 		char buf[100];
-		sprintf_s(buf, "%i. %s", n, ent.second.c_str());
+		sprintf_s(buf, "%i. %s", n, ent_name.c_str());
 		//Check if any the object has been selected
 
-		if (ImGui::Selectable(buf, LE_ECHELPER->SelectedEntities()[ent.first] ) )
+		if (ImGui::Selectable(buf, LE_ECHELPER->SelectedEntities()[ent.getId()] ) )
 		{
-			LE_ECHELPER->SelectEntity(ent.first);
-			std::cout << ent.first << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.first] << std::endl;
+			LE_ECHELPER->SelectEntity(ent.getId());
+			std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
 		}
 		else
 		{
@@ -78,13 +80,13 @@ void HeirarchyInspector::Run()
 	}
 }
 
-void HeirarchyInspector::Exit()
+void HierarchyInspector::Exit()
 {
 	//Exit not called?
 	//LE_ECHELPER->DestroyInstance();
 }
 
-void HeirarchyInspector::InitBeforeRun()
+void HierarchyInspector::InitBeforeRun()
 {
 #ifdef _EDITOR
 	hasInit = true;
