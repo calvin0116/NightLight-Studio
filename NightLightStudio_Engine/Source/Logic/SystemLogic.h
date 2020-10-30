@@ -13,10 +13,15 @@ namespace NS_LOGIC
     void Init() override;
     //void LateInit() override {};
 
-    void FixedUpdate() override;
-    void Update() override;
+    void GameLoad() override;
+    void GameInit() override;
 
-    void Free();
+    void Update() override;
+    void FixedUpdate() override;
+
+    void GameExit() override;
+
+    void Free() override;
     void Exit() override;
   };
 
