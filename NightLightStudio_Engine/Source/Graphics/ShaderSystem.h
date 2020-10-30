@@ -8,7 +8,7 @@ namespace NS_GRAPHICS
 	{
 		static const unsigned s_max_shaders = 4;
 		static const unsigned s_view_projection_buffer_size = 128; // Inclusive of padding
-		static const unsigned s_lights_buffer_size = 5184; // Inclusive of padding
+		static const unsigned s_lights_buffer_size = 6272; // Inclusive of padding
 
 		struct ShaderFile
 		{
@@ -44,6 +44,9 @@ namespace NS_GRAPHICS
 		GLuint viewProj_uniformBlockLocation;
 		GLuint lights_uniformBlockLocation;
 
+		// if no current program is binded, id is -1
+		int currentProgramID;
+
 	public:
 
 		// Unique Singleton instance
@@ -70,5 +73,7 @@ namespace NS_GRAPHICS
 		// Gets the uniform location of the current program
 		// If currentProgram is 0(no bound program), -1 will be returned(largest possible unsigned)
 		const GLuint& GetLightUniformLocation();
+
+		GLuint GetCurrentProgramHandle();
 	};
 }

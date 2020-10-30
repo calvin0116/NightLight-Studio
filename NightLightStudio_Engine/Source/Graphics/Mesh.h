@@ -51,7 +51,7 @@ namespace NS_GRAPHICS
 				: _diffuse{ 0.5f,0.5f,0.5f },
 				_ambient{ 1.f, 1.f, 1.f }, 
 				_specular{ 1.f,1.f,1.f },
-				_shininess{ 1.f } {}
+				_shininess{ 32.f } {}
 
 			~MaterialData() {}
 		};
@@ -71,7 +71,7 @@ namespace NS_GRAPHICS
 		
 		GLuint ModelMatrixBO = NULL;
 
-		GLuint MBO = NULL; // Material buffer object
+		
 
 		//////////////////////////////
 		/// ANIMATION STUFFS
@@ -85,6 +85,7 @@ namespace NS_GRAPHICS
 		//////////////////////////////
 		GLuint CBO = NULL;			// Color Buffer object
 		GLuint UVBO = NULL;
+		GLuint NBO = NULL; // normals buffer object
 
 		//RGBA IN FUTURE?
 		std::vector<glm::vec3> _rgb;

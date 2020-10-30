@@ -333,6 +333,15 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Inspecter.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\AudioBind.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\AllBindings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Binder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -544,6 +553,12 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Inspecter.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\AudioBind.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Binder.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

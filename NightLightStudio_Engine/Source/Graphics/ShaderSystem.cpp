@@ -5,7 +5,7 @@
 namespace NS_GRAPHICS
 {
 	ShaderSystem::ShaderSystem()
-		: viewProj_uniformBlockLocation{ NULL }, lights_uniformBlockLocation{ NULL }
+		: viewProj_uniformBlockLocation{ NULL }, lights_uniformBlockLocation{ NULL }, currentProgramID{ -1 }
 	{
 		// Reserve memory to avoid expensive allocations (Reduces load time)
 		files.reserve(s_max_shaders);
@@ -198,11 +198,16 @@ namespace NS_GRAPHICS
 
 	void ShaderSystem::StartProgram(const int& programType)
 	{
-		glUseProgram(programs[programType]);
+		if (programType >= 0)
+		{
+			glUseProgram(programs[programType]);
+			currentProgramID = programs[programType];
+		}
 	}
 	void ShaderSystem::StopProgram()
 	{
 		glUseProgram(NULL);
+		currentProgramID = -1;
 	}
 	const GLuint& ShaderSystem::GetViewProjectionUniformLocation()
 	{
@@ -211,5 +216,9 @@ namespace NS_GRAPHICS
 	const GLuint& ShaderSystem::GetLightUniformLocation()
 	{
 		return lights_uniformBlockLocation;
+	}
+	GLuint ShaderSystem::GetCurrentProgramHandle()
+	{
+		return currentProgramID;
 	}
 }
