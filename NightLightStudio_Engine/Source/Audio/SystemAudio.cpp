@@ -193,14 +193,14 @@ void SystemAudio::Load()
 void SystemAudio::Init()
 {
   // For testing
-  LoadSound("Asset\\Sounds\\TestAudio.ogg", "test");
+  //LoadSound("Asset/Sounds/TestAudio.ogg", "TestAudio");
 
   // Numpad 0 = Normal both speakers
   SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TestAudio", SystemInput_ns::IKEY_NUMPAD_0, "AudioTest", SystemInput_ns::OnRelease, [this]()
     {
       if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_0))
       {
-        PlayOnce("test");
+        PlayOnce("TestAudio");
       }
     });
   // Numpad 1 = 3D BGM on left side
@@ -208,7 +208,7 @@ void SystemAudio::Init()
     {
       if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_1))
       {
-        Play3DOnce("test", -1.0f, 0.0f, 0.0f);
+        Play3DOnce("TestAudio", -1.0f, 0.0f, 0.0f);
       }
     });
   // Numpad 2 = 3D BGM on right side
@@ -216,13 +216,18 @@ void SystemAudio::Init()
     {
       if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_2))
       {
-        Play3DOnce("test", 1.0f, 0.0f, 0.0f);
+        Play3DOnce("TestAudio", 1.0f, 0.0f, 0.0f);
       }
     });
 }
 
 void SystemAudio::GameLoad()
 {
+}
+
+void SystemAudio::GameInit()
+{
+  // Loading
   auto itr = G_ECMANAGER->begin<ComponentLoadAudio>();
   auto itrEnd = G_ECMANAGER->end<ComponentLoadAudio>();
   for (; itr != itrEnd; ++itr)
@@ -232,15 +237,12 @@ void SystemAudio::GameLoad()
     for (const auto& [path, name] : myComp->_sounds)
       LoadSound(path, name);
   }
-}
-
-void SystemAudio::GameInit()
-{
-  auto itr = G_ECMANAGER->begin<AudioComponent>();
-  auto itrEnd = G_ECMANAGER->end<AudioComponent>();
-  for (; itr != itrEnd; ++itr)
+  // Init
+  auto itr1 = G_ECMANAGER->begin<AudioComponent>();
+  auto itrEnd1 = G_ECMANAGER->end<AudioComponent>();
+  for (; itr1 != itrEnd1; ++itr1)
   {
-    AudioComponent* myComp = G_ECMANAGER->getComponent<AudioComponent>(itr);
+    AudioComponent* myComp = G_ECMANAGER->getComponent<AudioComponent>(itr1);
     // Component not active, skip it
     if (!myComp->_isActive)
       continue;
@@ -252,14 +254,14 @@ void SystemAudio::GameInit()
         if (data._loop)
         {
           if (data._is3D)
-            Play3DLoop(data._name, G_ECMANAGER->getObjId(itr));
+            Play3DLoop(data._name, G_ECMANAGER->getObjId(itr1));
           else
             PlayBGM(data._name);
         }
         else
         {
           if (data._is3D)
-            Play3DOnce(data._name, G_ECMANAGER->getObjId(itr));
+            Play3DOnce(data._name, G_ECMANAGER->getObjId(itr1));
           else
             PlayOnce(data._name);
         }

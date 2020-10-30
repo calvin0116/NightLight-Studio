@@ -173,5 +173,29 @@ void InspectorWindow::Run()
 
 			}
 		}
+
+    ComponentLoadAudio* aud_manager = ent.getComponent<ComponentLoadAudio>();
+    if (aud_manager != nullptr)
+    {
+      if (ImGui::CollapsingHeader("Audio Manager"))
+      {
+        if (ImGui::Button("Add Audio"))
+        {
+
+        }
+        
+
+        for (auto& [path, name] : aud_manager->_sounds)
+        {
+          char buf[512];
+          char buf2[256];
+          strcpy_s(buf, 256, path.c_str());
+          strcpy_s(buf2, 256, name.c_str());
+          ImGui::InputText("", buf, 512);
+          ImGui::SameLine(0, 10);
+          ImGui::InputText("", buf2, 256);
+        }
+      }
+    }
 	}
 }

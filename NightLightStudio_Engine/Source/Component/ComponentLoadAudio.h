@@ -1,7 +1,12 @@
 #pragma once
 #include "LocalVector.h"  // replaces std::vector
+#include "..\..\ISerializable.h"
 
-typedef class ComponentLoadAudio //: public IComponent
+#include <filesystem>
+
+namespace fs = std::filesystem;
+
+typedef class ComponentLoadAudio : public ISerializable
 {
 public:
   // path, user defined name
@@ -16,6 +21,16 @@ public:
 	~ComponentLoadAudio();
 
 	//read and write function for initialization from saved files
-	void Read();
-	void Write();
+  void	Read(Value& val) override{ 
+    auto sound_array = val["ListOfSound"].GetArray();
+    for (int i = 0; i < sound_array.Size(); ++i)
+    {
+      fs::path cur_path_name = sound_array[i].GetString();
+      std::string MyName = cur_path_name.stem().string();
+      std::string MyPath = cur_path_name.parent_path().string() + "/" + MyName + cur_path_name.extension().string();
+      _sounds.push_back(std::make_pair<std::string, std::string>(std::forward<std::string>(MyPath), std::forward<std::string>(MyName)));
+    }
+  };
+  virtual Value	Write() { return Value(); };
+  virtual Value& Write(Value& val) { return val; };
 } LoadAudioComponent;
