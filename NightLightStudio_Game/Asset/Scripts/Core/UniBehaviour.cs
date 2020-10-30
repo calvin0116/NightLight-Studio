@@ -13,6 +13,7 @@ namespace Unicorn
     public virtual void Start() { }
     public virtual void Update(float dt) { }
     public virtual void FixedUpdate(float dt) { }
+    public virtual void Exit() { }
 
     public virtual void OnEnable() { }
     public virtual void OnDisable() { }
