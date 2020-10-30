@@ -2,6 +2,9 @@
 #include "../imgui/imguizmo/ImGuizmo.h"
 #include "../../Graphics/GraphicsSystem.h"
 
+#include "LevelEditor_ECHelper.h"
+#include "../../Component/Components.h"
+
 const float identityMatrix[16] =
 { 1.f, 0.f, 0.f, 0.f,
     0.f, 1.f, 0.f, 0.f,
@@ -15,13 +18,6 @@ float Dot(const float* a, const float* b);
 void Normalize(const float* a, float* r);
 void LookAt(const float* eye, const float* at, const float* up, float* m16);
 void EditTransform(const float* cameraView, float* cameraProjection, float* matrix, bool editTransformDecomposition);
-
-// PURELY FOR TESTING ONLY
-float objectMatrix[16] =
-{ 1.f, 0.f, 0.f, 0.f,
-  0.f, 1.f, 0.f, 0.f,
-  0.f, 0.f, 1.f, 0.f,
-  0.f, 0.f, 0.f, 1.f };
 
 void LevelEditor::LE_SceneEditor()
 {
@@ -64,9 +60,39 @@ void LevelEditor::LE_SceneEditor()
     // **** FOR TESTING PURPOSES ONLY
     ImGuizmo::DrawGrid(camView, cameraProjection, identityMatrix, 100.0f);
 
-    ImGuizmo::SetID(0);
-    EditTransform(camView, cameraProjection, objectMatrix, true);
+    if (LE_ECHELPER->GetSelectedEntityID() != -1)
+    {
+        Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
+        TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+        glm::mat4 matObj = trans_comp->GetModelMatrix();
+        if (trans_comp != NULL)
+        {
+            float objectMatrix[16] =
+            { 1.f, 0.f, 0.f, 0.f,
+              0.f, 1.f, 0.f, 0.f,
+              0.f, 0.f, 1.f, 0.f,
+              0.f, 0.f, 0.f, 1.f };
 
+            for (int i = 0; i < 4; ++i)
+                for (int j = 0; j < 4; ++j)
+                {
+                    objectMatrix[(i * 4) + j] = matObj[i][j];
+                }
+
+            ImGuizmo::SetID(0);
+            EditTransform(camView, cameraProjection, objectMatrix, true);
+
+            float trans[3], rot[3], scale[3];
+            ImGuizmo::DecomposeMatrixToComponents(objectMatrix, trans, rot, scale);
+
+            for (int i = 0; i < 3; ++i)
+            {
+                trans_comp->_position[i] = trans[i];
+                trans_comp->_rotation[i] = rot[i];
+                trans_comp->_scale[i] = scale[i];
+            }
+        }
+    }
     // **********
 
     //ImGuizmo::ViewManipulate(camView, camDistance, ImVec2(io.DisplaySize.x - 128, 0), ImVec2(128, 128), 0x10101010);
@@ -170,7 +196,7 @@ void LookAt(const float* eye, const float* at, const float* up, float* m16)
 void EditTransform(const float* cameraView, float* cameraProjection, float* matrix, bool editTransformDecomposition)
 {
     static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
-    static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
+    static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
     static bool useSnap = false;
     static float snap[3] = { 1.f, 1.f, 1.f };
     static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
@@ -203,11 +229,11 @@ void EditTransform(const float* cameraView, float* cameraProjection, float* matr
 
         if (mCurrentGizmoOperation != ImGuizmo::SCALE)
         {
-            if (ImGui::RadioButton("Local", mCurrentGizmoMode == ImGuizmo::LOCAL))
-                mCurrentGizmoMode = ImGuizmo::LOCAL;
-            ImGui::SameLine();
             if (ImGui::RadioButton("World", mCurrentGizmoMode == ImGuizmo::WORLD))
                 mCurrentGizmoMode = ImGuizmo::WORLD;
+            ImGui::SameLine();
+            if (ImGui::RadioButton("Local", mCurrentGizmoMode == ImGuizmo::LOCAL))
+                mCurrentGizmoMode = ImGuizmo::LOCAL;
         }
         if (ImGui::IsKeyPressed(83))
             useSnap = !useSnap;
