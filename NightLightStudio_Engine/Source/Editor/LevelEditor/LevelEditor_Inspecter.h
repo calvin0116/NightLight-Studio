@@ -10,6 +10,7 @@ private:
 public:
 	InspectorWindow()
 		:hasInit{ false }
+		,selected_index{-1}
 	{};
 	~InspectorWindow() {};
 
