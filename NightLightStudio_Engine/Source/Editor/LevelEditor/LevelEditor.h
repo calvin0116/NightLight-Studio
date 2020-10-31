@@ -435,6 +435,7 @@ std::vector<std::string> LE_GetDirectories(const std::string& path);
 std::vector<std::string> LE_GetFilesInDir(const std::string& path);
 
 std::string LE_EraseSubStr(const std::string& str, const std::string& toErase);
+std::string LE_EraseBackSubStr(const std::string& str, const std::string& toErase);
 
 std::string LE_GetFilename(const std::string& path);
 

@@ -224,6 +224,20 @@ std::string LE_EraseSubStr(const std::string& str, const std::string& toErase)
     return mainStr;
 }
 
+std::string LE_EraseBackSubStr(const std::string& str, const std::string& toErase)
+{
+    std::string mainStr = str;
+    // Search for the substring in string
+    size_t pos = mainStr.rfind(toErase);
+    if (pos != std::string::npos)
+    {
+        // If found then erase it from string
+        mainStr.erase(pos, toErase.length());
+    }
+
+    return mainStr;
+}
+
 std::string LE_GetFilename(const std::string& path)
 {
     char sep = '/';
