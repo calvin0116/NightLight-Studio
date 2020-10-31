@@ -10,6 +10,7 @@ protected:
 	LE_ECHelper()
 		:selected_ent_amt{0}
 		, selected_ent_id{-1}
+		, setFocus{false}
 	{};
 	~LE_ECHelper() {};
 
@@ -19,12 +20,16 @@ protected:
 	//Multi select
 	int selected_ent_amt;
 
+
 	//First = entity id, second = selected bool
 	std::map<int, bool> selected_ents;
 	//First = level editor id, second = entity id
 	std::map<int, int> le_id_to_object_id;
 
 public:
+	//Window focus for inspecter
+	bool setFocus;
+
 	//==========Single select==============//
 	void SelectEntity(int id)
 	{
@@ -36,6 +41,8 @@ public:
 		selected_ents[id] = true;
 		++selected_ent_amt;
 		selected_ent_id = id;
+
+		setFocus = false;
 	}
 	
 	void DeSelectEntity(int id)

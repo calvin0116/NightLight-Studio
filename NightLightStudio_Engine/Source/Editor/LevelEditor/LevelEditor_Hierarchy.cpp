@@ -65,16 +65,32 @@ void HierarchyInspector::Run()
 		char buf[100];
 		sprintf_s(buf, "%i. %s", n, ent_name.c_str());
 		//Check if any the object has been selected
+		//ImGuiTreeNodeFlags flag = 
+			//LE_ECHELPER->SelectedEntities()[ent.getId()]
+		//If more then one child, get the child
+		if (ent.getNumChildren() > 0)
+		{
+			//~~!Prep for entity with children
+			if (ImGui::TreeNode(buf))
+			{
+				//~~!!Get child to be printed out as selectable
 
-		if (ImGui::Selectable(buf, LE_ECHELPER->SelectedEntities()[ent.getId()] ) )
-		{
-			LE_ECHELPER->SelectEntity(ent.getId());
-			std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
+				ImGui::TreePop();
+			}
 		}
-		else
+		else //if (!ent.isChild) print those not a child
 		{
-			//std::cout << ent.first << ". not selected: " << LE_ECHELPER->SelectedEntity()[ent.first] << std::endl;
+			if (ImGui::Selectable(buf, LE_ECHELPER->SelectedEntities()[ent.getId()]))
+			{
+				LE_ECHELPER->SelectEntity(ent.getId());
+				std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
+			}
+			else
+			{
+				//std::cout << ent.first << ". not selected: " << LE_ECHELPER->SelectedEntity()[ent.first] << std::endl;
+			}
 		}
+
 
 		++n;
 	}

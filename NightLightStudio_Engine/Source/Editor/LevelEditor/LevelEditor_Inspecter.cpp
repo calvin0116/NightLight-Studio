@@ -11,6 +11,12 @@ void InspectorWindow::Run()
 	//Check for valid Entity Id
 	if (LE_ECHELPER->GetSelectedEntityID() != -1)
 	{
+		if (!ImGui::IsWindowAppearing() && !LE_ECHELPER->setFocus)
+		{
+			ImGui::SetWindowFocus();
+			LE_ECHELPER->setFocus = true;
+		}
+
 		//Get entity
 		Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
 		// Entity name
@@ -45,6 +51,8 @@ void InspectorWindow::Run()
 				ImGui::InputFloat3("Rotation", glm::value_ptr(trans_comp->_rotation));
 			}
 		}
+		//Standard bool for all component to use
+		bool not_remove = true;
 
 		ComponentCollider* col_comp = ent.getComponent<ComponentCollider>();
 		if (col_comp != NULL)
@@ -84,9 +92,15 @@ void InspectorWindow::Run()
 			}
 
 			//4. May need loop to loop through all collider
-			if (ImGui::CollapsingHeader(name.c_str()))
+			if (ImGui::CollapsingHeader(name.c_str() , &not_remove))
 			{
 
+			}
+
+			if (!not_remove)
+			{
+				ent.RemoveComponent<ComponentCollider>();
+				not_remove = true;
 			}
 		}
 
@@ -94,10 +108,11 @@ void InspectorWindow::Run()
 		if (aud_manager != nullptr)
 		{
 
-			if (ImGui::CollapsingHeader("Audio Manager"))
+			if (ImGui::CollapsingHeader("Audio Manager", &not_remove))
 			{
 				if (ImGui::Button("Add Audio"))
 				{
+					aud_manager->_sounds.push_back(ComponentLoadAudio::data());
 				}
 
 
@@ -117,23 +132,37 @@ void InspectorWindow::Run()
 					ImGui::InputText("##AUDIONAME", name, 256);
 				}
 			}
+
+			if (!not_remove)
+			{
+				ent.RemoveComponent<ComponentLoadAudio>();
+				not_remove = true;
+			}
 		}
 
 
 		GraphicsComponent* graphics_comp = ent.getComponent<GraphicsComponent>();
 		if (graphics_comp != nullptr)
 		{
-			if (ImGui::CollapsingHeader("Graphics component"))
+			if (ImGui::CollapsingHeader("Graphics component", &not_remove))
 			{
-				_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+				ImGui::Checkbox("IsActive##Grahpic", &graphics_comp->_isActive);
+				_levelEditor->LE_AddInputText("Texture", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+				_levelEditor->LE_AddInputText("Model", graphics_comp->_modelFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 				//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			}
+
+			if (!not_remove)
+			{
+				ent.RemoveComponent<GraphicsComponent>();
+				not_remove = true;
 			}
 		}
 
 		RigidBody* rb = ent.getComponent<RigidBody>();
 		if (rb != nullptr)
 		{
-			if (ImGui::CollapsingHeader("Rigid Body"))
+			if (ImGui::CollapsingHeader("Rigid Body", &not_remove))
 			{
 				//_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 				//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
@@ -142,10 +171,16 @@ void InspectorWindow::Run()
 				ImGui::InputFloat3("Acceleration", rb->acceleration.m);
 				
 			}
+
+			if (!not_remove)
+			{
+				ent.RemoveComponent<RigidBody>();
+				not_remove = true;
+			}
 		}
 
 		static int item_type = 0;
-		ImGui::Combo(" ", &item_type, "Add component\0  Collider\0  RigidBody\0  Audio\0 Graphics\0");
+		ImGui::Combo(" ", &item_type, "Add component\0  Collider\0  RigidBody\0  Audio\0  Graphics\0");
 
 		void* next_lol = nullptr;
 
@@ -165,15 +200,10 @@ void InspectorWindow::Run()
 				}
 				case 3:
 				{
-					next_lol = ent.AddComponent<AudioComponent>();
+					next_lol = ent.AddComponent<ComponentLoadAudio>();
 					break;
 				}
 				case 4:
-				{
-					next_lol = ent.AddComponent<AudioComponent>();
-					break;
-				}
-				case 5:
 				{
 					next_lol = ent.AddComponent<GraphicsComponent>();
 					break;
