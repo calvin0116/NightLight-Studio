@@ -5,6 +5,10 @@
 
 namespace NS_GRAPHICS
 {
+	//Local Path For Custom Graphics Files
+	static std::string s_LocalPathName = "Asset\\Model\\";
+	static std::string s_ModelFileType = ".model";
+
 	struct Model
 	{
 		GLuint ModelMatrixBO = NULL; // Buffer Object ID for Model Matrix

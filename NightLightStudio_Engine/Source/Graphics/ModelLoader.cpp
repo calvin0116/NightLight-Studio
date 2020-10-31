@@ -1,5 +1,7 @@
 #include "ModelLoader.h"
 #include "../../framework.h"
+#include "../glm/gtc/matrix_transform.hpp"
+#include "../../glm/gtc/quaternion.hpp"
 
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -9,7 +11,8 @@
 namespace NS_GRAPHICS
 {
 	ModelLoader::ModelLoader() : _fbxManager{ nullptr }, _fbxScene{ nullptr }, _fbxImport{ nullptr },
-		_axisSystem{ FbxAxisSystem::eYAxis, FbxAxisSystem::eParityOdd, FbxAxisSystem::eRightHanded }
+		_axisSystem{ FbxAxisSystem::eYAxis, FbxAxisSystem::eParityOdd, FbxAxisSystem::eRightHanded },
+		_modelManager{ &ModelManager::GetInstance() }
 	{
 		std::cout << "Model Loader Created" << std::endl;
 	}
@@ -53,9 +56,9 @@ namespace NS_GRAPHICS
 				name.erase(name.find("."));
 				//CONVERSION TO CUSTOM FORMAT
 				//OLD
-				newMesh->_localFileName = s_LocalPathName + name + s_MeshFileType;
+				newMesh->_localFileName = s_LocalPathName + name + s_ModelFileType;
 				//NEW
-				newMeshNew->_localFileName = s_LocalPathName + name + s_MeshFileType;
+				newMeshNew->_localFileName = s_LocalPathName + name + s_ModelFileType;
 
 				//MESH NAME
 				if (customName.empty())
@@ -154,26 +157,68 @@ namespace NS_GRAPHICS
 				newMeshNew->_vertices.reserve(vertexCount);
 				newMeshNew->_vertexDatas.reserve(vertexCount);
 
+				std::cout << node->GetName() << ":" << std::endl;
+
+				FbxDouble3 translation = node->LclTranslation.Get();
+				FbxDouble3 rotation = node->LclRotation.Get();
 				FbxDouble3 scaling = node->LclScaling.Get();
+				FbxDouble3 test = node->GeometricTranslation.Get();
+
+				std::cout << translation[0] << ", " << translation[1] << ", " << translation[2] << std::endl;
+				std::cout << rotation[0] << ", " << rotation[1] << ", " << rotation[2] << std::endl;
+				std::cout << scaling[0] << ", " << scaling[1] << ", " << scaling[2] << std::endl;
+
+				std::cout << test[0] << ", " << test[1] << ", " << test[2] << std::endl;
+
+				//const char* nodeName = node->GetName();
+				glm::mat4 modelMatrix(1);
+				glm::mat4 translateMatrix(1);
+				glm::mat4 scaleMatrix(1);
+
+				glm::translate(translateMatrix, glm::vec3(translation[0], translation[1], translation[2]));
+				glm::quat quaternion(glm::radians(glm::vec3(rotation[0], rotation[1], rotation[2])));
+				glm::mat4 rotateMatrix = glm::mat4_cast(quaternion);
+				glm::scale(scaleMatrix, glm::vec3(scaling[0], scaling[1], scaling[2]));
+
+				modelMatrix = translateMatrix * rotateMatrix * scaleMatrix;
+
+				//FBX FIX 
+				if (fileName.find(s_FbxFileFormat) != std::string::npos)
+				{
+					glm::quat quaternion2(glm::radians(glm::vec3(-90.0f, 0.0f, 0.0f)));
+					glm::mat4 rotateMatrix2 = glm::mat4_cast(quaternion2);
+
+					modelMatrix = modelMatrix * rotateMatrix2;
+				}
 
 				for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
 				{
 					//Control point vertex
-					//0,2,1 as FBX exported it as X Z Y over X Y Z
 					glm::vec3 vertex;
-					if (fileName.find(s_FbxFileFormat) != std::string::npos)
-					{
-						vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
-								   (float)vertexs[vertexIndex][2] * (float)scaling[2],
-								   (float)vertexs[vertexIndex][1] * (float)scaling[1]};
-					}
 
-					else
-					{
-						vertex = { (float)vertexs[vertexIndex][0] * (float)scaling[0],
-								   (float)vertexs[vertexIndex][1] * (float)scaling[1],
-								   (float)vertexs[vertexIndex][2] * (float)scaling[2]};
-					}
+					vertex = { (float)vertexs[vertexIndex][0],
+							   (float)vertexs[vertexIndex][1],
+							   (float)vertexs[vertexIndex][2]};
+
+					vertex = modelMatrix * glm::vec4(vertex, 1.0);
+
+					//OLD WAY OF ROTATION
+					//if (fileName.find(s_FbxFileFormat) != std::string::npos)
+					//{
+					//	vertex = { (float)vertexs[vertexIndex][0],
+					//			   (float)vertexs[vertexIndex][2],
+					//			   -(float)vertexs[vertexIndex][1]};
+					//}
+					//else
+					//{
+
+					//	vertex = { (float)vertexs[vertexIndex][0],
+					//			   (float)vertexs[vertexIndex][1],
+					//			   (float)vertexs[vertexIndex][2] };
+
+					//}
+
+					//vertex = modelMatrix * glm::vec4(vertex, 1.0);
 
 					/////////////////////////////////
 					/// Mesh Way
@@ -311,7 +356,8 @@ namespace NS_GRAPHICS
 				mesh->Destroy();
 
 				//OLD WAY
-				MeshManager::GetInstance().AddLoadedMesh(newMesh, newMesh->_meshName);
+				//ModelManager::GetInstance().AddLoadedMesh(newMesh, newMesh->_meshName);
+				delete newMesh;
 
 				//NEW WAY
 				model->_meshes.push_back(newMeshNew);
@@ -433,8 +479,8 @@ namespace NS_GRAPHICS
 		}
 
 		//Trim the extension to get the file name
-		name.erase(name.find("."));
-		model->_fileName = s_LocalPathName + name + s_MeshFileType;
+		name.erase(name.rfind("."));
+		model->_fileName = s_LocalPathName + name + s_ModelFileType;
 
 		//Model name if empty use file name
 		if (customName.empty())
@@ -446,8 +492,15 @@ namespace NS_GRAPHICS
 			model->_modelName = customName;
 		}
 
+		//First checks if the model existed to avoid unnecessary loading
+		if (_modelManager->_modelList.find(model->_modelName) != _modelManager->_modelList.end())
+		{
+			delete model;
+			return;
+		}
+
 		//Loads the correct function based on extension
-		if (fileName.find(s_MeshFileType) != std::string::npos)
+		if (fileName.find(s_ModelFileType) != std::string::npos)
 		{
 			LoadCustomMesh(model, fileName, customName);
 		}
@@ -455,11 +508,44 @@ namespace NS_GRAPHICS
 		{
 			LoadFBX(model, fileName, customName);
 		}
-		MeshManager::GetInstance().AddLoadedModel(model, model->_modelName);
+
+		_modelManager->AddLoadedModel(model, model->_modelName);
+#ifdef _DEBUG
+		std::string textFileName = model->_modelName + ".txt";
+		DebugToFile(model->_modelName, textFileName);
+#endif
+
+		//TODO Saving custom mesh
 	}
 	void ModelLoader::LoadCustomMesh(Model*& model, const std::string& fileName, const std::string& customName)
 	{
 		//Gets rid of warning for now
 		(void)model, fileName, customName;
+	}
+	void ModelLoader::DebugToFile(const std::string& meshName, const std::string& fileName)
+	{
+		std::ofstream logFile;
+		logFile.open(fileName.c_str());
+
+		int lineCount = 0;
+		int MeshSize = _modelManager->_modelList[meshName]->_meshes.size();
+		for (int i = 0; i < MeshSize; ++i)
+		{
+			int verticeSize = _modelManager->_modelList[meshName]->_meshes[i]->_vertices.size();
+			for (int x = 0; x < verticeSize; ++x)
+			{
+				logFile << "Vertex: X: " << _modelManager->_modelList[meshName]->_meshes[i]->_vertices[x].x << " Y: " <<
+					_modelManager->_modelList[meshName]->_meshes[i]->_vertices[x].y << " Z: " <<
+					_modelManager->_modelList[meshName]->_meshes[i]->_vertices[x].z << "\n";
+
+				lineCount++;
+			}
+
+			logFile << std::endl;
+		}
+
+		logFile << "Total Points : " << lineCount << std::endl;
+
+		logFile.close();
 	}
 }

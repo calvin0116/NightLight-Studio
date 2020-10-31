@@ -110,9 +110,10 @@ void LevelEditor::LE_MainMenuBar()
                     */
                 }
 
-                if (LE_GetFileType(data) == "fbx")
+                if (LE_GetFileType(data) == "fbx" || LE_GetFileType(data) == "obj")
                 {
                     std::string fName = LE_EraseSubStr(LE_GetFilename(data), LE_GetFileType(data));
+
                     fName.pop_back();
 
                     Entity ent = G_ECMANAGER->BuildEntity();

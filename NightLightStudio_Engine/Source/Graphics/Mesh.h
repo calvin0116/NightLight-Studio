@@ -7,10 +7,6 @@
 
 namespace NS_GRAPHICS
 {
-	//Local Path For Custom Graphics Files
-	static std::string s_LocalPathName = "Resources\\Mesh\\";
-	static std::string s_MeshFileType = ".mesh";
-
 	struct Mesh
 	{
 		//FOR SAVING AND LOADING MIGHT NEED
@@ -39,28 +35,9 @@ namespace NS_GRAPHICS
 			glm::vec3 _vNormals;
 		};
 
-		// Designer Manual Input
-		struct MaterialData
-		{
-			glm::vec3 _diffuse;  // Base color
-			glm::vec3 _ambient;  // Reflective color under ambient lighting
-			glm::vec3 _specular; // Highlight color
-			float _shininess;    // Scattering / radius of specularity
-
-			MaterialData()
-				: _diffuse{ 0.5f,0.5f,0.5f },
-				_ambient{ 1.f, 1.f, 1.f }, 
-				_specular{ 1.f,1.f,1.f },
-				_shininess{ 32.f } {}
-
-			~MaterialData() {}
-		};
-
 		//Vertex Data might not be needed
 		std::vector<VertexData> _vertexDatas;
 		std::vector<FragmentData> _fragmentDatas;
-
-		MaterialData _materialData;
 
 		//Still needed
 		std::vector<unsigned short> _indices;
@@ -70,8 +47,6 @@ namespace NS_GRAPHICS
 		GLuint EBO = NULL;
 		
 		GLuint ModelMatrixBO = NULL;
-
-		
 
 		//////////////////////////////
 		/// ANIMATION STUFFS

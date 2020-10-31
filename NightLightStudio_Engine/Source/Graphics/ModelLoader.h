@@ -1,7 +1,7 @@
 #pragma once
 #include "../FBX_SDK/fbxsdk.h"
 #include "Mesh.h"
-#include "MeshManager.h"
+#include "ModelManager.h"
 #include "Model.h"
 
 namespace NS_GRAPHICS
@@ -14,6 +14,8 @@ namespace NS_GRAPHICS
 		FbxScene* _fbxScene;
 		FbxImporter* _fbxImport;
 		FbxAxisSystem _axisSystem;
+
+		ModelManager* _modelManager;
 
 		ModelLoader();
 		~ModelLoader();
@@ -34,5 +36,7 @@ namespace NS_GRAPHICS
 		void LoadFBX(Model*& model, const std::string& fileName, const std::string& customName = "");
 		void LoadModel(const std::string& fileName, const std::string& customName = "");
 		void LoadCustomMesh(Model*& model, const std::string& fileName, const std::string& customName ="");
+
+		void DebugToFile(const std::string& meshName, const std::string& fileName);
 	};
 }

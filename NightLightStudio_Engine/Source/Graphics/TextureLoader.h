@@ -6,6 +6,9 @@
 
 namespace NS_GRAPHICS
 {
+	static std::string s_DDSFileFormat = ".dds";
+	static std::string s_LocalTexturePathName = "Asset\\Texture\\";
+
 	struct DDSImageData
 	{
 		int _width;
@@ -55,7 +58,7 @@ namespace NS_GRAPHICS
 
 		bool LoadDDSImage(const std::string& file);
 		DDSImageData* LoadDDSImageData(const std::string& file);
-		bool LoadImage(const std::string& file);
+		bool LoadOtherImage(const std::string& file, const std::string& newFile);
 
 	public:
 		// Unique Singleton instance
@@ -65,6 +68,6 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
-		bool LoadTexture(const std::string& file);
+		int LoadTexture(const std::string& file);
 	};
 }

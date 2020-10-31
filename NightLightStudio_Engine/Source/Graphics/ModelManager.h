@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../../framework.h"
-#include "Mesh.h"
 #include "Model.h"
 #include "../Window/WndUtils.h"
 #include <unordered_map>
@@ -10,10 +9,10 @@ namespace NS_GRAPHICS
 {
 	// Manages OpenGL Object IDs A.K.A Model "keys" for all graphics components
 	// DOES NOT CONTAIN MODELS THEMSELVES
-	class MeshManager
+	class ModelManager
 	{
-		MeshManager();
-		~MeshManager();
+		ModelManager();
+		~ModelManager();
 
 		// Value representing number of mesh IDs, used by components to track meshes
 		// Value returned in AddMesh() represents mesh ID of current mesh made
@@ -32,40 +31,40 @@ namespace NS_GRAPHICS
 		   (return meshIDs++;)
 
 		*/
-		unsigned meshIDs;
+		//unsigned meshIDs;
 		unsigned _modelIDs;
 
 	public:
 		// Unique Singleton instance
-		static MeshManager& GetInstance()
+		static ModelManager& GetInstance()
 		{
-			static MeshManager instance;
+			static ModelManager instance;
 			return instance;
 		}
 
 		// Object Mesh Instances
 		// Used for actual drawing
-		std::vector<Mesh*> meshes;
+		//std::vector<Mesh*> meshes;
 		std::vector<Model*> _models;
 
 		// Loaded Meshes
-		std::unordered_map<std::string, Mesh*> meshlist;
+		//std::unordered_map<std::string, Mesh*> meshlist;
 		std::unordered_map<std::string, Model*> _modelList;
 
 		//std::unordered_map<std::string, Mesh> meshes;
 
 		//graphicscomp->AttachMesh("Cylinder");
-
+		
 		// Adds new mesh instance to vector of mesh instances and returns mesh ID
-		int AddMesh(Mesh* const mesh);
+		//int AddMesh(Mesh* const mesh);
 
 		// Adds new mesh instance to vector of mesh instances and returns mesh ID
 		// Takes in mesh key for mesh list
-	    int AddMesh(const std::string& meshkey);
+	    //int AddMesh(const std::string& meshkey);
 
 		// Adds loaded mesh into master list, requires name as key and context
 		// E.g.
-		void AddLoadedMesh(Mesh* mesh, const std::string& meshKey);
+		//void AddLoadedMesh(Mesh* mesh, const std::string& meshKey);
 
 		// Adds new model instance to vector of model instances and returns model ID
 		int AddModel(Model* const model);
@@ -80,8 +79,8 @@ namespace NS_GRAPHICS
 
 		void Free();
 
-		// Free all existing OpenGL Objects and removes Meshes from memory, if any
+		// Free all existing OpenGL Objects and removes Models from memory, if any
 		// This should be called upon graphics system shutdown
-		void DumpMeshData();
+		void DumpModelData();
 	};
 }
