@@ -345,6 +345,9 @@
     <ClInclude Include="Source\Graphics\ModelManager.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -562,7 +565,7 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Hierarchy.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Source\Graphics\ModelManager.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>

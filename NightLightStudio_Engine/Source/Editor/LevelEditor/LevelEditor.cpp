@@ -4,6 +4,7 @@
 #include "LevelEditor_PerfMetrics.h"
 #include "LevelEditor_Hierarchy.h"
 #include "LevelEditor_Inspecter.h"
+#include "LevelEditor_SceneEditor.h"
 #include "../imgui/imguizmo/ImGuizmo.h"
 
 //Added by Teck Wei
@@ -26,6 +27,7 @@ void LevelEditor::Init(HWND window)
     LE_CreateWindow<PerformanceMetrics>("Performance Metrics", true);
     LE_CreateWindow<HierarchyInspector>("Heirarchy", true);
     LE_CreateWindow<InspectorWindow>("Inspector", true);
+    LE_CreateWindow<SceneEditor>("Scene Editor", true);
 
     _window = window;
 
@@ -64,11 +66,8 @@ bool LevelEditor::Update(float)
 
     // Run the MainMenubar
     LE_MainMenuBar();
-    
-    // Run the Scene Editor
-    LE_SceneEditor();
 
-    bool show_demo_window = true;
+    //bool show_demo_window = true;
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     //ImGui::ShowDemoWindow(&show_demo_window);
     /*

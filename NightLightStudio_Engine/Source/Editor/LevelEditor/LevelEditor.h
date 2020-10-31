@@ -84,7 +84,6 @@ class LevelEditor
 
 	void LE_RunWindows();
 	void LE_MainMenuBar();
-	void LE_SceneEditor();
 public:
 	LevelEditor();
 	~LevelEditor();
