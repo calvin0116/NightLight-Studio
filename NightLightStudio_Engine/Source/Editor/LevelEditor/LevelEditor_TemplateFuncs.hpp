@@ -23,7 +23,7 @@ inline void LevelEditor::LE_AddChildWindow(const std::string& name, ImVec2 size,
 }
 
 template<typename T, typename ...Y, typename TReturn>
-inline TReturn LevelEditor::LE_AccessWindowFunc(const std::string& name, TReturn(T::* fn)(Y...), Y&&... arg)
+inline TReturn LevelEditor::LE_AccessWindowFunc(const std::string& name, TReturn(T::* fn)(Y...), Y... arg)
 {
     T* win = dynamic_cast<T*>(std::find(std::begin(_editorWind), std::end(_editorWind), name)->_ptr.get());
     // May change to simply do something else

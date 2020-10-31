@@ -119,8 +119,9 @@ public:
 	{ LE_AddChildWindow(name, size, []() {}, border, flag); }
 
 	// Runs another window's function.
+	//
 	template <typename T, typename... Y, typename TReturn>
-	TReturn LE_AccessWindowFunc(const std::string& name, TReturn(T::* fn)(Y...), Y&&... arg);
+	TReturn LE_AccessWindowFunc(const std::string& name, TReturn(T::* fn)(Y...), Y... arg);
 
 	// Sets a Windows Flag. Please use in Start.
 	void LE_SetWindowFlag(const std::string& name, const ImGuiWindowFlags& flag);

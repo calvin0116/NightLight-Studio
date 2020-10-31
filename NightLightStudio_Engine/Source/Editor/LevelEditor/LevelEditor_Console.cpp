@@ -1,4 +1,81 @@
 #include "LevelEditor_Console.h"
+#include "../../Input/SystemInput.h"
+
+#include <iostream>
+
+void ConsoleLog::Start()
+{
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("EDITOR_UNDO", SystemInput_ns::IKEY_Z, "CTRL-Z", SystemInput_ns::OnPress,
+		[this]() 
+		{
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+				UndoLastCommand();
+		});
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("EDITOR_REDO", SystemInput_ns::IKEY_Y, "CTRL-Y", SystemInput_ns::OnPress,
+		[this]()
+		{
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+				RedoLastCommand();
+		});
+
+	AddCommand("TEST_COMMAND", 
+		[this](std::any value)
+		{
+			// Initial state
+			int ret = _somevalue;
+
+			// THE ANY CAST MUST BE A SPECIFIC TYPE OR IT WILL FAIL
+			// Undo takes in as a string
+			std::string val = std::any_cast<std::string>(value);
+
+			// Uses the value to set state
+			_somevalue = std::stoi(val);
+
+			// Debugging only
+			AddLog("_someValue: " + std::to_string(_somevalue));
+
+			// Returns previous state
+			return ret;
+		},
+		[this](std::any value)
+		{
+			// Initial state (storing as a string for testing purposes)
+			std::string ret = std::to_string(_somevalue);
+
+			// THE ANY CAST MUST BE A SPECIFIC TYPE OR IT WILL FAIL
+			// Do takes in an int
+			int val = std::any_cast<int>(value);
+
+			// Uses the value to set state
+			_somevalue = val;
+
+			// Debugging only
+			AddLog("_someValue: " + std::to_string(_somevalue));
+
+			// Returns previous state
+			return ret;
+		});
+
+	// Running commands as per normal
+	RunCommand("TEST_COMMAND", std::to_string(1));
+	RunCommand("TEST_COMMAND", std::to_string(2));
+	RunCommand("TEST_COMMAND", std::to_string(3));
+
+
+	// Testing Undo Redo //
+	// Values should be : 1,2,3, 2,1, 2, 1, 2,3, 2,1,0,
+	UndoLastCommand();
+	UndoLastCommand();
+	RedoLastCommand();
+	UndoLastCommand();
+	RedoLastCommand();
+	RedoLastCommand();
+	RedoLastCommand();
+	UndoLastCommand();
+	UndoLastCommand();
+	UndoLastCommand();
+	UndoLastCommand();
+}
 
 void ConsoleLog::Init()
 {
@@ -38,12 +115,17 @@ void ConsoleLog::Run()
 			}
 
 			ImGui::PopStyleVar();
+
+			if (_scrollToBottom) {
+				ImGui::SetScrollHere(1.0f);
+				_scrollToBottom = false;
+			}
 		}, true, ImGuiWindowFlags_HorizontalScrollbar);
 
 	ImGui::Separator();
 	_levelEditor->LE_AddText("Input");
 	ImGui::SameLine();
-	ImGuiInputTextFlags inputFlag = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory;
+	ImGuiInputTextFlags inputFlag = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackHistory;
 	_levelEditor->LE_AddInputText("##Input", _inputBuffer, 100, inputFlag,
 		[this]() 
 		{
@@ -69,23 +151,104 @@ void ConsoleLog::Run()
 
 }
 
+// Might need to expand
 void ConsoleLog::AddLog(const std::string& item)
 {
 	if (_inputItems.size() >= MAX_SIZE_INPUTS)
 		_inputItems.erase(std::begin(_inputItems));
 	_inputItems.push_back(item);
-	ExecCommand(item);
+
+	// On new log, scroll to bottom
+	_scrollToBottom = true;
+
+	// RUN COMMAND HERE
+	try
+	{
+		std::string command, value;
+
+		std::size_t pos = item.find(" ");
+
+		command = item.substr(0, pos);
+		value = item.substr(pos + 1, item.size());
+
+		RunCommand(command, value);
+	}
+	catch (const std::exception& e)
+	{
+		if (_inputItems.size() >= MAX_SIZE_INPUTS)
+			_inputItems.erase(std::begin(_inputItems));
+		std::string errorMsg = "[error] : ";
+		errorMsg.append(e.what());
+		_inputItems.push_back(errorMsg);
+	}
 }
 
-void ConsoleLog::AddCommand(const std::string& command, std::function<void()> fn)
+void ConsoleLog::AddCommand(const std::string command, COMMAND doFN, COMMAND undoFN)
 {
-	_commands.emplace(command, fn);
+	_commands.emplace(command, DO_UNDO_COMMAND(doFN, undoFN));
 }
 
-void ConsoleLog::ExecCommand(const std::string& command)
+void ConsoleLog::RunCommand(const std::string command, std::any value)
 {
-	if (_commands.find(command) != std::end(_commands))
-		_commands[command]();
+	decltype(_commands)::iterator iter = _commands.find(command);
+	if (iter != std::end(_commands))
+	{
+		// Runs the function for DO
+		COMMAND fn = iter->second.first;
+		if (fn)
+		{
+			// Does not store if there is no undo functionality available
+			if (iter->second.second)
+			{
+				// Stores the initial values of the command
+				std::any returnValue = fn(value);
+				_inputCommands.push_back(std::make_pair(command, returnValue));
+			}
+			else
+				fn(value);
+
+			// Clears all possible forward events to prevent issues
+			_inputCommandsRedo.clear();
+		}
+	}
+}
+
+void ConsoleLog::UndoLastCommand()
+{
+	// Checks if there is anything left to undo
+	if (_inputCommands.size())
+	{
+		decltype(_inputCommands)::value_type lastCommand = _inputCommands.back();
+		std::string command = lastCommand.first;
+		std::any value = lastCommand.second;
+
+		// No need to check if it exists; if it's in vector, then it must be an existing command with undo functionality
+		DO_UNDO_COMMAND iter = _commands[command];
+		// Runs the function for UNDO
+		COMMAND fn = iter.second;
+		_inputCommandsRedo.push_back(std::make_pair(command, fn(value)));
+
+		_inputCommands.pop_back();
+
+	}
+}
+
+void ConsoleLog::RedoLastCommand()
+{
+	if (_inputCommandsRedo.size())
+	{
+		decltype(_inputCommandsRedo)::value_type lastCommand = _inputCommandsRedo.back();
+		std::string command = lastCommand.first;
+		std::any value = lastCommand.second;
+
+		// No need to check if it exists; if it's in vector, then it must be an existing command with undo functionality
+		DO_UNDO_COMMAND iter = _commands[command];
+		// Runs the function for UNDO
+		COMMAND fn = iter.first;
+		_inputCommands.push_back(std::make_pair(command, fn(value)));
+
+		_inputCommandsRedo.pop_back();
+	}
 }
 
 void ConsoleLog::ClearLog()

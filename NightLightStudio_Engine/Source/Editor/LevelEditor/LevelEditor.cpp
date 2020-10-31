@@ -65,8 +65,6 @@ bool LevelEditor::Update(float)
     // Run the MainMenubar
     LE_MainMenuBar();
     
-    // Only for testing
-    if (_runEngine)
     // Run the Scene Editor
     LE_SceneEditor();
 

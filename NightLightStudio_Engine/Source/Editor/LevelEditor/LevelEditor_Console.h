@@ -3,6 +3,7 @@
 
 #include "LevelEditor.h"
 #include <map>
+#include <any>
 
 class ConsoleLog : public LE_WinBase_Derived<ConsoleLog>
 {
@@ -12,12 +13,27 @@ class ConsoleLog : public LE_WinBase_Derived<ConsoleLog>
 	std::vector<std::string> _inputItems;
 	std::vector<std::string> _inputHistory;
 	int _historyPos;
-	std::map<const std::string, std::function<void()>> _commands;
+
+	std::vector<std::pair<std::string, std::any>> _inputCommands;
+	std::vector<std::pair<std::string, std::any>> _inputCommandsRedo;
+
+	// Stores a DO function, UNDO function, and a single value that stores values that you want to use
+	typedef std::function<std::any(std::any)> COMMAND;
+	typedef std::pair<COMMAND, COMMAND> DO_UNDO_COMMAND;
+
+	std::map<const std::string, DO_UNDO_COMMAND> _commands;
+
+	bool _scrollToBottom;
+
+	// TO REMOVE
+	int _somevalue = 0;
 
 public:
-	ConsoleLog() : _inputBuffer{}, _inputItems{}, _inputHistory{}, _historyPos{ -1 }, _commands{}
+	ConsoleLog() : _inputBuffer{}, _inputItems{}, _inputHistory{}, _historyPos{ -1 }, _commands{}, _inputCommands{}, _scrollToBottom{ false }
 	{}
 	~ConsoleLog() {}
+
+	void Start() override;
 
 	void Init() override;
 
@@ -27,8 +43,17 @@ public:
 
 	void AddLog(const std::string& item);
 
-	void AddCommand(const std::string& command, std::function<void()> fn);
-	void ExecCommand(const std::string& command);
+	// COMMAND -> std::pair < std::function <void(std::any)>, std::any >
+	// std::function <std::any(std::any)> -> The function that takes in an arbitrary value state to run, and returns the initial value state.
+	// Please note:
+	// The return value of the Do function will be the argument used for the Undo function
+	// The return value of the Undo function will be the argument used for the Do function
+	void AddCommand(const std::string command, COMMAND doFN, COMMAND undoFN = nullptr);
+
+	void RunCommand(const std::string command, std::any value = nullptr);
+
+	void UndoLastCommand();
+	void RedoLastCommand();
 
 	void ClearLog();
 
