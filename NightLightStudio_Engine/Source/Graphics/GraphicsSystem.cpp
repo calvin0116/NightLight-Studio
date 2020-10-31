@@ -103,7 +103,7 @@ namespace NS_GRAPHICS
 		
 		////////////////////////////////////////////////////
 		/// Commented to test level editor drag and drop
-		/*
+		
 		modelLoader->LoadModel("rotatedCube.fbx", "box");
 
 		//Draw Cylinder FBX file 
@@ -115,19 +115,19 @@ namespace NS_GRAPHICS
 		modelLoader->LoadModel("incense_pot_Model.fbx", "pot");
 
 		textureManager->GetTexture("Test.jpg");
-		*/
+		
 
 		//std::cout << "light block size: " <<  sizeof(LightBlock) << std::endl;
 
 		//////////////////////////////////////
 		/// TEST DRAW LOADED MODELS
 		//////////////////////////////////////
-		//Entity testdrawSphere = G_ECMANAGER->BuildEntity();
-		//ComponentTransform testtransformsphere;
-		//testtransformsphere._position = { 3.f, 0.f,0.f };
-		//testdrawSphere.AttachComponent<ComponentTransform>(testtransformsphere);
+		Entity testdrawSphere = G_ECMANAGER->BuildEntity();
+		ComponentTransform testtransformsphere;
+		testtransformsphere._position = { 3.f, 0.f,0.f };
+		testdrawSphere.AttachComponent<ComponentTransform>(testtransformsphere);
 
-		//CreateSphere(testdrawSphere, glm::vec3(0.f,1.f,1.f));
+		CreateSphere(testdrawSphere, glm::vec3(0.f,1.f,1.f));
 
 		//modelLoader->LoadModel(".\\incense_pot_model_custom.obj", "pot");
 
@@ -163,13 +163,13 @@ namespace NS_GRAPHICS
 
 		CreateCube(testdrawCube, glm::vec3(0.f, 1.f, 1.f));*/
 
-		//Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
-		//ComponentTransform testtransformcylinder;
-		//testtransformcylinder._position = { 3.f, 3.f,0.f };
-		//testtransformcylinder._rotation = { 0.f, 0.f,0.f };
-		//testdrawCylinder.AttachComponent<ComponentTransform>(testtransformcylinder);
+		Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
+		ComponentTransform testtransformcylinder;
+		testtransformcylinder._position = { 3.f, 3.f,0.f };
+		testtransformcylinder._rotation = { 0.f, 0.f,0.f };
+		testdrawCylinder.AttachComponent<ComponentTransform>(testtransformcylinder);
 
-		//CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));
+		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));
 
 		shaderManager->StartProgram(1);
 
