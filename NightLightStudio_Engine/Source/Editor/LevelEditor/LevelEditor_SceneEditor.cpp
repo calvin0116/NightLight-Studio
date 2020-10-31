@@ -3,6 +3,7 @@
 #include "../../Graphics/GraphicsSystem.h"
 
 #include "LevelEditor_ECHelper.h"
+#include "LevelEditor_Console.h"
 #include "../../Component/Components.h"
 
 const float identityMatrix[16] =
@@ -19,9 +20,18 @@ void Normalize(const float* a, float* r);
 void LookAt(const float* eye, const float* at, const float* up, float* m16);
 void EditTransform(const float* cameraView, float* cameraProjection, float* matrix, bool editTransformDecomposition);
 
+bool LESE_RUN_ONCE = false;
+
 void LevelEditor::LE_SceneEditor()
 {
     //************************************************* Scene Editor **************************************************//
+
+    if (LESE_RUN_ONCE)
+    {
+        LESE_RUN_ONCE = false;
+
+
+    }
 
     ImGuiIO& io = ImGui::GetIO();
 
@@ -29,12 +39,7 @@ void LevelEditor::LE_SceneEditor()
 
     NS_GRAPHICS::CameraSystem& cm = NS_GRAPHICS::CameraSystem::GetInstance();
     glm::mat4 cmMat = cm.GetViewMatrix();
-    float camView[16] = { 0 };
-    for (int i = 0; i < 4; ++i)
-        for (int j = 0; j < 4; ++j)
-        {
-            camView[(i*4) + j] = cmMat[i][j];
-        }
+    float* camView = glm::value_ptr(cmMat);
 
 
     /*
@@ -54,43 +59,30 @@ void LevelEditor::LE_SceneEditor()
 
     float cameraProjection[16];
 
-    float fov = 27.0f;
+    // Matches the most closely to the actual camera
+    // If gizmos don't match, change this?
+    float fov = 22.5f;
     Perspective(fov, io.DisplaySize.x / io.DisplaySize.y, 0.1f, 100.f, cameraProjection);
 
     // **** FOR TESTING PURPOSES ONLY
-    ImGuizmo::DrawGrid(camView, cameraProjection, identityMatrix, 100.0f);
+    // ImGuizmo::DrawGrid(camView, cameraProjection, identityMatrix, 100.0f);
 
+    // Might wanna change this
     if (LE_ECHELPER->GetSelectedEntityID() != -1)
     {
         Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
         TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
-        glm::mat4 matObj = trans_comp->GetModelMatrix();
         if (trans_comp != NULL)
         {
-            float objectMatrix[16] =
-            { 1.f, 0.f, 0.f, 0.f,
-              0.f, 1.f, 0.f, 0.f,
-              0.f, 0.f, 1.f, 0.f,
-              0.f, 0.f, 0.f, 1.f };
-
-            for (int i = 0; i < 4; ++i)
-                for (int j = 0; j < 4; ++j)
-                {
-                    objectMatrix[(i * 4) + j] = matObj[i][j];
-                }
-
+            float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
+            glm::mat4 matObj = trans_comp->GetModelMatrix();
             ImGuizmo::SetID(0);
-            EditTransform(camView, cameraProjection, objectMatrix, true);
+            EditTransform(camView, cameraProjection, glm::value_ptr(matObj), true);
+            ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(matObj), trans, rot, scale);
 
-            float trans[3], rot[3], scale[3];
-            ImGuizmo::DecomposeMatrixToComponents(objectMatrix, trans, rot, scale);
-
-            for (int i = 0; i < 3; ++i)
-            {
-                trans_comp->_position[i] = trans[i];
-                trans_comp->_rotation[i] = rot[i];
-                trans_comp->_scale[i] = scale[i];
-            }
+            trans_comp->_position = glm::make_vec3(trans);
+            trans_comp->_rotation = glm::make_vec3(rot);
+            trans_comp->_scale = glm::make_vec3(scale);
         }
     }
     // **********
