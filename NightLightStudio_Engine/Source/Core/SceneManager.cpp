@@ -170,7 +170,13 @@ namespace NS_SCENE
 	void SceneManager::ExitScene()
 	{
 		scene_list[current_scene]->CleanDoc();
-		//G_ECMANAGER->
+
+		//Delete all entity
+		for (Entity ent : G_ECMANAGER->getEntityContainer())
+		{
+			G_ECMANAGER->FreeEntity(ent.getId());
+		}
+
 		current_scene = next_scene;
 	}
 	

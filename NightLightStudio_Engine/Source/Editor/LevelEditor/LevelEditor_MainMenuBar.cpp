@@ -55,6 +55,8 @@ void LevelEditor::LE_MainMenuBar()
                 [this]() { LE_AccessWindowFunc("Console", &ConsoleLog::RedoLastCommand); }
             });
 
+
+
         std::vector<std::string> editorNames;
         std::vector<std::function<void()>> funcs;
         for (unsigned i = 0; i < _editorWind.size(); ++i)
@@ -67,6 +69,8 @@ void LevelEditor::LE_MainMenuBar()
         }
         LE_AddMenuWithItems("Windows", editorNames, {}, funcs);
         //LE_AddMenuOnly("Windows", [&](){ LE_AddMenuWithItems("SecondWindows", editorNames, {}, funcs);});
+
+        LE_AddMenuWithItems("Current Scene: ~" + NS_SCENE::SYS_SCENE_MANAGER->GetCurrentScene() + "~ Press 'Ctrl+1' to go next scene");
 
         ImVec2 size = viewport->GetWorkSize();
         ImGui::SetCursorPosX(size.x / 2.0f);

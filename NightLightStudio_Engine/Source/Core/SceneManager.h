@@ -93,6 +93,7 @@ namespace NS_SCENE
 		ENGINE_API void SetNextScene(std::string scene_name);
 		//bool GetToExit();
 		//SCENE_CHANGE GetToChangeScene();
+		std::string GetCurrentScene() { return current_scene; };
 	};
 
 
