@@ -8,4 +8,5 @@ struct ISerializable
 	virtual Value	Write() { return Value(); };
 	virtual Value&	Write(Value& val) { return val; };
 	virtual ISerializable* Clone() { return new ISerializable(); }
+	virtual ~ISerializable() {}
 };
