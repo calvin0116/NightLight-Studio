@@ -253,22 +253,21 @@ namespace NS_SCENE
 	{
 		std::cout << "Saving scene....." << std::endl;
 		//Save scene
-		//Parser* scene = scene_list[current_scene];
-		std::string output_filename = "Scene/Output";
-
-		NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath() );
+		NS_SERIALISER::Parser* scene = scene_list[current_scene];
+		//std::string output_filename = "Scene/Output"; <- For testing
+		//NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath() );
 		
 		struct stat buffer;
-		if (stat(scene.GetFilePath().c_str(), &buffer) != 0)
+		if (stat(scene->GetFilePath().c_str(), &buffer) != 0)
 		{
 			std::cout << "file does not exist, creating file....." << std::endl;
 			//Creates file
-			std::ofstream MyFile(scene.GetFilePath().c_str());
+			std::ofstream MyFile(scene->GetFilePath().c_str());
 
 			MyFile << "{\n}";
 		}
-		scene.Load();
-		scene.CleanDoc();
+		scene->Load();
+		scene->CleanDoc();
 
 		//Add Objects objects
 		Value* obj_val = new Value;
@@ -297,12 +296,12 @@ namespace NS_SCENE
 
 			delete ent_val;
 		}
-		scene.AddData("Objects", obj_val);
+		scene->AddData("Objects", obj_val);
 
 		//delete obj_val;
 
 		//scene.PrintDataList();
-		scene.Save();
+		scene->Save();
 	}
 
 	bool SceneManager::CheckIfSceneExist(std::string& scene_name)

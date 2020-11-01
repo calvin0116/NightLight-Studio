@@ -66,7 +66,7 @@ struct IComponent
 //	LocalVector<TestVar, 4> data;
 //
 //	virtual void	Read(Value& val) { UNREFERENCED_PARAMETER(val); };
-//	virtual Value	Write() { return Value(); };
+//	virtual Value	Write() { return Value(rapidjson::kObjectType); };
 //	virtual Value& Write(Value& val) { return val; };
 //	virtual ComponentTest0* Clone()
 //	{
@@ -76,7 +76,7 @@ struct IComponent
 //	}
 //};
 
-	virtual Value	Write() { return Value(rapidjson::kObjectType); };
+
 /*
 struct ComponentInput
 {
