@@ -38,5 +38,6 @@ namespace NS_GRAPHICS
 		void LoadCustomMesh(Model*& model, const std::string& fileName, const std::string& customName ="");
 
 		void DebugToFile(const std::string& meshName, const std::string& fileName);
+		FbxVector4 GetTransform(FbxNode* node, FbxVector4 vector);
 	};
 }
