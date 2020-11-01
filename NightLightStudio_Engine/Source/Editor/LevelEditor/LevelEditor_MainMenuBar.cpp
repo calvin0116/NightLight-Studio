@@ -10,7 +10,7 @@ void LevelEditor::LE_MainMenuBar()
 {
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
     // because it would be confusing to have two docking targets within each others.
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBackground;
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground;
     window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
     window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoScrollbar;
 
@@ -70,15 +70,15 @@ void LevelEditor::LE_MainMenuBar()
         ImGui::EndMenuBar();
     }
 
+    // Used to accept DragDrops
+    ImGui::BeginChild("DockSpace Child", ImVec2(0, 0), false, window_flags);
+
     // Sets dockspace for other objects
     if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
     {
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
     }
-
-    // Used to accept DragDrops
-    ImGui::BeginChild("DockSpace Child", ImVec2(0, 0), false, window_flags);
 
     ImGui::EndChild();
 
