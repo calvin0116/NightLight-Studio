@@ -35,5 +35,11 @@ typedef struct ComponentRigidBody : public ISerializable //: public IComponent
 	virtual void	Read(Value&) { };
 	virtual Value	Write() { return Value(); };
 	virtual Value& Write(Value& val) { return val; };
+	virtual ComponentRigidBody* Clone()
+	{
+		ComponentRigidBody* newcomp = new ComponentRigidBody();
+		*newcomp = *this;
+		return newcomp;
+	}
 
 } RigidBody, RigidBodyComponent;

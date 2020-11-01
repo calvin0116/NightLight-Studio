@@ -27,6 +27,13 @@ public:
 	void	Read(Value& val);
 	Value	Write();			
 	Value&	Write(Value& val);	// Ovewrite data that has alr have a memory slot
+	virtual ComponentTransform* Clone() 
+	{ 
+		ComponentTransform* newTransform = new ComponentTransform();
+		*newTransform = *this;
+		return newTransform;
+	
+	}
 } TransformComponent;
 
 //Operator overloading for cout

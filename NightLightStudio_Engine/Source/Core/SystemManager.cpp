@@ -139,6 +139,46 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////// sample for entity copy
+
+	//// create a entity in prefab
+	//Entity newEntity = G_ECMANAGER_PREFABS->BuildEntity();
+	//ComponentTransform compTransform;
+	//compTransform._position = NlMath::Vector3D(1.0f, 2.0f, 3.0f);
+	//newEntity.AttachComponent<ComponentTransform>(compTransform);
+	//newEntity.AttachComponent<ComponentCollider>();
+	//newEntity.AttachComponent<ComponentRigidBody>();
+
+	//// copy to main
+	//newEntity.Copy(G_ECMANAGER, "NewCopy");
+
+	//// iterate main
+	//for (Entity ent : G_ECMANAGER->getEntityContainer())
+	//{
+	//	ComponentTransform* transform = ent.getComponent<ComponentTransform>();
+
+	//	std::cout << transform->_position.x << " " << transform->_position.y << " " << transform->_position.z << " " << std::endl;
+
+	//	for (ISerializable* comp : ent.getEntityComponentContainer())
+	//	{
+	//		(void)comp;
+	//		ISerializable* newComp = comp->Clone();
+	//		(void)newComp;
+	//		delete newComp;
+	//	}
+	//}
+
+	//////// sample for entity copy END
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// Systems OnFirst start
 	for (auto my_sys : Systems)
