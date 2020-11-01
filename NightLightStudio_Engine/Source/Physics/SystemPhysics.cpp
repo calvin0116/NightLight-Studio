@@ -12,7 +12,8 @@
 namespace NS_PHYSICS
 {
 
-	constexpr float MAX_SPEED = 10.0f;
+	//constexpr float MAX_SPEED = 10.0f;
+	constexpr float MAX_SPEED = 0.3f;
 
 	PhysicsSystem::PhysicsSystem()
 		:_maxspeed(MAX_SPEED)
@@ -54,7 +55,7 @@ namespace NS_PHYSICS
 
 
 		// update the forces
-		_forceManager.updateTranslationalForces();
+		//_forceManager.updateTranslationalForces();
 
 
 		auto itr = G_ECMANAGER->begin<ComponentRigidBody>();
@@ -66,6 +67,28 @@ namespace NS_PHYSICS
 			ComponentRigidBody* compR = G_ECMANAGER->getComponent<ComponentRigidBody>(itr);
 			if (compR->isStatic)
 				continue;
+
+
+			////////////////////////////////////////
+			// TEST
+
+			//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_FORCE_UP", SystemInput_ns::IKEY_I, "I", SystemInput_ns::OnPress, [this]() {});
+
+			//if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_I))
+			//{
+			//	_forceManager.addForce(*compR, NlMath::Vector3D(0.0f, 5.0f, 0.0f), 1.0f/*, 1000*/);
+			//}
+
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_FORCE_UP", SystemInput_ns::IKEY_I, "I", SystemInput_ns::OnHold, [this]() {});
+
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_I))
+			{
+				_forceManager.addForce(*compR, NlMath::Vector3D(0.0f, 5.0f, 0.0f), 1.0f);
+			}
+
+			// TEST
+			////////////////////////////////////////
+
 
 			//get the transform to update
 			ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
@@ -102,6 +125,13 @@ namespace NS_PHYSICS
 			// resolve forces 
 			compR->force = _forceManager.resolveTranslationalForces(*compR);
 
+			// do gravity
+			if (compR->isGravity)
+			{
+				NlMath::Vector3D gravitationalForce = compR->gravity * compR->mass;
+				compR->force += gravitationalForce;
+			}
+
 
 			// update accleration // F = m dv/dt -> F = m a -> a = F / m
 			if (compR->mass < 0.0f)
@@ -116,11 +146,7 @@ namespace NS_PHYSICS
 			}
 			compR->acceleration = compR->force / compR->mass;
 
-			// do gravity
-			if (compR->isGravity)
-			{
-				compR->acceleration += compR->gravity;
-			}
+			//compR->acceleration += compR->gravity; // 
 
 			// update velocity // a = dv/dt -> dv = a * dt
 			compR->velocity += compR->acceleration * realDt;
@@ -129,8 +155,28 @@ namespace NS_PHYSICS
 
 			glm::vec3 changeInDisplacement = (glm::vec3)compR->velocity* realDt;
 
-			//if (abs(changeInDisplacement.x) > _maxspeed.x)
-			//	changeInDisplacement.x = _maxspeed.x;  // TODO
+			// limit max displacement
+			if (abs(changeInDisplacement.x) > _maxspeed.x)
+			{
+				if(changeInDisplacement.x < 0.0f)
+					changeInDisplacement.x = -_maxspeed.x;
+				else
+					changeInDisplacement.x = _maxspeed.x;
+			}
+			if (abs(changeInDisplacement.y) > _maxspeed.y)
+			{
+				if (changeInDisplacement.y < 0.0f)
+					changeInDisplacement.y = -_maxspeed.y;
+				else
+					changeInDisplacement.y = _maxspeed.y;
+			}
+			if (abs(changeInDisplacement.z) > _maxspeed.z)
+			{
+				if (changeInDisplacement.z < 0.0f)
+					changeInDisplacement.z = -_maxspeed.z;
+				else
+					changeInDisplacement.z = _maxspeed.z;
+			}
 
 			compT->_position += changeInDisplacement;
 
@@ -207,8 +253,21 @@ namespace NS_PHYSICS
 				compR->velocity.z -=  1 * realDt;
 #endif
 			}
+
+
+
 			/// </Testing>//////////////////////////////////////////////////////////////////////////////////////////
 		}
+
+
+
+
+
+
+		// update the forces
+		_forceManager.updateTranslationalForces();
+
+
 		//return true;
 	}
 

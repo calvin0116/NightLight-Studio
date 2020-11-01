@@ -51,7 +51,13 @@ public:
 	~ComponentGraphics();
 
 	//read and write function for initialization from saved files
-	virtual void	Read(Value& ) {  };
-	virtual Value	Write() { return Value(); };
+	void	Read(Value&);
+	Value	Write();
 	virtual Value& Write(Value& val) { return val; };
+	virtual ComponentGraphics* Clone()
+	{
+		ComponentGraphics* newcomp = new ComponentGraphics();
+		*newcomp = *this;
+		return newcomp;
+	}
 } GraphicsComponent;

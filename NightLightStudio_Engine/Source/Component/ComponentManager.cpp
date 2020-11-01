@@ -1085,7 +1085,7 @@ void ComponentManager::ComponentCreation()
 		comsetFac.StartBuild();
 
 		comsetFac.AddComponentContainer<ComponentTransform>();
-		comsetFac.AddComponentContainer<ComponentTest0>();
+		//comsetFac.AddComponentContainer<ComponentTest0>();
 		comsetFac.AddComponentContainer<ComponentCollider>();
 		comsetFac.AddComponentContainer<ComponentRigidBody>();
 		comsetFac.AddComponentContainer<ComponentGraphics>();
@@ -1121,416 +1121,419 @@ void ComponentManager::ComponentCreation()
 void ComponentManager::TestComponents()
 {
 
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	//// BUILD COMPONENT SAMPLE
-	{
-
-		// WHILE OBJECTS
-		// Start of creation and Entity
-		Entity newEntity = G_ECMANAGER->BuildEntity();
-
-		// WHILE COMPONENTS
-		// Creation
-		ComponentTest0 newCompComponentTest0;
-		//{
-		//	0,
-		//	"Hello World",
-		//	{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f}
-		//}; 
-		// initialiser list stopped working after inheriting from Iser
-
-		newCompComponentTest0.id = 0;
-		newCompComponentTest0.c[0] = 'H';
-		newCompComponentTest0.f[0] = 1.11f;
-
-		G_ECMANAGER->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
-		// WHILE COMPONENTS END
-		// WHILE OBJECTS END
-
-		// add 2nd obj 
-		newEntity = G_ECMANAGER->BuildEntity();
-
-		ComponentTransform compT;
-		compT._position.x = 1.11f;
-
-		G_ECMANAGER->AttachComponent<ComponentTransform>(newEntity, compT);
-
-		ComponentRigidBody compRB;
-		G_ECMANAGER->AttachComponent<ComponentRigidBody>(newEntity, compRB);
-
-		newCompComponentTest0.id = 1;
-		G_ECMANAGER->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
-
-		// add 3rd obj 
-		newEntity = G_ECMANAGER->BuildEntity();
-		G_ECMANAGER->AttachComponent<ComponentRigidBody>(newEntity, compRB);
+	// requires ComponentTest0
 
 
-		// add obj to another component set
-		newCompComponentTest0.id = 999;
-		newEntity = G_ECMANAGER_UI->BuildEntity();
-		G_ECMANAGER_UI->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	////// BUILD COMPONENT SAMPLE
+	//{
 
-		//// add to another compset
-		newEntity = G_ECMANAGER_UI->BuildEntity();
-		newCompComponentTest0.id = 123;
-		G_ECMANAGER_UI->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+	//	// WHILE OBJECTS
+	//	// Start of creation and Entity
+	//	Entity newEntity = G_ECMANAGER->BuildEntity();
 
-		///////////////////////////////
-		// hierarchical entity test
-		{
-			std::cout << std::endl;
-			std::cout << "/////////////////////////////////////" << std::endl;
-			std::cout << "// hierarchical entity test - LOAD" << std::endl;
-			std::cout << std::endl;
+	//	// WHILE COMPONENTS
+	//	// Creation
+	//	ComponentTest0 newCompComponentTest0;
+	//	//{
+	//	//	0,
+	//	//	"Hello World",
+	//	//	{1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f, 7.77f, 8.88f, 9.99f, 10.10f, 11.11f, 12.12f, 13.13f, 14.14f, 15.15f, 16.16f}
+	//	//}; 
+	//	// initialiser list stopped working after inheriting from Iser
 
-			Entity entity = G_ECMANAGER_UI->getEntity(newEntity.getId());
+	//	newCompComponentTest0.id = 0;
+	//	newCompComponentTest0.c[0] = 'H';
+	//	newCompComponentTest0.f[0] = 1.11f;
 
+	//	G_ECMANAGER->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+	//	// WHILE COMPONENTS END
+	//	// WHILE OBJECTS END
 
-			int numChild = entity.getNumChildren();
-			int numDec = entity.getNumDecendants();
-			int parentuid = entity.getParentId();
+	//	// add 2nd obj 
+	//	newEntity = G_ECMANAGER->BuildEntity();
 
-			std::cout << "numChild:" << numChild << std::endl;
-			std::cout << "numDec:" << numDec << std::endl;
-			std::cout << "parentuid:" << parentuid << std::endl;
+	//	ComponentTransform compT;
+	//	compT._position.x = 1.11f;
 
-			Entity childEntity = entity.makeChild();
-			ComponentManager::ChildContainerT* childrens = entity.getChildren();
-			(void)childrens;
+	//	G_ECMANAGER->AttachComponent<ComponentTransform>(newEntity, compT);
 
-			std::cout << std::endl;
+	//	ComponentRigidBody compRB;
+	//	G_ECMANAGER->AttachComponent<ComponentRigidBody>(newEntity, compRB);
 
-			int numChild_child = childEntity.getNumChildren();
-			int numDec_child = childEntity.getNumDecendants();
-			int parentuid_child = childEntity.getParentId();
+	//	newCompComponentTest0.id = 1;
+	//	G_ECMANAGER->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
 
-			std::cout << "numChild_child:" << childEntity.getId() << std::endl;
-			std::cout << "numChild_child:" << numChild_child << std::endl;
-			std::cout << "numDec_child:" << numDec_child << std::endl;
-			std::cout << "parentuid_child:" << parentuid_child << std::endl;
-
-			newCompComponentTest0.id = 54321;
-			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity, newCompComponentTest0);
-
-			std::cout << std::endl;
-			std::cout << "// hierarchical entity test - LOAD  END" << std::endl;
-			std::cout << "////////////////////////////////////" << std::endl;
-			std::cout << std::endl;
-		}
-		{
-			// make 2 more childs from the entity
-			Entity entity = G_ECMANAGER_UI->getEntity(newEntity.getId());
-			//entity.AttachComponent<ComponentTest0>();
-
-			// child1
-			Entity childEntity1 = entity.makeChild();
-			newCompComponentTest0.id = 5432;
-			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity1, newCompComponentTest0);
+	//	// add 3rd obj 
+	//	newEntity = G_ECMANAGER->BuildEntity();
+	//	G_ECMANAGER->AttachComponent<ComponentRigidBody>(newEntity, compRB);
 
 
-			// make child of child - grandchild
-			Entity grandChildEntity0 = childEntity1.makeChild();
-			newCompComponentTest0.id = 777;
-			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(grandChildEntity0, newCompComponentTest0);
+	//	// add obj to another component set
+	//	newCompComponentTest0.id = 999;
+	//	newEntity = G_ECMANAGER_UI->BuildEntity();
+	//	G_ECMANAGER_UI->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+
+	//	//// add to another compset
+	//	newEntity = G_ECMANAGER_UI->BuildEntity();
+	//	newCompComponentTest0.id = 123;
+	//	G_ECMANAGER_UI->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+
+	//	///////////////////////////////
+	//	// hierarchical entity test
+	//	{
+	//		std::cout << std::endl;
+	//		std::cout << "/////////////////////////////////////" << std::endl;
+	//		std::cout << "// hierarchical entity test - LOAD" << std::endl;
+	//		std::cout << std::endl;
+
+	//		Entity entity = G_ECMANAGER_UI->getEntity(newEntity.getId());
 
 
-			// child2
-			Entity childEntity2 = entity.makeChild();
-			newCompComponentTest0.id = 543;
-			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity2, newCompComponentTest0);
-		}
-		{
-			// adding more test objects
+	//		int numChild = entity.getNumChildren();
+	//		int numDec = entity.getNumDecendants();
+	//		int parentuid = entity.getParentId();
 
-			newEntity = G_ECMANAGER_UI->BuildEntity();
-			newCompComponentTest0.id = 1234;
-			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+	//		std::cout << "numChild:" << numChild << std::endl;
+	//		std::cout << "numDec:" << numDec << std::endl;
+	//		std::cout << "parentuid:" << parentuid << std::endl;
 
-			compT._position.x = 2.22f;
-			G_ECMANAGER_UI->AttachComponent<ComponentTransform>(newEntity, compT);
+	//		Entity childEntity = entity.makeChild();
+	//		ComponentManager::ChildContainerT* childrens = entity.getChildren();
+	//		(void)childrens;
 
-			{
-				// adding childs
-				Entity entity = G_ECMANAGER_UI->getEntity(newEntity.getId());
+	//		std::cout << std::endl;
 
-				// child1
-				Entity childEntity1 = entity.makeChild();
-				newCompComponentTest0.id = 7771;
-				G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity1, newCompComponentTest0);
+	//		int numChild_child = childEntity.getNumChildren();
+	//		int numDec_child = childEntity.getNumDecendants();
+	//		int parentuid_child = childEntity.getParentId();
 
+	//		std::cout << "numChild_child:" << childEntity.getId() << std::endl;
+	//		std::cout << "numChild_child:" << numChild_child << std::endl;
+	//		std::cout << "numDec_child:" << numDec_child << std::endl;
+	//		std::cout << "parentuid_child:" << parentuid_child << std::endl;
 
-				// make child of child - grandchild
-				Entity grandChildEntity0 = childEntity1.makeChild();
-				newCompComponentTest0.id = 8881;
-				G_ECMANAGER_UI->AttachComponent<ComponentTest0>(grandChildEntity0, newCompComponentTest0);
+	//		newCompComponentTest0.id = 54321;
+	//		G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity, newCompComponentTest0);
 
-				// make 2nd grandchild
-				Entity grandChildEntity1 = childEntity1.makeChild();
-				newCompComponentTest0.id = 8882;
-				G_ECMANAGER_UI->AttachComponent<ComponentTest0>(grandChildEntity1, newCompComponentTest0);
+	//		std::cout << std::endl;
+	//		std::cout << "// hierarchical entity test - LOAD  END" << std::endl;
+	//		std::cout << "////////////////////////////////////" << std::endl;
+	//		std::cout << std::endl;
+	//	}
+	//	{
+	//		// make 2 more childs from the entity
+	//		Entity entity = G_ECMANAGER_UI->getEntity(newEntity.getId());
+	//		//entity.AttachComponent<ComponentTest0>();
 
-				compT._position.x = 3.33f;
-				G_ECMANAGER_UI->AttachComponent<ComponentTransform>(grandChildEntity1, compT);
-
-				// make 3rd grandchild
-				Entity grandChildEntity2 = childEntity1.makeChild();
-				newCompComponentTest0.id = 8883;
-				G_ECMANAGER_UI->AttachComponent<ComponentTest0>(grandChildEntity2, newCompComponentTest0);
-
-				// child2
-				Entity childEntity2 = entity.makeChild();
-				newCompComponentTest0.id = 7772;
-				G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity2, newCompComponentTest0);
+	//		// child1
+	//		Entity childEntity1 = entity.makeChild();
+	//		newCompComponentTest0.id = 5432;
+	//		G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity1, newCompComponentTest0);
 
 
-			}
-
-			newEntity = G_ECMANAGER_UI->BuildEntity();
-			newCompComponentTest0.id = 1235;
-			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
-		}
-		// hierarchical entity test END
-		///////////////////////////////
-	}
-	//// BUILD COMPONENT END
-	///////////////////////////////////////////////////////////////////////////////////////////////
+	//		// make child of child - grandchild
+	//		Entity grandChildEntity0 = childEntity1.makeChild();
+	//		newCompComponentTest0.id = 777;
+	//		G_ECMANAGER_UI->AttachComponent<ComponentTest0>(grandChildEntity0, newCompComponentTest0);
 
 
+	//		// child2
+	//		Entity childEntity2 = entity.makeChild();
+	//		newCompComponentTest0.id = 543;
+	//		G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity2, newCompComponentTest0);
+	//	}
+	//	{
+	//		// adding more test objects
 
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	//// GET COMPONENT SAMPLE
+	//		newEntity = G_ECMANAGER_UI->BuildEntity();
+	//		newCompComponentTest0.id = 1234;
+	//		G_ECMANAGER_UI->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+
+	//		compT._position.x = 2.22f;
+	//		G_ECMANAGER_UI->AttachComponent<ComponentTransform>(newEntity, compT);
+
+	//		{
+	//			// adding childs
+	//			Entity entity = G_ECMANAGER_UI->getEntity(newEntity.getId());
+
+	//			// child1
+	//			Entity childEntity1 = entity.makeChild();
+	//			newCompComponentTest0.id = 7771;
+	//			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity1, newCompComponentTest0);
+
+
+	//			// make child of child - grandchild
+	//			Entity grandChildEntity0 = childEntity1.makeChild();
+	//			newCompComponentTest0.id = 8881;
+	//			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(grandChildEntity0, newCompComponentTest0);
+
+	//			// make 2nd grandchild
+	//			Entity grandChildEntity1 = childEntity1.makeChild();
+	//			newCompComponentTest0.id = 8882;
+	//			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(grandChildEntity1, newCompComponentTest0);
+
+	//			compT._position.x = 3.33f;
+	//			G_ECMANAGER_UI->AttachComponent<ComponentTransform>(grandChildEntity1, compT);
+
+	//			// make 3rd grandchild
+	//			Entity grandChildEntity2 = childEntity1.makeChild();
+	//			newCompComponentTest0.id = 8883;
+	//			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(grandChildEntity2, newCompComponentTest0);
+
+	//			// child2
+	//			Entity childEntity2 = entity.makeChild();
+	//			newCompComponentTest0.id = 7772;
+	//			G_ECMANAGER_UI->AttachComponent<ComponentTest0>(childEntity2, newCompComponentTest0);
+
+
+	//		}
+
+	//		newEntity = G_ECMANAGER_UI->BuildEntity();
+	//		newCompComponentTest0.id = 1235;
+	//		G_ECMANAGER_UI->AttachComponent<ComponentTest0>(newEntity, newCompComponentTest0);
+	//	}
+	//	// hierarchical entity test END
+	//	///////////////////////////////
+	//}
+	////// BUILD COMPONENT END
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	////// GET COMPONENT SAMPLE
+	////{
+	////	std::cout << std::endl;
+	////	std::cout << "////////////////////////////////////" << std::endl;
+	////	std::cout << "// Component Sample" << std::endl;
+	////	std::cout << std::endl;
+
+
+
+	////	std::cout << std::endl;
+	////	std::cout << "// Component Sample END" << std::endl;
+	////	std::cout << "////////////////////////////////////" << std::endl;
+	////	std::cout << std::endl;
+	////}
 	//{
 	//	std::cout << std::endl;
 	//	std::cout << "////////////////////////////////////" << std::endl;
-	//	std::cout << "// Component Sample" << std::endl;
+	//	std::cout << "// Test Components:" << std::endl;
+	//	std::cout << std::endl;
+
+	//	std::cout << std::endl;
+	//	std::cout << "// Test Iterator:" << std::endl;
+	//	std::cout << std::endl;
+
+	//	//
+
+	//	// G_UICOMPSET
+	//	// ComponentIteratorState::ITR_BOTH   // Iterate both root and child entities // this will iterate root first then child // child is not sorted by generation, not yet anyway
+	//	// ComponentIteratorState::ITR_ROOT   // Iterate both root only
+	//	// ComponentIteratorState::ITR_CHILD  // Iterate both child only
+
+	//	auto testItr = [&](ComponentIteratorState st)
+	//	{
+	//		auto itrT = G_ECMANAGER_UI->begin<ComponentTest0>(st);
+	//		auto itrTEnd = G_ECMANAGER_UI->end<ComponentTest0>(st);
+	//		while (itrT != itrTEnd)
+	//		{
+	//			// get the obj id
+	//			std::cout << "Object:" << G_ECMANAGER_UI->getObjId(itrT) << std::endl;
+
+	//			// get the transform component from the iterator
+	//			ComponentTest0* compR = G_ECMANAGER_UI->getComponent<ComponentTest0>(itrT);
+	//			std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
+
+	//			// get another component
+	//			ComponentTransform* compT = G_ECMANAGER_UI->getComponent<ComponentTransform>(itrT);
+
+	//			if (compT != nullptr) // nullptr -> uninitialised or deleted
+	//				std::cout << "Transform:" << compT->_position.x << std::endl;
+
+	//			// get entity
+	//			Entity entity = G_ECMANAGER_UI->getEntity(itrT);
+
+	//			std::cout << "ID: " << entity.getId() << std::endl;
+	//			std::cout << "Parent ID: " << entity.getParentId() << std::endl;
+	//			std::cout << "Generation: " << entity.getGeneration() << std::endl;
+
+	//			// can get component from entity too
+	//			ComponentTransform* compT1 = entity.getComponent<ComponentTransform>();
+	//			if (compT != compT1) throw;
+
+	//			std::cout << std::endl;
+
+	//			++itrT;
+	//		}
+	//	};
+	//	testItr(ComponentIteratorState::ITR_BOTH);
+	//	//testItr(ComponentIteratorState::ITR_ROOT);
+	//	//testItr(ComponentIteratorState::ITR_CHILD);
+
+
+	//	std::cout << std::endl;
+	//	std::cout << "// Test Iterator END" << std::endl;
+	//	std::cout << std::endl;
+
+
+	//	std::cout << std::endl;
+	//	std::cout << "// Test Get Components:" << std::endl;
+	//	std::cout << std::endl;
+
+	//	// G_MAINCOMPSET
+	//	auto itr = G_ECMANAGER->begin<ComponentTest0>();
+	//	auto itrEnd = G_ECMANAGER->end<ComponentTest0>();
+	//	while (itr != itrEnd)
+	//	{
+	//		// get the obj id
+	//		std::cout << "Object:" << G_ECMANAGER->getObjId(itr) << std::endl;
+
+	//		// get the transform component from the iterator
+	//		ComponentTest0* compR = G_ECMANAGER->getComponent<ComponentTest0>(itr);
+	//		std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
+
+	//		// get another component
+	//		ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+
+	//		if (compT != nullptr) // nullptr -> uninitialised or deleted
+	//			std::cout << "Transform:" << compT->_position.x << std::endl;
+
+	//		std::cout << std::endl;
+
+	//		++itr;
+	//	}
+
+	//	//
+	//	int toDel0 = -1;
+	//	int toDel1 = -1;
+	//	int toDel2 = -1;
+
+	//	auto print = [&]()
+	//	{
+	//		// G_UICOMPSET
+	//		itr = G_ECMANAGER_UI->begin<ComponentTest0>();
+	//		itrEnd = G_ECMANAGER_UI->end<ComponentTest0>();
+	//		while (itr != itrEnd)
+	//		{
+	//			// get the obj id
+	//			std::cout << std::endl;
+	//			std::cout << "Object:" << G_ECMANAGER_UI->getObjId(itr) << std::endl;
+
+	//			// get the transform component from the iterator
+	//			ComponentTest0* compR = reinterpret_cast<ComponentTest0*>(*itr);
+	//			std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
+
+	//			// get the entity from the iterator
+	//			Entity entity = G_ECMANAGER_UI->getEntity(itr);
+
+	//			// get transform component
+	//			ComponentTransform* compT = entity.getComponent<ComponentTransform>();
+	//			if (compT != nullptr) // nullptr -> uninitialised or deleted
+	//				std::cout << "Transform:" << compT->_position.x << std::endl;
+
+	//			// get id for remove
+	//			if (compR->id == 1234)
+	//			{
+	//				toDel1 = G_ECMANAGER_UI->getObjId(itr);
+	//			}
+
+	//			////////////
+	//			// childrens
+
+	//			// recursive fn to do to all children
+
+	//			std::function<void(ComponentManager::ChildContainerT*)> doChildrens = [&](ComponentManager::ChildContainerT* childrens)
+	//			{
+	//				for (int uid : *childrens)
+	//				{
+	//					Entity childEntity = G_ECMANAGER_UI->getEntity(uid);
+
+
+	//					std::cout << std::endl << "Print child:" << std::endl;
+
+	//					std::cout << "childEntity generation:" << childEntity.getGeneration() << std::endl;
+
+	//					std::cout << "childEntity id:" << childEntity.getId() << std::endl;
+	//					std::cout << "childEntity numChild:" << childEntity.getNumChildren() << std::endl;
+	//					std::cout << "childEntity numDec:" << childEntity.getNumDecendants() << std::endl;
+	//					std::cout << "childEntity parentuid:" << childEntity.getParentId() << std::endl;
+
+	//					compR = childEntity.getComponent<ComponentTest0>();
+	//					std::cout << "Child ComponentTest0:" << compR->id << " " << compR->c << std::endl;
+
+	//					// get id for remove
+	//					if (compR->id == 8882)
+	//					{
+	//						toDel0 = childEntity.getId();
+	//					}
+	//					if (compR->id == 5432)
+	//					{
+	//						toDel2 = childEntity.getId();
+	//					}
+
+	//					// get transform component
+	//					ComponentTransform* compT = childEntity.getComponent<ComponentTransform>();
+	//					if (compT != nullptr) // nullptr -> uninitialised or deleted
+	//						std::cout << "Transform:" << compT->_position.x << std::endl;
+
+	//					std::cout << std::endl;
+
+	//					// call recursive fn for each child
+	//					doChildrens(G_ECMANAGER_UI->getEntity(uid).getChildren());
+	//				}
+	//			};
+
+	//			doChildrens(entity.getChildren());
+
+	//			//
+	//			////////////
+
+	//			std::cout << "Object:" << G_ECMANAGER_UI->getObjId(itr) << " END" << std::endl;
+	//			std::cout << std::endl;
+
+	//			++itr;
+	//		}
+	//	};
+
+	//	print();
+
+	//	std::cout << std::endl;
+	//	std::cout << "// Test Get Components END" << std::endl;
 	//	std::cout << std::endl;
 
 
 
+
+
 	//	std::cout << std::endl;
-	//	std::cout << "// Component Sample END" << std::endl;
+	//	std::cout << "// Test Remove Components:" << std::endl;
+	//	std::cout << std::endl;
+
+	//	G_ECMANAGER_UI->RemoveComponent<ComponentTransform>(toDel0);
+	//	//print();
+
+	//	G_ECMANAGER_UI->FreeEntity(toDel2);
+	//	//print();
+
+	//	G_ECMANAGER_UI->FreeEntity(toDel1);
+	//	print();
+
+	//	std::cout << std::endl;
+	//	std::cout << "// Test Remove Components END" << std::endl;
+	//	std::cout << std::endl;
+
+
+
+
+	//	std::cout << "// Test Components END" << std::endl;
 	//	std::cout << "////////////////////////////////////" << std::endl;
 	//	std::cout << std::endl;
+
 	//}
-	{
-		std::cout << std::endl;
-		std::cout << "////////////////////////////////////" << std::endl;
-		std::cout << "// Test Components:" << std::endl;
-		std::cout << std::endl;
-
-		std::cout << std::endl;
-		std::cout << "// Test Iterator:" << std::endl;
-		std::cout << std::endl;
-
-		//
-
-		// G_UICOMPSET
-		// ComponentIteratorState::ITR_BOTH   // Iterate both root and child entities // this will iterate root first then child // child is not sorted by generation, not yet anyway
-		// ComponentIteratorState::ITR_ROOT   // Iterate both root only
-		// ComponentIteratorState::ITR_CHILD  // Iterate both child only
-
-		auto testItr = [&](ComponentIteratorState st)
-		{
-			auto itrT = G_ECMANAGER_UI->begin<ComponentTest0>(st);
-			auto itrTEnd = G_ECMANAGER_UI->end<ComponentTest0>(st);
-			while (itrT != itrTEnd)
-			{
-				// get the obj id
-				std::cout << "Object:" << G_ECMANAGER_UI->getObjId(itrT) << std::endl;
-
-				// get the transform component from the iterator
-				ComponentTest0* compR = G_ECMANAGER_UI->getComponent<ComponentTest0>(itrT);
-				std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
-
-				// get another component
-				ComponentTransform* compT = G_ECMANAGER_UI->getComponent<ComponentTransform>(itrT);
-
-				if (compT != nullptr) // nullptr -> uninitialised or deleted
-					std::cout << "Transform:" << compT->_position.x << std::endl;
-
-				// get entity
-				Entity entity = G_ECMANAGER_UI->getEntity(itrT);
-
-				std::cout << "ID: " << entity.getId() << std::endl;
-				std::cout << "Parent ID: " << entity.getParentId() << std::endl;
-				std::cout << "Generation: " << entity.getGeneration() << std::endl;
-
-				// can get component from entity too
-				ComponentTransform* compT1 = entity.getComponent<ComponentTransform>();
-				if (compT != compT1) throw;
-
-				std::cout << std::endl;
-
-				++itrT;
-			}
-		};
-		testItr(ComponentIteratorState::ITR_BOTH);
-		//testItr(ComponentIteratorState::ITR_ROOT);
-		//testItr(ComponentIteratorState::ITR_CHILD);
-
-
-		std::cout << std::endl;
-		std::cout << "// Test Iterator END" << std::endl;
-		std::cout << std::endl;
-
-
-		std::cout << std::endl;
-		std::cout << "// Test Get Components:" << std::endl;
-		std::cout << std::endl;
-
-		// G_MAINCOMPSET
-		auto itr = G_ECMANAGER->begin<ComponentTest0>();
-		auto itrEnd = G_ECMANAGER->end<ComponentTest0>();
-		while (itr != itrEnd)
-		{
-			// get the obj id
-			std::cout << "Object:" << G_ECMANAGER->getObjId(itr) << std::endl;
-
-			// get the transform component from the iterator
-			ComponentTest0* compR = G_ECMANAGER->getComponent<ComponentTest0>(itr);
-			std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
-
-			// get another component
-			ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
-
-			if (compT != nullptr) // nullptr -> uninitialised or deleted
-				std::cout << "Transform:" << compT->_position.x << std::endl;
-
-			std::cout << std::endl;
-
-			++itr;
-		}
-
-		//
-		int toDel0 = -1;
-		int toDel1 = -1;
-		int toDel2 = -1;
-
-		auto print = [&]()
-		{
-			// G_UICOMPSET
-			itr = G_ECMANAGER_UI->begin<ComponentTest0>();
-			itrEnd = G_ECMANAGER_UI->end<ComponentTest0>();
-			while (itr != itrEnd)
-			{
-				// get the obj id
-				std::cout << std::endl;
-				std::cout << "Object:" << G_ECMANAGER_UI->getObjId(itr) << std::endl;
-
-				// get the transform component from the iterator
-				ComponentTest0* compR = reinterpret_cast<ComponentTest0*>(*itr);
-				std::cout << "ComponentTest0:" << compR->id << " " << compR->c << std::endl;
-
-				// get the entity from the iterator
-				Entity entity = G_ECMANAGER_UI->getEntity(itr);
-
-				// get transform component
-				ComponentTransform* compT = entity.getComponent<ComponentTransform>();
-				if (compT != nullptr) // nullptr -> uninitialised or deleted
-					std::cout << "Transform:" << compT->_position.x << std::endl;
-
-				// get id for remove
-				if (compR->id == 1234)
-				{
-					toDel1 = G_ECMANAGER_UI->getObjId(itr);
-				}
-
-				////////////
-				// childrens
-
-				// recursive fn to do to all children
-
-				std::function<void(ComponentManager::ChildContainerT*)> doChildrens = [&](ComponentManager::ChildContainerT* childrens)
-				{
-					for (int uid : *childrens)
-					{
-						Entity childEntity = G_ECMANAGER_UI->getEntity(uid);
-
-
-						std::cout << std::endl << "Print child:" << std::endl;
-
-						std::cout << "childEntity generation:" << childEntity.getGeneration() << std::endl;
-
-						std::cout << "childEntity id:" << childEntity.getId() << std::endl;
-						std::cout << "childEntity numChild:" << childEntity.getNumChildren() << std::endl;
-						std::cout << "childEntity numDec:" << childEntity.getNumDecendants() << std::endl;
-						std::cout << "childEntity parentuid:" << childEntity.getParentId() << std::endl;
-
-						compR = childEntity.getComponent<ComponentTest0>();
-						std::cout << "Child ComponentTest0:" << compR->id << " " << compR->c << std::endl;
-
-						// get id for remove
-						if (compR->id == 8882)
-						{
-							toDel0 = childEntity.getId();
-						}
-						if (compR->id == 5432)
-						{
-							toDel2 = childEntity.getId();
-						}
-
-						// get transform component
-						ComponentTransform* compT = childEntity.getComponent<ComponentTransform>();
-						if (compT != nullptr) // nullptr -> uninitialised or deleted
-							std::cout << "Transform:" << compT->_position.x << std::endl;
-
-						std::cout << std::endl;
-
-						// call recursive fn for each child
-						doChildrens(G_ECMANAGER_UI->getEntity(uid).getChildren());
-					}
-				};
-
-				doChildrens(entity.getChildren());
-
-				//
-				////////////
-
-				std::cout << "Object:" << G_ECMANAGER_UI->getObjId(itr) << " END" << std::endl;
-				std::cout << std::endl;
-
-				++itr;
-			}
-		};
-
-		print();
-
-		std::cout << std::endl;
-		std::cout << "// Test Get Components END" << std::endl;
-		std::cout << std::endl;
-
-
-
-
-
-		std::cout << std::endl;
-		std::cout << "// Test Remove Components:" << std::endl;
-		std::cout << std::endl;
-
-		G_ECMANAGER_UI->RemoveComponent<ComponentTransform>(toDel0);
-		//print();
-
-		G_ECMANAGER_UI->FreeEntity(toDel2);
-		//print();
-
-		G_ECMANAGER_UI->FreeEntity(toDel1);
-		print();
-
-		std::cout << std::endl;
-		std::cout << "// Test Remove Components END" << std::endl;
-		std::cout << std::endl;
-
-
-
-
-		std::cout << "// Test Components END" << std::endl;
-		std::cout << "////////////////////////////////////" << std::endl;
-		std::cout << std::endl;
-
-	}
-	//// GET COMPONENT END
-	///////////////////////////////////////////////////////////////////////////////////////////////
+	////// GET COMPONENT END
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 }
 
@@ -1557,7 +1560,7 @@ void ComponentManager::Init()
 
 	TestComponents();
 
-
+	//Clear();
 }
 
 void ComponentManager::Free()

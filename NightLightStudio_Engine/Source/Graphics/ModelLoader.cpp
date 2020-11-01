@@ -149,47 +149,32 @@ namespace NS_GRAPHICS
 
 				//GET THE VERTEX DATA
 				const int vertexCount = mesh->GetControlPointsCount();
-				FbxVector4* vertexs = mesh->GetControlPoints();
-				//OLD
-				newMesh->_vertices.reserve(vertexCount);
-				newMesh->_vertexDatas.reserve(vertexCount);
-				//NEW
-				newMeshNew->_vertices.reserve(vertexCount);
-				newMeshNew->_vertexDatas.reserve(vertexCount);
+
 
 				std::cout << node->GetName() << ":" << std::endl;
 
-				FbxDouble3 translation = node->LclTranslation.Get();
-				FbxDouble3 rotation = node->LclRotation.Get();
-				FbxDouble3 scaling = node->LclScaling.Get();
-				FbxDouble3 test = node->GeometricTranslation.Get();
+				//FbxDouble3 translation = node->LclTranslation.Get();
+				//FbxDouble3 rotation = node->LclRotation.Get();
+				//FbxDouble3 scaling = node->LclScaling.Get();
+				////FbxDouble3 test = node->GeometricTranslation.Get();
 
-				std::cout << translation[0] << ", " << translation[1] << ", " << translation[2] << std::endl;
-				std::cout << rotation[0] << ", " << rotation[1] << ", " << rotation[2] << std::endl;
-				std::cout << scaling[0] << ", " << scaling[1] << ", " << scaling[2] << std::endl;
+				//std::cout << translation[0] << ", " << translation[1] << ", " << translation[2] << std::endl;
+				//std::cout << rotation[0] << ", " << rotation[1] << ", " << rotation[2] << std::endl;
+				//std::cout << scaling[0] << ", " << scaling[1] << ", " << scaling[2] << std::endl;
 
-				std::cout << test[0] << ", " << test[1] << ", " << test[2] << std::endl;
+				//std::cout << test[0] << ", " << test[1] << ", " << test[2] << std::endl;
 
 				//const char* nodeName = node->GetName();
-				glm::mat4 modelMatrix(1);
-				glm::mat4 translateMatrix(1);
-				glm::mat4 scaleMatrix(1);
+				//glm::mat4 modelMatrix(1);
+				//glm::mat4 translateMatrix(1);
+				//glm::mat4 scaleMatrix(1);
 
-				glm::translate(translateMatrix, glm::vec3(translation[0], translation[1], translation[2]));
-				glm::quat quaternion(glm::radians(glm::vec3(rotation[0], rotation[1], rotation[2])));
-				glm::mat4 rotateMatrix = glm::mat4_cast(quaternion);
-				glm::scale(scaleMatrix, glm::vec3(scaling[0], scaling[1], scaling[2]));
+				//glm::translate(translateMatrix, glm::vec3(translation[0], translation[1], translation[2]));
+				//glm::quat quaternion(glm::radians(glm::vec3(rotation[0], rotation[1], rotation[2])));
+				//glm::mat4 rotateMatrix = glm::mat4_cast(quaternion);
+				//glm::scale(scaleMatrix, glm::vec3(scaling[0], scaling[1], scaling[2]));
 
-				modelMatrix = translateMatrix * rotateMatrix * scaleMatrix;
-
-				//FBX FIX 
-				if (fileName.find(s_FbxFileFormat) != std::string::npos)
-				{
-					glm::quat quaternion2(glm::radians(glm::vec3(-90.0f, 0.0f, 0.0f)));
-					glm::mat4 rotateMatrix2 = glm::mat4_cast(quaternion2);
-
-					modelMatrix = modelMatrix * rotateMatrix2;
-				}
+				//modelMatrix = translateMatrix * rotateMatrix * scaleMatrix;
 
 				//for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
 				//{
@@ -246,12 +231,20 @@ namespace NS_GRAPHICS
 				//GET THE INDICES, UV AND NORMALS
 				//Might update this part
 				const int totalBufferSize = mesh->GetPolygonVertexCount();
+				FbxVector4* vertexs = mesh->GetControlPoints();
 				//OLD WAY
 				newMesh->_indices.reserve(totalBufferSize);
 				newMesh->_fragmentDatas.reserve(totalBufferSize);
 				//NEW WAY
 				newMeshNew->_indices.reserve(totalBufferSize);
 				newMeshNew->_fragmentDatas.reserve(totalBufferSize);
+
+				//OLD
+				newMesh->_vertices.reserve(totalBufferSize);
+				newMesh->_vertexDatas.reserve(totalBufferSize);
+				//NEW
+				newMeshNew->_vertices.reserve(totalBufferSize);
+				newMeshNew->_vertexDatas.reserve(totalBufferSize);
 
 				int vertexID = 0;
 				
@@ -265,13 +258,33 @@ namespace NS_GRAPHICS
 
 						//NEW POSITION HERE
 						//Control point vertex
+						if (controlPointIndex < 0)
+						{
+							//<0 means corrupted mesh
+							delete newMeshNew;
+							delete newMesh;
+
+							return;
+						}
+
+						FbxVector4 finalPosition = GetTransform(node ,vertexs[controlPointIndex]);
+
 						glm::vec3 vertex;
 
-						vertex = { (float)vertexs[controlPointIndex][0],
-									(float)vertexs[controlPointIndex][1],
-									(float)vertexs[controlPointIndex][2]};
+						vertex = { (float)finalPosition[0],
+									(float)finalPosition[1],
+									(float)finalPosition[2]};
 
-						vertex = modelMatrix * glm::vec4(vertex, 1.0);
+						//FBX FIX 
+						if (fileName.find(s_FbxFileFormat) != std::string::npos)
+						{
+							glm::quat quaternion(glm::radians(glm::vec3(90.0f, 0.0f, 0.0f)));
+							glm::mat4 rotateMatrix = glm::mat4_cast(quaternion);
+
+							vertex = rotateMatrix * glm::vec4(vertex, 1.0f);
+						}
+
+						//vertex = modelMatrix * glm::vec4(vertex, 1.0);
 
 						/////////////////////////////////
 						/// Mesh Way
@@ -559,15 +572,15 @@ namespace NS_GRAPHICS
 		logFile.open(fileName.c_str());
 
 		int lineCount = 0;
-		int MeshSize = _modelManager->_modelList[meshName]->_meshes.size();
-		for (int i = 0; i < MeshSize; ++i)
+		size_t MeshSize = _modelManager->_modelList[meshName]->_meshes.size();
+		for (size_t i = 0; i < MeshSize; ++i)
 		{
-			int verticeSize = _modelManager->_modelList[meshName]->_meshes[i]->_vertices.size();
-			for (int x = 0; x < verticeSize; ++x)
+			size_t verticeSize = _modelManager->_modelList[meshName]->_meshes[i]->_vertices.size();
+			for (size_t x = 0; x < verticeSize; ++x)
 			{
 				logFile << "Vertex: X: " << _modelManager->_modelList[meshName]->_meshes[i]->_vertices[x].x << " Y: " <<
-					_modelManager->_modelList[meshName]->_meshes[i]->_vertices[x].y << " Z: " <<
-					_modelManager->_modelList[meshName]->_meshes[i]->_vertices[x].z << "\n";
+											_modelManager->_modelList[meshName]->_meshes[i]->_vertices[x].y << " Z: " <<
+											_modelManager->_modelList[meshName]->_meshes[i]->_vertices[x].z << "\n";
 
 				lineCount++;
 			}
@@ -578,5 +591,33 @@ namespace NS_GRAPHICS
 		logFile << "Total Points : " << lineCount << std::endl;
 
 		logFile.close();
+	}
+
+	FbxVector4 ModelLoader::GetTransform(FbxNode* node, FbxVector4 vector) 
+	{
+		FbxAMatrix geomMatrix;
+		geomMatrix.SetIdentity();
+		if (node->GetNodeAttribute())
+		{
+			const FbxVector4 lT = node->GetGeometricTranslation(FbxNode::eSourcePivot);
+			const FbxVector4 lR = node->GetGeometricRotation(FbxNode::eSourcePivot);
+			const FbxVector4 lS = node->GetGeometricScaling(FbxNode::eSourcePivot);
+			geomMatrix.SetT(lT);
+			geomMatrix.SetR(lR);
+			geomMatrix.SetS(lS);
+		}
+		FbxAMatrix localMatrix = node->EvaluateLocalTransform();
+
+		FbxNode* parentNode = node->GetParent();
+		FbxAMatrix parentMatrix = parentNode->EvaluateLocalTransform();
+		while (parentNode != NULL)
+		{
+			parentMatrix = parentNode->EvaluateLocalTransform() * parentMatrix;
+			parentNode = parentNode->GetParent();
+		}
+
+		FbxAMatrix matrix = parentMatrix * localMatrix * geomMatrix;
+		FbxVector4 result = matrix.MultT(vector);
+		return result;
 	}
 }

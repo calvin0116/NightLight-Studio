@@ -5,8 +5,10 @@
 #include "LevelEditor_ECHelper.h"
 
 #include "LevelEditor_Console.h"
+
 #include "../../Input/SystemInput.h"
 #include "../../Graphics/CameraSystem.h"
+#include "../../Core/SceneManager.h"
 
 void Frustum(float left, float right, float bottom, float top, float znear, float zfar, float* m16);
 void Perspective(float fovyInDegrees, float aspectRatio, float znear, float zfar, float* m16);
@@ -56,8 +58,9 @@ void SceneEditor::Start()
         setPos);
 
     // PRESS F TO FOCUS ON SELECTED ITEM
+    // Honestly doesn't even need to be here, can be pretty much anywhere
     SYS_INPUT->GetSystemKeyPress().CreateNewEvent("FOCUS_CAMERA", SystemInput_ns::IKEY_F, "IDET", SystemInput_ns::OnPress, 
-        [this]() 
+        []() 
         {
             if (LE_ECHELPER->GetSelectedEntityID() != -1)
             {
@@ -71,6 +74,32 @@ void SceneEditor::Start()
                     camFront *= glm::vec3{ dist, dist, dist };
                     cam.SetCameraPosition(trans_comp->_position - camFront);
                     NS_GRAPHICS::CameraSystem::GetInstance().ForceUpdate();
+                }
+            }
+        });
+
+    // Ctrl-Copy object selected
+    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COPY_OBJECT", SystemInput_ns::IKEY_CTRL, "IDET", SystemInput_ns::OnHold,
+        []()
+        {
+            if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_C))
+            {
+                if (LE_ECHELPER->GetSelectedEntityID() != -1)
+                {
+                    Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
+                    TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+                    if (trans_comp != NULL)
+                    {
+                        std::string newName;
+                        newName = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
+                        if (newName == "")
+                            newName = "_Entity";
+
+                        newName.append("_copy");
+
+                        // Causes memory leaks currently (Probably Graphics Side)
+                        ent.Copy(G_ECMANAGER, newName);
+                    }
                 }
             }
         });

@@ -25,7 +25,7 @@ namespace NS_SCENE
 	private:
 		friend Singleton<SceneManager>;
 		//Parser for Scene manager
-		Parser scene_parser;
+		NS_SERIALISER::Parser scene_parser;
 
 		//Scene manipulation
 		FILE_NAME current_scene;
@@ -36,7 +36,7 @@ namespace NS_SCENE
 		int scene_index;		//For change scene test / change scene by index 
 		std::map<int, FILE_NAME> scene_indexes;
 		//Scene List
-		std::map<FILE_NAME, Parser*> scene_list;
+		std::map<FILE_NAME, NS_SERIALISER::Parser*> scene_list;
 
 		//Path for scenes
 		std::string scenes_path;
@@ -93,6 +93,7 @@ namespace NS_SCENE
 		ENGINE_API void SetNextScene(std::string scene_name);
 		//bool GetToExit();
 		//SCENE_CHANGE GetToChangeScene();
+		std::string GetCurrentScene() { return current_scene; };
 	};
 
 

@@ -4,7 +4,7 @@
 
 ComponentScript::ComponentScript()
 {
-
+	strcpy_s(ser_name,"ScriptComponent");
 }
 
 ComponentScript::~ComponentScript()

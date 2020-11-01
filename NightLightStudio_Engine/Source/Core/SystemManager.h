@@ -13,7 +13,7 @@ Brief Description :
 //System to manage
 #include "../IO/SystemIO.h"
 
-
+#include <Windows.h>
 
 class  MySystemManager : public Singleton<MySystemManager>
 {

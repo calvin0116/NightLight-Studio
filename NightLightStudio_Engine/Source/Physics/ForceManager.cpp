@@ -6,13 +6,14 @@
 namespace NS_PHYSICS
 {
 
-void ForceManager::addForce(int forceHandle, const TranslationalForce& transForce)
+
+void ForceManager::addForce(ComponentRigidBody& rigidBody, const TranslationalForce& transForce)
 {
 	// check if force handle is uninit/unassigned
-	if (forceHandle == -1)
+	if (rigidBody.forceHandle == -1)
 	{
 		int n = 0;
-		while (translationalForceMap.find(currentKeyIndex) != translationalForceMap.end()) 
+		while (translationalForceMap.find(currentKeyIndex) != translationalForceMap.end())
 		{
 			// found
 			// incremnet and hope that it is free
@@ -23,42 +24,21 @@ void ForceManager::addForce(int forceHandle, const TranslationalForce& transForc
 		}
 		// not found
 		// assignKey to handle
-		forceHandle = currentKeyIndex;
+		rigidBody.forceHandle = currentKeyIndex;
 		// increment the key index so the next key can be assigned
 		++currentKeyIndex;
 	}
-	translationalForceMap.insert(std::make_pair(forceHandle, transForce));
+	translationalForceMap.insert(std::pair<int, TranslationalForce>(rigidBody.forceHandle, transForce));
 }
 
-void ForceManager::addForce(const ComponentRigidBody& rigidBody, const TranslationalForce& transForce)
+void ForceManager::addForce(ComponentRigidBody& rigidBody, NlMath::Vector3D direction, float magnitude)
 {
-	addForce(rigidBody.forceHandle, transForce);
-}
-
-void ForceManager::addForce(const ComponentRigidBody& rigidBody, NlMath::Vector3D direction, float magnitude, size_t time)
-{
-	addForce(rigidBody, TranslationalForce(direction, magnitude, time));
+	addForce(rigidBody, TranslationalForce(direction, magnitude));
 }
 
 void ForceManager::updateTranslationalForces()
 {
-	auto itr = translationalForceMap.begin();
-	auto itrEnd = translationalForceMap.end();
-
-	while (itr != itrEnd)
-	{
-		//TranslationalForce force = (*itr).second;
-		if (!(*itr).second.checkAlive())
-		{
-			// dead
-			itr = translationalForceMap.erase(itr);
-			//itrEnd = translationalForceMap.end(); // 
-		}
-		else
-		{
-			++itr;
-		}
-	}
+	translationalForceMap.clear();
 }
 
 NlMath::Vector3D ForceManager::resolveTranslationalForces(int forceHandle)
@@ -89,14 +69,6 @@ NlMath::Vector3D ForceManager::resolveTranslationalForces(const ComponentRigidBo
 	}
 	return resolveTranslationalForces(forceHandle);
 }
-
-
-
-
-//void ForceManager::addMomentum(const TranslationalMomentum& transMom)
-//{
-//	translationalMomentumList.push_back(transMom);
-//}
 
 void ForceManager::addForce(const RotationalForce& rotForce)
 {
