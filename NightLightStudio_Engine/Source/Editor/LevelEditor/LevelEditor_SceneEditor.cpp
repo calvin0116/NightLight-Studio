@@ -5,7 +5,10 @@
 #include "LevelEditor_ECHelper.h"
 
 #include "LevelEditor_Console.h"
+
 #include "../../Input/SystemInput.h"
+#include "../../Graphics/CameraSystem.h"
+#include "../../Core/SceneManager.h"
 
 void Frustum(float left, float right, float bottom, float top, float znear, float zfar, float* m16);
 void Perspective(float fovyInDegrees, float aspectRatio, float znear, float zfar, float* m16);
@@ -53,6 +56,53 @@ void SceneEditor::Start()
     _levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"),
         setPos,
         setPos);
+
+    // PRESS F TO FOCUS ON SELECTED ITEM
+    // Honestly doesn't even need to be here, can be pretty much anywhere
+    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("FOCUS_CAMERA", SystemInput_ns::IKEY_F, "IDET", SystemInput_ns::OnPress, 
+        []() 
+        {
+            if (LE_ECHELPER->GetSelectedEntityID() != -1)
+            {
+                Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
+                TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+                if (trans_comp != NULL)
+                {
+                    NS_GRAPHICS::Camera& cam = NS_GRAPHICS::CameraSystem::GetInstance().GetCamera();
+                    glm::vec3 camFront = cam.GetFront();
+                    const float dist = 10.0f;
+                    camFront *= glm::vec3{ dist, dist, dist };
+                    cam.SetCameraPosition(trans_comp->_position - camFront);
+                    NS_GRAPHICS::CameraSystem::GetInstance().ForceUpdate();
+                }
+            }
+        });
+
+    // Ctrl-Copy object selected
+    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COPY_OBJECT", SystemInput_ns::IKEY_CTRL, "IDET", SystemInput_ns::OnHold,
+        []()
+        {
+            if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_C))
+            {
+                if (LE_ECHELPER->GetSelectedEntityID() != -1)
+                {
+                    Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
+                    TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+                    if (trans_comp != NULL)
+                    {
+                        std::string newName;
+                        newName = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
+                        if (newName == "")
+                            newName = "_Entity";
+
+                        newName.append("_copy");
+
+                        // Causes memory leaks currently (Probably Graphics Side)
+                        ent.Copy(G_ECMANAGER, newName);
+                    }
+                }
+            }
+        });
 }
 
 void SceneEditor::Init()
@@ -97,7 +147,7 @@ void SceneEditor::Run()
                 if (!_lastPos_Start)
                 {
                     _lastPos_Start = true;
-                    _lastPos_ELP = { trans_comp, matObj };
+                    _lastPos_ELP = { trans_comp, trans_comp->GetModelMatrix() };
                 }
 
                 // Sets object to new position
@@ -111,7 +161,7 @@ void SceneEditor::Run()
             else
             {
                 // Checks if not manipulating and mouse is let go
-                if (_lastPos_Start && !SYS_INPUT->GetSystemKeyPress().GetKeyStateHold(SystemInput_ns::IMOUSE_LBUTTON))
+                if (_lastPos_Start && SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IMOUSE_LBUTTON))
                 {
                     _lastPos_Start = false;
                     // New position for the object

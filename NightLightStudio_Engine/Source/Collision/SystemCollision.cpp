@@ -17,8 +17,11 @@
 #define MESH_MAX_LOD 18
 #define MESH_MIN_LOD -20
 
+
 namespace NS_COLLISION
 {
+	static int test_count = 0;
+
 	CollisionSystem::CollisionSystem() : MeshLod(0), doDrawLineMesh(true)
 	{
 	}
@@ -49,6 +52,25 @@ namespace NS_COLLISION
 			{
 				doDrawLineMesh = !doDrawLineMesh;
 			});
+
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("LALALA", SystemInput_ns::IKEY_M, "M", SystemInput_ns::OnPress, [this]()
+			{
+
+				Entity boxTest = G_ECMANAGER->BuildEntity(std::string("newBox").append(std::to_string(test_count))); 
+				++test_count;
+				ComponentTransform boxTestTransform;
+				boxTestTransform._position = glm::vec3(0.0f, 0.0f, 0.0f);
+				boxTestTransform._scale = glm::vec3(0.5f, 0.5f, 0.5f);
+				boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
+				ComponentCollider boxTestCollider(COLLIDERS::AABB);
+				boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
+				ComponentRigidBody boxTestrbody;
+				boxTestrbody.isStatic = false;
+				boxTestrbody.isGravity = true;
+				boxTestrbody.mass = 1.0f;
+				boxTest.AttachComponent<ComponentRigidBody>(boxTestrbody);
+			});
+
 		//// TestMesh Key Input END
 		///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +78,7 @@ namespace NS_COLLISION
 		//test code, to be removed
 		//////////////////////////////////////////////////////////////////////////////////////
 		//test creation
-		Entity cube1Test = G_ECMANAGER->BuildEntity();
+		//Entity cube1Test = G_ECMANAGER->BuildEntity("Test_Box1");
 		ComponentTransform Transform1;
 		ComponentRigidBody Rigid1;
 		
@@ -65,27 +87,27 @@ namespace NS_COLLISION
 		Rigid1.isGravity = true;
 		Rigid1.mass = 1.0f;
 
-		Transform1._rotation.x = 45;
-		Transform1._rotation.y = 40;
-		Transform1._rotation.z = 45;
+		//Transform1._rotation.x = 45;
+		//Transform1._rotation.y = 40;
+		//Transform1._rotation.z = 45;
 		Transform1._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
-		cube1Test.AttachComponent<ComponentTransform>(Transform1);
-		cube1Test.AttachComponent<ComponentRigidBody>(Rigid1);
+		//cube1Test.AttachComponent<ComponentTransform>(Transform1);
+		//cube1Test.AttachComponent<ComponentRigidBody>(Rigid1);
 		
 
 
 		//NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test, glm::vec3(0.5f, 0.5f, 1.f));
 
-		Entity cube2Test = G_ECMANAGER->BuildEntity();
+		Entity cube2Test = G_ECMANAGER->BuildEntity("Test_Box1");
 		ComponentTransform Transform2;
 		ComponentRigidBody Rigid2;
 		
 
 		Transform2._position = glm::vec3(2.5f, 0.0f, 0.f);
-		Transform2._rotation.x = -45;
-		Transform2._rotation.y = -45;
-		Transform2._rotation.z = -45;
+		//Transform2._rotation.x = -45;
+		//Transform2._rotation.y = -45;
+		//Transform2._rotation.z = -45;
 		Transform2._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
 
@@ -96,11 +118,11 @@ namespace NS_COLLISION
 		
 		//NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
 
-		//ComponentCollider AABB1(COLLIDERS::AABB);
-		//ComponentCollider AABB2(COLLIDERS::AABB);
+		ComponentCollider AABB1(COLLIDERS::AABB);
+		ComponentCollider AABB2(COLLIDERS::AABB);
 
-		ComponentCollider AABB1(COLLIDERS::OBB);
-		ComponentCollider AABB2(COLLIDERS::OBB);
+		//ComponentCollider AABB1(COLLIDERS::OBB);
+		//ComponentCollider AABB2(COLLIDERS::OBB);
 
 		//ComponentCollider AABB1(COLLIDERS::SPHERE);
 		//ComponentCollider AABB2(COLLIDERS::SPHERE);
@@ -114,7 +136,7 @@ namespace NS_COLLISION
 		//AABB1.collider.aabb.colliderScale = NlMath::Vector3D(1.0f, 1.0f, 1.0f);
 		//AABB2.collider.aabb.colliderScale = NlMath::Vector3D(1.0f, 1.0f, 1.0f);
 
-		cube1Test.AttachComponent<ComponentCollider>(AABB1);
+		//cube1Test.AttachComponent<ComponentCollider>(AABB1);
 		cube2Test.AttachComponent<ComponentCollider>(AABB2);
 
 		//ComponentCollider OBB1(COLLIDERS::OBB);
@@ -122,6 +144,16 @@ namespace NS_COLLISION
 		//cube1Test.AttachComponent<ComponentCollider>(OBB1);
 		//cube2Test.AttachComponent<ComponentCollider>(OBB2);
 
+
+		Entity platform0Test = G_ECMANAGER->BuildEntity();
+		ComponentTransform platform0Transform;
+		platform0Transform._position = glm::vec3(0.0f, -5.0f, 0.0f);
+		platform0Transform._scale = glm::vec3(5.0f, 1.0f, 5.0f);
+		platform0Test.AttachComponent<ComponentTransform>(platform0Transform);
+		ComponentCollider platform0Collider(COLLIDERS::AABB);
+		platform0Test.AttachComponent<ComponentCollider>(platform0Collider);
+		ComponentRigidBody platform0rbody;
+		platform0Test.AttachComponent<ComponentRigidBody>(platform0rbody);
 
 		
 		//////////////////////////////////////////////////////////////////////////////////////
@@ -146,6 +178,19 @@ namespace NS_COLLISION
 
 	void CollisionSystem::Update()
 	{
+
+		{
+			auto itr = G_ECMANAGER->begin<ComponentCollider>();
+			auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
+			for (; itr != itrEnd; ++itr)
+			{
+				ComponentCollider* comCol = G_ECMANAGER->getComponent<ComponentCollider>(itr);
+				ComponentTransform* comTrans = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+
+				UpdateCollisionBoxPos(comCol, comTrans);
+			}
+		}
+
 		auto itr1 = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd1 = G_ECMANAGER->end<ComponentCollider>();
 
@@ -179,7 +224,7 @@ namespace NS_COLLISION
 				ComponentRigidBody* comRigid1 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr1);
 				ComponentRigidBody* comRigid2 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr2);
 
-				UpdateCollisionBoxPos(comCol1, comTrans1);
+				//UpdateCollisionBoxPos(comCol1, comTrans1);
 				
 
 
@@ -192,15 +237,18 @@ namespace NS_COLLISION
 					//NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(1.0f, 0.0f, 1.f));
 					//NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent2, glm::vec3(0.8f, 0.0f, 1.f));
 
+					comCol1->isCollide = true;
+					comCol2->isCollide = true;
+
 					/////////////////////////////////////////////////////////////////////////////////////////////
 					// Draw Test mesh
-					if (doDrawLineMesh)
-					{
-						// get trans2
-						ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
-						DrawLineMesh(comTrans1, comCol1, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
-						DrawLineMesh(comTrans2, comCol2, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
-					}
+					//if (doDrawLineMesh)
+					//{
+					//	// get trans2
+					//	ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
+					//	DrawLineMesh(comTrans1, comCol1, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
+					//	DrawLineMesh(comTrans2, comCol2, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
+					//}
 					// Draw Test mesh
 					/////////////////////////////////////////////////////////////////////////////////////////////
 				}
@@ -211,13 +259,13 @@ namespace NS_COLLISION
 
 					///////////////////////////////////////////////////////////////////////////////////////////////
 					//// Draw Test mesh
-					if (doDrawLineMesh)
-					{
-						// get trans2
-						ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
-						DrawLineMesh(comTrans1, comCol1, MeshLod);
-						DrawLineMesh(comTrans2, comCol2, MeshLod);
-					}
+					//if (doDrawLineMesh)
+					//{
+					//	// get trans2
+					//	ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
+					//	DrawLineMesh(comTrans1, comCol1, MeshLod);
+					//	DrawLineMesh(comTrans2, comCol2, MeshLod);
+					//}
 					// Draw Test mesh
 					/////////////////////////////////////////////////////////////////////////////////////////////
 				}
@@ -228,6 +276,27 @@ namespace NS_COLLISION
 				//comTrans1->_rotation.y += 1;
 				//comTrans1->_rotation.z += 1;
 				/////////////////////////////////////////////////////////////////////////////////////////
+			}
+		}
+
+		if (doDrawLineMesh)
+		{
+			auto itr = G_ECMANAGER->begin<ComponentCollider>();
+			auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
+			for (; itr != itrEnd; ++itr)
+			{
+				ComponentCollider* comCol = G_ECMANAGER->getComponent<ComponentCollider>(itr);
+				ComponentTransform* comTrans = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+
+				if (comCol->isCollide)
+				{
+					DrawLineMesh(comTrans, comCol, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
+				}
+				else
+				{
+					DrawLineMesh(comTrans, comCol, MeshLod);
+				}
+				comCol->isCollide = false;
 			}
 		}
 

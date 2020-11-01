@@ -48,6 +48,12 @@ void ComponentCollider::CollisionTimeReset()
 	collisionTime = FLT_MAX;
 }
 
+inline Value ComponentCollider::Write() 
+{ 
+	Value val(rapidjson::kObjectType);
+	return val;
+}
+
 
 
 

@@ -3,7 +3,7 @@
         "Entity_0": {
             "TransformComponent": {
                 "Position": [
-                    3.0,
+                    2.0,
                     0.0,
                     0.0
                 ],
@@ -18,8 +18,23 @@
         "Entity_1": {
             "TransformComponent": {
                 "Position": [
-                    3.0,
-                    3.0,
+                    10.0,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    10.0,
+                    10.0,
+                    10.0
+                ]
+            },
+            "GraphicsComponent": {}
+        },
+        "Entity_2": {
+            "TransformComponent": {
+                "Position": [
+                    -3.0,
+                    0.0,
                     0.0
                 ],
                 "Scale": [
@@ -30,11 +45,11 @@
             },
             "GraphicsComponent": {}
         },
-        "Entity_2": {
+        "Test_Box1": {
             "TransformComponent": {
                 "Position": [
+                    2.5,
                     0.0,
-                    -0.13981443643569947,
                     0.0
                 ],
                 "Scale": [
@@ -43,8 +58,9 @@
                     0.5
                 ]
             },
-            "OBB Collider": {},
+            "AABB Collider": {},
             "RigidBody": {
+                "isStatic": true,
                 "Force": [
                     0.0,
                     0.0,
@@ -52,7 +68,7 @@
                 ],
                 "Accelaration": [
                     0.0,
-                    -0.009999999776482582,
+                    0.0,
                     0.0
                 ]
             }
@@ -60,18 +76,19 @@
         "Entity_3": {
             "TransformComponent": {
                 "Position": [
-                    2.5,
                     0.0,
+                    -5.0,
                     0.0
                 ],
                 "Scale": [
-                    0.4999997913837433,
-                    0.5,
-                    0.4999995231628418
+                    5.0,
+                    1.0,
+                    5.0
                 ]
             },
-            "OBB Collider": {},
+            "AABB Collider": {},
             "RigidBody": {
+                "isStatic": true,
                 "Force": [
                     0.0,
                     0.0,
@@ -102,6 +119,7 @@
             },
             "面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面\u0001": {},
             "RigidBody": {
+                "isStatic": true,
                 "Force": [
                     0.0,
                     0.0,
@@ -116,6 +134,7 @@
         },
         "Entity_6": {
             "RigidBody": {
+                "isStatic": true,
                 "Force": [
                     0.0,
                     0.0,
@@ -157,6 +176,7 @@
             },
             "面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面\u0001": {},
             "RigidBody": {
+                "isStatic": true,
                 "Force": [
                     0.0,
                     0.0,

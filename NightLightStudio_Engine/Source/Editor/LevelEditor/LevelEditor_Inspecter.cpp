@@ -185,8 +185,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 		if (ImGui::CollapsingHeader("Graphics component", &not_remove))
 		{
 			ImGui::Checkbox("IsActive##Grahpic", &graphics_comp->_isActive);
-			_levelEditor->LE_AddInputText("Texture", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
-			_levelEditor->LE_AddInputText("Model", graphics_comp->_modelFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			_levelEditor->LE_AddInputText("Texture file", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			_levelEditor->LE_AddInputText("Model file", graphics_comp->_modelFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 		}
 

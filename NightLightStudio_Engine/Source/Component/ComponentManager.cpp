@@ -1557,7 +1557,7 @@ void ComponentManager::Init()
 
 	TestComponents();
 
-
+	//Clear();
 }
 
 void ComponentManager::Free()

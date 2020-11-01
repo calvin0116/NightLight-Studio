@@ -25,4 +25,10 @@ public:
   void	Read(Value&) override { };
   Value	Write() override { return Value(rapidjson::kObjectType); };
   Value& Write(Value& val) override { return val; };
+  virtual ComponentScript* Clone()
+  {
+	  ComponentScript* newcomp = new ComponentScript();
+	  *newcomp = *this;
+	  return newcomp;
+  }
 } ScriptComponent;

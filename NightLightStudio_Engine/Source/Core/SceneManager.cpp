@@ -254,7 +254,7 @@ namespace NS_SCENE
 		std::cout << "Saving scene....." << std::endl;
 		//Save scene
 		//Parser* scene = scene_list[current_scene];
-		std::string output_filename = "Output";
+		std::string output_filename = "Scene/Output";
 
 		NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath() );
 		
@@ -287,8 +287,8 @@ namespace NS_SCENE
 			
 			for(ISerializable* comp : ent.getEntityComponentContainer())
 			{ 
-				const std::type_info& tinf = typeid(*comp);
-				std::cout << tinf.name() << std::endl;
+				//const std::type_info& tinf = typeid(*comp);
+				//std::cout << tinf.name() << std::endl;
 
 				NS_SERIALISER::ChangeData(ent_val, comp->ser_name, comp->Write().GetObject());
 			}

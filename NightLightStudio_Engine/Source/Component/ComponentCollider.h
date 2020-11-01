@@ -158,12 +158,29 @@ typedef struct ComponentCollider : public ISerializable//: public IComponent
 
 	Collider collider;
 
+	bool isCollide = false;
+
 	ComponentCollider(COLLIDERS col);
 
 	ComponentCollider();
 
 	void CollisionTimeReset();
 
+	virtual void	Read(Value&) { };
+	virtual Value	Write();
+	virtual Value& Write(Value& val) { return val; };
+
+	ComponentCollider& operator=(ComponentCollider& rhs)
+	{
+		return rhs;
+	}
+
+	virtual ComponentCollider* Clone()
+	{
+		ComponentCollider* newcomp = new ComponentCollider();
+		*newcomp = *this;
+		return newcomp;
+	}
 
 }ColliderComponent;
 

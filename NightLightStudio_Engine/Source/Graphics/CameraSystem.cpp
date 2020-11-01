@@ -190,6 +190,11 @@ namespace NS_GRAPHICS
 		updated = false;
 	}
 
+	void CameraSystem::ForceUpdate()
+	{
+		updated = true;
+	}
+
 	glm::mat4 CameraSystem::GetViewMatrix()
 	{
 		// Temporarily returns sole camera, will change to handle multiple cameras
@@ -198,5 +203,9 @@ namespace NS_GRAPHICS
 	glm::vec3 CameraSystem::GetCurrentCameraPosition()
 	{
 		return _camera.GetPosition();
+	}
+	Camera& CameraSystem::GetCamera()
+	{
+		return _camera;
 	}
 }

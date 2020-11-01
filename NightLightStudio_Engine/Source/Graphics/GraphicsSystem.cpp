@@ -124,7 +124,7 @@ namespace NS_GRAPHICS
 		//////////////////////////////////////
 		Entity testdrawSphere = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformsphere;
-		testtransformsphere._position = { 3.f, 0.f,0.f };
+		testtransformsphere._position = { 2.f, 0.f,0.f };
 		testdrawSphere.AttachComponent<ComponentTransform>(testtransformsphere);
 
 		CreateSphere(testdrawSphere, glm::vec3(0.f,1.f,1.f));
@@ -155,17 +155,17 @@ namespace NS_GRAPHICS
 		//testDrawIncense4.AttachComponent<ComponentTransform>(testtransformIncense4);
 		//testDrawIncense4.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddMesh("pot4")));
 
-		/*Entity testdrawCube = G_ECMANAGER->BuildEntity();
+		Entity testdrawCube = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformcube;
 		testtransformcube._position = { 10.f, 0.f,0.f };
 		testtransformcube._scale = { 10.f, 10.f,10.f };
 		testdrawCube.AttachComponent<ComponentTransform>(testtransformcube);
 
-		CreateCube(testdrawCube, glm::vec3(0.f, 1.f, 1.f));*/
+		CreateCube(testdrawCube, glm::vec3(0.f, 1.f, 1.f));
 
 		Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformcylinder;
-		testtransformcylinder._position = { 3.f, 3.f,0.f };
+		testtransformcylinder._position = { -3.f, 0.f,0.f };
 		testtransformcylinder._rotation = { 0.f, 0.f,0.f };
 		testdrawCylinder.AttachComponent<ComponentTransform>(testtransformcylinder);
 
@@ -336,7 +336,9 @@ namespace NS_GRAPHICS
 	{
 		// Update to view matrix in shader program
 		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetViewProjectionUniformLocation());
-		glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(cameraManager->GetViewMatrix()));
+		glm::mat4 viewmatrix = cameraManager->GetViewMatrix();
+
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewmatrix));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 

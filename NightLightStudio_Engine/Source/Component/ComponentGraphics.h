@@ -14,7 +14,7 @@ struct MaterialData
 	MaterialData()
 		: _diffuse{ 0.5f,0.5f,0.5f },
 		_ambient{ 1.f, 1.f, 1.f },
-		_specular{ 1.f,1.f,1.f },
+		_specular{ 0.5f,0.5f,0.5f },
 		_shininess{ 32.f } {}
 
 	~MaterialData() {}
@@ -51,7 +51,13 @@ public:
 	~ComponentGraphics();
 
 	//read and write function for initialization from saved files
-	virtual void	Read(Value& ) { };
-	virtual Value	Write() { return Value(rapidjson::kObjectType); };
+	void	Read(Value&);
+	Value	Write();
 	virtual Value& Write(Value& val) { return val; };
+	virtual ComponentGraphics* Clone()
+	{
+		ComponentGraphics* newcomp = new ComponentGraphics();
+		*newcomp = *this;
+		return newcomp;
+	}
 } GraphicsComponent;

@@ -6,13 +6,14 @@
 namespace NS_PHYSICS
 {
 
-void ForceManager::addForce(int forceHandle, const TranslationalForce& transForce)
+
+void ForceManager::addForce(ComponentRigidBody& rigidBody, const TranslationalForce& transForce)
 {
 	// check if force handle is uninit/unassigned
-	if (forceHandle == -1)
+	if (rigidBody.forceHandle == -1)
 	{
 		int n = 0;
-		while (translationalForceMap.find(currentKeyIndex) != translationalForceMap.end()) 
+		while (translationalForceMap.find(currentKeyIndex) != translationalForceMap.end())
 		{
 			// found
 			// incremnet and hope that it is free
@@ -23,27 +24,22 @@ void ForceManager::addForce(int forceHandle, const TranslationalForce& transForc
 		}
 		// not found
 		// assignKey to handle
-		forceHandle = currentKeyIndex;
+		rigidBody.forceHandle = currentKeyIndex;
 		// increment the key index so the next key can be assigned
 		++currentKeyIndex;
 	}
-	translationalForceMap.insert(std::make_pair(forceHandle, transForce));
+	translationalForceMap.insert(std::pair<int, TranslationalForce>(rigidBody.forceHandle, transForce));
 }
 
-void ForceManager::addForce(const ComponentRigidBody& rigidBody, const TranslationalForce& transForce)
+void ForceManager::addForce(ComponentRigidBody& rigidBody, NlMath::Vector3D direction, float magnitude, size_t time)
 {
-	addForce(rigidBody.forceHandle, transForce);
-}
-
-void ForceManager::addForce(const ComponentRigidBody& rigidBody, NlMath::Vector3D direction, float magnitude, size_t time)
-{
-	addForce(rigidBody, TranslationalForce(direction, magnitude, time));
+	addForce(rigidBody, TranslationalForce(direction, magnitude, time + clock()));
 }
 
 void ForceManager::updateTranslationalForces()
 {
-	auto itr = translationalForceMap.begin();
-	auto itrEnd = translationalForceMap.end();
+	std::map<int, TranslationalForce>::iterator itr = translationalForceMap.begin();
+	std::map<int, TranslationalForce>::iterator itrEnd = translationalForceMap.end();
 
 	while (itr != itrEnd)
 	{
@@ -69,6 +65,23 @@ NlMath::Vector3D ForceManager::resolveTranslationalForces(int forceHandle)
 
 	auto itr = translationalForceMap.lower_bound(forceHandle);
 	auto itrEnd = translationalForceMap.upper_bound(forceHandle);
+
+	if (translationalForceMap.size() > 5)
+	{
+		int i = 1;
+	}
+	if (translationalForceMap.size() > 4)
+	{
+		int i = 1;
+	}
+	if (translationalForceMap.size() > 3)
+	{
+		int i = 1;
+	}
+	if (translationalForceMap.size() > 2)
+	{
+		int i = 1;
+	}
 
 	while (itr != itrEnd)
 	{
