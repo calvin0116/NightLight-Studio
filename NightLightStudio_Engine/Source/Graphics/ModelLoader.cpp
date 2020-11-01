@@ -267,7 +267,7 @@ namespace NS_GRAPHICS
 							return;
 						}
 
-						FbxVector4 finalPosition = GetTransform(node ,vertexs[controlPointIndex]);
+						FbxVector4 finalPosition = Transform(node ,vertexs[controlPointIndex]);
 
 						glm::vec3 vertex;
 
@@ -275,16 +275,11 @@ namespace NS_GRAPHICS
 									(float)finalPosition[1],
 									(float)finalPosition[2]};
 
-						//FBX FIX 
-						if (fileName.find(s_FbxFileFormat) != std::string::npos)
-						{
-							glm::quat quaternion(glm::radians(glm::vec3(90.0f, 0.0f, 0.0f)));
-							glm::mat4 rotateMatrix = glm::mat4_cast(quaternion);
+						//FBX FIX FOR 3DS MAX AXIS DIFFERENCE
+						glm::quat quaternion(glm::radians(glm::vec3(90.0f, 0.0f, 0.0f)));
+						glm::mat4 rotateMatrix = glm::mat4_cast(quaternion);
 
-							vertex = rotateMatrix * glm::vec4(vertex, 1.0f);
-						}
-
-						//vertex = modelMatrix * glm::vec4(vertex, 1.0);
+						vertex = rotateMatrix * glm::vec4(vertex, 1.0f);
 
 						/////////////////////////////////
 						/// Mesh Way
@@ -593,7 +588,7 @@ namespace NS_GRAPHICS
 		logFile.close();
 	}
 
-	FbxVector4 ModelLoader::GetTransform(FbxNode* node, FbxVector4 vector) 
+	FbxVector4 ModelLoader::Transform(FbxNode* node, FbxVector4 vector)
 	{
 		FbxAMatrix geomMatrix;
 		geomMatrix.SetIdentity();

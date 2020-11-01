@@ -122,7 +122,7 @@ void LevelEditor::LE_MainMenuBar()
                 */
             }
 
-            if (LE_GetFileType(data) == "fbx" || LE_GetFileType(data) == "obj")
+            if (LE_GetFileType(data) == "fbx")
             {
                 std::string fName = LE_EraseBackSubStr(LE_GetFilename(data), std::string(".").append(LE_GetFileType(data)));
                 fName = "." + fName;
