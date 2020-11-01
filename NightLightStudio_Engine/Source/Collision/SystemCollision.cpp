@@ -59,13 +59,13 @@ namespace NS_COLLISION
 		ComponentRigidBody Rigid1;
 		
 
-		Rigid1.isStatic = false;
+		Rigid1.isStatic = true;
 		Rigid1.isGravity = true;
 		Rigid1.mass = 1.0f;
 
-		Transform1._rotation.x = 45;
-		Transform1._rotation.y = 40;
-		Transform1._rotation.z = 45;
+		//Transform1._rotation.x = 45;
+		//Transform1._rotation.y = 40;
+		//Transform1._rotation.z = 45;
 		Transform1._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
 		cube1Test.AttachComponent<ComponentTransform>(Transform1);
@@ -81,9 +81,9 @@ namespace NS_COLLISION
 		
 
 		Transform2._position = glm::vec3(2.5f, 0.0f, 0.f);
-		Transform2._rotation.x = -45;
-		Transform2._rotation.y = -45;
-		Transform2._rotation.z = -45;
+		//Transform2._rotation.x = -45;
+		//Transform2._rotation.y = -45;
+		//Transform2._rotation.z = -45;
 		Transform2._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
 
@@ -626,9 +626,13 @@ namespace NS_COLLISION
 				//// debug lines?
 				//NlMath::Vector3D start = a->center;
 				//NlMath::Vector3D end = normal  + start;
-				NlMath::Vector3D test(0.1);
+		
 
-					NS_GRAPHICS::SYS_GRAPHICS->DrawLine(a->center,  a->center+ tmp.normal);
+				for (Contact& contact : tmp.contacts)
+				{
+					NS_GRAPHICS::SYS_GRAPHICS->DrawLine(contact.position, contact.position + tmp.normal * 0.1);
+				}
+					
 
 				return check;
 
