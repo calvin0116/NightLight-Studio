@@ -191,57 +191,57 @@ namespace NS_GRAPHICS
 					modelMatrix = modelMatrix * rotateMatrix2;
 				}
 
-				for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
-				{
-					//Control point vertex
-					glm::vec3 vertex;
+				//for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
+				//{
+				//	//Control point vertex
+				//	glm::vec3 vertex;
 
-					vertex = { (float)vertexs[vertexIndex][0],
-							   (float)vertexs[vertexIndex][1],
-							   (float)vertexs[vertexIndex][2]};
+				//	vertex = { (float)vertexs[vertexIndex][0],
+				//			   (float)vertexs[vertexIndex][1],
+				//			   (float)vertexs[vertexIndex][2]};
 
-					vertex = modelMatrix * glm::vec4(vertex, 1.0);
+				//	vertex = modelMatrix * glm::vec4(vertex, 1.0);
 
-					//OLD WAY OF ROTATION
-					//if (fileName.find(s_FbxFileFormat) != std::string::npos)
-					//{
-					//	vertex = { (float)vertexs[vertexIndex][0],
-					//			   (float)vertexs[vertexIndex][2],
-					//			   -(float)vertexs[vertexIndex][1]};
-					//}
-					//else
-					//{
+				//	//OLD WAY OF ROTATION
+				//	//if (fileName.find(s_FbxFileFormat) != std::string::npos)
+				//	//{
+				//	//	vertex = { (float)vertexs[vertexIndex][0],
+				//	//			   (float)vertexs[vertexIndex][2],
+				//	//			   -(float)vertexs[vertexIndex][1]};
+				//	//}
+				//	//else
+				//	//{
 
-					//	vertex = { (float)vertexs[vertexIndex][0],
-					//			   (float)vertexs[vertexIndex][1],
-					//			   (float)vertexs[vertexIndex][2] };
+				//	//	vertex = { (float)vertexs[vertexIndex][0],
+				//	//			   (float)vertexs[vertexIndex][1],
+				//	//			   (float)vertexs[vertexIndex][2] };
 
-					//}
+				//	//}
 
-					//vertex = modelMatrix * glm::vec4(vertex, 1.0);
+				//	//vertex = modelMatrix * glm::vec4(vertex, 1.0);
 
-					/////////////////////////////////
-					/// Mesh Way
-					/////////////////////////////////
-					//OLD WAY 
-					newMesh->_vertices.push_back(vertex);
-					newMesh->_rgb.push_back({ 1.0f,1.0f,1.0f });
+				//	/////////////////////////////////
+				//	/// Mesh Way
+				//	/////////////////////////////////
+				//	//OLD WAY 
+				//	newMesh->_vertices.push_back(vertex);
+				//	newMesh->_rgb.push_back({ 1.0f,1.0f,1.0f });
 
-					//NEW WAY
-					Mesh::VertexData newVertex{ vertex, {1.0f,1.0f,1.0f} };
-					newMesh->_vertexDatas.push_back(newVertex);
+				//	//NEW WAY
+				//	Mesh::VertexData newVertex{ vertex, {1.0f,1.0f,1.0f} };
+				//	newMesh->_vertexDatas.push_back(newVertex);
 
-					/////////////////////////////////
-					/// Model Way
-					/////////////////////////////////
-					//OLD WAY
-					newMeshNew->_vertices.push_back(vertex);
-					newMeshNew->_rgb.push_back({ 1.0f,1.0f,1.0f });
+				//	/////////////////////////////////
+				//	/// Model Way
+				//	/////////////////////////////////
+				//	//OLD WAY
+				//	newMeshNew->_vertices.push_back(vertex);
+				//	newMeshNew->_rgb.push_back({ 1.0f,1.0f,1.0f });
 
-					//NEW WAY
-					newMeshNew->_vertexDatas.push_back(newVertex);
+				//	//NEW WAY
+				//	newMeshNew->_vertexDatas.push_back(newVertex);
 
-				}
+				//}
 
 				//GET THE INDICES, UV AND NORMALS
 				//Might update this part
@@ -262,6 +262,37 @@ namespace NS_GRAPHICS
 					for (int verticeIndex = 0; verticeIndex < verticeCount; ++verticeIndex)
 					{					
 						int controlPointIndex = mesh->GetPolygonVertex(polygonIndex, verticeIndex);
+
+						//NEW POSITION HERE
+						//Control point vertex
+						glm::vec3 vertex;
+
+						vertex = { (float)vertexs[controlPointIndex][0],
+									(float)vertexs[controlPointIndex][1],
+									(float)vertexs[controlPointIndex][2]};
+
+						vertex = modelMatrix * glm::vec4(vertex, 1.0);
+
+						/////////////////////////////////
+						/// Mesh Way
+						/////////////////////////////////
+						//OLD WAY 
+						newMesh->_vertices.push_back(vertex);
+						newMesh->_rgb.push_back({ 1.0f,1.0f,1.0f });
+
+						//NEW WAY
+						Mesh::VertexData newVertex{ vertex, {1.0f,1.0f,1.0f} };
+						newMesh->_vertexDatas.push_back(newVertex);
+
+						/////////////////////////////////
+						/// Model Way
+						/////////////////////////////////
+						//OLD WAY
+						newMeshNew->_vertices.push_back(vertex);
+						newMeshNew->_rgb.push_back({ 1.0f,1.0f,1.0f });
+
+						//NEW WAY
+						newMeshNew->_vertexDatas.push_back(newVertex);
 
 						Mesh::FragmentData fragmentData;
 
@@ -340,13 +371,13 @@ namespace NS_GRAPHICS
 						/////////////////////////////////
 						/// Mesh Way
 						/////////////////////////////////
-						newMesh->_indices.push_back((unsigned short)controlPointIndex);
+						newMesh->_indices.push_back((unsigned short)vertexID);
 						newMesh->_fragmentDatas.push_back(fragmentData);
 
 						/////////////////////////////////
 						/// Model Way
 						/////////////////////////////////
-						newMeshNew->_indices.push_back((unsigned short)controlPointIndex);
+						newMeshNew->_indices.push_back((unsigned short)vertexID);
 						newMeshNew->_fragmentDatas.push_back(fragmentData);
 
 						vertexID++;
