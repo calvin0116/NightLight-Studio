@@ -888,7 +888,7 @@ public:
 
 			// param tgt_compSetMgr is the target set to copy to
 			// param entityName is the name of the new entity
-			void Copy(ComponentManager::ComponentSetManager* tgt_compSetMgr, std::string entityName = "Entity_")
+			EntityHandle Copy(ComponentManager::ComponentSetManager* tgt_compSetMgr, std::string entityName = "Entity_")
 			{
 			// does not copy children // copy to root
 
@@ -922,6 +922,8 @@ public:
 					delete newComp; // !!
 					
 				}
+
+				return newEntity;
 
 			}
 
