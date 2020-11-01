@@ -14,7 +14,7 @@ void ConsoleLog::Start()
 				RedoLastCommand();
 		});
 
-	/*
+	
 	AddCommand("TEST_COMMAND", 
 		[this](std::any value)
 		{
@@ -73,7 +73,7 @@ void ConsoleLog::Start()
 	UndoLastCommand();
 	UndoLastCommand();
 
-	*/
+	
 }
 
 void ConsoleLog::Init()

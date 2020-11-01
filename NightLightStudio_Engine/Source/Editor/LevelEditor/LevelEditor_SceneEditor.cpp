@@ -97,7 +97,7 @@ void SceneEditor::Run()
                 if (!_lastPos_Start)
                 {
                     _lastPos_Start = true;
-                    _lastPos_ELP = { trans_comp, matObj };
+                    _lastPos_ELP = { trans_comp, trans_comp->GetModelMatrix() };
                 }
 
                 // Sets object to new position
@@ -111,7 +111,7 @@ void SceneEditor::Run()
             else
             {
                 // Checks if not manipulating and mouse is let go
-                if (_lastPos_Start && !SYS_INPUT->GetSystemKeyPress().GetKeyStateHold(SystemInput_ns::IMOUSE_LBUTTON))
+                if (_lastPos_Start && SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IMOUSE_LBUTTON))
                 {
                     _lastPos_Start = false;
                     // New position for the object
