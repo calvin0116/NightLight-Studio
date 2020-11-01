@@ -4,6 +4,7 @@
 #include "LevelEditor_AssetInsp.h"
 #include "../../Graphics/GraphicsSystem.h"
 #include "../../Component/Components.h"
+#include "LevelEditor_Console.h"
 
 void LevelEditor::LE_MainMenuBar()
 {
@@ -38,7 +39,13 @@ void LevelEditor::LE_MainMenuBar()
     if (ImGui::BeginMenuBar())
     {
         LE_AddMenuWithItems("File", { "Open" });
-        LE_AddMenuWithItems("Edit", { "Undo" }, { "Ctrl-Z" });
+        LE_AddMenuWithItems("Edit", 
+            { "Undo", "Redo" }, 
+            { "Ctrl-Z", "Ctrl-Y" }, 
+            { 
+                [this]() { LE_AccessWindowFunc("Console", &ConsoleLog::UndoLastCommand); },
+                [this]() { LE_AccessWindowFunc("Console", &ConsoleLog::RedoLastCommand); }
+            });
 
         std::vector<std::string> editorNames;
         std::vector<std::function<void()>> funcs;
