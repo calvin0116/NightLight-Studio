@@ -155,13 +155,13 @@ namespace NS_GRAPHICS
 		//testDrawIncense4.AttachComponent<ComponentTransform>(testtransformIncense4);
 		//testDrawIncense4.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddMesh("pot4")));
 
-		/*Entity testdrawCube = G_ECMANAGER->BuildEntity();
+		Entity testdrawCube = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformcube;
 		testtransformcube._position = { 10.f, 0.f,0.f };
 		testtransformcube._scale = { 10.f, 10.f,10.f };
 		testdrawCube.AttachComponent<ComponentTransform>(testtransformcube);
 
-		CreateCube(testdrawCube, glm::vec3(0.f, 1.f, 1.f));*/
+		CreateCube(testdrawCube, glm::vec3(0.f, 1.f, 1.f));
 
 		Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformcylinder;
