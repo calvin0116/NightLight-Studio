@@ -29,7 +29,7 @@ namespace NS_GRAPHICS
 		: shaderManager{ nullptr },
 		modelLoader{ nullptr },
 		textureLoader{ nullptr },
-		meshManager{ nullptr },
+		modelManager{ nullptr },
 		lightManager{ nullptr },
 		debugManager{ nullptr },
 		cameraManager{ nullptr },
@@ -65,7 +65,8 @@ namespace NS_GRAPHICS
 	{
 		// Free all OpenGL objects before exit
 		// Includes VAO, VBO, EBO, ModelMatrixBO
-		meshManager->Free();
+		modelManager->Free();
+		textureManager->Free();
 	}
 
 	void GraphicsSystem::Init()
@@ -81,7 +82,7 @@ namespace NS_GRAPHICS
 		shaderManager = &ShaderSystem::GetInstance();
 		modelLoader = &ModelLoader::GetInstance();
 		textureLoader = &TextureLoader::GetInstance();
-		meshManager = &MeshManager::GetInstance();
+		modelManager = &ModelManager::GetInstance();
 		lightManager = &LightSystem::GetInstance();
 		debugManager = &DebugManager::GetInstance();
 		cameraManager = &CameraSystem::GetInstance();
@@ -99,14 +100,22 @@ namespace NS_GRAPHICS
 		cameraManager->Init();
 
 		lightManager->Init();
-
-		modelLoader->LoadModel("box.fbx", "box");
+		
+		////////////////////////////////////////////////////
+		/// Commented to test level editor drag and drop
+		
+		modelLoader->LoadModel("rotatedCube.fbx", "box");
 
 		//Draw Cylinder FBX file 
 		modelLoader->LoadModel("cylinder.fbx", "cylinder");
 		
 		//Draw sphere FBX file 
 		modelLoader->LoadModel("sphere.fbx", "sphere");
+
+		modelLoader->LoadModel("incense_pot_Model.fbx", "pot");
+
+		textureManager->GetTexture("Test.jpg");
+		
 
 		//std::cout << "light block size: " <<  sizeof(LightBlock) << std::endl;
 
@@ -120,9 +129,36 @@ namespace NS_GRAPHICS
 
 		CreateSphere(testdrawSphere, glm::vec3(0.f,1.f,1.f));
 
+		//modelLoader->LoadModel(".\\incense_pot_model_custom.obj", "pot");
+
+		//Entity testDrawIncense = G_ECMANAGER->BuildEntity();
+		//ComponentTransform testtransformIncense;
+		//testtransformIncense._position = { 10.f, 0.f,0.f };
+		//testDrawIncense.AttachComponent<ComponentTransform>(testtransformIncense);
+		//testDrawIncense.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel("pot")));
+
+		//Entity testDrawIncense2 = G_ECMANAGER->BuildEntity();
+		//ComponentTransform testtransformIncense2;
+		//testtransformIncense2._position = { 3.f, 0.f,0.f };
+		//testDrawIncense2.AttachComponent<ComponentTransform>(testtransformIncense2);
+		//testDrawIncense2.AttachComponent<ComponentGraphics>(ComponentGraphics(meshManager->AddMesh("pot2")));
+
+		//Entity testDrawIncense3 = G_ECMANAGER->BuildEntity();
+		//ComponentTransform testtransformIncense3;
+		//testtransformIncense3._position = { 3.f, 0.f,0.f };
+		//testDrawIncense3.AttachComponent<ComponentTransform>(testtransformIncense3);
+		//testDrawIncense3.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddMesh("pot3")));
+
+		//Entity testDrawIncense4 = G_ECMANAGER->BuildEntity();
+		//ComponentTransform testtransformIncense4;
+		//testtransformIncense4._position = { 3.f, 0.f,0.f };
+		//testDrawIncense4.AttachComponent<ComponentTransform>(testtransformIncense4);
+		//testDrawIncense4.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddMesh("pot4")));
+
 		/*Entity testdrawCube = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformcube;
-		testtransformcube._position = { -3.f, 0.f,0.f };
+		testtransformcube._position = { 10.f, 0.f,0.f };
+		testtransformcube._scale = { 10.f, 10.f,10.f };
 		testdrawCube.AttachComponent<ComponentTransform>(testtransformcube);
 
 		CreateCube(testdrawCube, glm::vec3(0.f, 1.f, 1.f));*/
@@ -139,7 +175,7 @@ namespace NS_GRAPHICS
 
 		GLint blockSize;
 
-		glGetActiveUniformBlockiv(shaderManager->GetCurrentProgramHandle(), 0,
+		glGetActiveUniformBlockiv(shaderManager->GetCurrentProgramHandle(), 1,
 			GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
 
 		std::cout << "Light Uniform Block Size: " << blockSize << std::endl;
@@ -150,18 +186,31 @@ namespace NS_GRAPHICS
 
 		shaderManager->StopProgram();
 
-		/*std::ofstream logFile;
-		logFile.open("cylinder.txt");
+		//std::ofstream logFile;
+		//logFile.open("custom.txt");
 
-		int MeshSize = meshManager->meshlist["cylinder"]->_vertices.size();
-		for (int i=0; i < MeshSize; ++i)
-		{
-			logFile << "Vertex: X: " << meshManager->meshlist["cylinder"]->_vertices[i].x << " Y: " << 
-										meshManager->meshlist["cylinder"]->_vertices[i].y << " Z: " <<
-										meshManager->meshlist["cylinder"]->_vertices[i].z << "\n";
-		}
+		//modelLoader->LoadModel("incense_pot_Model.fbx", "incense_pot_model");
 
-		logFile.close();*/
+		//int lineCount = 0;
+		//int MeshSize = modelManager->_modelList["incense_pot_model"]->_meshes.size();
+		//for (int i=0; i < MeshSize; ++i)
+		//{
+		//	int verticeSize = modelManager->_modelList["incense_pot_model"]->_meshes[i]->_vertices.size();
+		//	for (int x = 0; x < verticeSize; ++x)
+		//	{
+		//		logFile << "Vertex: X: " << modelManager->_modelList["incense_pot_model"]->_meshes[i]->_vertices[x].x << " Y: " <<
+		//			modelManager->_modelList["incense_pot_model"]->_meshes[i]->_vertices[x].y << " Z: " <<
+		//			modelManager->_modelList["incense_pot_model"]->_meshes[i]->_vertices[x].z << "\n";
+
+		//		lineCount++;
+		//	}
+
+		//	logFile << std::endl;
+		//}
+
+		//logFile << lineCount << std::endl;
+
+		//logFile.close();
 
 		////TEST VECTOR MAX SIZE
 		//std::cout << "TEST MAX SIZE: " << vectTest.max_size() << std::endl;
@@ -210,7 +259,7 @@ namespace NS_GRAPHICS
 		{
 			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
 
-			Mesh* mesh = meshManager->meshes[graphicsComp->MeshID];
+			Mesh* mesh = modelManager->meshes[graphicsComp->MeshID];
 
 			// get transform component
 			ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
@@ -243,26 +292,28 @@ namespace NS_GRAPHICS
 		{
 			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
 
-			Mesh* mesh = meshManager->meshes[graphicsComp->MeshID];
+			Model* model = modelManager->_models[graphicsComp->MeshID];
 
 			// get transform component
 			ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
 
 			glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
+			
+			for (auto& mesh : model->_meshes)
+			{
+				glBindVertexArray(mesh->VAO);
 
-			glBindVertexArray(mesh->VAO);
+				// Update model and uniform for material
+				glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
+				glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
+				glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
 
-			// Update model and uniform for material
-			glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &mesh->_materialData._ambient[0]); // ambient
-			glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &mesh->_materialData._diffuse[0]); // diffuse
-			glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &mesh->_materialData._specular[0]); // specular
-			glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), mesh->_materialData._shininess);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-			glDrawElements(GL_TRIANGLES, (unsigned)mesh->_indices.size(), GL_UNSIGNED_SHORT, 0);
-
+				glDrawElements(GL_TRIANGLES, (unsigned)mesh->_indices.size(), GL_UNSIGNED_SHORT, 0);
+			}
 			itr++;
 		}
 
@@ -318,21 +369,21 @@ namespace NS_GRAPHICS
 		// Assume it's a proper objID for now
 		//if (G_ECMANAGER->getEntity(objID));
 
-		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(meshManager->AddMesh("box")));
+		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel("box")));
 
 		SetMeshColor(entity, rgb);
 	}
 
 	void GraphicsSystem::CreateSphere(Entity& entity, const glm::vec3& rgb)
 	{
-		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(meshManager->AddMesh("sphere")));
+		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel("sphere")));
 
 		SetMeshColor(entity, rgb);
 	}
 
 	void GraphicsSystem::CreateCylinder(Entity& entity, const glm::vec3& rgb)
 	{
-		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(meshManager->AddMesh("cylinder")));
+		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel("cylinder")));
 
 		SetMeshColor(entity, rgb);
 	}
@@ -436,17 +487,20 @@ namespace NS_GRAPHICS
 		}
 		
 		// Get pointer to current mesh
-		Mesh* mesh = meshManager->meshes[graphicsComp->MeshID];
+		Model* model = modelManager->_models[graphicsComp->MeshID];
 
 		// Replace all rgb for every vertex in mesh
-		for (auto& i : mesh->_rgb)
+		for (auto& mesh : model->_meshes)
 		{
-			i = rgb;
+			for (auto& i : mesh->_rgb)
+			{
+				i = rgb;
+			}
 		}
 
 		// Set diffuse and ambient to selected rgb
-		mesh->_materialData._ambient = rgb;
-		mesh->_materialData._diffuse = rgb;
+		graphicsComp->_materialData._ambient = rgb;
+		graphicsComp->_materialData._diffuse = rgb;
 
 		// No need to perform glBufferSubData here, update() will perform communication with GPU data
 	}
@@ -457,9 +511,9 @@ namespace NS_GRAPHICS
 	void GraphicsSystem::AttachMesh(Entity& entity, const std::string& meshName)
 	{
 		if (entity.getComponent<ComponentGraphics>() == nullptr)
-			entity.AttachComponent<ComponentGraphics>(ComponentGraphics(meshManager->AddMesh(meshName)));
+			entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel(meshName)));
 		else
-			entity.getComponent<ComponentGraphics>()->MeshID = meshManager->AddMesh(meshName);
+			entity.getComponent<ComponentGraphics>()->MeshID = modelManager->AddModel(meshName);
 	}
 	void GraphicsSystem::DetachMesh(Entity& entity)
 	{

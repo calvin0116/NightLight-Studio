@@ -48,7 +48,7 @@ void InspectorWindow::Run()
 
 				ImGui::InputFloat3("Position", glm::value_ptr(trans_comp->_position)); //,-100.f, 100.f); // Edit 3 floats representing a color
 				ImGui::InputFloat3("Scale", glm::value_ptr(trans_comp->_scale)); //, 0.0f, 100.f);
-				ImGui::InputFloat("Rotation Z", glm::value_ptr(trans_comp->_rotation));
+				ImGui::InputFloat3("Rotation", glm::value_ptr(trans_comp->_rotation));
 			}
 		}
 		//Standard bool for all component to use

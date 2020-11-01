@@ -1091,6 +1091,7 @@ void ComponentManager::ComponentCreation()
 		comsetFac.AddComponentContainer<ComponentGraphics>();
     comsetFac.AddComponentContainer<ComponentAudio>();
     comsetFac.AddComponentContainer<ComponentLoadAudio>();
+    comsetFac.AddComponentContainer<ComponentScript>();
 		//comsetFac.AddComponentContainer<ComponentInput>();
 		//comsetFac.AddComponentContainer<ComponentLogic>();
 		//comsetFac.AddComponentContainer<ComponentCamera>();

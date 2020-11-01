@@ -225,6 +225,7 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_ECHelper.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Hierarchy.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Inspecter.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_TemplateFuncs.hpp" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
@@ -237,7 +238,7 @@
     <ClInclude Include="Source\Graphics\Mesh.h" />
     <ClInclude Include="Source\Graphics\Model.h" />
     <ClInclude Include="Source\Graphics\ModelLoader.h" />
-    <ClInclude Include="Source\Graphics\MeshManager.h" />
+    <ClInclude Include="Source\Graphics\ModelManager.h" />
     <ClInclude Include="Source\Graphics\ShaderSystem.h" />
     <ClInclude Include="Source\Graphics\TextureLoader.h" />
     <ClInclude Include="Source\Graphics\TextureManager.h" />
@@ -323,7 +324,7 @@
     <ClCompile Include="Source\Graphics\Mesh.cpp" />
     <ClCompile Include="Source\Graphics\Model.cpp" />
     <ClCompile Include="Source\Graphics\ModelLoader.cpp" />
-    <ClCompile Include="Source\Graphics\MeshManager.cpp" />
+    <ClCompile Include="Source\Graphics\ModelManager.cpp" />
     <ClCompile Include="Source\Graphics\ShaderSystem.cpp" />
     <ClCompile Include="Source\Graphics\TextureLoader.cpp" />
     <ClCompile Include="Source\Graphics\TextureManager.cpp" />

@@ -5,19 +5,16 @@
 
 void ConsoleLog::Start()
 {
-	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("EDITOR_UNDO", SystemInput_ns::IKEY_Z, "CTRL-Z", SystemInput_ns::OnPress,
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("EDITOR_UNDO_REDO", SystemInput_ns::IKEY_CTRL, "CTRL_Z_Y", SystemInput_ns::OnHold,
 		[this]() 
 		{
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_Z))
 				UndoLastCommand();
-		});
-	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("EDITOR_REDO", SystemInput_ns::IKEY_Y, "CTRL-Y", SystemInput_ns::OnPress,
-		[this]()
-		{
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_Y))
 				RedoLastCommand();
 		});
 
+	/*
 	AddCommand("TEST_COMMAND", 
 		[this](std::any value)
 		{
@@ -75,6 +72,8 @@ void ConsoleLog::Start()
 	UndoLastCommand();
 	UndoLastCommand();
 	UndoLastCommand();
+
+	*/
 }
 
 void ConsoleLog::Init()

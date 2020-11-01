@@ -8,7 +8,7 @@
 #include "ShaderSystem.h"
 #include "ModelLoader.h"
 #include "TextureLoader.h"
-#include "MeshManager.h"
+#include "ModelManager.h"
 #include "LightSystem.h"
 #include "DebugManager.h"
 #include "CameraSystem.h"
@@ -128,7 +128,7 @@ namespace NS_GRAPHICS
         ShaderSystem* shaderManager;
         ModelLoader* modelLoader;
         TextureLoader* textureLoader;
-        MeshManager* meshManager;
+        ModelManager* modelManager;
         LightSystem* lightManager;
         DebugManager* debugManager;
         CameraSystem* cameraManager;

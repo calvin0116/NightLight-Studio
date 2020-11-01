@@ -5,6 +5,10 @@
 #include <map>
 #include <any>
 
+// Stores a DO function, UNDO function, and a single value that stores values that you want to use
+typedef std::function<std::any(std::any)> COMMAND;
+typedef std::pair<COMMAND, COMMAND> DO_UNDO_COMMAND;
+
 class ConsoleLog : public LE_WinBase_Derived<ConsoleLog>
 {
 	const unsigned MAX_SIZE_INPUTS = 1000;
@@ -16,11 +20,6 @@ class ConsoleLog : public LE_WinBase_Derived<ConsoleLog>
 
 	std::vector<std::pair<std::string, std::any>> _inputCommands;
 	std::vector<std::pair<std::string, std::any>> _inputCommandsRedo;
-
-	// Stores a DO function, UNDO function, and a single value that stores values that you want to use
-	typedef std::function<std::any(std::any)> COMMAND;
-	typedef std::pair<COMMAND, COMMAND> DO_UNDO_COMMAND;
-
 	std::map<const std::string, DO_UNDO_COMMAND> _commands;
 
 	bool _scrollToBottom;

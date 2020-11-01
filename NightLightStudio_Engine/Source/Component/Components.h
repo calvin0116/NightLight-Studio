@@ -12,6 +12,7 @@
 #include "ComponentTransform.h"
 #include "ComponentGraphics.h"
 #include "ComponentRigidBody.h"
+#include "ComponentScript.h"
 
 #include "..\..\ISerializable.h"
 
