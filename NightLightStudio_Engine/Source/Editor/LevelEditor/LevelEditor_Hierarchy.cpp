@@ -1,9 +1,12 @@
 #include "LevelEditor_Hierarchy.h"
+
 #include "../../Component/ComponentManager.h"
 #include "../../Core/SceneManager.h"
 #include "LevelEditor_ECHelper.h"
+#include "../../Component/Components.h"
 
 #include "../../Input/SystemInput.h"
+
 
 inline size_t findCaseInsensitive(std::string data, std::string toSearch, size_t pos = 0)
 {
@@ -41,6 +44,13 @@ void HierarchyInspector::Run()
 		LE_ECHELPER->selected_ents[selected_index] = true;
 
 	}*/
+	//Add entity button
+	if (ImGui::Button("Add Entity"))
+	{
+		//Add entity with default having a transform component
+		G_ECMANAGER->BuildEntity().AddComponent<TransformComponent>();
+
+	}
 	// List box
 	char search_buf[256];
 	static std::string search = "";

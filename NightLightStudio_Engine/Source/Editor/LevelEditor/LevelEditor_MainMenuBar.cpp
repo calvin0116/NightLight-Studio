@@ -9,15 +9,17 @@ void LevelEditor::LE_MainMenuBar()
 {
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
     // because it would be confusing to have two docking targets within each others.
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_MenuBar;
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBackground;
     window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
+    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoScrollbar;
 
     // DockSpace
     ImGuiIO& io = ImGui::GetIO();
     ImGuiViewport* viewport = ImGui::GetMainViewport();
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
     // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
     // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
@@ -29,7 +31,9 @@ void LevelEditor::LE_MainMenuBar()
     ImGui::SetNextWindowSize(viewport->GetWorkSize());
     ImGui::SetNextWindowViewport(viewport->ID);
 
-    ImGui::Begin("DockSpace Demo", nullptr, window_flags);
+    ImGui::Begin("DockSpace Demo", nullptr, window_flags | ImGuiWindowFlags_MenuBar);
+
+    ImGui::PopStyleVar();
 
     if (ImGui::BeginMenuBar())
     {
@@ -59,21 +63,19 @@ void LevelEditor::LE_MainMenuBar()
         ImGui::EndMenuBar();
     }
 
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-
-    // Used to accept DragDrops
-    ImGui::BeginChild("DockSpace Child", ImVec2(0, 0), false, window_flags ^ ImGuiWindowFlags_MenuBar);
-
-    ImGui::PopStyleVar(3);
-
     // Sets dockspace for other objects
     if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
     {
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
     }
+
+    // Used to accept DragDrops
+    ImGui::BeginChild("DockSpace Child", ImVec2(0, 0), false, window_flags);
+
     ImGui::EndChild();
+
+    ImGui::PopStyleVar(2);
 
     // Actual site to implement what to do with the filepath obtained from drag drop
     LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
@@ -84,22 +86,27 @@ void LevelEditor::LE_MainMenuBar()
                 [](unsigned char c)
                 { return (char)std::tolower(c); });
 
-            std::cout << data << std::endl;
+            // std::cout << data << std::endl;
             if (LE_GetFileType(data) == "json")
             {
-                // Create Entity here
                 /*
-                std::string name = LE_EraseSubStr(LE_GetFilename(*str), ".json");
+                // Create Entity here
+                std::string name = LE_EraseBackSubStr(LE_GetFilename(*str), ".json");
                 std::string filepath = ".";
                 filepath.append(LE_EraseSubStr(*str, LE_GetFilename(*str)));
-                Parser(name, filepath).Load();
+                Parser parser(name, filepath);
+                parser.Load();
+                if (parser.CheckForMember("Objects"))
+                {
+                    
+                }
                 */
             }
 
-            if (LE_GetFileType(data) == "fbx")
+            if (LE_GetFileType(data) == "fbx" || LE_GetFileType(data) == "obj")
             {
-                std::string fName = LE_EraseBackSubStr(LE_GetFilename(data), LE_GetFileType(data));
-                fName.pop_back();
+                std::string fName = LE_EraseBackSubStr(LE_GetFilename(data), std::string(".").append(LE_GetFileType(data)));
+                fName = "." + fName;
 
                 Entity ent = G_ECMANAGER->BuildEntity();
                 ComponentTransform transEnt;
