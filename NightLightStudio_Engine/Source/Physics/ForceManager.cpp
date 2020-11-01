@@ -31,30 +31,14 @@ void ForceManager::addForce(ComponentRigidBody& rigidBody, const TranslationalFo
 	translationalForceMap.insert(std::pair<int, TranslationalForce>(rigidBody.forceHandle, transForce));
 }
 
-void ForceManager::addForce(ComponentRigidBody& rigidBody, NlMath::Vector3D direction, float magnitude, size_t time)
+void ForceManager::addForce(ComponentRigidBody& rigidBody, NlMath::Vector3D direction, float magnitude)
 {
-	addForce(rigidBody, TranslationalForce(direction, magnitude, time + clock()));
+	addForce(rigidBody, TranslationalForce(direction, magnitude));
 }
 
 void ForceManager::updateTranslationalForces()
 {
-	std::map<int, TranslationalForce>::iterator itr = translationalForceMap.begin();
-	std::map<int, TranslationalForce>::iterator itrEnd = translationalForceMap.end();
-
-	while (itr != itrEnd)
-	{
-		//TranslationalForce force = (*itr).second;
-		if (!(*itr).second.checkAlive())
-		{
-			// dead
-			itr = translationalForceMap.erase(itr);
-			//itrEnd = translationalForceMap.end(); // 
-		}
-		else
-		{
-			++itr;
-		}
-	}
+	translationalForceMap.clear();
 }
 
 NlMath::Vector3D ForceManager::resolveTranslationalForces(int forceHandle)
@@ -65,23 +49,6 @@ NlMath::Vector3D ForceManager::resolveTranslationalForces(int forceHandle)
 
 	auto itr = translationalForceMap.lower_bound(forceHandle);
 	auto itrEnd = translationalForceMap.upper_bound(forceHandle);
-
-	if (translationalForceMap.size() > 5)
-	{
-		int i = 1;
-	}
-	if (translationalForceMap.size() > 4)
-	{
-		int i = 1;
-	}
-	if (translationalForceMap.size() > 3)
-	{
-		int i = 1;
-	}
-	if (translationalForceMap.size() > 2)
-	{
-		int i = 1;
-	}
 
 	while (itr != itrEnd)
 	{
@@ -102,14 +69,6 @@ NlMath::Vector3D ForceManager::resolveTranslationalForces(const ComponentRigidBo
 	}
 	return resolveTranslationalForces(forceHandle);
 }
-
-
-
-
-//void ForceManager::addMomentum(const TranslationalMomentum& transMom)
-//{
-//	translationalMomentumList.push_back(transMom);
-//}
 
 void ForceManager::addForce(const RotationalForce& rotForce)
 {
