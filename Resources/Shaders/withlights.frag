@@ -3,6 +3,7 @@
 in vec2 texCoords;
 in vec3 fragPos;
 in vec3 normal;
+in mat4 viewtransform;
 
 out vec4 fragColor;
 
@@ -71,7 +72,7 @@ void main(void)
 {
     // properties
     vec3 norm = normalize(normal);
-    vec3 viewDir = normalize(viewPos - fragPos);
+    vec3 viewDir = normalize(vec3(viewtransform * vec4((viewPos), 1.0f)) - fragPos);
     vec3 result = vec3(0.f,0.f,0.f);
     
     // Calculation for all directional lights
@@ -85,12 +86,13 @@ void main(void)
     result += CalcSLight(sLights[k], norm, fragPos, viewDir);    
     
     fragColor = vec4(result, 1.0);
+    //fragColor = vec4(norm, 1.0f);
 }
 
 // calculates the color when using a directional light.
 vec3 CalcDLight(DirLight light, vec3 Normal, vec3 viewDir)
 {
-    vec3 lightDir = normalize(-light.direction);
+    vec3 lightDir = normalize(vec3(viewtransform * vec4(-light.direction, 1.0f)));
     // diffuse shading
     float diff = max(dot(Normal, lightDir), 0.0);
     // specular shading

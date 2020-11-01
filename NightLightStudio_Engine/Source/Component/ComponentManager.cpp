@@ -200,7 +200,8 @@ void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::C
 	if (compData == nullptr) throw;
 
 	if (/*compData->compPtr != nullptr || */compData->containerId != -1 || compData->containerIndex != -1)
-		throw; // check for double allocation
+		//throw; // check for double allocation
+		return nullptr;
 
 	// insert the component // shifted the insert component AFTER the check 
 	int newCId = compSet->cmm.insertIntoContainer(compId, reinterpret_cast<const char*>(newComp));
@@ -1090,6 +1091,7 @@ void ComponentManager::ComponentCreation()
 		comsetFac.AddComponentContainer<ComponentGraphics>();
     comsetFac.AddComponentContainer<ComponentAudio>();
     comsetFac.AddComponentContainer<ComponentLoadAudio>();
+    comsetFac.AddComponentContainer<ComponentScript>();
 		//comsetFac.AddComponentContainer<ComponentInput>();
 		//comsetFac.AddComponentContainer<ComponentLogic>();
 		//comsetFac.AddComponentContainer<ComponentCamera>();

@@ -12,6 +12,7 @@
 #include "ComponentTransform.h"
 #include "ComponentGraphics.h"
 #include "ComponentRigidBody.h"
+#include "ComponentScript.h"
 
 #include "..\..\ISerializable.h"
 
@@ -47,6 +48,12 @@ struct ComponentTest0 : public ISerializable
 	virtual void	Read(Value& val) { UNREFERENCED_PARAMETER(val); };
 	virtual Value	Write() { return Value(); };
 	virtual Value& Write(Value& val) { return val; };
+	virtual ComponentTest0* Clone()
+	{
+		ComponentTest0* newcomp = new ComponentTest0();
+		*newcomp = *this;
+		return newcomp;
+	}
 };
 /*
 struct ComponentInput

@@ -40,7 +40,7 @@ namespace NS_GRAPHICS
 	public:
 		Camera()
 			: globalUp(0.f, 1.f, 0.f),
-			cameraPos(0.f, 0.f, 5.f),
+			cameraPos(0.f, 2.f, 5.f),
 			cameraFront(0.f, 0.f, -1.f),
 			cameraRight{ glm::normalize(glm::cross(cameraFront, globalUp)) },
 			cameraUp{ glm::normalize(glm::cross(cameraRight, cameraFront)) },

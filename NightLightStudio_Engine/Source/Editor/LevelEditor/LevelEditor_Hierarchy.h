@@ -2,17 +2,17 @@
 #include "LevelEditor.h"
 
 
-class HeirarchyInspector : public LE_WinBase_Derived<HeirarchyInspector>
+class HierarchyInspector : public LE_WinBase_Derived<HierarchyInspector>
 {
 private:
 	bool hasInit;
 
 	int selected_index;
 public :
-	HeirarchyInspector() 
+	HierarchyInspector()
 		:hasInit{false}
 	{};
-	~HeirarchyInspector() {};
+	~HierarchyInspector() {};
 
 	void Init() override;
 	void Run() override;

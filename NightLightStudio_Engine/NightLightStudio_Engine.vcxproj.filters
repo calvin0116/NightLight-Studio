@@ -279,9 +279,6 @@
     <ClInclude Include="Source\Component\ComponentGraphics.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\MeshManager.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="ISerializable.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
@@ -298,9 +295,6 @@
       <Filter>Source Files\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_TemplateFuncs.hpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Heirarchy.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
     <ClInclude Include="Source\Mono\MonoWrapper.h">
@@ -344,6 +338,15 @@
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentScript.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Hierarchy.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\ModelManager.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -518,17 +521,11 @@
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\MeshManager.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\CpuUsage.cpp">
       <Filter>Source Files\Editor\Helper</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Heirarchy.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Mono\MonoWrapper.cpp">
       <Filter>Source Files</Filter>
@@ -566,6 +563,12 @@
     <ClCompile Include="Source\Component\ComponentScript.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Hierarchy.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\ModelManager.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\Messaging\System_Messaging_Readme.txt">
@@ -576,5 +579,8 @@
     <Library Include="..\Bin\fmod_vc.lib">
       <Filter>Resource Files</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\Include\glm\glm.natvis" />
   </ItemGroup>
 </Project>

@@ -13,6 +13,10 @@ namespace NS_GRAPHICS
 		TextureManager();
 		~TextureManager();
 
+		// Texture IDs
+		// Loaded texture
+		std::unordered_map<std::string, unsigned> _textureList;
+
 	public:
 		// Unique Singleton instance
 		static TextureManager& GetInstance()
@@ -21,14 +25,10 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
-		// Texture IDs
-
-		// Loaded texture
-		std::unordered_map<std::string, unsigned> _textureList;
-
 		// Adds loaded texture into master list, requires name as key and context
 		// E.g.
 		void AddTexture(unsigned texture, const std::string& texturekey);
+		int GetTexture(const std::string& texturekey);
 
 		void Free();
 

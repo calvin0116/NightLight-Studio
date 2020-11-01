@@ -42,4 +42,10 @@ public:
   };
   virtual Value	Write() { return Value(); };
   virtual Value& Write(Value& val) { return val; };
+  virtual ComponentLoadAudio* Clone()
+  {
+	  ComponentLoadAudio* newcomp = new ComponentLoadAudio();
+	  *newcomp = *this;
+	  return newcomp;
+  }
 } LoadAudioComponent;

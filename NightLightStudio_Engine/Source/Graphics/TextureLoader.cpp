@@ -177,7 +177,7 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	bool TextureLoader::LoadImage(const std::string& file)
+	bool TextureLoader::LoadOtherImage(const std::string& file, const std::string& newFile)
 	{
 		int width, height, channel;
 		unsigned char* textureData = SOIL_load_image(file.c_str(), &width, &height, &channel, SOIL_LOAD_AUTO);
@@ -209,14 +209,19 @@ namespace NS_GRAPHICS
 		{
 			//Debug_LogToFile("Resources/Logs/Generate_texture.txt", "Texture loading failed");
 			//CDEBUG_ASSERT(textureData, std::string("Failed to load texture: ").append(file).c_str());
+			SOIL_free_image_data(textureData);
 			return false;
 		}
+
+		//SAVES CUSTOM DDS HERE
+		SOIL_save_image(newFile.c_str(), SOIL_SAVE_TYPE_DDS, width, height, channel, textureData);
+
 		SOIL_free_image_data(textureData);
 
 		return true;
 	}
 
-	bool TextureLoader::LoadTexture(const std::string & file)
+	int TextureLoader::LoadTexture(const std::string & file)
 	{
 		//Generate a texture Id for use and bind it to the active texture unit
 		unsigned texture;
@@ -226,6 +231,8 @@ namespace NS_GRAPHICS
 
 		bool result = false;
 
+		std::string finalFileName = file;
+
 		//Load the image file
 		if (file.find(".dds") != std::string::npos)
 		{
@@ -233,20 +240,43 @@ namespace NS_GRAPHICS
 		}
 		else
 		{
-			result = LoadImage(file);
+			//Checks for the file name
+			std::string name;
+			size_t pos = file.rfind("\\");
+			//Get just the string after the last path
+			if (pos != std::string::npos)
+			{
+				name = file.substr(pos + 1);
+			}
+			else
+			{
+				name = file;
+			}
+
+			//Trim the extension to get the file name
+			std::string newName;
+			name.erase(name.rfind("."));
+			newName = s_LocalTexturePathName + name + s_DDSFileFormat;
+			finalFileName = newName;
+
+			result = LoadOtherImage(file, newName);
 		}
 
 		if(!result)
 		{
 			glDeleteTextures(1, &texture);
+
+			//Unbind textureID from active texture unit once done with loading
+			glBindTexture(GL_TEXTURE_2D, 0);
+
 			//Not sure what to do here for error handling, used to throw catch all the way out
-			texture = 0;
+			return -1;
 		}
 
 		//Unbind textureID from active texture unit once done with loading
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		TextureManager::GetInstance().AddTexture(texture, file);
+		TextureManager::GetInstance().AddTexture(texture, finalFileName);
 
 		return texture;
 	}

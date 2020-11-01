@@ -1,9 +1,12 @@
 using System;
 
-public class HelloWorld
+namespace Unicorn
 {
-    public static void Main(string[] args)
-    {
-        Console.WriteLine ("Hello Mono World");
-    }
+public class Hello
+  {
+    public override void Init() { }
+    public override void Update() { }
+    public override void FixedUpdate() { }
+    public override void Exit() { }
+  }
 }

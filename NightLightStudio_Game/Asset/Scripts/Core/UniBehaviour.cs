@@ -11,8 +11,8 @@ namespace Unicorn
 
     // public virtual void Awake() { }
     public virtual void Init() { }
-    public virtual void Update(float dt) { }
-    public virtual void FixedUpdate(float dt) { }
+    public virtual void Update() { }
+    public virtual void FixedUpdate() { }
     public virtual void Exit() { }
 
     public virtual void OnEnable() { }

@@ -30,9 +30,9 @@ namespace NS_GRAPHICS
 	{
 		// Test add 1 light of each type
 		// TEST
-		//AddDirLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f)); // Somewhat working but looks hella weird
-		AddPointLight(0.2f, glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f));
-		//AddSpotLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::cos(glm::radians(22.5f)), glm::cos(glm::radians(27.5f)),
+		AddDirLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f)); // Somewhat working now?
+		//AddPointLight(0.0008f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f)); // Now this doesn't work wtf
+		//AddSpotLight(glm::vec3(-1.0f, 0.0f, 0.5f), glm::cos(glm::radians(2.5f)), glm::cos(glm::radians(7.5f)),
 					//0.2f, glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(0.5f,0.5f,0.5f));
 	}
 
@@ -126,9 +126,9 @@ namespace NS_GRAPHICS
 		if (lightcomponent != nullptr)
 		{
 			// Delete current light from local data
-			NS_GRAPHICS::Lights lightType = lightcomponent->_type;
+			//NS_GRAPHICS::Lights lightType = lightcomponent->_type;
 
-
+			// TODO
 
 			// Delete component
 			entity.RemoveComponent<ComponentLight>();

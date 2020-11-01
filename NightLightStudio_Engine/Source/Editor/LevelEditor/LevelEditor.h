@@ -84,7 +84,6 @@ class LevelEditor
 
 	void LE_RunWindows();
 	void LE_MainMenuBar();
-	void LE_SceneEditor();
 public:
 	LevelEditor();
 	~LevelEditor();
@@ -119,8 +118,9 @@ public:
 	{ LE_AddChildWindow(name, size, []() {}, border, flag); }
 
 	// Runs another window's function.
+	//
 	template <typename T, typename... Y, typename TReturn>
-	TReturn LE_AccessWindowFunc(const std::string& name, TReturn(T::* fn)(Y...), Y&&... arg);
+	TReturn LE_AccessWindowFunc(const std::string& name, TReturn(T::* fn)(Y...), Y... arg);
 
 	// Sets a Windows Flag. Please use in Start.
 	void LE_SetWindowFlag(const std::string& name, const ImGuiWindowFlags& flag);
@@ -435,6 +435,7 @@ std::vector<std::string> LE_GetDirectories(const std::string& path);
 std::vector<std::string> LE_GetFilesInDir(const std::string& path);
 
 std::string LE_EraseSubStr(const std::string& str, const std::string& toErase);
+std::string LE_EraseBackSubStr(const std::string& str, const std::string& toErase);
 
 std::string LE_GetFilename(const std::string& path);
 

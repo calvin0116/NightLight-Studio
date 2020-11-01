@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+#include "TextureLoader.h"
 
 namespace NS_GRAPHICS
 {
@@ -17,6 +18,16 @@ namespace NS_GRAPHICS
 		_textureList.insert({ texturekey, texture });
 	}
 
+	int TextureManager::GetTexture(const std::string& texturekey)
+	{
+		if (_textureList.find(texturekey) == _textureList.end())
+		{
+			TextureLoader::GetInstance().LoadTexture(texturekey);
+		}
+
+		return _textureList[texturekey];
+	}
+
 	void TextureManager::Free()
 	{
 		DumpTextureData();
@@ -29,6 +40,4 @@ namespace NS_GRAPHICS
 			glDeleteTextures(1, &texture.second);
 		}
 	}
-
-
 }

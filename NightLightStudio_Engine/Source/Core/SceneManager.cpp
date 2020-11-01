@@ -193,12 +193,6 @@ namespace NS_SCENE
 			{
 				CreateAndWriteComp<TransformComponent>(Comp_list, entity, component_name);
 				/*
-				TransformComponent trans_com;
-				trans_com.Read(Comp_list[component_name.c_str()]);
-
-				G_ECMANAGER->AttachComponent<TransformComponent>(entity, trans_com);
-				*/
-				/*
 				std::cout << "~~~~ Transform: " << std::endl << trans_com;
 				std::cout << "~~~~~~~~~~~~~~ " << std::endl;*/
 				
@@ -207,21 +201,15 @@ namespace NS_SCENE
 			else if (component_name == "ColliderComponent")
 			{
 				CreateAndWriteComp<ColliderComponent>(Comp_list, entity, component_name);
-				/*
-				ColliderComponent col_com;
-				col_com.Read(Comp_list[component_name.c_str()]);
-
-				G_ECMANAGER->AttachComponent<TransformComponent>(entity, col_com);
-				*/
 			}
 			else if (component_name == "RigidBody")
 			{
 				CreateAndWriteComp<RigidBody>(Comp_list, entity, component_name);
 			}
-      else if (component_name == "AudioManager")
-      {
-        CreateAndWriteComp<ComponentLoadAudio>(Comp_list, entity, component_name);
-      }
+			  else if (component_name == "AudioManager")
+			  {
+				CreateAndWriteComp<ComponentLoadAudio>(Comp_list, entity, component_name);
+			  }
 		}
 	}
 
@@ -286,7 +274,8 @@ namespace NS_SCENE
 		//Entity loop
 		//auto itr = G_ECMANAGER->begin<TransformComponent>();
 
-		for (auto ent : EntityName)
+		//for (auto ent : EntityName)
+		for(Entity ent : G_ECMANAGER->getEntityContainer())
 		{
 			Value* ent_val = new Value;
 			ent_val->SetObject();
@@ -295,12 +284,12 @@ namespace NS_SCENE
 			//scene.PrintDataList();
 			//~~!! Need to know what component the Entity have and loop through them
 			//Component Loop
-			/*
-			for(ISerializable* comp : EntityCompontlist)
+			
+			for(ISerializable* comp : ent.getEntityComponentContainer())
 			{ 
-				comp.Write();
-			}*/
-			Entity entity = G_ECMANAGER->getEntity(ent.first);
+				comp->Write();
+			}
+			//Entity entity = G_ECMANAGER->getEntity(ent.first);
 			/*
 			for (ISerializable* ser : entity.getEntityComponentContainer())
 			{
@@ -311,7 +300,7 @@ namespace NS_SCENE
 				
 			}*/
 
-			scene.ChangeData(obj_val, ent.second.c_str(), ent_val->GetObject());
+			scene.ChangeData(obj_val, EntityName[ent.getId()], ent_val->GetObject());
 
 			delete ent_val;
 		}

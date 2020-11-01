@@ -41,5 +41,11 @@ namespace NS_GRAPHICS
 		glm::mat4 GetViewMatrix();
 
 		glm::vec3 GetCurrentCameraPosition();
+
+
+		// Added by LJM
+		void ForceUpdate();
+		// Added by LJM
+		Camera& GetCamera();
 	};
 }

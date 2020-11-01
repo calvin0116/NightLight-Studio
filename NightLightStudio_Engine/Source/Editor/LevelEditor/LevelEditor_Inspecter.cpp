@@ -2,14 +2,21 @@
 
 #include "LevelEditor_ECHelper.h"
 #include "../../Core/SceneManager.h"
-#include "../../Component/ComponentManager.h"
-#include "../../Component/Components.h"
+
 #include <set>
+
+
 void InspectorWindow::Run()
 {
 	//Check for valid Entity Id
 	if (LE_ECHELPER->GetSelectedEntityID() != -1)
 	{
+		if (!ImGui::IsWindowAppearing() && !LE_ECHELPER->setFocus)
+		{
+			ImGui::SetWindowFocus();
+			LE_ECHELPER->setFocus = true;
+		}
+
 		//Get entity
 		Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
 		// Entity name
@@ -17,8 +24,8 @@ void InspectorWindow::Run()
 		itf |= ImGuiInputTextFlags_EnterReturnsTrue;
 
 		char buf[256];
-		strcpy_s(buf, 256, 
-			NS_SCENE::SYS_SCENE_MANAGER->EntityName[LE_ECHELPER->GetSelectedEntityID()].c_str() 
+		strcpy_s(buf, 256,
+			NS_SCENE::SYS_SCENE_MANAGER->EntityName[LE_ECHELPER->GetSelectedEntityID()].c_str()
 		);
 
 		if (ImGui::InputText("Name", buf, 256, itf))
@@ -29,173 +36,248 @@ void InspectorWindow::Run()
 		ImGui::Text("ID : ");
 
 		ImGui::SameLine(0, 10);
-		ImGui::Text( std::to_string(LE_ECHELPER->GetSelectedEntityID()).c_str() );
-		// ============================================== END OF LINE =========================
+		ImGui::Text(std::to_string(LE_ECHELPER->GetSelectedEntityID()).c_str());
+
+		//Componenets layout
+		ComponentLayout(ent);
+	}
+}
+
+
+void InspectorWindow::ComponentLayout(Entity& ent)
+{
+	TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+	if (trans_comp != NULL)
+	{
+		if (ImGui::CollapsingHeader("Transform"))
+		{
+			//float* rotation = &ent_selected->GetComponent<TransformComponent>().GetRotation().m[2];
+
+			ImGui::InputFloat3("Position", glm::value_ptr(trans_comp->_position)); //,-100.f, 100.f); // Edit 3 floats representing a color
+			ImGui::InputFloat3("Scale", glm::value_ptr(trans_comp->_scale)); //, 0.0f, 100.f);
+			ImGui::InputFloat3("Rotation", glm::value_ptr(trans_comp->_rotation));
+		}
+	}
+	//Standard bool for all component to use
+	bool not_remove = true;
+
+	ComponentCollider* col_comp = ent.getComponent<ComponentCollider>();
+	if (col_comp != NULL)
+	{
+		//~~! Need Help==//
+		//1. Check collider type that it have
+		//2. Get the right collider type
+		//3. Insert name
+		std::string name = "Collider";	//e.g.
+		switch (col_comp->colliderType)
+		{
+		case COLLIDERS::PLANE:
+		{
+			name = "Plane " + name;
+			break;
+		}
+		case COLLIDERS::AABB:
+		{
+			name = "AABB " + name;
+			break;
+		}
+		case COLLIDERS::SPHERE:
+		{
+			name = "Sphere " + name;
+			break;
+		}
+		case COLLIDERS::OBB:
+		{
+			name = "OBB " + name;
+			break;
+		}
+		case COLLIDERS::CAPSULE:
+		{
+			name = "Capsule " + name;
+			break;
+		}
+		}
+
+		//4. May need loop to loop through all collider
+		if (ImGui::CollapsingHeader(name.c_str(), &not_remove))
+		{
+
+		}
+
+		//Remove component
+		if (!not_remove)
+		{
+			ent.RemoveComponent<ComponentCollider>();
+			/*
+			switch (col_comp->colliderType)
+			{
+
+				case COLLIDERS::PLANE:
+				{
+					ent.RemoveComponent<PlaneCollider>();
+					break;
+				}
+				case COLLIDERS::AABB:
+				{
+					ent.RemoveComponent<AABBCollider>();
+					break;
+				}
+				case COLLIDERS::SPHERE:
+				{
+					ent.RemoveComponent<SphereCollider>();
+					break;
+				}
+				case COLLIDERS::OBB:
+				{
+					ent.RemoveComponent<OBBCollider>();
+					break;
+				}
+				case COLLIDERS::CAPSULE:
+				{
+					ent.RemoveComponent<CapsuleCollider>();
+					break;
+				}
+			}*/
+			not_remove = true;
+		}
+	}
+
+	ComponentLoadAudio* aud_manager = ent.getComponent<ComponentLoadAudio>();
+	if (aud_manager != nullptr)
+	{
+
+		if (ImGui::CollapsingHeader("Audio Manager", &not_remove))
+		{
+			if (ImGui::Button("Add Audio"))
+			{
+				aud_manager->_sounds.push_back(ComponentLoadAudio::data());
+			}
+
+
+			for (auto& [path, name] : aud_manager->_sounds)
+			{
+				/*
+			  char buf[512];
+			  char buf2[256];
+			  strcpy_s(buf, 512, path.c_str());
+			  strcpy_s(buf2, 256, name.c_str());
+			  ImGui::InputText("##NAME", buf, 512);
+			  ImGui::SameLine(0, 10);
+			  ImGui::InputText("##OTHERNAME", buf2, 256);
+			  */
+				ImGui::InputText("##AUDIOPATH", path, 512);
+				ImGui::SameLine(0, 10);
+				ImGui::InputText("##AUDIONAME", name, 256);
+			}
+		}
+
+		if (!not_remove)
+		{
+			ent.RemoveComponent<ComponentLoadAudio>();
+			not_remove = true;
+		}
+	}
+
+
+	GraphicsComponent* graphics_comp = ent.getComponent<GraphicsComponent>();
+	if (graphics_comp != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Graphics component", &not_remove))
+		{
+			ImGui::Checkbox("IsActive##Grahpic", &graphics_comp->_isActive);
+			_levelEditor->LE_AddInputText("Texture", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			_levelEditor->LE_AddInputText("Model", graphics_comp->_modelFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+		}
+
+		if (!not_remove)
+		{
+			ent.RemoveComponent<GraphicsComponent>();
+			not_remove = true;
+		}
+	}
+
+	RigidBody* rb = ent.getComponent<RigidBody>();
+	if (rb != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Rigid Body", &not_remove))
+		{
+			//_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			ImGui::Checkbox("IsStatic", &rb->isStatic);
+			ImGui::InputFloat3("Force", rb->force.m);
+			ImGui::InputFloat3("Acceleration", rb->acceleration.m);
+
+		}
+
+		if (!not_remove)
+		{
+			ent.RemoveComponent<RigidBody>();
+			not_remove = true;
+		}
+	}
+
+	static int item_type = 0;
+	//AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0
+	ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0  Collider");
+
+	void* next_lol = nullptr;
+
+	if (ImGui::Button("Add Selected Component"))
+	{
+		switch (item_type)
+		{
+		case 1:
+		{
+			next_lol = ent.AddComponent<RigidBody>();
+			break;
+		}
+		case 2:
+		{
+			next_lol = ent.AddComponent<ComponentLoadAudio>();
+			break;
+		}
+		case 3:
+		{
+			next_lol = ent.AddComponent<GraphicsComponent>();
+			break;
+		}
+		case 4:
+		{
+			next_lol = ent.AddComponent<ColliderComponent>();
+			break;
+		}
 		/*
-		// Entity's tag(s)
-		std::set<std::string> tag_names;
-		
-		if (!ent_selected->HasEmptyTagList())
-			tag_names = ent_selected->GetTagList();
-		else
-			tag_names.emplace("Untagged");
-			
-		if (ImGui::BeginCombo("Tags", (*tag_names.begin()).c_str()))
+		case 5:
 		{
-			// Display list of existing tags
-			for (auto itr = tag_names.begin(); itr != tag_names.end(); ++itr)
-			{
-				// If tag is selected, it is removed from the entity
-				if (ImGui::Selectable((*itr).c_str()))
-					ent_selected->RemoveTag(*itr);
-			}
-
-			ImGui::Separator();
-
-			// Offer option to create a new tag
-			if (ImGui::Button("Add Tag..."))
-				ImGui::OpenPopup("Add a New Tag");
-
-			// Creates a small window which handles creation of a new tag
-
-			if (ImGui::BeginPopupModal("Add a New Tag", &open_tag))
-			{
-				ImGui::InputText("Tag name", LEVEL_EDITOR_VARIABLES::input_tag_buf, sizeof(LEVEL_EDITOR_VARIABLES::input_tag_buf));
-
-				ImGui::Dummy(ImVec2(0, 5));
-
-				if (ImGui::Button("Create Tag"))
-				{
-					ent_selected->AddTag(LEVEL_EDITOR_VARIABLES::input_tag_buf);
-
-					for (auto& c : LEVEL_EDITOR_VARIABLES::input_tag_buf)
-						c = '\0';
-
-					ImGui::CloseCurrentPopup();
-				}
-				else if (ImGui::Button("Cancel"))
-					ImGui::CloseCurrentPopup();
-
-				ImGui::EndPopup();
-			}
-
-			ImGui::EndCombo();
-		}
-		*/
-		/*
-		// Entity's layer
-		if (ImGui::BeginCombo("Layer", ent_selected->GetLayer().GetName().c_str()))
-		{
-			// Display list of existing layers
-			for (auto itr = EntityManager::GetInstance()->GetEntityLayers().begin(); itr != EntityManager::GetInstance()->GetEntityLayers().end(); ++itr)
-			{
-				std::string selectable_text = std::to_string((*itr).GetPosition()) + ": " + (*itr).GetName();
-
-				// If layer is selected in the drop-down menu, the entity's current layer will be set to it
-				if (ImGui::Selectable(selectable_text.c_str()))
-				{
-					ent_selected->SetLayer(*itr);
-					EntityManager::GetInstance()->UpdateLayersBasedOnEntity(ent_selected);
-				}
-			}
-
-			ImGui::Separator();
-
-			// Offer option to create a new tag
-			if (ImGui::Button("Set Layer..."))
-				ImGui::OpenPopup("Set a New Layer");
-
-			// Creates a small window which handles creation of a new tag
-			if (ImGui::BeginPopupModal("Set a New Layer", &open_layer))
-			{
-				ImGui::Text("Layer name: ");
-				ImGui::InputText("Layer name", LEVEL_EDITOR_VARIABLES::input_layer_name_buf, sizeof(LEVEL_EDITOR_VARIABLES::input_layer_name_buf));
-
-				ImGui::Dummy(ImVec2(0, 5));
-
-				ImGui::Text("Layer position: ");
-				ImGui::InputInt("Layer position", &LEVEL_EDITOR_VARIABLES::input_layer_position_buf);
-
-				ImGui::Dummy(ImVec2(0, 5));
-
-				if (ImGui::Button("Set Layer"))
-				{
-					ent_selected->SetLayer(LEVEL_EDITOR_VARIABLES::input_layer_name_buf, LEVEL_EDITOR_VARIABLES::input_layer_position_buf);
-					EntityManager::GetInstance()->UpdateLayersBasedOnEntity(ent_selected);
-
-					for (auto& c : LEVEL_EDITOR_VARIABLES::input_layer_name_buf)
-						c = '\0';
-
-					LEVEL_EDITOR_VARIABLES::input_layer_position_buf = 0;
-
-					ImGui::CloseCurrentPopup();
-				}
-				else if (ImGui::Button("Cancel"))
-					ImGui::CloseCurrentPopup();
-
-				ImGui::EndPopup();
-			}
-			ImGui::EndCombo();
-		}
-		*/
-/*
-		// Entity's pickable state
-		ImGui::Checkbox("Pickable in Level Editor", &(ent_selected->GetPickableStatusRef()));
-		ImGui::Separator();
-
-		ImGui::Checkbox("SetActive", &(ent_selected->GetActiveStatusRef()));
-		*/
-		//=========================Example for component layouut in inspected
-		TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
-		if (trans_comp != NULL)
-		{
-			if (ImGui::CollapsingHeader("Transform"))
-			{
-				//float* rotation = &ent_selected->GetComponent<TransformComponent>().GetRotation().m[2];
-
-				ImGui::InputFloat3("Position", glm::value_ptr(trans_comp->_position) ); //,-100.f, 100.f); // Edit 3 floats representing a color
-				ImGui::InputFloat3("Scale", glm::value_ptr(trans_comp->_scale)); //, 0.0f, 100.f);
-				ImGui::InputFloat("Rotation Z", glm::value_ptr(trans_comp->_rotation));
-			}
+			next_lol = ent.AddComponent<AABBCollider>();
+			break;
 		}
 
-		ComponentCollider* col_comp = ent.getComponent<ComponentCollider>();
-		if (col_comp != NULL)
+		case 6:
 		{
-			//~~! Need Help==//
-			//1. Check collider type that it have
-			//2. Get the right collider type
-			//3. Insert name
-			std::string name = "AABBCollider";	//e.g.
-			//4. May need loop to loop through all collider
-			if (ImGui::CollapsingHeader(name.c_str()))
-			{
-
-			}
+			next_lol = ent.AddComponent<OBBCollider>();
+			break;
 		}
-
-    ComponentLoadAudio* aud_manager = ent.getComponent<ComponentLoadAudio>();
-    if (aud_manager != nullptr)
-    {
-      if (ImGui::CollapsingHeader("Audio Manager"))
-      {
-        if (ImGui::Button("Add Audio"))
-        {
-
-        }
-        
-
-        for (auto& [path, name] : aud_manager->_sounds)
-        {
-          char buf[512];
-          char buf2[256];
-          strcpy_s(buf, 512, path);
-          strcpy_s(buf2, 256, name);
-          ImGui::InputText("", buf, 512);
-          ImGui::SameLine(0, 10);
-          ImGui::InputText("", buf2, 256);
-        }
-      }
-    }
+		case 7:
+		{
+			next_lol = ent.AddComponent<PlaneCollider>();
+			break;
+		}
+		case 8:
+		{
+			next_lol = ent.AddComponent<SphereCollider>();
+			break;
+		}
+		case 9:
+		{
+			next_lol = ent.AddComponent<CapsuleCollider>();
+			break;
+		}*/
+		}
+		if (next_lol == nullptr)
+		{
+			std::cout << "Component has already been created" << std::endl;
+		}
 	}
 }

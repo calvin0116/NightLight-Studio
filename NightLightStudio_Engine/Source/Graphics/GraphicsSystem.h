@@ -8,7 +8,7 @@
 #include "ShaderSystem.h"
 #include "ModelLoader.h"
 #include "TextureLoader.h"
-#include "MeshManager.h"
+#include "ModelManager.h"
 #include "LightSystem.h"
 #include "DebugManager.h"
 #include "CameraSystem.h"
@@ -78,7 +78,7 @@ namespace NS_GRAPHICS
         // Sets perspective frustrum, very expensive, DO NOT CALL EVERY FRAME
         // Default values are set if not called throughout program lifetime
         // fov must be given in degrees
-        void SetProjectionMatrix(const float& fov = 45.f, const float& aspect_ratio = 1.78f, const float& near_plane = 0.01f, const float& far_plane = 1000.f);
+        void SetProjectionMatrix(const float& fov = 45.f, const float& aspect_ratio = 1.78f, const float& near_plane = 1.0f, const float& far_plane = 1000.f);
 
         // Updates uniform light variables based on active light components for all shaders
         // Temporarily hard set 1 type of light each
@@ -118,6 +118,8 @@ namespace NS_GRAPHICS
         // Unlinks mesh to specified entity for rendering, if any
         void DetachMesh(Entity& entity);
 
+        glm::mat4 GetInverseViewMatrix();
+
     private:
 
         bool _hasInit;
@@ -126,7 +128,7 @@ namespace NS_GRAPHICS
         ShaderSystem* shaderManager;
         ModelLoader* modelLoader;
         TextureLoader* textureLoader;
-        MeshManager* meshManager;
+        ModelManager* modelManager;
         LightSystem* lightManager;
         DebugManager* debugManager;
         CameraSystem* cameraManager;

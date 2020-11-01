@@ -1,12 +1,12 @@
-#include "LevelEditor.h"
+#include "LevelEditor_SceneEditor.h"
 #include "../imgui/imguizmo/ImGuizmo.h"
 #include "../../Graphics/GraphicsSystem.h"
 
-const float identityMatrix[16] =
-{ 1.f, 0.f, 0.f, 0.f,
-    0.f, 1.f, 0.f, 0.f,
-    0.f, 0.f, 1.f, 0.f,
-    0.f, 0.f, 0.f, 1.f };
+#include "LevelEditor_ECHelper.h"
+
+#include "LevelEditor_Console.h"
+#include "../../Input/SystemInput.h"
+#include "../../Graphics/CameraSystem.h"
 
 void Frustum(float left, float right, float bottom, float top, float znear, float zfar, float* m16);
 void Perspective(float fovyInDegrees, float aspectRatio, float znear, float zfar, float* m16);
@@ -14,63 +14,254 @@ void Cross(const float* a, const float* b, float* r);
 float Dot(const float* a, const float* b);
 void Normalize(const float* a, float* r);
 void LookAt(const float* eye, const float* at, const float* up, float* m16);
-void EditTransform(const float* cameraView, float* cameraProjection, float* matrix, bool editTransformDecomposition);
 
-// PURELY FOR TESTING ONLY
-float objectMatrix[16] =
-{ 1.f, 0.f, 0.f, 0.f,
-  0.f, 1.f, 0.f, 0.f,
-  0.f, 0.f, 1.f, 0.f,
-  0.f, 0.f, 0.f, 1.f };
-
-void LevelEditor::LE_SceneEditor()
+SceneEditor::SceneEditor()
+    : _lastPos_Start{ false }, _lastPos_ELP{}, _lastEnter{ false }
 {
-    //************************************************* Scene Editor **************************************************//
+}
 
+SceneEditor::~SceneEditor()
+{
+}
+
+void SceneEditor::Start()
+{
+    // Set up Command to run
+    COMMAND setPos =
+        [](std::any pos)
+    {
+        ENTITY_LAST_POS obj = std::any_cast<ENTITY_LAST_POS>(pos);
+
+        glm::mat4 newPos = obj._newPos;
+        TransformComponent* trans_comp = obj._transComp;
+        glm::mat4 lastPos = {};
+
+        if (trans_comp != NULL)
+        {
+            lastPos = trans_comp->GetModelMatrix();
+
+            float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
+            ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(newPos), trans, rot, scale);
+
+            trans_comp->_position = glm::make_vec3(trans);
+            trans_comp->_rotation = glm::make_vec3(rot);
+            trans_comp->_scale = glm::make_vec3(scale);
+        }
+        ENTITY_LAST_POS returnObj{ obj._transComp, lastPos };
+        return returnObj;
+    };
+
+    _levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"),
+        setPos,
+        setPos);
+
+    // PRESS F TO FOCUS ON SELECTED ITEM
+    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("FOCUS_CAMERA", SystemInput_ns::IKEY_F, "IDET", SystemInput_ns::OnPress, 
+        [this]() 
+        {
+            if (LE_ECHELPER->GetSelectedEntityID() != -1)
+            {
+                Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
+                TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+                if (trans_comp != NULL)
+                {
+                    NS_GRAPHICS::Camera& cam = NS_GRAPHICS::CameraSystem::GetInstance().GetCamera();
+                    glm::vec3 camFront = cam.GetFront();
+                    const float dist = 10.0f;
+                    camFront *= glm::vec3{ dist, dist, dist };
+                    cam.SetCameraPosition(trans_comp->_position - camFront);
+                    NS_GRAPHICS::CameraSystem::GetInstance().ForceUpdate();
+                }
+            }
+        });
+}
+
+void SceneEditor::Init()
+{
+}
+
+void SceneEditor::Run()
+{
     ImGuiIO& io = ImGui::GetIO();
 
-    ImGui::Begin("Scene Editor");
+    //ImGui::Begin("Scene Editor");
 
     NS_GRAPHICS::CameraSystem& cm = NS_GRAPHICS::CameraSystem::GetInstance();
     glm::mat4 cmMat = cm.GetViewMatrix();
-    float camView[16] = { 0 };
-    for (int i = 0; i < 4; ++i)
-        for (int j = 0; j < 4; ++j)
-        {
-            camView[(i*4) + j] = cmMat[i][j];
-        }
-
-
-    /*
-    float camYAngle = 165.f / 180.f * 3.14159f;
-    float camXAngle = 32.f / 180.f * 3.14159f;
-    float camDistance = 4.f;
-    //float camView[16] = { 0 };
-    if (firstFrame)
-    {
-        float eye[] = { cosf(camYAngle) * cosf(camXAngle) * camDistance, sinf(camXAngle) * camDistance, sinf(camYAngle) * cosf(camXAngle) * camDistance };
-        float at[] = { 0.f, 0.f, 0.f };
-        float up[] = { 0.f, 1.f, 0.f };
-        LookAt(eye, at, up, camView);
-        firstFrame = false;
-    }
-    */
+    float* camView = glm::value_ptr(cmMat);
 
     float cameraProjection[16];
 
-    float fov = 27.0f;
+    // Matches the most closely to the actual camera
+    // If gizmos don't match, change this?
+    float fov = 22.5f;
     Perspective(fov, io.DisplaySize.x / io.DisplaySize.y, 0.1f, 100.f, cameraProjection);
 
     // **** FOR TESTING PURPOSES ONLY
-    ImGuizmo::DrawGrid(camView, cameraProjection, identityMatrix, 100.0f);
+    // ImGuizmo::DrawGrid(camView, cameraProjection, identityMatrix, 100.0f);
 
-    ImGuizmo::SetID(0);
-    EditTransform(camView, cameraProjection, objectMatrix, true);
+    // Might wanna change this
+    if (LE_ECHELPER->GetSelectedEntityID() != -1)
+    {
+        Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
+        TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+        if (trans_comp != NULL)
+        {
+            glm::mat4 matObj = trans_comp->GetModelMatrix();
+            ImGuizmo::SetID(0);
 
-    // **********
+            // Updates object's position status
+            // Might want to change this
+            if (EditTransform(camView, cameraProjection, glm::value_ptr(matObj), true))
+            {
+                // Checks FIRST frame of manipulation only
+                if (!_lastPos_Start)
+                {
+                    _lastPos_Start = true;
+                    _lastPos_ELP = { trans_comp, trans_comp->GetModelMatrix() };
+                }
 
-    //ImGuizmo::ViewManipulate(camView, camDistance, ImVec2(io.DisplaySize.x - 128, 0), ImVec2(128, 128), 0x10101010);
-    ImGui::End();
+                // Sets object to new position
+                float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
+                ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(matObj), trans, rot, scale);
+
+                trans_comp->_position = glm::make_vec3(trans);
+                trans_comp->_rotation = glm::make_vec3(rot);
+                trans_comp->_scale = glm::make_vec3(scale);
+            }
+            else
+            {
+                // Checks if not manipulating and mouse is let go
+                if (_lastPos_Start && SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IMOUSE_LBUTTON))
+                {
+                    _lastPos_Start = false;
+                    // New position for the object
+                    ENTITY_LAST_POS newObj{ trans_comp , matObj };
+                    std::any curPos = newObj;
+
+                    // Reset object back to original position
+                    float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
+                    ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(_lastPos_ELP._newPos), trans, rot, scale);
+                    trans_comp->_position = glm::make_vec3(trans);
+                    trans_comp->_rotation = glm::make_vec3(rot);
+                    trans_comp->_scale = glm::make_vec3(scale);
+
+                    // Runs command to move object to new position from old position
+                    _levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
+                }
+                else if (_lastEnter)
+                {
+                    _lastEnter = false;
+
+                    ENTITY_LAST_POS newObj{ trans_comp , matObj };
+                    std::any curPos = newObj;
+
+                    // Runs command to move object to new position from old position
+                    _levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
+                }
+                else
+                {
+                    // Sets object to new position
+                    float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
+                    ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(matObj), trans, rot, scale);
+
+                    trans_comp->_position = glm::make_vec3(trans);
+                    trans_comp->_rotation = glm::make_vec3(rot);
+                    trans_comp->_scale = glm::make_vec3(scale);
+                }
+            }
+        }
+    }
+}
+
+void SceneEditor::Exit()
+{
+}
+
+bool SceneEditor::EditTransform(const float* cameraView, float* cameraProjection, float* matrix, bool editTransformDecomposition)
+{
+    static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
+    static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
+    static bool useSnap = false;
+    static float snap[3] = { 1.f, 1.f, 1.f };
+    static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
+    static float boundsSnap[] = { 0.1f, 0.1f, 0.1f };
+    static bool boundSizing = false;
+    static bool boundSizingSnap = false;
+
+    if (editTransformDecomposition)
+    {
+        if (ImGui::IsKeyPressed(90))
+            mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+        if (ImGui::IsKeyPressed(69))
+            mCurrentGizmoOperation = ImGuizmo::ROTATE;
+        if (ImGui::IsKeyPressed(82)) // r Key
+            mCurrentGizmoOperation = ImGuizmo::SCALE;
+        if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
+            mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+        ImGui::SameLine();
+        if (ImGui::RadioButton("Rotate", mCurrentGizmoOperation == ImGuizmo::ROTATE))
+            mCurrentGizmoOperation = ImGuizmo::ROTATE;
+        ImGui::SameLine();
+        if (ImGui::RadioButton("Scale", mCurrentGizmoOperation == ImGuizmo::SCALE))
+            mCurrentGizmoOperation = ImGuizmo::SCALE;
+        float matrixTranslation[3], matrixRotation[3], matrixScale[3];
+        ImGuizmo::DecomposeMatrixToComponents(matrix, matrixTranslation, matrixRotation, matrixScale);
+
+        if (ImGui::InputFloat3("Tr##TRANSLATION", matrixTranslation, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            _lastEnter = true;
+        }
+        if (ImGui::InputFloat3("Rt##ROTATION", matrixRotation, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            _lastEnter = true;
+        }
+        if (ImGui::InputFloat3("Sc##SCALE", matrixScale, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            _lastEnter = true;
+        }
+
+        ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, matrix);
+
+        if (mCurrentGizmoOperation != ImGuizmo::SCALE)
+        {
+            if (ImGui::RadioButton("World", mCurrentGizmoMode == ImGuizmo::WORLD))
+                mCurrentGizmoMode = ImGuizmo::WORLD;
+            ImGui::SameLine();
+            if (ImGui::RadioButton("Local", mCurrentGizmoMode == ImGuizmo::LOCAL))
+                mCurrentGizmoMode = ImGuizmo::LOCAL;
+        }
+        if (ImGui::IsKeyPressed(83))
+            useSnap = !useSnap;
+        ImGui::Checkbox("", &useSnap);
+        ImGui::SameLine();
+
+        switch (mCurrentGizmoOperation)
+        {
+        case ImGuizmo::TRANSLATE:
+            ImGui::InputFloat3("Snap", &snap[0]);
+            break;
+        case ImGuizmo::ROTATE:
+            ImGui::InputFloat("Angle Snap", &snap[0]);
+            break;
+        case ImGuizmo::SCALE:
+            ImGui::InputFloat("Scale Snap", &snap[0]);
+            break;
+        }
+        ImGui::Checkbox("Bound Sizing", &boundSizing);
+        if (boundSizing)
+        {
+            ImGui::PushID(3);
+            ImGui::Checkbox("", &boundSizingSnap);
+            ImGui::SameLine();
+            ImGui::InputFloat3("Snap", boundsSnap);
+            ImGui::PopID();
+        }
+    }
+    ImGuiIO& io = ImGui::GetIO();
+    ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+    return ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL, useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
+
 }
 
 
@@ -167,10 +358,11 @@ void LookAt(const float* eye, const float* at, const float* up, float* m16)
     m16[15] = 1.0f;
 }
 
-void EditTransform(const float* cameraView, float* cameraProjection, float* matrix, bool editTransformDecomposition)
+/*
+bool EditTransform(const float* cameraView, float* cameraProjection, float* matrix, bool editTransformDecomposition)
 {
     static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
-    static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
+    static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
     static bool useSnap = false;
     static float snap[3] = { 1.f, 1.f, 1.f };
     static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
@@ -203,11 +395,11 @@ void EditTransform(const float* cameraView, float* cameraProjection, float* matr
 
         if (mCurrentGizmoOperation != ImGuizmo::SCALE)
         {
-            if (ImGui::RadioButton("Local", mCurrentGizmoMode == ImGuizmo::LOCAL))
-                mCurrentGizmoMode = ImGuizmo::LOCAL;
-            ImGui::SameLine();
             if (ImGui::RadioButton("World", mCurrentGizmoMode == ImGuizmo::WORLD))
                 mCurrentGizmoMode = ImGuizmo::WORLD;
+            ImGui::SameLine();
+            if (ImGui::RadioButton("Local", mCurrentGizmoMode == ImGuizmo::LOCAL))
+                mCurrentGizmoMode = ImGuizmo::LOCAL;
         }
         if (ImGui::IsKeyPressed(83))
             useSnap = !useSnap;
@@ -238,5 +430,6 @@ void EditTransform(const float* cameraView, float* cameraProjection, float* matr
     }
     ImGuiIO& io = ImGui::GetIO();
     ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-    ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL, useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
+    return ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL, useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
 }
+*/
