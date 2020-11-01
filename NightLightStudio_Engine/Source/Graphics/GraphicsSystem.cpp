@@ -165,7 +165,7 @@ namespace NS_GRAPHICS
 
 		Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformcylinder;
-		testtransformcylinder._position = { -3.f, 0.f,0.f };
+		testtransformcylinder._position = { -2.f, 0.f,0.f };
 		testtransformcylinder._rotation = { 0.f, 0.f,0.f };
 		testdrawCylinder.AttachComponent<ComponentTransform>(testtransformcylinder);
 
