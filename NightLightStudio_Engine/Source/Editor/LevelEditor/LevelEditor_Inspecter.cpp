@@ -97,9 +97,40 @@ void InspectorWindow::Run()
 
 			}
 
+			//Remove component
 			if (!not_remove)
 			{
 				ent.RemoveComponent<ComponentCollider>();
+				/*
+				switch (col_comp->colliderType)
+				{
+				
+					case COLLIDERS::PLANE:
+					{
+						ent.RemoveComponent<PlaneCollider>();
+						break;
+					}
+					case COLLIDERS::AABB:
+					{
+						ent.RemoveComponent<AABBCollider>();
+						break;
+					}
+					case COLLIDERS::SPHERE:
+					{
+						ent.RemoveComponent<SphereCollider>();
+						break;
+					}
+					case COLLIDERS::OBB:
+					{
+						ent.RemoveComponent<OBBCollider>();
+						break;
+					}
+					case COLLIDERS::CAPSULE:
+					{
+						ent.RemoveComponent<CapsuleCollider>();
+						break;
+					}
+				}*/
 				not_remove = true;
 			}
 		}
@@ -180,7 +211,8 @@ void InspectorWindow::Run()
 		}
 
 		static int item_type = 0;
-		ImGui::Combo(" ", &item_type, "Add component\0  Collider\0  RigidBody\0  Audio\0  Graphics\0");
+		//AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0
+		ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0  Collider");
 
 		void* next_lol = nullptr;
 
@@ -190,24 +222,51 @@ void InspectorWindow::Run()
 			{
 				case 1:
 				{
-					next_lol = ent.AddComponent<ColliderComponent>();
+					next_lol = ent.AddComponent<RigidBody>();
 					break;
 				}
 				case 2:
 				{
-					next_lol = ent.AddComponent<RigidBody>();
+					next_lol = ent.AddComponent<ComponentLoadAudio>();
 					break;
 				}
 				case 3:
 				{
-					next_lol = ent.AddComponent<ComponentLoadAudio>();
+					next_lol = ent.AddComponent<GraphicsComponent>();
 					break;
 				}
 				case 4:
 				{
-					next_lol = ent.AddComponent<GraphicsComponent>();
+					next_lol = ent.AddComponent<ColliderComponent>();
 					break;
 				}
+				/*
+				case 5:
+				{
+					next_lol = ent.AddComponent<AABBCollider>();
+					break;
+				}
+				
+				case 6:
+				{
+					next_lol = ent.AddComponent<OBBCollider>();
+					break;
+				}
+				case 7:
+				{
+					next_lol = ent.AddComponent<PlaneCollider>();
+					break;
+				}
+				case 8:
+				{
+					next_lol = ent.AddComponent<SphereCollider>();
+					break;
+				}
+				case 9:
+				{
+					next_lol = ent.AddComponent<CapsuleCollider>();
+					break;
+				}*/
 			}
 			if (next_lol == nullptr)
 			{
