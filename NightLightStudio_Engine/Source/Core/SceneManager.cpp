@@ -294,8 +294,10 @@ namespace NS_SCENE
 			{ 
 				//const std::type_info& tinf = typeid(*comp);
 				//std::cout << tinf.name() << std::endl;
+				Value comp_val = comp->Write();
 
-				NS_SERIALISER::ChangeData(ent_val, comp->ser_name, comp->Write().GetObject());
+				if(comp_val.IsObject())
+					NS_SERIALISER::ChangeData(ent_val, comp->ser_name, comp_val.GetObject());
 			}
 
 			NS_SERIALISER::ChangeData(obj_val, EntityName[ent.getId()], ent_val->GetObject());
@@ -308,6 +310,8 @@ namespace NS_SCENE
 
 		//scene.PrintDataList();
 		scene->Save();
+
+		std::cout << "Save scene success~!" << std::endl;
 	}
 
 	bool SceneManager::CheckIfSceneExist(std::string& scene_name)
