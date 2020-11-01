@@ -1,0 +1,12 @@
+{
+	"Default_Prefab" :{
+		"TransformComponent":{
+			"Position" : [0.0,0.0,0.0],
+			"Scale" : [1.0, 1.0, 1.0],
+			"Rotate" : [0.0, 0.0, 0.0]
+		},
+		"CameraComponent":{
+			
+		}
+	}
+}

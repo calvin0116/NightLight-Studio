@@ -5,6 +5,9 @@
 
 #include "../Input/SystemInput.h"
 #include <filesystem>
+#include <typeinfo>
+
+#undef GetObject
 
 namespace fs = std::filesystem;
 
@@ -44,7 +47,7 @@ namespace NS_SCENE
 			//std::cout << cur_path_name.parent_path() << std::endl;
 
 			//Insert Scene Name with its relative path
-			scene_list[cur_path_name.stem().string()] = new Parser(cur_path_name.stem().string(), cur_path_name.parent_path().string());
+			scene_list[cur_path_name.stem().string()] = new NS_SERIALISER::Parser(cur_path_name.stem().string(), cur_path_name.parent_path().string());
 			//Individual files in Scene folder
 			std::cout << cur_path_name.stem().string() << std::endl;
 
@@ -139,7 +142,7 @@ namespace NS_SCENE
 
 	void SceneManager::LoadScene()
 	{
-		Parser* scene = scene_list[current_scene];
+		NS_SERIALISER::Parser* scene = scene_list[current_scene];
 		scene->Load();
 		to_change_scene = SC_NOCHANGE;
 		
@@ -160,14 +163,20 @@ namespace NS_SCENE
 
 	void SceneManager::InitScene()
 	{
-		Parser* scene = scene_list[current_scene];
+		NS_SERIALISER::Parser* scene = scene_list[current_scene];
 		//~~!Insert data back to the objects
 	}
 
 	void SceneManager::ExitScene()
 	{
 		scene_list[current_scene]->CleanDoc();
-		//G_ECMANAGER->
+
+		//Delete all entity
+		for (Entity ent : G_ECMANAGER->getEntityContainer())
+		{
+			G_ECMANAGER->FreeEntity(ent.getId());
+		}
+
 		current_scene = next_scene;
 	}
 	
@@ -242,7 +251,7 @@ namespace NS_SCENE
 		}
 #endif
 
-		Parser* scene = scene_list[scene_name];
+		NS_SERIALISER::Parser* scene = scene_list[scene_name];
 		scene->Load();
 	}
 
@@ -250,22 +259,21 @@ namespace NS_SCENE
 	{
 		std::cout << "Saving scene....." << std::endl;
 		//Save scene
-		//Parser* scene = scene_list[current_scene];
-		std::string output_filename = "Output";
-
-		Parser scene = Parser(output_filename, scene_parser.GetPath() );
+		NS_SERIALISER::Parser* scene = scene_list[current_scene];
+		//std::string output_filename = "Scene/Output"; <- For testing
+		//NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath() );
 		
 		struct stat buffer;
-		if (stat(scene.GetFilePath().c_str(), &buffer) != 0)
+		if (stat(scene->GetFilePath().c_str(), &buffer) != 0)
 		{
 			std::cout << "file does not exist, creating file....." << std::endl;
 			//Creates file
-			std::ofstream MyFile(scene.GetFilePath().c_str());
+			std::ofstream MyFile(scene->GetFilePath().c_str());
 
 			MyFile << "{\n}";
 		}
-		scene.Load();
-		scene.CleanDoc();
+		scene->Load();
+		scene->CleanDoc();
 
 		//Add Objects objects
 		Value* obj_val = new Value;
@@ -279,37 +287,31 @@ namespace NS_SCENE
 		{
 			Value* ent_val = new Value;
 			ent_val->SetObject();
-			//Add Entity json data
-			//scene.ChangeData(ent_val, "Variable in object of object", 5);
-			//scene.PrintDataList();
 			//~~!! Need to know what component the Entity have and loop through them
 			//Component Loop
 			
 			for(ISerializable* comp : ent.getEntityComponentContainer())
 			{ 
-				comp->Write();
-			}
-			//Entity entity = G_ECMANAGER->getEntity(ent.first);
-			/*
-			for (ISerializable* ser : entity.getEntityComponentContainer())
-			{
-				
-				Value* comp_val = new Value;
-				*comp_val = ser->Write();
-				scene.ChangeData(ent_val, ent.second.c_str(), comp_val->GetObject());
-				
-			}*/
+				//const std::type_info& tinf = typeid(*comp);
+				//std::cout << tinf.name() << std::endl;
+				Value comp_val = comp->Write();
 
-			scene.ChangeData(obj_val, EntityName[ent.getId()], ent_val->GetObject());
+				if(comp_val.IsObject())
+					NS_SERIALISER::ChangeData(ent_val, comp->ser_name, comp_val.GetObject());
+			}
+
+			NS_SERIALISER::ChangeData(obj_val, EntityName[ent.getId()], ent_val->GetObject());
 
 			delete ent_val;
 		}
-		scene.AddData("Objects", obj_val);
+		scene->AddData("Objects", obj_val);
 
 		//delete obj_val;
 
 		//scene.PrintDataList();
-		scene.Save();
+		scene->Save();
+
+		std::cout << "Save scene success~!" << std::endl;
 	}
 
 	bool SceneManager::CheckIfSceneExist(std::string& scene_name)
@@ -336,7 +338,7 @@ namespace NS_SCENE
 				//Create Scene parser and scene if not found
 				if (!found)
 				{
-					scene_list[cur_path_name.stem().string()] = new Parser(cur_path_name.stem().string(), cur_path_name.parent_path().string());
+					scene_list[cur_path_name.stem().string()] = new NS_SERIALISER::Parser(cur_path_name.stem().string(), cur_path_name.parent_path().string());
 				}
 				break;
 			}

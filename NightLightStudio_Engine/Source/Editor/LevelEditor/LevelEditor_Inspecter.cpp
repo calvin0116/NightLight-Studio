@@ -185,8 +185,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 		if (ImGui::CollapsingHeader("Graphics component", &not_remove))
 		{
 			ImGui::Checkbox("IsActive##Grahpic", &graphics_comp->_isActive);
-			_levelEditor->LE_AddInputText("Texture", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
-			_levelEditor->LE_AddInputText("Model", graphics_comp->_modelFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			_levelEditor->LE_AddInputText("Texture file", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			_levelEditor->LE_AddInputText("Model file", graphics_comp->_modelFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 		}
 
@@ -218,8 +218,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	}
 
 	static int item_type = 0;
-	//AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0
-	ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0  Collider");
+	
+	ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
 
 	void* next_lol = nullptr;
 
@@ -242,38 +242,47 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 			next_lol = ent.AddComponent<GraphicsComponent>();
 			break;
 		}
+		/*
 		case 4:
 		{
 			next_lol = ent.AddComponent<ColliderComponent>();
 			break;
-		}
-		/*
+		}*/
+		
 		case 5:
 		{
-			next_lol = ent.AddComponent<AABBCollider>();
+			ColliderComponent aabb(COLLIDERS::AABB);
+			ent.AttachComponent(aabb);
 			break;
 		}
 
 		case 6:
 		{
-			next_lol = ent.AddComponent<OBBCollider>();
+			ColliderComponent obb(COLLIDERS::OBB);
+			//next_lol = ent.AddComponent<OBBCollider>();
+			ent.AttachComponent(obb);
 			break;
 		}
 		case 7:
 		{
-			next_lol = ent.AddComponent<PlaneCollider>();
+			//next_lol = ent.AddComponent<PlaneCollider>();
+			ColliderComponent plane(COLLIDERS::PLANE);
+			ent.AttachComponent(plane);
 			break;
 		}
 		case 8:
 		{
-			next_lol = ent.AddComponent<SphereCollider>();
+			ColliderComponent sphere(COLLIDERS::SPHERE);
+			ent.AttachComponent(sphere);
 			break;
 		}
 		case 9:
 		{
-			next_lol = ent.AddComponent<CapsuleCollider>();
+			//next_lol = ent.AddComponent<CapsuleCollider>();
+			ColliderComponent capsule(COLLIDERS::CAPSULE);
+			ent.AttachComponent(capsule);
 			break;
-		}*/
+		}
 		}
 		if (next_lol == nullptr)
 		{

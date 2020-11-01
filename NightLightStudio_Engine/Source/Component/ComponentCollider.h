@@ -167,7 +167,7 @@ typedef struct ComponentCollider : public ISerializable//: public IComponent
 	void CollisionTimeReset();
 
 	virtual void	Read(Value&) { };
-	virtual Value	Write() { return Value(); };
+	virtual Value	Write();
 	virtual Value& Write(Value& val) { return val; };
 
 	ComponentCollider& operator=(ComponentCollider& rhs)

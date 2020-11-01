@@ -9,7 +9,34 @@
 ComponentCollider::ComponentCollider(COLLIDERS _col)
 	: collisionTime{ FLT_MAX }, colliderType(_col)
 {
-
+	switch (_col)
+	{
+		case COLLIDERS::PLANE:
+		{
+			strcpy_s(ser_name, "Plane Collider");
+			break;
+		}
+		case COLLIDERS::AABB:
+		{
+			strcpy_s(ser_name, "AABB Collider");
+			break;
+		}
+		case COLLIDERS::SPHERE:
+		{
+			strcpy_s(ser_name, "Sphere Collider");
+			break;
+		}
+		case COLLIDERS::OBB:
+		{
+			strcpy_s(ser_name , "OBB Collider");
+			break;
+		}
+		case COLLIDERS::CAPSULE:
+		{
+			strcpy_s(ser_name, "Capsule Collider");
+			break;
+		}
+	}
 }
 
 ComponentCollider::ComponentCollider() : collisionTime{ FLT_MAX }, colliderType(COLLIDERS::AABB) // default this
@@ -19,6 +46,12 @@ ComponentCollider::ComponentCollider() : collisionTime{ FLT_MAX }, colliderType(
 void ComponentCollider::CollisionTimeReset()
 {
 	collisionTime = FLT_MAX;
+}
+
+inline Value ComponentCollider::Write() 
+{ 
+	Value val(rapidjson::kObjectType);
+	return val;
 }
 
 

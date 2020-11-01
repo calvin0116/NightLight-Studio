@@ -6,6 +6,8 @@
 #include "../../Component/Components.h"
 #include "LevelEditor_Console.h"
 
+#include "../../Core/SceneManager.h"
+
 void LevelEditor::LE_MainMenuBar()
 {
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
@@ -38,7 +40,13 @@ void LevelEditor::LE_MainMenuBar()
 
     if (ImGui::BeginMenuBar())
     {
-        LE_AddMenuWithItems("File", { "Open" });
+        LE_AddMenuWithItems("File", 
+            { "Open" , "Save"},
+            { "" , "Ctrl-S" },
+            {
+                []() {},    //Open
+                []() { NS_SCENE::SYS_SCENE_MANAGER->SaveScene(); }
+            });
         LE_AddMenuWithItems("Edit", 
             { "Undo", "Redo" }, 
             { "Ctrl-Z", "Ctrl-Y" }, 
@@ -46,6 +54,8 @@ void LevelEditor::LE_MainMenuBar()
                 [this]() { LE_AccessWindowFunc("Console", &ConsoleLog::UndoLastCommand); },
                 [this]() { LE_AccessWindowFunc("Console", &ConsoleLog::RedoLastCommand); }
             });
+
+
 
         std::vector<std::string> editorNames;
         std::vector<std::function<void()>> funcs;
@@ -59,6 +69,8 @@ void LevelEditor::LE_MainMenuBar()
         }
         LE_AddMenuWithItems("Windows", editorNames, {}, funcs);
         //LE_AddMenuOnly("Windows", [&](){ LE_AddMenuWithItems("SecondWindows", editorNames, {}, funcs);});
+
+        LE_AddMenuWithItems("Current Scene: ~" + NS_SCENE::SYS_SCENE_MANAGER->GetCurrentScene() + "~ Press 'Ctrl+1' to go next scene");
 
         ImVec2 size = viewport->GetWorkSize();
         ImGui::SetCursorPosX(size.x / 2.0f);

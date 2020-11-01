@@ -3,9 +3,6 @@
 #include "../../framework.h"
 #include <windows.h>
 
-
-
-
 class ENGINE_API FluffyUnicornEngine
 {
 	enum ENGINESTATE

@@ -29,26 +29,25 @@ void HierarchyInspector::Run()
 		InitBeforeRun();
 
 	ImGuiWindowFlags window_flags = 0;
-	//ImVec4 tranform_bar = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	/*
-	if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_DOWN))
+	ImVec4 tranform_bar = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+	//Delete Entity
+	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_DELETE))
 	{
-		if(selected_index != -1)
-			LE_ECHELPER->selected_ents[selected_index] = false;
-
-		if (selected_index < NS_SCENE::SYS_SCENE_MANAGER->EntityName.size())
-			++selected_index;
-		else
-			selected_index = 0;
-
-		LE_ECHELPER->selected_ents[selected_index] = true;
-
-	}*/
+		for (Entity ent : G_ECMANAGER->getEntityContainer())
+		{
+			if (LE_ECHELPER->SelectedEntities()[ent.getId()])
+			{
+				G_ECMANAGER->FreeEntity(ent.getId());
+			}
+		}
+	}
 	//Add entity button
 	if (ImGui::Button("Add Entity"))
 	{
 		//Add entity with default having a transform component
-		G_ECMANAGER->BuildEntity().AddComponent<TransformComponent>();
+		TransformComponent tran;
+		G_ECMANAGER->BuildEntity().AttachComponent(tran);
 
 	}
 	// List box
@@ -58,12 +57,13 @@ void HierarchyInspector::Run()
 	if (ImGui::InputText("Search", search_buf, 256))
 		search = std::string(search_buf);
 
+	// Entity list
 	static int index_selected = -1;
 	int n = 1;
-	//EntityName
-	//for (auto& ent : NS_SCENE::SYS_SCENE_MANAGER->EntityName)
+
 	for (Entity ent : G_ECMANAGER->getEntityContainer())
 	{
+		// For searching
 		std::string& ent_name = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
 		//Check if entity is related to the search string inserted
 		if (search != "" && findCaseInsensitive(ent_name, search) == std::string::npos)
@@ -72,11 +72,10 @@ void HierarchyInspector::Run()
 			continue;
 		}
 
+		// Print out entity
 		char buf[100];
 		sprintf_s(buf, "%i. %s", n, ent_name.c_str());
-		//Check if any the object has been selected
-		//ImGuiTreeNodeFlags flag = 
-			//LE_ECHELPER->SelectedEntities()[ent.getId()]
+
 		//If more then one child, get the child
 		if (ent.getNumChildren() > 0)
 		{
@@ -84,7 +83,6 @@ void HierarchyInspector::Run()
 			if (ImGui::TreeNode(buf))
 			{
 				//~~!!Get child to be printed out as selectable
-
 				ImGui::TreePop();
 			}
 		}

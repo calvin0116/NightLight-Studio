@@ -39,8 +39,35 @@
                     0.0,
                     0.0
                 ]
-            },
-            "AudioManager": {}
+            }
+        },
+        "Plane_2": {
+            "TransformComponent": {
+                "Position": [
+                    5.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    10.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        "Plane_3": {
+            "TransformComponent": {
+                "Position": [
+                    5.0,
+                    -2.0,
+                    1.0
+                ],
+                "Scale": [
+                    10.0,
+                    1.0,
+                    10.0
+                ]
+            }
         }
     }
 }

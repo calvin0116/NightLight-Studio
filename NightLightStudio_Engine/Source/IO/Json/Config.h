@@ -33,7 +33,7 @@ struct ConfigData
 class Config : public MySystem ,public Singleton<Config> {
 private:
 	ConfigData config_d;
-	Parser parser;
+	NS_SERIALISER::Parser parser;
 public:
 	ENGINE_API Config()
 		:config_d{}

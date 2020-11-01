@@ -1,41 +1,74 @@
 {
-	"Objects" :{
-		"Camera" :{
-			"TransformComponent":{
-				"Position" : [1.0,2.0,3.0],
-				"Scale" : [1.0, 1.0, 1.0],
-				"Rotate" : [0.0, 0.0, 0.0]
-			},
-			"CameraComponent":{
-				
-			}
-		},
-		"Plane" : {
-			"TransformComponent":{
-				"Position" : [5.0,2.0,1.0],
-				"Scale" : [10.0, 1.0, 10.0],
-				"Rotate" : [0.0, 0.0, 0.0]
-			},
-			"ColliderComponent":{
-				
-			},
-			"RigidBody" : {
-			
-			}
-		},
-		"Plane_2" : {
-			"TransformComponent":{
-				"Position" : [5.0,0.0,1.0],
-				"Scale" : [10.0, 1.0, 10.0],
-				"Rotate" : [0.0, 0.0, 0.0]
-			}
-		},
-		"Plane_3" : {
-			"TransformComponent":{
-				"Position" : [5.0,-2.0,1.0],
-				"Scale" : [10.0, 1.0, 10.0],
-				"Rotate" : [0.0, 0.0, 0.0]
-			}
-		}
-	}
+    "Objects": {
+        "Camera": {
+            "TransformComponent": {
+                "Position": [
+                    1.0,
+                    2.0,
+                    3.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "Plane": {
+            "TransformComponent": {
+                "Position": [
+                    5.0,
+                    2.0,
+                    1.0
+                ],
+                "Scale": [
+                    10.0,
+                    1.0,
+                    10.0
+                ]
+            },
+            "面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面\u0001": {},
+            "RigidBody": {
+                "isStatic": true,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "Plane_2": {
+            "TransformComponent": {
+                "Position": [
+                    5.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    10.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        "Plane_3": {
+            "TransformComponent": {
+                "Position": [
+                    5.0,
+                    -2.0,
+                    1.0
+                ],
+                "Scale": [
+                    10.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        }
+    }
 }

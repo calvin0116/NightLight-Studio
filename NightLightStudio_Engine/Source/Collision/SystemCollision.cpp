@@ -10,6 +10,8 @@
 
 #include "CollisionDebugLines.h"
 
+#undef max
+#undef min
 #include <algorithm> // std max
 
 #define MESH_MAX_LOD 18
@@ -81,7 +83,7 @@ namespace NS_COLLISION
 		ComponentRigidBody Rigid1;
 		
 
-		Rigid1.isStatic = false;
+		Rigid1.isStatic = true;
 		Rigid1.isGravity = true;
 		Rigid1.mass = 1.0f;
 
@@ -699,9 +701,13 @@ namespace NS_COLLISION
 				//// debug lines?
 				//NlMath::Vector3D start = a->center;
 				//NlMath::Vector3D end = normal  + start;
-				NlMath::Vector3D test(0.1);
+		
 
-					NS_GRAPHICS::SYS_GRAPHICS->DrawLine(a->center,  a->center+ tmp.normal);
+				for (Contact& contact : tmp.contacts)
+				{
+					NS_GRAPHICS::SYS_GRAPHICS->DrawLine(contact.position, contact.position + tmp.normal * 0.1);
+				}
+					
 
 				return check;
 
