@@ -348,6 +348,12 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
+    <ClInclude Include="LocalString.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\LocalString.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
