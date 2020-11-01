@@ -11,11 +11,3 @@ ComponentScript::~ComponentScript()
 {
 
 }
-
-void ComponentScript::Read()
-{
-}
-
-void ComponentScript::Write()
-{
-}
