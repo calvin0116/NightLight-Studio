@@ -385,3 +385,6 @@ NightLightStudio_Engine/dep/Mono/*
 /Include/glm/out/build/x64-Debug
 /Include/glm/out/build/x64-Debug (default)
 NightLightStudio_Game/imgui.ini
+/NightLightStudio_Game/sphere.txt
+/NightLightStudio_Game/pot.txt
+/NightLightStudio_Game/box.txt
