@@ -40,7 +40,7 @@ public:
       _sounds.push_back(MyData);
     }
   };
-  virtual Value	Write() { return Value(); };
+  virtual Value	Write();
   virtual Value& Write(Value& val) { return val; };
   virtual ComponentLoadAudio* Clone()
   {

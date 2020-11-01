@@ -11,3 +11,9 @@ ComponentLoadAudio::~ComponentLoadAudio()
 {
 
 }
+
+inline Value ComponentLoadAudio::Write() { 
+	Value val(rapidjson::kObjectType);
+	//NS_SERIALISER::ChangeData(&val, my, rapidjson::StringRef(_modelFileName.c_str()));
+	return val;
+}
