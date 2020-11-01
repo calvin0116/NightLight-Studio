@@ -41,20 +41,13 @@ typedef struct TranslationalForce
 {
 	NlMath::Vector3D direction;
 	float magnitute;  //magnitude
-	std::clock_t aliveUntil;
-	bool checkAlive()
-	{
-		if (aliveUntil < std::clock()) return false; return true; // xD
-	}
 	TranslationalForce() :
 		direction(0.0f, 0.0f, 0.0f),
-		magnitute(0.0f),
-		aliveUntil(std::clock())
+		magnitute(0.0f)
 	{}
-	TranslationalForce(NlMath::Vector3D dir, float mag, int t) :
+	TranslationalForce(NlMath::Vector3D dir, float mag) :
 		direction(dir),
-		magnitute(mag),
-		aliveUntil(t)
+		magnitute(mag)
 	{}
 } Force;
 
@@ -87,8 +80,8 @@ class ForceManager
 	std::vector<RotationalMomentum> rotationalMomentumList;
 
 
-	// a map of forcehandle to translation force
-	std::map<int, TranslationalForce> translationalForceMap;
+	// a multimap of forcehandle to translation force
+	std::multimap<int, TranslationalForce> translationalForceMap;
 	// current key assignemnt
 	int currentKeyIndex;
 
@@ -96,9 +89,10 @@ public:
 	// add force to the rigidbody 
 	void addForce(ComponentRigidBody& rigidBody, const TranslationalForce& transForce);
 	// add force to the rigidbody 
-	void addForce(ComponentRigidBody& rigidBody, NlMath::Vector3D direction, float magnitude, size_t time = CLOCKS_PER_SEC);
+	void addForce(ComponentRigidBody& rigidBody, NlMath::Vector3D direction, float magnitude);
 
 	void updateTranslationalForces();
+
 
 	// resolve forces of a single rigid body
 	NlMath::Vector3D resolveTranslationalForces(int forceHandle);

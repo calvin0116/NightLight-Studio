@@ -54,27 +54,29 @@ struct IComponent
 };*/
 
 
-struct ComponentTest0 : public ISerializable
-{
-	struct TestVar
-	{
-		float f[3];
-	};
-	int id;
-	char c[128];
-	float f[16];
-	LocalVector<TestVar, 4> data;
+//struct ComponentTest0 : public ISerializable
+//{
+//	struct TestVar
+//	{
+//		float f[3];
+//	};
+//	int id;
+//	char c[128];
+//	float f[16];
+//	LocalVector<TestVar, 4> data;
+//
+//	virtual void	Read(Value& val) { UNREFERENCED_PARAMETER(val); };
+//	virtual Value	Write() { return Value(); };
+//	virtual Value& Write(Value& val) { return val; };
+//	virtual ComponentTest0* Clone()
+//	{
+//		ComponentTest0* newcomp = new ComponentTest0();
+//		*newcomp = *this;
+//		return newcomp;
+//	}
+//};
 
-	virtual void	Read(Value& val) { val; };
 	virtual Value	Write() { return Value(rapidjson::kObjectType); };
-	virtual Value& Write(Value& val) { return val; };
-	virtual ComponentTest0* Clone()
-	{
-		ComponentTest0* newcomp = new ComponentTest0();
-		*newcomp = *this;
-		return newcomp;
-	}
-};
 /*
 struct ComponentInput
 {

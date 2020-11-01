@@ -903,10 +903,10 @@ public:
 					const std::type_info& newComp_tinf = typeid(*newComp);
 
 
-					const std::type_info& comp_tinf = typeid(*comp);
+					//const std::type_info& comp_tinf = typeid(*comp);
 
-					size_t newhcode = newComp_tinf.hash_code();
-					size_t hcode = comp_tinf.hash_code();
+					//size_t newhcode = newComp_tinf.hash_code();
+					//size_t hcode = comp_tinf.hash_code();
 
 					int conInd = -1;
 

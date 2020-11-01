@@ -78,7 +78,7 @@ namespace NS_COLLISION
 		//test code, to be removed
 		//////////////////////////////////////////////////////////////////////////////////////
 		//test creation
-		//Entity cube1Test = G_ECMANAGER->BuildEntity("Test_Box1");
+		Entity cube1Test = G_ECMANAGER->BuildEntity("Test_Box1");
 		ComponentTransform Transform1;
 		ComponentRigidBody Rigid1;
 		
@@ -92,8 +92,8 @@ namespace NS_COLLISION
 		//Transform1._rotation.z = 45;
 		Transform1._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
-		//cube1Test.AttachComponent<ComponentTransform>(Transform1);
-		//cube1Test.AttachComponent<ComponentRigidBody>(Rigid1);
+		cube1Test.AttachComponent<ComponentTransform>(Transform1);
+		cube1Test.AttachComponent<ComponentRigidBody>(Rigid1);
 		
 
 
@@ -136,7 +136,7 @@ namespace NS_COLLISION
 		//AABB1.collider.aabb.colliderScale = NlMath::Vector3D(1.0f, 1.0f, 1.0f);
 		//AABB2.collider.aabb.colliderScale = NlMath::Vector3D(1.0f, 1.0f, 1.0f);
 
-		//cube1Test.AttachComponent<ComponentCollider>(AABB1);
+		cube1Test.AttachComponent<ComponentCollider>(AABB1);
 		cube2Test.AttachComponent<ComponentCollider>(AABB2);
 
 		//ComponentCollider OBB1(COLLIDERS::OBB);
@@ -302,6 +302,10 @@ namespace NS_COLLISION
 
 		//resolve collision here
 		colResolver.resolveCollision();
+
+
+
+
 	}
 	void CollisionSystem::GameExit()
 	{
