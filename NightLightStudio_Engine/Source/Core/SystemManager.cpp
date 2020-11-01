@@ -142,39 +142,39 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-	////// sample for entity copy
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////// sample for entity copy
 
-	// create a entity in prefab
-	Entity entity = G_ECMANAGER_PREFABS->BuildEntity();
-	ComponentTransform compTransform;
-	compTransform._position = NlMath::Vector3D(1.0f, 2.0f, 3.0f);
-	entity.AttachComponent<ComponentTransform>(compTransform);
-	entity.AttachComponent<ComponentCollider>();
-	entity.AttachComponent<ComponentRigidBody>();
+	//// create a entity in prefab
+	//Entity entity = G_ECMANAGER_PREFABS->BuildEntity();
+	//ComponentTransform compTransform;
+	//compTransform._position = NlMath::Vector3D(1.0f, 2.0f, 3.0f);
+	//entity.AttachComponent<ComponentTransform>(compTransform);
+	//entity.AttachComponent<ComponentCollider>();
+	//entity.AttachComponent<ComponentRigidBody>();
 
-	// copy to main
-	Entity newEntity = entity.Copy(G_ECMANAGER, "NewCopy");
-	ComponentTransform* newtransform = newEntity.getComponent<ComponentTransform>();
+	//// copy to main
+	//Entity newEntity = entity.Copy(G_ECMANAGER, "NewCopy");
+	//ComponentTransform* newtransform = newEntity.getComponent<ComponentTransform>();
 
-	// iterate main
-	for (Entity ent : G_ECMANAGER->getEntityContainer())
-	{
-		ComponentTransform* transform = ent.getComponent<ComponentTransform>();
+	//// iterate main
+	//for (Entity ent : G_ECMANAGER->getEntityContainer())
+	//{
+	//	ComponentTransform* transform = ent.getComponent<ComponentTransform>();
 
-		std::cout << transform->_position.x << " " << transform->_position.y << " " << transform->_position.z << " " << std::endl;
+	//	std::cout << transform->_position.x << " " << transform->_position.y << " " << transform->_position.z << " " << std::endl;
 
-		for (ISerializable* comp : ent.getEntityComponentContainer())
-		{
-			(void)comp;
-			ISerializable* newComp = comp->Clone();
-			(void)newComp;
-			delete newComp;
-		}
-	}
+	//	for (ISerializable* comp : ent.getEntityComponentContainer())
+	//	{
+	//		(void)comp;
+	//		ISerializable* newComp = comp->Clone();
+	//		(void)newComp;
+	//		delete newComp;
+	//	}
+	//}
 
-	////// sample for entity copy END
-	///////////////////////////////////////////////////////////////////////////////////////////////////
+	//////// sample for entity copy END
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
