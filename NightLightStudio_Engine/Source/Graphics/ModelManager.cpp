@@ -191,11 +191,13 @@ namespace NS_GRAPHICS
 				mesh->_indices = check->second->_meshes[meshIndex]->_indices;
 				mesh->_rgb = check->second->_meshes[meshIndex]->_rgb;
 				mesh->_uv = check->second->_meshes[meshIndex]->_uv;
+				mesh->_normals = check->second->_meshes[meshIndex]->_normals;
 
 				glGenVertexArrays(1, &mesh->VAO);
 				glGenBuffers(1, &mesh->VBO);
 				glGenBuffers(1, &mesh->EBO);
-				glGenBuffers(1, &mesh->CBO);
+				//glGenBuffers(1, &mesh->CBO);
+				glGenBuffers(1, &mesh->NBO);
 				glGenBuffers(1, &mesh->UVBO);
 				glGenBuffers(1, &mesh->ModelMatrixBO);
 
@@ -218,8 +220,14 @@ namespace NS_GRAPHICS
 				}
 
 				// color attribute
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->CBO);
+				/*glBindBuffer(GL_ARRAY_BUFFER, mesh->CBO);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * mesh->_rgb.size(), &mesh->_rgb[0], GL_STATIC_DRAW);
+				glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+				glEnableVertexAttribArray(2);*/
+
+				// normals attribute
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->NBO);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * mesh->_normals.size(), &mesh->_normals[0], GL_STATIC_DRAW);
 				glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
 				glEnableVertexAttribArray(2);
 

@@ -14,7 +14,7 @@ struct MaterialData
 	MaterialData()
 		: _diffuse{ 0.5f,0.5f,0.5f },
 		_ambient{ 1.f, 1.f, 1.f },
-		_specular{ 1.f,1.f,1.f },
+		_specular{ 0.5f,0.5f,0.5f },
 		_shininess{ 32.f } {}
 
 	~MaterialData() {}

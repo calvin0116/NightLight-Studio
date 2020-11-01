@@ -580,4 +580,7 @@
       <Filter>Resource Files</Filter>
     </Library>
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\Include\glm\glm.natvis" />
+  </ItemGroup>
 </Project>

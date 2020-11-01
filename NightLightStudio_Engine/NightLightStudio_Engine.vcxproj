@@ -353,6 +353,9 @@
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\Include\glm\glm.natvis" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
