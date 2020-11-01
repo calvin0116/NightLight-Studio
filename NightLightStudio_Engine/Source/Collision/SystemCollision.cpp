@@ -10,6 +10,8 @@
 
 #include "CollisionDebugLines.h"
 
+#undef max
+#undef min
 #include <algorithm> // std max
 
 #define MESH_MAX_LOD 18

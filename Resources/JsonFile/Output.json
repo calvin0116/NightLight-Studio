@@ -1,2 +1,201 @@
 {
+    "Objects": {
+        "Entity_0": {
+            "TransformComponent": {
+                "Position": [
+                    3.0,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {}
+        },
+        "Entity_1": {
+            "TransformComponent": {
+                "Position": [
+                    3.0,
+                    3.0,
+                    0.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {}
+        },
+        "Entity_2": {
+            "TransformComponent": {
+                "Position": [
+                    0.0,
+                    -0.13981443643569947,
+                    0.0
+                ],
+                "Scale": [
+                    0.5,
+                    0.5,
+                    0.5
+                ]
+            },
+            "OBB Collider": {},
+            "RigidBody": {
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    -0.009999999776482582,
+                    0.0
+                ]
+            }
+        },
+        "Entity_3": {
+            "TransformComponent": {
+                "Position": [
+                    2.5,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    0.4999997913837433,
+                    0.5,
+                    0.4999995231628418
+                ]
+            },
+            "OBB Collider": {},
+            "RigidBody": {
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "Entity_4": {
+            "面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面": {}
+        },
+        "Entity_5": {
+            "TransformComponent": {
+                "Position": [
+                    1.1100000143051148,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面\u0001": {},
+            "RigidBody": {
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "Entity_6": {
+            "RigidBody": {
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "Camera": {
+            "TransformComponent": {
+                "Position": [
+                    1.0,
+                    2.0,
+                    3.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "Plane": {
+            "TransformComponent": {
+                "Position": [
+                    5.0,
+                    2.0,
+                    1.0
+                ],
+                "Scale": [
+                    10.0,
+                    1.0,
+                    10.0
+                ]
+            },
+            "面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面\u0001": {},
+            "RigidBody": {
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "Plane_2": {
+            "TransformComponent": {
+                "Position": [
+                    5.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    10.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        "Plane_3": {
+            "TransformComponent": {
+                "Position": [
+                    5.0,
+                    -2.0,
+                    1.0
+                ],
+                "Scale": [
+                    10.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        }
+    }
 }

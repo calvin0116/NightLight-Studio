@@ -102,6 +102,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Include\rapidjson;$(SolutionDir)Include\FMOD\inc;$(SolutionDir)Include\FBX_SDK;$(SolutionDir)Include\mono\include\mono-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

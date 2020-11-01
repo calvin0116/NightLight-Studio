@@ -3,6 +3,7 @@
 #include "Components.h"
 //#include "ComponentTransform.h"
 
+
 constexpr float GRAVITY_DEF = 0.01f;
 
 ComponentRigidBody::ComponentRigidBody() :
@@ -16,9 +17,32 @@ ComponentRigidBody::ComponentRigidBody() :
 	isGravity(false),
 	gravity(0.0f, -GRAVITY_DEF, 0.0f),
 	forceHandle(-1) //default -1 to ininit
-{}
+{
+	strcpy_s(ser_name,"RigidBody");
+}
 
 ComponentRigidBody::~ComponentRigidBody()
 {
+}
+
+inline Value ComponentRigidBody::Write() {
+	
+	Value val(rapidjson::kObjectType);
+	
+	Value force_val(rapidjson::kArrayType);
+	force_val.PushBack(force.x, global_alloc);
+	force_val.PushBack(force.y, global_alloc);
+	force_val.PushBack(force.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "Force", force_val);
+
+	Value accel_val(rapidjson::kArrayType);
+	accel_val.PushBack(acceleration.x, global_alloc);
+	accel_val.PushBack(acceleration.y, global_alloc);
+	accel_val.PushBack(acceleration.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "Accelaration", accel_val);
+	
+	return val;
 }
 

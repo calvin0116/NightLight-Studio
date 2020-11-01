@@ -51,7 +51,7 @@ public:
 	~ComponentGraphics();
 
 	//read and write function for initialization from saved files
-	virtual void	Read(Value& ) {  };
-	virtual Value	Write() { return Value(); };
+	virtual void	Read(Value& ) { };
+	virtual Value	Write() { return Value(rapidjson::kObjectType); };
 	virtual Value& Write(Value& val) { return val; };
 } GraphicsComponent;

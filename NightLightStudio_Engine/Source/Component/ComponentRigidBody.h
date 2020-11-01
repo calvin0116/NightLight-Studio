@@ -32,8 +32,8 @@ typedef struct ComponentRigidBody : public ISerializable //: public IComponent
 
 
 
-	virtual void	Read(Value&) { };
-	virtual Value	Write() { return Value(); };
-	virtual Value& Write(Value& val) { return val; };
+	void	Read(Value&) { };
+	Value	Write();
+	Value& Write(Value& val) { return val; };
 
 } RigidBody, RigidBodyComponent;

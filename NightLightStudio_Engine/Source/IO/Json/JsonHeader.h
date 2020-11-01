@@ -3,6 +3,7 @@ Brief Description :
 			Json header files and related defines
 **************************************************************************/
 #pragma once
+
 #include "../../../Include/rapidjson/document.h"     // rapidjson's DOM-style API
 #include "../../../Include/rapidjson/prettywriter.h" // for stringify JSON
 #include "../../../Include/rapidjson/ostreamwrapper.h"
@@ -11,3 +12,6 @@ using namespace rapidjson;
 
 //!!!!== Use for allocator only ==!!!!!//
 //static Document global_doc;
+
+static Document global_doc;
+static Document::AllocatorType& global_alloc = global_doc.GetAllocator();

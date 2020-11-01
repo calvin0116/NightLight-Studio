@@ -3,12 +3,14 @@
 #include "../../glm/gtc/quaternion.hpp"
 
 #include "Components.h"
+//#include "../IO/Json/Parser.h"
 
-ComponentTransform::ComponentTransform() : 
-	_nextPos(0),_position{ 0.0f, 0.0f, 0.0f },
-_rotation{ 0.0f, 0.0f, 0.0f }, _scale{ 1.0f, 1.0f, 1.0f }
+
+ComponentTransform::ComponentTransform() :
+	_nextPos(0), _position{ 0.0f, 0.0f, 0.0f },
+	_rotation{ 0.0f, 0.0f, 0.0f }, _scale{ 1.0f, 1.0f, 1.0f }
 {
-
+	strcpy_s(ser_name, "TransformComponent");
 }
 
 ComponentTransform::~ComponentTransform()
@@ -69,9 +71,21 @@ void ComponentTransform::Read(Value& val)
 
 Value ComponentTransform::Write()
 {
-	Value val;
-	//val.AddMember("Position:" , _position, );
+	Value val(rapidjson::kObjectType);
 
+	Value position(rapidjson::kArrayType);
+	position.PushBack(_position.x, global_alloc);
+	position.PushBack(_position.y, global_alloc);
+	position.PushBack(_position.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "Position", position);
+
+	Value scale(rapidjson::kArrayType);
+	scale.PushBack(_scale.x, global_alloc);
+	scale.PushBack(_scale.y, global_alloc);
+	scale.PushBack(_scale.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "Scale", scale);
 
 	return val;
 }
