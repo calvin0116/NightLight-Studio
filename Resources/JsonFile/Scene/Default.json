@@ -1,31 +1,46 @@
 {
-	"Objects" :{
-		"Camera" :{
-			"TransformComponent":{
-				"Position" : [1.0,2.0,3.0],
-				"Scale" : [1.0, 1.0, 1.0],
-				"Rotate" : [0.0, 0.0, 0.0]
-			},
-			"CameraComponent":{
-				
-			}
-		},
-		"Plane" : {
-			"TransformComponent":{
-				"Position" : [5.0,2.0,1.0],
-				"Scale" : [10.0, 1.0, 10.0]
-			},
-			"ColliderComponent":{
-				
-			},
-			"RigidBody" : {
-			
-			},
-		  "AudioManager":{
-			"ListOfSound": [ 
-			  "Asset/Sounds/TestAudio.ogg"
-			  ]
-		  }
-		}
-	}
+    "Objects": {
+        "Camera": {
+            "TransformComponent": {
+                "Position": [
+                    1.0,
+                    2.0,
+                    3.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "Plane": {
+            "TransformComponent": {
+                "Position": [
+                    5.0,
+                    2.0,
+                    1.0
+                ],
+                "Scale": [
+                    10.0,
+                    1.0,
+                    10.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "AudioManager": {}
+        }
+    }
 }
