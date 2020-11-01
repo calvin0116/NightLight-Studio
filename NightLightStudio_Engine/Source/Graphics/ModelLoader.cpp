@@ -1,7 +1,5 @@
 #include "ModelLoader.h"
 #include "../../framework.h"
-#include "../glm/gtc/matrix_transform.hpp"
-#include "../../glm/gtc/quaternion.hpp"
 
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -12,7 +10,7 @@ namespace NS_GRAPHICS
 {
 	ModelLoader::ModelLoader() : _fbxManager{ nullptr }, _fbxScene{ nullptr }, _fbxImport{ nullptr },
 		_axisSystem{ FbxAxisSystem::eYAxis, FbxAxisSystem::eParityOdd, FbxAxisSystem::eRightHanded },
-		_modelManager{ &ModelManager::GetInstance() }
+		_modelManager{ &ModelManager::GetInstance() }, _matrixTransform{1}
 	{
 		std::cout << "Model Loader Created" << std::endl;
 	}
@@ -162,13 +160,13 @@ namespace NS_GRAPHICS
 				FbxDouble3 translation = node->LclTranslation.Get();
 				FbxDouble3 rotation = node->LclRotation.Get();
 				FbxDouble3 scaling = node->LclScaling.Get();
-				FbxDouble3 test = node->GeometricTranslation.Get();
+				//FbxDouble3 test = node->GeometricTranslation.Get();
 
 				std::cout << translation[0] << ", " << translation[1] << ", " << translation[2] << std::endl;
 				std::cout << rotation[0] << ", " << rotation[1] << ", " << rotation[2] << std::endl;
 				std::cout << scaling[0] << ", " << scaling[1] << ", " << scaling[2] << std::endl;
 
-				std::cout << test[0] << ", " << test[1] << ", " << test[2] << std::endl;
+				//std::cout << test[0] << ", " << test[1] << ", " << test[2] << std::endl;
 
 				//const char* nodeName = node->GetName();
 				glm::mat4 modelMatrix(1);
@@ -265,6 +263,14 @@ namespace NS_GRAPHICS
 
 						//NEW POSITION HERE
 						//Control point vertex
+						if (controlPointIndex < 0)
+						{
+							//<0 means corrupted mesh
+							delete newMeshNew;
+							delete newMesh;
+
+							return;
+						}
 						glm::vec3 vertex;
 
 						vertex = { (float)vertexs[controlPointIndex][0],
@@ -542,8 +548,8 @@ namespace NS_GRAPHICS
 
 		_modelManager->AddLoadedModel(model, model->_modelName);
 #ifdef _DEBUG
-		std::string textFileName = model->_modelName + ".txt";
-		DebugToFile(model->_modelName, textFileName);
+		//std::string textFileName = model->_modelName + ".txt";
+		//DebugToFile(model->_modelName, textFileName);
 #endif
 
 		//TODO Saving custom mesh
