@@ -158,6 +158,8 @@ typedef struct ComponentCollider : public ISerializable//: public IComponent
 
 	Collider collider;
 
+	bool isCollide = false;
+
 	ComponentCollider(COLLIDERS col);
 
 	ComponentCollider();

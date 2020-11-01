@@ -94,11 +94,9 @@ class ForceManager
 
 public:
 	// add force to the rigidbody 
-	void addForce(int forceHandle, const TranslationalForce& transForce);
+	void addForce(ComponentRigidBody& rigidBody, const TranslationalForce& transForce);
 	// add force to the rigidbody 
-	void addForce(const ComponentRigidBody& rigidBody, const TranslationalForce& transForce);
-	// add force to the rigidbody 
-	void addForce(const ComponentRigidBody& rigidBody, NlMath::Vector3D direction, float magnitude, size_t time = CLOCKS_PER_SEC);
+	void addForce(ComponentRigidBody& rigidBody, NlMath::Vector3D direction, float magnitude, size_t time = CLOCKS_PER_SEC);
 
 	void updateTranslationalForces();
 

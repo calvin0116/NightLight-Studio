@@ -3,7 +3,7 @@
 #include "Components.h"
 //#include "ComponentTransform.h"
 
-constexpr float GRAVITY_DEF = 0.01f;
+constexpr float GRAVITY_DEF = 1.0f;
 
 ComponentRigidBody::ComponentRigidBody() :
 	force(0.0f, 0.0f, 0.0f),
