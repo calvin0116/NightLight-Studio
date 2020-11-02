@@ -5,6 +5,7 @@
 #include "../../Graphics/GraphicsSystem.h"
 #include "../../Component/Components.h"
 #include "LevelEditor_Console.h"
+#include "WindowsDialogBox.h"
 
 #include "../../Core/SceneManager.h"
 
@@ -41,11 +42,37 @@ void LevelEditor::LE_MainMenuBar()
     if (ImGui::BeginMenuBar())
     {
         LE_AddMenuWithItems("File", 
-            { "Open" , "Save"},
-            { "" , "Ctrl-S" },
+            { "Open" , "Save", "Save Test"},
+            { "" , "Ctrl-S", "" },
             {
-                []() {},    //Open
-                []() { NS_SCENE::SYS_SCENE_MANAGER->SaveScene(); }
+                // Opens a Window Dialog Box for Opening a .json file
+                [this]() 
+                {
+                    COMDLG_FILTERSPEC rgSpec[] =
+                    {
+                        { L"*.json", L"*.json" }
+                    };
+                    // Gets the RELATIVE File Path to Open from
+                    std::string fileToOpen = WindowsOpenFileBox(_window, rgSpec, 1);
+                    std::cout << fileToOpen << std::endl;
+                },
+
+                []() 
+                {
+                    NS_SCENE::SYS_SCENE_MANAGER->SaveScene(); 
+                },
+
+                // Opens a Window Dialog Box for Saving a .json file
+                [this]()
+                {
+                    COMDLG_FILTERSPEC rgSpec[] =
+                    {
+                        { L"*.json", L"*.json" }
+                    };
+                    // Gets the RELATIVE File Path to Save to
+                    std::string fileToSaveTo = WindowsSaveFileBox(_window, rgSpec, 1);
+                    std::cout << fileToSaveTo << std::endl;
+                }
             });
         LE_AddMenuWithItems("Edit", 
             { "Undo", "Redo" }, 
