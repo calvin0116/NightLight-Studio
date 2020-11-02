@@ -17,6 +17,8 @@
 #define MESH_MAX_LOD 18
 #define MESH_MIN_LOD -20
 
+#define ENT_TEST 0
+
 
 namespace NS_COLLISION
 {
@@ -78,6 +80,7 @@ namespace NS_COLLISION
 		//test code, to be removed
 		//////////////////////////////////////////////////////////////////////////////////////
 		//test creation
+#if ENT_TEST == 1
 		Entity cube1Test = G_ECMANAGER->BuildEntity("Test_Box1");
 		ComponentTransform Transform1;
 		ComponentRigidBody Rigid1;
@@ -155,7 +158,7 @@ namespace NS_COLLISION
 		ComponentRigidBody platform0rbody;
 		platform0Test.AttachComponent<ComponentRigidBody>(platform0rbody);
 
-		
+#endif
 		//////////////////////////////////////////////////////////////////////////////////////
 	}
 

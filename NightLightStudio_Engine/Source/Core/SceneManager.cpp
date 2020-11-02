@@ -215,10 +215,14 @@ namespace NS_SCENE
 			{
 				CreateAndWriteComp<RigidBody>(Comp_list, entity, component_name);
 			}
-			  else if (component_name == "AudioManager")
-			  {
-				CreateAndWriteComp<ComponentLoadAudio>(Comp_list, entity, component_name);
-			  }
+			else if (component_name == "AudioManager")
+			{
+			CreateAndWriteComp<ComponentLoadAudio>(Comp_list, entity, component_name);
+			}
+			else if (component_name == "GraphicsComponent")
+			{
+				CreateAndWriteComp<GraphicsComponent>(Comp_list, entity, component_name);
+			}
 		}
 	}
 
@@ -255,11 +259,20 @@ namespace NS_SCENE
 		scene->Load();
 	}
 
-	void SceneManager::SaveScene()
+	void SceneManager::SaveScene(std::string path)
 	{
-		std::cout << "Saving scene....." << std::endl;
+		std::cout << "Saving scene to:" << std::endl;
 		//Save scene
-		NS_SERIALISER::Parser* scene = scene_list[current_scene];
+		NS_SERIALISER::Parser* scene;
+			
+		if(path == "")
+			scene = scene_list[current_scene];
+		else
+		{
+			fs::path cur_path_name = path;
+
+			scene = new NS_SERIALISER::Parser(cur_path_name.stem().string(), cur_path_name.parent_path().string());
+		}
 		//std::string output_filename = "Scene/Output"; <- For testing
 		//NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath() );
 		
@@ -272,6 +285,7 @@ namespace NS_SCENE
 
 			MyFile << "{\n}";
 		}
+
 		scene->Load();
 		scene->CleanDoc();
 
@@ -312,7 +326,12 @@ namespace NS_SCENE
 		scene->Save();
 
 		std::cout << "Save scene success~!" << std::endl;
+		if (path != "")
+		{
+			delete scene;
+		}
 	}
+
 
 	bool SceneManager::CheckIfSceneExist(std::string& scene_name)
 	{
