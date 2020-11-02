@@ -47,19 +47,19 @@ inline void ComponentGraphics::Read(Value& val)
 	else
 	{
 		_modelFileName = val["Model file"].GetString();
-		NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadMesh(_modelFileName);
+		NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadMesh(_modelFileName.toString());
 
 		//Checks for the file name
 		std::string name;
-		size_t pos = _modelFileName.rfind("\\");
+		size_t pos = _modelFileName.toString().rfind("\\");
 		//Get just the string after the last path
 		if (pos != std::string::npos)
 		{
-			name = _modelFileName.substr(pos + 1);
+			name = _modelFileName.toString().substr(pos + 1);
 		}
 		else
 		{
-			name = _modelFileName;
+			name = _modelFileName.toString();
 		}
 
 		//Trim the extension to get the file name
