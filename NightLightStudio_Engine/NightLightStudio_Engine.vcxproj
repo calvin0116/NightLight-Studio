@@ -231,6 +231,7 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_TemplateFuncs.hpp" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\WindowsDialogBox.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
@@ -319,6 +320,7 @@
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\WindowsDialogBox.cpp" />
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
     <ClCompile Include="Source\Graphics\DebugManager.cpp" />

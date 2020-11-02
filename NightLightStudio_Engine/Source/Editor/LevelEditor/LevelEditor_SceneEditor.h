@@ -7,15 +7,18 @@
 
 class SceneEditor : public LE_WinBase_Derived<SceneEditor>
 {
-	bool _lastPos_Start;
-	bool _lastEnter;
+public:
 	struct ENTITY_LAST_POS
 	{
 		TransformComponent* _transComp;
 		glm::mat4 _newPos;
 	};
+private:
+	bool _lastPos_Start;
+	bool _lastEnter;
 	ENTITY_LAST_POS _lastPos_ELP;
 public:
+
 	SceneEditor();
 	~SceneEditor();
 
