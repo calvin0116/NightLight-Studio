@@ -215,10 +215,14 @@ namespace NS_SCENE
 			{
 				CreateAndWriteComp<RigidBody>(Comp_list, entity, component_name);
 			}
-			  else if (component_name == "AudioManager")
-			  {
-				CreateAndWriteComp<ComponentLoadAudio>(Comp_list, entity, component_name);
-			  }
+			else if (component_name == "AudioManager")
+			{
+			CreateAndWriteComp<ComponentLoadAudio>(Comp_list, entity, component_name);
+			}
+			else if (component_name == "GraphicsComponent")
+			{
+				CreateAndWriteComp<GraphicsComponent>(Comp_list, entity, component_name);
+			}
 		}
 	}
 

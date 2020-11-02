@@ -8,6 +8,8 @@
 #define new DEBUG_NEW
 #endif
 
+//#define LOG_MODEL
+
 namespace NS_GRAPHICS
 {
 	ModelLoader::ModelLoader() : _fbxManager{ nullptr }, _fbxScene{ nullptr }, _fbxImport{ nullptr },
@@ -276,10 +278,10 @@ namespace NS_GRAPHICS
 									(float)finalPosition[2]};
 
 						//FBX FIX FOR 3DS MAX AXIS DIFFERENCE
-						glm::quat quaternion(glm::radians(glm::vec3(90.0f, 0.0f, 0.0f)));
-						glm::mat4 rotateMatrix = glm::mat4_cast(quaternion);
+						//glm::quat quaternion(glm::radians(glm::vec3(90.0f, 0.0f, 0.0f)));
+						//glm::mat4 rotateMatrix = glm::mat4_cast(quaternion);
 
-						vertex = rotateMatrix * glm::vec4(vertex, 1.0f);
+						//vertex = rotateMatrix * glm::vec4(vertex, 1.0f);
 
 						/////////////////////////////////
 						/// Mesh Way
@@ -479,7 +481,7 @@ namespace NS_GRAPHICS
 		FbxGeometryConverter toTriangulate(_fbxManager);
 		toTriangulate.Triangulate(_fbxScene, true, true);
 		//Not sure needed anot
-		//toTriangulate.SplitMeshesPerMaterial(_fbxScene, true);
+		toTriangulate.SplitMeshesPerMaterial(_fbxScene, true);
 
 		// Recursively goes through the scene to get all the meshes
 		// Root nodes should not contain any attributes.
@@ -519,7 +521,8 @@ namespace NS_GRAPHICS
 
 		//Trim the extension to get the file name
 		name.erase(name.rfind("."));
-		model->_fileName = s_LocalPathName + name + s_ModelFileType;
+		model->_fileName = fileName;
+		//model->_fileName = s_LocalPathName + name + s_ModelFileType;
 
 		//Model name if empty use file name
 		if (customName.empty())
@@ -549,7 +552,7 @@ namespace NS_GRAPHICS
 		}
 
 		_modelManager->AddLoadedModel(model, model->_modelName);
-#ifdef _DEBUG
+#ifdef LOG_MODEL
 		std::string textFileName = model->_modelName + ".txt";
 		DebugToFile(model->_modelName, textFileName);
 #endif
