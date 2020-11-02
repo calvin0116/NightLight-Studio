@@ -17,6 +17,8 @@
 #define MESH_MAX_LOD 18
 #define MESH_MIN_LOD -20
 
+#define ENT_TEST 0
+
 
 namespace NS_COLLISION
 {
@@ -77,85 +79,86 @@ namespace NS_COLLISION
 
 		//test code, to be removed
 		//////////////////////////////////////////////////////////////////////////////////////
-		////test creation
-		//Entity cube1Test = G_ECMANAGER->BuildEntity("Test_Box1");
-		//ComponentTransform Transform1;
-		//ComponentRigidBody Rigid1;
-		//
-
-		//Rigid1.isStatic = true;
-		//Rigid1.isGravity = true;
-		//Rigid1.mass = 1.0f;
-
-		////Transform1._rotation.x = 45;
-		////Transform1._rotation.y = 40;
-		////Transform1._rotation.z = 45;
-		//Transform1._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
-
-		//cube1Test.AttachComponent<ComponentTransform>(Transform1);
-		//cube1Test.AttachComponent<ComponentRigidBody>(Rigid1);
-		//
-
-
-		////NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test, glm::vec3(0.5f, 0.5f, 1.f));
-
-		//Entity cube2Test = G_ECMANAGER->BuildEntity("Test_Box1");
-		//ComponentTransform Transform2;
-		//ComponentRigidBody Rigid2;
-		//
-
-		//Transform2._position = glm::vec3(2.5f, 0.0f, 0.f);
-		////Transform2._rotation.x = -45;
-		////Transform2._rotation.y = -45;
-		////Transform2._rotation.z = -45;
-		//Transform2._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
-
-
-		//cube2Test.AttachComponent<ComponentTransform>(Transform2);
-		//cube2Test.AttachComponent<ComponentRigidBody>(Rigid2);
-		//
-		//
-		//
-		////NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
-
-		//ComponentCollider AABB1(COLLIDERS::AABB);
-		//ComponentCollider AABB2(COLLIDERS::AABB);
-
-		////ComponentCollider AABB1(COLLIDERS::OBB);
-		////ComponentCollider AABB2(COLLIDERS::OBB);
-
-		////ComponentCollider AABB1(COLLIDERS::SPHERE);
-		////ComponentCollider AABB2(COLLIDERS::SPHERE);
-
-		////ComponentCollider AABB1(COLLIDERS::CAPSULE);
-		////ComponentCollider AABB2(COLLIDERS::CAPSULE);
-
-		////AABB1.collider.aabb.colliderScale = NlMath::Vector3D(2.0f, 2.0f, 2.0f);
-		////AABB2.collider.aabb.colliderScale = NlMath::Vector3D(2.0f, 2.0f, 2.0f);
-
-		////AABB1.collider.aabb.colliderScale = NlMath::Vector3D(1.0f, 1.0f, 1.0f);
-		////AABB2.collider.aabb.colliderScale = NlMath::Vector3D(1.0f, 1.0f, 1.0f);
-
-		//cube1Test.AttachComponent<ComponentCollider>(AABB1);
-		//cube2Test.AttachComponent<ComponentCollider>(AABB2);
-
-		////ComponentCollider OBB1(COLLIDERS::OBB);
-		////ComponentCollider OBB2(COLLIDERS::OBB);
-		////cube1Test.AttachComponent<ComponentCollider>(OBB1);
-		////cube2Test.AttachComponent<ComponentCollider>(OBB2);
-
-
-		//Entity platform0Test = G_ECMANAGER->BuildEntity();
-		//ComponentTransform platform0Transform;
-		//platform0Transform._position = glm::vec3(0.0f, -5.0f, 0.0f);
-		//platform0Transform._scale = glm::vec3(5.0f, 1.0f, 5.0f);
-		//platform0Test.AttachComponent<ComponentTransform>(platform0Transform);
-		//ComponentCollider platform0Collider(COLLIDERS::AABB);
-		//platform0Test.AttachComponent<ComponentCollider>(platform0Collider);
-		//ComponentRigidBody platform0rbody;
-		//platform0Test.AttachComponent<ComponentRigidBody>(platform0rbody);
-
+		//test creation
+#if ENT_TEST == 1
+		Entity cube1Test = G_ECMANAGER->BuildEntity("Test_Box1");
+		ComponentTransform Transform1;
+		ComponentRigidBody Rigid1;
 		
+
+		Rigid1.isStatic = true;
+		Rigid1.isGravity = true;
+		Rigid1.mass = 1.0f;
+
+		//Transform1._rotation.x = 45;
+		//Transform1._rotation.y = 40;
+		//Transform1._rotation.z = 45;
+		Transform1._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
+
+		cube1Test.AttachComponent<ComponentTransform>(Transform1);
+		cube1Test.AttachComponent<ComponentRigidBody>(Rigid1);
+		
+
+
+		//NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test, glm::vec3(0.5f, 0.5f, 1.f));
+
+		Entity cube2Test = G_ECMANAGER->BuildEntity("Test_Box1");
+		ComponentTransform Transform2;
+		ComponentRigidBody Rigid2;
+		
+
+		Transform2._position = glm::vec3(2.5f, 0.0f, 0.f);
+		//Transform2._rotation.x = -45;
+		//Transform2._rotation.y = -45;
+		//Transform2._rotation.z = -45;
+		Transform2._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
+
+
+		cube2Test.AttachComponent<ComponentTransform>(Transform2);
+		cube2Test.AttachComponent<ComponentRigidBody>(Rigid2);
+		
+		
+		
+		//NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
+
+		ComponentCollider AABB1(COLLIDERS::AABB);
+		ComponentCollider AABB2(COLLIDERS::AABB);
+
+		//ComponentCollider AABB1(COLLIDERS::OBB);
+		//ComponentCollider AABB2(COLLIDERS::OBB);
+
+		//ComponentCollider AABB1(COLLIDERS::SPHERE);
+		//ComponentCollider AABB2(COLLIDERS::SPHERE);
+
+		//ComponentCollider AABB1(COLLIDERS::CAPSULE);
+		//ComponentCollider AABB2(COLLIDERS::CAPSULE);
+
+		//AABB1.collider.aabb.colliderScale = NlMath::Vector3D(2.0f, 2.0f, 2.0f);
+		//AABB2.collider.aabb.colliderScale = NlMath::Vector3D(2.0f, 2.0f, 2.0f);
+
+		//AABB1.collider.aabb.colliderScale = NlMath::Vector3D(1.0f, 1.0f, 1.0f);
+		//AABB2.collider.aabb.colliderScale = NlMath::Vector3D(1.0f, 1.0f, 1.0f);
+
+		cube1Test.AttachComponent<ComponentCollider>(AABB1);
+		cube2Test.AttachComponent<ComponentCollider>(AABB2);
+
+		//ComponentCollider OBB1(COLLIDERS::OBB);
+		//ComponentCollider OBB2(COLLIDERS::OBB);
+		//cube1Test.AttachComponent<ComponentCollider>(OBB1);
+		//cube2Test.AttachComponent<ComponentCollider>(OBB2);
+
+
+		Entity platform0Test = G_ECMANAGER->BuildEntity();
+		ComponentTransform platform0Transform;
+		platform0Transform._position = glm::vec3(0.0f, -5.0f, 0.0f);
+		platform0Transform._scale = glm::vec3(5.0f, 1.0f, 5.0f);
+		platform0Test.AttachComponent<ComponentTransform>(platform0Transform);
+		ComponentCollider platform0Collider(COLLIDERS::AABB);
+		platform0Test.AttachComponent<ComponentCollider>(platform0Collider);
+		ComponentRigidBody platform0rbody;
+		platform0Test.AttachComponent<ComponentRigidBody>(platform0rbody);
+
+#endif
 		//////////////////////////////////////////////////////////////////////////////////////
 	}
 

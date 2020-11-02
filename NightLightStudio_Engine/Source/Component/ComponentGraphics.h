@@ -2,6 +2,7 @@
 #include <string>
 #include "..\glm\glm.hpp"
 #include "..\\..\\ISerializable.h"
+#include "LocalString.h"
 
 // Designer Manual Input
 struct MaterialData
@@ -29,12 +30,15 @@ public:
 
 	//Serializing doesnt really save IDS? i think might have to add in a file name as well
 	int MeshID; // value is -1 if no mesh is assigned
-	std::string _meshFileName;
+	//std::string _meshFileName;
+	LocalString<256> _meshFileName;
 
 	int _modelID; // value is -1 if no mesh is assigned
-	std::string _modelFileName;
+	//std::string _modelFileName;
+	LocalString<256> _modelFileName;
 
-	std::string _textureFileName;
+	//std::string _textureFileName;
+	LocalString<256> _textureFileName;
 	unsigned _textureID; // Temporarily only diffuse texture
 
 	MaterialData _materialData;

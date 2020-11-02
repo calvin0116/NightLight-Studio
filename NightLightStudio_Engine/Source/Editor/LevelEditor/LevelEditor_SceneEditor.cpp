@@ -93,9 +93,9 @@ void SceneEditor::Start()
                         std::string newName;
                         newName = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
                         if (newName == "")
-                            newName = "_Entity";
-
-                        newName.append("_copy");
+                            newName = "Entity_";
+                        else
+                            newName.append("_copy");
 
                         // Causes memory leaks currently (Probably Graphics Side)
                         ent.Copy(G_ECMANAGER, newName);

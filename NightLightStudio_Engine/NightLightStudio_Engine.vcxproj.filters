@@ -348,6 +348,15 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
+    <ClInclude Include="LocalString.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\LocalString.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\WindowsDialogBox.h">
+      <Filter>Source Files\Editor\Helper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -568,6 +577,9 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\ModelManager.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\WindowsDialogBox.cpp">
+      <Filter>Source Files\Editor\Helper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
