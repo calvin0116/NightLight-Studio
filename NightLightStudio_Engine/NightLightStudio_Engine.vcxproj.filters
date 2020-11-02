@@ -324,9 +324,6 @@
     <ClInclude Include="Source\Component\ComponentLoadAudio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Inspecter.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Mono\Binding\Components\AudioBind.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -345,9 +342,6 @@
     <ClInclude Include="Source\Graphics\ModelManager.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
     <ClInclude Include="LocalString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -356,6 +350,9 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\LevelEditor\WindowsDialogBox.h">
       <Filter>Source Files\Editor\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Inspector.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -551,17 +548,11 @@
     <ClCompile Include="Source\Component\ComponentLight.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Collision\Contact.cpp">
       <Filter>Source Files\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentLoadAudio.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Inspecter.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Mono\Binding\Components\AudioBind.cpp">
       <Filter>Source Files</Filter>
@@ -580,6 +571,9 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\WindowsDialogBox.cpp">
       <Filter>Source Files\Editor\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Inspector.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

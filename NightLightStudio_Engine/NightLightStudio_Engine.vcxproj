@@ -227,8 +227,7 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_ECHelper.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Hierarchy.h" />
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Inspecter.h" />
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Inspector.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_TemplateFuncs.hpp" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.h" />
     <ClInclude Include="Source\Editor\LevelEditor\WindowsDialogBox.h" />
@@ -316,10 +315,9 @@
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_DropDowns.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Hierarchy.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp" />
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Inspecter.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Inspector.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.cpp" />
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_SceneEditor.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\WindowsDialogBox.cpp" />
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />

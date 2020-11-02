@@ -3,8 +3,7 @@
 #include "LevelEditor_AssetInsp.h"
 #include "LevelEditor_PerfMetrics.h"
 #include "LevelEditor_Hierarchy.h"
-#include "LevelEditor_Inspecter.h"
-#include "LevelEditor_SceneEditor.h"
+#include "LevelEditor_Inspector.h"
 #include "../imgui/imguizmo/ImGuizmo.h"
 
 //Added by Teck Wei
@@ -27,7 +26,6 @@ void LevelEditor::Init(HWND window)
     LE_CreateWindow<PerformanceMetrics>("Performance Metrics", true);
     LE_CreateWindow<HierarchyInspector>("Heirarchy", true);
     LE_CreateWindow<InspectorWindow>("Inspector", true);
-    LE_CreateWindow<SceneEditor>("Scene Editor", true);
 
     _window = window;
 

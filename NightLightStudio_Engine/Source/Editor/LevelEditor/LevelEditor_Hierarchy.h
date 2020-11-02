@@ -5,15 +5,15 @@
 class HierarchyInspector : public LE_WinBase_Derived<HierarchyInspector>
 {
 private:
-	bool hasInit;
-
+	std::string _search;
 	int selected_index;
 public :
 	HierarchyInspector()
-		:hasInit{false}
+		: selected_index{}
 	{};
 	~HierarchyInspector() {};
 
+	void Start() override;
 	void Init() override;
 	void Run() override;
 	void Exit() override;

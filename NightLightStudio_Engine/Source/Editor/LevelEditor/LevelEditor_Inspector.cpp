@@ -1,10 +1,45 @@
-#include "LevelEditor_Inspecter.h"
+#include "LevelEditor_Inspector.h"
 
 #include "LevelEditor_ECHelper.h"
 #include "../../Core/SceneManager.h"
+#include "../../Graphics/GraphicsSystem.h"
 
 #include <set>
+#include "LevelEditor_Console.h"
+#include "../../Input/SystemInput.h"
 
+
+void InspectorWindow::Start()
+{
+	// Set up Command to run to move objects
+	COMMAND setPos =
+		[](std::any pos)
+	{
+		ENTITY_LAST_POS obj = std::any_cast<ENTITY_LAST_POS>(pos);
+
+		glm::mat4 newPos = obj._newPos;
+		TransformComponent* trans_comp = obj._transComp;
+		glm::mat4 lastPos = {};
+
+		if (trans_comp != NULL)
+		{
+			lastPos = trans_comp->GetModelMatrix();
+
+			float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
+			ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(newPos), trans, rot, scale);
+
+			trans_comp->_position = glm::make_vec3(trans);
+			trans_comp->_rotation = glm::make_vec3(rot);
+			trans_comp->_scale = glm::make_vec3(scale);
+		}
+		ENTITY_LAST_POS returnObj{ obj._transComp, lastPos };
+		return returnObj;
+	};
+
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"),
+		setPos,
+		setPos);
+}
 
 void InspectorWindow::Run()
 {
@@ -49,14 +84,16 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
 	if (trans_comp != NULL)
 	{
+		TransformGizmo(trans_comp);
+		/*
 		if (ImGui::CollapsingHeader("Transform"))
 		{
 			//float* rotation = &ent_selected->GetComponent<TransformComponent>().GetRotation().m[2];
-
 			ImGui::InputFloat3("Position", glm::value_ptr(trans_comp->_position)); //,-100.f, 100.f); // Edit 3 floats representing a color
 			ImGui::InputFloat3("Scale", glm::value_ptr(trans_comp->_scale)); //, 0.0f, 100.f);
 			ImGui::InputFloat3("Rotation", glm::value_ptr(trans_comp->_rotation));
 		}
+		*/
 	}
 	//Standard bool for all component to use
 	bool not_remove = true;
@@ -294,4 +331,143 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 			std::cout << "Component has already been created" << std::endl;
 		}
 	}
+}
+
+bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjection, float* matrix)
+{
+	if (ImGui::RadioButton("Translate", _mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
+		_mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Rotate", _mCurrentGizmoOperation == ImGuizmo::ROTATE))
+		_mCurrentGizmoOperation = ImGuizmo::ROTATE;
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Scale", _mCurrentGizmoOperation == ImGuizmo::SCALE))
+		_mCurrentGizmoOperation = ImGuizmo::SCALE;
+
+	float matrixTranslation[3], matrixRotation[3], matrixScale[3];
+	ImGuizmo::DecomposeMatrixToComponents(matrix, matrixTranslation, matrixRotation, matrixScale);
+
+	if (ImGui::InputFloat3("Translation##TRANSLATION", matrixTranslation, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		_lastEnter = true;
+	}
+	if (ImGui::InputFloat3("Rotation##ROTATION", matrixRotation, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		_lastEnter = true;
+	}
+	if (ImGui::InputFloat3("Scale##SCALE", matrixScale, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		_lastEnter = true;
+	}
+
+	ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, matrix);
+
+	if (_mCurrentGizmoOperation != ImGuizmo::SCALE)
+	{
+		if (ImGui::RadioButton("World", _mCurrentGizmoMode == ImGuizmo::WORLD))
+			_mCurrentGizmoMode = ImGuizmo::WORLD;
+		ImGui::SameLine();
+		if (ImGui::RadioButton("Local", _mCurrentGizmoMode == ImGuizmo::LOCAL))
+			_mCurrentGizmoMode = ImGuizmo::LOCAL;
+	}
+
+	ImGui::Checkbox("", &_useSnap);
+	ImGui::SameLine();
+
+	switch (_mCurrentGizmoOperation)
+	{
+	case ImGuizmo::TRANSLATE:
+		ImGui::InputFloat3("Snap", &_snap[0]);
+		break;
+	case ImGuizmo::ROTATE:
+		ImGui::InputFloat("Angle Snap", &_snap[0]);
+		break;
+	case ImGuizmo::SCALE:
+		ImGui::InputFloat("Scale Snap", &_snap[0]);
+		break;
+	}
+
+	ImGuiIO& io = ImGui::GetIO();
+	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+	return ImGuizmo::Manipulate(cameraView, cameraProjection, _mCurrentGizmoOperation, _mCurrentGizmoMode, matrix, NULL, _useSnap ? &_snap[0] : NULL, NULL, NULL);
+}
+
+void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
+{
+	_levelEditor->LE_AddChildWindow("##TransformChildWindow", ImVec2(0, 150),
+		[this, &trans_comp]()
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			NS_GRAPHICS::CameraSystem& cm = NS_GRAPHICS::CameraSystem::GetInstance();
+			glm::mat4 cmMat = cm.GetViewMatrix();
+			float* camView = glm::value_ptr(cmMat);
+			// Matches the most closely to the actual camera
+			// If gizmos don't match, change this?
+			float fov = 44.5f;
+			//Perspective(fov, io.DisplaySize.x / io.DisplaySize.y, 1.0f, 1000.f, cameraProjection);
+			float* cameraProjection;
+			glm::mat4 persp = glm::perspective(glm::radians(fov), io.DisplaySize.x / io.DisplaySize.y, 1.0f, 1000.0f);
+			cameraProjection = glm::value_ptr(persp);
+
+			glm::mat4 matObj = trans_comp->GetModelMatrix();
+			ImGuizmo::SetID(0);
+			if (EditTransform(camView, cameraProjection, glm::value_ptr(matObj)))
+			{
+				// Checks FIRST frame of manipulation only
+				if (!_lastPos_Start)
+				{
+					_lastPos_Start = true;
+					_lastPos_ELP = { trans_comp, trans_comp->GetModelMatrix() };
+				}
+
+				// Sets object to new position
+				float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
+				ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(matObj), trans, rot, scale);
+
+				trans_comp->_position = glm::make_vec3(trans);
+				trans_comp->_rotation = glm::make_vec3(rot);
+				trans_comp->_scale = glm::make_vec3(scale);
+			}
+			else
+			{
+				// Checks if not manipulating and mouse is let go
+				if (_lastPos_Start && SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IMOUSE_LBUTTON))
+				{
+					_lastPos_Start = false;
+					// New position for the object
+					ENTITY_LAST_POS newObj{ trans_comp , matObj };
+					std::any curPos = newObj;
+
+					// Reset object back to original position
+					float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
+					ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(_lastPos_ELP._newPos), trans, rot, scale);
+					trans_comp->_position = glm::make_vec3(trans);
+					trans_comp->_rotation = glm::make_vec3(rot);
+					trans_comp->_scale = glm::make_vec3(scale);
+
+					// Runs command to move object to new position from old position
+					_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
+				}
+				else if (_lastEnter)
+				{
+					_lastEnter = false;
+
+					ENTITY_LAST_POS newObj{ trans_comp , matObj };
+					std::any curPos = newObj;
+
+					// Runs command to move object to new position from old position
+					_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
+				}
+				else
+				{
+					// Sets object to new position
+					float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
+					ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(matObj), trans, rot, scale);
+
+					trans_comp->_position = glm::make_vec3(trans);
+					trans_comp->_rotation = glm::make_vec3(rot);
+					trans_comp->_scale = glm::make_vec3(scale);
+				}
+			}
+		}, true);
 }
