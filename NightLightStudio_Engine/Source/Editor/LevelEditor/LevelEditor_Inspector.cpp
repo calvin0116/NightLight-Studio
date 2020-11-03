@@ -397,7 +397,7 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 	_levelEditor->LE_AddChildWindow("##TransformChildWindow", ImVec2(0, 150),
 		[this, &trans_comp]()
 		{
-			ImGuiIO& io = ImGui::GetIO();
+			POINT windowSize = SYS_INPUT->GetSystemMousePos().GetClientRectSize();
 			NS_GRAPHICS::CameraSystem& cm = NS_GRAPHICS::CameraSystem::GetInstance();
 			glm::mat4 cmMat = cm.GetViewMatrix();
 			float* camView = glm::value_ptr(cmMat);
@@ -406,7 +406,7 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 			float fov = 44.5f;
 			//Perspective(fov, io.DisplaySize.x / io.DisplaySize.y, 1.0f, 1000.f, cameraProjection);
 			float* cameraProjection;
-			glm::mat4 persp = glm::perspective(glm::radians(fov), io.DisplaySize.x / io.DisplaySize.y, 1.0f, 1000.0f);
+			glm::mat4 persp = glm::perspective(glm::radians(fov), (float)windowSize.x / (float)windowSize.y, 1.0f, 1000.0f);
 			cameraProjection = glm::value_ptr(persp);
 
 			glm::mat4 matObj = trans_comp->GetModelMatrix();
