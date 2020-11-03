@@ -456,6 +456,8 @@ namespace NS_GRAPHICS
 			printf("Call to FbxImporter::Initialize() failed.\n");
 			//printf("%s\n", fileName.c_str());
 			printf("Error returned: %s\n\n", _fbxImport->GetStatus().GetErrorString());
+			delete model;
+			return;
 			//exit(-1);
 		}
 
@@ -504,6 +506,11 @@ namespace NS_GRAPHICS
 	}
 	void ModelLoader::LoadModel(const std::string& fileName, const std::string& customName)
 	{
+		if (fileName.empty())
+		{
+			return;
+		}
+
 		Model* model = new Model();
 
 		//Checks for the file name
