@@ -292,6 +292,9 @@ namespace NS_GRAPHICS
 		{
 			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
 
+			if (graphicsComp->MeshID < 0)
+				continue;
+
 			Model* model = modelManager->_models[graphicsComp->MeshID];
 
 			// get transform component
