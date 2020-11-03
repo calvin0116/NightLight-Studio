@@ -51,27 +51,27 @@ ComponentCollider::ComponentCollider(const char* col)
 	std::string colliderName = col;
 	if (colliderName == "OBB")
 	{
-		colliderType == COLLIDERS::OBB;
+		colliderType = COLLIDERS::OBB;
 		collider.obb = OBBCollider();
 	}
 	else if (colliderName == "AABB")
 	{
-		colliderType == COLLIDERS::AABB;
+		colliderType = COLLIDERS::AABB;
 		collider.aabb = AABBCollider();
 	}
 	else if (colliderName == "PLANE")
 	{
-		colliderType == COLLIDERS::PLANE;
+		colliderType = COLLIDERS::PLANE;
 		collider.plane = PlaneCollider();
 	}
 	else if (colliderName == "CAPSULE")
 	{
-		colliderType == COLLIDERS::CAPSULE;
+		colliderType = COLLIDERS::CAPSULE;
 		collider.capsule = CapsuleCollider();
 	}
 	else if (colliderName == "SPHERE")
 	{
-		colliderType == COLLIDERS::SPHERE;
+		colliderType = COLLIDERS::SPHERE;
 		collider.sphere = SphereCollider();
 	}
 }
@@ -96,27 +96,27 @@ void ComponentCollider::Read(Value& val)
 		std::string colliderName = val["colliderType"].GetString();
 		if (colliderName == "OBB")
 		{
-			colliderType == COLLIDERS::OBB;
+			colliderType = COLLIDERS::OBB;
 			collider.obb = OBBCollider();
 		}
 		else if (colliderName == "AABB")
 		{
-			colliderType == COLLIDERS::AABB;
+			colliderType = COLLIDERS::AABB;
 			collider.aabb = AABBCollider();
 		}
 		else if (colliderName == "PLANE")
 		{
-			colliderType == COLLIDERS::PLANE;
+			colliderType = COLLIDERS::PLANE;
 			collider.plane = PlaneCollider();
 		}
 		else if (colliderName == "CAPSULE")
 		{
-			colliderType == COLLIDERS::CAPSULE;
+			colliderType = COLLIDERS::CAPSULE;
 			collider.capsule = CapsuleCollider();
 		}
 		else if (colliderName == "SPHERE")
 		{
-			colliderType == COLLIDERS::SPHERE;
+			colliderType = COLLIDERS::SPHERE;
 			collider.sphere = SphereCollider();
 		}
 	}
