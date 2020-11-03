@@ -439,7 +439,7 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	void ModelLoader::LoadFBX(Model*& model, const std::string& fileName, const std::string& customName)
+	bool ModelLoader::LoadFBX(Model*& model, const std::string& fileName, const std::string& customName)
 	{
 		std::cout << "Loading FBX..." << std::endl;
 		if (_fbxScene)
@@ -457,7 +457,7 @@ namespace NS_GRAPHICS
 			//printf("%s\n", fileName.c_str());
 			printf("Error returned: %s\n\n", _fbxImport->GetStatus().GetErrorString());
 			delete model;
-			return;
+			return false;
 			//exit(-1);
 		}
 
@@ -503,6 +503,8 @@ namespace NS_GRAPHICS
 				TransverseChild(root->GetChild(i), model, &offset, fileName, customName);
 			}
 		}
+
+		return true;
 	}
 	void ModelLoader::LoadModel(const std::string& fileName, const std::string& customName)
 	{
@@ -551,11 +553,19 @@ namespace NS_GRAPHICS
 		//Loads the correct function based on extension
 		if (fileName.find(s_ModelFileType) != std::string::npos)
 		{
-			LoadCustomMesh(model, fileName, customName);
+			if (!LoadCustomMesh(model, fileName, customName))
+			{
+				delete model;
+				return;
+			}
 		}
 		else
 		{
-			LoadFBX(model, fileName, customName);
+			if (!LoadFBX(model, fileName, customName))
+			{
+				delete model;
+				return;
+			}
 		}
 
 		_modelManager->AddLoadedModel(model, model->_modelName);
@@ -566,10 +576,11 @@ namespace NS_GRAPHICS
 
 		//TODO Saving custom mesh
 	}
-	void ModelLoader::LoadCustomMesh(Model*& model, const std::string& fileName, const std::string& customName)
+	bool ModelLoader::LoadCustomMesh(Model*& model, const std::string& fileName, const std::string& customName)
 	{
 		//Gets rid of warning for now
 		(void)model, fileName, customName;
+		return true;
 	}
 	void ModelLoader::DebugToFile(const std::string& meshName, const std::string& fileName)
 	{
