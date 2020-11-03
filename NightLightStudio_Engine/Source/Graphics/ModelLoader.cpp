@@ -506,6 +506,11 @@ namespace NS_GRAPHICS
 	}
 	void ModelLoader::LoadModel(const std::string& fileName, const std::string& customName)
 	{
+		if (fileName.empty())
+		{
+			return;
+		}
+
 		Model* model = new Model();
 
 		//Checks for the file name
