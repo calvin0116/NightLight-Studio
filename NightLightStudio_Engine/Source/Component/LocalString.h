@@ -85,10 +85,14 @@ public:
 		return std::string(stringData);
 	}
 
-	void empty()
+	void clear()
 	{
 		memset(stringData, 0, N);
 	}
 
+	bool empty()
+	{
+		return stringData[0] != 0;
+	}
 
 };
