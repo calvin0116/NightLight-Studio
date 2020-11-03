@@ -92,7 +92,7 @@ public:
 
 	bool empty()
 	{
-		return stringData[0] != 0;
+		return stringData[0] == 0;
 	}
 
 };
