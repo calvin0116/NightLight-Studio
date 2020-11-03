@@ -197,7 +197,7 @@ namespace NS_WINDOW
 #ifdef _DEBUG
 		ShowCursor(true);
 #else
-		ShowCursor(false);
+		ShowCursor(true);
 #endif
 
 		return true; // Successful Initialization
