@@ -29,9 +29,9 @@ public:
 	bool _isActive; // Temporarily set to true at beginning
 
 	//Serializing doesnt really save IDS? i think might have to add in a file name as well
-	int MeshID; // value is -1 if no mesh is assigned
+	//int MeshID; // value is -1 if no mesh is assigned
 	//std::string _meshFileName;
-	LocalString<256> _meshFileName;
+	//LocalString<256> _meshFileName;
 
 	int _modelID; // value is -1 if no mesh is assigned
 	//std::string _modelFileName;

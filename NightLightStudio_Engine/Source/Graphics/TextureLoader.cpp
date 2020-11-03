@@ -221,7 +221,7 @@ namespace NS_GRAPHICS
 		return true;
 	}
 
-	int TextureLoader::LoadTexture(const std::string & file)
+	unsigned TextureLoader::LoadTexture(const std::string & file)
 	{
 		//Generate a texture Id for use and bind it to the active texture unit
 		unsigned texture;
@@ -270,7 +270,7 @@ namespace NS_GRAPHICS
 			glBindTexture(GL_TEXTURE_2D, 0);
 
 			//Not sure what to do here for error handling, used to throw catch all the way out
-			return -1;
+			return 0;
 		}
 
 		//Unbind textureID from active texture unit once done with loading

@@ -13,10 +13,10 @@ namespace NS_GRAPHICS
 		//EXAMPLE: IF fbx file named "Test1.fbx", using model loader to create a new mesh files, it 
 		//loads the fbx file into our custom mesh format. We will need some way to serialize and load in therefore
 		//this is needed. It will become Test1.mesh or something?
-		std::string _localFileName;
+		//std::string _localFileName;
 
 		//Manual Input
-		std::string _meshName;
+		//std::string _meshName;
 
 		//////////////////////////////
 		/// New variables for interleaving data and reducing BOs

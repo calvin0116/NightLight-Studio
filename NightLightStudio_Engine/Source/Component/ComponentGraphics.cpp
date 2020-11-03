@@ -6,21 +6,21 @@
 
 ComponentGraphics::ComponentGraphics()
 	: _isActive{ true },
-	MeshID{ -1 }, _textureFileName{}, _textureID{ NULL }
+	_modelID{ -1 }, _textureFileName{}, _textureID{ NULL }
 {
 	strcpy_s(ser_name ,"GraphicsComponent");
 }
 
 ComponentGraphics::ComponentGraphics(const int& meshID)
 	: _isActive{ true },
-	MeshID{ meshID }, _textureFileName{}, _textureID{ NULL }
+	_modelID{ meshID }, _textureFileName{}, _textureID{ NULL }
 {
 	strcpy_s(ser_name, "GraphicsComponent");
 }
 
 void ComponentGraphics::AttachMesh(const int& meshID)
 {
-	MeshID = meshID;
+	_modelID = meshID;
 }
 
 ComponentGraphics::~ComponentGraphics()
@@ -50,10 +50,10 @@ inline void ComponentGraphics::Read(Value& val)
 
 		if (!_modelFileName.empty())
 		{
-			NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadMesh(_modelFileName.toString());
+			NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(_modelFileName.toString());
 
 			//Checks for the file name
-			std::string name;
+			/*std::string name;
 			size_t pos = _modelFileName.toString().rfind("\\");
 			//Get just the string after the last path
 			if (pos != std::string::npos)
@@ -68,8 +68,8 @@ inline void ComponentGraphics::Read(Value& val)
 			//Trim the extension to get the file name
 			name.erase(name.rfind("."));
 			//model->_fileName = s_LocalPathName + name + s_ModelFileType;
-
-			MeshID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(name);
+			*/
+			_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
 		}
 	}
 

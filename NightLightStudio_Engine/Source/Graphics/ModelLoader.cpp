@@ -24,7 +24,7 @@ namespace NS_GRAPHICS
 		_fbxManager->Destroy();
 	}
 
-	void ModelLoader::TransverseChild(FbxNode* node, Model*& model, int* meshIndex, const std::string& fileName, const std::string& customName)
+	void ModelLoader::TransverseChild(FbxNode* node, Model*& model, const std::string& fileName)
 	{
 		for (int i = 0; i < node->GetNodeAttributeCount(); ++i)
 		{
@@ -58,12 +58,12 @@ namespace NS_GRAPHICS
 				name.erase(name.find("."));
 				//CONVERSION TO CUSTOM FORMAT
 				//OLD
-				newMesh->_localFileName = s_LocalPathName + name + s_ModelFileType;
+				//newMesh->_localFileName = s_LocalPathName + name + s_ModelFileType;
 				//NEW
-				newMeshNew->_localFileName = s_LocalPathName + name + s_ModelFileType;
+				//newMeshNew->_localFileName = s_LocalPathName + name + s_ModelFileType;
 
 				//MESH NAME
-				if (customName.empty())
+				/*if (customName.empty())
 				{
 					if (*meshIndex)
 					{
@@ -99,6 +99,7 @@ namespace NS_GRAPHICS
 					}
 
 				}
+				*/
 
 				//TEXTURE FILE NAME
 				//PROBABLY WONT BE AUTO
@@ -402,13 +403,13 @@ namespace NS_GRAPHICS
 
 				//NEW WAY
 				model->_meshes.push_back(newMeshNew);
-				++(*meshIndex);
+				//++(*meshIndex);
 			}	
 		}
 
 		for (int i = 0; i < node->GetChildCount(); i++)
 		{
-			TransverseChild(node->GetChild(i), model, meshIndex, fileName, customName);
+			TransverseChild(node->GetChild(i), model, fileName);
 		}
 	}
 
@@ -439,7 +440,7 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	bool ModelLoader::LoadFBX(Model*& model, const std::string& fileName, const std::string& customName)
+	bool ModelLoader::LoadFBX(Model*& model, const std::string& fileName)
 	{
 		std::cout << "Loading FBX..." << std::endl;
 		if (_fbxScene)
@@ -486,7 +487,7 @@ namespace NS_GRAPHICS
 
 		// Recursively goes through the scene to get all the meshes
 		// Root nodes should not contain any attributes.
-		int offset = 0;
+		//int offset = 0;
 		FbxNode* root = _fbxScene->GetRootNode();
 		if (root)
 		{
@@ -494,18 +495,18 @@ namespace NS_GRAPHICS
 
 			if (parentNode)
 			{
-				TransverseChild(parentNode, model,&offset, fileName, customName);
+				TransverseChild(parentNode, model, fileName);
 			}
 
 			for (int i = 0; i < root->GetChildCount(); i++)
 			{
-				TransverseChild(root->GetChild(i), model, &offset, fileName, customName);
+				TransverseChild(root->GetChild(i), model, fileName);
 			}
 		}
 
 		return true;
 	}
-	void ModelLoader::LoadModel(const std::string& fileName, const std::string& customName)
+	void ModelLoader::LoadModel(const std::string& fileName)
 	{
 		if (fileName.empty())
 		{
@@ -527,23 +528,18 @@ namespace NS_GRAPHICS
 			name = fileName;
 		}
 
+		pos = name.rfind(".");
 		//Trim the extension to get the file name
-		name.erase(name.rfind("."));
+		if (pos != std::string::npos)
+		{
+			name.erase(pos);
+		}
+
 		model->_fileName = fileName;
 		//model->_fileName = s_LocalPathName + name + s_ModelFileType;
 
-		//Model name if empty use file name
-		if (customName.empty())
-		{
-			model->_modelName = name;
-		}
-		else
-		{
-			model->_modelName = customName;
-		}
-
 		//First checks if the model existed to avoid unnecessary loading
-		if (_modelManager->_modelList.find(model->_modelName) != _modelManager->_modelList.end())
+		if (_modelManager->_modelList.find(model->_fileName) != _modelManager->_modelList.end())
 		{
 			delete model;
 			return;
@@ -552,7 +548,7 @@ namespace NS_GRAPHICS
 		//Loads the correct function based on extension
 		if (fileName.find(s_ModelFileType) != std::string::npos)
 		{
-			if (!LoadCustomMesh(model, fileName, customName))
+			if (!LoadCustomMesh(model, fileName))
 			{
 				delete model;
 				return;
@@ -560,45 +556,49 @@ namespace NS_GRAPHICS
 		}
 		else
 		{
-			if (!LoadFBX(model, fileName, customName))
+			if (!LoadFBX(model, fileName))
 			{
 				delete model;
 				return;
 			}
 		}
 
-		_modelManager->AddLoadedModel(model, model->_modelName);
+		_modelManager->AddLoadedModel(model, model->_fileName);
 #ifdef LOG_MODEL
-		std::string textFileName = model->_modelName + ".txt";
-		DebugToFile(model->_modelName, textFileName);
+		//std::string textFileName = model-> + ".txt";
+		DebugToFile(model->_fileName);
 #endif
 
 		//TODO Saving custom mesh
 	}
-	bool ModelLoader::LoadCustomMesh(Model*& model, const std::string& fileName, const std::string& customName)
+	bool ModelLoader::LoadCustomMesh(Model*& model, const std::string& fileName)
 	{
 		//Gets rid of warning for now
 		std::ofstream meshFile;
 		meshFile.open(fileName.c_str());
-		(void)model, fileName, customName;
+		(void)model, fileName;
 		meshFile.close();
 		return true;
 	}
-	void ModelLoader::DebugToFile(const std::string& meshName, const std::string& fileName)
+	void ModelLoader::DebugToFile(const std::string& fileName)
 	{
+		std::string name = fileName;
+		name.erase(name.rfind("."));
+		name.append(".txt");
+
 		std::ofstream logFile;
 		logFile.open(fileName.c_str());
 
 		int lineCount = 0;
-		size_t MeshSize = _modelManager->_modelList[meshName]->_meshes.size();
+		size_t MeshSize = _modelManager->_modelList[fileName]->_meshes.size();
 		for (size_t i = 0; i < MeshSize; ++i)
 		{
-			size_t verticeSize = _modelManager->_modelList[meshName]->_meshes[i]->_vertices.size();
+			size_t verticeSize = _modelManager->_modelList[fileName]->_meshes[i]->_vertices.size();
 			for (size_t x = 0; x < verticeSize; ++x)
 			{
-				logFile << "Vertex: X: " << _modelManager->_modelList[meshName]->_meshes[i]->_vertices[x].x << " Y: " <<
-											_modelManager->_modelList[meshName]->_meshes[i]->_vertices[x].y << " Z: " <<
-											_modelManager->_modelList[meshName]->_meshes[i]->_vertices[x].z << "\n";
+				logFile << "Vertex: X: " << _modelManager->_modelList[fileName]->_meshes[i]->_vertices[x].x << " Y: " <<
+											_modelManager->_modelList[fileName]->_meshes[i]->_vertices[x].y << " Z: " <<
+											_modelManager->_modelList[fileName]->_meshes[i]->_vertices[x].z << "\n";
 
 				lineCount++;
 			}
