@@ -456,7 +456,6 @@ namespace NS_GRAPHICS
 			printf("Call to FbxImporter::Initialize() failed.\n");
 			//printf("%s\n", fileName.c_str());
 			printf("Error returned: %s\n\n", _fbxImport->GetStatus().GetErrorString());
-			delete model;
 			return false;
 			//exit(-1);
 		}
@@ -579,7 +578,10 @@ namespace NS_GRAPHICS
 	bool ModelLoader::LoadCustomMesh(Model*& model, const std::string& fileName, const std::string& customName)
 	{
 		//Gets rid of warning for now
+		std::ofstream meshFile;
+		meshFile.open(fileName.c_str());
 		(void)model, fileName, customName;
+		meshFile.close();
 		return true;
 	}
 	void ModelLoader::DebugToFile(const std::string& meshName, const std::string& fileName)

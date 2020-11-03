@@ -47,26 +47,30 @@ inline void ComponentGraphics::Read(Value& val)
 	else
 	{
 		_modelFileName = val["Model file"].GetString();
-		NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadMesh(_modelFileName.toString());
 
-		//Checks for the file name
-		/*std::string name;
-		size_t pos = _modelFileName.toString().rfind("\\");
-		//Get just the string after the last path
-		if (pos != std::string::npos)
+		if (!_modelFileName.empty())
 		{
-			name = _modelFileName.toString().substr(pos + 1);
+			NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadMesh(_modelFileName.toString());
+
+			//Checks for the file name
+			std::string name;
+			size_t pos = _modelFileName.toString().rfind("\\");
+			//Get just the string after the last path
+			if (pos != std::string::npos)
+			{
+				name = _modelFileName.toString().substr(pos + 1);
+			}
+			else
+			{
+				name = _modelFileName.toString();
+			}
+
+			//Trim the extension to get the file name
+			name.erase(name.rfind("."));
+			//model->_fileName = s_LocalPathName + name + s_ModelFileType;
+
+			MeshID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(name);
 		}
-		else
-		{
-			name = _modelFileName.toString();
-		}*/
-
-		//Trim the extension to get the file name
-		//name.erase(name.rfind("."));
-		//model->_fileName = s_LocalPathName + name + s_ModelFileType;
-
-		MeshID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
 	}
 
 }
