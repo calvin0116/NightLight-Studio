@@ -22,16 +22,20 @@ inline void ComponentScript::Read(Value& val)
 		if (itr->name == "isActive")	//bool
 			_isActive = itr->value.GetBool();
 
-		if (itr->name == "Script")		//Vector of object
+		if (itr->name == "Scripts")		//Vector of object
 		{
-			const Value& script = itr->value;
+			const Value& all_script = itr->value[itr->name];
+			for (Value::ConstMemberIterator itr = all_script.MemberBegin(); itr != all_script.MemberEnd(); ++itr)
+			{
+				const Value& script = itr->value;
+				
+				data d;
+				d._isActive = script["isActive"].GetBool();
+				d._isRunning = script["isRunning"].GetBool();
+				strcpy_s(d._ScriptName, script["Script Name"].GetString());
 
-			data d;
-			d._isActive = script["isActive"].GetBool();
-			d._isRunning = script["isRunning"].GetBool();
-			strcpy_s(d._ScriptName , script["Script Name"].GetString());
-
-			_Scripts.push_back(d);
+				_Scripts.push_back(d);
+			}
 		}
 	}
 
