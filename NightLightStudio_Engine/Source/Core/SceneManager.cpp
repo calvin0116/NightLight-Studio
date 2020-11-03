@@ -210,6 +210,9 @@ namespace NS_SCENE
 			else if (component_name == "ColliderComponent")
 			{
 				CreateAndWriteComp<ColliderComponent>(Comp_list, entity, component_name);
+				ColliderComponent comp(itr->value["colliderType"].GetString());
+				comp.Read(Comp_list[component_name.c_str()]);
+				G_ECMANAGER->AttachComponent<ColliderComponent>(entity, comp);
 			}
 			else if (component_name == "RigidBody")
 			{

@@ -5,6 +5,7 @@
 //#include "ComponentTransform.h"
 //#include "ComponentRigidBody.h"
 #include "..\\Collision\CollisionMathLib.h"
+#include "..\\..\ISerializable.h"
 //#include "..\Core\MySystem.h"
 
 class ComponentTransform;
@@ -146,6 +147,7 @@ typedef struct ComponentCollider : public ISerializable//: public IComponent
 		AABBCollider	aabb;
 		OBBCollider		obb;
 		CapsuleCollider capsule;
+		//default
 		Collider() : aabb() { };
 	};
 
@@ -161,12 +163,12 @@ typedef struct ComponentCollider : public ISerializable//: public IComponent
 	bool isCollide = false;
 
 	ComponentCollider(COLLIDERS col);
-
+	ComponentCollider(const char * col);
 	ComponentCollider();
 
 	void CollisionTimeReset();
 
-	virtual void	Read(Value&) { };
+	virtual void	Read(Value&);
 	virtual Value	Write();
 	virtual Value& Write(Value& val) { return val; };
 

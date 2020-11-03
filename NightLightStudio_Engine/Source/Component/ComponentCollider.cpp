@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "ComponentCollider.h"
 
 #include "Components.h"
@@ -13,34 +14,71 @@ ComponentCollider::ComponentCollider(COLLIDERS _col)
 	{
 		case COLLIDERS::PLANE:
 		{
-			strcpy_s(ser_name, "Plane Collider");
+			strcpy_s(ser_name, "ColliderComponent");
+			collider.plane = PlaneCollider();
 			break;
 		}
 		case COLLIDERS::AABB:
 		{
-			strcpy_s(ser_name, "AABB Collider");
+			strcpy_s(ser_name, "ColliderComponent");
+			collider.aabb = AABBCollider();
 			break;
 		}
 		case COLLIDERS::SPHERE:
 		{
-			strcpy_s(ser_name, "Sphere Collider");
+			strcpy_s(ser_name, "ColliderComponent");
+			collider.sphere = SphereCollider();
 			break;
 		}
 		case COLLIDERS::OBB:
 		{
-			strcpy_s(ser_name , "OBB Collider");
+			strcpy_s(ser_name, "ColliderComponent");
+			collider.obb = OBBCollider();
 			break;
 		}
 		case COLLIDERS::CAPSULE:
 		{
-			strcpy_s(ser_name, "Capsule Collider");
+			strcpy_s(ser_name, "ColliderComponent");
+			collider.capsule = CapsuleCollider();
 			break;
 		}
 	}
 }
 
+ComponentCollider::ComponentCollider(const char* col) 
+	: collisionTime(FLT_MAX), colliderType(COLLIDERS::AABB)
+{
+	std::string colliderName = col;
+	if (colliderName == "OBB")
+	{
+		colliderType == COLLIDERS::OBB;
+		collider.obb = OBBCollider();
+	}
+	else if (colliderName == "AABB")
+	{
+		colliderType == COLLIDERS::AABB;
+		collider.aabb = AABBCollider();
+	}
+	else if (colliderName == "PLANE")
+	{
+		colliderType == COLLIDERS::PLANE;
+		collider.plane = PlaneCollider();
+	}
+	else if (colliderName == "CAPSULE")
+	{
+		colliderType == COLLIDERS::CAPSULE;
+		collider.capsule = CapsuleCollider();
+	}
+	else if (colliderName == "SPHERE")
+	{
+		colliderType == COLLIDERS::SPHERE;
+		collider.sphere = SphereCollider();
+	}
+}
+
 ComponentCollider::ComponentCollider() : collisionTime{ FLT_MAX }, colliderType(COLLIDERS::AABB) // default this
 {
+	strcpy_s(ser_name, "ColliderComponent");
 }
 
 void ComponentCollider::CollisionTimeReset()
@@ -48,10 +86,91 @@ void ComponentCollider::CollisionTimeReset()
 	collisionTime = FLT_MAX;
 }
 
-inline Value ComponentCollider::Write() 
+void ComponentCollider::Read(Value& val)
+{
+	//get collider type
+	if (val.FindMember("colliderType") == val.MemberEnd())
+		std::cout << "No active data has been found" << std::endl;
+	else
+	{
+		std::string colliderName = val["colliderType"].GetString();
+		if (colliderName == "OBB")
+		{
+			colliderType == COLLIDERS::OBB;
+			collider.obb = OBBCollider();
+		}
+		else if (colliderName == "AABB")
+		{
+			colliderType == COLLIDERS::AABB;
+			collider.aabb = AABBCollider();
+		}
+		else if (colliderName == "PLANE")
+		{
+			colliderType == COLLIDERS::PLANE;
+			collider.plane = PlaneCollider();
+		}
+		else if (colliderName == "CAPSULE")
+		{
+			colliderType == COLLIDERS::CAPSULE;
+			collider.capsule = CapsuleCollider();
+		}
+		else if (colliderName == "SPHERE")
+		{
+			colliderType == COLLIDERS::SPHERE;
+			collider.sphere = SphereCollider();
+		}
+	}
+
+}
+
+inline Value ComponentCollider::Write()
 { 
 	Value val(rapidjson::kObjectType);
+	switch (colliderType)
+	{
+	case COLLIDERS::PLANE:
+		
+		NS_SERIALISER::ChangeData(&val, "colliderType", rapidjson::StringRef("PLANE"));		//custom enum
+		break;
+	case COLLIDERS::AABB:
+		NS_SERIALISER::ChangeData(&val, "colliderType", rapidjson::StringRef("AABB"));		//custom enum
+		break;
+	case COLLIDERS::SPHERE:
+		NS_SERIALISER::ChangeData(&val, "colliderType", rapidjson::StringRef("SPHERE"));		//custom enum
+		break;
+	case COLLIDERS::OBB:
+		NS_SERIALISER::ChangeData(&val, "colliderType", rapidjson::StringRef("OBB"));		//custom enum
+		break;
+	case COLLIDERS::CAPSULE:
+		NS_SERIALISER::ChangeData(&val, "colliderType", rapidjson::StringRef("CAPSULE"));		//custom enum
+		break;
+	default:
+		break;
+	}
+	
+
 	return val;
+
+	//Value val(rapidjson::kObjectType);
+
+	//NS_SERIALISER::ChangeData(&val, "isStatic", isStatic);		//Bool
+
+	//Value force_val(rapidjson::kArrayType);
+	//force_val.PushBack(force.x, global_alloc);
+	//force_val.PushBack(force.y, global_alloc);
+	//force_val.PushBack(force.z, global_alloc);
+
+	//NS_SERIALISER::ChangeData(&val, "Force", force_val);		//Array
+
+	//Value accel_val(rapidjson::kArrayType);
+	//accel_val.PushBack(acceleration.x, global_alloc);
+	//accel_val.PushBack(acceleration.y, global_alloc);
+	//accel_val.PushBack(acceleration.z, global_alloc);
+
+	//NS_SERIALISER::ChangeData(&val, "Accelaration", accel_val);	//Array
+
+
+	//return val;
 }
 
 
