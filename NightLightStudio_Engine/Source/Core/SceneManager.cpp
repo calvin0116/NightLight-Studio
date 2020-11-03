@@ -209,7 +209,7 @@ namespace NS_SCENE
 			//~~! Add your own component creation here ~~!//
 			else if (component_name == "ColliderComponent")
 			{
-				CreateAndWriteComp<ColliderComponent>(Comp_list, entity, component_name);
+				//CreateAndWriteComp<ColliderComponent>(Comp_list, entity, component_name);
 				ColliderComponent comp(itr->value["colliderType"].GetString());
 				comp.Read(Comp_list[component_name.c_str()]);
 				G_ECMANAGER->AttachComponent<ColliderComponent>(entity, comp);
@@ -225,6 +225,10 @@ namespace NS_SCENE
 			else if (component_name == "GraphicsComponent")
 			{
 				CreateAndWriteComp<GraphicsComponent>(Comp_list, entity, component_name);
+			}
+			else if (component_name == "ScriptComponent")
+			{
+				CreateAndWriteComp<ScriptComponent>(Comp_list, entity, component_name);
 			}
 		}
 	}

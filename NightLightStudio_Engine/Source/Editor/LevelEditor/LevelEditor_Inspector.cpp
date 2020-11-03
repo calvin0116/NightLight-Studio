@@ -108,31 +108,31 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 		std::string name = "Collider";	//e.g.
 		switch (col_comp->colliderType)
 		{
-		case COLLIDERS::PLANE:
-		{
-			name = "Plane " + name;
-			break;
-		}
-		case COLLIDERS::AABB:
-		{
-			name = "AABB " + name;
-			break;
-		}
-		case COLLIDERS::SPHERE:
-		{
-			name = "Sphere " + name;
-			break;
-		}
-		case COLLIDERS::OBB:
-		{
-			name = "OBB " + name;
-			break;
-		}
-		case COLLIDERS::CAPSULE:
-		{
-			name = "Capsule " + name;
-			break;
-		}
+			case COLLIDERS::PLANE:
+			{
+				name = "Plane " + name;
+				break;
+			}
+			case COLLIDERS::AABB:
+			{
+				name = "AABB " + name;
+				break;
+			}
+			case COLLIDERS::SPHERE:
+			{
+				name = "Sphere " + name;
+				break;
+			}
+			case COLLIDERS::OBB:
+			{
+				name = "OBB " + name;
+				break;
+			}
+			case COLLIDERS::CAPSULE:
+			{
+				name = "Capsule " + name;
+				break;
+			}
 		}
 
 		//4. May need loop to loop through all collider
@@ -145,36 +145,6 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 		if (!not_remove)
 		{
 			ent.RemoveComponent<ComponentCollider>();
-			/*
-			switch (col_comp->colliderType)
-			{
-
-				case COLLIDERS::PLANE:
-				{
-					ent.RemoveComponent<PlaneCollider>();
-					break;
-				}
-				case COLLIDERS::AABB:
-				{
-					ent.RemoveComponent<AABBCollider>();
-					break;
-				}
-				case COLLIDERS::SPHERE:
-				{
-					ent.RemoveComponent<SphereCollider>();
-					break;
-				}
-				case COLLIDERS::OBB:
-				{
-					ent.RemoveComponent<OBBCollider>();
-					break;
-				}
-				case COLLIDERS::CAPSULE:
-				{
-					ent.RemoveComponent<CapsuleCollider>();
-					break;
-				}
-			}*/
 			not_remove = true;
 		}
 	}
@@ -259,9 +229,53 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 		}
 	}
 
+	ScriptComponent* script_comp = ent.getComponent<ScriptComponent>();
+	if (script_comp != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Script", &not_remove))
+		{
+			//_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			ImGui::Checkbox("IsActive", &script_comp->_isActive);
+			
+			if (ImGui::Button("Add Script")) //Need to change to drag and drop or create a new default scipt
+			{
+				script_comp->_Scripts.push_back(ComponentScript::data());
+			}
+
+			ImGuiTreeNodeFlags treeflag = ImGuiTreeNodeFlags_DefaultOpen ;
+			int index = 0;
+			for (auto& script : script_comp->_Scripts)
+			{
+				if (std::string(script._ScriptName) == "")	//Temp for names
+					strcpy_s(script._ScriptName,"Script_" + index);
+
+				ImGui::Separator();
+				std::string header = "Script_" + std::to_string(index);
+				if (ImGui::CollapsingHeader(header.c_str(), treeflag))
+				{
+					std::string text = "Script name##" + header;
+					ImGui::InputText(text.c_str(), script._ScriptName, 128);
+					text = "IsActive##" + header;
+					ImGui::Checkbox(text.c_str(), &script._isActive);
+					text = "IsRunning##" + header;
+					ImGui::Checkbox(text.c_str(), &script._isRunning);
+				}
+				++index;
+			}
+		}
+
+		if (!not_remove)
+		{
+			ent.RemoveComponent<ScriptComponent>();
+			not_remove = true;
+		}
+	}
+
+
 	static int item_type = 0;
 	
-	ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
+	ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0 ------\0 Script\0");
 
 	void* next_lol = nullptr;
 
@@ -269,62 +283,61 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	{
 		switch (item_type)
 		{
-		case 1:
-		{
-			next_lol = ent.AddComponent<RigidBody>();
-			break;
-		}
-		case 2:
-		{
-			next_lol = ent.AddComponent<ComponentLoadAudio>();
-			break;
-		}
-		case 3:
-		{
-			next_lol = ent.AddComponent<GraphicsComponent>();
-			break;
-		}
-		/*
-		case 4:
-		{
-			next_lol = ent.AddComponent<ColliderComponent>();
-			break;
-		}*/
-		
-		case 5:
-		{
-			ColliderComponent aabb(COLLIDERS::AABB);
-			ent.AttachComponent(aabb);
-			break;
-		}
+			case 1:
+			{
+				next_lol = ent.AddComponent<RigidBody>();
+				break;
+			}
+			case 2:
+			{
+				next_lol = ent.AddComponent<ComponentLoadAudio>();
+				break;
+			}
+			case 3:
+			{
+				next_lol = ent.AddComponent<GraphicsComponent>();
+				break;
+			}
+			//case 4: -> --Collider--
+			case 5:
+			{
+				ColliderComponent aabb(COLLIDERS::AABB);
+				ent.AttachComponent(aabb);
+				break;
+			}
 
-		case 6:
-		{
-			ColliderComponent obb(COLLIDERS::OBB);
-			//next_lol = ent.AddComponent<OBBCollider>();
-			ent.AttachComponent(obb);
-			break;
-		}
-		case 7:
-		{
-			//next_lol = ent.AddComponent<PlaneCollider>();
-			ColliderComponent plane(COLLIDERS::PLANE);
-			ent.AttachComponent(plane);
-			break;
-		}
-		case 8:
-		{
-			ColliderComponent sphere(COLLIDERS::SPHERE);
-			ent.AttachComponent(sphere);
-			break;
-		}
-		case 9:
-		{
-			//next_lol = ent.AddComponent<CapsuleCollider>();
-			ColliderComponent capsule(COLLIDERS::CAPSULE);
-			ent.AttachComponent(capsule);
-			break;
-		}
+			case 6:
+			{
+				ColliderComponent obb(COLLIDERS::OBB);
+				//next_lol = ent.AddComponent<OBBCollider>();
+				ent.AttachComponent(obb);
+				break;
+			}
+			case 7:
+			{
+				//next_lol = ent.AddComponent<PlaneCollider>();
+				ColliderComponent plane(COLLIDERS::PLANE);
+				ent.AttachComponent(plane);
+				break;
+			}
+			case 8:
+			{
+				ColliderComponent sphere(COLLIDERS::SPHERE);
+				ent.AttachComponent(sphere);
+				break;
+			}
+			case 9:
+			{
+				//next_lol = ent.AddComponent<CapsuleCollider>();
+				ColliderComponent capsule(COLLIDERS::CAPSULE);
+				ent.AttachComponent(capsule);
+				break;
+			}
+			//case 10: -> ------
+			case 11:
+			{
+				next_lol = ent.AddComponent<ScriptComponent>();
+			}
 		}
 		if (next_lol == nullptr)
 		{

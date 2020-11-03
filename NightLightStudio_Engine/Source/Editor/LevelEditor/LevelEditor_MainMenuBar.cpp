@@ -72,7 +72,7 @@ void LevelEditor::LE_MainMenuBar()
                     // Gets the RELATIVE File Path to Save to
                     std::string fileToSaveTo = WindowsSaveFileBox(_window, rgSpec, 1);
                     std::cout << fileToSaveTo << std::endl;
-                    //NS_SCENE::SYS_SCENE_MANAGER->SaveScene(fileToSaveTo);
+                    NS_SCENE::SYS_SCENE_MANAGER->SaveScene(fileToSaveTo);
                 }
             });
         LE_AddMenuWithItems("Edit", 

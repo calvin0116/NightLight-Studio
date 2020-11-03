@@ -198,8 +198,7 @@ void HierarchyInspector::Run()
 
 void HierarchyInspector::Exit()
 {
-	//Exit not called?
-	//LE_ECHELPER->DestroyInstance();
+
 }
 
 void HierarchyInspector::InitBeforeRun()

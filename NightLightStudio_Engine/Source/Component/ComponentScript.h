@@ -22,8 +22,8 @@ public:
 	~ComponentScript();
 
 	//read and write function for initialization from saved files
-  void	Read(Value&) override { };
-  Value	Write() override { return Value(rapidjson::kObjectType); };
+	void	Read(Value&) override;
+  Value	Write() override;
   Value& Write(Value& val) override { return val; };
   virtual ComponentScript* Clone()
   {
