@@ -68,6 +68,6 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
-		int LoadTexture(const std::string& file);
+		unsigned LoadTexture(const std::string& file);
 	};
 }

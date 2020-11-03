@@ -110,10 +110,10 @@ namespace NS_GRAPHICS
         void SetMeshColor(Entity& entity, const glm::vec3& rgb);
 
         // Loads and stores mesh in local storage, calls mesh loader
-        void LoadMesh(const std::string& path, const std::string& name = "");
+        void LoadModel(const std::string& path);
 
         // Links mesh to specified entity for rendering
-        void AttachMesh(Entity& entity, const std::string& meshName);
+        void AttachModel(Entity& entity, const std::string& modelName);
 
         // Unlinks mesh to specified entity for rendering, if any
         void DetachMesh(Entity& entity);

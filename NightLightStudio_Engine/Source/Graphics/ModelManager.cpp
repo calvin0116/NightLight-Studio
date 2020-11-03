@@ -263,7 +263,7 @@ namespace NS_GRAPHICS
 #ifdef _DEBUG
 		std::cout << "ERROR: INVALID MODEL KEY GIVEN, PLEASE LOAD MODEL OR CHECK KEY" << std::endl;
 #endif
-		return 0;
+		return -1;
 	}
 
 	void ModelManager::AddLoadedModel(Model* model, const std::string& modelkey)

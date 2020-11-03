@@ -6,21 +6,21 @@
 
 ComponentGraphics::ComponentGraphics()
 	: _isActive{ true },
-	MeshID{ NULL }, _textureFileName{}, _textureID{ NULL }
+	_modelID{ -1 }, _textureFileName{}, _textureID{ NULL }
 {
 	strcpy_s(ser_name ,"GraphicsComponent");
 }
 
 ComponentGraphics::ComponentGraphics(const int& meshID)
 	: _isActive{ true },
-	MeshID{ meshID }, _textureFileName{}, _textureID{ NULL }
+	_modelID{ meshID }, _textureFileName{}, _textureID{ NULL }
 {
 	strcpy_s(ser_name, "GraphicsComponent");
 }
 
 void ComponentGraphics::AttachMesh(const int& meshID)
 {
-	MeshID = meshID;
+	_modelID = meshID;
 }
 
 ComponentGraphics::~ComponentGraphics()
@@ -47,26 +47,30 @@ inline void ComponentGraphics::Read(Value& val)
 	else
 	{
 		_modelFileName = val["Model file"].GetString();
-		NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadMesh(_modelFileName.toString());
 
-		//Checks for the file name
-		std::string name;
-		size_t pos = _modelFileName.toString().rfind("\\");
-		//Get just the string after the last path
-		if (pos != std::string::npos)
+		if (!_modelFileName.empty())
 		{
-			name = _modelFileName.toString().substr(pos + 1);
-		}
-		else
-		{
-			name = _modelFileName.toString();
-		}
+			NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(_modelFileName.toString());
 
-		//Trim the extension to get the file name
-		name.erase(name.rfind("."));
-		//model->_fileName = s_LocalPathName + name + s_ModelFileType;
+			//Checks for the file name
+			/*std::string name;
+			size_t pos = _modelFileName.toString().rfind("\\");
+			//Get just the string after the last path
+			if (pos != std::string::npos)
+			{
+				name = _modelFileName.toString().substr(pos + 1);
+			}
+			else
+			{
+				name = _modelFileName.toString();
+			}
 
-		MeshID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(name);
+			//Trim the extension to get the file name
+			name.erase(name.rfind("."));
+			//model->_fileName = s_LocalPathName + name + s_ModelFileType;
+			*/
+			_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
+		}
 	}
 
 }

@@ -202,6 +202,10 @@ void ConsoleLog::RunCommand(const std::string command, std::any value)
 				// Stores the initial values of the command
 				std::any returnValue = fn(value);
 				_inputCommands.push_back(std::make_pair(command, returnValue));
+
+				// SET MINIMUM NUMBER OF COMMANDS TO STORE
+				if (_inputCommands.size() > _maxCommands)
+					_inputCommands.erase(std::begin(_inputCommands));
 			}
 			else
 				fn(value);

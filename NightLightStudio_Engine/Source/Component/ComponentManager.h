@@ -1099,6 +1099,8 @@ public:
 
 	void Init() override;
 
+	void Load() override {} ;
+
 	void Free() override;
 
 	void Exit() override;

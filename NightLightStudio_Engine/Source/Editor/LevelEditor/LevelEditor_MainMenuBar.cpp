@@ -162,8 +162,8 @@ void LevelEditor::LE_MainMenuBar()
                 ent.AttachComponent<ComponentTransform>(transEnt);
 
                 // Causes memory leaks - pls fix calvin
-                NS_GRAPHICS::SYS_GRAPHICS->LoadMesh(data, fName);
-                NS_GRAPHICS::SYS_GRAPHICS->AttachMesh(ent, fName);
+                NS_GRAPHICS::SYS_GRAPHICS->LoadModel(data);
+                NS_GRAPHICS::SYS_GRAPHICS->AttachModel(ent, fName);
             }
         }, ImGuiDragDropFlags_AcceptNoDrawDefaultRect);
     ImGui::End();

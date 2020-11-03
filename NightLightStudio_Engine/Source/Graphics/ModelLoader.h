@@ -20,7 +20,7 @@ namespace NS_GRAPHICS
 		ModelLoader();
 		~ModelLoader();
 
-		void TransverseChild(FbxNode* node, Model*& model, int* meshIndex, const std::string& fileName, const std::string& customName = "");
+		void TransverseChild(FbxNode* node, Model*& model, const std::string& fileName);
 
 	public:
 		// Unique Singleton instance
@@ -33,11 +33,11 @@ namespace NS_GRAPHICS
 		void Init();
 
 		//void LoadFBX(const std::string& fileName, Mesh& mesh);
-		void LoadFBX(Model*& model, const std::string& fileName, const std::string& customName = "");
-		void LoadModel(const std::string& fileName, const std::string& customName = "");
-		void LoadCustomMesh(Model*& model, const std::string& fileName, const std::string& customName ="");
+		bool LoadFBX(Model*& model, const std::string& fileName);
+		void LoadModel(const std::string& fileName);
+		bool LoadCustomMesh(Model*& model, const std::string& fileName);
 
-		void DebugToFile(const std::string& meshName, const std::string& fileName);
+		void DebugToFile(const std::string& fileName);
 		FbxVector4 Transform(FbxNode* node, FbxVector4 vector);
 	};
 }

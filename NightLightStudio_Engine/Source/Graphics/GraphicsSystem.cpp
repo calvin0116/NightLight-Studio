@@ -104,15 +104,15 @@ namespace NS_GRAPHICS
 		////////////////////////////////////////////////////
 		/// Commented to test level editor drag and drop
 		
-		modelLoader->LoadModel("rotatedCube.fbx", "box");
+		modelLoader->LoadModel("rotatedCube.fbx");
 
 		//Draw Cylinder FBX file 
-		modelLoader->LoadModel("cylinder.fbx", "cylinder");
+		modelLoader->LoadModel("cylinder.fbx");
 		
 		//Draw sphere FBX file 
-		modelLoader->LoadModel("sphere.fbx", "sphere");
+		modelLoader->LoadModel("sphere.fbx");
 
-		modelLoader->LoadModel("incense_pot_Model.fbx", "pot");
+		modelLoader->LoadModel("incense_pot_Model.fbx");
 
 		textureManager->GetTexture("Test.jpg");
 		
@@ -292,7 +292,13 @@ namespace NS_GRAPHICS
 		{
 			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
 
-			Model* model = modelManager->_models[graphicsComp->MeshID];
+			if (graphicsComp->_modelID < 0)
+			{
+				++itr;
+				continue;
+			}
+
+			Model* model = modelManager->_models[graphicsComp->_modelID];
 
 			// get transform component
 			ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
@@ -371,21 +377,21 @@ namespace NS_GRAPHICS
 		// Assume it's a proper objID for now
 		//if (G_ECMANAGER->getEntity(objID));
 
-		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel("box")));
+		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel("rotatedCube.fbx")));
 
 		SetMeshColor(entity, rgb);
 	}
 
 	void GraphicsSystem::CreateSphere(Entity& entity, const glm::vec3& rgb)
 	{
-		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel("sphere")));
+		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel("sphere.fbx")));
 
 		SetMeshColor(entity, rgb);
 	}
 
 	void GraphicsSystem::CreateCylinder(Entity& entity, const glm::vec3& rgb)
 	{
-		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel("cylinder")));
+		entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel("cylinder.fbx")));
 
 		SetMeshColor(entity, rgb);
 	}
@@ -489,7 +495,7 @@ namespace NS_GRAPHICS
 		}
 		
 		// Get pointer to current mesh
-		Model* model = modelManager->_models[graphicsComp->MeshID];
+		Model* model = modelManager->_models[graphicsComp->_modelID];
 
 		// Replace all rgb for every vertex in mesh
 		for (auto& mesh : model->_meshes)
@@ -506,21 +512,21 @@ namespace NS_GRAPHICS
 
 		// No need to perform glBufferSubData here, update() will perform communication with GPU data
 	}
-	void GraphicsSystem::LoadMesh(const std::string& path, const std::string& name)
+	void GraphicsSystem::LoadModel(const std::string& path)
 	{
-		modelLoader->LoadModel(path, name);
+		modelLoader->LoadModel(path);
 	}
-	void GraphicsSystem::AttachMesh(Entity& entity, const std::string& meshName)
+	void GraphicsSystem::AttachModel(Entity& entity, const std::string& modelName)
 	{
 		if (entity.getComponent<ComponentGraphics>() == nullptr)
-			entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel(meshName)));
+			entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel(modelName)));
 		else
-			entity.getComponent<ComponentGraphics>()->MeshID = modelManager->AddModel(meshName);
+			entity.getComponent<ComponentGraphics>()->_modelID = modelManager->AddModel(modelName);
 	}
 	void GraphicsSystem::DetachMesh(Entity& entity)
 	{
 		if (entity.getComponent<ComponentGraphics>() != nullptr)
-			entity.getComponent<ComponentGraphics>()->MeshID = -1;
+			entity.getComponent<ComponentGraphics>()->_modelID = -1;
 	}
 
 	glm::mat4 GraphicsSystem::GetInverseViewMatrix()
