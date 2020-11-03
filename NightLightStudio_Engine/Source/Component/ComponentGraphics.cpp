@@ -6,7 +6,7 @@
 
 ComponentGraphics::ComponentGraphics()
 	: _isActive{ true },
-	MeshID{ NULL }, _textureFileName{}, _textureID{ NULL }
+	MeshID{ -1 }, _textureFileName{}, _textureID{ NULL }
 {
 	strcpy_s(ser_name ,"GraphicsComponent");
 }
@@ -50,7 +50,7 @@ inline void ComponentGraphics::Read(Value& val)
 		NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadMesh(_modelFileName.toString());
 
 		//Checks for the file name
-		std::string name;
+		/*std::string name;
 		size_t pos = _modelFileName.toString().rfind("\\");
 		//Get just the string after the last path
 		if (pos != std::string::npos)
@@ -60,13 +60,13 @@ inline void ComponentGraphics::Read(Value& val)
 		else
 		{
 			name = _modelFileName.toString();
-		}
+		}*/
 
 		//Trim the extension to get the file name
-		name.erase(name.rfind("."));
+		//name.erase(name.rfind("."));
 		//model->_fileName = s_LocalPathName + name + s_ModelFileType;
 
-		MeshID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(name);
+		MeshID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
 	}
 
 }
