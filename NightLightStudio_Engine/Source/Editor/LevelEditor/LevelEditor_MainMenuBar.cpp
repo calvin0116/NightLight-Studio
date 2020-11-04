@@ -55,6 +55,7 @@ void LevelEditor::LE_MainMenuBar()
                     // Gets the RELATIVE File Path to Open from
                     std::string fileToOpen = WindowsOpenFileBox(_window, rgSpec, 1);
                     std::cout << fileToOpen << std::endl;
+                    NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(fileToOpen);
                 },
 
                 []() 

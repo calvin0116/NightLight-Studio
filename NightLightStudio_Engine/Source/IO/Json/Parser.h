@@ -101,6 +101,10 @@ namespace NS_SERIALISER
 	template<typename d_type>
 	ENGINE_API inline void ChangeData(Value* val, std::string name, d_type data);
 
+	//Entity creation for scene using Json data
+	void EntityListCreation(Value& Ent_list);
+	//void ComponentsCreation(Value& Comp_list, Entity& entity);
+
 	//template<typename d_type>
 	//inline void ChangeDataWithObject(Value* val, std::string name, Value* data);
 
