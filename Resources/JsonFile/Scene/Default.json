@@ -1,11 +1,11 @@
 {
     "Objects": {
-        "Cylinder": {
+        "Height_1_wall": {
             "TransformComponent": {
                 "Position": [
-                    0.0,
-                    0.0,
-                    0.0
+                    -0.5,
+                    0.5,
+                    0.5
                 ],
                 "Scale": [
                     1.0,
@@ -16,7 +16,7 @@
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": "cylinder.fbx"
+                "Model file": ""
             }
         },
         "Camera": {
@@ -41,9 +41,9 @@
                     1.0
                 ],
                 "Scale": [
-                    10.0,
-                    1.0,
-                    10.0
+                    100.0,
+                    100.0,
+                    100.0
                 ]
             },
             "RigidBody": {
@@ -60,6 +60,282 @@
                 ]
             },
             "AudioManager": {}
+        },
+        "Height_3_Wall": {
+            "TransformComponent": {
+                "Position": [
+                    -2.5,
+                    1.5,
+                    0.5
+                ],
+                "Scale": [
+                    1.0,
+                    3.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": ""
+            }
+        },
+        "Height_2_Wall_2": {
+            "TransformComponent": {
+                "Position": [
+                    0.5,
+                    1.0,
+                    0.5
+                ],
+                "Scale": [
+                    1.0,
+                    2.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": ""
+            }
+        },
+        "Tree_H10_8": {
+            "TransformComponent": {
+                "Position": [
+                    1.5,
+                    5.0,
+                    -13.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": ""
+            }
+        },
+        "Height_2_Wall": {
+            "TransformComponent": {
+                "Position": [
+                    -1.5,
+                    1.0,
+                    0.5
+                ],
+                "Scale": [
+                    1.0,
+                    2.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": ""
+            }
+        },
+        "Height_3_Wall_1": {
+            "TransformComponent": {
+                "Position": [
+                    1.5,
+                    1.5,
+                    0.5
+                ],
+                "Scale": [
+                    1.0,
+                    3.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": ""
+            }
+        },
+        "Tree_H10_2": {
+            "TransformComponent": {
+                "Position": [
+                    1.5,
+                    5.0,
+                    1.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": ""
+            }
+        },
+        "Tree_H10_1": {
+            "TransformComponent": {
+                "Position": [
+                    -2.5,
+                    5.0,
+                    1.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": ""
+            }
+        },
+        "Tree_H10_7": {
+            "TransformComponent": {
+                "Position": [
+                    -2.5,
+                    5.0,
+                    -13.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": ""
+            }
+        },
+        "Tree_H10_3": {
+            "TransformComponent": {
+                "Position": [
+                    -2.5,
+                    5.0,
+                    -3.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": ""
+            }
+        },
+        "Tree_H10_4": {
+            "TransformComponent": {
+                "Position": [
+                    1.5,
+                    5.0,
+                    -3.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "CAPSULE"
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": ""
+            }
+        },
+        "Tree_H10_6": {
+            "TransformComponent": {
+                "Position": [
+                    1.5,
+                    5.0,
+                    -8.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": ""
+            }
+        },
+        "Tree_H10_5": {
+            "TransformComponent": {
+                "Position": [
+                    -2.5,
+                    5.0,
+                    -8.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": ""
+            }
         }
     }
 }

@@ -306,6 +306,7 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 			//case 4: -> --Collider--
 			case 5:
 			{
+				next_lol = ent.AddComponent<RigidBody>();
 				ColliderComponent aabb(COLLIDERS::AABB);
 				ent.AttachComponent(aabb);
 				break;
@@ -313,6 +314,7 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 
 			case 6:
 			{
+				next_lol = ent.AddComponent<RigidBody>();
 				ColliderComponent obb(COLLIDERS::OBB);
 				//next_lol = ent.AddComponent<OBBCollider>();
 				ent.AttachComponent(obb);
@@ -320,6 +322,7 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 			}
 			case 7:
 			{
+				next_lol = ent.AddComponent<RigidBody>();
 				//next_lol = ent.AddComponent<PlaneCollider>();
 				ColliderComponent plane(COLLIDERS::PLANE);
 				ent.AttachComponent(plane);
@@ -327,12 +330,14 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 			}
 			case 8:
 			{
+				next_lol = ent.AddComponent<RigidBody>();
 				ColliderComponent sphere(COLLIDERS::SPHERE);
 				ent.AttachComponent(sphere);
 				break;
 			}
 			case 9:
 			{
+				next_lol = ent.AddComponent<RigidBody>();
 				//next_lol = ent.AddComponent<CapsuleCollider>();
 				ColliderComponent capsule(COLLIDERS::CAPSULE);
 				ent.AttachComponent(capsule);

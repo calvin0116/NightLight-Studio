@@ -48,6 +48,8 @@ ComponentCollider::ComponentCollider(COLLIDERS _col)
 ComponentCollider::ComponentCollider(const char* col) 
 	: collisionTime(FLT_MAX), colliderType(COLLIDERS::AABB)
 {
+	strcpy_s(ser_name, "ColliderComponent");
+
 	std::string colliderName = col;
 	if (colliderName == "OBB")
 	{
