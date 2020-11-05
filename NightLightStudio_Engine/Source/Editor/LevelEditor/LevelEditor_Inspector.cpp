@@ -260,6 +260,8 @@ void InspectorWindow::ColliderComp(Entity& ent)
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
 		}
+
+		ImGui::Separator();
 	}
 }
 
@@ -301,6 +303,8 @@ void InspectorWindow::AudioComp(Entity& ent)
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
 		}
+
+		ImGui::Separator();
 	}
 }
 
@@ -353,6 +357,8 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
 		}
+
+		ImGui::Separator();
 	}
 }
 
@@ -378,6 +384,8 @@ void InspectorWindow::RigidBodyComp(Entity& ent)
 			//ent.RemoveComponent<RigidBody>();
 			_notRemove = true;
 		}
+
+		ImGui::Separator();
 	}
 }
 
@@ -471,6 +479,8 @@ void InspectorWindow::ScriptComp(Entity& ent)
 			// Currently does not run Delete Component Command (Script Read Write not working)
 			ent.RemoveComponent<ScriptComponent>();
 		}
+
+		ImGui::Separator();
 	}
 }
 
