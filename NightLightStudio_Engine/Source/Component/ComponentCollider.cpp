@@ -78,6 +78,44 @@ ComponentCollider::ComponentCollider(const char* col)
 	}
 }
 
+ComponentCollider::ComponentCollider(ComponentCollider& rhs)
+	:colliderType(rhs.colliderType), collisionTime(0), colliderTag(rhs.colliderTag), bounciness(rhs.bounciness), friction(rhs.friction)
+{
+	switch (colliderType)
+	{
+	case COLLIDERS::PLANE:
+	{
+		strcpy_s(ser_name, "ColliderComponent");
+		collider.plane = PlaneCollider();
+		break;
+	}
+	case COLLIDERS::AABB:
+	{
+		strcpy_s(ser_name, "ColliderComponent");
+		collider.aabb = AABBCollider();
+		break;
+	}
+	case COLLIDERS::SPHERE:
+	{
+		strcpy_s(ser_name, "ColliderComponent");
+		collider.sphere = SphereCollider();
+		break;
+	}
+	case COLLIDERS::OBB:
+	{
+		strcpy_s(ser_name, "ColliderComponent");
+		collider.obb = OBBCollider();
+		break;
+	}
+	case COLLIDERS::CAPSULE:
+	{
+		strcpy_s(ser_name, "ColliderComponent");
+		collider.capsule = CapsuleCollider();
+		break;
+	}
+	}
+}
+
 ComponentCollider::ComponentCollider() : collisionTime{ FLT_MAX }, colliderType(COLLIDERS::AABB) // default this
 {
 	strcpy_s(ser_name, "ColliderComponent");

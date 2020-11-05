@@ -65,7 +65,7 @@ enum class COLLIDERS
 struct ICollider
 {
 	NlMath::Vector3D colliderScale;
-	ICollider() : colliderScale(1.0f, 1.0f, 1.0f) {}
+	ICollider() : colliderScale(0.5f, 0.5f, 0.5f) {}
 };
 
 struct PlaneCollider : public ICollider
@@ -151,19 +151,21 @@ typedef struct ComponentCollider : public ISerializable//: public IComponent
 		Collider() : aabb() { };
 	};
 
-	//MyVector preCollisionData;
-	//MyVector newCollisionData;
+	////////////////////////////data/////////////////////////////////
+	//collider type is used to set collider
 	COLLIDERS colliderType;
-	float collisionTime;
-	// For layers
-	int ColliderTag = 1;
-
 	Collider collider;
-
+	//time of collision for dynanmic collision
+	float collisionTime;
+	// For layering
+	int colliderTag = 1;
+	float bounciness = 0;
+	float friction = 0;
 	bool isCollide = false;
-
+	////////////////////////////data end/////////////////////////////////
 	ComponentCollider(COLLIDERS col);
 	ComponentCollider(const char * col);
+	ComponentCollider(ComponentCollider& rhs);
 	ComponentCollider();
 
 	void CollisionTimeReset();

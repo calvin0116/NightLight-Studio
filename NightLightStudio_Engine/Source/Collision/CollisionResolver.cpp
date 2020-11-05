@@ -32,7 +32,7 @@ void CollsionResolver::resolveCollision()
 				case SIDES::FRONT:
 				{
 					colEvent.collisionNormal = NlMath::Vector3D(0.0f, 0.0f, -1.0f);
-					resolveEventNormally(colEvent);
+					AABBResolve(colEvent);
 
 					//if (colEvent.rigid1->velocity.z > 0)
 					//	colEvent.rigid1->velocity.z = 0;
@@ -43,7 +43,7 @@ void CollsionResolver::resolveCollision()
 				case SIDES::BACK:
 				{
 					colEvent.collisionNormal = NlMath::Vector3D(0.0f, 0.0f, 1.0f);
-					resolveEventNormally(colEvent);
+					AABBResolve(colEvent);
 
 					//if (colEvent.rigid1->velocity.z < 0)
 					//	colEvent.rigid1->velocity.z = 0;
@@ -54,7 +54,7 @@ void CollsionResolver::resolveCollision()
 				case SIDES::TOP:
 				{
 					colEvent.collisionNormal = NlMath::Vector3D(0.0f, 1.0f, 0.0f);
-					resolveEventNormally(colEvent);
+					AABBResolve(colEvent);
 
 
 					//if (colEvent.rigid1->velocity.y > 0)
@@ -66,7 +66,7 @@ void CollsionResolver::resolveCollision()
 				case SIDES::BOTTOM:
 				{
 					colEvent.collisionNormal = NlMath::Vector3D(0.0f, -1.0f, 0.0f);
-					resolveEventNormally(colEvent);
+					AABBResolve(colEvent);
 
 
 					//if (colEvent.rigid1->velocity.y < 0)
@@ -78,7 +78,7 @@ void CollsionResolver::resolveCollision()
 				case SIDES::RIGHT:
 				{
 					colEvent.collisionNormal = NlMath::Vector3D(1.0f, 0.0f, 0.0f);
-					resolveEventNormally(colEvent);
+					AABBResolve(colEvent);
 
 
 					//if (colEvent.rigid1->velocity.x > 0)
@@ -90,7 +90,7 @@ void CollsionResolver::resolveCollision()
 				case SIDES::LEFT:
 				{
 					colEvent.collisionNormal = NlMath::Vector3D(-1.0f, 0.0f, 0.0f);
-					resolveEventNormally(colEvent);
+					AABBResolve(colEvent);
 
 
 					//if (colEvent.rigid1->velocity.x < 0)
@@ -108,47 +108,47 @@ void CollsionResolver::resolveCollision()
 			}
 			case COLRESTYPE::AABB_SPHERE:
 			{
-				resolveEventNormally(colEvent);
+				AABBResolve(colEvent);
 				break;
 			}
 			case COLRESTYPE::AABB_CAPSULE:
 			{
-				resolveEventNormally(colEvent);
+				AABBResolve(colEvent);
 				break;
 			}
 			case COLRESTYPE::SPHERE_AABB:
 			{
-				resolveEventNormally(colEvent);
+				AABBResolve(colEvent);
 				break;
 			}
 			case COLRESTYPE::SPHERE_SPHERE:
 			{
-				resolveEventNormally(colEvent);
+				AABBResolve(colEvent);
 				break;
 			}
 			case COLRESTYPE::SPHERE_CAPSULE:
 			{
-				resolveEventNormally(colEvent);
+				AABBResolve(colEvent);
 				break;
 			}
 			case COLRESTYPE::CAPSULE_AABB:
 			{
-				resolveEventNormally(colEvent);
+				AABBResolve(colEvent);
 				break;
 			}
 			case COLRESTYPE::CAPSULE_SPHERE:
 			{
-				resolveEventNormally(colEvent);
+				AABBResolve(colEvent);
 				break;
 			}
 			case COLRESTYPE::CAPSULE_CAPSULE:
 			{
-				resolveEventNormally(colEvent);
+				AABBResolve(colEvent);
 				break;
 			}
 			case COLRESTYPE::OBB_OBB:
 			{
-				resolveEventNormally(colEvent);
+				AABBResolve(colEvent);
 				break;
 			}
 			default:
@@ -165,7 +165,7 @@ void CollsionResolver::clear()
 	colEventList.clear();
 }
 
-void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
+void CollsionResolver::AABBResolve(const CollisionEvent& colEvent)
 {
 	// ref: https://stackoverflow.com/questions/5060082/eliminating-a-direction-from-a-vector
 	// "Calculate the dot product of the geometry wall normal with the velocity vector of the object. 
