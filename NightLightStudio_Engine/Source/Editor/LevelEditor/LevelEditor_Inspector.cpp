@@ -173,7 +173,7 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 
 	RigidBodyComp(ent);
 
-	ScriptComp(ent);
+	// ScriptComp(ent);
 
 	AddSelectedComps(ent);
 }
@@ -416,9 +416,9 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  OBB Collider",
 			"  Plane Collider",
 			"  SphereCollider",
-			"  CapsuleCollider",
-			" ------",
-			" Script"
+			"  CapsuleCollider"
+			//" ------",
+			//" Script"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -434,11 +434,9 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			//next_lol = ent.AddComponent<RigidBody>()
 			if (!ent.getComponent<RigidBody>())
 			{
-				RigidBody rg = RigidBody();
 				// ENTITY_COMP comp{ ent, &rg, typeid(RigidBody).hash_code() };
-				ENTITY_COMP_DOC comp2{ ent, rg.Write(),typeid(RigidBody).hash_code() };
-
-				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp2));
+				ENTITY_COMP_DOC comp{ ent, RigidBody().Write(),typeid(RigidBody).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;
 		}
@@ -446,9 +444,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 		{
 			if (!ent.getComponent<ComponentLoadAudio>())
 			{
-				ComponentLoadAudio aud = ComponentLoadAudio();
 				//next_lol = ent.AddComponent<ComponentLoadAudio>();
-				ENTITY_COMP_DOC comp{ ent, aud.Write(), typeid(ComponentLoadAudio).hash_code() };
+				ENTITY_COMP_DOC comp{ ent, ComponentLoadAudio().Write(), typeid(ComponentLoadAudio).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;
@@ -458,8 +455,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			//next_lol = ent.AddComponent<GraphicsComponent>();
 			if (!ent.getComponent<GraphicsComponent>())
 			{
-				GraphicsComponent gra = GraphicsComponent();
-				ENTITY_COMP_DOC comp{ ent, gra.Write(), typeid(GraphicsComponent).hash_code() };
+				ENTITY_COMP_DOC comp{ ent, GraphicsComponent().Write(), typeid(GraphicsComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;
@@ -475,9 +471,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 		{
 			if (!ent.getComponent<ColliderComponent>())
 			{
-				ColliderComponent aabb(COLLIDERS::AABB);
 				//ent.AttachComponent(aabb);
-				ENTITY_COMP_DOC comp{ ent, aabb.Write(), typeid(ColliderComponent).hash_code() };
+				ENTITY_COMP_DOC comp{ ent, ColliderComponent(COLLIDERS::AABB).Write(), typeid(ColliderComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;
@@ -487,10 +482,9 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 		{
 			if (!ent.getComponent<ColliderComponent>())
 			{
-				ColliderComponent obb(COLLIDERS::OBB);
 				//next_lol = ent.AddComponent<OBBCollider>();
 				//ent.AttachComponent(obb);
-				ENTITY_COMP_DOC comp{ ent, obb.Write(), typeid(ColliderComponent).hash_code() };
+				ENTITY_COMP_DOC comp{ ent, ColliderComponent(COLLIDERS::OBB).Write(), typeid(ColliderComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;
@@ -500,9 +494,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			if (!ent.getComponent<ColliderComponent>())
 			{
 				//next_lol = ent.AddComponent<PlaneCollider>();
-				ColliderComponent plane(COLLIDERS::PLANE);
 				//ent.AttachComponent(plane);
-				ENTITY_COMP_DOC comp{ ent, plane.Write(), typeid(ColliderComponent).hash_code() };
+				ENTITY_COMP_DOC comp{ ent, ColliderComponent(COLLIDERS::PLANE).Write(), typeid(ColliderComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;
@@ -511,9 +504,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 		{
 			if (!ent.getComponent<ColliderComponent>())
 			{
-				ColliderComponent sphere(COLLIDERS::SPHERE);
 				//ent.AttachComponent(sphere);
-				ENTITY_COMP_DOC comp{ ent, sphere.Write(), typeid(ColliderComponent).hash_code() };
+				ENTITY_COMP_DOC comp{ ent, ColliderComponent(COLLIDERS::SPHERE).Write(), typeid(ColliderComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;
@@ -523,13 +515,13 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			if (!ent.getComponent<ColliderComponent>())
 			{
 				//next_lol = ent.AddComponent<CapsuleCollider>();
-				ColliderComponent capsule(COLLIDERS::CAPSULE);
 				//ent.AttachComponent(capsule);
-				ENTITY_COMP_DOC comp{ ent, capsule.Write(), typeid(ColliderComponent).hash_code() };
+				ENTITY_COMP_DOC comp{ ent, ColliderComponent(COLLIDERS::CAPSULE).Write(), typeid(ColliderComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;
 		}
+		/*
 		//case 10: -> ------
 		case 11:
 		{
@@ -537,14 +529,14 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			{
 				// Currently not using Run Command as it will crash when it tries to read Scripts
 				ent.AddComponent<ScriptComponent>();
-				/*
-				ScriptComponent scr = ScriptComponent();
-				ENTITY_COMP_DOC comp{ ent, scr.Write(), typeid(ScriptComponent).hash_code() };
-				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
-				*/
+				
+				//ScriptComponent scr = ScriptComponent();
+				//ENTITY_COMP_DOC comp{ ent, scr.Write(), typeid(ScriptComponent).hash_code() };
+				//_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+				
 			}
 			break;
-		}
+		}*/
 		}
 		//if (next_lol == nullptr)
 		//{
