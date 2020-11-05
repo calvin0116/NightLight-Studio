@@ -162,9 +162,8 @@ void LevelEditor::LE_MainMenuBar()
                 transEnt._position = { 0.f, 0.f,0.f };
                 ent.AttachComponent<ComponentTransform>(transEnt);
 
-                // Causes memory leaks - pls fix calvin
                 NS_GRAPHICS::SYS_GRAPHICS->LoadModel(data);
-                NS_GRAPHICS::SYS_GRAPHICS->AttachModel(ent, fName);
+                NS_GRAPHICS::SYS_GRAPHICS->AttachModel(ent, data);
             }
         }, ImGuiDragDropFlags_AcceptNoDrawDefaultRect);
     ImGui::End();

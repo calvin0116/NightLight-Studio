@@ -77,6 +77,7 @@ private:
 	void AudioComp(Entity& ent);
 	void GraphicsComp(Entity& ent);
 	void RigidBodyComp(Entity& ent);
+	void LightComp(Entity& ent);
 	void ScriptComp(Entity& ent);
 
 	void AddSelectedComps(Entity& ent);

@@ -180,9 +180,6 @@ namespace NS_SCENE
 		current_scene = next_scene;
 	}
 
-
-
-
 	void SceneManager::LoadScene(std::string scene_name)
 	{
 #ifdef _DEBUG 

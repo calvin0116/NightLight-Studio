@@ -11,8 +11,8 @@
 
 inline size_t findCaseInsensitive(std::string data, std::string toSearch, size_t pos = 0)
 {
-	std::transform(data.begin(), data.end(), data.begin(), ::tolower);
-	std::transform(toSearch.begin(), toSearch.end(), toSearch.begin(), ::tolower);
+	std::transform(data.begin(), data.end(), data.begin(), [](unsigned char c) {return (unsigned char)::tolower(c); });
+	std::transform(toSearch.begin(), toSearch.end(), toSearch.begin(), [](unsigned char c) {return (unsigned char)::tolower(c); });
 	return data.find(toSearch, pos);
 }
 
@@ -26,24 +26,21 @@ void HierarchyInspector::Start()
 		{
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_C))
 			{
-				if (!ImGui::IsAnyItemHovered())
+				if (LE_ECHELPER->GetSelectedEntityID() != -1)
 				{
-					if (LE_ECHELPER->GetSelectedEntityID() != -1)
+					Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
+					TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+					if (trans_comp != NULL)
 					{
-						Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
-						TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
-						if (trans_comp != NULL)
-						{
-							std::string newName;
-							newName = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
-							if (newName == "")
-								newName = "Entity_";
-							else
-								newName.append("_copy");
+						std::string newName;
+						newName = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
+						if (newName == "")
+							newName = "Entity_";
+						else
+							newName.append("_copy");
 
-							// Causes memory leaks currently (Probably Graphics Side)
-							ent.Copy(G_ECMANAGER, newName);
-						}
+						// Causes memory leaks currently (Probably Graphics Side)
+						ent.Copy(G_ECMANAGER, newName);
 					}
 				}
 			}
@@ -129,7 +126,7 @@ void HierarchyInspector::Run()
 		search = std::string(search_buf);
 		*/
 
-	_levelEditor->LE_AddInputText("Search", _search, 256);
+	_levelEditor->LE_AddInputText("Search", _search, 256, 0);
 
 	// Entity list
 	static int index_selected = -1;
