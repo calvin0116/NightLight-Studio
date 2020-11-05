@@ -87,6 +87,13 @@ Value ComponentTransform::Write()
 
 	NS_SERIALISER::ChangeData(&val, "Scale", scale);
 
+	Value rotation(rapidjson::kArrayType);
+	rotation.PushBack(_rotation.x, global_alloc);
+	rotation.PushBack(_rotation.y, global_alloc);
+	rotation.PushBack(_rotation.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "Rotate", rotation);
+
 	return val;
 }
 
