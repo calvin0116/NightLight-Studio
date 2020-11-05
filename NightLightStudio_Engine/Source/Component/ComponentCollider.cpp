@@ -79,38 +79,38 @@ ComponentCollider::ComponentCollider(const char* col)
 }
 
 ComponentCollider::ComponentCollider(ComponentCollider& rhs)
-	:colliderType(rhs.colliderType), collisionTime(0), colliderTag(rhs.colliderTag), bounciness(rhs.bounciness), friction(rhs.friction)
+	:colliderType(rhs.colliderType), collisionTime(FLT_MAX), colliderTag(rhs.colliderTag), bounciness(rhs.bounciness), friction(rhs.friction)
 {
 	switch (colliderType)
 	{
 	case COLLIDERS::PLANE:
 	{
 		strcpy_s(ser_name, "ColliderComponent");
-		collider.plane = PlaneCollider();
+		collider.plane = PlaneCollider(rhs.collider.plane);
 		break;
 	}
 	case COLLIDERS::AABB:
 	{
 		strcpy_s(ser_name, "ColliderComponent");
-		collider.aabb = AABBCollider();
+		collider.aabb = AABBCollider(rhs.collider.aabb);
 		break;
 	}
 	case COLLIDERS::SPHERE:
 	{
 		strcpy_s(ser_name, "ColliderComponent");
-		collider.sphere = SphereCollider();
+		collider.sphere = SphereCollider(rhs.collider.sphere);
 		break;
 	}
 	case COLLIDERS::OBB:
 	{
 		strcpy_s(ser_name, "ColliderComponent");
-		collider.obb = OBBCollider();
+		collider.obb = OBBCollider(rhs.collider.obb);
 		break;
 	}
 	case COLLIDERS::CAPSULE:
 	{
 		strcpy_s(ser_name, "ColliderComponent");
-		collider.capsule = CapsuleCollider();
+		collider.capsule = CapsuleCollider(rhs.collider.capsule);
 		break;
 	}
 	}
@@ -213,6 +213,47 @@ inline Value ComponentCollider::Write()
 	//return val;
 }
 
+ComponentCollider& ComponentCollider::operator=(const ComponentCollider& rhs)
+{
+	//collider type is used to set collider
+	colliderType = rhs.colliderType;
+	collisionTime = FLT_MAX;
+	colliderTag = rhs.colliderTag;
+	bounciness = rhs.bounciness;
+	friction = rhs.friction;
+	isCollide = rhs.isCollide;
+
+	switch (colliderType)
+	{
+	case COLLIDERS::PLANE:
+	{
+		collider.plane = (rhs.collider.plane);
+		break;
+	}
+	case COLLIDERS::AABB:
+	{
+		collider.aabb = (rhs.collider.aabb);
+		break;
+	}
+	case COLLIDERS::SPHERE:
+	{
+		collider.sphere = (rhs.collider.sphere);
+		break;
+	}
+	case COLLIDERS::OBB:
+	{
+		collider.obb = (rhs.collider.obb);
+		break;
+	}
+	case COLLIDERS::CAPSULE:
+	{
+		collider.capsule = (rhs.collider.capsule);
+		break;
+	}
+	}
+	return *this;
+}
+
 
 
 
@@ -225,9 +266,21 @@ SphereCollider::SphereCollider()
 
 }
 
+SphereCollider::SphereCollider(const SphereCollider& rhs)
+	:center(rhs.center), radius(rhs.radius)
+{
+}
+
 SphereCollider::SphereCollider(NlMath::Vector3D Point, float Radius)
 	: ICollider(), center{ Point }, radius{ Radius }
 {
+}
+
+SphereCollider& SphereCollider::operator=(const SphereCollider& rhs)
+{
+	center = rhs.center;
+	radius = rhs.radius;
+	return *this;
 }
 
 void SphereCollider::posUpdate(ComponentTransform* transform)
@@ -252,9 +305,21 @@ AABBCollider::AABBCollider()
 {
 }
 
+AABBCollider::AABBCollider(const AABBCollider& rhs)
+	:vecMax(rhs.vecMax),vecMin(rhs.vecMin)
+{
+}
+
 AABBCollider::AABBCollider(NlMath::Vector3D VecMax, NlMath::Vector3D VecMin)
 	: ICollider(), vecMax{ VecMax }, vecMin{ VecMin }
 {
+}
+
+AABBCollider& AABBCollider::operator=(const AABBCollider& rhs)
+{
+	vecMax = rhs.vecMax;
+	vecMin = rhs.vecMin;
+	return *this;
 }
 
 void AABBCollider::posUpdate(ComponentTransform* transform)
@@ -281,6 +346,11 @@ void AABBCollider::posUpdate(ComponentTransform* transform)
 //// OBB
 OBBCollider::OBBCollider()
 	: ICollider(), center(0), extend(0), rotation(1)
+{
+}
+
+OBBCollider::OBBCollider(const OBBCollider& rhs)
+	: center(rhs.center), extend(rhs.extend), rotation(rhs.rotation)
 {
 }
 
@@ -327,9 +397,22 @@ PlaneCollider::PlaneCollider()
 {
 }
 
+PlaneCollider::PlaneCollider(const PlaneCollider& rhs)
+	:center(rhs.center),extend(rhs.extend),rotation(rhs.rotation)
+{
+}
+
 PlaneCollider::PlaneCollider(NlMath::Vector3D _point, NlMath::Vector3D _extend, NlMath::Vector3D _rotation) 
 	: ICollider(), center(_point), extend(_extend), rotation(_rotation)
 {
+}
+
+PlaneCollider& PlaneCollider::operator=(const PlaneCollider& rhs)
+{
+	center = rhs.center;
+	extend = rhs.extend;
+	rotation = rhs.rotation;
+	return *this;
 }
 
 void PlaneCollider::posUpdate(ComponentTransform* transform)
@@ -347,9 +430,23 @@ CapsuleCollider::CapsuleCollider()
 {
 }
 
+CapsuleCollider::CapsuleCollider(const CapsuleCollider& rhs)
+	: tip(rhs.tip), base(rhs.base), radius(rhs.radius), rotation(rhs.rotation)
+{
+}
+
 CapsuleCollider::CapsuleCollider(NlMath::Vector3D _tip, NlMath::Vector3D _base, float _radius, NlMath::Vector3D _rotation)
 	: ICollider(), tip(_tip), base(_base), radius(_radius), rotation(_rotation)
 {
+}
+
+CapsuleCollider& CapsuleCollider::operator=(const CapsuleCollider& rhs)
+{
+	tip = rhs.tip;
+	base = rhs.base;
+	radius = rhs.radius;
+	rotation = rhs.rotation;
+	return *this;
 }
 
 void CapsuleCollider::posUpdate(ComponentTransform* transform)
