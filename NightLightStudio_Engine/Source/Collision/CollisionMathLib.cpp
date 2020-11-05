@@ -1,3 +1,4 @@
+#pragma once
 #include <functional>
 #include <queue>
 
@@ -826,11 +827,14 @@ namespace NlMath
 
         // Artificial axis bias to improve frame coherence
         const float kRelTol = float(0.95);
-        const float kAbsTol = float(0.01);
+        //this will improve penetration resolution if it is bigger
+        const float kAbsTol = float(0.1);
         unsigned int axis;
         float sMax;
         Vec3 n;
+        //record down face max
         float faceMax = aMax > bMax ? aMax : bMax;
+        //if edge max bigger than face max, edge collision is determined
         if (kRelTol * eMax > faceMax + kAbsTol)
         {
             axis = eAxis;
@@ -840,6 +844,7 @@ namespace NlMath
 
         else
         {
+            
             if (kRelTol * bMax > aMax + kAbsTol)
             {
                 axis = bAxis;
@@ -854,7 +859,7 @@ namespace NlMath
                 n = nA;
             }
         }
-
+        //check if normal needs to be fliped
         if ((n * (tBox2.center - tBox1.center)) < float(0.0))
             n = -n;
 
@@ -924,18 +929,25 @@ namespace NlMath
 
         else
         {
+            //rotate to local position for easy calculation
             n = tBox1.rotation * n;
 
-            if (n * (tBox2.center - tBox1.center) < float(0.06))
+            //check if normal need to be negated
+            if (n * (tBox2.center - tBox1.center) < float(0.0f))
                 n = -n;
 
-            Vec3 PA, QA;
-            Vec3 PB, QB;
-            SupportEdge(tBox1, n, &PA, &QA);
-            SupportEdge(tBox2, -n, &PB, &QB);
+            //start and end point of 2 lines, line A and line B
+            //line A is the colliding reference edge of tBox1
+            //line B is the colliding reference edge of tBox2
+            Vec3 StartA, EndA;
+            Vec3 StartB, EndB;
 
-            Vec3 CA, CB;
-            EdgesContact(&CA, &CB, PA, QA, PB, QB);
+            //normal for shape b is inversed
+            SupportEdge(tBox1, n, &StartA, &EndA);
+            SupportEdge(tBox2, -n, &StartB, &EndB);
+
+            Vec3 collidingPointA, collidingPointB;
+            EdgesContact(&collidingPointA, &collidingPointB, StartA, EndA, StartB, EndB);
 
             manifold.normal = n;
             manifold.contactCount = 1;
@@ -945,7 +957,8 @@ namespace NlMath
             pair.key = axis;
             c->fp = pair;
             c->penetration = sMax;
-            c->position = (CA + CB) * float(0.5);
+            //take mid point of collision
+            c->position = (collidingPointA + collidingPointB) * float(0.5);
         }
 
         return true;
@@ -1311,23 +1324,23 @@ namespace NlMath
         *bOut = tx.rotation * b + tx.center;
     }
 
-    void EdgesContact(Vec3* CA, Vec3* CB, const Vec3& PA, const Vec3& QA, const Vec3& PB, const Vec3& QB)
+    void EdgesContact(Vec3* collidingPointA, Vec3* collidingPointB, const Vec3& StartA, const Vec3& EndA, const Vec3& StartB, const Vec3& EndB)
     {
-        Vec3 DA = QA - PA;
-        Vec3 DB = QB - PB;
-        Vec3 r = PA - PB;
-        float a = (DA * DA);
-        float e = (DB * DB);
-        float f = (DB * r);
-        float c = (DA * r);
+        Vec3 VectorA = EndA - StartA;
+        Vec3 VectorB = EndB - StartB;
+        Vec3 ReferenceVector = StartA - StartB;
+        float ALengthSqr = (VectorA * VectorA);
+        float BLengthSqr = (VectorB * VectorB);
+        float ReferenceB = (VectorB * ReferenceVector);
+        float ReferenceA = (VectorA * ReferenceVector);
 
-        float b = (DA* DB);
-        float denom = a * e - b * b;
+        float ADotB = (VectorA* VectorB);
+        float denom = ALengthSqr * BLengthSqr - ADotB * ADotB;
 
-        float TA = (b * f - c * e) / denom;
-        float TB = (b * TA + f) / e;
+        float LengthA = (ADotB * ReferenceB - ReferenceA * BLengthSqr) / denom;
+        float LengthB = (ADotB * LengthA + ReferenceB) / BLengthSqr;
 
-        *CA = PA + DA * TA;
-        *CB = PB + DB * TB;
+        *collidingPointA = StartA + VectorA * LengthA;
+        *collidingPointB = StartB + VectorB * LengthB;
     }
 }

@@ -1,3 +1,4 @@
+#pragma once
 #include "SystemCollision.h"
 #include "../Core/DeltaTime.h"
 #include "../Graphics/GraphicsSystem.h"//for testing, to be removed
@@ -6,7 +7,6 @@
 #include "../Component/ComponentTransform.h"
 #include "../Component/ComponentRigidBody.h"
 #include "../Input/SystemInput.h"
-#include "Contact.h"
 
 #include "CollisionDebugLines.h"
 

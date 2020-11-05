@@ -4,6 +4,7 @@
 #include "../Math/Vector.h"
 #include "../Component/ComponentRigidBody.h"
 #include "../Component/ComponentCollider.h"
+#include "Contact.cpp"
 
 struct CollisionEvent
 {
@@ -12,11 +13,11 @@ struct CollisionEvent
 
 	//for OBB angular physics, aabb dont use this
 	bool rotationEnabledEvent = false;
-	NlMath::Vector3D collisionPoint;
-	NlMath::Vector3D collisionNormal;
+	Manifold manifold;
 
 	//for AABB, obb dont use this
 	SIDES colidingSide = SIDES::NO_COLLISION;
+	NlMath::Vector3D collisionNormal;
 
 	//for all colision
 	ComponentRigidBody* rigid1;
@@ -34,5 +35,6 @@ struct CollsionResolver
 
 private:
 	// helper functions
-	void resolveEventNormally/*like you know with the NORMAL*/(const CollisionEvent& _event);
+	void AABBResolve/*like you know with the NORMAL*/(const CollisionEvent& _event);
+	
 };

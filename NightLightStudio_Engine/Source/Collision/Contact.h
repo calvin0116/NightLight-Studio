@@ -43,7 +43,6 @@ struct Contact
 
 struct Manifold
 {
-	void SetPair(OBBCollider* a, OBBCollider* b);
 
 	OBBCollider* A;
 	OBBCollider* B;
