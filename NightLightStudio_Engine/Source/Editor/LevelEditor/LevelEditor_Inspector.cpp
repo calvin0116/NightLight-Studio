@@ -309,16 +309,28 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				{
 					graphics_comp->_textureFileName = tex;
 				});
-			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue, 
-				[this, &ent, &mod, &graphics_comp]()
+			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			// Drag and Drop from Asset Inspector onto Model File Name
+			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+				[this, &mod, &graphics_comp](std::string* str)
 				{
-					if (mod != "")
-					{
-						graphics_comp->_modelFileName = mod;
-						NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(graphics_comp->_modelFileName.toString());
-						graphics_comp->_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(graphics_comp->_modelFileName.toString());
-					}
+					std::string data = *str;
+					std::transform(data.begin(), data.end(), data.begin(),
+						[](unsigned char c)
+						{ return (char)std::tolower(c); });
+
+					std::string fileType = LE_GetFileType(data);
+					if (fileType == "fbx" || fileType == "obj")
+						mod = data;
 				});
+
+			if (graphics_comp->_modelFileName.toString() != mod && !mod.empty())
+			{
+				graphics_comp->_modelFileName = mod;
+				NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(graphics_comp->_modelFileName.toString());
+				graphics_comp->_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(graphics_comp->_modelFileName.toString());
+			}
+
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 		}
 
