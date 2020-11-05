@@ -13,6 +13,7 @@
 #include "ComponentGraphics.h"
 #include "ComponentRigidBody.h"
 #include "ComponentScript.h"
+#include "ComponentLight.h"
 
 //For json serialising
 #include "..\..\ISerializable.h"

@@ -15,8 +15,8 @@ namespace NS_GRAPHICS
 		//this is needed. It will become Test1.mesh or something?
 		//std::string _localFileName;
 
-		//Manual Input
-		//std::string _meshName;
+		//FOR SAVING PURPOSE IF NEEDED
+		std::string _nodeName;
 
 		//////////////////////////////
 		/// New variables for interleaving data and reducing BOs

@@ -1,7 +1,8 @@
 #pragma once
 #include "../Graphics/Lights.h"
+#include "..\\..\\ISerializable.h"
 
-typedef class ComponentLight //: public IComponent
+typedef class ComponentLight : public ISerializable //: public IComponent
 {
 public:
 	// Temporarily make them public for easy access
@@ -13,6 +14,19 @@ public:
 
 	// Type of light: POINT/DIRECTIONAL/SPOT
 	NS_GRAPHICS::Lights _type;
+
+	//Variables For Lighting
+	//Standard variable
+	glm::vec3 _ambient;
+	glm::vec3 _diffuse;
+	glm::vec3 _specular;
+
+	//For point and spot
+	float _attenuation;
+
+	//For spot
+	float _cutOff;
+	float _outerCutOff;
 
 	// Default constructor
 	ComponentLight();
@@ -45,6 +59,13 @@ public:
 	////////////////////////////////////////
 
 	//read and write function for initialization from saved files
-	void Read();
-	void Write();
+	void Read(Value& val);
+	Value	Write();
+	virtual Value& Write(Value& val) { return val; };
+	virtual ComponentLight* Clone()
+	{
+		ComponentLight* newcomp = new ComponentLight();
+		*newcomp = *this;
+		return newcomp;
+	}
 } LightComponent;

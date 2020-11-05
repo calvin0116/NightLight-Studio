@@ -519,9 +519,15 @@ namespace NS_GRAPHICS
 	void GraphicsSystem::AttachModel(Entity& entity, const std::string& modelName)
 	{
 		if (entity.getComponent<ComponentGraphics>() == nullptr)
+		{
 			entity.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel(modelName)));
+			entity.getComponent<ComponentGraphics>()->_modelFileName = modelName.c_str();
+		}
 		else
+		{
 			entity.getComponent<ComponentGraphics>()->_modelID = modelManager->AddModel(modelName);
+			entity.getComponent<ComponentGraphics>()->_modelFileName = modelName.c_str();
+		}
 	}
 	void GraphicsSystem::DetachMesh(Entity& entity)
 	{

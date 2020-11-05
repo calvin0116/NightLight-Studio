@@ -61,10 +61,10 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<ColliderComponent>();
 			entComp._ent.getComponent<ColliderComponent>()->Read(*entComp._rjDoc);
 		}
-		else if (t == typeid(RigidBody).hash_code())
+		else if (t == typeid(LightComponent).hash_code())
 		{
-			entComp._ent.AttachComponent<RigidBody>();
-			entComp._ent.getComponent<RigidBody>()->Read(*entComp._rjDoc);
+			entComp._ent.AttachComponent<LightComponent>();
+			entComp._ent.getComponent<LightComponent>()->Read(*entComp._rjDoc);
 		}
 		/*
 		else if (t == typeid(ScriptComponent).hash_code())
@@ -102,6 +102,11 @@ void InspectorWindow::Start()
 		{
 			entComp.Copy(entComp._ent.getComponent<RigidBody>()->Write());
 			entComp._ent.RemoveComponent<RigidBody>();
+		}
+		else if (t == typeid(LightComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<LightComponent>()->Write());
+			entComp._ent.RemoveComponent<LightComponent>();
 		}
 		/*
 		else if (t == typeid(ScriptComponent).hash_code())
@@ -170,6 +175,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	AudioComp(ent);
 
 	GraphicsComp(ent);
+
+	LightComp(ent);
 
 	RigidBodyComp(ent);
 
@@ -369,6 +376,52 @@ void InspectorWindow::RigidBodyComp(Entity& ent)
 	}
 }
 
+void InspectorWindow::LightComp(Entity& ent)
+{
+	ComponentLight* light = ent.getComponent<ComponentLight>();
+	if (light != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Light", &_notRemove))
+		{
+			ImGui::Checkbox("Is Active", &light->_isActive);
+
+			const char* lights[] = { "Directional", "Point", "Spot" };
+			ImGui::Combo("Light Type", (int*)&light->_type, lights, IM_ARRAYSIZE(lights));
+
+			float diffuse[3] = { light->_diffuse.x, light->_diffuse.y, light->_diffuse.z };
+			ImGui::ColorEdit3("Diffuse", diffuse);
+			light->_diffuse = { diffuse[0], diffuse[1], diffuse[2] };
+
+			float ambient[3] = { light->_ambient.x, light->_ambient.y, light->_ambient.z };
+			ImGui::ColorEdit3("Ambient", ambient);
+			light->_ambient = { ambient[0], ambient[1], ambient[2] };
+
+			float specular[3] = { light->_specular.x, light->_specular.y, light->_specular.z };
+			ImGui::ColorEdit3("Specular", specular);
+			light->_specular = { specular[0], specular[1], specular[2] };
+
+			if (light->_type != NS_GRAPHICS::Lights::DIRECTIONAL)
+			{
+				ImGui::InputFloat("Attenuation", &light->_attenuation);
+			}
+
+			if (light->_type == NS_GRAPHICS::Lights::SPOT)
+			{
+				ImGui::InputFloat("Cut off", &light->_cutOff);
+				ImGui::InputFloat("Outer cut off", &light->_outerCutOff);
+			}
+		}
+
+		if (!_notRemove)
+		{
+			ent.RemoveComponent<RigidBody>();
+			_notRemove = true;
+		}
+
+		ImGui::Separator();
+	}
+}
+
 void InspectorWindow::ScriptComp(Entity& ent)
 {
 	ScriptComponent* script_comp = ent.getComponent<ScriptComponent>();
@@ -423,6 +476,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  RigidBody",
 			"  Audio",
 			"  Graphics",
+			"  Light   ",
 			"--Collider--",
 			"  AABB Colider",
 			"  OBB Collider",
@@ -472,14 +526,25 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		/*
+
 		case 4:
+		{
+			//next_lol = ent.AddComponent<GraphicsComponent>();
+			if (!ent.getComponent<LightComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, LightComponent().Write(), typeid(LightComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		/*
+		case 5:
 		{
 			next_lol = ent.AddComponent<ColliderComponent>();
 			break;
 		}*/
 
-		case 5:
+		case 6:
 		{
 			if (!ent.getComponent<ColliderComponent>())
 			{
@@ -490,7 +555,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			break;
 		}
 
-		case 6:
+		case 7:
 		{
 			if (!ent.getComponent<ColliderComponent>())
 			{
@@ -501,7 +566,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 7:
+		case 8:
 		{
 			if (!ent.getComponent<ColliderComponent>())
 			{
@@ -512,7 +577,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 8:
+		case 9:
 		{
 			if (!ent.getComponent<ColliderComponent>())
 			{
@@ -522,7 +587,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 9:
+		case 10:
 		{
 			if (!ent.getComponent<ColliderComponent>())
 			{
@@ -530,12 +595,14 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 				//ent.AttachComponent(capsule);
 				ENTITY_COMP_DOC comp{ ent, ColliderComponent(COLLIDERS::CAPSULE).Write(), typeid(ColliderComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+				//ColliderComponent capsule(COLLIDERS::CAPSULE);
+				//ent.AttachComponent(capsule);
+				break;
 			}
-			break;
 		}
 		/*
-		//case 10: -> ------
-		case 11:
+		//case 11: -> ------
+		case 12:
 		{
 			if (!ent.getComponent<ScriptComponent>())
 			{

@@ -22,7 +22,11 @@ namespace NS_GRAPHICS
 	{
 		if (_textureList.find(texturekey) == _textureList.end())
 		{
-			TextureLoader::GetInstance().LoadTexture(texturekey);
+			//This means if loading fails
+			if (TextureLoader::GetInstance().LoadTexture(texturekey) == 0)
+			{
+				return 0;
+			}
 		}
 
 		return _textureList[texturekey];

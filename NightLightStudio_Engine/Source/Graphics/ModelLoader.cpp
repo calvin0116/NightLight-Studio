@@ -155,6 +155,8 @@ namespace NS_GRAPHICS
 
 
 				std::cout << node->GetName() << ":" << std::endl;
+				newMesh->_nodeName = node->GetName();
+				newMeshNew->_nodeName = node->GetName();
 
 				//FbxDouble3 translation = node->LclTranslation.Get();
 				//FbxDouble3 rotation = node->LclRotation.Get();
