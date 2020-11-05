@@ -61,6 +61,11 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<ColliderComponent>();
 			entComp._ent.getComponent<ColliderComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(RigidBody).hash_code())
+		{
+			entComp._ent.AttachComponent<RigidBody>();
+			entComp._ent.getComponent<RigidBody>()->Read(*entComp._rjDoc);
+		}
 		else if (t == typeid(LightComponent).hash_code())
 		{
 			entComp._ent.AttachComponent<LightComponent>();
@@ -414,7 +419,8 @@ void InspectorWindow::LightComp(Entity& ent)
 
 		if (!_notRemove)
 		{
-			ent.RemoveComponent<RigidBody>();
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentLight>()->Write(), typeid(ComponentLight).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
 		}
 
