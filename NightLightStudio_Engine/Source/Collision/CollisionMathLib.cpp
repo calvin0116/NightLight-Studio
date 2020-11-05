@@ -715,32 +715,32 @@ namespace NlMath
 
         // box 1's x axis
         penetrationDepth = getSeparatingPlane(normalX1);
-        if (TrackFaceAxis(&aAxis, 0, penetrationDepth, &aMax, tBox1.rotation.Row0(), &nA))
+        if (TrackFaceAxis(&aAxis, 0, penetrationDepth, &aMax, normalX1, &nA))
             return false;
 
         // box 1's y axis
         penetrationDepth = getSeparatingPlane(normalY1);
-        if (TrackFaceAxis(&aAxis, 1, penetrationDepth, &aMax, tBox1.rotation.Row1(), &nA))
+        if (TrackFaceAxis(&aAxis, 1, penetrationDepth, &aMax, normalY1, &nA))
             return false;
 
         // box 1's z axis
         penetrationDepth = getSeparatingPlane(normalZ1);
-        if (TrackFaceAxis(&aAxis, 2, penetrationDepth, &aMax, tBox1.rotation.Row2(), &nA))
+        if (TrackFaceAxis(&aAxis, 2, penetrationDepth, &aMax, normalZ1, &nA))
             return false;
 
         // box 2's x axis
         penetrationDepth = getSeparatingPlane(normalX2);
-        if (TrackFaceAxis(&bAxis, 3, penetrationDepth, &bMax, tBox2.rotation.Row0(), &nB))
+        if (TrackFaceAxis(&bAxis, 3, penetrationDepth, &bMax, normalX2, &nB))
             return false;
 
         // box 2's y axis
         penetrationDepth = getSeparatingPlane(normalY2);
-        if (TrackFaceAxis(&bAxis, 4, penetrationDepth, &bMax, tBox2.rotation.Row1(), &nB))
+        if (TrackFaceAxis(&bAxis, 4, penetrationDepth, &bMax, normalY2, &nB))
             return false;
 
         // box 2's z axis
         penetrationDepth = getSeparatingPlane(normalZ2);
-        if (TrackFaceAxis(&bAxis, 5, penetrationDepth, &bMax, tBox2.rotation.Row2(), &nB))
+        if (TrackFaceAxis(&bAxis, 5, penetrationDepth, &bMax, normalZ2, &nB))
             return false;
 
         //// box 1's x axis
@@ -780,47 +780,47 @@ namespace NlMath
 
             tmp = Vector3DCrossProduct(normalX1, normalX2);
             penetrationDepth = getSeparatingPlane(tmp);
-            if (TrackFaceAxis(&eAxis, 6, penetrationDepth, &eMax, Vec3(float(0.0), -C.m2[0][2], C.m2[0][1]), &nE))
+            if (TrackFaceAxis(&eAxis, 6, penetrationDepth, &eMax, tmp, &nE))
                 return false;
 
             tmp = Vector3DCrossProduct(normalX1, normalY2);
             penetrationDepth = getSeparatingPlane(tmp);
-            if (TrackFaceAxis(&eAxis, 7, penetrationDepth, &eMax, Vec3(float(0.0), -C.m2[1][2], C.m2[1][1]), &nE))
+            if (TrackFaceAxis(&eAxis, 7, penetrationDepth, &eMax, tmp, &nE))
                 return false;
 
             tmp = Vector3DCrossProduct(normalX1, normalZ2);
             penetrationDepth = getSeparatingPlane(tmp);
-            if (TrackFaceAxis(&eAxis, 8, penetrationDepth, &eMax, Vec3(float(0.0), -C.m2[2][2], C.m2[2][1]), &nE))
+            if (TrackFaceAxis(&eAxis, 8, penetrationDepth, &eMax, tmp, &nE))
                 return false;
 
             tmp = Vector3DCrossProduct(normalY1, normalX2);
             penetrationDepth = getSeparatingPlane(tmp);
-            if (TrackFaceAxis(&eAxis, 9, penetrationDepth, &eMax, Vec3(C.m2[0][2], float(0.0), -C.m2[0][0]), &nE))
+            if (TrackFaceAxis(&eAxis, 9, penetrationDepth, &eMax, tmp, &nE))
                 return false;
 
             tmp = Vector3DCrossProduct(normalY1, normalY2);
             penetrationDepth = getSeparatingPlane(tmp);
-            if (TrackFaceAxis(&eAxis, 10, penetrationDepth, &eMax, Vec3(C.m2[1][2], float(0.0), -C.m2[1][0]), &nE))
+            if (TrackFaceAxis(&eAxis, 10, penetrationDepth, &eMax, tmp, &nE))
                 return false;
 
             tmp = Vector3DCrossProduct(normalY1, normalZ2);
             penetrationDepth = getSeparatingPlane(tmp);
-            if (TrackFaceAxis(&eAxis, 11, penetrationDepth, &eMax, Vec3(C.m2[2][2], float(0.0), -C.m2[2][0]), &nE))
+            if (TrackFaceAxis(&eAxis, 11, penetrationDepth, &eMax, tmp, &nE))
                 return false;
 
             tmp = Vector3DCrossProduct(normalZ1, normalX2);
             penetrationDepth = getSeparatingPlane(tmp);
-            if (TrackFaceAxis(&eAxis, 12, penetrationDepth, &eMax, Vec3(-C.m2[0][1], C.m2[0][0], float(0.0)), &nE))
+            if (TrackFaceAxis(&eAxis, 12, penetrationDepth, &eMax, tmp, &nE))
                 return false;
 
             tmp = Vector3DCrossProduct(normalZ1, normalY2);
             penetrationDepth = getSeparatingPlane(tmp);
-            if (TrackFaceAxis(&eAxis, 13, penetrationDepth, &eMax, Vec3(-C.m2[0][1], C.m2[0][0], float(0.0)), &nE))
+            if (TrackFaceAxis(&eAxis, 13, penetrationDepth, &eMax, tmp, &nE))
                 return false;
 
             tmp = Vector3DCrossProduct(normalZ1, normalZ2);
             penetrationDepth = getSeparatingPlane(tmp);
-            if (TrackFaceAxis(&eAxis, 14, penetrationDepth, &eMax, Vec3(-C.m2[2][1], C.m2[2][0], float(0.0)), &nE))
+            if (TrackFaceAxis(&eAxis, 14, penetrationDepth, &eMax, tmp, &nE))
                 return false;
         }
 
@@ -926,7 +926,7 @@ namespace NlMath
         {
             n = tBox1.rotation * n;
 
-            if (n * (tBox2.center - tBox1.center) < float(0.0))
+            if (n * (tBox2.center - tBox1.center) < float(0.06))
                 n = -n;
 
             Vec3 PA, QA;
@@ -1092,7 +1092,7 @@ namespace NlMath
                 out[3] = 9;
     
                 e->set(referenceBox.extend.y, referenceBox.extend.z, referenceBox.extend.x);
-                basis->SetRows(referenceBox.rotation.Row1(), referenceBox.rotation.Row2(), referenceBox.rotation.Row0());
+                basis->SetColumns(referenceBox.rotation.Column1(), referenceBox.rotation.Column2(), referenceBox.rotation.Column0());
             }
     
             else
@@ -1103,7 +1103,7 @@ namespace NlMath
                 out[3] = 5;
     
                 e->set(referenceBox.extend.z, referenceBox.extend.y, referenceBox.extend.x);
-                basis->SetRows(referenceBox.rotation.Row2(), referenceBox.rotation.Row1(), -referenceBox.rotation.Row0());
+                basis->SetColumns(referenceBox.rotation.Column2(), referenceBox.rotation.Column1(), -referenceBox.rotation.Column0());
             }
             break;
     
@@ -1116,7 +1116,7 @@ namespace NlMath
                 out[3] = 3;
     
                 e->set(referenceBox.extend.z, referenceBox.extend.x, referenceBox.extend.y);
-                basis->SetRows(referenceBox.rotation.Row2(), referenceBox.rotation.Row0(), referenceBox.rotation.Row1());
+                basis->SetColumns(referenceBox.rotation.Column2(), referenceBox.rotation.Column0(), referenceBox.rotation.Column1());
             }
     
             else
@@ -1127,7 +1127,7 @@ namespace NlMath
                 out[3] = 7;
     
                 e->set(referenceBox.extend.z, referenceBox.extend.x, referenceBox.extend.y);
-                basis->SetRows(referenceBox.rotation.Row2(), -referenceBox.rotation.Row0(), -referenceBox.rotation.Row1());
+                basis->SetColumns(referenceBox.rotation.Column2(), -referenceBox.rotation.Column0(), -referenceBox.rotation.Column1());
             }
             break;
     
@@ -1140,7 +1140,7 @@ namespace NlMath
                 out[3] = 0;
     
                 e->set(referenceBox.extend.y, referenceBox.extend.x, referenceBox.extend.z);
-                basis->SetRows(-referenceBox.rotation.Row1(), referenceBox.rotation.Row0(), referenceBox.rotation.Row2());
+                basis->SetColumns(-referenceBox.rotation.Column1(), referenceBox.rotation.Column0(), referenceBox.rotation.Column2());
             }
     
             else
@@ -1151,7 +1151,7 @@ namespace NlMath
                 out[3] = 9;
     
                 e->set(referenceBox.extend.y, referenceBox.extend.x, referenceBox.extend.z);
-                basis->SetRows(-referenceBox.rotation.Row1(), -referenceBox.rotation.Row0(), -referenceBox.rotation.Row2());
+                basis->SetColumns(-referenceBox.rotation.Column1(), -referenceBox.rotation.Column0(), -referenceBox.rotation.Column2());
             }
             break;
         }
@@ -1217,8 +1217,9 @@ namespace NlMath
         ClipVertex out[8];
     
         for (unsigned int i = 0; i < 4; ++i)
-            in[i].v = Mtx44Transpose(basis) * (incident[i].v - rPos);
+            in[i].v = Mtx44Transpose(basis) * (incident[i].v - rPos); 
     
+        //sign , extend , axis, clipedge represented with int, clipvertex passed in, number of clip
         outCount = Orthographic(float(1.0), e.x, 0, clipEdges[0], in, inCount, out);
     
         if (!outCount)
@@ -1242,7 +1243,7 @@ namespace NlMath
         {
             float d = in[i].v.z - e.z;
     
-            if (d <= float(0.0))
+            if (d <= float(0.006))
             {
                 outVerts[outCount].v = (basis* in[i].v) + rPos;
                 outVerts[outCount].f = in[i].f;

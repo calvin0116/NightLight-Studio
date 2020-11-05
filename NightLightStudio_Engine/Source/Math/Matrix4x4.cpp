@@ -268,11 +268,30 @@ namespace NlMath
 		return Vector3D(m20,m21,m22);
 	}
 
+	const Vec3 MulT(const Matrix4x4& r, const Vec3& rhs)
+	{
+		Matrix4x4 tmpmat = Mtx44Transpose(r);
+
+		return Vec3(
+			tmpmat.m00 * rhs.x + tmpmat.m10 * rhs.y + tmpmat.m20 * rhs.z,
+			tmpmat.m01 * rhs.x + tmpmat.m11 * rhs.y + tmpmat.m21 * rhs.z,
+			tmpmat.m02 * rhs.x + tmpmat.m12 * rhs.y + tmpmat.m22 * rhs.z
+		);
+	}
+
 	void Matrix4x4::SetRows(const Vec3 x, const Vec3 y, const Vec3 z)
 	{
 		m00 = x.x;	 m01 = x.y;	m02 = x.z;	m03 = 0;
 		m10 = y.x;		 m11 = y.y;		m12 = y.z;		m13 = 0;
 		m20 = z.x;	 m21 = z.y;	m22 = z.z;		m23 = 0;
+		m30 = 0;		m31 = 0;		m32 = 0;		m33 = 1;
+	}
+
+	void Matrix4x4::SetColumns(const Vec3 x, const Vec3 y, const Vec3 z)
+	{
+		m00 = x.x;	 m01 = y.x;	m02 = z.x;	m03 = 0;
+		m10 = x.y;		 m11 = y.y;		m12 = z.y;		m13 = 0;
+		m20 = x.z;	 m21 = y.z;	m22 = z.z;		m23 = 0;
 		m30 = 0;		m31 = 0;		m32 = 0;		m33 = 1;
 	}
 

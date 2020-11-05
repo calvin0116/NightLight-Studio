@@ -94,6 +94,11 @@ namespace NlMath
 		return m[i];
 	}
 
+	bool Vector3D::operator==(const Vector3D& rhs)
+	{
+		return (x == rhs.x) && (y == rhs.y) && (z == rhs.z);
+	}
+
 	/**************************************************************************/
 	/*!
 		3D vector unary minus operator

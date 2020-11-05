@@ -708,7 +708,11 @@ namespace NS_COLLISION
 
 				for (Contact& contact : tmp.contacts)
 				{
-					NS_GRAPHICS::SYS_GRAPHICS->DrawLine(contact.position, contact.position + tmp.normal * 0.1);
+					if (contact.position == NlMath::Vec3(0,0,0))
+					{
+						continue;
+					}
+					NS_GRAPHICS::SYS_GRAPHICS->DrawLine(contact.position, contact.position + tmp.normal * 0.3);
 				}
 					
 

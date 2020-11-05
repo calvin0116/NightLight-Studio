@@ -143,6 +143,8 @@ namespace NlMath
 		return mtx;
 	}
 
+
+
 	Matrix3x3::operator glm::mat4x4() const
 	{
 		glm::mat4x4 tmp{ 
