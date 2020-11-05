@@ -169,6 +169,11 @@ void InspectorWindow::Run()
 	}
 }
 
+bool InspectorWindow::GetIfGizmoManipulate()
+{
+	return _lastPos_Start;
+}
+
 void InspectorWindow::ComponentLayout(Entity& ent)
 {
 	TransformComp(ent);
@@ -713,8 +718,16 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 			float fov = 44.5f;
 			//Perspective(fov, io.DisplaySize.x / io.DisplaySize.y, 1.0f, 1000.f, cameraProjection);
 			float* cameraProjection;
-			glm::mat4 persp = glm::perspective(glm::radians(fov), (float)windowSize.x / (float)windowSize.y, 1.0f, 1000.0f);
-			cameraProjection = glm::value_ptr(persp);
+			if (windowSize.x && windowSize.y)
+			{
+				glm::mat4 persp = glm::perspective(glm::radians(fov), (float)windowSize.x / (float)windowSize.y, 1.0f, 1000.0f);
+				cameraProjection = glm::value_ptr(persp);
+			}
+			else
+			{
+				glm::mat4 persp = glm::perspective(glm::radians(fov), 1280.0f / 720.0f, 1.0f, 1000.0f);
+				cameraProjection = glm::value_ptr(persp);
+			}
 
 			glm::mat4 matObj = trans_comp->GetModelMatrix();
 			ImGuizmo::SetID(0);
@@ -738,7 +751,7 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 			else
 			{
 				// Checks if not manipulating and mouse is let go
-				if (_lastPos_Start && SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IMOUSE_LBUTTON))
+				if (_lastPos_Start && !SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IMOUSE_LBUTTON))
 				{
 					_lastPos_Start = false;
 					// New position for the object

@@ -99,4 +99,6 @@ public:
 	///void Exit() override;
 
 	//void InitBeforeRun();
+
+	bool GetIfGizmoManipulate();
 };

@@ -7,9 +7,11 @@ class HierarchyInspector : public LE_WinBase_Derived<HierarchyInspector>
 private:
 	std::string _search;
 	int selected_index;
+	bool _allowCopy;
+	bool _scrollBottom;
 public :
 	HierarchyInspector()
-		: selected_index{}
+		: selected_index{}, _allowCopy{ true }, _scrollBottom{ false }
 	{};
 	~HierarchyInspector() {};
 
