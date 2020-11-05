@@ -126,7 +126,7 @@ void HierarchyInspector::Run()
 		search = std::string(search_buf);
 		*/
 
-	_levelEditor->LE_AddInputText("Search", _search, 256);
+	_levelEditor->LE_AddInputText("Search", _search, 256, 0);
 
 	// Entity list
 	static int index_selected = -1;
