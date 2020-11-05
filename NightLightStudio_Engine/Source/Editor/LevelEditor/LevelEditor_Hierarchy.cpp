@@ -26,21 +26,40 @@ void HierarchyInspector::Start()
 		{
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_C))
 			{
-				if (LE_ECHELPER->GetSelectedEntityID() != -1)
+				if (!ImGui::IsAnyItemHovered())
 				{
-					Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
-					TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
-					if (trans_comp != NULL)
+					if (LE_ECHELPER->GetSelectedEntityID() != -1)
 					{
-						std::string newName;
-						newName = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
-						if (newName == "")
-							newName = "Entity_";
-						else
-							newName.append("_copy");
+						Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
+						TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+						if (trans_comp != NULL)
+						{
+							std::string newName;
+							newName = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
+							if (newName == "")
+								newName = "Entity_";
+							else
+								newName.append("_copy");
 
-						// Causes memory leaks currently (Probably Graphics Side)
-						ent.Copy(G_ECMANAGER, newName);
+							// Causes memory leaks currently (Probably Graphics Side)
+							ent.Copy(G_ECMANAGER, newName);
+						}
+					}
+				}
+			}
+		});
+
+	// Delete Object
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("DELETE_OBJECT", SystemInput_ns::IKEY_CTRL, "DELETE", SystemInput_ns::OnHold,
+		[]()
+		{
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_DELETE))
+			{
+				for (Entity ent : G_ECMANAGER->getEntityContainer())
+				{
+					if (LE_ECHELPER->SelectedEntities()[ent.getId()])
+					{
+						G_ECMANAGER->FreeEntity(ent.getId());
 					}
 				}
 			}
@@ -48,6 +67,7 @@ void HierarchyInspector::Start()
 
 	// PRESS F TO FOCUS ON SELECTED ITEM
 	// Honestly doesn't even need to be here, can be pretty much anywhere
+	/*
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("FOCUS_CAMERA", SystemInput_ns::IKEY_F, "IDET", SystemInput_ns::OnPress,
 		[]()
 		{
@@ -66,15 +86,18 @@ void HierarchyInspector::Start()
 				}
 			}
 		});
-
-	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOUSE_CLICK_SELECT_OBJ", SystemInput_ns::IMOUSE_LBUTTON, "CLICK", SystemInput_ns::OnPress,
-		[this]()
+*/
+// Object Selection
+/*
+SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOUSE_CLICK_SELECT_OBJ", SystemInput_ns::IMOUSE_LBUTTON, "CLICK", SystemInput_ns::OnPress,
+	[this]()
+	{
+		if (!ImGui::IsAnyItemHovered())
 		{
-			if (!ImGui::IsAnyItemHovered())
-			{
 
-			}
-		});
+		}
+	});
+	*/
 }
 
 void HierarchyInspector::Init()
@@ -89,18 +112,6 @@ void HierarchyInspector::Run()
 {
 	//ImGuiWindowFlags window_flags = 0;
 	//ImVec4 tranform_bar = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-	//Delete Entity
-	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_DELETE))
-	{
-		for (Entity ent : G_ECMANAGER->getEntityContainer())
-		{
-			if (LE_ECHELPER->SelectedEntities()[ent.getId()])
-			{
-				G_ECMANAGER->FreeEntity(ent.getId());
-			}
-		}
-	}
 	//Add entity button
 	if (ImGui::Button("Add Entity"))
 	{
@@ -143,8 +154,8 @@ void HierarchyInspector::Run()
 		if (ent.getNumChildren() > 0)
 		{
 			//~~!Prep for entity with children
-			_levelEditor->LE_AddTreeNodes(ent_name, 
-				[]() 
+			_levelEditor->LE_AddTreeNodes(ent_name,
+				[]()
 				{
 
 				});
@@ -158,8 +169,8 @@ void HierarchyInspector::Run()
 		}
 		else //if (!ent.isChild) print those not a child
 		{
-			_levelEditor->LE_AddSelectable(ent_name, LE_ECHELPER->SelectedEntities()[ent.getId()], 
-				[&ent]() 
+			_levelEditor->LE_AddSelectable(ent_name, LE_ECHELPER->SelectedEntities()[ent.getId()],
+				[&ent]()
 				{
 					LE_ECHELPER->SelectEntity(ent.getId());
 					std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
@@ -198,7 +209,8 @@ void HierarchyInspector::Run()
 
 void HierarchyInspector::Exit()
 {
-
+	//Exit not called?
+	//LE_ECHELPER->DestroyInstance();
 }
 
 void HierarchyInspector::InitBeforeRun()

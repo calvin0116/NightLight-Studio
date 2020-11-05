@@ -174,12 +174,12 @@ inline void LevelEditor::LE_AddInputText(const std::string& name, std::string& t
     if (ImGui::InputText(name.c_str(), toStr, maxLen, flag, callback, obj))
         runFN = true;
 
-    text = toStr;
-
-    delete[] toStr;
-
     if (runFN)
+    {
+        text = toStr;
         fn();
+    }
+    delete[] toStr;
 }
 
 template<typename TFunc>
@@ -194,12 +194,13 @@ inline void LevelEditor::LE_AddInputMultiText(const std::string& name, std::stri
     if (ImGui::InputTextMultiline(name.c_str(), toStr, maxLen, size, flag, callback, obj))
         runFN = true;
 
-    text = toStr;
+    if (runFN)
+    {
+        text = toStr;
+        fn();
+    }
 
     delete[] toStr;
-
-    if (runFN)
-        fn();
 }
 
 /**********************************************************************/

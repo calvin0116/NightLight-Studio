@@ -8,7 +8,6 @@
 #include "LevelEditor_Console.h"
 #include "../../Input/SystemInput.h"
 
-
 void InspectorWindow::Start()
 {
 	// Set up Command to run to move objects
@@ -39,6 +38,85 @@ void InspectorWindow::Start()
 	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"),
 		setPos,
 		setPos);
+
+	COMMAND createComp =
+		[](std::any comp)
+	{
+		ENTITY_COMP_DOC entComp = std::any_cast<ENTITY_COMP_DOC>(comp);
+		const size_t& t = entComp._compType;
+
+		// Generates the correct Component type
+		if (t == typeid(ComponentLoadAudio).hash_code())
+		{
+			entComp._ent.AttachComponent<ComponentLoadAudio>();
+			entComp._ent.getComponent<ComponentLoadAudio>()->Read(*entComp._rjDoc);
+		}
+		else if (t == typeid(ComponentGraphics).hash_code())
+		{
+			entComp._ent.AttachComponent<ComponentGraphics>();
+			entComp._ent.getComponent<ComponentGraphics>()->Read(*entComp._rjDoc);
+		}
+		else if (t == typeid(ColliderComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<ColliderComponent>();
+			entComp._ent.getComponent<ColliderComponent>()->Read(*entComp._rjDoc);
+		}
+		else if (t == typeid(RigidBody).hash_code())
+		{
+			entComp._ent.AttachComponent<RigidBody>();
+			entComp._ent.getComponent<RigidBody>()->Read(*entComp._rjDoc);
+		}
+		/*
+		else if (t == typeid(ScriptComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<ScriptComponent>();
+			entComp._ent.getComponent<ScriptComponent>()->Read(*entComp._rjDoc);
+		}
+		*/
+		return comp;
+	};
+
+	COMMAND removeComp =
+		[](std::any comp)
+	{
+		ENTITY_COMP_DOC entComp = std::any_cast<ENTITY_COMP_DOC>(comp);
+		const size_t& t = entComp._compType;
+
+		// Generates the correct Component type
+		if (t == typeid(ComponentLoadAudio).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<ComponentLoadAudio>()->Write());
+			entComp._ent.RemoveComponent<ComponentLoadAudio>();
+		}
+		else if (t == typeid(ComponentGraphics).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<ComponentGraphics>()->Write());
+			entComp._ent.RemoveComponent<ComponentGraphics>();
+		}
+		else if (t == typeid(ColliderComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<ColliderComponent>()->Write());
+			entComp._ent.RemoveComponent<ColliderComponent>();
+		}
+		else if (t == typeid(RigidBody).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<RigidBody>()->Write());
+			entComp._ent.RemoveComponent<RigidBody>();
+		}
+		/*
+		else if (t == typeid(ScriptComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<ScriptComponent>()->Write());
+			entComp._ent.RemoveComponent<ScriptComponent>();
+		}
+		*/
+		return std::any(entComp);
+	};
+
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_ATTACH_COMP"),
+		createComp, removeComp);
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_REMOVE_COMP"),
+		removeComp, createComp);
 }
 
 void InspectorWindow::Run()
@@ -55,6 +133,7 @@ void InspectorWindow::Run()
 		//Get entity
 		Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
 		// Entity name
+		/*
 		ImGuiInputTextFlags itf = 0;
 		itf |= ImGuiInputTextFlags_EnterReturnsTrue;
 
@@ -65,6 +144,8 @@ void InspectorWindow::Run()
 
 		if (ImGui::InputText("Name", buf, 256, itf))
 			NS_SCENE::SYS_SCENE_MANAGER->EntityName[LE_ECHELPER->GetSelectedEntityID()] = std::string(buf);
+		*/
+		_levelEditor->LE_AddInputText("Name##Entity", NS_SCENE::SYS_SCENE_MANAGER->EntityName[LE_ECHELPER->GetSelectedEntityID()], 256);
 
 		// Print out the ID of the entity (Debug purposes)
 		ImGui::SameLine(0, 10);
@@ -78,8 +159,26 @@ void InspectorWindow::Run()
 	}
 }
 
-
 void InspectorWindow::ComponentLayout(Entity& ent)
+{
+	TransformComp(ent);
+	//Standard bool for all component to use
+	_notRemove = true;
+
+	ColliderComp(ent);
+
+	AudioComp(ent);
+
+	GraphicsComp(ent);
+
+	RigidBodyComp(ent);
+
+	ScriptComp(ent);
+
+	AddSelectedComps(ent);
+}
+
+void InspectorWindow::TransformComp(Entity& ent)
 {
 	TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
 	if (trans_comp != NULL)
@@ -95,9 +194,10 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 		}
 		*/
 	}
-	//Standard bool for all component to use
-	bool not_remove = true;
+}
 
+void InspectorWindow::ColliderComp(Entity& ent)
+{
 	ComponentCollider* col_comp = ent.getComponent<ComponentCollider>();
 	if (col_comp != NULL)
 	{
@@ -108,52 +208,56 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 		std::string name = "Collider";	//e.g.
 		switch (col_comp->colliderType)
 		{
-			case COLLIDERS::PLANE:
-			{
-				name = "Plane " + name;
-				break;
-			}
-			case COLLIDERS::AABB:
-			{
-				name = "AABB " + name;
-				break;
-			}
-			case COLLIDERS::SPHERE:
-			{
-				name = "Sphere " + name;
-				break;
-			}
-			case COLLIDERS::OBB:
-			{
-				name = "OBB " + name;
-				break;
-			}
-			case COLLIDERS::CAPSULE:
-			{
-				name = "Capsule " + name;
-				break;
-			}
+		case COLLIDERS::PLANE:
+		{
+			name = "Plane " + name;
+			break;
+		}
+		case COLLIDERS::AABB:
+		{
+			name = "AABB " + name;
+			break;
+		}
+		case COLLIDERS::SPHERE:
+		{
+			name = "Sphere " + name;
+			break;
+		}
+		case COLLIDERS::OBB:
+		{
+			name = "OBB " + name;
+			break;
+		}
+		case COLLIDERS::CAPSULE:
+		{
+			name = "Capsule " + name;
+			break;
+		}
 		}
 
 		//4. May need loop to loop through all collider
-		if (ImGui::CollapsingHeader(name.c_str(), &not_remove))
+		if (ImGui::CollapsingHeader(name.c_str(), &_notRemove))
 		{
 
 		}
 
 		//Remove component
-		if (!not_remove)
+		if (!_notRemove)
 		{
-			ent.RemoveComponent<ComponentCollider>();
-			not_remove = true;
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentCollider>()->Write(), typeid(ComponentCollider).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
 		}
 	}
+}
 
+void InspectorWindow::AudioComp(Entity& ent)
+{
 	ComponentLoadAudio* aud_manager = ent.getComponent<ComponentLoadAudio>();
 	if (aud_manager != nullptr)
 	{
 
-		if (ImGui::CollapsingHeader("Audio Manager", &not_remove))
+		if (ImGui::CollapsingHeader("Audio Manager", &_notRemove))
 		{
 			if (ImGui::Button("Add Audio"))
 			{
@@ -178,46 +282,62 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 			}
 		}
 
-		if (!not_remove)
+		if (!_notRemove)
 		{
-			ent.RemoveComponent<ComponentLoadAudio>();
-			not_remove = true;
+			//ent.RemoveComponent<ComponentLoadAudio>();
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentLoadAudio>()->Write(), typeid(ComponentLoadAudio).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
 		}
 	}
+}
 
-
+void InspectorWindow::GraphicsComp(Entity& ent)
+{
 	GraphicsComponent* graphics_comp = ent.getComponent<GraphicsComponent>();
 	if (graphics_comp != nullptr)
 	{
-		if (ImGui::CollapsingHeader("Graphics component", &not_remove))
+		if (ImGui::CollapsingHeader("Graphics component", &_notRemove))
 		{
 			ImGui::Checkbox("IsActive##Grahpic", &graphics_comp->_isActive);
 
 			std::string tex = graphics_comp->_textureFileName.toString();
 			std::string mod = graphics_comp->_modelFileName.toString();
-			_levelEditor->LE_AddInputText("Texture file", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue);
-			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue);
-			if (graphics_comp->_modelFileName.toString() != mod && !mod.empty() )
-			{
-				graphics_comp->_modelFileName = mod;
-				NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(graphics_comp->_modelFileName.toString());
-				graphics_comp->_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(graphics_comp->_modelFileName.toString());
-			}
-			graphics_comp->_textureFileName = tex;
+
+			_levelEditor->LE_AddInputText("Texture file", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue, 
+				[&tex, &graphics_comp]() 
+				{
+					graphics_comp->_textureFileName = tex;
+				});
+			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue, 
+				[this, &ent, &mod, &graphics_comp]()
+				{
+					if (mod != "")
+					{
+						graphics_comp->_modelFileName = mod;
+						NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(graphics_comp->_modelFileName.toString());
+						graphics_comp->_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(graphics_comp->_modelFileName.toString());
+					}
+				});
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 		}
 
-		if (!not_remove)
+		if (!_notRemove)
 		{
-			ent.RemoveComponent<GraphicsComponent>();
-			not_remove = true;
+			//ent.RemoveComponent<GraphicsComponent>();
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<GraphicsComponent>()->Write(), typeid(GraphicsComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
 		}
 	}
+}
 
+void InspectorWindow::RigidBodyComp(Entity& ent)
+{
 	RigidBody* rb = ent.getComponent<RigidBody>();
 	if (rb != nullptr)
 	{
-		if (ImGui::CollapsingHeader("Rigid Body", &not_remove))
+		if (ImGui::CollapsingHeader("Rigid Body", &_notRemove))
 		{
 			//_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
@@ -227,33 +347,38 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 
 		}
 
-		if (!not_remove)
+		if (!_notRemove)
 		{
-			ent.RemoveComponent<RigidBody>();
-			not_remove = true;
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<RigidBody>()->Write(), typeid(RigidBody).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			//ent.RemoveComponent<RigidBody>();
+			_notRemove = true;
 		}
 	}
+}
 
+void InspectorWindow::ScriptComp(Entity& ent)
+{
 	ScriptComponent* script_comp = ent.getComponent<ScriptComponent>();
 	if (script_comp != nullptr)
 	{
-		if (ImGui::CollapsingHeader("Script", &not_remove))
+		if (ImGui::CollapsingHeader("Script", &_notRemove))
 		{
 			//_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			ImGui::Checkbox("IsActive", &script_comp->_isActive);
-			
+
 			if (ImGui::Button("Add Script")) //Need to change to drag and drop or create a new default scipt
 			{
 				script_comp->_Scripts.push_back(ComponentScript::data());
 			}
 
-			ImGuiTreeNodeFlags treeflag = ImGuiTreeNodeFlags_DefaultOpen ;
+			ImGuiTreeNodeFlags treeflag = ImGuiTreeNodeFlags_DefaultOpen;
 			int index = 0;
 			for (auto& script : script_comp->_Scripts)
 			{
 				if (std::string(script._ScriptName) == "")	//Temp for names
-					strcpy_s(script._ScriptName,"Script_" + index);
+					strcpy_s(script._ScriptName, "Script_" + index);
 
 				ImGui::Separator();
 				std::string header = "Script_" + std::to_string(index);
@@ -270,89 +395,161 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 			}
 		}
 
-		if (!not_remove)
+		if (!_notRemove)
 		{
+			// Currently does not run Delete Component Command (Script Read Write not working)
 			ent.RemoveComponent<ScriptComponent>();
-			not_remove = true;
 		}
 	}
+}
 
+void InspectorWindow::AddSelectedComps(Entity& ent)
+{
+	_levelEditor->LE_AddCombo("##AddComponentsCombo", _itemType,
+		{
+			"Add component",
+			"  RigidBody",
+			"  Audio",
+			"  Graphics",
+			"--Collider--",
+			"  AABB Colider",
+			"  OBB Collider",
+			"  Plane Collider",
+			"  SphereCollider",
+			"  CapsuleCollider",
+			" ------",
+			" Script"
+		});
 
-	static int item_type = 0;
-	
-	ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0 ------\0 Script\0");
+	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
 
-	void* next_lol = nullptr;
+	//void* next_lol = nullptr;
 
 	if (ImGui::Button("Add Selected Component"))
 	{
-		switch (item_type)
+		switch (_itemType)
 		{
-			case 1:
+		case 1:
+		{
+			//next_lol = ent.AddComponent<RigidBody>()
+			if (!ent.getComponent<RigidBody>())
 			{
-				next_lol = ent.AddComponent<RigidBody>();
-				break;
-			}
-			case 2:
-			{
-				next_lol = ent.AddComponent<ComponentLoadAudio>();
-				break;
-			}
-			case 3:
-			{
-				next_lol = ent.AddComponent<GraphicsComponent>();
-				break;
-			}
-			//case 4: -> --Collider--
-			case 5:
-			{
-				next_lol = ent.AddComponent<RigidBody>();
-				ColliderComponent aabb(COLLIDERS::AABB);
-				ent.AttachComponent(aabb);
-				break;
-			}
+				RigidBody rg = RigidBody();
+				// ENTITY_COMP comp{ ent, &rg, typeid(RigidBody).hash_code() };
+				ENTITY_COMP_DOC comp2{ ent, rg.Write(),typeid(RigidBody).hash_code() };
 
-			case 6:
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp2));
+			}
+			break;
+		}
+		case 2:
+		{
+			if (!ent.getComponent<ComponentLoadAudio>())
 			{
-				next_lol = ent.AddComponent<RigidBody>();
+				ComponentLoadAudio aud = ComponentLoadAudio();
+				//next_lol = ent.AddComponent<ComponentLoadAudio>();
+				ENTITY_COMP_DOC comp{ ent, aud.Write(), typeid(ComponentLoadAudio).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		case 3:
+		{
+			//next_lol = ent.AddComponent<GraphicsComponent>();
+			if (!ent.getComponent<GraphicsComponent>())
+			{
+				GraphicsComponent gra = GraphicsComponent();
+				ENTITY_COMP_DOC comp{ ent, gra.Write(), typeid(GraphicsComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		/*
+		case 4:
+		{
+			next_lol = ent.AddComponent<ColliderComponent>();
+			break;
+		}*/
+
+		case 5:
+		{
+			if (!ent.getComponent<ColliderComponent>())
+			{
+				ColliderComponent aabb(COLLIDERS::AABB);
+				//ent.AttachComponent(aabb);
+				ENTITY_COMP_DOC comp{ ent, aabb.Write(), typeid(ColliderComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+
+		case 6:
+		{
+			if (!ent.getComponent<ColliderComponent>())
+			{
 				ColliderComponent obb(COLLIDERS::OBB);
 				//next_lol = ent.AddComponent<OBBCollider>();
-				ent.AttachComponent(obb);
-				break;
+				//ent.AttachComponent(obb);
+				ENTITY_COMP_DOC comp{ ent, obb.Write(), typeid(ColliderComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
-			case 7:
+			break;
+		}
+		case 7:
+		{
+			if (!ent.getComponent<ColliderComponent>())
 			{
-				next_lol = ent.AddComponent<RigidBody>();
 				//next_lol = ent.AddComponent<PlaneCollider>();
 				ColliderComponent plane(COLLIDERS::PLANE);
-				ent.AttachComponent(plane);
-				break;
+				//ent.AttachComponent(plane);
+				ENTITY_COMP_DOC comp{ ent, plane.Write(), typeid(ColliderComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
-			case 8:
+			break;
+		}
+		case 8:
+		{
+			if (!ent.getComponent<ColliderComponent>())
 			{
-				next_lol = ent.AddComponent<RigidBody>();
 				ColliderComponent sphere(COLLIDERS::SPHERE);
-				ent.AttachComponent(sphere);
-				break;
+				//ent.AttachComponent(sphere);
+				ENTITY_COMP_DOC comp{ ent, sphere.Write(), typeid(ColliderComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
-			case 9:
+			break;
+		}
+		case 9:
+		{
+			if (!ent.getComponent<ColliderComponent>())
 			{
-				next_lol = ent.AddComponent<RigidBody>();
 				//next_lol = ent.AddComponent<CapsuleCollider>();
 				ColliderComponent capsule(COLLIDERS::CAPSULE);
-				ent.AttachComponent(capsule);
-				break;
+				//ent.AttachComponent(capsule);
+				ENTITY_COMP_DOC comp{ ent, capsule.Write(), typeid(ColliderComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
-			//case 10: -> ------
-			case 11:
-			{
-				next_lol = ent.AddComponent<ScriptComponent>();
-			}
+			break;
 		}
-		if (next_lol == nullptr)
+		//case 10: -> ------
+		case 11:
 		{
-			std::cout << "Component has already been created" << std::endl;
+			if (!ent.getComponent<ScriptComponent>())
+			{
+				// Currently not using Run Command as it will crash when it tries to read Scripts
+				ent.AddComponent<ScriptComponent>();
+				/*
+				ScriptComponent scr = ScriptComponent();
+				ENTITY_COMP_DOC comp{ ent, scr.Write(), typeid(ScriptComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+				*/
+			}
+			break;
 		}
+		}
+		//if (next_lol == nullptr)
+		//{
+		//	std::cout << "Component has already been created" << std::endl;
+		//}
 	}
 }
 

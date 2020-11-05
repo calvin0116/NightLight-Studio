@@ -24,7 +24,7 @@ class ConsoleLog : public LE_WinBase_Derived<ConsoleLog>
 
 	bool _scrollToBottom;
 
-	const size_t _maxCommands = 1000;
+	const size_t _maxCommands = 100;
 
 	// TO REMOVE
 	int _somevalue = 0;

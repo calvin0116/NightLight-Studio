@@ -5,6 +5,8 @@
 
 #include "../imgui/imguizmo/ImGuizmo.h"
 
+#include <memory>
+
 class InspectorWindow : public LE_WinBase_Derived<InspectorWindow>
 {
 public:
@@ -12,6 +14,47 @@ public:
 	{
 		TransformComponent* _transComp;
 		glm::mat4 _newPos;
+	};
+	struct ENTITY_COMP_DOC
+	{
+		Entity _ent;
+		std::shared_ptr<Document> _rjDoc;
+		size_t _compType;
+		ENTITY_COMP_DOC(Entity& ent, Value&& val, size_t cType) : _ent{ ent }, _rjDoc{ std::make_shared<Document>() }, _compType{ cType }
+		{
+			Copy(std::move(val));
+		}
+		~ENTITY_COMP_DOC() {}
+
+		void Copy(Value&& val)
+		{
+			if (_rjDoc->IsObject())
+			{
+				_rjDoc->RemoveAllMembers();
+			}
+			_rjDoc->CopyFrom(val, _rjDoc->GetAllocator(), true);
+		}
+
+		ENTITY_COMP_DOC(const ENTITY_COMP_DOC& ecd) : _ent{ ecd._ent }, _rjDoc{ std::make_shared<Document>() }, _compType{ ecd._compType }
+		{
+			if (_rjDoc->IsObject())
+			{
+				_rjDoc->RemoveAllMembers();
+			}
+			_rjDoc->CopyFrom(*ecd._rjDoc, _rjDoc->GetAllocator(), true);
+		}
+
+		std::string StringOut()
+		{
+			rapidjson::StringBuffer buffer;
+
+			buffer.Clear();
+
+			rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+			(*_rjDoc).Accept(writer);
+
+			return std::string(buffer.GetString());
+		}
 	};
 private:
 	int selected_index;
@@ -25,13 +68,27 @@ private:
 	bool _lastEnter;
 	ENTITY_LAST_POS _lastPos_ELP;
 
+	int _itemType;
+
+	bool _notRemove;
+
+	void TransformComp(Entity& ent);
+	void ColliderComp(Entity& ent);
+	void AudioComp(Entity& ent);
+	void GraphicsComp(Entity& ent);
+	void RigidBodyComp(Entity& ent);
+	void ScriptComp(Entity& ent);
+
+	void AddSelectedComps(Entity& ent);
+
 	void ComponentLayout(Entity& ent);
 	bool EditTransform(const float* cameraView, float* cameraProjection, float* matrix);
 	void TransformGizmo(TransformComponent* comp);
 public:
 	InspectorWindow()
 		: selected_index{ -1 }, _mCurrentGizmoOperation{ ImGuizmo::TRANSLATE }, _mCurrentGizmoMode{ ImGuizmo::WORLD },
-		_useSnap{ false }, _snap{ 1.0f, 1.0f, 1.0f }, _lastEnter{ false }, _lastPos_Start{ false }, _lastPos_ELP{ false }
+		_useSnap{ false }, _snap{ 1.0f, 1.0f, 1.0f }, _lastEnter{ false }, _lastPos_Start{ false }, _lastPos_ELP{ false },
+		_itemType{ 0 }, _notRemove{ true }
 	{};
 	~InspectorWindow() {};
 
