@@ -31,7 +31,7 @@ namespace NS_COLLISION
 {
 	static int test_count = 0;
 
-	CollisionSystem::CollisionSystem() : MeshLod(0), doDrawLineMesh(true)
+	CollisionSystem::CollisionSystem() : MeshLod(0), doDrawLineMesh(true), compTtest0(nullptr), compRtest0(nullptr), entityTest0(nullptr, -1)
 	{
 	}
 	void CollisionSystem::Load()
@@ -189,6 +189,7 @@ namespace NS_COLLISION
 
 		compTtest0 = compT;
 		compRtest0 = compR;
+		entityTest0 = boxTest;
 
 
 		{// ctrl
@@ -199,39 +200,39 @@ namespace NS_COLLISION
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.x += 1 * DELTA_T->dt / CLOCKS_PER_SEC;
-
-				NS_PHYSICS::USE_THE_FORCE.addForce(*compRtest0, NlMath::Vector3D(1.0f, 0.0f, 0.0f), TEST_FORCE_MAGNITUDE);
+				if(compRtest0->isActive)
+					NS_PHYSICS::USE_THE_FORCE.addForce(entityTest0, NlMath::Vector3D(1.0f, 0.0f, 0.0f), TEST_FORCE_MAGNITUDE);
 			});
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.x += -1 * DELTA_T->dt / CLOCKS_PER_SEC;
-
-				NS_PHYSICS::USE_THE_FORCE.addForce(*compRtest0, NlMath::Vector3D(-1.0f, 0.0f, 0.0f), TEST_FORCE_MAGNITUDE);
+				if (compRtest0->isActive)
+					NS_PHYSICS::USE_THE_FORCE.addForce(entityTest0, NlMath::Vector3D(-1.0f, 0.0f, 0.0f), TEST_FORCE_MAGNITUDE);
 			});
 
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_DOWN", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.y += -1 * DELTA_T->dt / CLOCKS_PER_SEC;
-
-				NS_PHYSICS::USE_THE_FORCE.addForce(*compRtest0, NlMath::Vector3D(0.0f, -1.0f, 0.0f), TEST_FORCE_MAGNITUDE);
+				if (compRtest0->isActive)
+					NS_PHYSICS::USE_THE_FORCE.addForce(entityTest0, NlMath::Vector3D(0.0f, -1.0f, 0.0f), TEST_FORCE_MAGNITUDE);
 			});
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_UP", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.y += 1 * DELTA_T->dt / CLOCKS_PER_SEC;
-
-				NS_PHYSICS::USE_THE_FORCE.addForce(*compRtest0, NlMath::Vector3D(0.0f, 1.0f, 0.0f), TEST_FORCE_MAGNITUDE);
+				if (compRtest0->isActive)
+					NS_PHYSICS::USE_THE_FORCE.addForce(entityTest0, NlMath::Vector3D(0.0f, 1.0f, 0.0f), TEST_FORCE_MAGNITUDE);
 			});
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_FRONT", SystemInput_ns::IKEY_Q, "Q", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.z += 1 * DELTA_T->dt / CLOCKS_PER_SEC;
-
-				NS_PHYSICS::USE_THE_FORCE.addForce(*compRtest0, NlMath::Vector3D(0.0f, 0.0f, 1.0f), TEST_FORCE_MAGNITUDE);
+				if (compRtest0->isActive)
+					NS_PHYSICS::USE_THE_FORCE.addForce(entityTest0, NlMath::Vector3D(0.0f, 0.0f, 1.0f), TEST_FORCE_MAGNITUDE);
 			});
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_BACK", SystemInput_ns::IKEY_E, "E", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.z += -1 * DELTA_T->dt / CLOCKS_PER_SEC;
-
-				NS_PHYSICS::USE_THE_FORCE.addForce(*compRtest0, NlMath::Vector3D(0.0f, 0.0f, -1.0f), TEST_FORCE_MAGNITUDE);
+				if (compRtest0->isActive)
+					NS_PHYSICS::USE_THE_FORCE.addForce(entityTest0, NlMath::Vector3D(0.0f, 0.0f, -1.0f), TEST_FORCE_MAGNITUDE);
 			});
 
 		} // ctrl
@@ -273,6 +274,9 @@ namespace NS_COLLISION
 			}
 		}
 
+		// clear collision events
+		colResolver.clear();
+
 		auto itr1 = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd1 = G_ECMANAGER->end<ComponentCollider>();
 
@@ -311,12 +315,14 @@ namespace NS_COLLISION
 
 				if (comRigid1 == nullptr || comRigid2 == nullptr) continue;
 
+				if (!comRigid1->isActive || !comRigid2->isActive) continue;
+
 				//UpdateCollisionBoxPos(comCol1, comTrans1);
 				
 
 
 				//check for collision, also create collision event in CheckCollision if there is collision
-				if (CheckCollision(comCol1, comCol2, comRigid1, comRigid2, comTrans1, comTrans2))
+				if (CheckCollision(comCol1, comCol2, comRigid1, comRigid2, comTrans1, comTrans2, Ent1, Ent2))
 				{
 					// store collision event
 					//NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(1.0f, 0.0f, 1.f));
@@ -468,7 +474,8 @@ namespace NS_COLLISION
 	bool CollisionSystem::CheckCollision(
 		ComponentCollider* Collider1, ComponentCollider* Collider2, 
 		ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2,
-		ComponentTransform* Transform1, ComponentTransform* Transform2)
+		ComponentTransform* Transform1, ComponentTransform* Transform2,
+		Entity Entity1, Entity Entity2)
 	{
 
 		if (Collider1->GetColliderT() == COLLIDERS::AABB)
@@ -495,6 +502,8 @@ namespace NS_COLLISION
 				newEvent.collider2 = Collider2;
 				newEvent.transform1 = Transform1;
 				newEvent.transform2 = Transform2;
+				newEvent.entity1 = Entity1;
+				newEvent.entity2 = Entity2;
 				// !!
 
 				newEvent.collisionType = COLRESTYPE::AABB_AABB;
@@ -519,6 +528,16 @@ namespace NS_COLLISION
 				// yes collision add to collision event and return true
 				newEvent.rigid1 = Rigid1;
 				newEvent.rigid2 = Rigid2;
+
+				// !!
+				newEvent.collider1 = Collider1;
+				newEvent.collider2 = Collider2;
+				newEvent.transform1 = Transform1;
+				newEvent.transform2 = Transform2;
+				newEvent.entity1 = Entity1;
+				newEvent.entity2 = Entity2;
+				// !!
+
 				newEvent.collisionType = COLRESTYPE::AABB_SPHERE;
 				colResolver.addCollisionEvent(newEvent);
 				return true;
@@ -541,6 +560,16 @@ namespace NS_COLLISION
 				// yes collision add to collision event and return true
 				newEvent.rigid1 = Rigid1;
 				newEvent.rigid2 = Rigid2;
+
+				// !!
+				newEvent.collider1 = Collider1;
+				newEvent.collider2 = Collider2;
+				newEvent.transform1 = Transform1;
+				newEvent.transform2 = Transform2;
+				newEvent.entity1 = Entity1;
+				newEvent.entity2 = Entity2;
+				// !!
+
 				newEvent.collisionType = COLRESTYPE::AABB_CAPSULE;
 				colResolver.addCollisionEvent(newEvent);
 				return true;
@@ -585,6 +614,16 @@ namespace NS_COLLISION
 				// yes collision add to collision event and return true
 				newEvent.rigid1 = Rigid1;
 				newEvent.rigid2 = Rigid2;
+
+				// !!
+				newEvent.collider1 = Collider1;
+				newEvent.collider2 = Collider2;
+				newEvent.transform1 = Transform1;
+				newEvent.transform2 = Transform2;
+				newEvent.entity1 = Entity1;
+				newEvent.entity2 = Entity2;
+				// !!
+
 				newEvent.collisionType = COLRESTYPE::SPHERE_AABB;
 				colResolver.addCollisionEvent(newEvent);
 				return true;
@@ -615,6 +654,16 @@ namespace NS_COLLISION
 				// add rigid body
 				newEvent.rigid1 = Rigid1;
 				newEvent.rigid2 = Rigid2;
+
+				// !!
+				newEvent.collider1 = Collider1;
+				newEvent.collider2 = Collider2;
+				newEvent.transform1 = Transform1;
+				newEvent.transform2 = Transform2;
+				newEvent.entity1 = Entity1;
+				newEvent.entity2 = Entity2;
+				// !!
+
 
 				// set type
 				newEvent.collisionType = COLRESTYPE::SPHERE_SPHERE;
@@ -653,6 +702,16 @@ namespace NS_COLLISION
 				// add rigid body
 				newEvent.rigid1 = Rigid1;
 				newEvent.rigid2 = Rigid2;
+
+				// !!
+				newEvent.collider1 = Collider1;
+				newEvent.collider2 = Collider2;
+				newEvent.transform1 = Transform1;
+				newEvent.transform2 = Transform2;
+				newEvent.entity1 = Entity1;
+				newEvent.entity2 = Entity2;
+				// !!
+
 
 				// set type
 				newEvent.collisionType = COLRESTYPE::SPHERE_CAPSULE;
@@ -694,6 +753,16 @@ namespace NS_COLLISION
 				// yes collision add to collision event and return true
 				newEvent.rigid1 = Rigid1;
 				newEvent.rigid2 = Rigid2;
+
+				// !!
+				newEvent.collider1 = Collider1;
+				newEvent.collider2 = Collider2;
+				newEvent.transform1 = Transform1;
+				newEvent.transform2 = Transform2;
+				newEvent.entity1 = Entity1;
+				newEvent.entity2 = Entity2;
+				// !!
+
 				newEvent.collisionType = COLRESTYPE::CAPSULE_AABB;
 				colResolver.addCollisionEvent(newEvent);
 				return true;
@@ -726,6 +795,16 @@ namespace NS_COLLISION
 				// add rigid body
 				newEvent.rigid1 = Rigid1;
 				newEvent.rigid2 = Rigid2;
+
+				// !!
+				newEvent.collider1 = Collider1;
+				newEvent.collider2 = Collider2;
+				newEvent.transform1 = Transform1;
+				newEvent.transform2 = Transform2;
+				newEvent.entity1 = Entity1;
+				newEvent.entity2 = Entity2;
+				// !!
+
 
 				// set type
 				newEvent.collisionType = COLRESTYPE::SPHERE_CAPSULE;
@@ -762,6 +841,16 @@ namespace NS_COLLISION
 				// add rigid body
 				newEvent.rigid1 = Rigid1;
 				newEvent.rigid2 = Rigid2;
+
+				// !!
+				newEvent.collider1 = Collider1;
+				newEvent.collider2 = Collider2;
+				newEvent.transform1 = Transform1;
+				newEvent.transform2 = Transform2;
+				newEvent.entity1 = Entity1;
+				newEvent.entity2 = Entity2;
+				// !!
+
 
 				// set type
 				newEvent.collisionType = COLRESTYPE::CAPSULE_CAPSULE;
@@ -825,6 +914,16 @@ namespace NS_COLLISION
 				//// add rigid body
 				//newEvent.rigid1 = Rigid1;
 				//newEvent.rigid2 = Rigid2;
+
+				//// !!
+				//newEvent.collider1 = Collider1;
+				//newEvent.collider2 = Collider2;
+				//newEvent.transform1 = Transform1;
+				//newEvent.transform2 = Transform2;
+				//newEvent.entity1 = Entity1;
+				//newEvent.entity2 = Entity2;
+				//// !!
+
 
 				//// set type
 				//newEvent.collisionType = COLRESTYPE::OBB_OBB;

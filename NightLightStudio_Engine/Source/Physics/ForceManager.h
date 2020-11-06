@@ -8,6 +8,7 @@
 #include "../Math/Vector.h"
 
 #include "..\Component\ComponentRigidBody.h"
+#include "..\Component\ComponentManager.h"
 
 // force, F = dp / dt
 // where p is momentum and t is time
@@ -51,6 +52,22 @@ typedef struct TranslationalForce
 	{}
 } Force;
 
+typedef struct TimedTranslationalForce
+{
+	NlMath::Vector3D direction;
+	float magnitute;  //magnitude
+	clock_t activeUntil;
+	TimedTranslationalForce() :
+		direction(0.0f, 0.0f, 0.0f),
+		magnitute(0.0f),
+		activeUntil(clock())
+	{}
+	TimedTranslationalForce(NlMath::Vector3D dir, float mag) :
+		direction(dir),
+		magnitute(mag)
+	{}
+} TimedForce, Force_Timed, TranslationalForce_Timed;
+
 //typedef struct TranslationalMomentum
 //{
 //	NlMath::Vector3D direction = 0;
@@ -87,17 +104,17 @@ class ForceManager
 
 public:
 	// add force to the rigidbody 
-	void addForce(ComponentRigidBody& rigidBody, const TranslationalForce& transForce);
+	void addForce(Entity ent, const TranslationalForce& transForce);
 	// add force to the rigidbody 
-	void addForce(ComponentRigidBody& rigidBody, NlMath::Vector3D direction, float magnitude);
+	void addForce(Entity ent, NlMath::Vector3D direction, float magnitude);
 
 	void updateTranslationalForces();
 
 
 	// resolve forces of a single rigid body
-	NlMath::Vector3D resolveTranslationalForces(int forceHandle);
+	NlMath::Vector3D resolveTranslationalForces(int entId);
 	// resolve forces of a single rigid body
-	NlMath::Vector3D resolveTranslationalForces(const ComponentRigidBody& rigidBody);
+	NlMath::Vector3D resolveTranslationalForces(Entity ent);
 
 
 

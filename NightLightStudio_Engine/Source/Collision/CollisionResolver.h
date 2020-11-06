@@ -6,6 +6,7 @@
 #include "../Component/ComponentCollider.h"
 #include "../Component/ComponentTransform.h"
 #include "Contact.cpp"
+#include "../Component/ComponentManager.h"
 
 struct CollisionEvent
 {
@@ -28,11 +29,22 @@ struct CollisionEvent
 	ComponentTransform* transform2;
 	ComponentCollider* collider1;
 	ComponentCollider* collider2;
+
+	Entity entity1;
+	Entity entity2;
+
+	CollisionEvent() : 
+		entity1(nullptr, -1),
+		entity2(nullptr, -1)
+	{
+	}
+
 };
 
 struct CollsionResolver
 {
 	std::list<CollisionEvent> colEventList;
+
 	void addCollisionEvent(const CollisionEvent& _event);
 
 	void resolveCollision();
