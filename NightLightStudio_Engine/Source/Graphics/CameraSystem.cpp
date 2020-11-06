@@ -53,12 +53,12 @@ namespace NS_GRAPHICS
 			//NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
 			if (SYS_INPUT->GetSystemMousePos().GetIfScrollUp())
 			{
-				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront());
+				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * ZOOM_SENSITIVITY);
 				updated = true;
 			}
 			else if (SYS_INPUT->GetSystemMousePos().GetIfScrollDown())
 			{
-				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront());
+				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * ZOOM_SENSITIVITY);
 				updated = true;
 			}
 		});
