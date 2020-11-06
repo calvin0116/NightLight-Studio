@@ -16,6 +16,10 @@ class AssetInspector : public LE_WinBase_Derived<AssetInspector>
 	std::string _dragDropFilePath;
 	std::string _currentFilePath;
 
+	std::string _searchPath;
+
+	bool _setScroll;
+
 	void _RecursiveDirectoryTree(const std::string& path);
 
 	void _RefreshDirectories(const std::string& path);
