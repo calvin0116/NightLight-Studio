@@ -344,13 +344,13 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 		{
 			ImGui::Checkbox("IsActive##Grahpic", &graphics_comp->_isActive);
 
-			std::string tex = graphics_comp->_textureFileName.toString();
+			std::string tex = graphics_comp->_albedoFileName.toString();
 			std::string mod = graphics_comp->_modelFileName.toString();
 
 			_levelEditor->LE_AddInputText("Texture file", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&tex, &graphics_comp]()
 				{
-					graphics_comp->_textureFileName = tex;
+					graphics_comp->_albedoFileName = tex;
 				});
 			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			// Drag and Drop from Asset Inspector onto Model File Name

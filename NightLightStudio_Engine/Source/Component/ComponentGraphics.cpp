@@ -6,14 +6,14 @@
 
 ComponentGraphics::ComponentGraphics()
 	: _isActive{ true },
-	_modelID{ -1 }, _textureFileName{}, _textureID{ NULL }
+	_modelID{ -1 }, _albedoFileName{}, _albedoID{ NULL }
 {
 	strcpy_s(ser_name ,"GraphicsComponent");
 }
 
 ComponentGraphics::ComponentGraphics(const int& meshID)
 	: _isActive{ true },
-	_modelID{ meshID }, _textureFileName{}, _textureID{ NULL }
+	_modelID{ meshID }, _albedoFileName{}, _albedoID{ NULL }
 {
 	strcpy_s(ser_name, "GraphicsComponent");
 }
@@ -40,7 +40,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("Texture file") == val.MemberEnd())
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
-		_textureFileName = val["Texture file"].GetString();
+		_albedoFileName = val["Texture file"].GetString();
 
 	if (val.FindMember("Model file") == val.MemberEnd())
 		std::cout << "No Model file data has been found" << std::endl;
@@ -80,7 +80,7 @@ inline Value ComponentGraphics::Write()
 	Value val(rapidjson::kObjectType);
 
 	NS_SERIALISER::ChangeData(&val, "isActive", _isActive);		//Bool
-	NS_SERIALISER::ChangeData(&val, "Texture file", rapidjson::StringRef(_textureFileName.c_str()) );
+	NS_SERIALISER::ChangeData(&val, "Texture file", rapidjson::StringRef(_albedoFileName.c_str()) );
 	NS_SERIALISER::ChangeData(&val, "Model file", rapidjson::StringRef(_modelFileName.c_str()));
 	return val;
 }

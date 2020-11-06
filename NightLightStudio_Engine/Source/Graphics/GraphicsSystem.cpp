@@ -101,21 +101,21 @@ namespace NS_GRAPHICS
 
 		lightManager->Init();
 		
-		////////////////////////////////////////////////////
-		/// Commented to test level editor drag and drop
-		
-		modelLoader->LoadModel("rotatedCube.fbx");
+		//////////////////////////////////////////////////////
+		///// Commented to test level editor drag and drop
+		//
+		//modelLoader->LoadModel("rotatedCube.fbx");
 
-		//Draw Cylinder FBX file 
-		modelLoader->LoadModel("cylinder.fbx");
-		
-		//Draw sphere FBX file 
-		modelLoader->LoadModel("sphere.fbx");
+		////Draw Cylinder FBX file 
+		//modelLoader->LoadModel("cylinder.fbx");
+		//
+		////Draw sphere FBX file 
+		//modelLoader->LoadModel("sphere.fbx");
 
-		modelLoader->LoadModel("incense_pot_Model.fbx");
+		//modelLoader->LoadModel("incense_pot_Model.fbx");
 
-		textureManager->GetTexture("Test.jpg");
-		
+		//textureManager->GetTexture("Test.jpg");
+		//
 
 		//std::cout << "light block size: " <<  sizeof(LightBlock) << std::endl;
 
@@ -497,14 +497,14 @@ namespace NS_GRAPHICS
 		// Get pointer to current mesh
 		Model* model = modelManager->_models[graphicsComp->_modelID];
 
-		// Replace all rgb for every vertex in mesh
-		for (auto& mesh : model->_meshes)
-		{
-			for (auto& i : mesh->_rgb)
-			{
-				i = rgb;
-			}
-		}
+		//// Replace all rgb for every vertex in mesh
+		//for (auto& mesh : model->_meshes)
+		//{
+		//	for (auto& i : mesh->_rgb)
+		//	{
+		//		i = rgb;
+		//	}
+		//}
 
 		// Set diffuse and ambient to selected rgb
 		graphicsComp->_materialData._ambient = rgb;

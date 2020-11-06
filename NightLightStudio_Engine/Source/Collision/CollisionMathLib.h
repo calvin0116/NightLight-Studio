@@ -21,6 +21,7 @@ struct ClipVertex;
 
 namespace NlMath
 {
+	bool RayToAABB(const AABBCollider& tBox, const Point3D& rayStartingPoint, const Point3D& rayEndPoint);
 
 	Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint);
 
