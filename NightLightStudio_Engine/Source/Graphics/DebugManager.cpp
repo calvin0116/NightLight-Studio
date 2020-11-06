@@ -39,13 +39,13 @@ namespace NS_GRAPHICS
 		ShaderSystem::GetInstance().StopProgram();
 	}
 
-	void DebugManager::SetGridExtents(const float& length)
+	void DebugManager::SetGridLength(const float& length)
 	{
 		_grid._gridLength = length;
 		_grid._update_required = true;
 	}
 
-	void DebugManager::SetCellExtents(const float& length)
+	void DebugManager::SetCellLength(const float& length)
 	{
 		_grid._cellLength = length;
 		_grid._update_required = true;
@@ -60,6 +60,26 @@ namespace NS_GRAPHICS
 	void DebugManager::SetGridColor(const float& red, const float& green, const float& blue, const float& alpha)
 	{
 		SetGridColor(glm::vec4(red, green, blue, alpha));
+	}
+
+	void DebugManager::ShowGrid(const bool& set)
+	{
+		_grid._render_grid = set;
+	}
+
+	const float& DebugManager::GetGridLength() const
+	{
+		return _grid._gridLength;
+	}
+
+	const float& DebugManager::GetCellLength() const
+	{
+		return _grid._cellLength;
+	}
+
+	const glm::vec4& DebugManager::GetGridRGBA() const
+	{
+		return _grid._rgba;
 	}
 
 	void DebugManager::CalculateGrid()
@@ -97,6 +117,9 @@ namespace NS_GRAPHICS
 
 	void DebugManager::Render()
 	{
+		if (_grid._render_grid == false)
+			return;
+
 		if (_grid._update_required == true)
 			CalculateGrid();
 

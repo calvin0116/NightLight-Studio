@@ -14,7 +14,8 @@ namespace NS_GRAPHICS
 	static const float  MAX_PITCH = 1.5534f;
 	static const float  MIN_PITCH = -MAX_PITCH;
 	static const float  ROTATION_SENSITIVITY = 1000.f;
-	static const float  POSITION_SENSITIVITY = 15.f;
+	static const float  POSITION_SENSITIVITY = 600.f;
+	static const float  ZOOM_SENSITIVITY = 150.f;
 
 	class Camera
 	{
@@ -40,7 +41,7 @@ namespace NS_GRAPHICS
 	public:
 		Camera()
 			: globalUp(0.f, 1.f, 0.f),
-			cameraPos(0.f, 2.f, 5.f),
+			cameraPos(0.f, 20.f, 500.f),
 			cameraFront(0.f, 0.f, -1.f),
 			cameraRight{ glm::normalize(glm::cross(cameraFront, globalUp)) },
 			cameraUp{ glm::normalize(glm::cross(cameraRight, cameraFront)) },
