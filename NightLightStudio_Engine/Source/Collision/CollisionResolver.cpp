@@ -177,12 +177,7 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 		colEvent.rigid1->velocity -= colEvent.collisionNormal * dot1;
 
 		float dot1a = colEvent.collisionNormal * colEvent.rigid1->acceleration;
-		colEvent.rigid1->acceleration -= colEvent.collisionNormal * dot1a;
-
-		if (colEvent.rigid1->force.y > 10)
-		{
-			int i = 1;
-		}
+		colEvent.rigid1->acceleration -= colEvent.collisionNormal;
 
 		float dot1f = colEvent.collisionNormal * colEvent.rigid1->force;
 		NlMath::Vector3D normalForce = colEvent.collisionNormal * dot1f;
@@ -190,7 +185,14 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 
 		//NS_PHYSICS::SYS_PHYSICS->getForceManager()->addForce(*colEvent.rigid1, colEvent.collisionNormal, 7);
 		NS_PHYSICS::USE_THE_FORCE.addForce(*colEvent.rigid1, normalForce, 1.0f);
-		
+
+
+		NlMath::Vector3D externalForce = NS_PHYSICS::USE_THE_FORCE.resolveTranslationalForces(*colEvent.rigid2);
+
+		float dote = colEvent.collisionNormal * externalForce;
+		NlMath::Vector3D externalForceResolve = colEvent.collisionNormal * dote;
+
+		NS_PHYSICS::USE_THE_FORCE.addForce(*colEvent.rigid1, externalForceResolve, 1.0f);
 	}
 	if (!colEvent.rigid2->isStatic)
 	{
@@ -199,7 +201,7 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 		float dot2 = oppNorm * colEvent.rigid2->velocity;
 		colEvent.rigid2->velocity -= oppNorm * dot2;
 
-		float dot2a = colEvent.collisionNormal * colEvent.rigid2->acceleration;
+		float dot2a = oppNorm * colEvent.rigid2->acceleration;
 		colEvent.rigid2->acceleration -= oppNorm * dot2a;
 
 		float dot2f = oppNorm * colEvent.rigid2->force;
@@ -208,6 +210,15 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 
 		//NS_PHYSICS::SYS_PHYSICS->getForceManager()->addForce(*colEvent.rigid1, colEvent.collisionNormal, 7);
 		NS_PHYSICS::USE_THE_FORCE.addForce(*colEvent.rigid2, normalForce, 1.0f);
+
+
+
+		NlMath::Vector3D externalForce = NS_PHYSICS::USE_THE_FORCE.resolveTranslationalForces(*colEvent.rigid1);
+
+		float dote = oppNorm * externalForce;
+		NlMath::Vector3D externalForceResolve = oppNorm * dote;
+
+		NS_PHYSICS::USE_THE_FORCE.addForce(*colEvent.rigid2, externalForceResolve, 1.0f);
 	}
 }
 
@@ -235,41 +246,29 @@ void CollsionResolver::resolveAABB(const CollisionEvent& colEvent)
 	}
 	case SIDES::TOP:
 	{
-		if (!colEvent.rigid1->isStatic)
-		{
-			colEvent.collider1;
-			colEvent.transform1;
-		}
-
+		float pen = colEvent.collider2->collider.aabb.vecMin.y - colEvent.collider1->collider.aabb.vecMax.y;
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.collider2;
-			colEvent.transform2;
+			colEvent.transform2->_position.y += -pen;
+		}
 
-			float pen = colEvent.collider2->collider.aabb.vecMin.y - colEvent.collider1->collider.aabb.vecMax.y;
-
-			colEvent.transform2->_position.y += pen;
-
+		if (!colEvent.rigid1->isStatic)
+		{
+			//colEvent.transform1->_position.y = colEvent.transform2->_position.y - pen;
 		}
 		break;
 	}
 	case SIDES::BOTTOM:
 	{
+		float pen = colEvent.collider1->collider.aabb.vecMin.y - colEvent.collider2->collider.aabb.vecMax.y;
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.collider1;
-			colEvent.transform1;
-
-			float pen = colEvent.collider2->collider.aabb.vecMax.y - colEvent.collider1->collider.aabb.vecMin.y;
-
-			colEvent.transform1->_position.y += pen;
+			colEvent.transform1->_position.y += -pen;
 		}
 
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.collider2;
-			colEvent.transform2;
-
+			//colEvent.transform2->_position.y = colEvent.transform1->_position.y - pen;
 		}
 		break;
 	}

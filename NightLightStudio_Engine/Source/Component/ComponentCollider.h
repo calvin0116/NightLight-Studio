@@ -183,6 +183,7 @@ public:
 	float bounciness = 0;
 	float friction = 0;
 	bool isCollide = false;
+	int lod = 0;
 	////////////////////////////data end/////////////////////////////////
 	ComponentCollider(COLLIDERS col);
 	ComponentCollider(const char * col);

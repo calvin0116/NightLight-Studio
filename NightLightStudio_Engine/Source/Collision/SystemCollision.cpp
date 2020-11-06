@@ -68,7 +68,7 @@ namespace NS_COLLISION
 				Entity boxTest = G_ECMANAGER->BuildEntity(std::string("newBox").append(std::to_string(test_count))); 
 				++test_count;
 				ComponentTransform boxTestTransform;
-				boxTestTransform._position = glm::vec3(0.0f, 0.0f, 0.0f);
+				boxTestTransform._position = glm::vec3(0.0f, 3.0f, 0.0f);
 				boxTestTransform._scale = glm::vec3(0.5f, 0.5f, 0.5f);
 				boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
 				ComponentCollider boxTestCollider(COLLIDERS::AABB);
@@ -157,12 +157,14 @@ namespace NS_COLLISION
 
 		Entity platform0Test = G_ECMANAGER->BuildEntity(std::string("TestPlatform0"));
 		ComponentTransform platform0Transform;
-		platform0Transform._position = glm::vec3(0.0f, -5.0f, 0.0f);
+		platform0Transform._position = glm::vec3(0.0f, 0.0f, 0.0f);
 		platform0Transform._scale = glm::vec3(5.0f, 1.0f, 5.0f);
 		platform0Test.AttachComponent<ComponentTransform>(platform0Transform);
 		ComponentCollider platform0Collider(COLLIDERS::AABB);
+		platform0Collider.lod = 5;
 		platform0Test.AttachComponent<ComponentCollider>(platform0Collider);
 		ComponentRigidBody platform0rbody;
+		platform0rbody.isStatic = true;
 		platform0Test.AttachComponent<ComponentRigidBody>(platform0rbody);
 
 
@@ -170,7 +172,7 @@ namespace NS_COLLISION
 		Entity boxTest = G_ECMANAGER->BuildEntity(std::string("TestBox0"));
 		++test_count;
 		ComponentTransform boxTestTransform;
-		boxTestTransform._position = glm::vec3(0.0f, 0.0f, 0.0f);
+		boxTestTransform._position = glm::vec3(0.0f, 3.0f, 0.0f);
 		boxTestTransform._scale = glm::vec3(1.0f, 1.0f, 1.0f);
 		boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
 		ComponentCollider boxTestCollider(COLLIDERS::AABB);
@@ -299,7 +301,7 @@ namespace NS_COLLISION
 
 				//Get Transforms
 				ComponentTransform* comTrans1 = G_ECMANAGER->getComponent<ComponentTransform>(itr1);
-				ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr1);
+				ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
 
 				if (comTrans1 == nullptr || comTrans2 == nullptr) continue;
 
@@ -872,6 +874,8 @@ namespace NS_COLLISION
 			comTrans->_scale.y * comCol->collider.aabb.colliderScale.y * 2.0f,
 			comTrans->_scale.z * comCol->collider.aabb.colliderScale.z * 2.0f
 		);
+
+		lod += comCol->lod;
 
 		if (lod < MESH_MIN_LOD) lod = MESH_MIN_LOD;
 		if (lod > MESH_MAX_LOD) lod = MESH_MAX_LOD;
