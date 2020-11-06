@@ -1,12 +1,17 @@
 #include "CameraSystem.h"
 #include "../Input/SystemInput.h"
 
+#include "../../glm/gtc/matrix_transform.hpp"
+#include "../../glm/gtc/quaternion.hpp"
+
 namespace NS_GRAPHICS
 {
 	CameraSystem::CameraSystem()
 		: _camera(),
 		updatedRot{ false },
-		updated{ false }
+		updated{ false },
+		zoomDistance{ 100.0f },
+		tgt(0.0f, 0.0f, 0.0f)
 	{
 	}
 
@@ -17,6 +22,54 @@ namespace NS_GRAPHICS
 
 	void CameraSystem::Init()
 	{
+
+#define TEST_TARGET_MOVE_STEP 0.5f;
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_FRONT", SystemInput_ns::IKEY_W, "TARGET_MOVE_FRONT", SystemInput_ns::OnHold, [this]()
+		{
+			glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
+			tgt += vec * TEST_TARGET_MOVE_STEP;
+			//tgt.z -= TEST_TARGET_MOVE_STEP;
+		});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_BACK", SystemInput_ns::IKEY_S, "TARGET_MOVE_BACK", SystemInput_ns::OnHold, [this]()
+		{
+			glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
+
+			glm::quat quaternion(glm::radians(glm::vec3(0.0f, 180.0f, 0.0f)));
+			glm::mat4 rotate = glm::mat4_cast(quaternion);
+
+			vec = rotate * glm::vec4(vec, 1.0f);
+
+			tgt += vec * TEST_TARGET_MOVE_STEP;
+			//tgt.z += TEST_TARGET_MOVE_STEP;
+		});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_LEFT", SystemInput_ns::IKEY_A, "TARGET_MOVE_LEFT", SystemInput_ns::OnHold, [this]()
+		{
+			glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
+
+			glm::quat quaternion(glm::radians(glm::vec3(0.0f, 90.0f, 0.0f)));
+			glm::mat4 rotate = glm::mat4_cast(quaternion);
+
+			vec = rotate * glm::vec4(vec, 1.0f);
+
+			tgt += vec * TEST_TARGET_MOVE_STEP;
+			//tgt.x -= TEST_TARGET_MOVE_STEP;
+		});
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_RIGHT", SystemInput_ns::IKEY_D, "TARGET_MOVE_RIGHT", SystemInput_ns::OnHold, [this]()
+		{
+			glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
+
+			glm::quat quaternion(glm::radians(glm::vec3(0.0f, -90.0f, 0.0f)));
+			glm::mat4 rotate = glm::mat4_cast(quaternion);
+
+			vec = rotate * glm::vec4(vec, 1.0f);
+
+			tgt += vec * TEST_TARGET_MOVE_STEP;
+			//tgt.x += TEST_TARGET_MOVE_STEP;
+		});
+
+
+
+
 		// Initialize all required cameras(if any)
 		// Currently only one test camera, thus no initialization required
 
@@ -62,6 +115,7 @@ namespace NS_GRAPHICS
 				updated = true;
 			}
 		});
+
 		/*SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_DOWN", SystemInput_ns::IKEY_DOWN, "DOWN", SystemInput_ns::OnHold, [this]()
 			{
 				//Position -= CameraUp * velocity;
@@ -168,40 +222,8 @@ namespace NS_GRAPHICS
 	void CameraSystem::Update()
 	{
 
-		SYS_INPUT->GetSystemMousePos().SetClipCursor(true);
-
-
-		glm::vec3 tgt = glm::vec3(0.0f, 0.0f, 0.0f);
-		//glm::vec3 eye;
-		float dist = 100.0f;
-
-		NS_GRAPHICS::Camera& cam = NS_GRAPHICS::CameraSystem::GetInstance().GetCamera();
-		glm::vec3 camFront = cam.GetFront();
-		camFront *= glm::vec3(dist, dist, dist);
-		cam.SetCameraPosition(tgt - camFront);
-
-		//NS_GRAPHICS::CameraSystem::GetInstance().ForceUpdate();
-
-		//Mouse relative velocity
-		glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
-
-		// Rotation for left and right
-		cam.SetCameraYaw(cam.GetYaw() + mousePos.x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
-
-		// Rotation for up and down
-		float offsetted = cam.GetPitch() + mousePos.y * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP;
-
-		if (offsetted > NS_GRAPHICS::MAX_PITCH)
-			offsetted = NS_GRAPHICS::MAX_PITCH;
-
-		cam.SetCameraPitch(offsetted);
-
-
-		SYS_INPUT->GetSystemMousePos().SetCurPos();
-
-		updatedRot = true;
-		updated = true;
-
+		// update thrid person camera
+		UpdateThirdPersonCamera();
 
 
 		// Call to activate all keys
@@ -216,16 +238,8 @@ namespace NS_GRAPHICS
 			updated = true;
 		}
 
-
-
-
-
-
-
-
-
-
-
+		// update the view vector
+		UpdateViewVector();
 	}
 
 	bool CameraSystem::CheckUpdate()
@@ -255,5 +269,60 @@ namespace NS_GRAPHICS
 	Camera& CameraSystem::GetCamera()
 	{
 		return _camera;
+	}
+	void CameraSystem::UpdateThirdPersonCamera()
+	{
+		SYS_INPUT->GetSystemMousePos().SetTheThing(true);
+		SYS_INPUT->GetSystemMousePos().SetCursorVisible(false);
+
+		//glm::vec3 tgt = glm::vec3(0.0f, 0.0f, 0.0f);
+		//glm::vec3 eye;
+		//float dist = 100.0f;
+
+		NS_GRAPHICS::Camera& cam = NS_GRAPHICS::CameraSystem::GetInstance().GetCamera();
+		glm::vec3 camFront = cam.GetFront();
+		camFront *= glm::vec3(zoomDistance, zoomDistance, zoomDistance);
+		cam.SetCameraPosition(tgt - camFront);
+
+		//NS_GRAPHICS::CameraSystem::GetInstance().ForceUpdate();
+
+		//Mouse relative velocity
+		glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
+
+		// Rotation for left and right
+		cam.SetCameraYaw(cam.GetYaw() + mousePos.x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
+
+		// Rotation for up and down
+		float offsetted = cam.GetPitch() + mousePos.y * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP;
+
+		if (offsetted > NS_GRAPHICS::MAX_PITCH)
+			offsetted = NS_GRAPHICS::MAX_PITCH;
+
+		cam.SetCameraPitch(offsetted);
+
+		if (SYS_INPUT->GetSystemMousePos().GetIfScrollUp())
+		{
+			zoomDistance += NS_GRAPHICS::ZOOM_SENSITIVITY;
+
+			//_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * ZOOM_SENSITIVITY);
+			updated = true;
+		}
+		else if (SYS_INPUT->GetSystemMousePos().GetIfScrollDown())
+		{
+			zoomDistance -= NS_GRAPHICS::ZOOM_SENSITIVITY;
+
+			//_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * ZOOM_SENSITIVITY);
+			updated = true;
+		}
+
+		updatedRot = true;
+		updated = true;
+	}
+	void CameraSystem::UpdateViewVector()
+	{
+		glm::vec3 camFront = _camera.GetFront();
+		glm::vec3 camPositron = _camera.GetPosition();
+		viewVector = camFront - camPositron;
+		viewVector = glm::normalize(viewVector);
 	}
 }

@@ -3,6 +3,7 @@
 #include "..\Physics\SystemPhysics.h"
 #include <limits>
 
+#include "..\Logic\SystemLogic.h"
 
 #include "..\Graphics\CameraSystem.h"
 #include "../Input/SystemInput.h"
@@ -170,10 +171,11 @@ void CollsionResolver::resolveCollision()
 
 	for (CollisionEvent& colEvent : colEventList)
 	{
-		colEvent.entity1;
-		colEvent.entity2;
+		//colEvent.entity1;
+		//colEvent.entity2;
 
 		// pass to syslogic
+		NS_LOGIC::SYS_LOGIC->OnCollisionEnter(colEvent.entity1, colEvent.entity2);
 	}
 
 

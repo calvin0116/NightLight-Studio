@@ -15,7 +15,8 @@ namespace NS_GRAPHICS
 	static const float  MIN_PITCH = -MAX_PITCH;
 	static const float  ROTATION_SENSITIVITY = 1000.f;
 	static const float  POSITION_SENSITIVITY = 600.f;
-	static const float  ZOOM_SENSITIVITY = 150.f;
+	//static const float  ZOOM_SENSITIVITY = 150.f;
+	static const float  ZOOM_SENSITIVITY = 15.f;
 
 	class Camera
 	{
