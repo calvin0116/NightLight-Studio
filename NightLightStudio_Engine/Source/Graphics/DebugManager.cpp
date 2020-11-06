@@ -117,15 +117,23 @@ namespace NS_GRAPHICS
 
 	void DebugManager::Render()
 	{
+
+
 		if (_grid._render_grid == false)
 			return;
 
+		glBindVertexArray(_grid._VAO);
+
 		if (_grid._update_required == true)
+		{
 			CalculateGrid();
 
-		ShaderSystem::GetInstance().StartProgram(2);
+			// update to GPU
+			glBindBuffer(GL_ARRAY_BUFFER, _grid._VBO);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec3) * _grid._gridPoints.size(), &_grid._gridPoints[0]);
+		}
 
-		glBindVertexArray(_grid._VAO);
+		ShaderSystem::GetInstance().StartProgram(2);
 
 		glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(_grid._gridPoints.size()));
 
