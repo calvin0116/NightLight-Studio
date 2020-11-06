@@ -16,6 +16,10 @@ namespace SystemInput_ns
 
 		bool _showCursor;
 
+		bool _clipCursor;
+
+		bool _theThing;
+
 		short _scrollDown;
 
 		POINT _clientRectSize;
@@ -28,7 +32,7 @@ namespace SystemInput_ns
 		glm::vec2 Offset(glm::vec2 pos, glm::vec2 offset);
 
 	public:
-		SystemMousePosition(bool showCursor = true);
+		SystemMousePosition(bool showCursor = true, bool clipCursor = true);
 		~SystemMousePosition() = default;
 
 		// Updates Mouse Position, must run once to refresh mouse Positions
@@ -52,6 +56,22 @@ namespace SystemInput_ns
 		void LoadCursorImage(std::string name);
 		// Returns Client Rect Size in pixels
 		POINT GetClientRectSize();
+
+		// get win rect
+		RECT GetWinRect();
+
+		// Toggle to clip cursor
+		bool ToggleClipCursor();
+		// Set to clip cursor
+		void SetClipCursor(bool clip);
+
+		// Set cursor positron
+		POINT SetCurPos(int x, int y);
+		// lala
+		POINT SetCurPos();
+
+		// sets the thing so it does the thing
+		void SetTheThing(bool set);
 
 		// Gets the cursor's position in the client rect from 0.0 to 1.0 in xy coordinates, (0,0) Begins in Bottom-Left Corner
 		glm::vec2 GetRelativeLocation();

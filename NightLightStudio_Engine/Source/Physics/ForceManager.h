@@ -52,6 +52,7 @@ typedef struct TranslationalForce
 	{}
 } Force;
 
+///////////////////////////////////////////////////////////////////////////////////// TODO !!!
 typedef struct TimedTranslationalForce
 {
 	NlMath::Vector3D direction;

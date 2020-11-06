@@ -3,6 +3,11 @@
 #include "..\Physics\SystemPhysics.h"
 #include <limits>
 
+#include "..\Logic\SystemLogic.h"
+
+#include "..\Graphics\CameraSystem.h"
+#include "../Input/SystemInput.h"
+
 void CollisionResolver()
 {
 
@@ -159,6 +164,22 @@ void CollsionResolver::resolveCollision()
 	}
 
 
+
+	// Resolve Logic events
+
+	// SYS LOGIC TODO!!!
+
+	for (CollisionEvent& colEvent : colEventList)
+	{
+		//colEvent.entity1;
+		//colEvent.entity2;
+
+		// pass to syslogic
+		NS_LOGIC::SYS_LOGIC->OnCollisionEnter(colEvent.entity1, colEvent.entity2);
+	}
+
+
+
 	// clear event list
 	// collision events should be cleared before collision detection
 	//colEventList.clear();
@@ -309,7 +330,6 @@ void CollsionResolver::resolveAABB(const CollisionEvent& colEvent)
 		{
 			//colEvent.transform1->_position.y = colEvent.transform2->_position.y - pen;
 		}
-		break;
 		break;
 	}
 	default:
