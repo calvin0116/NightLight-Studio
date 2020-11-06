@@ -127,6 +127,26 @@ void InspectorWindow::Start()
 		createComp, removeComp);
 	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_REMOVE_COMP"),
 		removeComp, createComp);
+
+	// INPUTS TO CHANGE GIZMO OPERATIONS
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("CHANGE_GIZMO_TRANSFORM_TRANSLATE", SystemInput_ns::IKEY_W, "TRANSLATE", SystemInput_ns::OnPress,
+		[this]()
+		{
+			if (!ImGui::IsAnyItemFocused())
+				_mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+		});
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("CHANGE_GIZMO_TRANSFORM_ROTATE", SystemInput_ns::IKEY_E, "ROTATE", SystemInput_ns::OnPress,
+		[this]()
+		{
+			if (!ImGui::IsAnyItemFocused())
+				_mCurrentGizmoOperation = ImGuizmo::ROTATE;
+		});
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("CHANGE_GIZMO_TRANSFORM_SCALE", SystemInput_ns::IKEY_R, "SCALE", SystemInput_ns::OnPress,
+		[this]()
+		{
+			if (!ImGui::IsAnyItemFocused())
+				_mCurrentGizmoOperation = ImGuizmo::SCALE;
+		});
 }
 
 void InspectorWindow::Run()
@@ -223,7 +243,7 @@ void InspectorWindow::ColliderComp(Entity& ent)
 		//2. Get the right collider type
 		//3. Insert name
 		std::string name = "Collider";	//e.g.
-		switch (col_comp->colliderType)
+		switch (col_comp->GetColliderT())
 		{
 		case COLLIDERS::PLANE:
 		{
@@ -325,8 +345,8 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 			std::string tex = graphics_comp->_textureFileName.toString();
 			std::string mod = graphics_comp->_modelFileName.toString();
 
-			_levelEditor->LE_AddInputText("Texture file", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue, 
-				[&tex, &graphics_comp]() 
+			_levelEditor->LE_AddInputText("Texture file", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&tex, &graphics_comp]()
 				{
 					graphics_comp->_textureFileName = tex;
 				});
@@ -629,11 +649,11 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			{
 				// Currently not using Run Command as it will crash when it tries to read Scripts
 				ent.AddComponent<ScriptComponent>();
-				
+
 				//ScriptComponent scr = ScriptComponent();
 				//ENTITY_COMP_DOC comp{ ent, scr.Write(), typeid(ScriptComponent).hash_code() };
 				//_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
-				
+
 			}
 			break;
 		}*/

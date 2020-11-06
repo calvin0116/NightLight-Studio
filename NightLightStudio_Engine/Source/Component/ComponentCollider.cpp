@@ -7,50 +7,46 @@
 #include "../../glm/gtc/matrix_transform.hpp"
 #include "../../glm/gtc/quaternion.hpp"
 
-ComponentCollider::ComponentCollider(COLLIDERS _col)
-	: collisionTime{ FLT_MAX }, colliderType(_col)
+void ComponentCollider::SetColliderT(COLLIDERS _col)
 {
 	switch (_col)
 	{
-		case COLLIDERS::PLANE:
-		{
-			strcpy_s(ser_name, "ColliderComponent");
-			collider.plane = PlaneCollider();
-			break;
-		}
-		case COLLIDERS::AABB:
-		{
-			strcpy_s(ser_name, "ColliderComponent");
-			collider.aabb = AABBCollider();
-			break;
-		}
-		case COLLIDERS::SPHERE:
-		{
-			strcpy_s(ser_name, "ColliderComponent");
-			collider.sphere = SphereCollider();
-			break;
-		}
-		case COLLIDERS::OBB:
-		{
-			strcpy_s(ser_name, "ColliderComponent");
-			collider.obb = OBBCollider();
-			break;
-		}
-		case COLLIDERS::CAPSULE:
-		{
-			strcpy_s(ser_name, "ColliderComponent");
-			collider.capsule = CapsuleCollider();
-			break;
-		}
+	case COLLIDERS::PLANE:
+	{
+		strcpy_s(ser_name, "ColliderComponent");
+		collider.plane = PlaneCollider();
+		break;
+	}
+	case COLLIDERS::AABB:
+	{
+		strcpy_s(ser_name, "ColliderComponent");
+		collider.aabb = AABBCollider();
+		break;
+	}
+	case COLLIDERS::SPHERE:
+	{
+		strcpy_s(ser_name, "ColliderComponent");
+		collider.sphere = SphereCollider();
+		break;
+	}
+	case COLLIDERS::OBB:
+	{
+		strcpy_s(ser_name, "ColliderComponent");
+		collider.obb = OBBCollider();
+		break;
+	}
+	case COLLIDERS::CAPSULE:
+	{
+		strcpy_s(ser_name, "ColliderComponent");
+		collider.capsule = CapsuleCollider();
+		break;
+	}
 	}
 }
 
-ComponentCollider::ComponentCollider(const char* col) 
-	: collisionTime(FLT_MAX), colliderType(COLLIDERS::AABB)
+void ComponentCollider::SetColliderT(const char* _col)
 {
-	strcpy_s(ser_name, "ColliderComponent");
-
-	std::string colliderName = col;
+	std::string colliderName = _col;
 	if (colliderName == "OBB")
 	{
 		colliderType = COLLIDERS::OBB;
@@ -76,6 +72,25 @@ ComponentCollider::ComponentCollider(const char* col)
 		colliderType = COLLIDERS::SPHERE;
 		collider.sphere = SphereCollider();
 	}
+}
+
+COLLIDERS ComponentCollider::GetColliderT()
+{
+	return colliderType;
+}
+
+ComponentCollider::ComponentCollider(COLLIDERS _col)
+	: collisionTime{ FLT_MAX }, colliderType(_col)
+{
+	SetColliderT(_col);
+}
+
+ComponentCollider::ComponentCollider(const char* col) 
+	: collisionTime(FLT_MAX), colliderType(COLLIDERS::AABB)
+{
+	strcpy_s(ser_name, "ColliderComponent");
+
+	SetColliderT(col);
 }
 
 ComponentCollider::ComponentCollider(ComponentCollider& rhs)
