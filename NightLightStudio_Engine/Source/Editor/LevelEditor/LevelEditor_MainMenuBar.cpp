@@ -121,26 +121,63 @@ void LevelEditor::LE_MainMenuBar()
     if (ImGui::BeginMenuBar())
     {
         NS_GRAPHICS::DebugManager& dm = NS_GRAPHICS::DebugManager::GetInstance();
-        ImGui::SetCursorPosX(viewport->GetWorkSize().x / 8.0f * 5.0f);
+        //ImGui::SetCursorPosX(viewport->GetWorkSize().x / 10.0f);
+        ImGui::Separator();
         LE_AddCheckbox("Run Grid", &_showGrid, [this, &dm]() { dm.ShowGrid(_showGrid); });
+        ImGui::Separator();
         if (_showGrid)
         {
-            ImGui::SameLine();
-            ImGui::SetNextItemWidth(120);
-            float gridCell[2] = {dm.GetGridLength(), dm.GetCellLength()};
-            glm::vec4 gridCol = dm.GetGridRGBA();
-            if (ImGui::InputFloat2("Grid : Cell##GRIDGRID", gridCell, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+            if (ImGui::BeginMenu("Grid Settings##GRID"))
             {
-                dm.SetGridLength(gridCell[0]); dm.SetCellLength(gridCell[1]);
+                float gridCell[2] = { dm.GetGridLength(), dm.GetCellLength() };
+                glm::vec4 gridCol = dm.GetGridRGBA();
+                ImGui::Text("     Grid      :     Cell    ");
+                //ImGui::Separator();
+                //ImGui::SetNextItemWidth(120);
+                if (ImGui::InputFloat2("##GRIDGRID", gridCell, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+                {
+                    dm.SetGridLength(gridCell[0]); dm.SetCellLength(gridCell[1]);
+                }
+                //ImGui::Separator();
+                //ImGui::SetNextItemWidth(150);
+                if (ImGui::ColorEdit4("##GRIDCOLOR", glm::value_ptr(gridCol)))
+                {
+                    dm.SetGridColor(gridCol);
+                }
+                ImGui::Separator();
+                ImGui::EndMenu();
             }
+            ImGui::Separator();
+        }
+
+        //ImGui::SetCursorPosX(viewport->GetWorkSize().x / 10.0f * 7.0f);
+        if (ImGui::BeginMenu("Camera Settings##CAMERA"))
+        {
+            NS_GRAPHICS::CameraSystem& cs = NS_GRAPHICS::CameraSystem::GetInstance();
+            float camVals[3] = { cs.GetDragSensitivity(), cs.GetRotationSensitivity(), cs.GetZoomSensitivity() };
+            ImGui::Text("  Drag:");
             ImGui::SameLine();
-            ImGui::SetNextItemWidth(150);
-            if (ImGui::ColorEdit4("##GRIDCOLOR", glm::value_ptr(gridCol)))
+            if (ImGui::InputFloat("##CAMDRAG", camVals, 3, ImGuiInputTextFlags_EnterReturnsTrue))
             {
-                dm.SetGridColor(gridCol);
+                cs.SetDragSensitivity(camVals[0]);
             }
 
+            ImGui::Text("Rotate:");
+            ImGui::SameLine();
+            if (ImGui::InputFloat("##CAMROTATE", camVals+1, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+            {
+                cs.SetRotationSensitivity(camVals[1]);
+            }
+
+            ImGui::Text("  Zoom:");
+            ImGui::SameLine();
+            if (ImGui::InputFloat("##CAMZOOM", camVals+2, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+            {
+                cs.SetZoomSensitivity(camVals[2]);
+            }
+            ImGui::EndMenu();
         }
+
         ImGui::EndMenuBar();
     }
 
