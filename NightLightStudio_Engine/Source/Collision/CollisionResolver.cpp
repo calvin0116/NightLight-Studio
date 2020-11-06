@@ -32,7 +32,7 @@ void CollsionResolver::resolveCollision()
 				case SIDES::FRONT:
 				{
 					colEvent.collisionNormal = NlMath::Vector3D(0.0f, 0.0f, -1.0f);
-					AABBResolve(colEvent);
+					resolveAABB(colEvent);
 
 					//if (colEvent.rigid1->velocity.z > 0)
 					//	colEvent.rigid1->velocity.z = 0;
@@ -43,7 +43,7 @@ void CollsionResolver::resolveCollision()
 				case SIDES::BACK:
 				{
 					colEvent.collisionNormal = NlMath::Vector3D(0.0f, 0.0f, 1.0f);
-					AABBResolve(colEvent);
+					resolveAABB(colEvent);
 
 					//if (colEvent.rigid1->velocity.z < 0)
 					//	colEvent.rigid1->velocity.z = 0;
@@ -54,7 +54,7 @@ void CollsionResolver::resolveCollision()
 				case SIDES::TOP:
 				{
 					colEvent.collisionNormal = NlMath::Vector3D(0.0f, 1.0f, 0.0f);
-					AABBResolve(colEvent);
+					resolveAABB(colEvent);
 
 
 					//if (colEvent.rigid1->velocity.y > 0)
@@ -66,7 +66,7 @@ void CollsionResolver::resolveCollision()
 				case SIDES::BOTTOM:
 				{
 					colEvent.collisionNormal = NlMath::Vector3D(0.0f, -1.0f, 0.0f);
-					AABBResolve(colEvent);
+					resolveAABB(colEvent);
 
 
 					//if (colEvent.rigid1->velocity.y < 0)
@@ -78,7 +78,7 @@ void CollsionResolver::resolveCollision()
 				case SIDES::RIGHT:
 				{
 					colEvent.collisionNormal = NlMath::Vector3D(1.0f, 0.0f, 0.0f);
-					AABBResolve(colEvent);
+					resolveAABB(colEvent);
 
 
 					//if (colEvent.rigid1->velocity.x > 0)
@@ -90,7 +90,7 @@ void CollsionResolver::resolveCollision()
 				case SIDES::LEFT:
 				{
 					colEvent.collisionNormal = NlMath::Vector3D(-1.0f, 0.0f, 0.0f);
-					AABBResolve(colEvent);
+					resolveAABB(colEvent);
 
 
 					//if (colEvent.rigid1->velocity.x < 0)
@@ -108,47 +108,47 @@ void CollsionResolver::resolveCollision()
 			}
 			case COLRESTYPE::AABB_SPHERE:
 			{
-				AABBResolve(colEvent);
+				resolveEventNormally(colEvent);
 				break;
 			}
 			case COLRESTYPE::AABB_CAPSULE:
 			{
-				AABBResolve(colEvent);
+				resolveEventNormally(colEvent);
 				break;
 			}
 			case COLRESTYPE::SPHERE_AABB:
 			{
-				AABBResolve(colEvent);
+				resolveEventNormally(colEvent);
 				break;
 			}
 			case COLRESTYPE::SPHERE_SPHERE:
 			{
-				AABBResolve(colEvent);
+				resolveEventNormally(colEvent);
 				break;
 			}
 			case COLRESTYPE::SPHERE_CAPSULE:
 			{
-				AABBResolve(colEvent);
+				resolveEventNormally(colEvent);
 				break;
 			}
 			case COLRESTYPE::CAPSULE_AABB:
 			{
-				AABBResolve(colEvent);
+				resolveEventNormally(colEvent);
 				break;
 			}
 			case COLRESTYPE::CAPSULE_SPHERE:
 			{
-				AABBResolve(colEvent);
+				resolveEventNormally(colEvent);
 				break;
 			}
 			case COLRESTYPE::CAPSULE_CAPSULE:
 			{
-				AABBResolve(colEvent);
+				resolveEventNormally(colEvent);
 				break;
 			}
 			case COLRESTYPE::OBB_OBB:
 			{
-				AABBResolve(colEvent);
+				resolveEventNormally(colEvent);
 				break;
 			}
 			default:
@@ -165,7 +165,7 @@ void CollsionResolver::clear()
 	colEventList.clear();
 }
 
-void CollsionResolver::AABBResolve(const CollisionEvent& colEvent)
+void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 {
 	// ref: https://stackoverflow.com/questions/5060082/eliminating-a-direction-from-a-vector
 	// "Calculate the dot product of the geometry wall normal with the velocity vector of the object. 
@@ -239,14 +239,30 @@ void CollsionResolver::resolveAABB(const CollisionEvent& colEvent)
 		{
 			colEvent.collider1;
 			colEvent.transform1;
+		}
 
-			colEvent.collider1->collider.aabb.vecMax.y;
-			colEvent.collider2->collider.aabb.vecMin.y;
+		if (!colEvent.rigid2->isStatic)
+		{
+			colEvent.collider2;
+			colEvent.transform2;
 
-			float pen = colEvent.collider1->collider.aabb.vecMax.y - colEvent.collider2->collider.aabb.vecMin.y;
+			float pen = colEvent.collider2->collider.aabb.vecMin.y - colEvent.collider1->collider.aabb.vecMax.y;
+
+			colEvent.transform2->_position.y += pen;
+
+		}
+		break;
+	}
+	case SIDES::BOTTOM:
+	{
+		if (!colEvent.rigid1->isStatic)
+		{
+			colEvent.collider1;
+			colEvent.transform1;
+
+			float pen = colEvent.collider2->collider.aabb.vecMax.y - colEvent.collider1->collider.aabb.vecMin.y;
 
 			colEvent.transform1->_position.y += pen;
-
 		}
 
 		if (!colEvent.rigid2->isStatic)
@@ -255,11 +271,6 @@ void CollsionResolver::resolveAABB(const CollisionEvent& colEvent)
 			colEvent.transform2;
 
 		}
-		break;
-	}
-	case SIDES::BOTTOM:
-	{
-
 		break;
 	}
 	case SIDES::RIGHT:

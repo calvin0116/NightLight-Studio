@@ -169,7 +169,7 @@ namespace NS_COLLISION
 		++test_count;
 		ComponentTransform boxTestTransform;
 		boxTestTransform._position = glm::vec3(0.0f, 0.0f, 0.0f);
-		boxTestTransform._scale = glm::vec3(0.5f, 0.5f, 0.5f);
+		boxTestTransform._scale = glm::vec3(1.0f, 1.0f, 1.0f);
 		boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
 		ComponentCollider boxTestCollider(COLLIDERS::AABB);
 		boxTest.AttachComponent<ComponentCollider>(boxTestCollider);

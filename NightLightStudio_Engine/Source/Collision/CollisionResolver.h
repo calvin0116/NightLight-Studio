@@ -44,6 +44,7 @@ private:
 	void resolveEventNormally/*like you know with the NORMAL*/(const CollisionEvent& _event);
 
 	void resolveAABB(const CollisionEvent& _event);
-	void AABBResolve/*like you know with the NORMAL*/(const CollisionEvent& _event);
+
+	//void AABBResolve/*like you know with the NORMAL*/(const CollisionEvent& _event);
 	
 };

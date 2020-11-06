@@ -169,9 +169,10 @@ private:
 	////////////////////////////data/////////////////////////////////
 	//collider type is used to set collider
 	COLLIDERS colliderType;
-	void updateColliderSer();
+	//void updateColliderSer();
 public:
 	void SetColliderT(COLLIDERS col);
+	void SetColliderT(const char* col);
 	COLLIDERS GetColliderT();
 
 	Collider collider;
