@@ -357,7 +357,13 @@
     <ClInclude Include="Source\Component\ComponentCScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\IScript.h">
+    <ClInclude Include="Source\Logic\CScripts\IScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Logic\CScripts\TestScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Logic\CScripts\AllScripts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
