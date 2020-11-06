@@ -62,4 +62,34 @@ namespace NS_LOGIC
   {
     DestroyInstance();
   }
+
+  void SystemLogic::OnCollisionEnter()
+  {
+
+  }
+
+  void SystemLogic::OnCollisionStay()
+  {
+
+  }
+
+  void SystemLogic::OnCollisionExit()
+  {
+
+  }
+
+  void SystemLogic::OnTriggerEnter()
+  {
+
+  }
+
+  void SystemLogic::OnTriggerStay()
+  {
+
+  }
+
+  void SystemLogic::OnTriggerExit()
+  {
+
+  }
 }
