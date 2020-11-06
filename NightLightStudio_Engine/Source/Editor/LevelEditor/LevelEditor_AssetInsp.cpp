@@ -71,6 +71,7 @@ void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
                     // Get relative path
                     _dragDropFilePath = LE_EraseSubStr(files[i], _currentFilePath);
                     _selectedFilePath = files[i];
+                    _setScroll = true;
                 }
 
                 // Gets Relative path from executable
@@ -105,7 +106,8 @@ AssetInspector::AssetInspector()
     _currentFilePath{ std::filesystem::current_path().string() },
     _selectedFolderPath{ std::filesystem::current_path().string() },
     _selectedFilePath{},
-    _dragDropFilePath{}
+    _dragDropFilePath{},
+    _setScroll{ false }
 {
     _RefreshDirectories(_currentFilePath);
 }
@@ -135,6 +137,10 @@ void AssetInspector::Run()
             _RecursiveDirectoryTree(_currentFilePath);
         });
     ImGui::NextColumn();
+
+    _levelEditor->LE_AddInputText("Search##SearchFilePath", _searchPath, 256, 0);
+    // lower-case everything
+    std::transform(std::begin(_searchPath), std::end(_searchPath), std::begin(_searchPath), [](char u) {return (char)std::tolower(u); });
 
     _levelEditor->LE_AddChildWindow("FolderView", ImVec2(0, 0),
         [this]()
@@ -173,6 +179,15 @@ void AssetInspector::Run()
 
             for (int i = 0; i < files.size(); ++i)
             {
+                {
+                    if (_searchPath != "")
+                    {
+                        std::string lowerCase = files[i];
+                        std::transform(std::begin(lowerCase), std::end(lowerCase), std::begin(lowerCase), [](char u) {return (char)std::tolower(u); });
+                        if (lowerCase.rfind(_searchPath) == std::string::npos)
+                            continue;
+                    }
+                }
                 ImGui::PushID(i);
                 ImGui::BeginGroup(); // Lock X position
 
@@ -252,6 +267,12 @@ void AssetInspector::Run()
                 float next_button_x2 = last_button_x2 + style.ItemSpacing.x + size.x; // Expected position if next button was on same line
                 if ((i + 1) < files.size() && next_button_x2 < window_visible_x2)
                     ImGui::SameLine();
+
+                if (_setScroll && (_selectedFilePath == files[i]))
+                {
+                    _setScroll = false;
+                    ImGui::SetScrollHereY();
+                }
 
 
                 ImGui::PopID();

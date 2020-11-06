@@ -2,38 +2,27 @@
 
 #include <map>
 #include "ForceManager.h"
+#include "..\Component\ComponentManager.h"
 
 namespace NS_PHYSICS
 {
 
 
-void ForceManager::addForce(ComponentRigidBody& rigidBody, const TranslationalForce& transForce)
+void ForceManager::addForce(Entity ent, const TranslationalForce& transForce)
 {
 	// check if force handle is uninit/unassigned
-	if (rigidBody.forceHandle == -1)
-	{
-		int n = 0;
-		while (translationalForceMap.find(currentKeyIndex) != translationalForceMap.end())
-		{
-			// found
-			// incremnet and hope that it is free
-			++currentKeyIndex;
+	// use ent id instead
 
-			++n;
-			if (n == 1000) throw; // throws after n tries so it wun be stuck in a while loop
-		}
-		// not found
-		// assignKey to handle
-		rigidBody.forceHandle = currentKeyIndex;
-		// increment the key index so the next key can be assigned
-		++currentKeyIndex;
+	if (ent.getId() == -1)
+	{
+		// throw
 	}
-	translationalForceMap.insert(std::pair<int, TranslationalForce>(rigidBody.forceHandle, transForce));
+	translationalForceMap.insert(std::pair<int, TranslationalForce>(ent.getId(), transForce));
 }
 
-void ForceManager::addForce(ComponentRigidBody& rigidBody, NlMath::Vector3D direction, float magnitude)
+void ForceManager::addForce(Entity ent, NlMath::Vector3D direction, float magnitude)
 {
-	addForce(rigidBody, TranslationalForce(direction, magnitude));
+	addForce(ent, TranslationalForce(direction, magnitude));
 }
 
 void ForceManager::updateTranslationalForces()
@@ -41,14 +30,14 @@ void ForceManager::updateTranslationalForces()
 	translationalForceMap.clear();
 }
 
-NlMath::Vector3D ForceManager::resolveTranslationalForces(int forceHandle)
+NlMath::Vector3D ForceManager::resolveTranslationalForces(int entityId)
 {
-	if (forceHandle == -1) throw; // no force
+	if (entityId == -1) throw; // no force
 
 	NlMath::Vector3D finalForce(0.0f, 0.0f, 0.0f);
 
-	auto itr = translationalForceMap.lower_bound(forceHandle);
-	auto itrEnd = translationalForceMap.upper_bound(forceHandle);
+	auto itr = translationalForceMap.lower_bound(entityId);
+	auto itrEnd = translationalForceMap.upper_bound(entityId);
 
 	while (itr != itrEnd)
 	{
@@ -60,14 +49,13 @@ NlMath::Vector3D ForceManager::resolveTranslationalForces(int forceHandle)
 	return finalForce;
 }
 
-NlMath::Vector3D ForceManager::resolveTranslationalForces(const ComponentRigidBody& rigidBody)
+NlMath::Vector3D ForceManager::resolveTranslationalForces(Entity ent)
 {
-	int forceHandle = rigidBody.forceHandle;
-	if (forceHandle == -1)
+	if (ent.getId() == -1)
 	{
-		return NlMath::Vector3D(0.0f, 0.0f, 0.0f); // no forces acting on rb
+		throw;
 	}
-	return resolveTranslationalForces(forceHandle);
+	return resolveTranslationalForces(ent.getId());
 }
 
 void ForceManager::addForce(const RotationalForce& rotForce)

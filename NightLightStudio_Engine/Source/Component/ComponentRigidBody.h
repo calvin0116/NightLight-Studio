@@ -5,6 +5,8 @@
 
 typedef struct ComponentRigidBody : public ISerializable //: public IComponent
 {
+	bool isActive;
+
 	//sum of all forces acting on the object
 	NlMath::Vector3D force;
 	//acceleration of the object
