@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{690ed57f-f1d8-4062-b40c-29b6d2f2121c}</UniqueIdentifier>
     </Filter>
@@ -69,6 +65,10 @@
     </Filter>
     <Filter Include="Source Files\Editor\Helper">
       <UniqueIdentifier>{3a18ec3b-fe41-41a3-b18c-b0bec2eea290}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\Json\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -369,6 +369,12 @@
     <ClInclude Include="Source\Graphics\Camera.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\IO\Json\JsonFunction.h">
+      <Filter>Source Files\IO\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\PrefabManager.h">
+      <Filter>Source Files\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -596,6 +602,12 @@
     <ClCompile Include="Source\Component\ComponentCamera.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Source\IO\Json\JsonFunction.cpp">
+      <Filter>Source Files\IO\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\PrefabManager.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\Messaging\System_Messaging_Readme.txt">
@@ -604,7 +616,7 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib">
-      <Filter>Resource Files</Filter>
+      <Filter>Source Files\IO\Json\Resource Files</Filter>
     </Library>
   </ItemGroup>
   <ItemGroup>

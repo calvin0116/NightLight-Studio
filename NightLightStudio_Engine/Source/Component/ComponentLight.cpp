@@ -3,6 +3,7 @@
 #include "Components.h"
 #include "ComponentManager.h"
 
+
 ComponentLight::ComponentLight()
 	: _isActive{ true },
 	_lightID{ -1 }, _type{ NS_GRAPHICS::Lights::DIRECTIONAL },
