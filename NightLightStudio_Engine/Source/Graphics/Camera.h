@@ -48,7 +48,6 @@ namespace NS_GRAPHICS
 			cameraFront(0.f, 0.f, -1.f),
 			cameraRight{ glm::normalize(glm::cross(cameraFront, globalUp)) },
 			cameraUp{ glm::normalize(glm::cross(cameraRight, cameraFront)) },
-			cameraSpeed{ 1.0f },
 			cameraYaw{ -HALF_PI },
 			cameraPitch{ 0.f }
 		{
