@@ -16,9 +16,10 @@
 Player::Player()
 	:comCol(COLLIDERS::CAPSULE),comRigid(),comTrans(),_playerState(PLAYERSTATE::HUMAN),_prevPlayerState(PLAYERSTATE::HUMAN),_front(0), playerEntity(nullptr, -1)
 {
+
 }
 
-void Player::init()
+void Player::Init()
 {
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk1", WALKFRONT, "WalkFront", SystemInput_ns::OnHold, [this]()
 		{
@@ -44,7 +45,7 @@ void Player::init()
 		});
 }
 
-void Player::update()
+void Player::Update()
 {
 	switch (_playerState)
 	{
@@ -68,6 +69,10 @@ void Player::update()
 	default:
 		break;
 	}
+}
+
+void Player::Exit()
+{
 }
 
 void Player::changeState(PLAYERSTATE state)

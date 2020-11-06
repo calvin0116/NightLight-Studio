@@ -12,7 +12,8 @@ Brief Description :
 #ifndef PARSER_H
 #define PARSER_H
 #include "..\..\..\framework.h"
-#include "JsonHeader.h"
+#include "JsonFunction.h"
+#include "../../Component/ComponentManager.h"
 
 namespace NS_SERIALISER
 {
@@ -46,7 +47,7 @@ namespace NS_SERIALISER
 		ENGINE_API void PrintData(Value::ConstMemberIterator itr, Value& val);
 	public:
 		//Constructer with input of file name to parse from
-		ENGINE_API Parser(std::string name_, std::string path_);
+		ENGINE_API Parser(std::string name_, std::string path_, std::string type_ = ".json");
 		ENGINE_API ~Parser();
 
 		//Basic function to load/save data into the file
@@ -98,12 +99,7 @@ namespace NS_SERIALISER
 
 	//For object access change
 	//Helper that can be use to add one value object to another value object
-	template<typename d_type>
-	ENGINE_API inline void ChangeData(Value* val, std::string name, d_type data);
 
-	//Entity creation for scene using Json data
-	void EntityListCreation(Value& Ent_list);
-	//void ComponentsCreation(Value& Comp_list, Entity& entity);
 
 	//template<typename d_type>
 	//inline void ChangeDataWithObject(Value* val, std::string name, Value* data);
@@ -129,6 +125,7 @@ namespace NS_SERIALISER
 		parser->AddData("obj", val);
 	*/
 	//==============================================================//
+
 }
 #include "Parser.hpp"
 

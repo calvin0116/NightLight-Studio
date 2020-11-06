@@ -11,7 +11,9 @@
 
 #include "LocalVector.h"
 
-#include "..\..\\ISerializable.h"
+
+
+struct ISerializable;
 
 namespace NS_COMPONENT
 {
@@ -892,44 +894,7 @@ public:
 
 			// param tgt_compSetMgr is the target set to copy to
 			// param entityName is the name of the new entity
-			EntityHandle Copy(ComponentManager::ComponentSetManager* tgt_compSetMgr, std::string entityName = "Entity_")
-			{
-			// does not copy children // copy to root
-
-				EntityHandle newEntity = tgt_compSetMgr->BuildEntity(entityName);
-
-				for (ISerializable* comp : getEntityComponentContainer())
-				{
-					ISerializable* newComp = comp->Clone();
-
-					//const std::type_info& tinf = typeid(T);
-
-					const std::type_info& newComp_tinf = typeid(*newComp);
-
-
-					//const std::type_info& comp_tinf = typeid(*comp);
-
-					//size_t newhcode = newComp_tinf.hash_code();
-					//size_t hcode = comp_tinf.hash_code();
-
-					int conInd = -1;
-
-					auto find = tgt_compSetMgr->compSet->hashConIdMap.find(newComp_tinf.hash_code());
-
-					if (find == tgt_compSetMgr->compSet->hashConIdMap.end())
-						throw; // gg
-
-					conInd = (*find).second;
-
-					tgt_compSetMgr->AttachComponent(conInd, newEntity.getId(), newComp);
-
-					delete newComp; // !!
-					
-				}
-
-				return newEntity;
-
-			}
+			ENGINE_API EntityHandle Copy(ComponentManager::ComponentSetManager* tgt_compSetMgr, std::string entityName = "Entity_");
 
 			///////////////////////////////////////////////////////////////////////////////////////
 			///////////////////////////////////////////////////////////////////////////////////////
