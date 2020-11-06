@@ -38,6 +38,12 @@ namespace NS_LOGIC
         //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
         if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_9))
         {
+          if (_isPlaying)
+          {
+            _Loaded = false;
+            _Inited = false;
+            GameExit();
+          }
           _isPlaying = !_isPlaying;
           std::cout << "Logic Playing: " << _isPlaying << std::endl;
         }
