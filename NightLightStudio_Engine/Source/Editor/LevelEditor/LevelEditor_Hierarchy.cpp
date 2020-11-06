@@ -237,7 +237,7 @@ void HierarchyInspector::Run()
 		else //if (!ent.isChild) print those not a child
 		{
 			_levelEditor->LE_AddSelectable(ent_name, LE_ECHELPER->SelectedEntities()[ent.getId()],
-				[&ent]()
+				[&ent, this]()
 				{
 					LE_ECHELPER->SelectEntity(ent.getId());
 					std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
@@ -249,8 +249,7 @@ void HierarchyInspector::Run()
 						{
 							NS_GRAPHICS::Camera& cam = NS_GRAPHICS::CameraSystem::GetInstance().GetCamera();
 							glm::vec3 camFront = cam.GetFront();
-							const float dist = 10.0f;
-							camFront *= glm::vec3{ dist, dist, dist };
+							camFront *= glm::vec3{ _zoomDist, _zoomDist, _zoomDist };
 							cam.SetCameraPosition(trans_comp->_position - camFront);
 							NS_GRAPHICS::CameraSystem::GetInstance().ForceUpdate();
 						}

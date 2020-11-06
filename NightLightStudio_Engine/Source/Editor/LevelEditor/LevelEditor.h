@@ -60,6 +60,8 @@ class LevelEditor
 
 	bool _runEngine;
 
+	bool _showGrid;
+
 	struct LEWindow
 	{
 		std::string _name;

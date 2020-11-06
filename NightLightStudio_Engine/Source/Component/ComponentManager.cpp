@@ -1096,6 +1096,8 @@ void ComponentManager::ComponentCreation()
 		//comsetFac.AddComponentContainer<ComponentLogic>();
 		//comsetFac.AddComponentContainer<ComponentCamera>();
 		comsetFac.AddComponentContainer<ComponentLight>();
+    // Temporary C++ Scripting component
+    comsetFac.AddComponentContainer<ComponentCScript>();
 
 
 		// builds the component set

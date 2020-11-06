@@ -187,6 +187,7 @@
     <ClInclude Include="Source\Collision\SystemCollision.h" />
     <ClInclude Include="Source\Component\ComponentAudio.h" />
     <ClInclude Include="Source\Component\ComponentCollider.h" />
+    <ClInclude Include="Source\Component\ComponentCScript.h" />
     <ClInclude Include="Source\Component\ComponentGraphics.h" />
     <ClInclude Include="Source\Component\ComponentLight.h" />
     <ClInclude Include="Source\Component\ComponentLoadAudio.h" />
@@ -254,6 +255,9 @@
     <ClInclude Include="Source\IO\Json\Parser.h" />
     <ClInclude Include="Source\IO\Json\Parser.hpp" />
     <ClInclude Include="Source\IO\SystemIO.h" />
+    <ClInclude Include="Source\Logic\CScripts\AllScripts.h" />
+    <ClInclude Include="Source\Logic\CScripts\IScript.h" />
+    <ClInclude Include="Source\Logic\CScripts\TestScript.h" />
     <ClInclude Include="Source\Logic\SystemLogic.h" />
     <ClInclude Include="Source\Math\Matrix3x3.h" />
     <ClInclude Include="Source\Math\Matrix4x4.h" />
@@ -284,6 +288,7 @@
     <ClCompile Include="Source\Collision\SystemCollision.cpp" />
     <ClCompile Include="Source\Component\ComponentAudio.cpp" />
     <ClCompile Include="Source\Component\ComponentCollider.cpp" />
+    <ClCompile Include="Source\Component\ComponentCScript.cpp" />
     <ClCompile Include="Source\Component\ComponentGraphics.cpp" />
     <ClCompile Include="Source\Component\ComponentLight.cpp" />
     <ClCompile Include="Source\Component\ComponentLoadAudio.cpp" />

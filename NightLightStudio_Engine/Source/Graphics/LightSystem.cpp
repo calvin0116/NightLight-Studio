@@ -31,7 +31,7 @@ namespace NS_GRAPHICS
 		// Test add 1 light of each type
 		// TEST
 		AddDirLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f)); // Somewhat working now?
-		AddPointLight(0.2f, glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f)); // Now this works
+		//AddPointLight(0.2f, glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f)); // Now this works
 		//AddSpotLight(glm::vec3(-1.0f, 0.0f, 0.f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)),
 					//0.2f, glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
 	}
