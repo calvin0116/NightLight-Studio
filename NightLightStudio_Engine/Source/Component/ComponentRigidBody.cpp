@@ -4,9 +4,10 @@
 //#include "ComponentTransform.h"
 
 
-constexpr float GRAVITY_DEF = 1.0f;
+constexpr float GRAVITY_DEF = 100.0f;
 
 ComponentRigidBody::ComponentRigidBody() :
+	isActive(true),
 	force(0.0f, 0.0f, 0.0f),
 	acceleration(0.0f, 0.0f, 0.0f),
 	velocity(0.0f, 0.0f, 0.0f),

@@ -1,6 +1,7 @@
 #pragma once
 #include "CollisionResolver.h"
 #include "..\Physics\SystemPhysics.h"
+#include <limits>
 
 void CollisionResolver()
 {
@@ -156,8 +157,11 @@ void CollsionResolver::resolveCollision()
 		}
 
 	}
+
+
 	// clear event list
-	colEventList.clear();
+	// collision events should be cleared before collision detection
+	//colEventList.clear();
 }
 
 void CollsionResolver::clear()
@@ -182,17 +186,23 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 		float dot1f = colEvent.collisionNormal * colEvent.rigid1->force;
 		NlMath::Vector3D normalForce = colEvent.collisionNormal * dot1f;
 		normalForce = normalForce * -1;
+		
+		// normal reaction force
+		NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity1, normalForce, 1.0f);
 
-		//NS_PHYSICS::SYS_PHYSICS->getForceManager()->addForce(*colEvent.rigid1, colEvent.collisionNormal, 7);
-		NS_PHYSICS::USE_THE_FORCE.addForce(*colEvent.rigid1, normalForce, 1.0f);
 
 
-		NlMath::Vector3D externalForce = NS_PHYSICS::USE_THE_FORCE.resolveTranslationalForces(*colEvent.rigid2);
+		// force due to the other object
+		NlMath::Vector3D externalForce = NS_PHYSICS::USE_THE_FORCE.resolveTranslationalForces(colEvent.entity2);
 
 		float dote = colEvent.collisionNormal * externalForce;
 		NlMath::Vector3D externalForceResolve = colEvent.collisionNormal * dote;
 
-		NS_PHYSICS::USE_THE_FORCE.addForce(*colEvent.rigid1, externalForceResolve, 1.0f);
+		// F = m a
+		// F = m dp / dt
+
+
+		NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity1, externalForceResolve, 1.0f);
 	}
 	if (!colEvent.rigid2->isStatic)
 	{
@@ -208,17 +218,18 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 		NlMath::Vector3D normalForce = oppNorm * dot2f;
 		normalForce = normalForce * -1;
 
-		//NS_PHYSICS::SYS_PHYSICS->getForceManager()->addForce(*colEvent.rigid1, colEvent.collisionNormal, 7);
-		NS_PHYSICS::USE_THE_FORCE.addForce(*colEvent.rigid2, normalForce, 1.0f);
+		// normal reaction force
+		NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity2, normalForce, 1.0f);
 
 
 
-		NlMath::Vector3D externalForce = NS_PHYSICS::USE_THE_FORCE.resolveTranslationalForces(*colEvent.rigid1);
+		// force due to the other object
+		NlMath::Vector3D externalForce = NS_PHYSICS::USE_THE_FORCE.resolveTranslationalForces(colEvent.entity1);
 
 		float dote = oppNorm * externalForce;
 		NlMath::Vector3D externalForceResolve = oppNorm * dote;
 
-		NS_PHYSICS::USE_THE_FORCE.addForce(*colEvent.rigid2, externalForceResolve, 1.0f);
+		NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity2, externalForceResolve, 1.0f);
 	}
 }
 
@@ -274,12 +285,31 @@ void CollsionResolver::resolveAABB(const CollisionEvent& colEvent)
 	}
 	case SIDES::RIGHT:
 	{
+		float pen = colEvent.collider2->collider.aabb.vecMin.x - colEvent.collider1->collider.aabb.vecMax.x;
+		if (!colEvent.rigid2->isStatic)
+		{
+			colEvent.transform2->_position.x += -pen + std::numeric_limits<float>::epsilon();
+		}
 
+		if (!colEvent.rigid1->isStatic)
+		{
+			//colEvent.transform1->_position.y = colEvent.transform2->_position.y - pen;
+		}
 		break;
 	}
 	case SIDES::LEFT:
 	{
+		float pen = colEvent.collider1->collider.aabb.vecMin.x - colEvent.collider2->collider.aabb.vecMax.x;
+		if (!colEvent.rigid1->isStatic)
+		{
+			colEvent.transform1->_position.x += -pen + std::numeric_limits<float>::epsilon();
+		}
 
+		if (!colEvent.rigid2->isStatic)
+		{
+			//colEvent.transform1->_position.y = colEvent.transform2->_position.y - pen;
+		}
+		break;
 		break;
 	}
 	default:

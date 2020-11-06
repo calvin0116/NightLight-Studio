@@ -24,6 +24,7 @@ namespace NS_GRAPHICS
 			float _cellLength = 1.f;
 
 			bool _update_required = false;
+			bool _render_grid = true;
 		};
 
 		DebugGrid _grid;
@@ -40,14 +41,23 @@ namespace NS_GRAPHICS
 		void Init();
 
 		// Sets size of grid
-		void SetGridExtents(const float& length);
+		void SetGridLength(const float& length);
 
 		// Sets cell size
-		void SetCellExtents(const float& length);
+		void SetCellLength(const float& length);
 
+		// Set grid color
 		void SetGridColor(const glm::vec4& RGBA);
 
 		void SetGridColor(const float& red, const float& green, const float& blue, const float& alpha);
+
+		void ShowGrid(const bool& set);
+
+		const float& GetGridLength() const;
+
+		const float& GetCellLength() const;
+
+		const glm::vec4& GetGridRGBA() const;
 
 		void CalculateGrid();
 

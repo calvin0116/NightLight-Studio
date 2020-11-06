@@ -23,6 +23,13 @@ namespace NS_LOGIC
 
     void Free() override;
     void Exit() override;
+
+    void OnCollisionEnter();
+    void OnCollisionStay();
+    void OnCollisionExit();
+    void OnTriggerEnter();
+    void OnTriggerStay();
+    void OnTriggerExit();
   };
 
   static SystemLogic* SYS_LOGIC = SystemLogic::GetInstance();

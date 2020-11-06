@@ -7,6 +7,7 @@
 #include "../Component/ComponentTransform.h"
 #include "../Component/ComponentRigidBody.h"
 #include "CollisionResolver.h"
+#include "../Component/ComponentManager.h"
 
 namespace NS_COLLISION
 {
@@ -43,7 +44,8 @@ namespace NS_COLLISION
 		bool CheckCollision(
 			ComponentCollider* Collider1, ComponentCollider* Collider2, 
 			ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2,
-			ComponentTransform* Transform1, ComponentTransform* Transform2
+			ComponentTransform* Transform1, ComponentTransform* Transform2,
+			Entity Entity1, Entity Entity2
 		);
 
 	private:
@@ -52,6 +54,8 @@ namespace NS_COLLISION
 		ComponentTransform* compTtest0;
 
 		ComponentRigidBody* compRtest0;
+
+		Entity entityTest0;
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//// Line Mesh
