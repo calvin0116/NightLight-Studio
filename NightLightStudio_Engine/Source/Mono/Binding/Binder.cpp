@@ -6,6 +6,7 @@ namespace MonoBind
 {
   void BindCustomTypes()
   {
+    Vector3DBind::BindVector3D();
   }
 
   void BindComponentsGetSet()

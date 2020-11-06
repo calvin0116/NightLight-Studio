@@ -15,14 +15,14 @@ ComponentCScript::~ComponentCScript()
 void	ComponentCScript::Read(Value& val)
 {
   if (val.FindMember("isActive") == val.MemberEnd())
-    std::cout << "No active data has been found" << std::endl;
+    std::cout << "No isActive data has been found" << std::endl;
   else
     _isActive = val["isActive"].GetBool();
 
-  if (val.FindMember("Texture file") == val.MemberEnd())
-    std::cout << "No Texture file data has been found" << std::endl;
+  if (val.FindMember("Name") == val.MemberEnd())
+    std::cout << "No Name data has been found" << std::endl;
   else
-    _sName = val["Texture file"].GetString();
+    _sName = val["Name"].GetString();
 }
 
 Value	ComponentCScript::Write()

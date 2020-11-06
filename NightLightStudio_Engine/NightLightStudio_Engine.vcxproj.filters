@@ -321,9 +321,6 @@
     <ClInclude Include="Source\Component\ComponentLoadAudio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\AudioBind.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Mono\Binding\AllBindings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -374,6 +371,15 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\PrefabManager.h">
       <Filter>Source Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Logic\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\CustomTypes\Vector3DBind.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Systems\AudioBind.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -575,9 +581,6 @@
     <ClCompile Include="Source\Component\ComponentLoadAudio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Mono\Binding\Components\AudioBind.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Mono\Binding\Binder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -607,6 +610,15 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\PrefabManager.cpp">
       <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Logic\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\CustomTypes\Vector3DBind.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Systems\AudioBind.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

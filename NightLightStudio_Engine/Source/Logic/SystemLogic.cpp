@@ -1,6 +1,6 @@
 #include "SystemLogic.h"
 #include "..\Mono\MonoWrapper.h" // Mono functions wrapped
-// #include "..\Mono\Binding\Binder.h" // Bind C++ to C# functions
+#include "..\Mono\Binding\Binder.h" // Bind C++ to C# functions
 
 #include "../Input/SystemInput.h" // For testing
 #include "CScripts/AllScripts.h"
@@ -62,15 +62,16 @@ namespace NS_LOGIC
       myComp->_pScript = AllScripts::Construct(myComp->_sName.toString());
       myComp->_pScript->SetEntity(G_ECMANAGER->getEntity(itr).getId());
     }
+
+    // C# Script
+    MonoBind::Bind();
+
   }
 
   void SystemLogic::GameInit()
   {
     if (!_isPlaying)
       return;
-    // MonoBind::Bind();
-    // Init CS
-    // MonoMethod* m_Init = MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
     for (; itr != itrEnd; ++itr)
@@ -78,6 +79,10 @@ namespace NS_LOGIC
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
       myComp->_pScript->Init();
     }
+
+    // C# Script
+    // Init CS
+    MonoMethod* m_Init = MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
   }
 
   void SystemLogic::Update()
