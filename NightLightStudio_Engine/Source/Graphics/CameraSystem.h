@@ -46,6 +46,10 @@ namespace NS_GRAPHICS
 		void SetDragSensitivity(const float& sensitivity);
 		void SetZoomSensitivity(const float& sensitivity);
 
+		const float& GetRotationSensitivity();
+		const float& GetDragSensitivity();
+		const float& GetZoomSensitivity();
+
 		// Added by LJM
 		void ForceUpdate();
 		// Added by LJM

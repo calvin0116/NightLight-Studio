@@ -126,6 +126,36 @@ namespace NS_GRAPHICS
 	{
 		return _camera.GetPosition();
 	}
+	void CameraSystem::SetRotationSensitivity(const float& sensitivity)
+	{
+		_camera.SetRotationSensitivity(sensitivity);
+	}
+
+	void CameraSystem::SetDragSensitivity(const float& sensitivity)
+	{
+		_camera.SetDragSensitivity(sensitivity);
+	}
+
+	void CameraSystem::SetZoomSensitivity(const float& sensitivity)
+	{
+		_camera.SetZoomSensitivity(sensitivity);
+	}
+
+	const float& CameraSystem::GetRotationSensitivity()
+	{
+		return _camera.GetRotationSensitivity();
+	}
+
+	const float& CameraSystem::GetDragSensitivity()
+	{
+		return _camera.GetDragSensitivity();
+	}
+
+	const float& CameraSystem::GetZoomSensitivity()
+	{
+		return _camera.GetZoomSensitivity();
+	}
+
 	Camera& CameraSystem::GetCamera()
 	{
 		return _camera;
