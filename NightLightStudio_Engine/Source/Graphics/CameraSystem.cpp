@@ -315,10 +315,16 @@ namespace NS_GRAPHICS
 		}
 		else
 		{
+			// this is so the mse cursor update wun cause the camera to move a huge distance when this is toggled
+			SYS_INPUT->GetSystemMousePos().SetTheThing(true);
+			SYS_INPUT->GetSystemMousePos().Update();
+
+			// update the tgt pos or the camera direction will be wrong when this is toggled
 			glm::vec3 camFront = _camera.GetFront();
 			camFront *= glm::vec3(zoomDistance, zoomDistance, zoomDistance);
 			tgt = _camera.GetPosition() + camFront;
 			tgt.y = 0.0f; // set ht to 0 for now
+
 		}
 	}
 	void CameraSystem::ToggleUseThridPersonCam()
