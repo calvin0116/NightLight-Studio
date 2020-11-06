@@ -21,10 +21,13 @@ public:
 	glm::vec3 _diffuse;
 	glm::vec3 _specular;
 
-	//For point and spot
+	// For spot and directional
+	//float direction;
+
+	// For point and spot
 	float _attenuation;
 
-	//For spot
+	// For spot
 	float _cutOff;
 	float _outerCutOff;
 
