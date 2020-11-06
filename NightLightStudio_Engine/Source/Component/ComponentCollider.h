@@ -184,6 +184,7 @@ public:
 	float friction = 0;
 	bool isCollide = false;
 	int lod = 0;
+	bool isTrigger = false;
 	////////////////////////////data end/////////////////////////////////
 	ComponentCollider(COLLIDERS col);
 	ComponentCollider(const char * col);

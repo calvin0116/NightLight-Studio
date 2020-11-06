@@ -13,6 +13,10 @@ namespace NS_GRAPHICS
 	static const float  ONE_ROT_STEP = PI / 1800.f; // Each step for rotation, should allow access in the future
 	static const float  MAX_PITCH = 1.5534f;
 	static const float  MIN_PITCH = -MAX_PITCH;
+	static const float  ROTATION_SENSITIVITY = 1000.f;
+	static const float  POSITION_SENSITIVITY = 600.f;
+	//static const float  ZOOM_SENSITIVITY = 150.f;
+	static const float  ZOOM_SENSITIVITY = 15.f;
 
 	class Camera
 	{
