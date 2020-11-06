@@ -9,7 +9,7 @@
 //Added by Teck Wei
 #include "LevelEditor_ECHelper.h"
 
-LevelEditor::LevelEditor() : _window{ nullptr }, _runEngine{ false }
+LevelEditor::LevelEditor() : _window{ nullptr }, _runEngine{ false }, _showGrid{ true }
 {
 }
 
