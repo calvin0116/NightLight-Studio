@@ -8,6 +8,8 @@
 #include "../Component/ComponentRigidBody.h"
 #include "../Input/SystemInput.h"
 
+#include "..\Physics\SystemPhysics.h"
+
 #include "CollisionDebugLines.h"
 
 #undef max
@@ -183,76 +185,52 @@ namespace NS_COLLISION
 
 		ComponentRigidBody* compR = boxTest.getComponent<ComponentRigidBody>();
 
+		compTtest0 = compT;
+		compRtest0 = compR;
+
 
 		{// ctrl
 
 			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
 
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]() {});
+			#define TEST_FORCE_MAGNITUDE 10.0f
 
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_D))
-			{
-#if USEVEL == 0
-				compT->_position.x += 1 * realDt;
-#else
-				compR->velocity.x += 1 * realDt;
-#endif
-			}
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]() {
+				//compT->_position.x += 1 * DELTA_T->dt / CLOCKS_PER_SEC;
 
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]() {});
+				NS_PHYSICS::USE_THE_FORCE.addForce(*compRtest0, NlMath::Vector3D(1.0f, 0.0f, 0.0f), TEST_FORCE_MAGNITUDE);
+			});
 
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_A))
-			{
-#if USEVEL == 0
-				compT->_position.x += -1 * realDt;
-#else
-				compR->velocity.x -= 1 * realDt;
-#endif
-			}
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]() {
+				//compT->_position.x += -1 * DELTA_T->dt / CLOCKS_PER_SEC;
 
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_DOWN", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]() {});
-
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_S))
-			{
-#if USEVEL == 0
-				compT->_position.y += -1 * realDt;
-#else
-				compR->velocity.y -= 1 * realDt;
-#endif
-			}
-
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_UP", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]() {});
-
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_W))
-			{
-#if USEVEL == 0
-				compT->_position.y += 1 * realDt;
-#else
-				compR->velocity.y += 1 * realDt;
-#endif
-			}
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_FRONT", SystemInput_ns::IKEY_Q, "Q", SystemInput_ns::OnHold, [this]() {});
-
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_Q))
-			{
-#if USEVEL == 0
-				compT->_position.z += 1 * realDt;
-#else
-				compR->velocity.z += 1 * realDt;
-#endif
-			}
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_BACK", SystemInput_ns::IKEY_E, "E", SystemInput_ns::OnHold, [this]() {});
-
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_E))
-			{
-#if USEVEL == 0
-				compT->_position.z += -1 * realDt;
-#else
-				compR->velocity.z -= 1 * realDt;
-#endif
-			}
+				NS_PHYSICS::USE_THE_FORCE.addForce(*compRtest0, NlMath::Vector3D(-1.0f, 0.0f, 0.0f), TEST_FORCE_MAGNITUDE);
+			});
 
 
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_DOWN", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]() {
+				//compT->_position.y += -1 * DELTA_T->dt / CLOCKS_PER_SEC;
+
+				NS_PHYSICS::USE_THE_FORCE.addForce(*compRtest0, NlMath::Vector3D(0.0f, -1.0f, 0.0f), TEST_FORCE_MAGNITUDE);
+			});
+
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_UP", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]() {
+				//compT->_position.y += 1 * DELTA_T->dt / CLOCKS_PER_SEC;
+
+				NS_PHYSICS::USE_THE_FORCE.addForce(*compRtest0, NlMath::Vector3D(0.0f, 1.0f, 0.0f), TEST_FORCE_MAGNITUDE);
+			});
+
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_FRONT", SystemInput_ns::IKEY_Q, "Q", SystemInput_ns::OnHold, [this]() {
+				//compT->_position.z += 1 * DELTA_T->dt / CLOCKS_PER_SEC;
+
+				NS_PHYSICS::USE_THE_FORCE.addForce(*compRtest0, NlMath::Vector3D(0.0f, 0.0f, 1.0f), TEST_FORCE_MAGNITUDE);
+			});
+
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_BACK", SystemInput_ns::IKEY_E, "E", SystemInput_ns::OnHold, [this]() {
+				//compT->_position.z += -1 * DELTA_T->dt / CLOCKS_PER_SEC;
+
+				NS_PHYSICS::USE_THE_FORCE.addForce(*compRtest0, NlMath::Vector3D(0.0f, 0.0f, -1.0f), TEST_FORCE_MAGNITUDE);
+			});
 
 		} // ctrl
 

@@ -5,6 +5,7 @@
 #include "../Math/Vector.h"
 #include "../Component/ComponentCollider.h"
 #include "../Component/ComponentTransform.h"
+#include "../Component/ComponentRigidBody.h"
 #include "CollisionResolver.h"
 
 namespace NS_COLLISION
@@ -46,6 +47,11 @@ namespace NS_COLLISION
 		);
 
 	private:
+
+		// test var
+		ComponentTransform* compTtest0;
+
+		ComponentRigidBody* compRtest0;
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//// Line Mesh
