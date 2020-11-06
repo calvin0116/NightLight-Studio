@@ -53,8 +53,10 @@ namespace NS_GRAPHICS
 
 	void DebugManager::SetGridColor(const glm::vec4& RGBA)
 	{
+		ShaderSystem::GetInstance().StartProgram(2);
 		_grid._rgba = RGBA;
 		glUniform4fv(_grid._rgba_location, 1, &_grid._rgba[0]);
+		ShaderSystem::GetInstance().StopProgram();
 	}
 
 	void DebugManager::SetGridColor(const float& red, const float& green, const float& blue, const float& alpha)
@@ -117,8 +119,6 @@ namespace NS_GRAPHICS
 
 	void DebugManager::Render()
 	{
-
-
 		if (_grid._render_grid == false)
 			return;
 
