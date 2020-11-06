@@ -27,8 +27,8 @@ namespace NS_GRAPHICS
 
 		// Dictates how fast the camera will move
 		float _rotation_sensitivity = 1000.f;
-		float _drag_sensitivity = 600.f;
-		float _zoom_sensitivity = 150.f;
+		float _drag_sensitivity = 200.f;
+		float _zoom_sensitivity = 50.f;
 
 		// Variables for camera rotation
 		// Given in radians

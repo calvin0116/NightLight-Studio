@@ -26,18 +26,20 @@ namespace NS_GRAPHICS
 		struct VertexData
 		{
 			glm::vec3 _position;
-			glm::vec3 _rgb;
+			glm::vec2 _uv;
+			glm::vec3 _normals;
+			//glm::vec3 _rgb;
 		};
 
-		struct FragmentData
-		{
-			glm::vec2 _uv;
-			glm::vec3 _vNormals;
-		};
+		//struct FragmentData
+		//{
+		//	glm::vec2 _uv;
+		//	glm::vec3 _vNormals;
+		//};
 
 		//Vertex Data might not be needed
 		std::vector<VertexData> _vertexDatas;
-		std::vector<FragmentData> _fragmentDatas;
+		//std::vector<FragmentData> _fragmentDatas;
 
 		//Still needed
 		std::vector<unsigned short> _indices;
@@ -62,16 +64,16 @@ namespace NS_GRAPHICS
 		GLuint UVBO = NULL;
 		GLuint NBO = NULL; // normals buffer object
 
-		//RGBA IN FUTURE?
-		std::vector<glm::vec3> _rgb;
+		////RGBA IN FUTURE?
+		//std::vector<glm::vec3> _rgb;
 
-		//Combined into a vector of vertex datas
-		std::vector<glm::vec3> _vertices;
-		std::vector<glm::vec2> _uv;
-		std::vector<glm::vec3> _normals;
+		////Combined into a vector of vertex datas
+		//std::vector<glm::vec3> _vertices;
+		//std::vector<glm::vec2> _uv;
+		//std::vector<glm::vec3> _normals;
 
-		//If ever need to calculate
-		std::vector<glm::vec3> _fNormals;
+		////If ever need to calculate
+		//std::vector<glm::vec3> _fNormals;
 
 		Mesh() = default;
 		~Mesh() = default;

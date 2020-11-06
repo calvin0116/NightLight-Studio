@@ -1,7 +1,7 @@
 #pragma once
 #include "..\Core\MySystem.h"
 #include <vector>
-#include "../Component/Components.h" // G_ECMANAGER
+#include "../Component/Components.h" // G_ECMANAGER, Entity type
 
 namespace NS_LOGIC
 {
@@ -10,7 +10,7 @@ namespace NS_LOGIC
     friend Singleton<SystemLogic>;
 
     // Temporary C++ scripting
-    //std::vector<Component
+    // Scripts stored in script component
   public:
     // System functions
     void Load() override;
