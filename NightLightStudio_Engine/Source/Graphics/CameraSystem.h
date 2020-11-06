@@ -42,6 +42,9 @@ namespace NS_GRAPHICS
 
 		glm::vec3 GetCurrentCameraPosition();
 
+		void SetRotationSensitivity(const float& sensitivity);
+		void SetDragSensitivity(const float& sensitivity);
+		void SetZoomSensitivity(const float& sensitivity);
 
 		// Added by LJM
 		void ForceUpdate();
