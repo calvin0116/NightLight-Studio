@@ -216,9 +216,6 @@
     <ClInclude Include="Source\Core\SceneManager.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\ComponentAudio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -369,8 +366,8 @@
     <ClInclude Include="Source\Component\ComponentCamera.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Logic\Player.h">
-      <Filter>Source Files\Logic</Filter>
+    <ClInclude Include="Source\Graphics\Camera.h">
+      <Filter>Source Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -598,9 +595,6 @@
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentCamera.cpp">
       <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Logic\Player.cpp">
-      <Filter>Source Files\Logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

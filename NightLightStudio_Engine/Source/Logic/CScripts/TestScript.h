@@ -8,6 +8,7 @@
 class TestScript : public IScript
 {
 public:
+
   virtual void Init()
   {
     std::cout << "Init from TestScript" << std::endl;
@@ -23,8 +24,12 @@ public:
     std::cout << "Exit from TestScript" << std::endl;
   }
 
-  virtual void OnCollisionEnter()
+  virtual void OnCollisionEnter(int other)
   {
+    // Your own ID
+    (void)_Obj;
+    // The other entity I collided with
+    (void)other;
     std::cout << "OnCollisionEnter from TestScript" << std::endl;
   }
 

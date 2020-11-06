@@ -22,6 +22,20 @@ namespace NS_GRAPHICS
 		// Check if view matrix has updated at all
 		bool updated;
 
+		// Zoom distance
+		float zoomDistance;
+
+		// the target the camera is looking at
+		// tgt [] <---- >o camera
+		glm::vec3 tgt;
+
+		// viewVector
+		// tgt [] <---- >o camera
+		//          ^
+		//          |
+		//        this vector
+		glm::vec3 viewVector;
+
 	public:
 		// Unique Singleton instance
 		static CameraSystem& GetInstance()
@@ -54,5 +68,10 @@ namespace NS_GRAPHICS
 		void ForceUpdate();
 		// Added by LJM
 		Camera& GetCamera();
+
+		// update the theird person camera
+		void UpdateThirdPersonCamera();
+		// update the view vector, view vector is normalsied
+		void UpdateViewVector();
 	};
 }
