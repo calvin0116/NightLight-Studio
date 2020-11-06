@@ -79,6 +79,7 @@ private:
 	void RigidBodyComp(Entity& ent);
 	void LightComp(Entity& ent);
 	void ScriptComp(Entity& ent);
+  void CScriptComp(Entity& ent);
 
 	void AddSelectedComps(Entity& ent);
 
