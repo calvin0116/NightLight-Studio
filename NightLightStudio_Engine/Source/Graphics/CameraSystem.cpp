@@ -86,12 +86,12 @@ namespace NS_GRAPHICS
 				{
 					glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
 					//handles topdown
-					glm::vec3 newCameraOffset = _camera.GetCameraUp() * -mousePos.y * POSITION_SENSITIVITY;
+					glm::vec3 newCameraOffset = _camera.GetCameraUp() * -mousePos.y * _camera.GetDragSensitivity();
 					//newCameraOffset *= DELTA_T->dt;
 					//_camera.SetCameraPosition(_camera.GetPosition() + newCameraOffset);
 
 					//handles leftright
-					newCameraOffset += _camera.GetRight() * -mousePos.x * POSITION_SENSITIVITY;
+					newCameraOffset += _camera.GetRight() * -mousePos.x * _camera.GetDragSensitivity();
 					//newCameraOffset *= DELTA_T->dt;
 
 					//Position += CameraUp * velocity;
@@ -103,10 +103,9 @@ namespace NS_GRAPHICS
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_Z", SystemInput_ns::IKEY_ALT, "Z_CAMERA_MOVE", SystemInput_ns::OnHold, [this]()
 		{
 			//Only if mouse wheel + alt button is pressed, camera will move.
-			//NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
 			if (SYS_INPUT->GetSystemMousePos().GetIfScrollUp())
 			{
-				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * ZOOM_SENSITIVITY);
+				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * _camera.GetZoomSensitivity());
 				updated = true;
 			}
 			else if (SYS_INPUT->GetSystemMousePos().GetIfScrollDown())
@@ -174,10 +173,10 @@ namespace NS_GRAPHICS
 					glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
 
 					// Rotation for left and right
-					_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x * ROTATION_SENSITIVITY * ONE_ROT_STEP);
+					_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x * _camera.GetRotationSensitivity() * ONE_ROT_STEP);
 
 					// Rotation for up and down
-					float offsetted = _camera.GetPitch() + mousePos.y * ROTATION_SENSITIVITY * ONE_ROT_STEP;
+					float offsetted = _camera.GetPitch() + mousePos.y * _camera.GetRotationSensitivity() * ONE_ROT_STEP;
 
 					if (offsetted > MAX_PITCH)
 						offsetted = MAX_PITCH;
@@ -266,6 +265,36 @@ namespace NS_GRAPHICS
 	{
 		return _camera.GetPosition();
 	}
+	void CameraSystem::SetRotationSensitivity(const float& sensitivity)
+	{
+		_camera.SetRotationSensitivity(sensitivity);
+	}
+
+	void CameraSystem::SetDragSensitivity(const float& sensitivity)
+	{
+		_camera.SetDragSensitivity(sensitivity);
+	}
+
+	void CameraSystem::SetZoomSensitivity(const float& sensitivity)
+	{
+		_camera.SetZoomSensitivity(sensitivity);
+	}
+
+	const float& CameraSystem::GetRotationSensitivity()
+	{
+		return _camera.GetRotationSensitivity();
+	}
+
+	const float& CameraSystem::GetDragSensitivity()
+	{
+		return _camera.GetDragSensitivity();
+	}
+
+	const float& CameraSystem::GetZoomSensitivity()
+	{
+		return _camera.GetZoomSensitivity();
+	}
+
 	Camera& CameraSystem::GetCamera()
 	{
 		return _camera;

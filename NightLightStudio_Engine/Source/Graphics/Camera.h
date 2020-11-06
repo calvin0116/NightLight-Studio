@@ -30,7 +30,9 @@ namespace NS_GRAPHICS
 		glm::vec3 cameraUp;
 
 		// Dictates how fast the camera will move
-		float cameraSpeed;
+		float _rotation_sensitivity = 1000.f;
+		float _drag_sensitivity = 200.f;
+		float _zoom_sensitivity = 50.f;
 
 		// Variables for camera rotation
 		// Given in radians
@@ -79,9 +81,19 @@ namespace NS_GRAPHICS
 			return cameraUp;
 		}
 
-		const float& GetSpeed()
+		const float& GetRotationSensitivity()
 		{
-			return cameraSpeed;
+			return _rotation_sensitivity;
+		}
+
+		const float& GetDragSensitivity()
+		{
+			return _drag_sensitivity;
+		}
+
+		const float& GetZoomSensitivity()
+		{
+			return _zoom_sensitivity;
 		}
 
 		const float& GetYaw()
@@ -109,9 +121,19 @@ namespace NS_GRAPHICS
 			cameraPitch = pitch;
 		}
 
-		void SetCameraSpeed(const float& speed)
+		void SetRotationSensitivity(const float& sensitivity)
 		{
-			cameraSpeed = speed;
+			_rotation_sensitivity = sensitivity;
+		}
+
+		void SetDragSensitivity(const float& sensitivity)
+		{
+			_drag_sensitivity = sensitivity;
+		}
+
+		void SetZoomSensitivity(const float& sensitivity)
+		{
+			_zoom_sensitivity = sensitivity;
 		}
 
 		// Update vectors & position for current camera based on updated values
