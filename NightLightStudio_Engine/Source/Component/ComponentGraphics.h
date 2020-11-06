@@ -34,13 +34,31 @@ public:
 	//LocalString<256> _meshFileName;
 
 	int _modelID; // value is -1 if no mesh is assigned
-	//std::string _modelFileName;
 	LocalString<256> _modelFileName;
 
-	//std::string _textureFileName;
-	LocalString<256> _textureFileName;
-	unsigned _textureID; // Temporarily only diffuse texture
+	/////////////////////////////////////////
+	/// Mapping Variables
+	/////////////////////////////////////////
+	//This is colour/albedo/diffuse
+	LocalString<256> _albedoFileName;
+	unsigned _albedoID;
 
+	LocalString<256> _normalFileName;
+	unsigned _normalID;
+
+	LocalString<256> _metallicFileName;
+	unsigned _metallicID;
+
+	LocalString<256> _roughnessFileName;
+	unsigned _roughnessID;
+
+	//Ambient Occlusion
+	LocalString<256> _aoFileName;
+	unsigned _aoID;
+
+	/////////////////////////////////////////
+	/// Material without texture
+	/////////////////////////////////////////
 	MaterialData _materialData;
 
 	// Default constructor

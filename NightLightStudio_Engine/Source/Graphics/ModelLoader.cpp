@@ -288,7 +288,7 @@ namespace NS_GRAPHICS
 
 		std::string searchString;
 		searchString = fileName;
-		searchString = s_LocalPathName + name + s_ModelFileType;
+		//searchString = s_LocalPathName + name + s_ModelFileType;
 
 		//First checks if the custom model existed to avoid unnecessary loading
 		if (_modelManager->_modelList.find(searchString) != _modelManager->_modelList.end())
