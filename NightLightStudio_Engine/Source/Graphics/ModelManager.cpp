@@ -187,11 +187,9 @@ namespace NS_GRAPHICS
 			for (size_t meshIndex = 0; meshIndex != meshSize; ++meshIndex)
 			{
 				Mesh* mesh = new Mesh();
-				mesh->_vertices = check->second->_meshes[meshIndex]->_vertices;
+
+				mesh->_vertexDatas = check->second->_meshes[meshIndex]->_vertexDatas;
 				mesh->_indices = check->second->_meshes[meshIndex]->_indices;
-				mesh->_rgb = check->second->_meshes[meshIndex]->_rgb;
-				mesh->_uv = check->second->_meshes[meshIndex]->_uv;
-				mesh->_normals = check->second->_meshes[meshIndex]->_normals;
 
 				glGenVertexArrays(1, &mesh->VAO);
 				glGenBuffers(1, &mesh->VBO);
@@ -203,32 +201,17 @@ namespace NS_GRAPHICS
 
 				glBindVertexArray(mesh->VAO);
 
-				// pos attribute
+				// vertex data attribute
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * mesh->_vertices.size(), &mesh->_vertices[0], GL_STATIC_DRAW);
-				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(NS_GRAPHICS::Mesh::VertexData) * mesh->_vertexDatas.size(), &mesh->_vertexDatas[0], GL_STATIC_DRAW);
+				// position
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), (void*)0);
 				glEnableVertexAttribArray(0);
-
-
 				// uv attribute
-				if (mesh->_uv.size() > 0)
-				{
-					glBindBuffer(GL_ARRAY_BUFFER, mesh->UVBO);
-					glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * mesh->_uv.size(), &mesh->_uv[0], GL_STATIC_DRAW);
-					glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
-					glEnableVertexAttribArray(1);
-				}
-
-				// color attribute
-				/*glBindBuffer(GL_ARRAY_BUFFER, mesh->CBO);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * mesh->_rgb.size(), &mesh->_rgb[0], GL_STATIC_DRAW);
-				glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
-				glEnableVertexAttribArray(2);*/
-
+				glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), (void*)sizeof(glm::vec3));
+				glEnableVertexAttribArray(1);
 				// normals attribute
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->NBO);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * mesh->_normals.size(), &mesh->_normals[0], GL_STATIC_DRAW);
-				glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+				glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), (void*)(sizeof(glm::vec3) + sizeof(glm::vec2)));
 				glEnableVertexAttribArray(2);
 
 				// Indices

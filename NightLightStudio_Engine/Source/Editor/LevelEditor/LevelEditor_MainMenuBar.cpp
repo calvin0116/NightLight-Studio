@@ -182,7 +182,7 @@ void LevelEditor::LE_MainMenuBar()
                 */
             }
 
-            if (LE_GetFileType(data) == "fbx")
+            if (LE_GetFileType(data) == "fbx" || LE_GetFileType(data) == "model")
             {
                 std::string fName = LE_EraseBackSubStr(LE_GetFilename(data), std::string(".").append(LE_GetFileType(data)));
                 fName = "." + fName;
@@ -193,6 +193,33 @@ void LevelEditor::LE_MainMenuBar()
                 ent.AttachComponent<ComponentTransform>(transEnt);
 
                 NS_GRAPHICS::SYS_GRAPHICS->LoadModel(data);
+
+                /*if (LE_GetFileType(data) == "fbx")
+                {
+                    //Checks for the file name
+                    std::string name;
+                    size_t pos = data.rfind("\\");
+                    //Get just the string after the last path
+                    if (pos != std::string::npos)
+                    {
+                        name = data.substr(pos + 1);
+                    }
+                    else
+                    {
+                        name = data;
+                    }
+
+                    pos = name.rfind(".");
+                    //Trim the extension to get the file name
+                    if (pos != std::string::npos)
+                    {
+                        name.erase(pos);
+                    }
+
+                    std::string meshName;
+                    meshName = NS_GRAPHICS::s_LocalPathName + name + NS_GRAPHICS::s_ModelFileType;
+                    data = meshName;
+                }*/
                 NS_GRAPHICS::SYS_GRAPHICS->AttachModel(ent, data);
             }
         }, ImGuiDragDropFlags_AcceptNoDrawDefaultRect);
