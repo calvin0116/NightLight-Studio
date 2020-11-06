@@ -223,7 +223,7 @@ void InspectorWindow::ColliderComp(Entity& ent)
 		//2. Get the right collider type
 		//3. Insert name
 		std::string name = "Collider";	//e.g.
-		switch (col_comp->colliderType)
+		switch (col_comp->GetColliderT())
 		{
 		case COLLIDERS::PLANE:
 		{

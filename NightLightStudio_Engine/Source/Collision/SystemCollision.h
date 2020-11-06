@@ -4,6 +4,7 @@
 #include "../../framework.h"
 #include "../Math/Vector.h"
 #include "../Component/ComponentCollider.h"
+#include "../Component/ComponentTransform.h"
 #include "CollisionResolver.h"
 
 namespace NS_COLLISION
@@ -38,7 +39,11 @@ namespace NS_COLLISION
 
 		void UpdateCollisionBoxPos(ComponentCollider * comCol, ComponentTransform * comTrans);
 		
-		bool CheckCollision(ComponentCollider* Collider1, ComponentCollider* Collider2, ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2);
+		bool CheckCollision(
+			ComponentCollider* Collider1, ComponentCollider* Collider2, 
+			ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2,
+			ComponentTransform* Transform1, ComponentTransform* Transform2
+		);
 
 	private:
 

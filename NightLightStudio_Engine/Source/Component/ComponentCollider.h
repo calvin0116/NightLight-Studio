@@ -162,9 +162,18 @@ typedef struct ComponentCollider : public ISerializable//: public IComponent
 		Collider() : aabb() { };
 	};
 
+	//MyVector preCollisionData;
+	//MyVector newCollisionData;
+
+private:
 	////////////////////////////data/////////////////////////////////
 	//collider type is used to set collider
 	COLLIDERS colliderType;
+	void updateColliderSer();
+public:
+	void SetColliderT(COLLIDERS col);
+	COLLIDERS GetColliderT();
+
 	Collider collider;
 	//time of collision for dynanmic collision
 	float collisionTime;

@@ -5,7 +5,7 @@
 #include "../Component/ComponentRigidBody.h"
 #include "../Input/SystemInput.h"
 
-#define USEVEL 0
+//#define USEVEL 0
 //#define USEVEL 1
 
 
@@ -79,12 +79,12 @@ namespace NS_PHYSICS
 			//	_forceManager.addForce(*compR, NlMath::Vector3D(0.0f, 5.0f, 0.0f), 1.0f/*, 1000*/);
 			//}
 
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_FORCE_UP", SystemInput_ns::IKEY_I, "I", SystemInput_ns::OnHold, [this]() {});
+			//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_FORCE_UP", SystemInput_ns::IKEY_I, "I", SystemInput_ns::OnHold, [this]() {});
 
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_I))
-			{
-				_forceManager.addForce(*compR, NlMath::Vector3D(0.0f, 5.0f, 0.0f), 1.0f);
-			}
+			//if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_I))
+			//{
+			//	_forceManager.addForce(*compR, NlMath::Vector3D(0.0f, 5.0f, 0.0f), 1.0f);
+			//}
 
 			// TEST
 			////////////////////////////////////////
@@ -190,69 +190,69 @@ namespace NS_PHYSICS
 
 			/// <Testing>///////////////////////////////////////////////////////////////////////////////////////////////
 			
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]() {});
-				
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_D))
-			{
-#if USEVEL == 0
-				compT->_position.x += 1 *realDt;
-#else
-				compR->velocity.x += 1 * realDt;
-#endif
-			}
-
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]() {});
-
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_A))
-			{
-#if USEVEL == 0
-				compT->_position.x += -1 * realDt;
-#else
-				compR->velocity.x -= 1 * realDt;
-#endif
-			}
-
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_DOWN", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]() {});
-
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_S))
-			{
-#if USEVEL == 0
-				compT->_position.y += -1 * realDt;
-#else
-				compR->velocity.y -= 1 * realDt;
-#endif
-			}
-
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_UP", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]() {});
-
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_W))
-			{
-#if USEVEL == 0
-				compT->_position.y += 1 * realDt;
-#else
-				compR->velocity.y += 1 * realDt;
-#endif
-			}
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_FRONT", SystemInput_ns::IKEY_Q, "Q", SystemInput_ns::OnHold, [this]() {});
-
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_Q))
-			{
-#if USEVEL == 0
-				compT->_position.z += 1 * realDt;
-#else
-				compR->velocity.z += 1 * realDt;
-#endif
-			}
-			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_BACK", SystemInput_ns::IKEY_E, "E", SystemInput_ns::OnHold, [this]() {});
-
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_E))
-			{
-#if USEVEL == 0
-				compT->_position.z += -1 * realDt;
-#else
-				compR->velocity.z -=  1 * realDt;
-#endif
-			}
+//			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]() {});
+//				
+//			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_D))
+//			{
+//#if USEVEL == 0
+//				compT->_position.x += 1 *realDt;
+//#else
+//				compR->velocity.x += 1 * realDt;
+//#endif
+//			}
+//
+//			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]() {});
+//
+//			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_A))
+//			{
+//#if USEVEL == 0
+//				compT->_position.x += -1 * realDt;
+//#else
+//				compR->velocity.x -= 1 * realDt;
+//#endif
+//			}
+//
+//			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_DOWN", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]() {});
+//
+//			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_S))
+//			{
+//#if USEVEL == 0
+//				compT->_position.y += -1 * realDt;
+//#else
+//				compR->velocity.y -= 1 * realDt;
+//#endif
+//			}
+//
+//			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_UP", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]() {});
+//
+//			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_W))
+//			{
+//#if USEVEL == 0
+//				compT->_position.y += 1 * realDt;
+//#else
+//				compR->velocity.y += 1 * realDt;
+//#endif
+//			}
+//			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_FRONT", SystemInput_ns::IKEY_Q, "Q", SystemInput_ns::OnHold, [this]() {});
+//
+//			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_Q))
+//			{
+//#if USEVEL == 0
+//				compT->_position.z += 1 * realDt;
+//#else
+//				compR->velocity.z += 1 * realDt;
+//#endif
+//			}
+//			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_BACK", SystemInput_ns::IKEY_E, "E", SystemInput_ns::OnHold, [this]() {});
+//
+//			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_E))
+//			{
+//#if USEVEL == 0
+//				compT->_position.z += -1 * realDt;
+//#else
+//				compR->velocity.z -=  1 * realDt;
+//#endif
+//			}
 
 
 

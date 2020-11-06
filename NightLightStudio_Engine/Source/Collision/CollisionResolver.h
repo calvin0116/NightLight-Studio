@@ -4,6 +4,7 @@
 #include "../Math/Vector.h"
 #include "../Component/ComponentRigidBody.h"
 #include "../Component/ComponentCollider.h"
+#include "../Component/ComponentTransform.h"
 #include "Contact.cpp"
 
 struct CollisionEvent
@@ -22,6 +23,11 @@ struct CollisionEvent
 	//for all colision
 	ComponentRigidBody* rigid1;
 	ComponentRigidBody* rigid2;
+
+	ComponentTransform* transform1;
+	ComponentTransform* transform2;
+	ComponentCollider* collider1;
+	ComponentCollider* collider2;
 };
 
 struct CollsionResolver
@@ -35,6 +41,9 @@ struct CollsionResolver
 
 private:
 	// helper functions
+	void resolveEventNormally/*like you know with the NORMAL*/(const CollisionEvent& _event);
+
+	void resolveAABB(const CollisionEvent& _event);
 	void AABBResolve/*like you know with the NORMAL*/(const CollisionEvent& _event);
 	
 };

@@ -17,7 +17,12 @@
 #define MESH_MAX_LOD 18
 #define MESH_MIN_LOD -20
 
-#define ENT_TEST 0
+#define ENT_TEST 1
+
+
+#define USEVEL 0
+//#define USEVEL 1
+
 
 
 namespace NS_COLLISION
@@ -81,48 +86,48 @@ namespace NS_COLLISION
 		//////////////////////////////////////////////////////////////////////////////////////
 		//test creation
 #if ENT_TEST == 1
-		Entity cube1Test = G_ECMANAGER->BuildEntity("Test_Box1");
-		ComponentTransform Transform1;
-		ComponentRigidBody Rigid1;
-		
+		//Entity cube1Test = G_ECMANAGER->BuildEntity("Test_Box1");
+		//ComponentTransform Transform1;
+		//ComponentRigidBody Rigid1;
+		//
 
-		Rigid1.isStatic = true;
-		Rigid1.isGravity = true;
-		Rigid1.mass = 1.0f;
+		//Rigid1.isStatic = true;
+		//Rigid1.isGravity = true;
+		//Rigid1.mass = 1.0f;
 
-		//Transform1._rotation.x = 45;
-		//Transform1._rotation.y = 40;
-		//Transform1._rotation.z = 45;
-		Transform1._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
+		////Transform1._rotation.x = 45;
+		////Transform1._rotation.y = 40;
+		////Transform1._rotation.z = 45;
+		//Transform1._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
 
-		cube1Test.AttachComponent<ComponentTransform>(Transform1);
-		cube1Test.AttachComponent<ComponentRigidBody>(Rigid1);
-		
-
-
-		//NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test, glm::vec3(0.5f, 0.5f, 1.f));
-
-		Entity cube2Test = G_ECMANAGER->BuildEntity("Test_Box1");
-		ComponentTransform Transform2;
-		ComponentRigidBody Rigid2;
-		
-
-		Transform2._position = glm::vec3(2.5f, 0.0f, 0.f);
-		//Transform2._rotation.x = -45;
-		//Transform2._rotation.y = -45;
-		//Transform2._rotation.z = -45;
-		Transform2._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
+		//cube1Test.AttachComponent<ComponentTransform>(Transform1);
+		//cube1Test.AttachComponent<ComponentRigidBody>(Rigid1);
+		//
 
 
-		cube2Test.AttachComponent<ComponentTransform>(Transform2);
-		cube2Test.AttachComponent<ComponentRigidBody>(Rigid2);
-		
+		////NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube1Test, glm::vec3(0.5f, 0.5f, 1.f));
+
+		//Entity cube2Test = G_ECMANAGER->BuildEntity("Test_Box1");
+		//ComponentTransform Transform2;
+		//ComponentRigidBody Rigid2;
+		//
+
+		//Transform2._position = glm::vec3(2.5f, 0.0f, 0.f);
+		////Transform2._rotation.x = -45;
+		////Transform2._rotation.y = -45;
+		////Transform2._rotation.z = -45;
+		//Transform2._scale = NlMath::Vector3D(0.5f, 0.5f, 0.5f);
+
+
+		//cube2Test.AttachComponent<ComponentTransform>(Transform2);
+		//cube2Test.AttachComponent<ComponentRigidBody>(Rigid2);
+		//
 		
 		
 		//NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
 
-		ComponentCollider AABB1(COLLIDERS::AABB);
-		ComponentCollider AABB2(COLLIDERS::AABB);
+		//ComponentCollider AABB1(COLLIDERS::AABB);
+		//ComponentCollider AABB2(COLLIDERS::AABB);
 
 		//ComponentCollider AABB1(COLLIDERS::OBB);
 		//ComponentCollider AABB2(COLLIDERS::OBB);
@@ -139,8 +144,8 @@ namespace NS_COLLISION
 		//AABB1.collider.aabb.colliderScale = NlMath::Vector3D(1.0f, 1.0f, 1.0f);
 		//AABB2.collider.aabb.colliderScale = NlMath::Vector3D(1.0f, 1.0f, 1.0f);
 
-		cube1Test.AttachComponent<ComponentCollider>(AABB1);
-		cube2Test.AttachComponent<ComponentCollider>(AABB2);
+		//cube1Test.AttachComponent<ComponentCollider>(AABB1);
+		//cube2Test.AttachComponent<ComponentCollider>(AABB2);
 
 		//ComponentCollider OBB1(COLLIDERS::OBB);
 		//ComponentCollider OBB2(COLLIDERS::OBB);
@@ -148,7 +153,7 @@ namespace NS_COLLISION
 		//cube2Test.AttachComponent<ComponentCollider>(OBB2);
 
 
-		Entity platform0Test = G_ECMANAGER->BuildEntity();
+		Entity platform0Test = G_ECMANAGER->BuildEntity(std::string("TestPlatform0"));
 		ComponentTransform platform0Transform;
 		platform0Transform._position = glm::vec3(0.0f, -5.0f, 0.0f);
 		platform0Transform._scale = glm::vec3(5.0f, 1.0f, 5.0f);
@@ -157,6 +162,100 @@ namespace NS_COLLISION
 		platform0Test.AttachComponent<ComponentCollider>(platform0Collider);
 		ComponentRigidBody platform0rbody;
 		platform0Test.AttachComponent<ComponentRigidBody>(platform0rbody);
+
+
+
+		Entity boxTest = G_ECMANAGER->BuildEntity(std::string("TestBox0"));
+		++test_count;
+		ComponentTransform boxTestTransform;
+		boxTestTransform._position = glm::vec3(0.0f, 0.0f, 0.0f);
+		boxTestTransform._scale = glm::vec3(0.5f, 0.5f, 0.5f);
+		boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
+		ComponentCollider boxTestCollider(COLLIDERS::AABB);
+		boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
+		ComponentRigidBody boxTestrbody;
+		boxTestrbody.isStatic = false;
+		boxTestrbody.isGravity = true;
+		boxTestrbody.mass = 1.0f;
+		boxTest.AttachComponent<ComponentRigidBody>(boxTestrbody);
+
+		ComponentTransform* compT = boxTest.getComponent<ComponentTransform>();
+
+		ComponentRigidBody* compR = boxTest.getComponent<ComponentRigidBody>();
+
+
+		{// ctrl
+
+			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
+
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]() {});
+
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_D))
+			{
+#if USEVEL == 0
+				compT->_position.x += 1 * realDt;
+#else
+				compR->velocity.x += 1 * realDt;
+#endif
+			}
+
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]() {});
+
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_A))
+			{
+#if USEVEL == 0
+				compT->_position.x += -1 * realDt;
+#else
+				compR->velocity.x -= 1 * realDt;
+#endif
+			}
+
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_DOWN", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]() {});
+
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_S))
+			{
+#if USEVEL == 0
+				compT->_position.y += -1 * realDt;
+#else
+				compR->velocity.y -= 1 * realDt;
+#endif
+			}
+
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_UP", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]() {});
+
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_W))
+			{
+#if USEVEL == 0
+				compT->_position.y += 1 * realDt;
+#else
+				compR->velocity.y += 1 * realDt;
+#endif
+			}
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_FRONT", SystemInput_ns::IKEY_Q, "Q", SystemInput_ns::OnHold, [this]() {});
+
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_Q))
+			{
+#if USEVEL == 0
+				compT->_position.z += 1 * realDt;
+#else
+				compR->velocity.z += 1 * realDt;
+#endif
+			}
+			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_BACK", SystemInput_ns::IKEY_E, "E", SystemInput_ns::OnHold, [this]() {});
+
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_E))
+			{
+#if USEVEL == 0
+				compT->_position.z += -1 * realDt;
+#else
+				compR->velocity.z -= 1 * realDt;
+#endif
+			}
+
+
+
+		} // ctrl
+
 
 #endif
 		//////////////////////////////////////////////////////////////////////////////////////
@@ -222,19 +321,22 @@ namespace NS_COLLISION
 
 				//Get Transforms
 				ComponentTransform* comTrans1 = G_ECMANAGER->getComponent<ComponentTransform>(itr1);
+				ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr1);
+
+				if (comTrans1 == nullptr || comTrans2 == nullptr) continue;
 
 				//Get rigidBody for Collision Resolution
 				ComponentRigidBody* comRigid1 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr1);
 				ComponentRigidBody* comRigid2 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr2);
 
+				if (comRigid1 == nullptr || comRigid2 == nullptr) continue;
+
 				//UpdateCollisionBoxPos(comCol1, comTrans1);
 				
 
 
-
-
 				//check for collision, also create collision event in CheckCollision if there is collision
-				if (CheckCollision(comCol1, comCol2, comRigid1, comRigid2))
+				if (CheckCollision(comCol1, comCol2, comRigid1, comRigid2, comTrans1, comTrans2))
 				{
 					// store collision event
 					//NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(1.0f, 0.0f, 1.f));
@@ -293,11 +395,17 @@ namespace NS_COLLISION
 
 				if (comCol->isCollide)
 				{
-					DrawLineMesh(comTrans, comCol, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
+					if (doDrawLineMesh)
+					{
+						DrawLineMesh(comTrans, comCol, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
+					}
 				}
 				else
 				{
-					DrawLineMesh(comTrans, comCol, MeshLod);
+					if (doDrawLineMesh)
+					{
+						DrawLineMesh(comTrans, comCol, MeshLod);
+					}
 				}
 				comCol->isCollide = false;
 			}
@@ -323,7 +431,7 @@ namespace NS_COLLISION
 
 	ICollider* CollisionSystem::GetCollider(ComponentCollider* collider)
 	{
-		switch (collider->colliderType)
+		switch (collider->GetColliderT())
 		{
 		case COLLIDERS::AABB:
 			return &(collider->collider.aabb);
@@ -338,7 +446,7 @@ namespace NS_COLLISION
 	{
 		//update collision box position
 
-		switch (comCol->colliderType)
+		switch (comCol->GetColliderT())
 		{
 		case COLLIDERS::PLANE:
 		{
@@ -379,12 +487,13 @@ namespace NS_COLLISION
 
 	bool CollisionSystem::CheckCollision(
 		ComponentCollider* Collider1, ComponentCollider* Collider2, 
-		ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2)
+		ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2,
+		ComponentTransform* Transform1, ComponentTransform* Transform2)
 	{
 
-		if (Collider1->colliderType == COLLIDERS::AABB)
+		if (Collider1->GetColliderT() == COLLIDERS::AABB)
 		{
-			if (Collider2->colliderType == COLLIDERS::AABB)
+			if (Collider2->GetColliderT() == COLLIDERS::AABB)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// AABB to AABB
@@ -400,13 +509,21 @@ namespace NS_COLLISION
 				// yes collision add to collision event and return true
 				newEvent.rigid1 = Rigid1;
 				newEvent.rigid2 = Rigid2;
+
+				// !!
+				newEvent.collider1 = Collider1;
+				newEvent.collider2 = Collider2;
+				newEvent.transform1 = Transform1;
+				newEvent.transform2 = Transform2;
+				// !!
+
 				newEvent.collisionType = COLRESTYPE::AABB_AABB;
 				colResolver.addCollisionEvent(newEvent);
 				return true;
 				//// AABB to AABB END
 				///////////////////////////////////////////////////////////////////////////////////
 			}
-			if (Collider2->colliderType == COLLIDERS::SPHERE)
+			if (Collider2->GetColliderT() == COLLIDERS::SPHERE)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// AABB to SPHERE
@@ -428,7 +545,7 @@ namespace NS_COLLISION
 				//// AABB to SPHERE END
 				///////////////////////////////////////////////////////////////////////////////////
 			}
-			if (Collider2->colliderType == COLLIDERS::CAPSULE)
+			if (Collider2->GetColliderT() == COLLIDERS::CAPSULE)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// AABB to CAPSULE
@@ -450,7 +567,7 @@ namespace NS_COLLISION
 				//// AABB to CAPSULE END
 				///////////////////////////////////////////////////////////////////////////////////
 			}
-			if (Collider2->colliderType == COLLIDERS::OBB)
+			if (Collider2->GetColliderT() == COLLIDERS::OBB)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// AABB to OBB
@@ -469,10 +586,10 @@ namespace NS_COLLISION
 			//	//return NlMath::AABBtoAABB(*a, *b);
 			//}
 		}
-		if (Collider1->colliderType == COLLIDERS::SPHERE)
+		if (Collider1->GetColliderT() == COLLIDERS::SPHERE)
 		{
 
-			if (Collider2->colliderType == COLLIDERS::AABB)
+			if (Collider2->GetColliderT() == COLLIDERS::AABB)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// SPHERE to AABB
@@ -494,7 +611,7 @@ namespace NS_COLLISION
 				//// SPHERE to AABB END
 				///////////////////////////////////////////////////////////////////////////////////
 			}
-			if (Collider2->colliderType == COLLIDERS::SPHERE)
+			if (Collider2->GetColliderT() == COLLIDERS::SPHERE)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// SPHERE to SPHERE
@@ -530,7 +647,7 @@ namespace NS_COLLISION
 				//// SPHERE to SPHERE END
 				///////////////////////////////////////////////////////////////////////////////////
 			}
-			if (Collider2->colliderType == COLLIDERS::CAPSULE)
+			if (Collider2->GetColliderT() == COLLIDERS::CAPSULE)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// SPHERE to CAPSULE
@@ -569,7 +686,7 @@ namespace NS_COLLISION
 				//// SPHERE to CAPSULE END
 				///////////////////////////////////////////////////////////////////////////////////
 			}
-			if (Collider2->colliderType == COLLIDERS::OBB)
+			if (Collider2->GetColliderT() == COLLIDERS::OBB)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// SPHERE to OBB
@@ -578,10 +695,10 @@ namespace NS_COLLISION
 				///////////////////////////////////////////////////////////////////////////////////
 			}
 		}
-		if (Collider1->colliderType == COLLIDERS::CAPSULE)
+		if (Collider1->GetColliderT() == COLLIDERS::CAPSULE)
 		{
 
-			if (Collider2->colliderType == COLLIDERS::AABB)
+			if (Collider2->GetColliderT() == COLLIDERS::AABB)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// CAPSULE to AABB
@@ -603,7 +720,7 @@ namespace NS_COLLISION
 				//// CAPSULE to AABB END
 				///////////////////////////////////////////////////////////////////////////////////
 			}
-			if (Collider2->colliderType == COLLIDERS::SPHERE)
+			if (Collider2->GetColliderT() == COLLIDERS::SPHERE)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// CAPSULE to SPHERE
@@ -644,7 +761,7 @@ namespace NS_COLLISION
 				//// CAPSULE to SPHERE END
 				///////////////////////////////////////////////////////////////////////////////////
 			}
-			if (Collider2->colliderType == COLLIDERS::CAPSULE)
+			if (Collider2->GetColliderT() == COLLIDERS::CAPSULE)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// CAPSULE to CAPSULE
@@ -677,7 +794,7 @@ namespace NS_COLLISION
 				//// CAPSULE to CAPSULE END
 				///////////////////////////////////////////////////////////////////////////////////
 			}
-			if (Collider2->colliderType == COLLIDERS::OBB)
+			if (Collider2->GetColliderT() == COLLIDERS::OBB)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// CAPSULE to OBB
@@ -686,9 +803,9 @@ namespace NS_COLLISION
 				///////////////////////////////////////////////////////////////////////////////////
 			}
 		}
-		if (Collider1->colliderType == COLLIDERS::OBB)
+		if (Collider1->GetColliderT() == COLLIDERS::OBB)
 		{
-			if (Collider2->colliderType == COLLIDERS::OBB)
+			if (Collider2->GetColliderT() == COLLIDERS::OBB)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// OBB to OBB
@@ -740,7 +857,7 @@ namespace NS_COLLISION
 				//// OBB to OBB END
 				///////////////////////////////////////////////////////////////////////////////////
 			}
-			if (Collider2->colliderType == COLLIDERS::AABB)
+			if (Collider2->GetColliderT() == COLLIDERS::AABB)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// OBB to AABB
@@ -748,7 +865,7 @@ namespace NS_COLLISION
 				//// OBB to AABB END
 				///////////////////////////////////////////////////////////////////////////////////
 			}
-			if (Collider2->colliderType == COLLIDERS::SPHERE)
+			if (Collider2->GetColliderT() == COLLIDERS::SPHERE)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// OBB to SPHERE
@@ -756,7 +873,7 @@ namespace NS_COLLISION
 				//// OBB to SPHERE END
 				///////////////////////////////////////////////////////////////////////////////////
 			}
-			if (Collider2->colliderType == COLLIDERS::CAPSULE)
+			if (Collider2->GetColliderT() == COLLIDERS::CAPSULE)
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// OBB to CAPSULE
@@ -783,7 +900,7 @@ namespace NS_COLLISION
 		int meshlod = lod / 2;
 
 		NS_COLDEBUGTEST::Mesh mesh;
-		switch (comCol->colliderType)
+		switch (comCol->GetColliderT())
 		{
 		case COLLIDERS::AABB:
 			mesh = NS_COLDEBUGTEST::CreateCube(std::max(1 + meshlod, 1), std::max(1 + meshlod, 1));

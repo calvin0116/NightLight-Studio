@@ -211,4 +211,74 @@ void CollsionResolver::AABBResolve(const CollisionEvent& colEvent)
 	}
 }
 
+void CollsionResolver::resolveAABB(const CollisionEvent& colEvent)
+{
+	resolveEventNormally(colEvent);
+
+	switch (colEvent.colidingSide)
+	{
+	case SIDES::NO_COLLISION:
+	{
+		// no collision y u here
+		throw;
+		break;
+	}
+	case SIDES::FRONT:
+	{
+
+		break;
+	}
+	case SIDES::BACK:
+	{
+
+		break;
+	}
+	case SIDES::TOP:
+	{
+		if (!colEvent.rigid1->isStatic)
+		{
+			colEvent.collider1;
+			colEvent.transform1;
+
+			colEvent.collider1->collider.aabb.vecMax.y;
+			colEvent.collider2->collider.aabb.vecMin.y;
+
+			float pen = colEvent.collider1->collider.aabb.vecMax.y - colEvent.collider2->collider.aabb.vecMin.y;
+
+			colEvent.transform1->_position.y += pen;
+
+		}
+
+		if (!colEvent.rigid2->isStatic)
+		{
+			colEvent.collider2;
+			colEvent.transform2;
+
+		}
+		break;
+	}
+	case SIDES::BOTTOM:
+	{
+
+		break;
+	}
+	case SIDES::RIGHT:
+	{
+
+		break;
+	}
+	case SIDES::LEFT:
+	{
+
+		break;
+	}
+	default:
+		// nani
+		throw;
+	}
+
+
+
+}
+
 
