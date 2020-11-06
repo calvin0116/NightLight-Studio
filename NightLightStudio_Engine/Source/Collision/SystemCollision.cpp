@@ -898,7 +898,7 @@ namespace NS_COLLISION
 					{
 						continue;
 					}
-					NS_GRAPHICS::SYS_GRAPHICS->DrawLine(contact.position, contact.position + tmp.normal * 0.3);
+					NS_GRAPHICS::SYS_GRAPHICS->DrawLine(contact.position, contact.position + tmp.normal * 30);
 				}
 					
 

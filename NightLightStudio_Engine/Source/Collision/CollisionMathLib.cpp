@@ -17,6 +17,48 @@
 
 namespace NlMath
 {
+    bool RayToAABB(const AABBCollider& tBox, const Point3D& rayStartingPoint, const Point3D& rayEndPoint)
+    {
+        const Vector3D center = (tBox.vecMin + tBox.vecMax) * 0.5;
+        const Vector3D extents = tBox.vecMax - center;
+        const Vector3D lineDir = 0.5 * (rayEndPoint - rayStartingPoint);
+        const Vector3D lineCenter = rayStartingPoint + lineDir;
+        const Vector3D dir = lineCenter - center;
+
+        const float ld0 = fabs(lineDir.x);
+        if (fabs(dir.x) > (extents.x + ld0))
+        {
+            return false;
+        }
+
+        const float ld1 = fabs(lineDir.y);
+        if (fabs(dir.y) > (extents.y + ld1))
+        {
+            return false;
+        }
+
+        const float ld2 = fabs(lineDir.z);
+        if (fabs(dir.z) > (extents.z + ld2))
+        {
+            return false;
+        }
+
+        const Vector3D vCross = Vector3DCrossProduct(lineDir, dir);
+        if (fabs(vCross.x) > (extents.y * ld2 + extents.z * ld1))
+        {
+            return false;
+        }
+        if (fabs(vCross.y) > (extents.x * ld2 + extents.z * ld0))
+        {
+            return false;
+        }
+        if (fabs(vCross.z) > (extents.x * ld1 + extents.y * ld0))
+        {
+            return false;
+        }
+
+        return true;
+    }
     Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint)
     {
 
