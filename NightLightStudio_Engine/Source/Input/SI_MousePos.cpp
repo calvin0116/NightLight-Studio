@@ -1,4 +1,5 @@
 #include "SI_MousePos.h"
+#include "..\Window\WndSystem.h"
 
 namespace SystemInput_ns
 {
@@ -13,7 +14,7 @@ namespace SystemInput_ns
 		return { pos.x + offset.x, pos.y + offset.y };
 	}
 
-	SystemMousePosition::SystemMousePosition(bool showCursor) : _mousePos{}, _prevMousePos{}, _showCursor{ showCursor }, _scrollDown{}
+	SystemMousePosition::SystemMousePosition(bool showCursor, bool clipCursor) : _mousePos{}, _prevMousePos{}, _showCursor{ showCursor }, _clipCursor{ clipCursor },  _scrollDown{}
 	{
 		RECT rect;
 		GetClientRect(_window, &rect);
@@ -92,6 +93,43 @@ namespace SystemInput_ns
 	POINT SystemMousePosition::GetClientRectSize()
 	{
 		return _clientRectSize;
+	}
+	RECT SystemMousePosition::GetWinRect()
+	{
+		RECT rect;
+		HWND h = NS_WINDOW::SYS_WINDOW->GetHandlerToWindow();
+		GetWindowRect(h, &rect);
+		return rect;
+	}
+	bool SystemMousePosition::ToggleClipCursor()
+	{
+		_clipCursor = !_clipCursor;
+		RECT rect = GetWinRect();
+		rect.top += 10;
+		rect.right -= 10;
+		rect.bottom -= 10;
+		rect.left += 10;
+		ClipCursor(&rect);
+		return _clipCursor;
+	}
+	void SystemMousePosition::SetClipCursor(bool clip)
+	{
+		_clipCursor = clip;
+		RECT rect = GetWinRect();
+		rect.top += 10;
+		rect.right -= 10;
+		rect.bottom -= 10;
+		rect.left += 10;
+		ClipCursor(&rect);
+	}
+	void SystemMousePosition::SetCurPos(int x, int y)
+	{
+		SetCursorPos(x, y);
+	}
+	void SystemMousePosition::SetCurPos()
+	{
+		RECT rect = GetWinRect();
+		SetCursorPos((rect.top + rect.bottom) / 2, (rect.left + rect.right) / 2);
 	}
 	glm::vec2 SystemMousePosition::GetRelativeLocation()
 	{

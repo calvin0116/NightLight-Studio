@@ -167,6 +167,43 @@ namespace NS_GRAPHICS
 
 	void CameraSystem::Update()
 	{
+
+		SYS_INPUT->GetSystemMousePos().SetClipCursor(true);
+
+
+		glm::vec3 tgt = glm::vec3(0.0f, 0.0f, 0.0f);
+		//glm::vec3 eye;
+		float dist = 100.0f;
+
+		NS_GRAPHICS::Camera& cam = NS_GRAPHICS::CameraSystem::GetInstance().GetCamera();
+		glm::vec3 camFront = cam.GetFront();
+		camFront *= glm::vec3(dist, dist, dist);
+		cam.SetCameraPosition(tgt - camFront);
+
+		//NS_GRAPHICS::CameraSystem::GetInstance().ForceUpdate();
+
+		//Mouse relative velocity
+		glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
+
+		// Rotation for left and right
+		cam.SetCameraYaw(cam.GetYaw() + mousePos.x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
+
+		// Rotation for up and down
+		float offsetted = cam.GetPitch() + mousePos.y * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP;
+
+		if (offsetted > NS_GRAPHICS::MAX_PITCH)
+			offsetted = NS_GRAPHICS::MAX_PITCH;
+
+		cam.SetCameraPitch(offsetted);
+
+
+		SYS_INPUT->GetSystemMousePos().SetCurPos();
+
+		updatedRot = true;
+		updated = true;
+
+
+
 		// Call to activate all keys
 		//SYS_INPUT->GetSystemKeyPress().ALL_THE_KEYS();
 
@@ -178,6 +215,17 @@ namespace NS_GRAPHICS
 			updatedRot = false;
 			updated = true;
 		}
+
+
+
+
+
+
+
+
+
+
+
 	}
 
 	bool CameraSystem::CheckUpdate()
