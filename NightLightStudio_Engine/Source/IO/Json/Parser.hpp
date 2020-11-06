@@ -23,7 +23,7 @@ namespace NS_SERIALISER {
 		//If no data change
 		std::cout << "Unknown name taken" << std::endl;
 	}
-
+/*
 	inline void ChangeData(Value* val, std::string d_name, Value& data)
 	{
 		Value key(d_name.c_str(), global_alloc);
@@ -38,7 +38,7 @@ namespace NS_SERIALISER {
 		Value key(d_name.c_str(), global_alloc);
 		Value _data(data);
 		val->GetObject().AddMember(key, _data, global_alloc);
-	}
+	}*/
 	/*
 	inline void ChangeDataWithObject(Value* val, std::string name, Value* data)
 	{

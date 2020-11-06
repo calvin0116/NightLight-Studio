@@ -7,6 +7,7 @@
 #include "../../glm/gtc/matrix_transform.hpp"
 #include "../../glm/gtc/quaternion.hpp"
 
+
 void ComponentCollider::SetColliderT(COLLIDERS _col)
 {
 	switch (_col)

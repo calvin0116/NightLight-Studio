@@ -870,7 +870,7 @@ namespace NlMath
         // Artificial axis bias to improve frame coherence
         const float kRelTol = float(0.95);
         //this will improve penetration resolution if it is bigger
-        const float kAbsTol = float(0.1);
+        const float kAbsTol = float(0.01);
         unsigned int axis;
         float sMax;
         Vec3 n;
@@ -971,12 +971,12 @@ namespace NlMath
 
         else
         {
-            //rotate to local position for easy calculation
-            n = tBox1.rotation * n;
+            
+            //n = tBox1.rotation * n;
 
             //check if normal need to be negated
-            if (n * (tBox2.center - tBox1.center) < float(0.0f))
-                n = -n;
+            //if (n * (tBox2.center - tBox1.center) < float(0.0f))
+            //    n = -n;
 
             //start and end point of 2 lines, line A and line B
             //line A is the colliding reference edge of tBox1

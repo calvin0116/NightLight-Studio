@@ -233,6 +233,7 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_TemplateFuncs.hpp" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.h" />
     <ClInclude Include="Source\Editor\LevelEditor\WindowsDialogBox.h" />
+    <ClInclude Include="Source\Editor\PrefabManager.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
@@ -252,6 +253,7 @@
     <ClInclude Include="Source\Input\SI_MousePos.h" />
     <ClInclude Include="Source\Input\SystemInput.h" />
     <ClInclude Include="Source\IO\Json\Config.h" />
+    <ClInclude Include="Source\IO\Json\JsonFunction.h" />
     <ClInclude Include="Source\IO\Json\JsonHeader.h" />
     <ClInclude Include="Source\IO\Json\Parser.h" />
     <ClInclude Include="Source\IO\Json\Parser.hpp" />
@@ -259,6 +261,7 @@
     <ClInclude Include="Source\Logic\CScripts\AllScripts.h" />
     <ClInclude Include="Source\Logic\CScripts\IScript.h" />
     <ClInclude Include="Source\Logic\CScripts\TestScript.h" />
+    <ClInclude Include="Source\Logic\Player.h" />
     <ClInclude Include="Source\Logic\SystemLogic.h" />
     <ClInclude Include="Source\Math\Matrix3x3.h" />
     <ClInclude Include="Source\Math\Matrix4x4.h" />
@@ -326,6 +329,7 @@
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\WindowsDialogBox.cpp" />
+    <ClCompile Include="Source\Editor\PrefabManager.cpp" />
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
     <ClCompile Include="Source\Graphics\DebugManager.cpp" />
@@ -342,8 +346,10 @@
     <ClCompile Include="Source\Input\SI_KeyPress.cpp" />
     <ClCompile Include="Source\Input\SI_MousePos.cpp" />
     <ClCompile Include="Source\Input\SystemInput.cpp" />
+    <ClCompile Include="Source\IO\Json\JsonFunction.cpp" />
     <ClCompile Include="Source\IO\Json\Parser.cpp" />
     <ClCompile Include="Source\IO\SystemIO.cpp" />
+    <ClCompile Include="Source\Logic\Player.cpp" />
     <ClCompile Include="Source\Logic\SystemLogic.cpp" />
     <ClCompile Include="Source\Math\Matrix3x3.cpp" />
     <ClCompile Include="Source\Math\Matrix4x4.cpp" />
