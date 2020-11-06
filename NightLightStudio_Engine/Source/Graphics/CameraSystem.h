@@ -36,6 +36,9 @@ namespace NS_GRAPHICS
 		//        this vector
 		glm::vec3 viewVector;
 
+		// use thrid person cam?
+		bool useThridPersonCam;
+
 	public:
 		// Unique Singleton instance
 		static CameraSystem& GetInstance()
@@ -73,5 +76,10 @@ namespace NS_GRAPHICS
 		void UpdateThirdPersonCamera();
 		// update the view vector, view vector is normalsied
 		void UpdateViewVector();
+
+		// set weather to use thrid person cam
+		void SetUseThridPersonCam(bool set);
+		// toggle weather to use thrid person cam
+		void ToggleUseThridPersonCam();
 	};
 }

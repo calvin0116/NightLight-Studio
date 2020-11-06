@@ -13,7 +13,8 @@ namespace NS_GRAPHICS
 		updatedRot{ false },
 		updated{ false },
 		zoomDistance{ 100.0f },
-		tgt(0.0f, 0.0f, 0.0f)
+		tgt(0.0f, 0.0f, 0.0f),
+		useThridPersonCam{false}
 	{
 	}
 
@@ -24,52 +25,75 @@ namespace NS_GRAPHICS
 
 	void CameraSystem::Init()
 	{
+		// I think can leave this in
+		// uses arrow keys to move target on xz plane
 #if TESTMOVETARGET == 1
 #define TEST_TARGET_MOVE_STEP 0.5f;
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_FRONT", SystemInput_ns::IKEY_W, "TARGET_MOVE_FRONT", SystemInput_ns::OnHold, [this]()
+		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_FRONT", SystemInput_ns::IKEY_UP, "TARGET_MOVE_FRONT", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_FRONT", SystemInput_ns::IKEY_I, "TARGET_MOVE_FRONT", SystemInput_ns::OnHold, [this]()
 		{
-			glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
-			tgt += vec * TEST_TARGET_MOVE_STEP;
-			//tgt.z -= TEST_TARGET_MOVE_STEP;
+			if (useThridPersonCam)
+			{
+				glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
+				tgt += vec * TEST_TARGET_MOVE_STEP;
+				//tgt.z -= TEST_TARGET_MOVE_STEP;
+			}
 		});
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_BACK", SystemInput_ns::IKEY_S, "TARGET_MOVE_BACK", SystemInput_ns::OnHold, [this]()
+		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_BACK", SystemInput_ns::IKEY_DOWN, "TARGET_MOVE_BACK", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_BACK", SystemInput_ns::IKEY_K, "TARGET_MOVE_BACK", SystemInput_ns::OnHold, [this]()
 		{
-			glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
+			if (useThridPersonCam)
+			{
+				glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
 
-			glm::quat quaternion(glm::radians(glm::vec3(0.0f, 180.0f, 0.0f)));
-			glm::mat4 rotate = glm::mat4_cast(quaternion);
+				glm::quat quaternion(glm::radians(glm::vec3(0.0f, 180.0f, 0.0f)));
+				glm::mat4 rotate = glm::mat4_cast(quaternion);
 
-			vec = rotate * glm::vec4(vec, 1.0f);
+				vec = rotate * glm::vec4(vec, 1.0f);
 
-			tgt += vec * TEST_TARGET_MOVE_STEP;
-			//tgt.z += TEST_TARGET_MOVE_STEP;
+				tgt += vec * TEST_TARGET_MOVE_STEP;
+				//tgt.z += TEST_TARGET_MOVE_STEP;
+			}
 		});
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_LEFT", SystemInput_ns::IKEY_A, "TARGET_MOVE_LEFT", SystemInput_ns::OnHold, [this]()
+		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_LEFT", SystemInput_ns::IKEY_LEFT, "TARGET_MOVE_LEFT", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_LEFT", SystemInput_ns::IKEY_J, "TARGET_MOVE_LEFT", SystemInput_ns::OnHold, [this]()
 		{
-			glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
+			if (useThridPersonCam)
+			{
+				glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
 
-			glm::quat quaternion(glm::radians(glm::vec3(0.0f, 90.0f, 0.0f)));
-			glm::mat4 rotate = glm::mat4_cast(quaternion);
+				glm::quat quaternion(glm::radians(glm::vec3(0.0f, 90.0f, 0.0f)));
+				glm::mat4 rotate = glm::mat4_cast(quaternion);
 
-			vec = rotate * glm::vec4(vec, 1.0f);
+				vec = rotate * glm::vec4(vec, 1.0f);
 
-			tgt += vec * TEST_TARGET_MOVE_STEP;
-			//tgt.x -= TEST_TARGET_MOVE_STEP;
+				tgt += vec * TEST_TARGET_MOVE_STEP;
+				//tgt.x -= TEST_TARGET_MOVE_STEP;
+			}
 		});
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_RIGHT", SystemInput_ns::IKEY_D, "TARGET_MOVE_RIGHT", SystemInput_ns::OnHold, [this]()
+		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_RIGHT", SystemInput_ns::IKEY_RIGHT, "TARGET_MOVE_RIGHT", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_RIGHT", SystemInput_ns::IKEY_L, "TARGET_MOVE_RIGHT", SystemInput_ns::OnHold, [this]()
 		{
-			glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
+			if (useThridPersonCam)
+			{
+				glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
 
-			glm::quat quaternion(glm::radians(glm::vec3(0.0f, -90.0f, 0.0f)));
-			glm::mat4 rotate = glm::mat4_cast(quaternion);
+				glm::quat quaternion(glm::radians(glm::vec3(0.0f, -90.0f, 0.0f)));
+				glm::mat4 rotate = glm::mat4_cast(quaternion);
 
-			vec = rotate * glm::vec4(vec, 1.0f);
+				vec = rotate * glm::vec4(vec, 1.0f);
 
-			tgt += vec * TEST_TARGET_MOVE_STEP;
-			//tgt.x += TEST_TARGET_MOVE_STEP;
+				tgt += vec * TEST_TARGET_MOVE_STEP;
+				//tgt.x += TEST_TARGET_MOVE_STEP;
+			}
 		});
 #endif
 
+		// toggle thrid person camera
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TOGGLE_THIRD_PERSONCAM", SystemInput_ns::IKEY_P, "TOGGLE_THIRD_PERSONCAM", SystemInput_ns::OnPress, [this]()
+		{
+			ToggleUseThridPersonCam();
+		});
 
 
 		// Initialize all required cameras(if any)
@@ -146,7 +170,8 @@ namespace NS_GRAPHICS
 	{
 
 		// update thrid person camera
-		UpdateThirdPersonCamera();
+		if(useThridPersonCam)
+			UpdateThirdPersonCamera();
 
 
 		// Call to activate all keys
@@ -255,14 +280,14 @@ namespace NS_GRAPHICS
 
 		if (SYS_INPUT->GetSystemMousePos().GetIfScrollUp())
 		{
-			zoomDistance += NS_GRAPHICS::ZOOM_SENSITIVITY;
+			zoomDistance -= NS_GRAPHICS::ZOOM_SENSITIVITY;
 
 			//_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * ZOOM_SENSITIVITY);
 			updated = true;
 		}
 		else if (SYS_INPUT->GetSystemMousePos().GetIfScrollDown())
 		{
-			zoomDistance -= NS_GRAPHICS::ZOOM_SENSITIVITY;
+			zoomDistance += NS_GRAPHICS::ZOOM_SENSITIVITY;
 
 			//_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * ZOOM_SENSITIVITY);
 			updated = true;
@@ -277,5 +302,27 @@ namespace NS_GRAPHICS
 		glm::vec3 camPositron = _camera.GetPosition();
 		viewVector = camFront - camPositron;
 		viewVector = glm::normalize(viewVector);
+	}
+	void CameraSystem::SetUseThridPersonCam(bool set)
+	{
+		useThridPersonCam = set;
+
+		if (!useThridPersonCam)
+		{
+			// turn off cursor thingy
+			SYS_INPUT->GetSystemMousePos().SetTheThing(false);
+			SYS_INPUT->GetSystemMousePos().SetCursorVisible(true);
+		}
+		else
+		{
+			glm::vec3 camFront = _camera.GetFront();
+			camFront *= glm::vec3(zoomDistance, zoomDistance, zoomDistance);
+			tgt = _camera.GetPosition() + camFront;
+			tgt.y = 0.0f; // set ht to 0 for now
+		}
+	}
+	void CameraSystem::ToggleUseThridPersonCam()
+	{
+		SetUseThridPersonCam(!useThridPersonCam);
 	}
 }
