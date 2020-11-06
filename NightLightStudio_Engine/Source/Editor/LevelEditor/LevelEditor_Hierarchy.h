@@ -9,6 +9,8 @@ private:
 	int selected_index;
 	bool _allowCopy;
 	bool _scrollBottom;
+
+	const float _zoomDist = 100.0f;
 public :
 	HierarchyInspector()
 		: selected_index{}, _allowCopy{ true }, _scrollBottom{ false }

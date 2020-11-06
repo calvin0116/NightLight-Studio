@@ -6,6 +6,7 @@
 #include "../../Component/Components.h"
 #include "LevelEditor_Console.h"
 #include "WindowsDialogBox.h"
+#include "../../Graphics/DebugManager.h"
 
 #include "../../Core/SceneManager.h"
 
@@ -13,7 +14,7 @@ void LevelEditor::LE_MainMenuBar()
 {
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
     // because it would be confusing to have two docking targets within each others.
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground;
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_MenuBar;
     window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
     window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoScrollbar;
 
@@ -35,7 +36,7 @@ void LevelEditor::LE_MainMenuBar()
     ImGui::SetNextWindowSize(viewport->GetWorkSize());
     ImGui::SetNextWindowViewport(viewport->ID);
 
-    ImGui::Begin("DockSpace Demo", nullptr, window_flags | ImGuiWindowFlags_MenuBar);
+    ImGui::Begin("DockSpace Demo", nullptr, window_flags);
 
     ImGui::PopStyleVar();
 
@@ -55,7 +56,8 @@ void LevelEditor::LE_MainMenuBar()
                     // Gets the RELATIVE File Path to Open from
                     std::string fileToOpen = WindowsOpenFileBox(_window, rgSpec, 1);
                     std::cout << fileToOpen << std::endl;
-                    NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(fileToOpen);
+                    if (fileToOpen != "")
+                        NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(fileToOpen);
                 },
 
                 []() 
@@ -73,7 +75,8 @@ void LevelEditor::LE_MainMenuBar()
                     // Gets the RELATIVE File Path to Save to
                     std::string fileToSaveTo = WindowsSaveFileBox(_window, rgSpec, 1);
                     std::cout << fileToSaveTo << std::endl;
-                    NS_SCENE::SYS_SCENE_MANAGER->SaveScene(fileToSaveTo);
+                    if (fileToSaveTo != "")
+                        NS_SCENE::SYS_SCENE_MANAGER->SaveScene(fileToSaveTo);
                 }
             });
         LE_AddMenuWithItems("Edit", 
@@ -114,6 +117,33 @@ void LevelEditor::LE_MainMenuBar()
     // Used to accept DragDrops
     ImGui::BeginChild("DockSpace Child", ImVec2(0, 0), false, window_flags);
 
+    // Grid Control
+    if (ImGui::BeginMenuBar())
+    {
+        NS_GRAPHICS::DebugManager& dm = NS_GRAPHICS::DebugManager::GetInstance();
+        ImGui::SetCursorPosX(viewport->GetWorkSize().x / 8.0f * 5.0f);
+        LE_AddCheckbox("Run Grid", &_showGrid, [this, &dm]() { dm.ShowGrid(_showGrid); });
+        if (_showGrid)
+        {
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(120);
+            float gridCell[2] = {dm.GetGridLength(), dm.GetCellLength()};
+            glm::vec4 gridCol = dm.GetGridRGBA();
+            if (ImGui::InputFloat2("Grid : Cell##GRIDGRID", gridCell, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+            {
+                dm.SetGridLength(gridCell[0]); dm.SetCellLength(gridCell[1]);
+            }
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(150);
+            if (ImGui::ColorEdit4("##GRIDCOLOR", glm::value_ptr(gridCol)))
+            {
+                dm.SetGridColor(gridCol);
+            }
+
+        }
+        ImGui::EndMenuBar();
+    }
+
     // Sets dockspace for other objects
     if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
     {
@@ -152,7 +182,7 @@ void LevelEditor::LE_MainMenuBar()
                 */
             }
 
-            if (LE_GetFileType(data) == "fbx")
+            if (LE_GetFileType(data) == "fbx" || LE_GetFileType(data) == "model")
             {
                 std::string fName = LE_EraseBackSubStr(LE_GetFilename(data), std::string(".").append(LE_GetFileType(data)));
                 fName = "." + fName;
@@ -163,6 +193,33 @@ void LevelEditor::LE_MainMenuBar()
                 ent.AttachComponent<ComponentTransform>(transEnt);
 
                 NS_GRAPHICS::SYS_GRAPHICS->LoadModel(data);
+
+                /*if (LE_GetFileType(data) == "fbx")
+                {
+                    //Checks for the file name
+                    std::string name;
+                    size_t pos = data.rfind("\\");
+                    //Get just the string after the last path
+                    if (pos != std::string::npos)
+                    {
+                        name = data.substr(pos + 1);
+                    }
+                    else
+                    {
+                        name = data;
+                    }
+
+                    pos = name.rfind(".");
+                    //Trim the extension to get the file name
+                    if (pos != std::string::npos)
+                    {
+                        name.erase(pos);
+                    }
+
+                    std::string meshName;
+                    meshName = NS_GRAPHICS::s_LocalPathName + name + NS_GRAPHICS::s_ModelFileType;
+                    data = meshName;
+                }*/
                 NS_GRAPHICS::SYS_GRAPHICS->AttachModel(ent, data);
             }
         }, ImGuiDragDropFlags_AcceptNoDrawDefaultRect);

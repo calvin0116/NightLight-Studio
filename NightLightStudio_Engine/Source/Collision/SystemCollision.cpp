@@ -19,7 +19,8 @@
 #define MESH_MAX_LOD 18
 #define MESH_MIN_LOD -20
 
-#define ENT_TEST 1
+//#define ENT_TEST 1
+#define ENT_TEST 0
 
 
 #define USEVEL 0
@@ -62,14 +63,16 @@ namespace NS_COLLISION
 				doDrawLineMesh = !doDrawLineMesh;
 			});
 
+#if ENT_TEST == 1
+
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("LALALA", SystemInput_ns::IKEY_M, "M", SystemInput_ns::OnPress, [this]()
 			{
 
 				Entity boxTest = G_ECMANAGER->BuildEntity(std::string("newBox").append(std::to_string(test_count))); 
 				++test_count;
 				ComponentTransform boxTestTransform;
-				boxTestTransform._position = glm::vec3(0.0f, 3.0f, 0.0f);
-				boxTestTransform._scale = glm::vec3(0.5f, 0.5f, 0.5f);
+				boxTestTransform._position = glm::vec3(0.0f, 300.0f, 0.0f);
+				boxTestTransform._scale = glm::vec3(50.0f, 50.0f, 50.0f);
 				boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
 				ComponentCollider boxTestCollider(COLLIDERS::AABB);
 				boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
@@ -87,7 +90,6 @@ namespace NS_COLLISION
 		//test code, to be removed
 		//////////////////////////////////////////////////////////////////////////////////////
 		//test creation
-#if ENT_TEST == 1
 		//Entity cube1Test = G_ECMANAGER->BuildEntity("Test_Box1");
 		//ComponentTransform Transform1;
 		//ComponentRigidBody Rigid1;
@@ -157,8 +159,8 @@ namespace NS_COLLISION
 
 		Entity platform0Test = G_ECMANAGER->BuildEntity(std::string("TestPlatform0"));
 		ComponentTransform platform0Transform;
-		platform0Transform._position = glm::vec3(0.0f, 0.0f, 0.0f);
-		platform0Transform._scale = glm::vec3(5.0f, 1.0f, 5.0f);
+		platform0Transform._position = glm::vec3(0.0f, 100.0f, 0.0f);
+		platform0Transform._scale = glm::vec3(500.0f, 50.0f, 500.0f);
 		platform0Test.AttachComponent<ComponentTransform>(platform0Transform);
 		ComponentCollider platform0Collider(COLLIDERS::AABB);
 		platform0Collider.lod = 5;
@@ -172,8 +174,8 @@ namespace NS_COLLISION
 		Entity boxTest = G_ECMANAGER->BuildEntity(std::string("TestBox0"));
 		++test_count;
 		ComponentTransform boxTestTransform;
-		boxTestTransform._position = glm::vec3(0.0f, 3.0f, 0.0f);
-		boxTestTransform._scale = glm::vec3(1.0f, 1.0f, 1.0f);
+		boxTestTransform._position = glm::vec3(0.0f, 300.0f, 0.0f);
+		boxTestTransform._scale = glm::vec3(80.0f, 80.0f, 80.0f);
 		boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
 		ComponentCollider boxTestCollider(COLLIDERS::AABB);
 		boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
@@ -196,7 +198,7 @@ namespace NS_COLLISION
 
 			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
 
-			#define TEST_FORCE_MAGNITUDE 10.0f
+			#define TEST_FORCE_MAGNITUDE 1000.0f
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.x += 1 * DELTA_T->dt / CLOCKS_PER_SEC;

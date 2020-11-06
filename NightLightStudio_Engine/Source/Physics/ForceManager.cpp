@@ -15,7 +15,8 @@ void ForceManager::addForce(Entity ent, const TranslationalForce& transForce)
 
 	if (ent.getId() == -1)
 	{
-		// throw
+		//std::cout << "add Force Error" << std::endl;
+		// throw;
 	}
 	translationalForceMap.insert(std::pair<int, TranslationalForce>(ent.getId(), transForce));
 }
@@ -53,7 +54,8 @@ NlMath::Vector3D ForceManager::resolveTranslationalForces(Entity ent)
 {
 	if (ent.getId() == -1)
 	{
-		throw;
+		//std::cout <<  "Force resoultion Error" << std::endl;
+		//throw;
 	}
 	return resolveTranslationalForces(ent.getId());
 }

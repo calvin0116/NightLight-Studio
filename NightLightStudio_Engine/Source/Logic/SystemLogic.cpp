@@ -3,6 +3,7 @@
 // #include "..\Mono\Binding\Binder.h" // Bind C++ to C# functions
 
 #include "../Input/SystemInput.h" // For testing
+#include "CScripts/AllScripts.h"
 
 namespace NS_LOGIC
 {
@@ -30,6 +31,13 @@ namespace NS_LOGIC
 
   void SystemLogic::GameLoad()
   {
+    auto itr = G_ECMANAGER->begin<ComponentCScript>();
+    auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
+    for (; itr != itrEnd; ++itr)
+    {
+      ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
+      myComp->_pScript = AllScripts::Construct(myComp->_sName.toString());
+    }
   }
 
   void SystemLogic::GameInit()
@@ -37,11 +45,25 @@ namespace NS_LOGIC
     // MonoBind::Bind();
     // Init CS
     // MonoMethod* m_Init = MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
+    auto itr = G_ECMANAGER->begin<ComponentCScript>();
+    auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
+    for (; itr != itrEnd; ++itr)
+    {
+      ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
+      myComp->_pScript->Init();
+    }
   }
 
   void SystemLogic::Update()
   {
     //Run Script?
+    auto itr = G_ECMANAGER->begin<ComponentCScript>();
+    auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
+    for (; itr != itrEnd; ++itr)
+    {
+      ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
+      myComp->_pScript->Update();
+    }
   }
 
   void SystemLogic::FixedUpdate()
@@ -51,7 +73,13 @@ namespace NS_LOGIC
 
   void SystemLogic::GameExit()
   {
-
+    auto itr = G_ECMANAGER->begin<ComponentCScript>();
+    auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
+    for (; itr != itrEnd; ++itr)
+    {
+      ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
+      myComp->_pScript->Exit();
+    }
   }
 
   void SystemLogic::Free()
@@ -63,32 +91,32 @@ namespace NS_LOGIC
     DestroyInstance();
   }
 
-  void SystemLogic::OnCollisionEnter()
+  void SystemLogic::OnCollisionEnter(Entity _obj1, Entity _obj2)
   {
 
   }
 
-  void SystemLogic::OnCollisionStay()
+  void SystemLogic::OnCollisionStay(Entity _obj1, Entity _obj2)
   {
 
   }
 
-  void SystemLogic::OnCollisionExit()
+  void SystemLogic::OnCollisionExit(Entity _obj1, Entity _obj2)
   {
 
   }
 
-  void SystemLogic::OnTriggerEnter()
+  void SystemLogic::OnTriggerEnter(Entity _obj1, Entity _obj2)
   {
 
   }
 
-  void SystemLogic::OnTriggerStay()
+  void SystemLogic::OnTriggerStay(Entity _obj1, Entity _obj2)
   {
 
   }
 
-  void SystemLogic::OnTriggerExit()
+  void SystemLogic::OnTriggerExit(Entity _obj1, Entity _obj2)
   {
 
   }

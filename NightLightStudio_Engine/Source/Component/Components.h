@@ -14,6 +14,8 @@
 #include "ComponentRigidBody.h"
 #include "ComponentScript.h"
 #include "ComponentLight.h"
+// Temporary C++ script
+#include "ComponentCScript.h"
 
 //For json serialising
 #include "..\..\ISerializable.h"

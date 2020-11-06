@@ -13,7 +13,7 @@ namespace NS_PHYSICS
 {
 
 	//constexpr float MAX_SPEED = 10.0f;
-	constexpr float MAX_SPEED = 0.3f;
+	constexpr float MAX_SPEED = 10000.0f;
 
 	PhysicsSystem::PhysicsSystem()
 		:_maxspeed(MAX_SPEED)

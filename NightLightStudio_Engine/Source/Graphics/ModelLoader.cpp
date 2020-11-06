@@ -2,6 +2,8 @@
 #include "../../framework.h"
 #include "../glm/gtc/matrix_transform.hpp"
 #include "../../glm/gtc/quaternion.hpp"
+#include <iostream>
+#include <string>
 
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -24,7 +26,7 @@ namespace NS_GRAPHICS
 		_fbxManager->Destroy();
 	}
 
-	void ModelLoader::TransverseChild(FbxNode* node, Model*& model, const std::string& fileName)
+	void ModelLoader::ProcessMesh(FbxNode* node, Model*& model)
 	{
 		for (int i = 0; i < node->GetNodeAttributeCount(); ++i)
 		{
@@ -37,219 +39,16 @@ namespace NS_GRAPHICS
 				//Old way of loading fbx
 				Mesh* newMesh = new Mesh();
 
-				//New way of loading fbx
-				//Ignore naming
-				Mesh* newMeshNew = new Mesh();
-
-				//CHECKS FOR THE FILE NAME
-				std::string name;
-				size_t pos = fileName.rfind("\\");
-				//Get just the string after the last path
-				if (pos != std::string::npos)
-				{
-					name = fileName.substr(pos + 1);
-				}
-				else
-				{
-					name = fileName;
-				}
-
-				//LOCAL FILE NAME
-				name.erase(name.find("."));
-				//CONVERSION TO CUSTOM FORMAT
-				//OLD
-				//newMesh->_localFileName = s_LocalPathName + name + s_ModelFileType;
-				//NEW
-				//newMeshNew->_localFileName = s_LocalPathName + name + s_ModelFileType;
-
-				//MESH NAME
-				/*if (customName.empty())
-				{
-					if (*meshIndex)
-					{
-						//OLD
-						newMesh->_meshName = name + std::to_string(*meshIndex + 1);
-						//NEW
-						newMeshNew->_meshName = name + std::to_string(*meshIndex + 1);
-					}
-					else
-					{
-						//OLD
-						newMesh->_meshName = name;
-						//NEW
-						newMeshNew->_meshName = name;
-					}
-				}
-
-				else
-				{
-					if (*meshIndex)
-					{
-						//OLD
-						newMesh->_meshName = customName + std::to_string(*meshIndex + 1);
-						//NEW
-						newMeshNew->_meshName = customName + std::to_string(*meshIndex + 1);
-					}
-					else
-					{
-						//OLD
-						newMesh->_meshName = customName;
-						//NEW
-						newMeshNew->_meshName = customName;
-					}
-
-				}
-				*/
-
-				//TEXTURE FILE NAME
-				//PROBABLY WONT BE AUTO
-				//MANUAL ATTACH OF TEXTURE NONE WILL BE PORTED OVER
-				//FbxGeometry* geom = (FbxGeometry*)mesh;
-				//FbxProperty property;
-				//
-				//if (geom->GetNode() != nullptr)
-				//{
-				//	////Just gets first texture for now
-				//	//FbxSurfaceMaterial* material = geom->GetNode()->GetSrcObject<FbxSurfaceMaterial>(0);
-				//	//property = material->FindProperty(FbxLayerElement::sTextureChannelNames[0]);
-
-				//	//FbxTexture* texture = property.GetSrcObject<FbxTexture>(0);
-				//	//FbxFileTexture* fileTexture = FbxCast<FbxFileTexture>(texture);
-
-				//	int mat = geom->GetNode()->GetSrcObjectCount<FbxSurfaceMaterial>();
-				//	for (int materialIndex = 0; materialIndex < mat; materialIndex++) {
-				//		FbxSurfaceMaterial* material = geom->GetNode()->GetSrcObject<FbxSurfaceMaterial>(materialIndex);
-
-				//		//go through all the possible textures
-				//		if (material) {
-
-				//			int textureIndex;
-				//			FBXSDK_FOR_EACH_TEXTURE(textureIndex)
-				//			{
-				//				property = material->FindProperty(FbxLayerElement::sTextureChannelNames[textureIndex]);
-
-				//				//FindAndDisplayTextureInfoByProperty(lProperty, lDisplayHeader, lMaterialIndex);
-				//				if (property.IsValid())
-				//				{
-				//					int textureCount = property.GetSrcObjectCount<FbxTexture>();
-				//					for (int id = 0; id < textureCount; ++id)
-				//					{
-				//						FbxTexture* texture = property.GetSrcObject<FbxTexture>(id);
-				//						if (texture)
-				//						{
-				//							FbxFileTexture* fileTexture = FbxCast<FbxFileTexture>(texture);
-				//							newMesh->_textureFileName = { fileTexture->GetRelativeFileName() };
-				//							break;
-				//						}
-				//					}
-				//				}
-				//			}
-
-				//		}//end if(lMaterial)
-
-				//	}// end for lMaterialIndex     
-				//}
-
-				//GET THE VERTEX DATA
-				const int vertexCount = mesh->GetControlPointsCount();
-
-
-				std::cout << node->GetName() << ":" << std::endl;
+				std::cout << "Model Loader: Loading " << node->GetName() << std::endl;
 				newMesh->_nodeName = node->GetName();
-				newMeshNew->_nodeName = node->GetName();
-
-				//FbxDouble3 translation = node->LclTranslation.Get();
-				//FbxDouble3 rotation = node->LclRotation.Get();
-				//FbxDouble3 scaling = node->LclScaling.Get();
-				////FbxDouble3 test = node->GeometricTranslation.Get();
-
-				//std::cout << translation[0] << ", " << translation[1] << ", " << translation[2] << std::endl;
-				//std::cout << rotation[0] << ", " << rotation[1] << ", " << rotation[2] << std::endl;
-				//std::cout << scaling[0] << ", " << scaling[1] << ", " << scaling[2] << std::endl;
-
-				//std::cout << test[0] << ", " << test[1] << ", " << test[2] << std::endl;
-
-				//const char* nodeName = node->GetName();
-				//glm::mat4 modelMatrix(1);
-				//glm::mat4 translateMatrix(1);
-				//glm::mat4 scaleMatrix(1);
-
-				//glm::translate(translateMatrix, glm::vec3(translation[0], translation[1], translation[2]));
-				//glm::quat quaternion(glm::radians(glm::vec3(rotation[0], rotation[1], rotation[2])));
-				//glm::mat4 rotateMatrix = glm::mat4_cast(quaternion);
-				//glm::scale(scaleMatrix, glm::vec3(scaling[0], scaling[1], scaling[2]));
-
-				//modelMatrix = translateMatrix * rotateMatrix * scaleMatrix;
-
-				//for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex)
-				//{
-				//	//Control point vertex
-				//	glm::vec3 vertex;
-
-				//	vertex = { (float)vertexs[vertexIndex][0],
-				//			   (float)vertexs[vertexIndex][1],
-				//			   (float)vertexs[vertexIndex][2]};
-
-				//	vertex = modelMatrix * glm::vec4(vertex, 1.0);
-
-				//	//OLD WAY OF ROTATION
-				//	//if (fileName.find(s_FbxFileFormat) != std::string::npos)
-				//	//{
-				//	//	vertex = { (float)vertexs[vertexIndex][0],
-				//	//			   (float)vertexs[vertexIndex][2],
-				//	//			   -(float)vertexs[vertexIndex][1]};
-				//	//}
-				//	//else
-				//	//{
-
-				//	//	vertex = { (float)vertexs[vertexIndex][0],
-				//	//			   (float)vertexs[vertexIndex][1],
-				//	//			   (float)vertexs[vertexIndex][2] };
-
-				//	//}
-
-				//	//vertex = modelMatrix * glm::vec4(vertex, 1.0);
-
-				//	/////////////////////////////////
-				//	/// Mesh Way
-				//	/////////////////////////////////
-				//	//OLD WAY 
-				//	newMesh->_vertices.push_back(vertex);
-				//	newMesh->_rgb.push_back({ 1.0f,1.0f,1.0f });
-
-				//	//NEW WAY
-				//	Mesh::VertexData newVertex{ vertex, {1.0f,1.0f,1.0f} };
-				//	newMesh->_vertexDatas.push_back(newVertex);
-
-				//	/////////////////////////////////
-				//	/// Model Way
-				//	/////////////////////////////////
-				//	//OLD WAY
-				//	newMeshNew->_vertices.push_back(vertex);
-				//	newMeshNew->_rgb.push_back({ 1.0f,1.0f,1.0f });
-
-				//	//NEW WAY
-				//	newMeshNew->_vertexDatas.push_back(newVertex);
-
-				//}
 
 				//GET THE INDICES, UV AND NORMALS
 				//Might update this part
 				const int totalBufferSize = mesh->GetPolygonVertexCount();
 				FbxVector4* vertexs = mesh->GetControlPoints();
-				//OLD WAY
-				newMesh->_indices.reserve(totalBufferSize);
-				newMesh->_fragmentDatas.reserve(totalBufferSize);
-				//NEW WAY
-				newMeshNew->_indices.reserve(totalBufferSize);
-				newMeshNew->_fragmentDatas.reserve(totalBufferSize);
 
-				//OLD
-				newMesh->_vertices.reserve(totalBufferSize);
+				newMesh->_indices.reserve(totalBufferSize);
 				newMesh->_vertexDatas.reserve(totalBufferSize);
-				//NEW
-				newMeshNew->_vertices.reserve(totalBufferSize);
-				newMeshNew->_vertexDatas.reserve(totalBufferSize);
 
 				int vertexID = 0;
 				
@@ -261,12 +60,10 @@ namespace NS_GRAPHICS
 					{					
 						int controlPointIndex = mesh->GetPolygonVertex(polygonIndex, verticeIndex);
 
-						//NEW POSITION HERE
-						//Control point vertex
+						//Checks for corrupted mesh
 						if (controlPointIndex < 0)
 						{
 							//<0 means corrupted mesh
-							delete newMeshNew;
 							delete newMesh;
 
 							return;
@@ -280,34 +77,9 @@ namespace NS_GRAPHICS
 									(float)finalPosition[1],
 									(float)finalPosition[2]};
 
-						//FBX FIX FOR 3DS MAX AXIS DIFFERENCE
-						//glm::quat quaternion(glm::radians(glm::vec3(90.0f, 0.0f, 0.0f)));
-						//glm::mat4 rotateMatrix = glm::mat4_cast(quaternion);
 
-						//vertex = rotateMatrix * glm::vec4(vertex, 1.0f);
-
-						/////////////////////////////////
-						/// Mesh Way
-						/////////////////////////////////
-						//OLD WAY 
-						newMesh->_vertices.push_back(vertex);
-						newMesh->_rgb.push_back({ 1.0f,1.0f,1.0f });
-
-						//NEW WAY
-						Mesh::VertexData newVertex{ vertex, {1.0f,1.0f,1.0f} };
-						newMesh->_vertexDatas.push_back(newVertex);
-
-						/////////////////////////////////
-						/// Model Way
-						/////////////////////////////////
-						//OLD WAY
-						newMeshNew->_vertices.push_back(vertex);
-						newMeshNew->_rgb.push_back({ 1.0f,1.0f,1.0f });
-
-						//NEW WAY
-						newMeshNew->_vertexDatas.push_back(newVertex);
-
-						Mesh::FragmentData fragmentData;
+						Mesh::VertexData newVertex;
+						newVertex._position = vertex;
 
 						for (int uv = 0; uv < mesh->GetElementUVCount(); ++uv)
 						{
@@ -330,12 +102,7 @@ namespace NS_GRAPHICS
 
 									glm::vec2 currentUV = { fbxUV[0], fbxUV[1] };
 									
-									//OLD WAY
-									newMesh->_uv.push_back(currentUV);
-									newMeshNew->_uv.push_back(currentUV);
-
-									//NEW WAY
-									fragmentData._uv = currentUV;
+									newVertex._uv = currentUV;
 								}
 								break;
 								default:
@@ -372,26 +139,12 @@ namespace NS_GRAPHICS
 														(float)fbxNormal[1],
 														(float)fbxNormal[2] };
 
-								//OLD WAY
-								newMesh->_normals.push_back(normal);
-								newMeshNew->_normals.push_back(normal);
-
-								//NEW WAY
-								fragmentData._vNormals = normal;
+								newVertex._normals = normal;
 							}
 						}
 
-						/////////////////////////////////
-						/// Mesh Way
-						/////////////////////////////////
 						newMesh->_indices.push_back((unsigned short)vertexID);
-						newMesh->_fragmentDatas.push_back(fragmentData);
-
-						/////////////////////////////////
-						/// Model Way
-						/////////////////////////////////
-						newMeshNew->_indices.push_back((unsigned short)vertexID);
-						newMeshNew->_fragmentDatas.push_back(fragmentData);
+						newMesh->_vertexDatas.push_back(newVertex);
 
 						vertexID++;
 					}
@@ -399,19 +152,14 @@ namespace NS_GRAPHICS
 
 				mesh->Destroy();
 
-				//OLD WAY
-				//ModelManager::GetInstance().AddLoadedMesh(newMesh, newMesh->_meshName);
-				delete newMesh;
-
 				//NEW WAY
-				model->_meshes.push_back(newMeshNew);
-				//++(*meshIndex);
+				model->_meshes.push_back(newMesh);
 			}	
 		}
 
 		for (int i = 0; i < node->GetChildCount(); i++)
 		{
-			TransverseChild(node->GetChild(i), model, fileName);
+			ProcessMesh(node->GetChild(i), model);
 		}
 	}
 
@@ -442,7 +190,7 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	bool ModelLoader::LoadFBX(Model*& model, const std::string& fileName)
+	bool ModelLoader::LoadFBX(Model*& model)
 	{
 		std::cout << "Loading FBX..." << std::endl;
 		if (_fbxScene)
@@ -455,15 +203,15 @@ namespace NS_GRAPHICS
 		_fbxImport = FbxImporter::Create(_fbxManager, "");
 
 		// Load the fbx using the importer.
-		if (!_fbxImport->Initialize(fileName.c_str(), -1, _fbxManager->GetIOSettings())) {
+		if (!_fbxImport->Initialize(model->_fileName.c_str(), -1, _fbxManager->GetIOSettings())) {
 			printf("Call to FbxImporter::Initialize() failed.\n");
-			//printf("%s\n", fileName.c_str());
+			printf("%s\n", model->_fileName.c_str());
 			printf("Error returned: %s\n\n", _fbxImport->GetStatus().GetErrorString());
 			return false;
 			//exit(-1);
 		}
 
-		_fbxScene = FbxScene::Create(_fbxManager, fileName.c_str());
+		_fbxScene = FbxScene::Create(_fbxManager, model->_fileName.c_str());
 		_fbxImport->Import(_fbxScene);
 		_fbxImport->Destroy();
 
@@ -497,12 +245,12 @@ namespace NS_GRAPHICS
 
 			if (parentNode)
 			{
-				TransverseChild(parentNode, model, fileName);
+				ProcessMesh(parentNode, model);
 			}
 
 			for (int i = 0; i < root->GetChildCount(); i++)
 			{
-				TransverseChild(root->GetChild(i), model, fileName);
+				ProcessMesh(root->GetChild(i), model);
 			}
 		}
 
@@ -516,6 +264,7 @@ namespace NS_GRAPHICS
 		}
 
 		Model* model = new Model();
+		model->_fileName = fileName;
 
 		//Checks for the file name
 		std::string name;
@@ -537,11 +286,12 @@ namespace NS_GRAPHICS
 			name.erase(pos);
 		}
 
-		model->_fileName = fileName;
-		//model->_fileName = s_LocalPathName + name + s_ModelFileType;
+		std::string searchString;
+		searchString = fileName;
+		searchString = s_LocalPathName + name + s_ModelFileType;
 
-		//First checks if the model existed to avoid unnecessary loading
-		if (_modelManager->_modelList.find(model->_fileName) != _modelManager->_modelList.end())
+		//First checks if the custom model existed to avoid unnecessary loading
+		if (_modelManager->_modelList.find(searchString) != _modelManager->_modelList.end())
 		{
 			delete model;
 			return;
@@ -550,22 +300,33 @@ namespace NS_GRAPHICS
 		//Loads the correct function based on extension
 		if (fileName.find(s_ModelFileType) != std::string::npos)
 		{
-			if (!LoadCustomMesh(model, fileName))
+			if (!LoadCustomMesh(model))
 			{
 				delete model;
 				return;
+			}
+
+			//If different pathing, saves another copy in our own asset folder
+			if (model->_fileName != searchString)
+			{
+				model->_fileName = s_LocalPathName + name + s_ModelFileType;
+				SaveCustomMesh(model);
 			}
 		}
 		else
 		{
-			if (!LoadFBX(model, fileName))
+			if (!LoadFBX(model))
 			{
 				delete model;
 				return;
 			}
+
+			//model->_fileName = s_LocalPathName + name + s_ModelFileType;
+			//SaveCustomMesh(model);
 		}
 
 		_modelManager->AddLoadedModel(model, model->_fileName);
+
 #ifdef LOG_MODEL
 		//std::string textFileName = model-> + ".txt";
 		DebugToFile(model->_fileName);
@@ -573,12 +334,71 @@ namespace NS_GRAPHICS
 
 		//TODO Saving custom mesh
 	}
-	bool ModelLoader::LoadCustomMesh(Model*& model, const std::string& fileName)
+	bool ModelLoader::LoadCustomMesh(Model*& model)
+	{
+		if (model->_fileName[0] == '\\')
+		{
+			model->_fileName.erase(0, 1);
+		}
+		//Gets rid of warning for now
+		std::ifstream meshFile;
+		meshFile.open(model->_fileName.c_str());
+
+		if (!meshFile.is_open())
+		{
+			std::cout << "Fail to opened model file" << std::endl;
+			return false;
+		}
+
+		std::string input;
+		while (std::getline(meshFile, input))
+		{
+			std::cout << "Reading Variables" << std::endl;
+			if (input.find("BEGIN") != std::string::npos)
+			{
+				std::string vertexCount = input.substr(input.find(" ")+1);
+			}
+		}
+
+		meshFile.close();
+		return true;
+	}
+	bool ModelLoader::SaveCustomMesh(Model*& model)
 	{
 		//Gets rid of warning for now
 		std::ofstream meshFile;
-		meshFile.open(fileName.c_str());
-		(void)model, fileName;
+		meshFile.open(model->_fileName.c_str());
+
+		auto meshIterator = model->_meshes.begin();
+		auto meshIteratorEnd = model->_meshes.end();
+
+		while (meshIterator != meshIteratorEnd)
+		{
+			meshFile << "BEGIN " << (*meshIterator)->_vertexDatas.size() << "\n";
+			meshFile << (*meshIterator)->_nodeName << "\n";
+
+			size_t vertexCount = (*meshIterator)->_vertexDatas.size();
+			for (size_t i = 0; i < vertexCount; ++i)
+			{
+				meshFile << "v: " << (*meshIterator)->_vertexDatas[i]._position.x << "," 
+								  << (*meshIterator)->_vertexDatas[i]._position.y << ","
+								  << (*meshIterator)->_vertexDatas[i]._position.z
+								  << "\n";
+
+				meshFile << "uv: " << (*meshIterator)->_vertexDatas[i]._uv.x << "," 
+								   << (*meshIterator)->_vertexDatas[i]._uv.x
+								   << "\n";
+
+				meshFile << "n: " << (*meshIterator)->_vertexDatas[i]._normals.x << ","
+								  << (*meshIterator)->_vertexDatas[i]._normals.y << ","
+								  << (*meshIterator)->_vertexDatas[i]._normals.z
+								  << "\n";
+			}
+			meshFile << "END\n";
+			++meshIterator;
+		}
+
+
 		meshFile.close();
 		return true;
 	}
@@ -595,12 +415,12 @@ namespace NS_GRAPHICS
 		size_t MeshSize = _modelManager->_modelList[fileName]->_meshes.size();
 		for (size_t i = 0; i < MeshSize; ++i)
 		{
-			size_t verticeSize = _modelManager->_modelList[fileName]->_meshes[i]->_vertices.size();
+			size_t verticeSize = _modelManager->_modelList[fileName]->_meshes[i]->_vertexDatas.size();
 			for (size_t x = 0; x < verticeSize; ++x)
 			{
-				logFile << "Vertex: X: " << _modelManager->_modelList[fileName]->_meshes[i]->_vertices[x].x << " Y: " <<
-											_modelManager->_modelList[fileName]->_meshes[i]->_vertices[x].y << " Z: " <<
-											_modelManager->_modelList[fileName]->_meshes[i]->_vertices[x].z << "\n";
+				logFile << "Vertex: X: " << _modelManager->_modelList[fileName]->_meshes[i]->_vertexDatas[x]._position.x << " Y: " <<
+											_modelManager->_modelList[fileName]->_meshes[i]->_vertexDatas[x]._position.y << " Z: " <<
+											_modelManager->_modelList[fileName]->_meshes[i]->_vertexDatas[x]._position.z << "\n";
 
 				lineCount++;
 			}

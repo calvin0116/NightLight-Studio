@@ -354,8 +354,20 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Inspector.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Logic\Player.h">
-      <Filter>Source Files\Logic</Filter>
+    <ClInclude Include="Source\Component\ComponentCScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Logic\CScripts\IScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Logic\CScripts\TestScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Logic\CScripts\AllScripts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentCamera.h">
+      <Filter>Source Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -578,8 +590,11 @@
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Inspector.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Logic\Player.cpp">
-      <Filter>Source Files\Logic</Filter>
+    <ClCompile Include="Source\Component\ComponentCScript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentCamera.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
