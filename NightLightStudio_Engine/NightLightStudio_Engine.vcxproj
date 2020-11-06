@@ -199,6 +199,7 @@
     <ClInclude Include="Source\Component\ComponentScript.h" />
     <ClInclude Include="Source\Component\ComponentTest.h" />
     <ClInclude Include="Source\Component\ComponentTransform.h" />
+    <ClInclude Include="Source\Component\IScript.h" />
     <ClInclude Include="Source\Component\LocalString.h" />
     <ClInclude Include="Source\Component\LocalVector.h" />
     <ClInclude Include="Source\Component\MemoryThingy.h" />
