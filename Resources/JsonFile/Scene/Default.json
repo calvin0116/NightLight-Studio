@@ -3,12 +3,12 @@
         "Height_1_wall": {
             "TransformComponent": {
                 "Position": [
-                    -0.5,
+                    -1.0,
                     0.5,
-                    0.5
+                    1.5
                 ],
                 "Scale": [
-                    1.0,
+                    2.0,
                     1.0,
                     1.0
                 ]
@@ -16,7 +16,7 @@
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": ""
+                "Model file": "box.fbx"
             }
         },
         "Camera": {
@@ -66,7 +66,26 @@
                 "Position": [
                     -2.5,
                     1.5,
-                    0.5
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    3.0,
+                    2.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_2_Wall_2": {
+            "TransformComponent": {
+                "Position": [
+                    0.5,
+                    1.5,
+                    1.5
                 ],
                 "Scale": [
                     1.0,
@@ -77,26 +96,7 @@
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": ""
-            }
-        },
-        "Height_2_Wall_2": {
-            "TransformComponent": {
-                "Position": [
-                    0.5,
-                    1.0,
-                    0.5
-                ],
-                "Scale": [
-                    1.0,
-                    2.0,
-                    1.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Texture file": "",
-                "Model file": ""
+                "Model file": "box.fbx"
             }
         },
         "Tree_H10_8": {
@@ -115,37 +115,37 @@
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": ""
+                "Model file": "box.fbx"
             }
         },
-        "Height_2_Wall": {
+        "Height_4_Wall": {
             "TransformComponent": {
                 "Position": [
-                    -1.5,
-                    1.0,
-                    0.5
+                    0.5,
+                    2.0,
+                    -1.0
                 ],
                 "Scale": [
                     1.0,
-                    2.0,
-                    1.0
+                    4.0,
+                    2.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": ""
+                "Model file": "box.fbx"
             }
         },
         "Height_3_Wall_1": {
             "TransformComponent": {
                 "Position": [
+                    -4.0,
                     1.5,
-                    1.5,
-                    0.5
+                    -0.5
                 ],
                 "Scale": [
-                    1.0,
+                    2.0,
                     3.0,
                     1.0
                 ]
@@ -153,7 +153,7 @@
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": ""
+                "Model file": "box.fbx"
             }
         },
         "Tree_H10_2": {
@@ -172,13 +172,13 @@
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": ""
+                "Model file": "box.fbx"
             }
         },
         "Tree_H10_1": {
             "TransformComponent": {
                 "Position": [
-                    -2.5,
+                    -3.5,
                     5.0,
                     1.5
                 ],
@@ -191,13 +191,13 @@
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": ""
+                "Model file": "box.fbx"
             }
         },
         "Tree_H10_7": {
             "TransformComponent": {
                 "Position": [
-                    -2.5,
+                    -3.5,
                     5.0,
                     -13.5
                 ],
@@ -210,13 +210,13 @@
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": ""
+                "Model file": "box.fbx"
             }
         },
         "Tree_H10_3": {
             "TransformComponent": {
                 "Position": [
-                    -2.5,
+                    -3.5,
                     5.0,
                     -3.5
                 ],
@@ -229,7 +229,7 @@
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": ""
+                "Model file": "box.fbx"
             }
         },
         "Tree_H10_4": {
@@ -245,26 +245,10 @@
                     1.0
                 ]
             },
-            "ColliderComponent": {
-                "colliderType": "CAPSULE"
-            },
-            "RigidBody": {
-                "isStatic": true,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": ""
+                "Model file": "box.fbx"
             }
         },
         "Tree_H10_6": {
@@ -280,32 +264,16 @@
                     1.0
                 ]
             },
-            "ColliderComponent": {
-                "colliderType": "AABB"
-            },
-            "RigidBody": {
-                "isStatic": true,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": ""
+                "Model file": "box.fbx"
             }
         },
         "Tree_H10_5": {
             "TransformComponent": {
                 "Position": [
-                    -2.5,
+                    -3.5,
                     5.0,
                     -8.5
                 ],
@@ -315,26 +283,447 @@
                     1.0
                 ]
             },
-            "ColliderComponent": {
-                "colliderType": "AABB"
-            },
-            "RigidBody": {
-                "isStatic": true,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_1": {
+            "TransformComponent": {
+                "Position": [
+                    1.5,
+                    2.0,
+                    -2.5
                 ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
-                    0.0
+                "Scale": [
+                    1.0,
+                    4.0,
+                    1.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
                 "Texture file": "",
-                "Model file": ""
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_2": {
+            "TransformComponent": {
+                "Position": [
+                    -2.5,
+                    2.0,
+                    -1.0
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    2.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_3_Wall_2": {
+            "TransformComponent": {
+                "Position": [
+                    1.5,
+                    1.5,
+                    0.5
+                ],
+                "Scale": [
+                    1.0,
+                    3.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_3": {
+            "TransformComponent": {
+                "Position": [
+                    -5.5,
+                    2.0,
+                    -1.5
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_4": {
+            "TransformComponent": {
+                "Position": [
+                    1.0,
+                    2.0,
+                    -4.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_5": {
+            "TransformComponent": {
+                "Position": [
+                    -0.5,
+                    2.0,
+                    -5.5
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_7": {
+            "TransformComponent": {
+                "Position": [
+                    1.0,
+                    2.0,
+                    -6.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_6": {
+            "TransformComponent": {
+                "Position": [
+                    -5.0,
+                    2.0,
+                    -5.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_8": {
+            "TransformComponent": {
+                "Position": [
+                    1.5,
+                    2.0,
+                    -7.5
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_9": {
+            "TransformComponent": {
+                "Position": [
+                    1.5,
+                    2.0,
+                    -10.0
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    2.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_10": {
+            "TransformComponent": {
+                "Position": [
+                    0.0,
+                    2.0,
+                    -9.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_11": {
+            "TransformComponent": {
+                "Position": [
+                    -5.0,
+                    2.0,
+                    -9.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_12": {
+            "TransformComponent": {
+                "Position": [
+                    -5.5,
+                    2.0,
+                    -8.5
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_13": {
+            "TransformComponent": {
+                "Position": [
+                    2.0,
+                    2.0,
+                    -11.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_14": {
+            "TransformComponent": {
+                "Position": [
+                    3.0,
+                    2.0,
+                    -12.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_15": {
+            "TransformComponent": {
+                "Position": [
+                    -5.0,
+                    2.0,
+                    -12.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_16": {
+            "TransformComponent": {
+                "Position": [
+                    0.0,
+                    2.0,
+                    -13.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_17": {
+            "TransformComponent": {
+                "Position": [
+                    1.0,
+                    2.0,
+                    -14.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_18": {
+            "TransformComponent": {
+                "Position": [
+                    1.5,
+                    2.0,
+                    -15.5
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_19": {
+            "TransformComponent": {
+                "Position": [
+                    -4.5,
+                    2.0,
+                    -15.0
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    2.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_2_Wall_3": {
+            "TransformComponent": {
+                "Position": [
+                    -1.5,
+                    1.0,
+                    -13.5
+                ],
+                "Scale": [
+                    1.0,
+                    2.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_2_Wall_4": {
+            "TransformComponent": {
+                "Position": [
+                    -2.5,
+                    1.0,
+                    -14.5
+                ],
+                "Scale": [
+                    1.0,
+                    2.0,
+                    1.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
+            }
+        },
+        "Height_4_Wall_15_copy": {
+            "TransformComponent": {
+                "Position": [
+                    -6.5,
+                    2.0,
+                    -7.0
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    12.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "box.fbx"
             }
         }
     }
