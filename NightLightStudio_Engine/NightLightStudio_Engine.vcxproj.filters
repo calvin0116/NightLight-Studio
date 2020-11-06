@@ -366,6 +366,9 @@
     <ClInclude Include="Source\Logic\CScripts\AllScripts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\ComponentCamera.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -589,6 +592,9 @@
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentCScript.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentCamera.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
