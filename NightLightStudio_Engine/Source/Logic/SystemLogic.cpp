@@ -63,32 +63,32 @@ namespace NS_LOGIC
     DestroyInstance();
   }
 
-  void SystemLogic::OnCollisionEnter()
+  void SystemLogic::OnCollisionEnter(Entity _obj1, Entity _obj2)
   {
 
   }
 
-  void SystemLogic::OnCollisionStay()
+  void SystemLogic::OnCollisionStay(Entity _obj1, Entity _obj2)
   {
 
   }
 
-  void SystemLogic::OnCollisionExit()
+  void SystemLogic::OnCollisionExit(Entity _obj1, Entity _obj2)
   {
 
   }
 
-  void SystemLogic::OnTriggerEnter()
+  void SystemLogic::OnTriggerEnter(Entity _obj1, Entity _obj2)
   {
 
   }
 
-  void SystemLogic::OnTriggerStay()
+  void SystemLogic::OnTriggerStay(Entity _obj1, Entity _obj2)
   {
 
   }
 
-  void SystemLogic::OnTriggerExit()
+  void SystemLogic::OnTriggerExit(Entity _obj1, Entity _obj2)
   {
 
   }
