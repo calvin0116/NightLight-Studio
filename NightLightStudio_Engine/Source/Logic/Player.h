@@ -7,6 +7,7 @@
 #include "../Physics/SystemPhysics.h"
 #include "../Input/SystemInput.h"
 #include "../../glm/gtx/euler_angles.hpp"
+#include "CScripts/IScript.h"
 
 enum class PLAYERSTATE
 {
@@ -14,7 +15,7 @@ enum class PLAYERSTATE
 	BUTTERFLY,
 	POSSESSED
 };
-class Player
+class Player : public IScript
 {
 	Entity playerEntity;
 	NlMath::Vector3D currentCameraDirection;
@@ -30,8 +31,9 @@ class Player
 	
 public:
 	Player();
-	void init();
-	void update();
+	void Init() override;
+	void Update() override;
+	void Exit() override;
 	void changeState(PLAYERSTATE state);
 	bool enterPossession();
 };

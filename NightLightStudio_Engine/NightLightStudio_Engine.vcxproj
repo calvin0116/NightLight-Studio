@@ -259,6 +259,7 @@
     <ClInclude Include="Source\Logic\CScripts\AllScripts.h" />
     <ClInclude Include="Source\Logic\CScripts\IScript.h" />
     <ClInclude Include="Source\Logic\CScripts\TestScript.h" />
+    <ClInclude Include="Source\Logic\Player.h" />
     <ClInclude Include="Source\Logic\SystemLogic.h" />
     <ClInclude Include="Source\Math\Matrix3x3.h" />
     <ClInclude Include="Source\Math\Matrix4x4.h" />
@@ -344,6 +345,7 @@
     <ClCompile Include="Source\Input\SystemInput.cpp" />
     <ClCompile Include="Source\IO\Json\Parser.cpp" />
     <ClCompile Include="Source\IO\SystemIO.cpp" />
+    <ClCompile Include="Source\Logic\Player.cpp" />
     <ClCompile Include="Source\Logic\SystemLogic.cpp" />
     <ClCompile Include="Source\Math\Matrix3x3.cpp" />
     <ClCompile Include="Source\Math\Matrix4x4.cpp" />
