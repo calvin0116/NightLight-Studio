@@ -38,7 +38,6 @@ inline void ComponentScript::Read(Value& val)
 			}
 		}
 	}
-
 }
 
 inline Value ComponentScript::Write() {

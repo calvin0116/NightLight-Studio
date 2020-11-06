@@ -199,7 +199,6 @@
     <ClInclude Include="Source\Component\ComponentScript.h" />
     <ClInclude Include="Source\Component\ComponentTest.h" />
     <ClInclude Include="Source\Component\ComponentTransform.h" />
-    <ClInclude Include="Source\Component\IScript.h" />
     <ClInclude Include="Source\Component\LocalString.h" />
     <ClInclude Include="Source\Component\LocalVector.h" />
     <ClInclude Include="Source\Component\MemoryThingy.h" />
@@ -256,6 +255,9 @@
     <ClInclude Include="Source\IO\Json\Parser.h" />
     <ClInclude Include="Source\IO\Json\Parser.hpp" />
     <ClInclude Include="Source\IO\SystemIO.h" />
+    <ClInclude Include="Source\Logic\CScripts\AllScripts.h" />
+    <ClInclude Include="Source\Logic\CScripts\IScript.h" />
+    <ClInclude Include="Source\Logic\CScripts\TestScript.h" />
     <ClInclude Include="Source\Logic\SystemLogic.h" />
     <ClInclude Include="Source\Math\Matrix3x3.h" />
     <ClInclude Include="Source\Math\Matrix4x4.h" />
