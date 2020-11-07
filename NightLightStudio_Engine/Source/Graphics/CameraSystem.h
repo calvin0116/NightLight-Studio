@@ -38,6 +38,8 @@ namespace NS_GRAPHICS
 
 		// use thrid person cam?
 		bool useThridPersonCam;
+		// can the cam rotate?
+		bool canThridPersonCamRotate;
 
 	public:
 		// Unique Singleton instance
@@ -92,6 +94,8 @@ namespace NS_GRAPHICS
 		void SetUseThridPersonCam(bool set);
 		// toggle weather to use thrid person cam
 		void ToggleUseThridPersonCam();
+		// toggle weather to use thrid person cam
+		void SetThridPersonCamCanRotateAnot(bool set);
 		// set the target location of the thrid person cam
 		void SetThridPersonCamTarget(glm::vec3 tgt);
 		// set the camera distance of the thrid person cam

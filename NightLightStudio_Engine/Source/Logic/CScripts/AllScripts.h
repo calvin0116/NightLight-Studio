@@ -12,9 +12,9 @@ namespace AllScripts
   {
     if (name == "TestScript")
         return dynamic_cast<IScript*>(new TestScript());
-    if (name == "Player")
+    else if (name == "Player")
         return dynamic_cast<IScript*>(new Player());
-    if (name == "Player")
+    else if (name == "Camera")
         return dynamic_cast<CameraScript*>(new CameraScript());
   }
 }

@@ -6,14 +6,14 @@
 class IScript
 {
 protected:
-  int  _Obj;
+  Entity  MyID;
 public:
   // IScript() {}
   virtual ~IScript() {}
-  virtual void SetEntity(int _id) { _Obj = _id; }
+  virtual void SetEntity(Entity _id) { MyID = _id; }
   virtual void Init() {};
   virtual void Update() {};
   virtual void Exit() {};
 
-  virtual void OnCollisionEnter(int other) {};
+  virtual void OnCollisionEnter(Entity other) {};
 };

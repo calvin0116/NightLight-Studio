@@ -18,44 +18,75 @@ namespace AllScripts
 {
 
 
-    class CameraScript : public IScript
+  class CameraScript : public IScript
+  {
+      //  int  MyID;
+    glm::vec3 tgt;
+    float dist;
+    bool isActive;
+
+    bool canRotate;
+
+  public:
+
+    // set the camera target
+    void SetTarget(glm::vec3 _tgt)
     {
-        glm::vec3 tgt;
-        float dist;
+      tgt = _tgt;
+    }
+    // set the camera distance from the target
+    void SetDistance(float _dist)
+    {
+      dist = _dist;
+    }
+    // set camera active anot - only 1 cam active at a time
+    void SetActive(bool _set)
+    {
+      isActive = _set;
+    }
+    // set camera can rotate anot
+    void SetRotate(bool _set)
+    {
+      canRotate = _set;
+    }
 
-    public:
+    CameraScript() :
+      tgt(0.0f, 0.0f, 0.0f),
+      dist(1.0f),
+      isActive(false),
+      canRotate(false)
+    {
 
-        void SetTarget(glm::vec3 _tgt)
-        {
-            tgt = _tgt;
-        }
+    }
 
-        void SetDistance(float _dist)
-        {
-            dist = _dist;
-        }
+    virtual ~CameraScript() override
+    {
+    }
 
-        CameraScript() :
-            tgt(0.0f, 0.0f, 0.0f)
-        {
+    virtual void SetEntity(Entity _id)
+    {
+      MyID = _id;
+    }
 
-        }
+    virtual void Init() override
+    {
+        // set default target using transform
 
-        virtual ~CameraScript() override
-        {
-        }
+        ComponentTransform* compTrans = MyID.getComponent<ComponentTransform>();
+        
+        glm::vec3 vec(1.0f, 0.0f, 0.0f);
+        glm::quat quaternion(glm::radians(compTrans->_rotation));
+        glm::mat4 rotate = glm::mat4_cast(quaternion);
+        vec = rotate * glm::vec4(vec, 1.0f);
+        vec = glm::normalize(vec);
 
-        virtual void SetEntity(int _id)
-        {
-            _Obj = _id;
-        }
+        tgt = compTrans->_position + vec;
 
-        virtual void Init() override
-        {
+    };
 
-        };
-
-        virtual void Update() override
+    virtual void Update() override
+    {
+        if (isActive)
         {
             NS_GRAPHICS::CameraSystem& camSys = NS_GRAPHICS::CameraSystem::GetInstance();
 
@@ -67,17 +98,20 @@ namespace AllScripts
 
             camSys.SetUseThridPersonCam(true);
 
-        };
+            camSys.SetThridPersonCamCanRotateAnot(canRotate);
+        }
 
-        virtual void Exit() override
-        {
+    };
 
-        };
+    virtual void Exit() override
+    {
 
-        virtual void OnCollisionEnter(int other) override
-        {
+    };
 
-        };
+    virtual void OnCollisionEnter(Entity other) override
+    {
 
-    }; 
-}// NS
+    };
+
+  };
+} // NS

@@ -372,9 +372,6 @@
     <ClInclude Include="Source\Editor\PrefabManager.h">
       <Filter>Source Files\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Logic\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Mono\Binding\CustomTypes\Vector3DBind.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -382,6 +379,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Logic\CameraScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Logic\Player.h">
+      <Filter>Source Files\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Logic\CScripts\PossessScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -614,9 +617,6 @@
     <ClCompile Include="Source\Editor\PrefabManager.cpp">
       <Filter>Source Files\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Logic\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Mono\Binding\CustomTypes\Vector3DBind.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -624,6 +624,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Logic\CameraScript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Logic\Player.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Logic\CScripts\PossessScript.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

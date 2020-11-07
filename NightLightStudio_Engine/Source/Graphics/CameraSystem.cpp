@@ -14,7 +14,8 @@ namespace NS_GRAPHICS
 		updated{ false },
 		zoomDistance{ 100.0f },
 		tgt(0.0f, 0.0f, 0.0f),
-		useThridPersonCam{false}
+		useThridPersonCam{false},
+		canThridPersonCamRotate{true}
 	{
 	}
 
@@ -236,19 +237,23 @@ namespace NS_GRAPHICS
 
 		//NS_GRAPHICS::CameraSystem::GetInstance().ForceUpdate();
 
-		//Mouse relative velocity
-		glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
+		// camera rotation
+		if (canThridPersonCamRotate)
+		{
+			//Mouse relative velocity
+			glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
 
-		// Rotation for left and right
-		cam.SetCameraYaw(cam.GetYaw() + mousePos.x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
+			// Rotation for left and right
+			cam.SetCameraYaw(cam.GetYaw() + mousePos.x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
 
-		// Rotation for up and down
-		float offsetted = cam.GetPitch() + mousePos.y * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP;
+			// Rotation for up and down
+			float offsetted = cam.GetPitch() + mousePos.y * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP;
 
-		if (offsetted > NS_GRAPHICS::MAX_PITCH)
-			offsetted = NS_GRAPHICS::MAX_PITCH;
+			if (offsetted > NS_GRAPHICS::MAX_PITCH)
+				offsetted = NS_GRAPHICS::MAX_PITCH;
 
-		cam.SetCameraPitch(offsetted);
+			cam.SetCameraPitch(offsetted);
+		}
 
 		if (SYS_INPUT->GetSystemMousePos().GetIfScrollUp())
 		{
@@ -310,6 +315,8 @@ namespace NS_GRAPHICS
 	}
 	void CameraSystem::SetUseThridPersonCam(bool set)
 	{
+		if (useThridPersonCam == set) return;
+
 		useThridPersonCam = set;
 
 		if (!useThridPersonCam)
@@ -335,6 +342,10 @@ namespace NS_GRAPHICS
 	void CameraSystem::ToggleUseThridPersonCam()
 	{
 		SetUseThridPersonCam(!useThridPersonCam);
+	}
+	void CameraSystem::SetThridPersonCamCanRotateAnot(bool _set)
+	{
+		canThridPersonCamRotate = _set;
 	}
 	void CameraSystem::SetThridPersonCamTarget(glm::vec3 _tgt)
 	{
