@@ -384,6 +384,9 @@
     <ClInclude Include="Source\Logic\Player.h">
       <Filter>Source Files\Logic</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Logic\CScripts\PossessScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -625,6 +628,9 @@
     </ClCompile>
     <ClCompile Include="Source\Logic\Player.cpp">
       <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Logic\CScripts\PossessScript.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
