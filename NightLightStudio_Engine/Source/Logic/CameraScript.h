@@ -25,27 +25,36 @@ namespace AllScripts
     float dist;
     bool isActive;
 
+    bool canRotate;
+
   public:
 
+    // set the camera target
     void SetTarget(glm::vec3 _tgt)
     {
       tgt = _tgt;
     }
-
+    // set the camera distance from the target
     void SetDistance(float _dist)
     {
       dist = _dist;
     }
-
+    // set camera active anot - only 1 cam active at a time
     void SetActive(bool _set)
     {
-        isActive = _set;
+      isActive = _set;
+    }
+    // set camera can rotate anot
+    void SetRotate(bool _set)
+    {
+      canRotate = _set;
     }
 
     CameraScript() :
       tgt(0.0f, 0.0f, 0.0f),
-      dist(500.0f),
-      isActive(false)
+      dist(1.0f),
+      isActive(false),
+      canRotate(false)
     {
 
     }
@@ -61,7 +70,17 @@ namespace AllScripts
 
     virtual void Init() override
     {
+        // set default target using transform
 
+        ComponentTransform* compTrans = MyID.getComponent<ComponentTransform>();
+        
+        glm::vec3 vec(1.0f, 0.0f, 0.0f);
+        glm::quat quaternion(glm::radians(compTrans->_rotation));
+        glm::mat4 rotate = glm::mat4_cast(quaternion);
+        vec = rotate * glm::vec4(vec, 1.0f);
+        vec = glm::normalize(vec);
+
+        tgt = compTrans->_position + vec;
     };
 
     virtual void Update() override
@@ -77,6 +96,8 @@ namespace AllScripts
             camSys.SetThridPersonCamDistance(dist);
 
             camSys.SetUseThridPersonCam(true);
+
+            camSys.SetThridPersonCamCanRotateAnot(canRotate);
         }
 
     };
