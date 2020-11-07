@@ -81,14 +81,16 @@ namespace AllScripts
 
         ComponentTransform* compTrans = MyID.getComponent<ComponentTransform>();
         
-        glm::vec3 vec(1.0f, 0.0f, 0.0f);
+        glm::vec3 viewVector(dist, 0.0f, 0.0f);
         glm::quat quaternion(glm::radians(compTrans->_rotation));
         glm::mat4 rotate = glm::mat4_cast(quaternion);
-        vec = rotate * glm::vec4(vec, 1.0f);
-        vec = glm::normalize(vec);
+        viewVector = rotate * glm::vec4(viewVector, 1.0f);
+        viewVector = glm::normalize(viewVector);
 
-        tgt = compTrans->_position + vec;
+        //compTrans->_position = tgt - viewVector * dist;
+        tgt = compTrans->_position + viewVector * dist;
 
+        //tgt = compTrans->_position + viewVector;
     };
 
     virtual void Update() override
@@ -96,8 +98,6 @@ namespace AllScripts
         if (isActive)
         {
             NS_GRAPHICS::CameraSystem& camSys = NS_GRAPHICS::CameraSystem::GetInstance();
-
-            glm::vec3 viewVector = camSys.GetViewVector();
 
             camSys.SetThridPersonCamTarget(tgt);
 
@@ -108,6 +108,17 @@ namespace AllScripts
             camSys.SetThridPersonCamCanZoomAnot(canZoom);
 
             camSys.SetUseThridPersonCam(true);
+
+            // cam pos
+            //   o<- (get the cam pos)
+            //      \
+            //       \ dist (set by user)
+            //        \ view vec (set by camera sys)
+            //         \
+            //          x tgt (set by user)
+            ComponentTransform* compTrans = MyID.getComponent<ComponentTransform>();
+            glm::vec3 viewVector = camSys.GetViewVector();
+            compTrans->_position = tgt - viewVector * dist;
         }
 
     };
