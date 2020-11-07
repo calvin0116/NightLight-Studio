@@ -12,7 +12,7 @@ public:
   virtual void Init()
   {
     std::cout << "Init from TestScript" << std::endl;
-    std::cout << "My Obj ID: " << MyID << std::endl;
+    //std::cout << "My Obj ID: " << MyID << std::endl;
   }
 
   virtual void Update()
@@ -25,7 +25,7 @@ public:
     std::cout << "Exit from TestScript" << std::endl;
   }
 
-  virtual void OnCollisionEnter(int other)
+  virtual void OnCollisionEnter(Entity other)
   {
     // Your own ID
     (void)MyID;

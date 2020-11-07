@@ -60,12 +60,11 @@ namespace NS_LOGIC
     {
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
       myComp->_pScript = AllScripts::Construct(myComp->_sName.toString());
-      myComp->_pScript->SetEntity(G_ECMANAGER->getEntity(itr).getId());
+      myComp->_pScript->SetEntity(G_ECMANAGER->getEntity(itr));
     }
 
     // C# Script
     MonoBind::Bind();
-
   }
 
   void SystemLogic::GameInit()
@@ -150,17 +149,23 @@ namespace NS_LOGIC
   {
     if (!_isPlaying)
       return;
-    auto itr = G_ECMANAGER->begin<ComponentCScript>();
-    auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
-    for (; itr != itrEnd; ++itr)
-    {
-      ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
-      Entity entity = G_ECMANAGER->getEntity(itr);
-      if (entity.getId() == _obj1.getId())
-        myComp->_pScript->OnCollisionEnter(_obj2.getId());
-      else if (entity.getId() == _obj2.getId())
-        myComp->_pScript->OnCollisionEnter(_obj1.getId());
-    }
+    ComponentCScript* comp1 = _obj1.getComponent<ComponentCScript>();
+    ComponentCScript* comp2 = _obj2.getComponent<ComponentCScript>();
+    if(comp1)
+      comp1->_pScript->OnCollisionEnter(_obj2);
+    if(comp2)
+      comp2->_pScript->OnCollisionEnter(_obj1);
+    //auto itr = G_ECMANAGER->begin<ComponentCScript>();
+    //auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
+    //for (; itr != itrEnd; ++itr)
+    //{
+    //  ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
+    //  Entity entity = G_ECMANAGER->getEntity(itr);
+    //  if (entity.getId() == _obj1.getId())
+    //    myComp->_pScript->OnCollisionEnter(_obj2.getId());
+    //  else if (entity.getId() == _obj2.getId())
+    //    myComp->_pScript->OnCollisionEnter(_obj1.getId());
+    //}
   }
 
   void SystemLogic::OnCollisionStay(Entity _obj1, Entity _obj2)

@@ -46,7 +46,7 @@ namespace AllScripts
     {
     }
 
-    virtual void SetEntity(int _id)
+    virtual void SetEntity(Entity _id)
     {
       MyID = _id;
     }
@@ -75,7 +75,7 @@ namespace AllScripts
 
     };
 
-    virtual void OnCollisionEnter(int other) override
+    virtual void OnCollisionEnter(Entity other) override
     {
 
     };
