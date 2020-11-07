@@ -81,6 +81,7 @@ namespace AllScripts
         vec = glm::normalize(vec);
 
         tgt = compTrans->_position + vec;
+
     };
 
     virtual void Update() override

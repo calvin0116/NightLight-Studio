@@ -315,6 +315,8 @@ namespace NS_GRAPHICS
 	}
 	void CameraSystem::SetUseThridPersonCam(bool set)
 	{
+		if (useThridPersonCam == set) return;
+
 		useThridPersonCam = set;
 
 		if (!useThridPersonCam)
