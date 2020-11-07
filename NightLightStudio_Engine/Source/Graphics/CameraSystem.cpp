@@ -227,7 +227,7 @@ namespace NS_GRAPHICS
 	void CameraSystem::UpdateThirdPersonCamera()
 	{
 		// cursor setting
-		SYS_INPUT->GetSystemMousePos().SetTheThing(true);
+		SYS_INPUT->GetSystemMousePos().SetToCenter(true);
 		SYS_INPUT->GetSystemMousePos().SetCursorVisible(false);
 
 		// set camera position
@@ -327,13 +327,13 @@ namespace NS_GRAPHICS
 		if (!useThridPersonCam)
 		{
 			// turn off cursor thingy
-			SYS_INPUT->GetSystemMousePos().SetTheThing(false);
+			SYS_INPUT->GetSystemMousePos().SetToCenter(false);
 			SYS_INPUT->GetSystemMousePos().SetCursorVisible(true);
 		}
 		else
 		{
 			// this is so the mse cursor update wun cause the camera to move a huge distance when this is toggled
-			SYS_INPUT->GetSystemMousePos().SetTheThing(true);
+			SYS_INPUT->GetSystemMousePos().SetToCenter(true);
 			SYS_INPUT->GetSystemMousePos().Update();
 
 			// update the tgt pos or the camera direction will be wrong when this is toggled

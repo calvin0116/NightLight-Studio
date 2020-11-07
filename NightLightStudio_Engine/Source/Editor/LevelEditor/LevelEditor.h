@@ -14,6 +14,7 @@
 #include <functional>
 
 #include <Windows.h>
+#include "LevelEditor_Picking.h"
 
 class LevelEditor;
 
@@ -83,6 +84,8 @@ class LevelEditor
 	};
 
 	std::vector<LEWindow> _editorWind;
+
+	LE_Picking _lePicking;
 
 	void LE_RunWindows();
 	void LE_MainMenuBar();

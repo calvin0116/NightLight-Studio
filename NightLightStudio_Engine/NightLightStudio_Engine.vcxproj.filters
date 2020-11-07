@@ -390,6 +390,9 @@
     <ClInclude Include="Source\Logic\CScripts\APIScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Picking.h">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -634,6 +637,9 @@
     </ClCompile>
     <ClCompile Include="Source\Logic\CScripts\PossessScript.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Picking.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
