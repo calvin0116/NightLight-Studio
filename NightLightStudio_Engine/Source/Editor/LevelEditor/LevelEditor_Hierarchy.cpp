@@ -255,6 +255,13 @@ void HierarchyInspector::Run()
 						}
 					}
 				}, ImGuiSelectableFlags_AllowDoubleClick);
+
+			// Drag and Drop the entity's pointer
+			_levelEditor->LE_AddDragDropSource("HIERARCHY_ENTITY_OBJECT", &ent,
+				[&]()
+				{
+					_levelEditor->LE_AddText(ent_name);
+				});
 			/*
 			if (ImGui::Selectable(buf, LE_ECHELPER->SelectedEntities()[ent.getId()]))
 			{
