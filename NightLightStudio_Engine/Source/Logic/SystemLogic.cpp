@@ -77,6 +77,8 @@ namespace NS_LOGIC
     for (; itr != itrEnd; ++itr)
     {
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
+      if (!myComp->_isActive)
+        continue;
       myComp->_pScript->Init();
     }
 
@@ -105,6 +107,8 @@ namespace NS_LOGIC
     for (; itr != itrEnd; ++itr)
     {
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
+      if (!myComp->_isActive)
+        continue;
       myComp->_pScript->Update();
     }
   }
@@ -124,7 +128,9 @@ namespace NS_LOGIC
     for (; itr != itrEnd; ++itr)
     {
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
-      myComp->_pScript->Exit();
+      if (myComp->_isActive)
+        myComp->_pScript->Exit();
+
       // Delete memory
       delete myComp->_pScript;
       myComp->_pScript = nullptr;
