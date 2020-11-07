@@ -26,6 +26,7 @@ namespace AllScripts
     bool isActive;
 
     bool canRotate;
+    bool canZoom;
 
   public:
 
@@ -49,12 +50,18 @@ namespace AllScripts
     {
       canRotate = _set;
     }
+    // set camera can zoom anot
+    void SetZoom(bool _set)
+    {
+        canZoom = _set;
+    }
 
     CameraScript() :
       tgt(0.0f, 0.0f, 0.0f),
       dist(1.0f),
       isActive(false),
-      canRotate(false)
+      canRotate(true),
+      canZoom(true)
     {
 
     }
@@ -96,9 +103,11 @@ namespace AllScripts
 
             camSys.SetThridPersonCamDistance(dist);
 
-            camSys.SetUseThridPersonCam(true);
-
             camSys.SetThridPersonCamCanRotateAnot(canRotate);
+
+            camSys.SetThridPersonCamCanZoomAnot(canZoom);
+
+            camSys.SetUseThridPersonCam(true);
         }
 
     };

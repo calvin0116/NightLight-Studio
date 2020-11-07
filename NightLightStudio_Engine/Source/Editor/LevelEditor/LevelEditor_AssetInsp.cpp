@@ -4,6 +4,7 @@
 #include <filesystem>
 
 #include <shellapi.h>
+#include "../../Component/Components.h"
 
 void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
 {
@@ -280,6 +281,14 @@ void AssetInspector::Run()
                 _levelEditor->LE_AddTooltip(relativePath);
             }
         }, true);
+
+        // Entity of Object
+        _levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
+            [this](Entity* entptr)
+            {
+                Entity ent = *entptr;
+                std::cout << ent.getId() << std::endl;
+            });
 }
 
 void AssetInspector::Exit()

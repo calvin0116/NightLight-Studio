@@ -15,7 +15,8 @@ namespace NS_GRAPHICS
 		zoomDistance{ 100.0f },
 		tgt(0.0f, 0.0f, 0.0f),
 		useThridPersonCam{false},
-		canThridPersonCamRotate{true}
+		canThridPersonCamRotate{true},
+		canThridPersonCamZoom{true}
 	{
 	}
 
@@ -237,7 +238,7 @@ namespace NS_GRAPHICS
 
 		//NS_GRAPHICS::CameraSystem::GetInstance().ForceUpdate();
 
-		// camera rotation
+		// camera rotation control
 		if (canThridPersonCamRotate)
 		{
 			//Mouse relative velocity
@@ -255,13 +256,17 @@ namespace NS_GRAPHICS
 			cam.SetCameraPitch(offsetted);
 		}
 
-		if (SYS_INPUT->GetSystemMousePos().GetIfScrollUp())
+		// camera zoom control
+		if (canThridPersonCamZoom)
 		{
-			zoomDistance -= NS_GRAPHICS::ZOOM_SENSITIVITY;
-		}
-		else if (SYS_INPUT->GetSystemMousePos().GetIfScrollDown())
-		{
-			zoomDistance += NS_GRAPHICS::ZOOM_SENSITIVITY;
+			if (SYS_INPUT->GetSystemMousePos().GetIfScrollUp())
+			{
+				zoomDistance -= NS_GRAPHICS::ZOOM_SENSITIVITY;
+			}
+			else if (SYS_INPUT->GetSystemMousePos().GetIfScrollDown())
+			{
+				zoomDistance += NS_GRAPHICS::ZOOM_SENSITIVITY;
+			}
 		}
 
 		updatedRot = true;
@@ -346,6 +351,10 @@ namespace NS_GRAPHICS
 	void CameraSystem::SetThridPersonCamCanRotateAnot(bool _set)
 	{
 		canThridPersonCamRotate = _set;
+	}
+	void CameraSystem::SetThridPersonCamCanZoomAnot(bool _set)
+	{
+		canThridPersonCamZoom = _set;
 	}
 	void CameraSystem::SetThridPersonCamTarget(glm::vec3 _tgt)
 	{
