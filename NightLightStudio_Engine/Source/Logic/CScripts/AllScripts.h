@@ -1,6 +1,6 @@
 #pragma once
 // Include all scripts here
-#include "IScript.h"
+//#include "IScript.h"
 #include "TestScript.h"
 #include "../Player.h"
 #include "../CameraScript.h"
