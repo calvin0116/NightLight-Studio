@@ -46,10 +46,14 @@ namespace NS_GRAPHICS
 		// Used for actual drawing
 		//std::vector<Mesh*> meshes;
 		std::vector<Model*> _models;
+		std::vector<bool> _usedStatus;
 
 		// Loaded Meshes
 		//std::unordered_map<std::string, Mesh*> meshlist;
 		std::unordered_map<std::string, Model*> _modelList;
+
+		size_t GetFreeIndex();
+		void SetFreeIndex(unsigned index, bool state = false);
 
 		//std::unordered_map<std::string, Mesh> meshes;
 
