@@ -387,6 +387,9 @@
     <ClInclude Include="Source\Logic\CScripts\PossessScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Logic\CScripts\APIScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

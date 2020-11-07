@@ -260,6 +260,7 @@
     <ClInclude Include="Source\IO\SystemIO.h" />
     <ClInclude Include="Source\Logic\CameraScript.h" />
     <ClInclude Include="Source\Logic\CScripts\AllScripts.h" />
+    <ClInclude Include="Source\Logic\CScripts\APIScript.h" />
     <ClInclude Include="Source\Logic\CScripts\IScript.h" />
     <ClInclude Include="Source\Logic\CScripts\PossessScript.h" />
     <ClInclude Include="Source\Logic\CScripts\TestScript.h" />

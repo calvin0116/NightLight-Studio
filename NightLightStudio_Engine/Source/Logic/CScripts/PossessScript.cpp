@@ -5,6 +5,7 @@
 void PossessScript::Init()
 {
   // Fetch player entity here.
+  // GetEntity by 
   PlayerEntity = G_ECMANAGER->getEntity(1);
 }
 
