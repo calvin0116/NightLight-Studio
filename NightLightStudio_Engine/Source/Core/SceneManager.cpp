@@ -55,20 +55,6 @@ namespace NS_SCENE
 			scene_indexes[index] = cur_path_name.stem().string();
 			++index;
 		}
-
-		/*
-		//Load up each scene
-		for (const auto& pars : scene_list)
-		{
-			//pars.second->Load();
-			//pars.second->PrintDataList();
-			Parser& level_parse = *(pars.second);
-			if (level_parse.CheckForMember("Objects"))
-			{
-				level_parse["Objects"]
-			}
-
-		}*/
 	}
 
 	void SceneManager::GameLoad()

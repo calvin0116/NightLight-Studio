@@ -18,67 +18,66 @@ namespace AllScripts
 {
 
 
-class CameraScript : public IScript
-{
-    glm::vec3 tgt;
-    float dist;
-
-public:
-
-    void SetTarget(glm::vec3 _tgt)
+    class CameraScript : public IScript
     {
-        tgt = _tgt;
-    }
+        glm::vec3 tgt;
+        float dist;
 
-    void SetDistance(float _dist)
-    {
-        dist = _dist;
-    }
+    public:
 
-    CameraScript() :
-        tgt(0.0f, 0.0f, 0.0f)
-    {
+        void SetTarget(glm::vec3 _tgt)
+        {
+            tgt = _tgt;
+        }
 
-    }
+        void SetDistance(float _dist)
+        {
+            dist = _dist;
+        }
 
-    virtual ~CameraScript() override
-    {
-    }
+        CameraScript() :
+            tgt(0.0f, 0.0f, 0.0f)
+        {
 
-    virtual void SetEntity(int _id) 
-    { 
-        _Obj = _id; 
-    }
+        }
 
-    virtual void Init() override
-    {
+        virtual ~CameraScript() override
+        {
+        }
 
-    };
+        virtual void SetEntity(int _id)
+        {
+            _Obj = _id;
+        }
 
-    virtual void Update() override
-    {
-        NS_GRAPHICS::CameraSystem& camSys = NS_GRAPHICS::CameraSystem::GetInstance();
+        virtual void Init() override
+        {
 
-        glm::vec3 viewVector = camSys.GetViewVector();
+        };
 
-        camSys.SetThridPersonCamTarget(tgt);
+        virtual void Update() override
+        {
+            NS_GRAPHICS::CameraSystem& camSys = NS_GRAPHICS::CameraSystem::GetInstance();
 
-        camSys.SetThridPersonCamDistance(dist);
+            glm::vec3 viewVector = camSys.GetViewVector();
 
-        camSys.SetUseThridPersonCam(true);
+            camSys.SetThridPersonCamTarget(tgt);
 
-    };
+            camSys.SetThridPersonCamDistance(dist);
 
-    virtual void Exit() override
-    {
+            camSys.SetUseThridPersonCam(true);
 
-    };
+        };
 
-    virtual void OnCollisionEnter(int other) override
-    {
+        virtual void Exit() override
+        {
 
-    };
+        };
 
-}
+        virtual void OnCollisionEnter(int other) override
+        {
 
-} // NS
+        };
+
+    }; 
+}// NS

@@ -7,7 +7,7 @@
 namespace fs = std::filesystem;
 
 namespace Prefab_Function {
-	inline void ReadAndCreatePrefab(std::string file)
+	Entity PrefabReadAndCreate(std::string file)
 	{
 		fs::path cur_path_name = file;
 		NS_SERIALISER::Parser prefab_parser(
@@ -24,5 +24,11 @@ namespace Prefab_Function {
 		Entity prefab_ent = G_ECMANAGER->BuildEntity(prefab_val["Name"].GetString());
 
 		NS_SERIALISER::ComponentsCreation(prefab_val, prefab_ent);
+		return prefab_ent;
+	}
+
+	ENGINE_API void WritePrefab(std::string file, Entity& prefab_ent)
+	{
+		return ENGINE_API void();
 	}
 }
