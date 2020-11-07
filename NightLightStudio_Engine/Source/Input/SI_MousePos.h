@@ -18,7 +18,7 @@ namespace SystemInput_ns
 
 		bool _clipCursor;
 
-		bool _theThing;
+		bool _toCenter;
 
 		short _scrollDown;
 
@@ -26,11 +26,6 @@ namespace SystemInput_ns
 
 		//ONLY TO PREVENT CHECKING WHEN OUT OF WINDOW, MAY BE REMOVED/REPLACED
 		HWND _window = GetForegroundWindow();
-
-		// CURRENTLY BUILDING
-		glm::vec2 ConvertToVec2(POINT pos);
-		glm::vec2 Offset(glm::vec2 pos, glm::vec2 offset);
-
 	public:
 		SystemMousePosition(bool showCursor = true, bool clipCursor = true);
 		~SystemMousePosition() = default;
@@ -58,7 +53,7 @@ namespace SystemInput_ns
 		POINT GetClientRectSize();
 
 		// get win rect
-		RECT GetWinRect();
+		RECT GetWinClientRect();
 
 		// Toggle to clip cursor
 		bool ToggleClipCursor();
@@ -71,7 +66,7 @@ namespace SystemInput_ns
 		POINT SetCurPos();
 
 		// sets the thing so it does the thing
-		void SetTheThing(bool set);
+		void SetToCenter(bool set);
 
 		// Gets the cursor's position in the client rect from 0.0 to 1.0 in xy coordinates, (0,0) Begins in Bottom-Left Corner
 		glm::vec2 GetRelativeLocation();
@@ -82,6 +77,8 @@ namespace SystemInput_ns
 		void SetScroll(short scroll);
 		bool GetIfScrollUp();
 		bool GetIfScrollDown();
+
+		void ResetWinSize();
 	};
 }
 

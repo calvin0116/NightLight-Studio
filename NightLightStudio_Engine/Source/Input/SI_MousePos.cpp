@@ -4,23 +4,9 @@
 namespace SystemInput_ns
 {
 	//********************************************** SYSTEM CURSOR POSITION **********************************************//
-	glm::vec2 SystemMousePosition::ConvertToVec2(POINT pos)
-	{
-		return { (float)pos.x, (float)pos.y };
-	}
-
-	glm::vec2 SystemMousePosition::Offset(glm::vec2 pos, glm::vec2 offset)
-	{
-		return { pos.x + offset.x, pos.y + offset.y };
-	}
-
 	SystemMousePosition::SystemMousePosition(bool showCursor, bool clipCursor) : _mousePos{}, _prevMousePos{}, _showCursor{ showCursor }, _clipCursor{ clipCursor },  _scrollDown{}
 	{
-		RECT rect;
-		GetClientRect(_window, &rect);
-		_clientRectSize.x = rect.right;
-		_clientRectSize.y = rect.bottom;
-
+		ResetWinSize();
 		//std::cout << _ClientRectSize.x << " " << _ClientRectSize.y;
 	}
 
@@ -29,7 +15,7 @@ namespace SystemInput_ns
 		if (GetForegroundWindow() == _window)
 		{
 
-			if (_theThing)
+			if (_toCenter)
 			{
 				// do the thing
 				GetCursorPos(&_mousePos);
@@ -110,17 +96,17 @@ namespace SystemInput_ns
 	{
 		return _clientRectSize;
 	}
-	RECT SystemMousePosition::GetWinRect()
+	RECT SystemMousePosition::GetWinClientRect()
 	{
 		RECT rect;
-		HWND h = NS_WINDOW::SYS_WINDOW->GetHandlerToWindow();
-		GetWindowRect(h, &rect);
+		//GetWindowRect(_window, &rect);
+		GetClientRect(_window, &rect);
 		return rect;
 	}
 	bool SystemMousePosition::ToggleClipCursor()
 	{
 		_clipCursor = !_clipCursor;
-		RECT rect = GetWinRect();
+		RECT rect = GetWinClientRect();
 		rect.top += 10;
 		rect.right -= 10;
 		rect.bottom -= 10;
@@ -131,7 +117,7 @@ namespace SystemInput_ns
 	void SystemMousePosition::SetClipCursor(bool clip)
 	{
 		_clipCursor = clip;
-		RECT rect = GetWinRect();
+		RECT rect = GetWinClientRect();
 		rect.top += 10;
 		rect.right -= 10;
 		rect.bottom -= 10;
@@ -148,7 +134,7 @@ namespace SystemInput_ns
 	}
 	POINT SystemMousePosition::SetCurPos()
 	{
-		RECT rect = GetWinRect();
+		RECT rect = GetWinClientRect();
 		POINT point;
 		point.x = (rect.left + rect.right) / 2;
 		point.y = (rect.top + rect.bottom) / 2;
@@ -156,9 +142,9 @@ namespace SystemInput_ns
 		return point;
 	}
 
-	void SystemMousePosition::SetTheThing(bool set)
+	void SystemMousePosition::SetToCenter(bool set)
 	{
-		_theThing = set;
+		_toCenter = set;
 	}
 
 	glm::vec2 SystemMousePosition::GetRelativeLocation()
@@ -172,6 +158,7 @@ namespace SystemInput_ns
 	void SystemMousePosition::SetWindow(HWND win)
 	{
 		_window = win;
+		ResetWinSize();
 	}
 	void SystemMousePosition::SetScroll(short scroll)
 	{
@@ -187,5 +174,13 @@ namespace SystemInput_ns
 	bool SystemMousePosition::GetIfScrollDown()
 	{
 		return _scrollDown < 0;;
+	}
+
+	void SystemMousePosition::ResetWinSize()
+	{
+		RECT rect;
+		GetClientRect(_window, &rect);
+		_clientRectSize.x = rect.right;
+		_clientRectSize.y = rect.bottom;
 	}
 }

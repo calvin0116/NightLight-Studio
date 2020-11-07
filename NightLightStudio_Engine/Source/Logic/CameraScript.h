@@ -81,6 +81,8 @@ namespace AllScripts
 
         ComponentTransform* compTrans = MyID.getComponent<ComponentTransform>();
         
+        dist = compTrans->_scale.x;
+
         glm::vec3 viewVector(dist, 0.0f, 0.0f);
         glm::quat quaternion(glm::radians(compTrans->_rotation));
         glm::mat4 rotate = glm::mat4_cast(quaternion);
@@ -119,6 +121,9 @@ namespace AllScripts
             ComponentTransform* compTrans = MyID.getComponent<ComponentTransform>();
             glm::vec3 viewVector = camSys.GetViewVector();
             compTrans->_position = tgt - viewVector * dist;
+
+            // rotation?
+            // how to check the view vector rot?
         }
 
     };

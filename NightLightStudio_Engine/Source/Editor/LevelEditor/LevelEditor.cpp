@@ -86,6 +86,8 @@ bool LevelEditor::Update(float)
     */
     LE_RunWindows();
 
+    _lePicking.LE_PickingRun();
+
     // Rendering
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
