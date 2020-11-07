@@ -9,6 +9,8 @@
 #include "../../Graphics/DebugManager.h"
 
 #include "../../Core/SceneManager.h"
+#include "../PrefabManager.h"
+#include "LevelEditor_ECHelper.h"
 
 void LevelEditor::LE_MainMenuBar()
 {
@@ -217,7 +219,17 @@ void LevelEditor::LE_MainMenuBar()
                     
                 }
                 */
+                data = "..//NightLightStudio_Game" + *str;
+                NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(data);
+
             }
+            if (LE_GetFileType(data) == "prefab")
+            {
+                data = "..//NightLightStudio_Game" + *str;          //Temp solution, please help =v
+                Entity ent = PFunc::PrefabReadAndCreate(data);      //Create Prefab
+                LE_ECHELPER->SelectEntity(ent.getId());             //Select Entity
+            }
+
 
             if (LE_GetFileType(data) == "fbx" || LE_GetFileType(data) == "model")
             {
