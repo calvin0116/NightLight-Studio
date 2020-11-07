@@ -100,7 +100,26 @@ Value ComponentTransform::Write()
 Value& ComponentTransform::Write(Value& val)
 {
 	// TODO: insert return statement here
-	
+	Value position(rapidjson::kArrayType);
+	position.PushBack(_position.x, global_alloc);
+	position.PushBack(_position.y, global_alloc);
+	position.PushBack(_position.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "Position", position);
+
+	Value scale(rapidjson::kArrayType);
+	scale.PushBack(_scale.x, global_alloc);
+	scale.PushBack(_scale.y, global_alloc);
+	scale.PushBack(_scale.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "Scale", scale);
+
+	Value rotation(rapidjson::kArrayType);
+	rotation.PushBack(_rotation.x, global_alloc);
+	rotation.PushBack(_rotation.y, global_alloc);
+	rotation.PushBack(_rotation.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "Rotate", rotation);
 
 	return val;
 }
