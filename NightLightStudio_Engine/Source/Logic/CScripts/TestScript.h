@@ -12,11 +12,12 @@ public:
   virtual void Init()
   {
     std::cout << "Init from TestScript" << std::endl;
+    std::cout << "My Obj ID: " << _Obj << std::endl;
   }
 
   virtual void Update()
   {
-    std::cout << "Update from TestScript" << std::endl;
+    //std::cout << "Update from TestScript" << std::endl;
   }
 
   virtual void Exit()

@@ -9,6 +9,7 @@ protected:
   int  _Obj;
 public:
   // IScript() {}
+  virtual ~IScript() {}
   virtual void SetEntity(int _id) { _Obj = _id; }
   virtual void Init() {};
   virtual void Update() {};
