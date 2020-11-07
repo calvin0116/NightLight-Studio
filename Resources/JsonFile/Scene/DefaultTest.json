@@ -1,31 +1,110 @@
 {
-	"Objects" :{
-		"Camera" :{
-			"TransformComponent":{
-				"Position" : [1.0,2.0,3.0],
-				"Scale" : [1.0, 1.0, 1.0],
-				"Rotate" : [0.0, 0.0, 0.0]
-			},
-			"CameraComponent":{
-				
-			}
-		},
-		"Plane" : {
-			"TransformComponent":{
-				"Position" : [5.0,2.0,1.0],
-				"Scale" : [10.0, 1.0, 10.0]
-			},
-			"ColliderComponent":{
-				"colliderType" : "AABB"
-			},
-			"RigidBody" : {
-			
-			},
-		  "AudioManager":{
-			"ListOfSound": [ 
-			  "Asset/Sounds/TestAudio.ogg"
-			  ]
-		  }
-		}
-	}
+    "Objects": {
+        "Camera": {
+            "TransformComponent": {
+                "Position": [
+                    1.0,
+                    2.0,
+                    3.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            }
+        },
+        "Plane": {
+            "TransformComponent": {
+                "Position": [
+                    5.0,
+                    2.0,
+                    1.0
+                ],
+                "Scale": [
+                    10.0,
+                    1.0,
+                    10.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "AudioManager": {}
+        },
+        "Prop1": {
+            "TransformComponent": {
+                "Position": [
+                    0.03007793426513672,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Texture file": "",
+                "Model file": "\\box.fbx"
+            },
+            "LightComponent": {
+                "LightType": "POINT",
+                "isActive": true,
+                "Diffuse": [
+                    1.0,
+                    0.9999899864196777,
+                    0.9999899864196777
+                ],
+                "Ambient": [
+                    1.0,
+                    0.9999899864196777,
+                    0.9999899864196777
+                ],
+                "Specular": [
+                    1.0,
+                    0.9999899864196777,
+                    0.9999899864196777
+                ],
+                "Attenuation": 100.0,
+                "CutOff": 0.0,
+                "OuterCutOff": 0.0
+            },
+            "面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面\u0001": {
+                "isActive": true,
+                "Name": "",
+                "Tag": 0
+            }
+        }
+    }
 }
