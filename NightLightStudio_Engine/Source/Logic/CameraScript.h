@@ -23,6 +23,7 @@ namespace AllScripts
       //  int  MyID;
     glm::vec3 tgt;
     float dist;
+    bool isActive;
 
   public:
 
@@ -36,8 +37,15 @@ namespace AllScripts
       dist = _dist;
     }
 
+    void SetActive(bool _set)
+    {
+        isActive = _set;
+    }
+
     CameraScript() :
-      tgt(0.0f, 0.0f, 0.0f)
+      tgt(0.0f, 0.0f, 0.0f),
+      dist(500.0f),
+      isActive(false)
     {
 
     }
@@ -58,15 +66,18 @@ namespace AllScripts
 
     virtual void Update() override
     {
-      NS_GRAPHICS::CameraSystem& camSys = NS_GRAPHICS::CameraSystem::GetInstance();
+        if (isActive)
+        {
+            NS_GRAPHICS::CameraSystem& camSys = NS_GRAPHICS::CameraSystem::GetInstance();
 
-      glm::vec3 viewVector = camSys.GetViewVector();
+            glm::vec3 viewVector = camSys.GetViewVector();
 
-      camSys.SetThridPersonCamTarget(tgt);
+            camSys.SetThridPersonCamTarget(tgt);
 
-      camSys.SetThridPersonCamDistance(dist);
+            camSys.SetThridPersonCamDistance(dist);
 
-      camSys.SetUseThridPersonCam(true);
+            camSys.SetUseThridPersonCam(true);
+        }
 
     };
 
