@@ -6,11 +6,11 @@
 class IScript
 {
 protected:
-  int  _Obj;
+  int  MyID;
 public:
   // IScript() {}
   virtual ~IScript() {}
-  virtual void SetEntity(int _id) { _Obj = _id; }
+  virtual void SetEntity(int _id) { MyID = _id; }
   virtual void Init() {};
   virtual void Update() {};
   virtual void Exit() {};

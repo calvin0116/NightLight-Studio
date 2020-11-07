@@ -18,25 +18,25 @@ namespace AllScripts
 {
 
 
-class CameraScript : public IScript
-{
+  class CameraScript : public IScript
+  {
     glm::vec3 tgt;
     float dist;
 
-public:
+  public:
 
     void SetTarget(glm::vec3 _tgt)
     {
-        tgt = _tgt;
+      tgt = _tgt;
     }
 
     void SetDistance(float _dist)
     {
-        dist = _dist;
+      dist = _dist;
     }
 
     CameraScript() :
-        tgt(0.0f, 0.0f, 0.0f)
+      tgt(0.0f, 0.0f, 0.0f)
     {
 
     }
@@ -45,9 +45,9 @@ public:
     {
     }
 
-    virtual void SetEntity(int _id) 
-    { 
-        _Obj = _id; 
+    virtual void SetEntity(int _id)
+    {
+      MyID = _id;
     }
 
     virtual void Init() override
@@ -57,15 +57,15 @@ public:
 
     virtual void Update() override
     {
-        NS_GRAPHICS::CameraSystem& camSys = NS_GRAPHICS::CameraSystem::GetInstance();
+      NS_GRAPHICS::CameraSystem& camSys = NS_GRAPHICS::CameraSystem::GetInstance();
 
-        glm::vec3 viewVector = camSys.GetViewVector();
+      glm::vec3 viewVector = camSys.GetViewVector();
 
-        camSys.SetThridPersonCamTarget(tgt);
+      camSys.SetThridPersonCamTarget(tgt);
 
-        camSys.SetThridPersonCamDistance(dist);
+      camSys.SetThridPersonCamDistance(dist);
 
-        camSys.SetUseThridPersonCam(true);
+      camSys.SetUseThridPersonCam(true);
 
     };
 
@@ -79,6 +79,5 @@ public:
 
     };
 
-}
-
+  };
 } // NS
