@@ -4,11 +4,19 @@
 #include "IScript.h"
 // Testing
 #include <iostream>
+#include "..\..\Component\ComponentLight.h"
 
 class PossessScript : public IScript
 {
   Entity PlayerEntity;
+  ComponentLight* CompLight;
 public:
+  // Exposed variables
+  const bool Possessable = true;
+  bool Possessed = false;
+  float LightIntensity = 5.0f;
+  const float MinIntensity = 5.0f;
+  const float MaxIntensity = 100.0f;
 
   virtual void Init() override;
 
@@ -18,4 +26,5 @@ public:
 
   virtual void OnCollisionEnter(Entity other) override;
 
+  virtual void ChangeLight(float val);
 };
