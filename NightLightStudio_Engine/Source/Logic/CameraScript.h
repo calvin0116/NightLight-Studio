@@ -20,6 +20,7 @@ namespace AllScripts
 
   class CameraScript : public IScript
   {
+      //  int  MyID;
     glm::vec3 tgt;
     float dist;
 

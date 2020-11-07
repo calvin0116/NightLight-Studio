@@ -816,6 +816,12 @@ public:
 			// ctor
 			EntityHandle(ComponentSetManager* csm, int oid);
 
+			// default ctor
+			EntityHandle() :
+				compSetMgr(nullptr), 
+				objId(-1)
+			{}
+
 		private:
 			// get component of the entity // using container id // helper
 			void* getComponent(int compId);
