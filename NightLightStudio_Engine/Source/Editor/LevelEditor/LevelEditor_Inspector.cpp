@@ -573,7 +573,7 @@ void InspectorWindow::CScriptComp(Entity& ent)
     if (ImGui::CollapsingHeader("CScript component", &_notRemove))
     {
       ImGui::Checkbox("IsActive##CScript", &cScript_comp->_isActive);
-
+      ImGui::InputInt("Tag", &cScript_comp->_iTag);
       std::string tex = cScript_comp->_sName.toString();
 
       _levelEditor->LE_AddInputText("Script Name", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
