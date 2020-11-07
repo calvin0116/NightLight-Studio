@@ -3,6 +3,10 @@
 #include <vector>
 #include "../Component/Components.h" // G_ECMANAGER, Entity type
 
+// For messaging/event
+#include "../Messaging/SystemReceiver.h"
+#include "../Messaging/Messages/MessageScriptRequest.h"
+
 namespace NS_LOGIC
 {
   class SystemLogic : public MySystem, public Singleton<SystemLogic>
@@ -14,6 +18,9 @@ namespace NS_LOGIC
     static bool _isPlaying;
     static bool _Loaded;
     static bool _Inited;
+    
+    // For receiving event/message
+    SystemMessaging::SystemReceiver r;
   public:
     // System functions
     void Load() override;
@@ -38,6 +45,8 @@ namespace NS_LOGIC
     void OnTriggerEnter(Entity _obj1, Entity _obj2);
     void OnTriggerStay(Entity _obj1, Entity _obj2);
     void OnTriggerExit(Entity _obj1, Entity _obj2);
+
+    void HandleMsg(MessageScriptRequest&);
   };
 
   static SystemLogic* SYS_LOGIC = SystemLogic::GetInstance();

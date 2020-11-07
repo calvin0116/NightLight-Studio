@@ -393,6 +393,12 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Picking.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Messaging\Messages\MessageScriptRequest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Logic\CScripts\TestScript2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

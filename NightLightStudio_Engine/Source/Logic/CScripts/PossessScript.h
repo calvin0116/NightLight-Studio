@@ -27,4 +27,6 @@ public:
   virtual void OnCollisionEnter(Entity other) override;
 
   virtual void ChangeLight(float val);
+
+  virtual void Test();
 };

@@ -78,32 +78,34 @@
                 "Texture file": "",
                 "Model file": "\\box.fbx"
             },
-            "LightComponent": {
-                "LightType": "POINT",
-                "isActive": true,
-                "Diffuse": [
-                    1.0,
-                    0.9999899864196777,
-                    0.9999899864196777
+            "面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面": {
+                "isActive": false,
+                "Name": "TestScript",
+                "Tag": 2
+            }
+        },
+        "UniqueEntity": {
+            "TransformComponent": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
                 ],
-                "Ambient": [
+                "Scale": [
                     1.0,
-                    0.9999899864196777,
-                    0.9999899864196777
-                ],
-                "Specular": [
                     1.0,
-                    0.9999899864196777,
-                    0.9999899864196777
+                    1.0
                 ],
-                "Attenuation": 100.0,
-                "CutOff": 0.0,
-                "OuterCutOff": 0.0
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
             },
-            "面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面\u0001": {
+            "面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面\u0001TestScript2": {
                 "isActive": true,
-                "Name": "",
-                "Tag": 0
+                "Name": "TestScript2",
+                "Tag": 101
             }
         }
     }

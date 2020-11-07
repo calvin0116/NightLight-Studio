@@ -5,6 +5,7 @@
 #include "../Input/SystemInput.h" // For testing
 #include "CScripts/AllScripts.h"
 
+
 namespace NS_LOGIC
 {
   // Variable to decide whether to run function
@@ -48,6 +49,9 @@ namespace NS_LOGIC
           std::cout << "Logic Playing: " << _isPlaying << std::endl;
         }
       });
+
+    // Attach handler
+    r.AttachHandler("ScriptRequest", &SystemLogic::HandleMsg, this);
   }
 
   void SystemLogic::GameLoad()
@@ -155,17 +159,6 @@ namespace NS_LOGIC
       comp1->_pScript->OnCollisionEnter(_obj2);
     if(comp2)
       comp2->_pScript->OnCollisionEnter(_obj1);
-    //auto itr = G_ECMANAGER->begin<ComponentCScript>();
-    //auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
-    //for (; itr != itrEnd; ++itr)
-    //{
-    //  ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
-    //  Entity entity = G_ECMANAGER->getEntity(itr);
-    //  if (entity.getId() == _obj1.getId())
-    //    myComp->_pScript->OnCollisionEnter(_obj2.getId());
-    //  else if (entity.getId() == _obj2.getId())
-    //    myComp->_pScript->OnCollisionEnter(_obj1.getId());
-    //}
   }
 
   void SystemLogic::OnCollisionStay(Entity _obj1, Entity _obj2)
@@ -196,5 +189,22 @@ namespace NS_LOGIC
   {
     if (!_isPlaying)
       return;
+  }
+
+  void SystemLogic::HandleMsg(MessageScriptRequest& msg)
+  {
+    std::cout << "Received Request for script!" << std::endl;
+    auto itr = G_ECMANAGER->begin<CScriptComponent>();
+    auto eitr = G_ECMANAGER->end<CScriptComponent>();
+    for (; itr != eitr; ++itr)
+    {
+      CScriptComponent* comp = G_ECMANAGER->getComponent<CScriptComponent>(itr);
+      if (comp == nullptr || comp->_iTag != msg.tagID)
+        continue;
+      // Found script instance
+      msg._pScript = comp->_pScript;
+      // Break out of loop
+      break;
+    }
   }
 }

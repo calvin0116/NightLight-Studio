@@ -44,3 +44,8 @@ void PossessScript::ChangeLight(float val)
     LightIntensity += -val * DELTA_T->dt;
   }
 }
+
+void PossessScript::Test()
+{
+  std::cout << "Hello from Possess Script" << std::endl;
+}

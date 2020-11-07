@@ -17,7 +17,7 @@ public:
   bool            _isActive;  // Expose, can edit
   LocalString<20> _sName;     // Expose, can edit
   IScript*        _pScript;   // Don't touch
-  int             _iTag;      // Expose, can edit
+  int             _iTag;      // Expose, can edit. must be unique
 
   ComponentCScript();
 	~ComponentCScript();
