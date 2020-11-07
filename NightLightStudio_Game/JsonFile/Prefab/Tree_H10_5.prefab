@@ -1,0 +1,25 @@
+{
+    "Name": "Tree_H10_5",
+    "TransformComponent": {
+        "Position": [
+            -3.5,
+            5.0,
+            -8.5
+        ],
+        "Scale": [
+            1.0,
+            10.0,
+            1.0
+        ],
+        "Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "GraphicsComponent": {
+        "isActive": true,
+        "Texture file": "",
+        "Model file": "box.fbx"
+    }
+}

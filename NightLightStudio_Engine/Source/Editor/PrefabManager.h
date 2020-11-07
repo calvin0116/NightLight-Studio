@@ -11,7 +11,7 @@ class PrefabManager : public Singleton<PrefabManager>
 };
 */
 namespace Prefab_Function {
-	ENGINE_API Entity PrefabReadAndCreate(std::string file);
+	ENGINE_API int PrefabReadAndCreate(std::string file);
 
 	ENGINE_API void WritePrefab(std::string file, Entity& prefab_ent);
 }

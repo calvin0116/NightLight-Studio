@@ -133,6 +133,7 @@ ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentS
 		name.append(std::to_string(compSet->unknown_ent_id));
 		++compSet->unknown_ent_id;
 	}
+	
 	NS_SCENE::SYS_SCENE_MANAGER->EntityName[objId + compSet->idIndexModifier] = name;
 	//----------------------------------------//
 	//return objId + compSet->idIndexModifier;

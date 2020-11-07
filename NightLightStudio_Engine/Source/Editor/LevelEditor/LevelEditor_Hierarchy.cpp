@@ -177,8 +177,6 @@ void HierarchyInspector::Run()
 		_allowCopy = true;
 	}
 
-	//ImGuiWindowFlags window_flags = 0;
-	//ImVec4 tranform_bar = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	//Add entity button
 	if (ImGui::Button("Add Entity"))
 	{
@@ -188,14 +186,6 @@ void HierarchyInspector::Run()
 
 	}
 	// List box
-	/*
-	char search_buf[256];
-	static std::string search = "";
-	strcpy_s(search_buf, 32, search.c_str());
-	if (ImGui::InputText("Search", search_buf, 256))
-		search = std::string(search_buf);
-		*/
-
 	_levelEditor->LE_AddInputText("Search", _search, 256, 0);
 
 	// Entity list
@@ -205,7 +195,7 @@ void HierarchyInspector::Run()
 	for (Entity ent : G_ECMANAGER->getEntityContainer())
 	{
 		// For searching
-		std::string& ent_name = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
+		std::string ent_name = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
 		//Check if entity is related to the search string inserted
 		if (_search != "" && findCaseInsensitive(ent_name, _search) == std::string::npos)
 		{
@@ -216,6 +206,9 @@ void HierarchyInspector::Run()
 		// Print out entity
 		//char buf[100];
 		//sprintf_s(buf, "%i. %s", n, ent_name.c_str());
+
+		//e.g 1. name -> for ease to read and different naming in level editor selection
+		std::string name_with_index = std::to_string(n)+ ". " + ent_name;
 
 		//If more then one child, get the child
 		if (ent.getNumChildren() > 0)
@@ -236,7 +229,7 @@ void HierarchyInspector::Run()
 		}
 		else //if (!ent.isChild) print those not a child
 		{
-			_levelEditor->LE_AddSelectable(ent_name, LE_ECHELPER->SelectedEntities()[ent.getId()],
+			_levelEditor->LE_AddSelectable(name_with_index, LE_ECHELPER->SelectedEntities()[ent.getId()],
 				[&ent, this]()
 				{
 					LE_ECHELPER->SelectEntity(ent.getId());
@@ -287,8 +280,6 @@ void HierarchyInspector::Run()
 
 void HierarchyInspector::Exit()
 {
-	//Exit not called?
-	//LE_ECHELPER->DestroyInstance();
 }
 
 void HierarchyInspector::InitBeforeRun()

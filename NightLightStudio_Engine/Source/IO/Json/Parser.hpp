@@ -46,6 +46,7 @@ namespace NS_SERIALISER {
 		//Value _data(data);
 		val->GetObject().AddMember(key, data->GetObject(), global_alloc);
 	}*/
+
 	template<>
 	inline void Parser::AddData(std::string d_name, Value* val)
 	{

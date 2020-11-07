@@ -233,6 +233,11 @@ namespace NS_SCENE
 
 				if(comp_val.IsObject())
 					NS_SERIALISER::ChangeData(ent_val, comp->ser_name, comp_val.GetObject());
+				else
+				{
+					const std::type_info& tinf = typeid(*comp);
+					std::cout << "Wrong data given from component: " << tinf.name() << std::endl;
+				}
 			}
 
 			NS_SERIALISER::ChangeData(obj_val, EntityName[ent.getId()], ent_val->GetObject());

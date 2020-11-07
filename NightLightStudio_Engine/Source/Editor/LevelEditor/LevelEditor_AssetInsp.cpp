@@ -5,6 +5,8 @@
 
 #include <shellapi.h>
 #include "../../Component/Components.h"
+#include "../PrefabManager.h"
+#include "../../Core/SceneManager.h"
 
 void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
 {
@@ -287,7 +289,17 @@ void AssetInspector::Run()
             [this](Entity* entptr)
             {
                 Entity ent = *entptr;
-                std::cout << ent.getId() << std::endl;
+                //std::cout << ent.getId() << std::endl;
+                //std::cout << _selectedFolderPath << std::endl;
+
+                PFunc::WritePrefab(_selectedFolderPath, ent);
+                //Copied from your refresh inspector to refresh
+                {
+                    _allDirFiles.clear();
+                    _allDirDirs.clear();
+                    _currentFilePath = std::filesystem::current_path().string();
+                    _RefreshDirectories(_currentFilePath);
+                }
             });
 }
 

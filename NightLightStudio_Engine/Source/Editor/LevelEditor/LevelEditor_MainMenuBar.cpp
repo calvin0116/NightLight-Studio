@@ -226,8 +226,9 @@ void LevelEditor::LE_MainMenuBar()
             if (LE_GetFileType(data) == "prefab")
             {
                 data = "..//NightLightStudio_Game" + *str;          //Temp solution, please help =v
-                Entity ent = PFunc::PrefabReadAndCreate(data);      //Create Prefab
-                LE_ECHELPER->SelectEntity(ent.getId());             //Select Entity
+                int id = PFunc::PrefabReadAndCreate(data);      //Create Prefab
+                if(id != -1)
+                    LE_ECHELPER->SelectEntity(id);             //Select Entity
             }
 
 
