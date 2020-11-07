@@ -34,9 +34,7 @@ namespace NS_GRAPHICS
 		{
 			if (useThridPersonCam)
 			{
-				glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
-				tgt += vec * TEST_TARGET_MOVE_STEP;
-				//tgt.z -= TEST_TARGET_MOVE_STEP;
+				tgt += GetXZViewVector() * TEST_TARGET_MOVE_STEP;
 			}
 		});
 		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_BACK", SystemInput_ns::IKEY_DOWN, "TARGET_MOVE_BACK", SystemInput_ns::OnHold, [this]()
@@ -44,15 +42,7 @@ namespace NS_GRAPHICS
 		{
 			if (useThridPersonCam)
 			{
-				glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
-
-				glm::quat quaternion(glm::radians(glm::vec3(0.0f, 180.0f, 0.0f)));
-				glm::mat4 rotate = glm::mat4_cast(quaternion);
-
-				vec = rotate * glm::vec4(vec, 1.0f);
-
-				tgt += vec * TEST_TARGET_MOVE_STEP;
-				//tgt.z += TEST_TARGET_MOVE_STEP;
+				tgt += GetXZViewVector_Back() * TEST_TARGET_MOVE_STEP;
 			}
 		});
 		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_LEFT", SystemInput_ns::IKEY_LEFT, "TARGET_MOVE_LEFT", SystemInput_ns::OnHold, [this]()
@@ -60,15 +50,7 @@ namespace NS_GRAPHICS
 		{
 			if (useThridPersonCam)
 			{
-				glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
-
-				glm::quat quaternion(glm::radians(glm::vec3(0.0f, 90.0f, 0.0f)));
-				glm::mat4 rotate = glm::mat4_cast(quaternion);
-
-				vec = rotate * glm::vec4(vec, 1.0f);
-
-				tgt += vec * TEST_TARGET_MOVE_STEP;
-				//tgt.x -= TEST_TARGET_MOVE_STEP;
+				tgt += GetXZViewVector_Left() * TEST_TARGET_MOVE_STEP;
 			}
 		});
 		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_RIGHT", SystemInput_ns::IKEY_RIGHT, "TARGET_MOVE_RIGHT", SystemInput_ns::OnHold, [this]()
@@ -76,15 +58,7 @@ namespace NS_GRAPHICS
 		{
 			if (useThridPersonCam)
 			{
-				glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
-
-				glm::quat quaternion(glm::radians(glm::vec3(0.0f, -90.0f, 0.0f)));
-				glm::mat4 rotate = glm::mat4_cast(quaternion);
-
-				vec = rotate * glm::vec4(vec, 1.0f);
-
-				tgt += vec * TEST_TARGET_MOVE_STEP;
-				//tgt.x += TEST_TARGET_MOVE_STEP;
+				tgt += GetXZViewVector_Right() * TEST_TARGET_MOVE_STEP;
 			}
 		});
 #endif
@@ -250,13 +224,11 @@ namespace NS_GRAPHICS
 	}
 	void CameraSystem::UpdateThirdPersonCamera()
 	{
+		// cursor setting
 		SYS_INPUT->GetSystemMousePos().SetTheThing(true);
 		SYS_INPUT->GetSystemMousePos().SetCursorVisible(false);
 
-		//glm::vec3 tgt = glm::vec3(0.0f, 0.0f, 0.0f);
-		//glm::vec3 eye;
-		//float dist = 100.0f;
-
+		// set camera position
 		NS_GRAPHICS::Camera& cam = NS_GRAPHICS::CameraSystem::GetInstance().GetCamera();
 		glm::vec3 camFront = cam.GetFront();
 		camFront *= glm::vec3(zoomDistance, zoomDistance, zoomDistance);
@@ -281,16 +253,10 @@ namespace NS_GRAPHICS
 		if (SYS_INPUT->GetSystemMousePos().GetIfScrollUp())
 		{
 			zoomDistance -= NS_GRAPHICS::ZOOM_SENSITIVITY;
-
-			//_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * ZOOM_SENSITIVITY);
-			updated = true;
 		}
 		else if (SYS_INPUT->GetSystemMousePos().GetIfScrollDown())
 		{
 			zoomDistance += NS_GRAPHICS::ZOOM_SENSITIVITY;
-
-			//_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * ZOOM_SENSITIVITY);
-			updated = true;
 		}
 
 		updatedRot = true;
@@ -302,6 +268,45 @@ namespace NS_GRAPHICS
 		glm::vec3 camPositron = _camera.GetPosition();
 		viewVector = camFront - camPositron;
 		viewVector = glm::normalize(viewVector);
+	}
+	glm::vec3 CameraSystem::GetViewVector()
+	{
+		return viewVector;
+	}
+	glm::vec3 CameraSystem::GetXZViewVector()
+	{
+		glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
+		return vec;
+	}
+	glm::vec3 CameraSystem::GetXZViewVector_Back()
+	{
+		glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
+
+		glm::quat quaternion(glm::radians(glm::vec3(0.0f, 180.0f, 0.0f)));
+		glm::mat4 rotate = glm::mat4_cast(quaternion);
+
+		vec = rotate * glm::vec4(vec, 1.0f);
+		return vec;
+	}
+	glm::vec3 CameraSystem::GetXZViewVector_Left()
+	{
+		glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
+
+		glm::quat quaternion(glm::radians(glm::vec3(0.0f, 90.0f, 0.0f)));
+		glm::mat4 rotate = glm::mat4_cast(quaternion);
+
+		vec = rotate * glm::vec4(vec, 1.0f);
+		return vec;
+	}
+	glm::vec3 CameraSystem::GetXZViewVector_Right()
+	{
+		glm::vec3 vec(viewVector.x, 0.0f, viewVector.z);
+
+		glm::quat quaternion(glm::radians(glm::vec3(0.0f, -90.0f, 0.0f)));
+		glm::mat4 rotate = glm::mat4_cast(quaternion);
+
+		vec = rotate * glm::vec4(vec, 1.0f);
+		return vec;
 	}
 	void CameraSystem::SetUseThridPersonCam(bool set)
 	{
@@ -330,5 +335,13 @@ namespace NS_GRAPHICS
 	void CameraSystem::ToggleUseThridPersonCam()
 	{
 		SetUseThridPersonCam(!useThridPersonCam);
+	}
+	void CameraSystem::SetThridPersonCamTarget(glm::vec3 _tgt)
+	{
+		tgt = _tgt;
+	}
+	void CameraSystem::SetThridPersonCamDistance(float _dist)
+	{
+		zoomDistance = _dist;
 	}
 }

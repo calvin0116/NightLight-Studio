@@ -77,9 +77,24 @@ namespace NS_GRAPHICS
 		// update the view vector, view vector is normalsied
 		void UpdateViewVector();
 
+		// get viewVector
+		glm::vec3 GetViewVector();
+		// get viewVector on XZ plane
+		glm::vec3 GetXZViewVector();
+		// get viewVector on XZ plane, rotate @Y 180 deg
+		glm::vec3 GetXZViewVector_Back();
+		// get viewVector on XZ plane, rotate @Y 90 deg
+		glm::vec3 GetXZViewVector_Left();
+		// get viewVector on XZ plane, rotate @Y -90 deg
+		glm::vec3 GetXZViewVector_Right();
+
 		// set weather to use thrid person cam
 		void SetUseThridPersonCam(bool set);
 		// toggle weather to use thrid person cam
 		void ToggleUseThridPersonCam();
+		// set the target location of the thrid person cam
+		void SetThridPersonCamTarget(glm::vec3 tgt);
+		// set the camera distance of the thrid person cam
+		void SetThridPersonCamDistance(float dist);
 	};
 }
