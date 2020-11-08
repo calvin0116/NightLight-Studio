@@ -162,6 +162,7 @@ void LevelEditor::LE_MainMenuBar()
             if (ImGui::InputFloat("##CAMDRAG", camVals, 3, ImGuiInputTextFlags_EnterReturnsTrue))
             {
                 cs.SetDragSensitivity(camVals[0]);
+                CONFIG_DATA->GetConfigData()._positionSensitivity = camVals[0];
             }
 
             ImGui::Text("Rotate:");
@@ -169,6 +170,7 @@ void LevelEditor::LE_MainMenuBar()
             if (ImGui::InputFloat("##CAMROTATE", camVals+1, 3, ImGuiInputTextFlags_EnterReturnsTrue))
             {
                 cs.SetRotationSensitivity(camVals[1]);
+                CONFIG_DATA->GetConfigData()._rotationSensitivity = camVals[1];
             }
 
             ImGui::Text("  Zoom:");
@@ -176,6 +178,7 @@ void LevelEditor::LE_MainMenuBar()
             if (ImGui::InputFloat("##CAMZOOM", camVals+2, 3, ImGuiInputTextFlags_EnterReturnsTrue))
             {
                 cs.SetZoomSensitivity(camVals[2]);
+                CONFIG_DATA->GetConfigData()._zoomSensitivity = camVals[2];
             }
             ImGui::EndMenu();
         }

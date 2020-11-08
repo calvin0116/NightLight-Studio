@@ -45,79 +45,61 @@ inline void ComponentGraphics::Read(Value& val)
 	else
 		_isActive= val["isActive"].GetBool();
 
-	//if (val.FindMember("Model") == val.MemberEnd())
-	//	std::cout << "No Model file data has been found" << std::endl;
-	//else
-	//{
-	//	_modelFileName = val["Model"].GetString();
-
-	//	if (!_modelFileName.empty())
-	//	{
-	//		NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(_modelFileName.toString());
-
-	//		//Checks for the file name
-	//		/*std::string name;
-	//		size_t pos = _modelFileName.toString().rfind("\\");
-	//		//Get just the string after the last path
-	//		if (pos != std::string::npos)
-	//		{
-	//			name = _modelFileName.toString().substr(pos + 1);
-	//		}
-	//		else
-	//		{
-	//			name = _modelFileName.toString();
-	//		}
-
-	//		//Trim the extension to get the file name
-	//		name.erase(name.rfind("."));
-	//		//model->_fileName = s_LocalPathName + name + s_ModelFileType;
-	//		*/
-	//		_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
-	//	}
-	//}
-
-	if (val.FindMember("Model file") == val.MemberEnd())
+	if (val.FindMember("Model") == val.MemberEnd())
 		std::cout << "No Model file data has been found" << std::endl;
 	else
 	{
-		_modelFileName = val["Model file"].GetString();
+		_modelFileName = val["Model"].GetString();
 
 		if (!_modelFileName.empty())
 		{
 			NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(_modelFileName.toString());
+
+			//Checks for the file name
+			/*std::string name;
+			size_t pos = _modelFileName.toString().rfind("\\");
+			//Get just the string after the last path
+			if (pos != std::string::npos)
+			{
+				name = _modelFileName.toString().substr(pos + 1);
+			}
+			else
+			{
+				name = _modelFileName.toString();
+			}
+
+			//Trim the extension to get the file name
+			name.erase(name.rfind("."));
+			//model->_fileName = s_LocalPathName + name + s_ModelFileType;
+			*/
 			_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
 		}
 	}
 
-	if (val.FindMember("Texture file") == val.MemberEnd())
+	if (val.FindMember("Albedo") == val.MemberEnd())
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
-		_albedoFileName = val["Texture file"].GetString();
-
-	//if (val.FindMember("Texture") == val.MemberEnd())
-	//	std::cout << "No Texture file data has been found" << std::endl;
-	//else
-	//	_albedoFileName = val["Texture"].GetString();
+		_albedoFileName = val["Albedo"].GetString();
 
 	if (val.FindMember("Normal") == val.MemberEnd())
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
-		_albedoFileName = val["Normal"].GetString();
+		_normalFileName = val["Normal"].GetString();
 
 	if (val.FindMember("Metallic") == val.MemberEnd())
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
-		_albedoFileName = val["Metallic"].GetString();
+		_metallicFileName = val["Metallic"].GetString();
 
 	if (val.FindMember("Roughness") == val.MemberEnd())
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
-		_albedoFileName = val["Roughness"].GetString();
+		_roughnessFileName = val["Roughness"].GetString();
 
 	if (val.FindMember("AmbientOcclusion") == val.MemberEnd())
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
-		_albedoFileName = val["AmbientOcclusion"].GetString();
+		_aoFileName = val["AmbientOcclusion"].GetString();
 
 }
 

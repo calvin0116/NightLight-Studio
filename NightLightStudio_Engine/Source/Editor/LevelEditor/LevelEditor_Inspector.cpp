@@ -437,23 +437,33 @@ void InspectorWindow::LightComp(Entity& ent)
 			ImGui::Checkbox("Is Active", &light->_isActive);
 
 			const char* lights[] = { "Directional", "Point", "Spot" };
-			ImGui::Combo("Light Type", (int*)&light->_type, lights, IM_ARRAYSIZE(lights));
+			static int LIGHT = (int) light->_type;
+			if (ImGui::Combo("Light Type", &LIGHT, lights, IM_ARRAYSIZE(lights)))
+			{
+				NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(ent, (NS_GRAPHICS::Lights)LIGHT);
+			}
 
-			float diffuse[3] = { light->_diffuse.x, light->_diffuse.y, light->_diffuse.z };
-			ImGui::ColorEdit3("Diffuse", diffuse);
-			light->_diffuse = { diffuse[0], diffuse[1], diffuse[2] };
+			if (ImGui::InputFloat3("Diffuse", glm::value_ptr(light->_diffuse)))
+			{
+				light->SetDiffuse(light->_diffuse);
+			}
+			
+			if (ImGui::InputFloat3("Ambient", glm::value_ptr(light->_ambient)))
+			{
+				light->SetAmbient(light->_ambient);
+			}
 
-			float ambient[3] = { light->_ambient.x, light->_ambient.y, light->_ambient.z };
-			ImGui::ColorEdit3("Ambient", ambient);
-			light->_ambient = { ambient[0], ambient[1], ambient[2] };
-
-			float specular[3] = { light->_specular.x, light->_specular.y, light->_specular.z };
-			ImGui::ColorEdit3("Specular", specular);
-			light->_specular = { specular[0], specular[1], specular[2] };
+			if (ImGui::InputFloat3("Specular", glm::value_ptr(light->_specular)))
+			{
+				light->SetSpecular(light->_specular);
+			}
 
 			if (light->_type != NS_GRAPHICS::Lights::DIRECTIONAL)
 			{
-				ImGui::InputFloat("Attenuation", &light->_attenuation);
+				if (ImGui::InputFloat("Attenuation", &light->_attenuation))
+				{
+					light->SetAttenuation(light->_attenuation);
+				}
 			}
 
 			if (light->_type == NS_GRAPHICS::Lights::SPOT)
