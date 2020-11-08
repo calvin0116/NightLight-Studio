@@ -42,6 +42,13 @@ inline void ComponentRigidBody::Read(Value& val)
 		isGravity = val["isGravity"].GetBool();
 	}
 
+	if (val.FindMember("mass") == val.MemberEnd())
+		std::cout << "No mass data has been found" << std::endl;
+	else
+	{
+		mass = val["mass"].GetFloat();
+	}
+
 	if (val.FindMember("Force") == val.MemberEnd())
 		std::cout << "No Force data has been found" << std::endl;
 	else
@@ -71,6 +78,9 @@ inline Value ComponentRigidBody::Write()
 	
 	NS_SERIALISER::ChangeData(&val, "isStatic", isStatic);		//Bool
 	NS_SERIALISER::ChangeData(&val, "isGravity", isGravity);	//Bool
+
+
+	NS_SERIALISER::ChangeData(&val, "mass", mass);	//Float
 
 	Value force_val(rapidjson::kArrayType);
 	force_val.PushBack(force.x, global_alloc);
