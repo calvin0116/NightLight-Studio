@@ -41,7 +41,6 @@ namespace NS_LOGIC
         {
           if (_isPlaying)
           {
-            _Inited = false;
             GameExit();
           }
           _isPlaying = !_isPlaying;
@@ -68,7 +67,6 @@ namespace NS_LOGIC
     // new smth
     // C# Script
     MonoBind::Bind();
-    _Loaded = true;
   }
 
   void SystemLogic::GameInit()
@@ -96,9 +94,15 @@ namespace NS_LOGIC
     if (!_isPlaying)
       return;
     if (!_Loaded)
+    {
       GameLoad();
+      _Loaded = true;
+    }
     if (!_Inited)
+    {
       GameInit();
+      _Inited = true;
+    }
     ////Run Script?
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
@@ -120,6 +124,7 @@ namespace NS_LOGIC
   void SystemLogic::GameExit()
   {
     _Inited = false;
+    _Loaded = false;
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
     for (; itr != itrEnd; ++itr)
