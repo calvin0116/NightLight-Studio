@@ -613,9 +613,9 @@ public:
 				{
 
 					ComponentManager::ComponentSet::ObjectData* currentObjdata = reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(*memItr);
-					int id = currentObjdata->objId + compSetMgr->compSet->idIndexModifier;
-					if (isChild) id += IDRANGE_RT;
-					return EntityHandle(compSetMgr, id);
+					int hid = currentObjdata->objId + compSetMgr->compSet->idIndexModifier;
+					if (isChild) hid += IDRANGE_RT;
+					return EntityHandle(compSetMgr, hid);
 				}
 
 				void operator++()

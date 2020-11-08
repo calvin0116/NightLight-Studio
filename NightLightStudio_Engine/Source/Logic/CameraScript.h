@@ -133,7 +133,7 @@ namespace AllScripts
 
     };
 
-    virtual void OnCollisionEnter(Entity other) override
+    virtual void OnCollisionEnter(Entity) override
     {
 
     };
