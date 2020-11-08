@@ -297,10 +297,7 @@ namespace NS_GRAPHICS
 	}
 	void CameraSystem::UpdateViewVector()
 	{
-		glm::vec3 camFront = _camera.GetFront();
-		glm::vec3 camPositron = _camera.GetPosition();
-		viewVector = camFront - camPositron;
-		viewVector = glm::normalize(viewVector);
+		viewVector = _camera.GetFront();
 	}
 	glm::vec3 CameraSystem::GetViewVector()
 	{

@@ -185,6 +185,8 @@ public:
 	bool isCollide = false;
 	int lod = 0;
 	bool isTrigger = false;
+	//turn collider on and off
+	bool isCollidable = true;
 	////////////////////////////data end/////////////////////////////////
 	ComponentCollider(COLLIDERS col);
 	ComponentCollider(const char * col);

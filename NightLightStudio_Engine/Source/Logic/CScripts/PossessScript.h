@@ -12,6 +12,7 @@ class player;
 class PossessScript : public IScript
 {
 	ComponentTransform* playerTransform;
+	ComponentTransform* spawnPointTransform;
 	Player* player;
 
 public:
