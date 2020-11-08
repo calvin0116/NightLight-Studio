@@ -106,6 +106,13 @@ inline void ComponentCamera::Read(Value& val)
 	{
 		_h = val["Height"].GetFloat();
 	}
+
+	if (val.FindMember("Depth") == val.MemberEnd())
+		std::cout << "No depth data has been found" << std::endl;
+	else
+	{
+		_h = val["Depth"].GetFloat();
+	}
 }
 
 inline Value ComponentCamera::Write()
@@ -141,6 +148,8 @@ inline Value ComponentCamera::Write()
 	NS_SERIALISER::ChangeData(&val, "YOffset", _y);
 	NS_SERIALISER::ChangeData(&val, "Width", _w);
 	NS_SERIALISER::ChangeData(&val, "Height", _h);
+
+	NS_SERIALISER::ChangeData(&val, "Depth", _depth);
 
 	return val;
 }
