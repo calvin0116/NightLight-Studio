@@ -250,8 +250,10 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 		{
 			NlMath::Vector3D frictionalForce = colEvent.rigid1->velocity * -1;
 			frictionalForce = NlMath::Vector3DNormalize(frictionalForce);
-			frictionalForce = frictionalForce * frictionalForce_mag + colEvent.rigid1->friction * 
-				NlMath::Vector3D(colEvent.rigid1->velocity.x * colEvent.rigid1->velocity.x, colEvent.rigid1->velocity.y * colEvent.rigid1->velocity.y, colEvent.rigid1->velocity.z * colEvent.rigid1->velocity.z) * -1;
+			frictionalForce = frictionalForce * frictionalForce_mag /*+ 
+				colEvent.rigid1->friction * 
+				colEvent.rigid1->mass * colEvent.rigid1->mass *
+				colEvent.rigid1->velocity * -1*/;
 
 			NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity1, frictionalForce, 1.0f);
 		}
@@ -295,8 +297,10 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 		{
 			NlMath::Vector3D frictionalForce = colEvent.rigid2->velocity * -1;
 			frictionalForce = NlMath::Vector3DNormalize(frictionalForce);
-			frictionalForce = frictionalForce * frictionalForce_mag + colEvent.rigid2->friction *
-				NlMath::Vector3D(colEvent.rigid2->velocity.x * colEvent.rigid2->velocity.x, colEvent.rigid2->velocity.y * colEvent.rigid2->velocity.y, colEvent.rigid2->velocity.z * colEvent.rigid2->velocity.z) * -1;
+			frictionalForce = frictionalForce * frictionalForce_mag /*+ 
+				colEvent.rigid2->friction * 
+				colEvent.rigid2->mass * colEvent.rigid1->mass *
+				colEvent.rigid2->velocity * -1*/;
 
 			NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity2, frictionalForce, 1.0f);
 		}
