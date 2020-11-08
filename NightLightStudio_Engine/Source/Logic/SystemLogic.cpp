@@ -62,7 +62,8 @@ namespace NS_LOGIC
     {
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
       myComp->_pScript = AllScripts::Construct(myComp->_sName.toString());
-      myComp->_pScript->SetEntity(G_ECMANAGER->getEntity(itr));
+      if(myComp->_pScript) // Check if script constructed
+        myComp->_pScript->SetEntity(G_ECMANAGER->getEntity(itr));
     }
     // new smth
     // C# Script
