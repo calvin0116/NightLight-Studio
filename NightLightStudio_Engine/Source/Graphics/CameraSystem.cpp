@@ -280,10 +280,18 @@ namespace NS_GRAPHICS
 		}
 		else
 		{
-			glm::vec3 viewVec = /*tgt - tgt */ /*-*/ camFront;
-			cam.SetCameraYaw(atan2(viewVec.x, viewVec.z));
-			cam.SetCameraPitch(asin(-viewVec.y));
+			glm::vec3 viewVec = _camera.GetFront();
+			_camera.SetCameraYaw(atan2(viewVec.x, viewVec.z));
 
+			float offsetted = asin(-viewVec.y);
+
+			if (offsetted > NS_GRAPHICS::MAX_PITCH)
+				offsetted = NS_GRAPHICS::MAX_PITCH;
+
+			if (offsetted < NS_GRAPHICS::MIN_PITCH)
+				offsetted = NS_GRAPHICS::MIN_PITCH;
+
+			_camera.SetCameraPitch(offsetted);
 		}
 
 		// camera zoom control
@@ -367,7 +375,8 @@ namespace NS_GRAPHICS
 			glm::vec3 camFront = _camera.GetFront();
 			camFront *= glm::vec3(zoomDistance, zoomDistance, zoomDistance);
 			tgt = _camera.GetPosition() + camFront;
-			tgt.y = 0.0f; // set ht to 0 for now
+			//tgt.y = 0.0f; // set ht to 0 for now
+
 
 		}
 	}
@@ -377,7 +386,16 @@ namespace NS_GRAPHICS
 	}
 	void CameraSystem::SetThridPersonCamCanRotateAnot(bool _set)
 	{
+		if (canThridPersonCamRotate == _set) return;
+
 		canThridPersonCamRotate = _set;
+
+		//if (!canThridPersonCamRotate)
+		//{
+		//	glm::vec3 viewVec = _camera.GetFront();
+		//	_camera.SetCameraYaw(atan2(viewVec.x, viewVec.z));
+		//	_camera.SetCameraPitch(asin(-viewVec.y));
+		//}
 	}
 	void CameraSystem::SetThridPersonCamCanZoomAnot(bool _set)
 	{
