@@ -27,7 +27,7 @@ class Player : public IScript
 	AllScripts::CameraScript*camera;
 
 	NlMath::Vector3D currentCameraDirection;
-	
+
 	//keep a copy of the component
 	ComponentCollider* comCol;
 	ComponentRigidBody* comRigid;

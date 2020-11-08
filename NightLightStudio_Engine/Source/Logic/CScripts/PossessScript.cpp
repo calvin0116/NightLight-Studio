@@ -43,9 +43,8 @@ void PossessScript::OnCollisionEnter(Entity other)
           if (playerTransform == nullptr)
           {
               playerTransform = other.getComponent<ComponentTransform>();
+              playerTransform = MyID.getComponent<ComponentTransform>();
           }
-          
-          
 	  }
   }
 }
