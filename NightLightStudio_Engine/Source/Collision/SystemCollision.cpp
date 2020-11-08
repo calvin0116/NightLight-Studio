@@ -321,7 +321,10 @@ namespace NS_COLLISION
 
 				//UpdateCollisionBoxPos(comCol1, comTrans1);
 				
-
+				if (comCol1->isCollidable == false || comCol2->isCollidable == false)
+				{
+					continue;
+				}
 
 				//check for collision, also create collision event in CheckCollision if there is collision
 				if (CheckCollision(comCol1, comCol2, comRigid1, comRigid2, comTrans1, comTrans2, Ent1, Ent2))
