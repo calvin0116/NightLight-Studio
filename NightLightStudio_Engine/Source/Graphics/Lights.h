@@ -23,8 +23,8 @@ namespace NS_GRAPHICS
 
         glm::vec3 _specular; float _dummyPadding3 = 0.f;
 
-        DirLight(const glm::vec3& Direction = glm::vec3(1.f,0.f,0.f), const glm::vec3& Ambient = glm::vec3(1.f, 1.f, 1.f),
-                 const glm::vec3& Diffuse = glm::vec3(1.f, 1.f, 1.f), const glm::vec3& Specular = glm::vec3(1.f, 1.f, 1.f))
+        DirLight(const glm::vec3& Direction = glm::vec3(1.f,0.f,0.f), const glm::vec3& Ambient = glm::vec3(0.2f, 0.2f, 0.2f),
+                 const glm::vec3& Diffuse = glm::vec3(0.5f, 0.5f, 0.5f), const glm::vec3& Specular = glm::vec3(1.f, 1.f, 1.f))
             : _direction{ Direction },
             _ambient{ Ambient },
             _diffuse{ Diffuse },

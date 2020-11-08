@@ -125,9 +125,17 @@ namespace NS_GRAPHICS
 		/*Entity testdrawSphere = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformsphere;
 		testtransformsphere._position = { 2.f, 0.f,0.f };
+		testtransformsphere._scale = {10.f,10.f,10.f};
 		testdrawSphere.AttachComponent<ComponentTransform>(testtransformsphere);
 
-		CreateSphere(testdrawSphere, glm::vec3(0.f,1.f,1.f));*/
+		CreateSphere(testdrawSphere, glm::vec3(0.f,1.f,1.f));
+
+		Entity testlight = G_ECMANAGER->BuildEntity();
+		ComponentTransform testtransformlight;
+		testtransformlight._rotation = {15.f, 15.f,15.f};
+		
+		testlight.AttachComponent<ComponentTransform>(testtransformlight);
+		lightManager->AttachLightComponent(testlight);*/
 
 		//modelLoader->LoadModel(".\\incense_pot_model_custom.obj", "pot");
 
@@ -228,6 +236,8 @@ namespace NS_GRAPHICS
 		// Enable depth buffering
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -360,15 +370,24 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::UpdateLights()
 	{
-		// Update light uniform block(CPU)
+		// Update light components in light block(CPU)
+
+		// Shader program must be started to fill in uniform data
+		shaderManager->StartProgram(1);
+
+		lightManager->Update();
+
 		// Update view/camera position in light uniform block
 		LightBlock* lightblock = lightManager->GetLightBlock();
 
 		lightblock->_viewPos = cameraManager->GetCurrentCameraPosition();
 
+		// Update light uniform block(GPU)
 		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetLightUniformLocation());
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(LightBlock), &*lightblock);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+		shaderManager->StopProgram();
 	}
 
 	void GraphicsSystem::CreateCube(Entity& entity, const glm::vec3& rgb)

@@ -7,7 +7,8 @@
 ComponentLight::ComponentLight()
 	: _isActive{ true },
 	_lightID{ -1 }, _type{ NS_GRAPHICS::Lights::DIRECTIONAL },
-	_ambient{}, _diffuse{}, _specular{}, _attenuation{}, _cutOff{}, _outerCutOff{}
+	_ambient{}, _diffuse{}, _specular{}, _attenuation{}, _cutOff{}, _outerCutOff{},
+	_direction{1.f,0.f,0.f}
 {
 	strcpy_s(ser_name, "LightComponent");
 }
@@ -15,7 +16,8 @@ ComponentLight::ComponentLight()
 ComponentLight::ComponentLight(const int& lightID, const NS_GRAPHICS::Lights& Type)
 	: _isActive{ true },
 	_lightID{ lightID }, _type{ Type },
-	_ambient{}, _diffuse{}, _specular{}, _attenuation{}, _cutOff{}, _outerCutOff{}
+	_ambient{}, _diffuse{}, _specular{}, _attenuation{}, _cutOff{}, _outerCutOff{},
+	_direction{ 1.f,0.f,0.f }
 {
 	strcpy_s(ser_name, "LightComponent");
 }
@@ -157,6 +159,90 @@ void ComponentLight::SetSpecular(const glm::vec3& specular)
 
 		case NS_GRAPHICS::Lights::SPOT:
 			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._specular = specular;
+			break;
+		}
+	}
+}
+
+float ComponentLight::GetIntensity()
+{
+	if (_lightID != -1)
+	{
+		switch (_type)
+		{
+		case NS_GRAPHICS::Lights::POINT:
+			return NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._attenuation;
+			break;
+
+		case NS_GRAPHICS::Lights::SPOT:
+			return NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._attenuation;
+			break;
+
+		default:
+			return 0.f;
+		}
+	}
+
+	return 0.f;
+}
+
+void ComponentLight::SetIntensity(const float& intensity)
+{
+	if (_lightID != -1)
+	{
+		switch (_type)
+		{
+		case NS_GRAPHICS::Lights::POINT:
+			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._attenuation = intensity;
+			break;
+
+		case NS_GRAPHICS::Lights::SPOT:
+			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._attenuation = intensity;
+			break;
+
+		default:
+			break;
+		}
+	}
+}
+
+float ComponentLight::GetAttenuation()
+{
+	if (_lightID != -1)
+	{
+		switch (_type)
+		{
+		case NS_GRAPHICS::Lights::POINT:
+			return NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._attenuation;
+			break;
+
+		case NS_GRAPHICS::Lights::SPOT:
+			return NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._attenuation;
+			break;
+
+		default:
+			return 0.f;
+		}
+	}
+
+	return 0.f;
+}
+
+void ComponentLight::SetAttenuation(const float& attenuation)
+{
+	if (_lightID != -1)
+	{
+		switch (_type)
+		{
+		case NS_GRAPHICS::Lights::POINT:
+			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._attenuation = attenuation;
+			break;
+
+		case NS_GRAPHICS::Lights::SPOT:
+			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._attenuation = attenuation;
+			break;
+
+		default:
 			break;
 		}
 	}
