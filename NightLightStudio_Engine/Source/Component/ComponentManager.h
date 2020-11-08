@@ -1045,6 +1045,8 @@ public:
 		//class ComponentTransform;
 		EntityHandle getEntity(std::string str);
 
+		std::vector<EntityHandle> getEntityTagContainer(std::string str);
+
 
 	private:
 
