@@ -102,6 +102,7 @@ namespace NS_WINDOW
 	void WndSystem::Load()
 	{
 		SetWindowedSize(CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height);
+		//SetWindowedSize(1920, 1080);
 	}
 
 	// Window Update Loop
@@ -340,6 +341,7 @@ namespace NS_WINDOW
 
 		SYS_WINDOW->SetAppTitle(s);
 		
+		SetWindowedSize(CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height);
 
 		// Window Creation Function Call
 		if (!InitWindow())
@@ -466,6 +468,11 @@ namespace NS_WINDOW
 
 				InvalidateRect(hAppWnd, NULL, TRUE);
 
+				RECT rect; // Making a rect to ensure that size is proper
+				GetClientRect(GetHandlerToWindow(), &rect);
+				glViewport(0, 0, rect.right - rect.left, rect.bottom - rect.top);
+
+				//glViewport(0, 0, appWidth, appHeight);
 				//SAE_GRAPHICS::system->SetViewport(0, 0); // Reset the viewport position to fit resize
 
 				isWndMode = false;
@@ -493,6 +500,10 @@ namespace NS_WINDOW
 				SetWindowPos(hAppWnd, HWND_TOP, cDisplayPosX, cDisplayPosY, appWidth, appHeight, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 
 				InvalidateRect(hAppWnd, NULL, TRUE);
+
+				RECT rect; // Making a rect to ensure that size is proper
+				GetClientRect(GetHandlerToWindow(), &rect);
+				glViewport(0, 0, rect.right - rect.left, rect.bottom - rect.top);
 
 				//SAE_GRAPHICS::system->SetViewport(0, 0); // Reset the viewport position to fit resize
 
