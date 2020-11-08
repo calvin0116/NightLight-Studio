@@ -327,12 +327,12 @@ void CollsionResolver::resolveAABB(const CollisionEvent& colEvent)
 
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.transform1->_position.z -= pen + std::numeric_limits<float>::epsilon();
+			colEvent.transform1->_position.z += -pen - std::numeric_limits<float>::epsilon();
 		}
 
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.transform2->_position.z += -pen - std::numeric_limits<float>::epsilon();
+			colEvent.transform2->_position.z += pen + std::numeric_limits<float>::epsilon();
 		}
 
 		break;
