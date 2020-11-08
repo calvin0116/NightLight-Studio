@@ -514,7 +514,7 @@ namespace NS_GRAPHICS
 		}
 		
 		// Get pointer to current mesh
-		Model* model = modelManager->_models[graphicsComp->_modelID];
+		//Model* model = modelManager->_models[graphicsComp->_modelID];
 
 		//// Replace all rgb for every vertex in mesh
 		//for (auto& mesh : model->_meshes)
