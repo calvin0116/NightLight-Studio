@@ -5,7 +5,7 @@
 ComponentCamera::ComponentCamera()
 	: _isActive{ true }, _cameraID{ -1 }, _flag{ COLOUR },
 	_colour{ 0.5f,0.5f,0.5f }, _fov{ 45.0f }, _near{ 1.0f }, _far{ 50000.0f },
-	_x{}, _y{}, _w{}, _h{}
+	_x{}, _y{}, _w{}, _h{}, _depth{ 0 }
 {
 	strcpy_s(ser_name, "CameraComponent");
 }
@@ -13,7 +13,7 @@ ComponentCamera::ComponentCamera()
 ComponentCamera::ComponentCamera(const int& cameraID)
 	: _isActive{ true }, _cameraID{ cameraID }, _flag{ COLOUR },
 	_colour{ 0.5f,0.5f,0.5f }, _fov{ 45.0f }, _near{ 1.0f }, _far{ 50000.0f },
-	_x{}, _y{}, _w{}, _h{}
+	_x{}, _y{}, _w{}, _h{}, _depth{ 0 }
 {
 	strcpy_s(ser_name, "CameraComponent");
 }
@@ -111,7 +111,7 @@ inline void ComponentCamera::Read(Value& val)
 		std::cout << "No depth data has been found" << std::endl;
 	else
 	{
-		_h = val["Depth"].GetFloat();
+		_h = val["Depth"].GetInt();
 	}
 }
 

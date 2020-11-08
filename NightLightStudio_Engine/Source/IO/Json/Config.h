@@ -29,7 +29,10 @@ struct ConfigData
 	//Selected Starting Screen (for ease of changing starting screen for debuggging purpose) 
 	std::string startscene;
 
-	int mouse_sensitivity;
+	//Camera Variables
+	float _positionSensitivity;
+	float _rotationSensitivity;
+	float _zoomSensitivity;
 };
 
 class Config : public MySystem ,public Singleton<Config> {
@@ -56,7 +59,9 @@ public:
 
 		Value& config_val = parser["settings"];
 		config_d.startscene = config_val["startscene"].GetString();
-		//config_d.mouse_sensitivity = config_val["mouse sensitivity"].GetFloat();
+		config_d._positionSensitivity = config_val["positionSensitivity"].GetFloat();
+		config_d._rotationSensitivity = config_val["rotationSensitivity"].GetFloat();
+		config_d._zoomSensitivity = config_val["zoomSensitivity"].GetFloat();
 	}
 
 
@@ -75,7 +80,9 @@ public:
 
 		Value& config_val = parser["settings"];
 		config_val["startscene"].SetString(rapidjson::StringRef(config_d.startscene.c_str()));
-		//config_val["mouse sensitivity"].SetFloat(config_d.mouse_sensitivity);
+		config_val["positionSensitivity"].SetFloat(config_d._positionSensitivity);
+		config_val["rotationSensitivity"].SetFloat(config_d._rotationSensitivity);
+		config_val["zoomSensitivity"].SetFloat(config_d._zoomSensitivity);
 
 		parser.Save();
 	};
