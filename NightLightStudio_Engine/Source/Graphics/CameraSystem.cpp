@@ -267,6 +267,9 @@ namespace NS_GRAPHICS
 			if (offsetted > NS_GRAPHICS::MAX_PITCH)
 				offsetted = NS_GRAPHICS::MAX_PITCH;
 
+			if (offsetted < NS_GRAPHICS::MIN_PITCH)
+				offsetted = NS_GRAPHICS::MIN_PITCH;
+
 			cam.SetCameraPitch(offsetted);
 		}
 
