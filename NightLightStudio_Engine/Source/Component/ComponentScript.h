@@ -12,13 +12,11 @@ public:
   {
     MonoObject*     _pInstance;
     uint32_t        _GCHandle;
-    bool            _isActive;        // Show on editor, can edit
-    bool            _isRunning;       // Show on editor, can edit
-    LocalString<64> _ScriptName; // Show on editor, can edit
   };
-  bool  _isActive;   // Show on editor, can edit
-  data  _Script1;    // 2 Script per component
-  data  _Script2;
+  bool            _isActive;    // Show on editor, can edit
+  bool            _isRunning;   // Show on editor, can edit
+  LocalString<64> _ScriptName;  // Show on editor, can edit
+  data            _MonoData;    // Mono Data
 
   ComponentScript();
 	~ComponentScript();

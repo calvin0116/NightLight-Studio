@@ -7,7 +7,7 @@ namespace Unicorn
   public class UniBehaviour
   {
     //Entity id
-    private uint id = 0;
+    public int id = 0;
 
     // public virtual void Awake() { }
     public virtual void Init() { }

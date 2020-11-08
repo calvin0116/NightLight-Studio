@@ -67,7 +67,6 @@ namespace NS_LOGIC
     }
     // new smth
     // C# Script
-    MonoBind::Bind();
   }
 
   void SystemLogic::GameInit()
@@ -85,8 +84,24 @@ namespace NS_LOGIC
     }
 
     // C# Script
+    MonoBind::Bind();
     // Init CS
-    MonoMethod* m_Init = MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
+    MonoMethod* baseInit = MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
+    auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    auto itrE = G_ECMANAGER->end<ComponentScript>();
+    for (; itrS != itrE; ++itrS)
+    {
+      ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+      if (MyScript == nullptr || !MyScript->_isActive)
+        continue;
+      MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
+      MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
+      int ID = G_ECMANAGER->getObjId(itrS);
+      MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
+      MonoMethod* MyInit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseInit);
+      MonoWrapper::InvokeMethod(MyInit, MyScript->_MonoData._pInstance);
+    }
+
     _Inited = true;
   }
 
@@ -137,6 +152,19 @@ namespace NS_LOGIC
       // Delete memory
       delete myComp->_pScript;
       myComp->_pScript = nullptr;
+    }
+
+    MonoMethod* baseExit = MonoWrapper::GetObjectMethod("Exit", "UniBehaviour");
+    auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    auto itrE = G_ECMANAGER->end<ComponentScript>();
+    for (; itrS != itrE; ++itrS)
+    {
+      ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+      if (MyScript == nullptr && !MyScript->_isActive)
+        continue;
+      MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
+      MonoMethod* MyExit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseExit);
+      MonoWrapper::InvokeMethod(MyExit, MyScript->_MonoData._pInstance);
     }
   }
 
