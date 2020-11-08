@@ -5,11 +5,15 @@
 // Testing
 #include <iostream>
 #include "..\..\Component\ComponentLight.h"
+#include "../Player.h"
+
+class player;
 
 class PossessScript : public IScript
 {
-  Entity PlayerEntity;
-  ComponentLight* CompLight;
+	ComponentTransform* playerTransform;
+	Player* player;
+
 public:
   // Exposed variables
   const bool Possessable = true;

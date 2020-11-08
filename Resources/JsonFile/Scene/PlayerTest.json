@@ -1,0 +1,116 @@
+{
+    "Objects": {
+        "Camera": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.0,
+                    2.0,
+                    3.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            }
+        },
+        "Plane": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    5.0,
+                    7.106937408447266,
+                    1.0
+                ],
+                "Scale": [
+                    50.0,
+                    1.0,
+                    50.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "AudioManager": {},
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "TestScript2",
+                "Tag": 101
+            }
+        },
+        "Player": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    5.429365158081055,
+                    13.648331642150879,
+                    0.0
+                ],
+                "Scale": [
+                    5.0,
+                    5.0,
+                    5.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            },
+            "RigidBody": {
+                "isStatic": false,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "Player",
+                "Tag": 0
+            }
+        }
+    }
+}
