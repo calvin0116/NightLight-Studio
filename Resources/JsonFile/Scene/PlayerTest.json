@@ -1,8 +1,8 @@
 {
     "Objects": {
-        "Camera": {
+        "PlayerCamera": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "PlayerCamera",
                 "Position": [
                     1.0,
                     236.45419311523438,
@@ -72,11 +72,11 @@
         },
         "Player": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "Player",
                 "Position": [
-                    0.0,
+                    12.903614044189454,
                     82.10693359375,
-                    0.0
+                    76.12945556640625
                 ],
                 "Scale": [
                     50.0,
@@ -99,7 +99,7 @@
                 "friction": 1.0,
                 "Force": [
                     0.0,
-                    -100.0,
+                    0.0,
                     0.0
                 ],
                 "Accelaration": [
@@ -121,6 +121,332 @@
                 "isActive": true,
                 "Name": "Player",
                 "Tag": 0
+            }
+        },
+        "Possessable": {
+            "TransformComponent": {
+                "EntityName": "Set1",
+                "Position": [
+                    -187.73126220703126,
+                    103.452392578125,
+                    0.0
+                ],
+                "Scale": [
+                    50.0,
+                    80.0,
+                    50.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": true,
+                "mass": 20.0,
+                "friction": 1.0,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "Possess",
+                "Tag": 3
+            }
+        },
+        "PossessableCamera": {
+            "TransformComponent": {
+                "EntityName": "Set1",
+                "Position": [
+                    -202.65672302246095,
+                    131.5900115966797,
+                    -26.91021156311035
+                ],
+                "Scale": [
+                    0.9999536871910095,
+                    0.9999884963035584,
+                    0.9999721646308899
+                ],
+                "Rotate": [
+                    -0.00020938859961461276,
+                    85.40186309814453,
+                    -0.00021007815666962415
+                ]
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "Camera",
+                "Tag": 3
+            }
+        },
+        "Possessable_2": {
+            "TransformComponent": {
+                "EntityName": "Set2",
+                "Position": [
+                    -273.2615966796875,
+                    103.452392578125,
+                    98.90814208984375
+                ],
+                "Scale": [
+                    50.0,
+                    80.0,
+                    50.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": true,
+                "mass": 20.0,
+                "friction": 1.0,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "Possess",
+                "Tag": 3
+            }
+        },
+        "PossessableCamera_2": {
+            "TransformComponent": {
+                "EntityName": "Set2",
+                "Position": [
+                    -284.05419921875,
+                    131.5900115966797,
+                    85.15283966064453
+                ],
+                "Scale": [
+                    0.9999440312385559,
+                    0.9999884963035584,
+                    0.9999649524688721
+                ],
+                "Rotate": [
+                    -179.999755859375,
+                    -34.876991271972659,
+                    -179.999755859375
+                ]
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "Camera",
+                "Tag": 3
+            }
+        },
+        "Pillar": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -552.38525390625,
+                    -8.499978065490723,
+                    -776.8848876953125
+                ],
+                "Scale": [
+                    10.0,
+                    500.0,
+                    10.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            }
+        },
+        "Pillar_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    51.85881042480469,
+                    -8.499980926513672,
+                    -659.5775146484375
+                ],
+                "Scale": [
+                    10.0,
+                    500.0,
+                    10.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            }
+        },
+        "Pillar_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    382.5596008300781,
+                    -8.499985694885254,
+                    -135.13308715820313
+                ],
+                "Scale": [
+                    10.0,
+                    500.0,
+                    10.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            }
+        },
+        "Pillar_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -49.806785583496097,
+                    -8.499988555908204,
+                    306.4539794921875
+                ],
+                "Scale": [
+                    10.0,
+                    500.0,
+                    10.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            }
+        },
+        "Pillar_4": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -514.3233642578125,
+                    -8.49998664855957,
+                    248.55276489257813
+                ],
+                "Scale": [
+                    10.0,
+                    500.0,
+                    10.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            }
+        },
+        "Pillar_5": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -843.5816040039063,
+                    -8.499980926513672,
+                    -294.574951171875
+                ],
+                "Scale": [
+                    10.0,
+                    500.0,
+                    10.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            }
+        },
+        "PossessableSpawn": {
+            "TransformComponent": {
+                "EntityName": "Set1",
+                "Position": [
+                    -193.70289611816407,
+                    105.64445495605469,
+                    -141.1052703857422
+                ],
+                "Scale": [
+                    0.9999536871910095,
+                    0.9999884963035584,
+                    0.9999721646308899
+                ],
+                "Rotate": [
+                    -0.00020938859961461276,
+                    85.40186309814453,
+                    -0.00021007815666962415
+                ]
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "SpawnPoint",
+                "Tag": 3
+            }
+        },
+        "PossessableSpawn_2": {
+            "TransformComponent": {
+                "EntityName": "Set2",
+                "Position": [
+                    -315.48419189453127,
+                    105.64447784423828,
+                    196.1343994140625
+                ],
+                "Scale": [
+                    0.9999536871910095,
+                    0.9999884963035584,
+                    0.9999721646308899
+                ],
+                "Rotate": [
+                    -0.00020938859961461276,
+                    85.40186309814453,
+                    -0.00021007815666962415
+                ]
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "SpawnPoint",
+                "Tag": 3
             }
         }
     }

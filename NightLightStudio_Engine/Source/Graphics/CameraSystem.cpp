@@ -272,6 +272,13 @@ namespace NS_GRAPHICS
 
 			cam.SetCameraPitch(offsetted);
 		}
+		else
+		{
+			glm::vec3 viewVec = /*tgt - tgt */ /*-*/ camFront;
+			cam.SetCameraYaw(atan2(viewVec.x, viewVec.z));
+			cam.SetCameraPitch(asin(-viewVec.y));
+
+		}
 
 		// camera zoom control
 		if (canThridPersonCamZoom)

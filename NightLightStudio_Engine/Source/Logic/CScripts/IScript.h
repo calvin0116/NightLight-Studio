@@ -6,8 +6,8 @@
 class IScript
 {
 protected:
-  Entity  MyID;
 public:
+  Entity  MyID;
   // IScript() {}
   virtual ~IScript() {}
   virtual void SetEntity(Entity _id) { MyID = _id; }

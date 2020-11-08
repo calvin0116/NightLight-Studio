@@ -4,6 +4,7 @@
 #include "../Messaging/SystemBroadcaster.h"
 #include "../Messaging/Messages/MessageScriptRequest.h"
 #include "CScripts/PossessScript.h"
+#include "SpawnPoint.h"
 
 #define PLAYER_MOVE_MAG 10000.0f
 #define PLAYER_FLY_MAG 500.0f
@@ -19,7 +20,7 @@
 /// </control mapping>
 
 Player::Player()
-	:comCol(nullptr), comRigid(nullptr), comTrans(nullptr), _playerState(PLAYERSTATE::HUMAN), _prevPlayerState(PLAYERSTATE::HUMAN), _front(0),camera(nullptr)
+	:comCol(nullptr), comRigid(nullptr), comTrans(nullptr), _playerState(PLAYERSTATE::HUMAN), _prevPlayerState(PLAYERSTATE::HUMAN), _front(0),camera(nullptr), possessStateCamera(nullptr)
 {
 	spawnPoint._rotation = { 0,0,0 };
 	spawnPoint._position = { 0,0,0 };
@@ -99,7 +100,7 @@ void Player::Init()
 			}
 			else if (_playerState == PLAYERSTATE::POSSESSED)
 			{
-				changeState(PLAYERSTATE::BUTTERFLY);
+				changeState(PLAYERSTATE::HUMAN);
 			}
 		});
 }
@@ -167,6 +168,23 @@ void Player::changeState(PLAYERSTATE state)
 		{
 			/*TO DO*/ 
 			//set player's transform to spawn point transform
+
+			// disable pos cam
+			possessStateCamera->SetActive(false);
+
+			// do camera settings on player camera
+			camera->SetActive(true);
+			camera->SetRotate(true);
+			//camera->SetZoom(true);
+
+			// change player state
+			changeState(PLAYERSTATE::HUMAN);
+
+			// turn off player collider
+			MyID.getComponent<ComponentCollider>()->isCollidable = true;
+
+			// set rigid body to static
+			MyID.getComponent<ComponentRigidBody>()->isStatic = false;
 			
 		}
 		//player is a human with human controls
@@ -272,24 +290,74 @@ bool Player::enterPossession()
 
 void Player::OnCollisionEnter(Entity other)
 {
-	//IScript* tmp = other.getComponent<ComponentCScript>()->_pScript;
-	//if (typeid(*tmp).hash_code() == typeid(PossessScript).hash_code())
-	//{
-	//	PossessScript* tmp1 = reinterpret_cast<PossessScript*>(tmp);
-	//	if (_playerState == PLAYERSTATE::BUTTERFLY)
-	//	{
-	//		//it will possess the object
-	//		changeState(PLAYERSTATE::POSSESSED);
-	//	}
-	//	ComponentTransform* comTransform = other.getComponent<ComponentTransform>();
-	//	std::vector<Entity> entityContainer =  G_ECMANAGER->getEntityTagContainer(comTransform->_entityName.toString());
-	//	for (Entity& entity : entityContainer )
-	//	{
-	//		IScript* tmp2 = entity.getComponent<ComponentCScript>()->_pScript;
-	//		if (typeid(*tmp2).hash_code() == typeid(AllScripts::CameraScript).hash_code())
-	//		{
+	// find script
+	IScript* tmp = other.getComponent<ComponentCScript>()->_pScript;
+	// script not found return
+	if (tmp == nullptr) return;
+	// check script
+	if (typeid(*tmp).hash_code() == typeid(PossessScript).hash_code())
+	{
+		// confirmed that player has collided with entity with possess script
 
-	//		}
-	//	}
-	//}
+		// if player is not a butterfly do nothing
+		//if (getState() != PLAYERSTATE::BUTTERFLY)
+		//	return;
+
+
+		// get possess script
+		PossessScript* posScr = reinterpret_cast<PossessScript*>(tmp);
+
+		// set camera to use possess script entity's camera
+		// get transform tag
+		ComponentTransform* comTransform = other.getComponent<ComponentTransform>();
+		std::vector<Entity> entityContainer =  G_ECMANAGER->getEntityTagContainer(comTransform->_entityName.toString());
+		// find tag
+		for (Entity& entity : entityContainer )
+		{
+			IScript* otherScr = entity.getComponent<ComponentCScript>()->_pScript;
+			if (typeid(*otherScr).hash_code() == typeid(AllScripts::CameraScript).hash_code())
+			{
+				// get camera script
+				AllScripts::CameraScript* posCam = reinterpret_cast<AllScripts::CameraScript*>(otherScr);
+				// do camera settings
+				posCam->SetActive(true);
+				posCam->SetRotate(false);
+				posCam->SetZoom(false);
+				// set cam var
+				possessStateCamera = posCam;
+			}
+			if (typeid(*otherScr).hash_code() == typeid(SpawnPoint).hash_code())
+			{
+				// get spawn script
+				SpawnPoint* spawn = reinterpret_cast<SpawnPoint*>(otherScr);
+
+				// set player spawn position to possess spawn transfrom
+				ComponentTransform* myTf = MyID.getComponent<ComponentTransform>();
+				// get the transform
+				Entity possessSpawnEntity = spawn->MyID;
+				ComponentTransform* possessSpawnTransform = possessSpawnEntity.getComponent< ComponentTransform>();
+				// set the data
+				myTf->_position = possessSpawnTransform->_position;
+				myTf->_rotation = possessSpawnTransform->_rotation;
+			}
+		}
+
+		// do camera settings on player camera
+		camera->SetActive(false);
+		camera->SetRotate(false);
+		camera->SetZoom(false);
+
+		// change player state
+		changeState(PLAYERSTATE::POSSESSED);
+
+		// turn off player collider
+		MyID.getComponent<ComponentCollider>()->isCollidable = false;
+
+		// set rigid body to static
+		ComponentRigidBody* rgb = MyID.getComponent<ComponentRigidBody>();
+		rgb->isStatic = true;
+		rgb->velocity = NlMath::Vector3D(0.0f, 0.0f, 0.0f);
+		rgb->acceleration = NlMath::Vector3D(0.0f, 0.0f, 0.0f);
+
+	}
 }

@@ -25,6 +25,7 @@ class Player : public IScript
 {
 	Entity playerEntity;
 	AllScripts::CameraScript*camera;
+	AllScripts::CameraScript* possessStateCamera;
 
 	NlMath::Vector3D currentCameraDirection;
 

@@ -22,6 +22,7 @@ namespace AllScripts
   {
       //  int  MyID;
     glm::vec3 tgt;
+    glm::vec3 initTgt;
     float dist;
     bool isActive;
 
@@ -58,6 +59,7 @@ namespace AllScripts
 
     CameraScript() :
       tgt(0.0f, 0.0f, 0.0f),
+      initTgt(0.0f, 0.0f, 0.0f),
       dist(1.0f),
       isActive(false),
       canRotate(true),
@@ -91,7 +93,7 @@ namespace AllScripts
 
         //compTrans->_position = tgt - viewVector * dist;
         tgt = compTrans->_position + viewVector * dist;
-
+        initTgt = tgt;
         //tgt = compTrans->_position + viewVector;
     };
 
@@ -101,7 +103,10 @@ namespace AllScripts
         {
             NS_GRAPHICS::CameraSystem& camSys = NS_GRAPHICS::CameraSystem::GetInstance();
 
-            camSys.SetThridPersonCamTarget(tgt);
+            if(canRotate)
+                camSys.SetThridPersonCamTarget(tgt);
+            else
+                camSys.SetThridPersonCamTarget(initTgt);
 
             camSys.SetThridPersonCamDistance(dist);
 
