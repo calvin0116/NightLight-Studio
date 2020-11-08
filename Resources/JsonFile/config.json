@@ -7,7 +7,7 @@
     "settings": {
         "startscene": "Intro",
         "master_volume": 37.5,
-        "start_in_level_editor": false,
+        "start_in_level_editor": true,
         "positionSensitivity": 200.0,
         "rotationSensitivity": 1000.0,
         "zoomSensitivity": 50.0

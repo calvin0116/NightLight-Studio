@@ -23,9 +23,9 @@ class ENGINE_API FluffyUnicornEngine
 	ENGINESTATE _engineState;
 	float _prevdt;
 	HINSTANCE hinstance;
-	bool engine_running = true;
+	
 	//bool scene_running = true;
-	bool scene_running = false;	//This should come from game / logic system later on
+	//bool scene_running = false;	//This should come from game / logic system later on
 public:
 	FluffyUnicornEngine() = default;
 	~FluffyUnicornEngine() = default;

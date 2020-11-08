@@ -21,9 +21,9 @@ void FluffyUnicornEngine::Init(HINSTANCE& hInstance)
 	{
 		if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_8))
 		{
-			scene_running = !scene_running;
-			std::cout << "Scene Running: " << scene_running << std::endl;
-			if (scene_running)
+			CONFIG_DATA->GetConfigData().sceneRunning = !CONFIG_DATA->GetConfigData().sceneRunning;
+			std::cout << "Scene Running: " << CONFIG_DATA->GetConfigData().sceneRunning << std::endl;
+			if (CONFIG_DATA->GetConfigData().sceneRunning)
 				gameState = GameState::Load;
 			else
 				gameState = GameState::Exit;
@@ -40,7 +40,7 @@ void FluffyUnicornEngine::Run()
   DELTA_T->load();
 	//System Init
 	SYS_MAN->Init();		// Master Sound Volume / Graphics settings (high res / lows) 
-	while (engine_running)
+	while (CONFIG_DATA->GetConfigData().engineRunning)
 	{
 		DELTA_T->start();
 		switch (gameState)
@@ -58,13 +58,13 @@ void FluffyUnicornEngine::Run()
 			{
 				DELTA_T->accumulatedTime -= DELTA_T->fixed_dt;
 				++DELTA_T->currentNumberOfSteps;
-				SYS_MAN->FixedUpdate(scene_running);
+				SYS_MAN->FixedUpdate(CONFIG_DATA->GetConfigData().sceneRunning);
 			}
-			SYS_MAN->Update(scene_running);
+			SYS_MAN->Update(CONFIG_DATA->GetConfigData().sceneRunning);
 			break;
 		case GameState::Exit:
 			SYS_MAN->GameExit();
-			scene_running = false;
+			CONFIG_DATA->GetConfigData().sceneRunning = false;
 			break;
 		default:
 			break;
@@ -81,9 +81,9 @@ void FluffyUnicornEngine::Run()
 			gameState = GameState::Init;
 			break;
 		case NS_SCENE::SC_EXIT:
-			if (scene_running)
+			if (CONFIG_DATA->GetConfigData().sceneRunning)
 				SYS_MAN->GameExit();
-			engine_running = false;
+			CONFIG_DATA->GetConfigData().engineRunning = false;
 			break;
 		default:
 			break;

@@ -4,7 +4,7 @@
 
 #include "../Input/SystemInput.h" // For testing
 #include "CScripts/AllScripts.h"
-
+#include "../IO/Json/Config.h"
 
 namespace NS_LOGIC
 {
@@ -77,6 +77,11 @@ namespace NS_LOGIC
 
   void SystemLogic::Update()
   {
+    // Getting the bool needed
+    // ->  CONFIG_DATA->GetConfigData().isPlaying;      //Play button toggling bool
+    // -> CONFIG_DATA->GetConfigData().engineRunning;
+    // -> CONFIG_DATA->GetConfigData().sceneRunning;
+
     //if (!_isPlaying)
     //  return;
     //if (!_Loaded)
