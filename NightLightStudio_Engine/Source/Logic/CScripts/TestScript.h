@@ -11,6 +11,7 @@
 class TestScript : public IScript
 {
   TestScript2* testScript2;
+  TestScript2* dupTestScript2;
 public:
 
   virtual void Init()
@@ -22,6 +23,23 @@ public:
     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(msg);
     // Get script from msg.
     testScript2 = dynamic_cast<TestScript2*>(msg._pScript);
+
+    //// Get entity by name
+    //auto itr = G_ECMANAGER->begin<TransformComponent>();
+    //auto eitr = G_ECMANAGER->end<TransformComponent>();
+    //Entity en;
+    //for (; itr != eitr; ++itr)
+    //{
+    //  TransformComponent* trans = G_ECMANAGER->getComponent<TransformComponent>(itr);
+    //  if (trans && trans->_entityName.toString() == "Plane")
+    //  {
+    //    en = G_ECMANAGER->getEntity(itr);
+    //  }        
+    //}
+
+    //CScriptComponent* script = en.getComponent<CScriptComponent>();
+    //if (script)
+    //  dupTestScript2 = dynamic_cast<TestScript2*>(script->_pScript);
   }
 
   virtual void Update()

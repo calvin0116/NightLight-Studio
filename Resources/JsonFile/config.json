@@ -7,6 +7,7 @@
 	"settings": {
 		"startscene": "Intro",
 		"master_volume": 37.5,
-		"start_in_level_editor": false
+		"start_in_level_editor": false,
+		"mouse sensitivity" : 1.0
 	}
 }

@@ -41,7 +41,6 @@ namespace NS_LOGIC
         {
           if (_isPlaying)
           {
-            _Loaded = false;
             _Inited = false;
             GameExit();
           }
@@ -66,9 +65,10 @@ namespace NS_LOGIC
       myComp->_pScript = AllScripts::Construct(myComp->_sName.toString());
       myComp->_pScript->SetEntity(G_ECMANAGER->getEntity(itr));
     }
-
+    // new smth
     // C# Script
     MonoBind::Bind();
+    _Loaded = true;
   }
 
   void SystemLogic::GameInit()
@@ -88,6 +88,7 @@ namespace NS_LOGIC
     // C# Script
     // Init CS
     MonoMethod* m_Init = MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
+    _Inited = true;
   }
 
   void SystemLogic::Update()
@@ -95,15 +96,9 @@ namespace NS_LOGIC
     if (!_isPlaying)
       return;
     if (!_Loaded)
-    {
-      _Loaded = true;
       GameLoad();
-    }
     if (!_Inited)
-    {
-      _Inited = true;
       GameInit();
-    }
     ////Run Script?
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
@@ -124,8 +119,7 @@ namespace NS_LOGIC
 
   void SystemLogic::GameExit()
   {
-    if (!_isPlaying)
-      return;
+    _Inited = false;
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
     for (; itr != itrEnd; ++itr)
