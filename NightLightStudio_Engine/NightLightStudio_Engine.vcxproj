@@ -279,6 +279,7 @@
     <ClInclude Include="Source\Mono\Binding\Binder.h" />
     <ClInclude Include="Source\Mono\Binding\Systems\AudioBind.h" />
     <ClInclude Include="Source\Mono\Binding\CustomTypes\Vector3DBind.h" />
+    <ClInclude Include="Source\Mono\Binding\Systems\ForceBind.h" />
     <ClInclude Include="Source\Mono\MonoWrapper.h" />
     <ClInclude Include="Source\Physics\ForceManager.h" />
     <ClInclude Include="Source\Physics\SystemPhysics.h" />
@@ -369,6 +370,7 @@
     <ClCompile Include="Source\Mono\Binding\Binder.cpp" />
     <ClCompile Include="Source\Mono\Binding\Systems\AudioBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\CustomTypes\Vector3DBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Systems\ForceBind.cpp" />
     <ClCompile Include="Source\Mono\MonoWrapper.cpp" />
     <ClCompile Include="Source\Physics\ForceManager.cpp" />
     <ClCompile Include="Source\Physics\SystemPhysics.cpp" />
