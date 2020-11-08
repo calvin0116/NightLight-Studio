@@ -28,6 +28,8 @@ namespace SystemInput_ns
 			}
 			else
 			{
+				SetClipCursor(false);
+
 				_prevMousePos = _mousePos;
 
 				GetCursorPos(&_mousePos);
@@ -106,23 +108,29 @@ namespace SystemInput_ns
 	bool SystemMousePosition::ToggleClipCursor()
 	{
 		_clipCursor = !_clipCursor;
-		RECT rect = GetWinClientRect();
-		rect.top += 10;
-		rect.right -= 10;
-		rect.bottom -= 10;
-		rect.left += 10;
-		ClipCursor(&rect);
+		if (_clipCursor)
+		{
+			RECT rect = GetWinClientRect();
+			rect.top += 10;
+			rect.right -= 10;
+			rect.bottom -= 10;
+			rect.left += 10;
+			ClipCursor(&rect);
+		}
 		return _clipCursor;
 	}
 	void SystemMousePosition::SetClipCursor(bool clip)
 	{
 		_clipCursor = clip;
-		RECT rect = GetWinClientRect();
-		rect.top += 10;
-		rect.right -= 10;
-		rect.bottom -= 10;
-		rect.left += 10;
-		ClipCursor(&rect);
+		if (clip)
+		{
+			RECT rect = GetWinClientRect();
+			rect.top += 10;
+			rect.right -= 10;
+			rect.bottom -= 10;
+			rect.left += 10;
+			ClipCursor(&rect);
+		}
 	}
 	POINT SystemMousePosition::SetCurPos(int x, int y)
 	{

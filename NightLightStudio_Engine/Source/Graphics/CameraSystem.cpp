@@ -27,51 +27,6 @@ namespace NS_GRAPHICS
 
 	void CameraSystem::Init()
 	{
-		// I think can leave this in
-		// uses arrow keys to move target on xz plane
-#if TESTMOVETARGET == 1
-#define TEST_TARGET_MOVE_STEP 0.5f;
-		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_FRONT", SystemInput_ns::IKEY_UP, "TARGET_MOVE_FRONT", SystemInput_ns::OnHold, [this]()
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_FRONT", SystemInput_ns::IKEY_I, "TARGET_MOVE_FRONT", SystemInput_ns::OnHold, [this]()
-		{
-			if (useThridPersonCam)
-			{
-				tgt += GetXZViewVector() * TEST_TARGET_MOVE_STEP;
-			}
-		});
-		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_BACK", SystemInput_ns::IKEY_DOWN, "TARGET_MOVE_BACK", SystemInput_ns::OnHold, [this]()
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_BACK", SystemInput_ns::IKEY_K, "TARGET_MOVE_BACK", SystemInput_ns::OnHold, [this]()
-		{
-			if (useThridPersonCam)
-			{
-				tgt += GetXZViewVector_Back() * TEST_TARGET_MOVE_STEP;
-			}
-		});
-		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_LEFT", SystemInput_ns::IKEY_LEFT, "TARGET_MOVE_LEFT", SystemInput_ns::OnHold, [this]()
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_LEFT", SystemInput_ns::IKEY_J, "TARGET_MOVE_LEFT", SystemInput_ns::OnHold, [this]()
-		{
-			if (useThridPersonCam)
-			{
-				tgt += GetXZViewVector_Left() * TEST_TARGET_MOVE_STEP;
-			}
-		});
-		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_RIGHT", SystemInput_ns::IKEY_RIGHT, "TARGET_MOVE_RIGHT", SystemInput_ns::OnHold, [this]()
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_RIGHT", SystemInput_ns::IKEY_L, "TARGET_MOVE_RIGHT", SystemInput_ns::OnHold, [this]()
-		{
-			if (useThridPersonCam)
-			{
-				tgt += GetXZViewVector_Right() * TEST_TARGET_MOVE_STEP;
-			}
-		});
-#endif
-
-		// toggle thrid person camera
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TOGGLE_THIRD_PERSONCAM", SystemInput_ns::IKEY_P, "TOGGLE_THIRD_PERSONCAM", SystemInput_ns::OnPress, [this]()
-		{
-			ToggleUseThridPersonCam();
-		});
-
-
 		// Initialize all required cameras(if any)
 		// Currently only one test camera, thus no initialization required
 
@@ -80,6 +35,65 @@ namespace NS_GRAPHICS
 		
 		//Needed for alt key checking in input system
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ALT_REGISTER", SystemInput_ns::IKEY_ALT);
+
+#if TESTMOVETARGET == 1
+#define TEST_TARGET_MOVE_STEP 0.5f;
+
+		// toggle thrid person camera
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TOGGLE_THIRD_PERSONCAM", SystemInput_ns::IKEY_P, "TOGGLE_THIRD_PERSONCAM", SystemInput_ns::OnPress, [this]()
+		{
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ALT))
+			{
+				ToggleUseThridPersonCam();
+
+			}
+		});
+
+		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_FRONT", SystemInput_ns::IKEY_UP, "TARGET_MOVE_FRONT", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_FRONT", SystemInput_ns::IKEY_W, "TARGET_MOVE_FRONT", SystemInput_ns::OnHold, [this]()
+		{
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ALT))
+			{
+				if (useThridPersonCam)
+				{
+					tgt += GetXZViewVector() * TEST_TARGET_MOVE_STEP;
+				}
+			}
+		});
+		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_BACK", SystemInput_ns::IKEY_DOWN, "TARGET_MOVE_BACK", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_BACK", SystemInput_ns::IKEY_S, "TARGET_MOVE_BACK", SystemInput_ns::OnHold, [this]()
+		{
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ALT))
+			{
+				if (useThridPersonCam)
+				{
+					tgt += GetXZViewVector_Back() * TEST_TARGET_MOVE_STEP;
+				}
+			}
+		});
+		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_LEFT", SystemInput_ns::IKEY_LEFT, "TARGET_MOVE_LEFT", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_LEFT", SystemInput_ns::IKEY_A, "TARGET_MOVE_LEFT", SystemInput_ns::OnHold, [this]()
+		{
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ALT))
+			{
+				if (useThridPersonCam)
+				{
+					tgt += GetXZViewVector_Left() * TEST_TARGET_MOVE_STEP;
+				}
+			}
+		});
+		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_RIGHT", SystemInput_ns::IKEY_RIGHT, "TARGET_MOVE_RIGHT", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TARGET_MOVE_RIGHT", SystemInput_ns::IKEY_D, "TARGET_MOVE_RIGHT", SystemInput_ns::OnHold, [this]()
+		{
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ALT))
+			{
+				if (useThridPersonCam)
+				{
+					tgt += GetXZViewVector_Right() * TEST_TARGET_MOVE_STEP;
+				}
+			}
+		});
+#endif
 
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("MOVE_CAMERA_XY", SystemInput_ns::IMOUSE_MBUTTON, "XY_CAMERA_MOVE", SystemInput_ns::OnHold, [this]()
 			{
