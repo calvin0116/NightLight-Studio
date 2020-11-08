@@ -22,9 +22,12 @@ public:
 	glm::vec3 _specular;
 
 	// For spot and directional
-	//float direction;
+	// used as reference only
+	// Note that direction is set based on transform component's rotation
+	glm::vec3 _direction;
 
 	// For point and spot
+	// Also known as intensity
 	float _attenuation;
 
 	// For spot
@@ -58,6 +61,18 @@ public:
 	glm::vec3 GetSpecular() const;
 	// Applicable for all lights
 	void SetSpecular(const glm::vec3& specular);
+
+	// Applicable for spot and spot light
+	float GetIntensity();
+	void SetIntensity(const float& intensity);
+
+	// Alternate way to set attenuation/intensity
+	float GetAttenuation();
+	void SetAttenuation(const float& attenuation);
+
+
+	//TO DO
+	// Set setters and getters for spotlight
 
 	////////////////////////////////////////
 

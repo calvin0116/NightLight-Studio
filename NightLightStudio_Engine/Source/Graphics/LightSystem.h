@@ -2,6 +2,7 @@
 
 #include "../../framework.h"
 #include "../Component/ComponentManager.h"
+#include <array>
 
 #include "Lights.h"
 
@@ -11,8 +12,6 @@ namespace NS_GRAPHICS
 
 	struct LightBlock
 	{
-		// TO DO
-		// Currently variables are not registering properly for light block
 		// Number of lights currently in scene
 		int _dLights_Num;
 		int _pLights_Num;
@@ -41,11 +40,14 @@ namespace NS_GRAPHICS
 		LightSystem();
 		~LightSystem();
 
-		//std::vector<DirLight*> dLights;
-		//std::vector<PointLight*> pLights;
-		//std::vector<SpotLight*> sLights;
-
 		LightBlock* lightblock;
+
+		// Light block trackers
+		// Used to check for available/allocated lights for light components
+		// All set to false upon initialization
+		std::array<bool, s_MaxLights> dLights_tracker{};
+		std::array<bool, s_MaxLights> pLights_tracker{};
+		std::array<bool, s_MaxLights> sLights_tracker{};
 
 	public:
 		// Unique Singleton instance
@@ -57,6 +59,8 @@ namespace NS_GRAPHICS
 
 		void Init();
 
+		void Update();
+
 		/* TO DO*/
 		// Position should be set in transform component
 		// Update uniforms for lights based on existing data
@@ -64,8 +68,8 @@ namespace NS_GRAPHICS
 		LightBlock*& GetLightBlock();
 
 		// Adds Directional Light to scene, returns the id token for currently added light
-		int AddDirLight(const glm::vec3& direction = glm::vec3(1.f, 0.f, 0.f), const glm::vec3& ambient = glm::vec3(1.f, 1.f, 1.f),
-			const glm::vec3& diffuse = glm::vec3(1.f, 1.f, 1.f), const glm::vec3& specular = glm::vec3(1.f, 1.f, 1.f));
+		int AddDirLight(const glm::vec3& direction = glm::vec3(1.f, 0.f, 0.f), const glm::vec3& ambient = glm::vec3(0.2f, 0.2f, 0.2f),
+			const glm::vec3& diffuse = glm::vec3(0.5f, 0.5f, 0.5f), const glm::vec3& specular = glm::vec3(1.f, 1.f, 1.f));
 
 		// Adds Point Light to scene, returns the id token for currently added light
 		int AddPointLight(const float& attenuation = 0.2f, const glm::vec3& ambient = glm::vec3(1.f, 1.f, 1.f),
