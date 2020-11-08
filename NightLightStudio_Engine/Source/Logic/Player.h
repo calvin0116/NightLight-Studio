@@ -8,6 +8,10 @@
 #include "../Input/SystemInput.h"
 #include "../../glm/gtx/euler_angles.hpp"
 #include "CScripts/IScript.h"
+#include "CameraScript.h"
+#include "../Graphics/CameraSystem.h"
+
+
 
 enum class PLAYERSTATE
 {
@@ -15,15 +19,18 @@ enum class PLAYERSTATE
 	BUTTERFLY,
 	POSSESSED
 };
+
 class Player : public IScript
 {
 	Entity playerEntity;
+
 	NlMath::Vector3D currentCameraDirection;
 	
-	//hardcoded for testing
-	ComponentCollider comCol;
-	ComponentRigidBody comRigid;
-	ComponentTransform comTrans;
+	//keep a copy of the component
+	ComponentCollider* comCol;
+	ComponentRigidBody* comRigid;
+	ComponentTransform* comTrans;
+	ComponentTransform spawnPoint;
 
 	PLAYERSTATE _prevPlayerState;
 	PLAYERSTATE _playerState;
@@ -34,6 +41,9 @@ public:
 	void Init() override;
 	void Update() override;
 	void Exit() override;
+	PLAYERSTATE getState();
 	void changeState(PLAYERSTATE state);
+	void setSpawnPoint(ComponentTransform& _spawnPoint);
 	bool enterPossession();
+	virtual void OnCollisionEnter(Entity other) override;
 };

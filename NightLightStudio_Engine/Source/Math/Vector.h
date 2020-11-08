@@ -41,6 +41,7 @@ namespace NlMath
 		Vector3D operator -() const;
 
 		/*conversion operator is case we are using open gl, this converts my vector to glm vectors*/
+		Vector3D(const glm::vec3& vec);
 		Vector3D& operator = (const glm::vec3& rhs);
 		operator glm::vec2() const;
 		operator glm::vec3() const;

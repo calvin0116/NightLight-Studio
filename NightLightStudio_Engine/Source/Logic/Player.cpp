@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.h"
+#include "../Component/ComponentCScript.h"
 
 #define PLAYER_MOVE_MAG 1000.0f
 
@@ -14,34 +15,58 @@
 /// </control mapping>
 
 Player::Player()
-	:comCol(COLLIDERS::CAPSULE),comRigid(),comTrans(),_playerState(PLAYERSTATE::HUMAN),_prevPlayerState(PLAYERSTATE::HUMAN),_front(0), playerEntity(nullptr, -1)
+	:comCol(nullptr), comRigid(nullptr), comTrans(nullptr), _playerState(PLAYERSTATE::HUMAN), _prevPlayerState(PLAYERSTATE::HUMAN), _front(0)
 {
-
+	spawnPoint._rotation = { 0,0,0 };
+	spawnPoint._position = { 0,0,0 };
+	spawnPoint._scale = { 1,1,1 };
 }
 
 void Player::Init()
 {
+	playerEntity = MyID;
+	comCol = MyID.getComponent<ColliderComponent>();
+	comRigid = MyID.getComponent<RigidBodyComponent>();
+	comTrans = MyID.getComponent<TransformComponent>();
+	//initially the player is a human with human controls
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk1", WALKFRONT, "WalkFront", SystemInput_ns::OnHold, [this]()
 		{
-			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, NlMath::Vec3(currentCameraDirection.x,0,currentCameraDirection.z), PLAYER_MOVE_MAG);
+			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector();
+			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk2", WALKLEFT, "WalkLeft", SystemInput_ns::OnHold, [this]()
 		{
-			
-			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, NlMath::Vec3( -currentCameraDirection.x, 0,0), PLAYER_MOVE_MAG);
+
+			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector_Left();
+			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk3", WALKBACK, "WalkBack", SystemInput_ns::OnHold, [this]()
 		{
 			//negative direction
-			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, NlMath::Vec3(-currentCameraDirection.x, 0, -currentCameraDirection.z), PLAYER_MOVE_MAG);
+			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector_Back();
+			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk4", WALKRIGHT, "WalkRight", SystemInput_ns::OnHold, [this]()
 		{
-			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, NlMath::Vec3(currentCameraDirection.x, 0, 0), PLAYER_MOVE_MAG);
+			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector_Right();
+			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
 		});
-	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Become Butterfly", WALKRIGHT, "butterfly", SystemInput_ns::OnPress, [this]()
+	//state change control
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Become Butterfly", POSSESS, "butterfly", SystemInput_ns::OnPress, [this]()
 		{
-			changeState(PLAYERSTATE::BUTTERFLY);
+			if (_playerState == PLAYERSTATE::HUMAN)
+			{
+				changeState(PLAYERSTATE::BUTTERFLY);
+			}
+			if (_playerState == PLAYERSTATE::BUTTERFLY)
+			{
+				changeState(PLAYERSTATE::HUMAN);
+			}
+			if (_playerState == PLAYERSTATE::POSSESSED)
+			{
+				changeState(PLAYERSTATE::BUTTERFLY);
+			}
+			
 		});
 }
 
@@ -52,7 +77,7 @@ void Player::Update()
 	case PLAYERSTATE::HUMAN:
 	{
 		/*TO DO*/ // take camera position as front
-		_front = NlMath::Vec3(currentCameraDirection.x, 0, currentCameraDirection.z);
+		_front = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector();
 
 		break;
 	}
@@ -65,6 +90,9 @@ void Player::Update()
 	}
 		
 	case PLAYERSTATE::POSSESSED:
+	{
+		//player will change to possessed state if it collides with the possessed
+	}
 		break;
 	default:
 		break;
@@ -73,6 +101,11 @@ void Player::Update()
 
 void Player::Exit()
 {
+}
+
+PLAYERSTATE Player::getState()
+{
+	return _playerState;
 }
 
 void Player::changeState(PLAYERSTATE state)
@@ -89,36 +122,24 @@ void Player::changeState(PLAYERSTATE state)
 			//set player's transform to spawn point transform
 			
 		}
+		//player is a human with human controls
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk1", WALKFRONT, "WalkFront", SystemInput_ns::OnHold, [this]()
 			{
-				NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, _front, PLAYER_MOVE_MAG);
+				NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, NlMath::Vec3(currentCameraDirection.x, 0, currentCameraDirection.z), PLAYER_MOVE_MAG);
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk2", WALKLEFT, "WalkLeft", SystemInput_ns::OnHold, [this]()
 			{
-				glm::quat Quaternion(glm::radians(glm::vec3(0,-90,0)));
-				glm::mat4 Rotate = glm::mat4_cast(Quaternion);
-				NlMath::Matrix4x4 rotation;
-				rotation = Rotate;
-				NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, rotation * _front , PLAYER_MOVE_MAG);
+				NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, NlMath::Vec3(-currentCameraDirection.x, 0, 0), PLAYER_MOVE_MAG);
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk3", WALKBACK, "WalkBack", SystemInput_ns::OnHold, [this]()
 			{
 				//negative direction
-				NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, -_front, PLAYER_MOVE_MAG);
+				NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, NlMath::Vec3(-currentCameraDirection.x, 0, -currentCameraDirection.z), PLAYER_MOVE_MAG);
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk4", WALKRIGHT, "WalkRight", SystemInput_ns::OnHold, [this]()
 			{
-				glm::quat Quaternion(glm::radians(glm::vec3(0, 90, 0)));
-				glm::mat4 Rotate = glm::mat4_cast(Quaternion);
-				NlMath::Matrix4x4 rotation;
-				rotation = Rotate;
-				NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, rotation * _front, PLAYER_MOVE_MAG);
+				NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, NlMath::Vec3(currentCameraDirection.x, 0, 0), PLAYER_MOVE_MAG);
 			});
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Become Butterfly", WALKRIGHT, "butterfly", SystemInput_ns::OnPress, [this]()
-			{
-				changeState(PLAYERSTATE::BUTTERFLY);
-			});
-		
 		break;
 	}
 
@@ -139,6 +160,8 @@ void Player::changeState(PLAYERSTATE state)
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk2");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk3");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk4");
+
+		//camera
 		break;
 	}
 		
@@ -147,9 +170,26 @@ void Player::changeState(PLAYERSTATE state)
 	}
 }
 
+void Player::setSpawnPoint(ComponentTransform& _spawnPoint)
+{
+	spawnPoint = _spawnPoint;
+}
+
 bool Player::enterPossession()
 {
 	//check if the player is colliding with any object
 	//check any object is possessable
 	return true;
+}
+
+void Player::OnCollisionEnter(Entity other)
+{
+	//ComponentCScript* tmp = other.getComponent<ComponentCScript>();
+	//if (tmp != nullptr)
+	//{
+	//	tmp->_iTag == 101;
+	//	tmp->_iTag == 102;
+	//	tmp->_iTag == 103;
+	//	tmp->_iTag == 104;
+	//}
 }

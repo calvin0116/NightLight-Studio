@@ -147,9 +147,11 @@ namespace NS_LOGIC
     ComponentCScript* comp1 = _obj1.getComponent<ComponentCScript>();
     ComponentCScript* comp2 = _obj2.getComponent<ComponentCScript>();
     if(comp1)
-      comp1->_pScript->OnCollisionEnter(_obj2);
+        if (comp1->_pScript)
+            comp1->_pScript->OnCollisionEnter(_obj2);
     if(comp2)
-      comp2->_pScript->OnCollisionEnter(_obj1);
+        if (comp2->_pScript)
+            comp2->_pScript->OnCollisionEnter(_obj1);
   }
 
   void SystemLogic::OnCollisionStay(Entity _obj1, Entity _obj2)

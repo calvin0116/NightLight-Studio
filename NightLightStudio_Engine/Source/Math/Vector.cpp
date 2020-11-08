@@ -132,6 +132,11 @@ namespace NlMath
 	}
 
 
+	Vector3D::Vector3D(const glm::vec3& vec)
+		:x(vec.x), y(vec.y), z(vec.z)
+	{
+	}
+
 	Vector3D& Vector3D::operator=(const glm::vec3& rhs)
 	{
 		x = rhs.x;

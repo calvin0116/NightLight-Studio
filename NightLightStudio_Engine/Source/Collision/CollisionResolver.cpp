@@ -196,6 +196,12 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 	// "Calculate the dot product of the geometry wall normal with the velocity vector of the object. 
 	//    The result equals the velocity component in the direction of the wall normal. Subtract the wall 
 	//    normal multiplied by this result from the velocity vector to remove all velocity in that direction. " 
+
+
+	NlMath::Vector3D entity1Force = NS_PHYSICS::USE_THE_FORCE.resolveTranslationalForces(colEvent.entity1);
+	NlMath::Vector3D entity2Force = NS_PHYSICS::USE_THE_FORCE.resolveTranslationalForces(colEvent.entity2);
+	float totalFriction = colEvent.rigid1->friction + colEvent.rigid2->friction;
+
 	if (!colEvent.rigid1->isStatic)
 	{
 		float dot1 = colEvent.collisionNormal * colEvent.rigid1->velocity;
@@ -214,7 +220,7 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 
 
 		// force due to the other object
-		NlMath::Vector3D externalForce = NS_PHYSICS::USE_THE_FORCE.resolveTranslationalForces(colEvent.entity2);
+		NlMath::Vector3D externalForce = entity2Force;
 
 		float dote = colEvent.collisionNormal * externalForce;
 		NlMath::Vector3D externalForceResolve = colEvent.collisionNormal * dote;
@@ -224,6 +230,20 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 
 
 		NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity1, externalForceResolve, 1.0f);
+
+
+
+		// frictional force = friction co-efficient * normal force
+
+		float frictionalForce_mag = (totalFriction * normalForce).length();
+		if (colEvent.rigid1->velocity.x != 0.0f || colEvent.rigid1->velocity.y != 0.0f || colEvent.rigid1->velocity.z != 0.0f)
+		{
+			NlMath::Vector3D frictionalForce = colEvent.rigid1->velocity * -1;
+			frictionalForce = NlMath::Vector3DNormalize(frictionalForce);
+			frictionalForce = frictionalForce * frictionalForce_mag;
+
+			NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity1, frictionalForce, 1.0f);
+		}
 	}
 	if (!colEvent.rigid2->isStatic)
 	{
@@ -245,12 +265,27 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 
 
 		// force due to the other object
-		NlMath::Vector3D externalForce = NS_PHYSICS::USE_THE_FORCE.resolveTranslationalForces(colEvent.entity1);
+		NlMath::Vector3D externalForce = entity1Force;
 
 		float dote = oppNorm * externalForce;
 		NlMath::Vector3D externalForceResolve = oppNorm * dote;
 
 		NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity2, externalForceResolve, 1.0f);
+
+
+
+		// frictional force = friction co-efficient * normal force
+
+		float frictionalForce_mag = (totalFriction * normalForce).length();
+
+		if (colEvent.rigid2->velocity.x != 0.0f || colEvent.rigid2->velocity.y != 0.0f || colEvent.rigid2->velocity.z != 0.0f)
+		{
+			NlMath::Vector3D frictionalForce = colEvent.rigid2->velocity * -1;
+			frictionalForce = NlMath::Vector3DNormalize(frictionalForce);
+			frictionalForce = frictionalForce * frictionalForce_mag;
+
+			NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity2, frictionalForce, 1.0f);
+		}
 	}
 }
 

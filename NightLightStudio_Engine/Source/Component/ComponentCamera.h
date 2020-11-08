@@ -34,6 +34,8 @@ public:
 	float _w;
 	float _h;
 
+	//Draw order
+	float _depth;
 
 	// Default constructor
 	ComponentCamera();

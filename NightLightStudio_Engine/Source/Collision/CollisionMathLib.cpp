@@ -265,8 +265,9 @@ namespace NlMath
         }
         else
         {
+            return SIDES::NO_COLLISION;
             //shouldnt reach here!
-            throw;
+            //throw;
         }
     }
 
