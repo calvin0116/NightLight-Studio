@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "../Component/ComponentCScript.h"
 
-#define PLAYER_MOVE_MAG 1000.0f
+#define PLAYER_MOVE_MAG 10000.0f
 
 /// <control mapping>
 ////////////////////////////////////////////////////////////////////////////////////////////
