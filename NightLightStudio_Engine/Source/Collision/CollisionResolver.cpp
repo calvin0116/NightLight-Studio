@@ -242,7 +242,7 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 			frictionalForce = NlMath::Vector3DNormalize(frictionalForce);
 			frictionalForce = frictionalForce * frictionalForce_mag;
 
-			NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity1, frictionalForce, 100.0f);
+			NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity1, frictionalForce, 1.0f);
 		}
 	}
 	if (!colEvent.rigid2->isStatic)
@@ -270,7 +270,7 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 		float dote = oppNorm * externalForce;
 		NlMath::Vector3D externalForceResolve = oppNorm * dote;
 
-		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity2, externalForceResolve, 100.0f);
+		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity2, externalForceResolve, 1.0f);
 
 		//Entity e = G_ECMANAGER->getEntity("hello");
 
@@ -321,7 +321,7 @@ void CollsionResolver::resolveAABB(const CollisionEvent& colEvent)
 	}
 	case SIDES::BACK:
 	{
-		float pen = colEvent.collider2->collider.aabb.vecMin.z - colEvent.collider1->collider.aabb.vecMax.z;
+		float pen = colEvent.collider1->collider.aabb.vecMin.z - colEvent.collider2->collider.aabb.vecMax.z;
 
 		pen = pen * 0.5f;
 

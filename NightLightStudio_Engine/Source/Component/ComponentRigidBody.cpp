@@ -54,7 +54,7 @@ inline void ComponentRigidBody::Read(Value& val)
 		std::cout << "No mass friction has been found" << std::endl;
 	else
 	{
-		mass = val["friction"].GetFloat();
+		friction = val["friction"].GetFloat();
 	}
 
 	if (val.FindMember("Force") == val.MemberEnd())
