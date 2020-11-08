@@ -91,7 +91,7 @@ void FluffyUnicornEngine::Exit()
 	SYS_MAN->Free();
 
 	DELTA_T->Exit();
-	CONFIG_DATA->Exit();
+	//CONFIG_DATA->Exit();
 	//SYS_MAN->Free();
 	SYS_COMPONENT->Free();
 	
