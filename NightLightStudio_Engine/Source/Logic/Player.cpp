@@ -31,21 +31,25 @@ void Player::Init()
 	//initially the player is a human with human controls
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk1", WALKFRONT, "WalkFront", SystemInput_ns::OnHold, [this]()
 		{
-			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector(), PLAYER_MOVE_MAG);
+			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector();
+			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk2", WALKLEFT, "WalkLeft", SystemInput_ns::OnHold, [this]()
 		{
-			
-			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, NlMath::Vec3( -currentCameraDirection.x, 0,0), PLAYER_MOVE_MAG);
+
+			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector_Left();
+			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk3", WALKBACK, "WalkBack", SystemInput_ns::OnHold, [this]()
 		{
 			//negative direction
-			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, NlMath::Vec3(-currentCameraDirection.x, 0, -currentCameraDirection.z), PLAYER_MOVE_MAG);
+			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector_Back();
+			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk4", WALKRIGHT, "WalkRight", SystemInput_ns::OnHold, [this]()
 		{
-			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, NlMath::Vec3(currentCameraDirection.x, 0, 0), PLAYER_MOVE_MAG);
+			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector_Right();
+			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
 		});
 	//state change control
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Become Butterfly", POSSESS, "butterfly", SystemInput_ns::OnPress, [this]()
