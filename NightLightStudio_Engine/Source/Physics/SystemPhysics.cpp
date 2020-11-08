@@ -12,9 +12,6 @@
 namespace NS_PHYSICS
 {
 
-	//constexpr float MAX_SPEED = 10.0f;
-	constexpr float MAX_SPEED = 10000.0f;
-
 	PhysicsSystem::PhysicsSystem()
 		:_maxspeed(MAX_SPEED)
 	{
@@ -56,6 +53,9 @@ namespace NS_PHYSICS
 
 		// update the forces
 		//_forceManager.updateTranslationalForces();
+
+		// update the forces
+		_forceManager.updateTranslationalForces();
 
 
 		auto itr = G_ECMANAGER->begin<ComponentRigidBody>();
@@ -266,7 +266,7 @@ namespace NS_PHYSICS
 
 
 		// update the forces
-		_forceManager.updateTranslationalForces();
+		_forceManager.clearTranslationalForces();
 
 
 		//return true;

@@ -18,6 +18,11 @@
                     -0.0,
                     0.0
                 ]
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "Camera",
+                "Tag": 1
             }
         },
         "Plane": {
@@ -45,7 +50,8 @@
             "RigidBody": {
                 "isStatic": true,
                 "isGravity": false,
-                "mass": 0.0,
+                "mass": 0.009999999776482582,
+                "friction": 1.0,
                 "Force": [
                     0.0,
                     0.0,
@@ -69,7 +75,7 @@
                 "EntityName": "",
                 "Position": [
                     0.0,
-                    427.3662109375,
+                    82.10693359375,
                     0.0
                 ],
                 "Scale": [
@@ -87,17 +93,18 @@
                 "colliderType": "AABB"
             },
             "RigidBody": {
-                "isStatic": true,
+                "isStatic": false,
                 "isGravity": true,
-                "mass": 100.0,
+                "mass": 20.0,
+                "friction": 1.0,
                 "Force": [
                     0.0,
-                    -0.000011920928955078125,
+                    -100.0,
                     0.0
                 ],
                 "Accelaration": [
                     0.0,
-                    -100.0,
+                    0.0,
                     0.0
                 ]
             },

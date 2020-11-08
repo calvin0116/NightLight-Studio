@@ -100,6 +100,8 @@ class ForceManager
 
 	// a multimap of forcehandle to translation force
 	std::multimap<int, TranslationalForce> translationalForceMap;
+	// nxt tick
+	std::multimap<int, TranslationalForce> translationalForceMap_next;
 	// current key assignemnt
 	int currentKeyIndex;
 
@@ -109,7 +111,12 @@ public:
 	// add force to the rigidbody 
 	void addForce(Entity ent, NlMath::Vector3D direction, float magnitude);
 
+
+	// add force to the rigidbody in the next tick
+	void addForceToNextTick(Entity ent, NlMath::Vector3D direction, float magnitude);
+
 	void updateTranslationalForces();
+	void clearTranslationalForces();
 
 
 	// resolve forces of a single rigid body

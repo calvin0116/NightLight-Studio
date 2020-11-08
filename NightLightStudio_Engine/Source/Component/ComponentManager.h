@@ -14,6 +14,7 @@
 
 
 struct ISerializable;
+//class ComponentTransform;
 
 namespace NS_COMPONENT
 {
@@ -612,9 +613,9 @@ public:
 				{
 
 					ComponentManager::ComponentSet::ObjectData* currentObjdata = reinterpret_cast<ComponentManager::ComponentSet::ObjectData*>(*memItr);
-					int id = currentObjdata->objId + compSetMgr->compSet->idIndexModifier;
-					if (isChild) id += IDRANGE_RT;
-					return EntityHandle(compSetMgr, id);
+					int hid = currentObjdata->objId + compSetMgr->compSet->idIndexModifier;
+					if (isChild) hid += IDRANGE_RT;
+					return EntityHandle(compSetMgr, hid);
 				}
 
 				void operator++()
@@ -1039,6 +1040,13 @@ public:
 		int getObjId(Iterator itr);
 		EntityHandle getEntity(Iterator itr);
 		EntityHandle getEntity(int uid);
+
+
+		//class ComponentTransform;
+		EntityHandle getEntity(std::string str);
+
+		std::vector<EntityHandle> getEntityTagContainer(std::string str);
+
 
 	private:
 

@@ -906,6 +906,39 @@ ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentS
 	return obj;
 }
 
+ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::getEntity(std::string str)
+{
+	auto itr = begin<ComponentTransform>();
+	auto endItr = end<ComponentTransform>();
+	for (; itr != endItr; ++itr)
+	{
+		ComponentTransform* trans = getComponent<ComponentTransform>(itr);
+		if (trans && trans->_entityName.toString() == str)
+		{
+			return getEntity(itr);
+		}
+	}
+	return EntityHandle(nullptr, -1);
+}
+
+std::vector<ComponentManager::ComponentSetManager::EntityHandle> ComponentManager::ComponentSetManager::getEntityTagContainer(std::string str)
+{
+	std::vector<EntityHandle> container;
+
+	auto itr = begin<ComponentTransform>();
+	auto endItr = end<ComponentTransform>();
+	for (; itr != endItr; ++itr)
+	{
+		ComponentTransform* trans = getComponent<ComponentTransform>(itr);
+		if (trans && trans->_entityName.toString() == str)
+		{
+			Entity ent = getEntity(itr);
+			container.push_back(ent);
+		}
+	}
+
+	return container;
+}
 
 //// ComponentSetManager END
 ///////////////////////////////////////////////////////////////////////////////////////////////////

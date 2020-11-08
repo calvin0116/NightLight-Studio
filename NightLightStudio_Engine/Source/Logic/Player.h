@@ -13,6 +13,7 @@
 
 
 
+
 enum class PLAYERSTATE
 {
 	HUMAN = 0,
@@ -23,9 +24,10 @@ enum class PLAYERSTATE
 class Player : public IScript
 {
 	Entity playerEntity;
+	AllScripts::CameraScript*camera;
 
 	NlMath::Vector3D currentCameraDirection;
-	
+
 	//keep a copy of the component
 	ComponentCollider* comCol;
 	ComponentRigidBody* comRigid;
