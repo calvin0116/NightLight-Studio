@@ -215,7 +215,7 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 		normalForce = normalForce * -1;
 		
 		// normal reaction force
-		NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity1, normalForce, 1.0f);
+		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity1, normalForce, 1.0f);
 
 
 
@@ -229,7 +229,7 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 		// F = m dp / dt
 
 
-		NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity1, externalForceResolve, 1.0f);
+		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity1, externalForceResolve, 1.0f);
 
 
 
@@ -242,7 +242,7 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 			frictionalForce = NlMath::Vector3DNormalize(frictionalForce);
 			frictionalForce = frictionalForce * frictionalForce_mag;
 
-			NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity1, frictionalForce, 1.0f);
+			NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity1, frictionalForce, 100.0f);
 		}
 	}
 	if (!colEvent.rigid2->isStatic)
@@ -260,7 +260,7 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 		normalForce = normalForce * -1;
 
 		// normal reaction force
-		NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity2, normalForce, 1.0f);
+		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity2, normalForce, 1.0f);
 
 
 
@@ -270,9 +270,9 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 		float dote = oppNorm * externalForce;
 		NlMath::Vector3D externalForceResolve = oppNorm * dote;
 
-		NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity2, externalForceResolve, 1.0f);
+		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity2, externalForceResolve, 100.0f);
 
-
+		
 
 		// frictional force = friction co-efficient * normal force
 
@@ -284,7 +284,7 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 			frictionalForce = NlMath::Vector3DNormalize(frictionalForce);
 			frictionalForce = frictionalForce * frictionalForce_mag;
 
-			NS_PHYSICS::USE_THE_FORCE.addForce(colEvent.entity2, frictionalForce, 1.0f);
+			NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity2, frictionalForce, 1.0f);
 		}
 	}
 }
@@ -303,12 +303,36 @@ void CollsionResolver::resolveAABB(const CollisionEvent& colEvent)
 	}
 	case SIDES::FRONT:
 	{
+		float pen = colEvent.collider2->collider.aabb.vecMin.z - colEvent.collider1->collider.aabb.vecMax.z;
 
+		pen = pen * 0.5f;
+
+		if (!colEvent.rigid2->isStatic)
+		{
+			colEvent.transform2->_position.z += -pen - std::numeric_limits<float>::epsilon();
+		}
+
+		if (!colEvent.rigid1->isStatic)
+		{
+			colEvent.transform1->_position.z += pen + std::numeric_limits<float>::epsilon();
+		}
 		break;
 	}
 	case SIDES::BACK:
 	{
+		float pen = colEvent.collider2->collider.aabb.vecMin.z - colEvent.collider1->collider.aabb.vecMax.z;
 
+		pen = pen * 0.5f;
+
+		if (!colEvent.rigid2->isStatic)
+		{
+			colEvent.transform2->_position.z += -pen - std::numeric_limits<float>::epsilon();
+		}
+
+		if (!colEvent.rigid1->isStatic)
+		{
+			colEvent.transform1->_position.z += pen + std::numeric_limits<float>::epsilon();
+		}
 		break;
 	}
 	case SIDES::TOP:
@@ -342,28 +366,34 @@ void CollsionResolver::resolveAABB(const CollisionEvent& colEvent)
 	case SIDES::RIGHT:
 	{
 		float pen = colEvent.collider2->collider.aabb.vecMin.x - colEvent.collider1->collider.aabb.vecMax.x;
+
+		pen = pen * 0.5f;
+
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.transform2->_position.x += -pen + std::numeric_limits<float>::epsilon();
+			colEvent.transform2->_position.x += -pen - std::numeric_limits<float>::epsilon();
 		}
 
 		if (!colEvent.rigid1->isStatic)
 		{
-			//colEvent.transform1->_position.y = colEvent.transform2->_position.y - pen;
+			colEvent.transform1->_position.x += pen + std::numeric_limits<float>::epsilon();
 		}
 		break;
 	}
 	case SIDES::LEFT:
 	{
 		float pen = colEvent.collider1->collider.aabb.vecMin.x - colEvent.collider2->collider.aabb.vecMax.x;
+
+		pen = pen * 0.5f;
+
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.transform1->_position.x += -pen + std::numeric_limits<float>::epsilon();
+			colEvent.transform1->_position.x += -pen - std::numeric_limits<float>::epsilon();
 		}
 
 		if (!colEvent.rigid2->isStatic)
 		{
-			//colEvent.transform1->_position.y = colEvent.transform2->_position.y - pen;
+			colEvent.transform2->_position.x += pen + std::numeric_limits<float>::epsilon();
 		}
 		break;
 	}

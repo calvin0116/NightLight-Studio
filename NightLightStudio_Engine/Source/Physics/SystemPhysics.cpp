@@ -57,6 +57,9 @@ namespace NS_PHYSICS
 		// update the forces
 		//_forceManager.updateTranslationalForces();
 
+		// update the forces
+		_forceManager.updateTranslationalForces();
+
 
 		auto itr = G_ECMANAGER->begin<ComponentRigidBody>();
 		auto itrEnd = G_ECMANAGER->end<ComponentRigidBody>();
@@ -266,7 +269,7 @@ namespace NS_PHYSICS
 
 
 		// update the forces
-		_forceManager.updateTranslationalForces();
+		_forceManager.clearTranslationalForces();
 
 
 		//return true;
