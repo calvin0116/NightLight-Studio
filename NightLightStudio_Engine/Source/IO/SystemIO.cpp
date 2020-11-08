@@ -38,10 +38,12 @@ void SystemIO::GameExit()
 
 void SystemIO::Free()
 {
+	CONFIG_DATA->Free();
 }
 
 void SystemIO::Exit()
 {
+	CONFIG_DATA->Exit();
 	DestroyInstance();
 }
 

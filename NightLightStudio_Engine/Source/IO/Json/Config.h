@@ -75,7 +75,7 @@ public:
 
 		Value& config_val = parser["settings"];
 		config_val["startscene"].SetString(rapidjson::StringRef(config_d.startscene.c_str()));
-		config_val["mouse sensitivity"].SetInt(config_d.mouse_sensitivity);
+		config_val["mouse sensitivity"].SetFloat(config_d.mouse_sensitivity);
 
 		parser.Save();
 	};
