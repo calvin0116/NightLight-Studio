@@ -133,18 +133,18 @@ namespace NS_SCENE
 		to_change_scene = SC_NOCHANGE;
 		
 		//~~!Create object using data
-		std::cout << "===============================================" << std::endl;
-		std::cout << "Loading Scene: " << current_scene << std::endl;
+		//std::cout << "===============================================" << std::endl;
+		//std::cout << "Loading Scene: " << current_scene << std::endl;
 		if (scene->CheckForMember("Objects"))
 		{
-			std::cout << "Initialising Objects....." << std::endl;
+			//std::cout << "Initialising Objects....." << std::endl;
 			NS_SERIALISER::EntityListCreation((*scene)["Objects"]);
 		}
 		else
 		{
 			std::cout << "Failed to find object to initailise....." << std::endl;
 		}
-		std::cout << "===============================================" << std::endl;
+		//std::cout << "===============================================" << std::endl;
 	}
 
 	void SceneManager::InitScene()

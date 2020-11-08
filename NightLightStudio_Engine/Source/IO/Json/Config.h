@@ -77,7 +77,9 @@ public:
 			config_d.isPlaying = false;
 		else
 			config_d.isPlaying = true;
-	}
+
+		std::cout << "Level editor is:" << config_d.levelEditorMode << " Play button: " << config_d.isPlaying << std::endl;
+	} 
 
 
 	ENGINE_API void Init()

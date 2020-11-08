@@ -78,6 +78,7 @@ namespace NS_LOGIC
   void SystemLogic::Update()
   {
     // Getting the bool needed
+    // #include "../IO/Json/Config.h"
     // ->  CONFIG_DATA->GetConfigData().isPlaying;      //Play button toggling bool
     // -> CONFIG_DATA->GetConfigData().engineRunning;
     // -> CONFIG_DATA->GetConfigData().sceneRunning;

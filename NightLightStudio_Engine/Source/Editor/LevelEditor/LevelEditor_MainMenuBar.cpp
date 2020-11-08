@@ -111,8 +111,9 @@ void LevelEditor::LE_MainMenuBar()
         LE_AddCheckbox("PLAY##MMBAR", &CONFIG_DATA->GetConfigData().isPlaying, []()
             {
                 // START/STOP ENGINE RUN HERE
+                std::cout << "Play button: " << CONFIG_DATA->GetConfigData().isPlaying << std::endl;
             });
-
+        
         ImGui::EndMenuBar();
     }
 
