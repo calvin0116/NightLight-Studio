@@ -35,6 +35,13 @@ inline void ComponentRigidBody::Read(Value& val)
 		isStatic = val["isStatic"].GetBool();
 	}
 
+	if (val.FindMember("isGravity") == val.MemberEnd())
+		std::cout << "No gravitay data has been found" << std::endl;
+	else
+	{
+		isGravity = val["isGravity"].GetBool();
+	}
+
 	if (val.FindMember("Force") == val.MemberEnd())
 		std::cout << "No Force data has been found" << std::endl;
 	else
@@ -63,6 +70,7 @@ inline Value ComponentRigidBody::Write()
 	Value val(rapidjson::kObjectType);
 	
 	NS_SERIALISER::ChangeData(&val, "isStatic", isStatic);		//Bool
+	NS_SERIALISER::ChangeData(&val, "isGravity", isGravity);	//Bool
 
 	Value force_val(rapidjson::kArrayType);
 	force_val.PushBack(force.x, global_alloc);
