@@ -19,12 +19,12 @@
 #define MESH_MAX_LOD 18
 #define MESH_MIN_LOD -20
 
-//#define ENT_TEST 1
-#define ENT_TEST 0
+#define ENT_TEST 1
+//#define ENT_TEST 0
 
 
-#define USEVEL 0
-//#define USEVEL 1
+////#define USEVEL 0
+////#define USEVEL 1
 
 
 
