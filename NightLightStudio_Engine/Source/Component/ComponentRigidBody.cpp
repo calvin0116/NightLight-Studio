@@ -17,7 +17,8 @@ ComponentRigidBody::ComponentRigidBody() :
 	mass(0.0f),
 	isGravity(false),
 	gravity(0.0f, -GRAVITY_DEF, 0.0f),
-	forceHandle(-1) //default -1 to ininit
+	forceHandle(-1), //default -1 to ininit
+	friction(0.01)
 {
 	strcpy_s(ser_name,"RigidBody");
 }
@@ -47,6 +48,13 @@ inline void ComponentRigidBody::Read(Value& val)
 	else
 	{
 		mass = val["mass"].GetFloat();
+	}
+	
+	if (val.FindMember("friction") == val.MemberEnd())
+		std::cout << "No mass friction has been found" << std::endl;
+	else
+	{
+		mass = val["friction"].GetFloat();
 	}
 
 	if (val.FindMember("Force") == val.MemberEnd())
@@ -81,6 +89,7 @@ inline Value ComponentRigidBody::Write()
 
 
 	NS_SERIALISER::ChangeData(&val, "mass", mass);	//Float
+	NS_SERIALISER::ChangeData(&val, "friction", friction);	//Float
 
 	Value force_val(rapidjson::kArrayType);
 	force_val.PushBack(force.x, global_alloc);

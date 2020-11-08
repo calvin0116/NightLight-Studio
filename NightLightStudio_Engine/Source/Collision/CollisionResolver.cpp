@@ -200,6 +200,7 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 
 	NlMath::Vector3D entity1Force = NS_PHYSICS::USE_THE_FORCE.resolveTranslationalForces(colEvent.entity1);
 	NlMath::Vector3D entity2Force = NS_PHYSICS::USE_THE_FORCE.resolveTranslationalForces(colEvent.entity2);
+	float totalFriction = colEvent.rigid1->friction + colEvent.rigid2->friction;
 
 	if (!colEvent.rigid1->isStatic)
 	{
@@ -234,8 +235,8 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 
 		// frictional force = friction co-efficient * normal force
 
-		float frictionalForce_mag = (1.0f * normalForce).length();
-		if (colEvent.rigid2->velocity.x != 0.0f && colEvent.rigid2->velocity.y != 0.0f && colEvent.rigid2->velocity.z != 0.0f)
+		float frictionalForce_mag = (totalFriction * normalForce).length();
+		if (colEvent.rigid1->velocity.x != 0.0f || colEvent.rigid1->velocity.y != 0.0f || colEvent.rigid1->velocity.z != 0.0f)
 		{
 			NlMath::Vector3D frictionalForce = colEvent.rigid1->velocity * -1;
 			frictionalForce = NlMath::Vector3DNormalize(frictionalForce);
@@ -275,9 +276,9 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 
 		// frictional force = friction co-efficient * normal force
 
-		float frictionalForce_mag = (1.0f * normalForce).length();
+		float frictionalForce_mag = (totalFriction * normalForce).length();
 
-		if (colEvent.rigid2->velocity.x != 0.0f && colEvent.rigid2->velocity.y != 0.0f && colEvent.rigid2->velocity.z != 0.0f)
+		if (colEvent.rigid2->velocity.x != 0.0f || colEvent.rigid2->velocity.y != 0.0f || colEvent.rigid2->velocity.z != 0.0f)
 		{
 			NlMath::Vector3D frictionalForce = colEvent.rigid2->velocity * -1;
 			frictionalForce = NlMath::Vector3DNormalize(frictionalForce);

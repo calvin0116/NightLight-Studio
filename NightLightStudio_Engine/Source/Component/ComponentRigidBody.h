@@ -25,6 +25,8 @@ typedef struct ComponentRigidBody : public ISerializable //: public IComponent
 	bool isGravity;
 	//gravity accleration of the object
 	NlMath::Vector3D gravity;
+	// friction coefficient of the object
+	float friction;
 
 	// handle to the force handled by force manager
 	int forceHandle;

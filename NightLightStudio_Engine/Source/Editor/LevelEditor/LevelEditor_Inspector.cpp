@@ -409,6 +409,7 @@ void InspectorWindow::RigidBodyComp(Entity& ent)
 			ImGui::Checkbox("IsStatic", &rb->isStatic);
 			ImGui::Checkbox("IsGravity", &rb->isGravity);
 			ImGui::InputFloat("Mass", &rb->mass);
+			ImGui::InputFloat("Friction", &rb->friction);
 			ImGui::InputFloat3("Force", rb->force.m);
 			ImGui::InputFloat3("Acceleration", rb->acceleration.m);
 
