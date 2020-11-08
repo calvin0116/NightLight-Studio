@@ -408,6 +408,7 @@ void InspectorWindow::RigidBodyComp(Entity& ent)
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			ImGui::Checkbox("IsStatic", &rb->isStatic);
 			ImGui::Checkbox("IsGravity", &rb->isGravity);
+			ImGui::InputFloat("Mass", &rb->mass);
 			ImGui::InputFloat3("Force", rb->force.m);
 			ImGui::InputFloat3("Acceleration", rb->acceleration.m);
 

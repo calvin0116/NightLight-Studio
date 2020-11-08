@@ -125,6 +125,12 @@ namespace NS_PHYSICS
 			// resolve forces 
 			compR->force = _forceManager.resolveTranslationalForces(ent);
 
+
+			if (compR->force.x != 0.0f || compR->force.y != 0.0f || compR->force.z != 0.0f)
+			{
+				int i = 1;
+			}
+
 			// do gravity
 			if (compR->isGravity)
 			{
