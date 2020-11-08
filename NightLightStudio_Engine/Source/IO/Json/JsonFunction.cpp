@@ -49,6 +49,10 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<GraphicsComponent>(Comp_list, entity, component_name);
             }
+            else if (component_name == "CScriptComponent")
+            {
+                CreateAndWriteComp<CScriptComponent>(Comp_list, entity, component_name);
+            }
             else if (component_name == "ScriptComponent")
             {
                 CreateAndWriteComp<ScriptComponent>(Comp_list, entity, component_name);

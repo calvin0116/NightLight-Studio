@@ -53,7 +53,12 @@
                     0.0
                 ]
             },
-            "AudioManager": {}
+            "AudioManager": {},
+            "CScriptComponent": {
+                "isActive": false,
+                "Name": "lol",
+                "Tag": 0
+            }
         },
         "Prop1": {
             "TransformComponent": {
@@ -75,13 +80,12 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "\\box.fbx"
-            },
-            "面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面": {
-                "isActive": false,
-                "Name": "TestScript",
-                "Tag": 2
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "UniqueEntity": {
@@ -101,11 +105,6 @@
                     -0.0,
                     0.0
                 ]
-            },
-            "面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面面\u0001TestScript2": {
-                "isActive": true,
-                "Name": "TestScript2",
-                "Tag": 101
             }
         }
     }

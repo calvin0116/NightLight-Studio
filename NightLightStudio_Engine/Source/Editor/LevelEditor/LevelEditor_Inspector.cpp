@@ -71,13 +71,13 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<LightComponent>();
 			entComp._ent.getComponent<LightComponent>()->Read(*entComp._rjDoc);
 		}
-		/*
-		else if (t == typeid(ScriptComponent).hash_code())
+		
+		else if (t == typeid(CScriptComponent).hash_code())
 		{
-			entComp._ent.AttachComponent<ScriptComponent>();
-			entComp._ent.getComponent<ScriptComponent>()->Read(*entComp._rjDoc);
+			entComp._ent.AttachComponent<CScriptComponent>();
+			entComp._ent.getComponent<CScriptComponent>()->Read(*entComp._rjDoc);
 		}
-		*/
+		
 		return comp;
 	};
 
@@ -113,13 +113,13 @@ void InspectorWindow::Start()
 			entComp.Copy(entComp._ent.getComponent<LightComponent>()->Write());
 			entComp._ent.RemoveComponent<LightComponent>();
 		}
-		/*
-		else if (t == typeid(ScriptComponent).hash_code())
+		
+		else if (t == typeid(CScriptComponent).hash_code())
 		{
-			entComp.Copy(entComp._ent.getComponent<ScriptComponent>()->Write());
-			entComp._ent.RemoveComponent<ScriptComponent>();
+			entComp.Copy(entComp._ent.getComponent<CScriptComponent>()->Write());
+			entComp._ent.RemoveComponent<CScriptComponent>();
 		}
-		*/
+		
 		return std::any(entComp);
 	};
 

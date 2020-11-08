@@ -4,7 +4,7 @@
 
 ComponentCScript::ComponentCScript() : _isActive(false), _iTag(0)
 {
-
+    strcpy_s(ser_name, "CScriptComponent");
 }
 
 ComponentCScript::~ComponentCScript()
