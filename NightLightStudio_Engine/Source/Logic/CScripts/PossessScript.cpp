@@ -1,20 +1,21 @@
 #pragma once
 // Temporary for C++ scripting
 #include "PossessScript.h"
-#include "APIScript.h"
 #include "..\..\Core\DeltaTime.h"
+#include "../../Component/ComponentCScript.h"
+
 
 void PossessScript::Init()
 {
   // Fetch player entity here.
-  // GetEntity by name
-  PlayerEntity = APIScript::FindEntityByName("Player");
-  CompLight = PlayerEntity.getComponent<ComponentLight>();
+    playerTransform = nullptr;
+
 }
 
 void PossessScript::Update()
 {
-  ChangeLight(10.0f);
+  //ChangeLight(10.0f);
+    
 }
 
 void PossessScript::Exit()
@@ -24,11 +25,29 @@ void PossessScript::Exit()
 
 void PossessScript::OnCollisionEnter(Entity other)
 {
-  // Your own ID
-  (void)MyID;
-  // The other entity I collided with
-  (void)other;
-
+  ComponentCScript* tmp = other.getComponent<ComponentCScript>();
+  if (tmp != nullptr)
+  {
+      if (tmp->_iTag == 0)
+	  {
+          //logic
+          player = dynamic_cast<Player*>(tmp->_pScript);
+          //if the colliding player is in butterfly state
+          if (player->getState() == PLAYERSTATE::BUTTERFLY)
+          {
+              //it will possess the object
+              player->changeState(PLAYERSTATE::POSSESSED);
+          }
+         
+          //init player transform here
+          if (playerTransform == nullptr)
+          {
+              playerTransform = other.getComponent<ComponentTransform>();
+          }
+          
+          
+	  }
+  }
 }
 
 void PossessScript::ChangeLight(float val)
