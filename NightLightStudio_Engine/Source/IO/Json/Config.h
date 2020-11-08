@@ -47,11 +47,6 @@ public:
 	{
 		std::cout << "Parser::StartUp" << std::endl;
 		parser.Load();
-	}
-
-
-	ENGINE_API void Init()
-	{
 		std::cout << "Parser::Loading of data" << std::endl;
 		Value& wind_val = parser["window"];
 
@@ -62,6 +57,12 @@ public:
 		Value& config_val = parser["settings"];
 		config_d.startscene = config_val["startscene"].GetString();
 		config_d.mouse_sensitivity = config_val["mouse sensitivity"].GetFloat();
+	}
+
+
+	ENGINE_API void Init()
+	{
+
 	};
 
 	ENGINE_API void Free() 

@@ -295,7 +295,6 @@ namespace NS_SCENE
 	void SceneManager::SetNextScene(std::string scene_name)
 	{
 		
-		
 		fs::path scene_path = scene_name;
 		bool found = false;
 		for (auto& scene_pair : scene_list)
