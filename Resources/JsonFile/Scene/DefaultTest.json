@@ -2,6 +2,7 @@
     "Objects": {
         "Camera": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.0,
                     2.0,
@@ -21,6 +22,7 @@
         },
         "Plane": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     5.0,
                     2.0,
@@ -42,6 +44,9 @@
             },
             "RigidBody": {
                 "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
                 "Force": [
                     0.0,
                     0.0,
@@ -55,13 +60,14 @@
             },
             "AudioManager": {},
             "CScriptComponent": {
-                "isActive": false,
-                "Name": "lol",
-                "Tag": 0
+                "isActive": true,
+                "Name": "TestScript2",
+                "Tag": 101
             }
         },
         "Prop1": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     0.03007793426513672,
                     0.0,
@@ -86,10 +92,16 @@
                 "Metallic": "",
                 "Roughness": "",
                 "AmbientOcclusion": ""
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "TestScript",
+                "Tag": 0
             }
         },
         "UniqueEntity": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     0.0,
                     0.0,

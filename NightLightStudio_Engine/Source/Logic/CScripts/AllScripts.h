@@ -26,5 +26,7 @@ namespace AllScripts
       return dynamic_cast<IScript*>(new PossessScript());
     else if (name == "SpawnPoint")
         return dynamic_cast<IScript*>(new SpawnPoint());
+    // No such script
+    return nullptr;
   }
 }

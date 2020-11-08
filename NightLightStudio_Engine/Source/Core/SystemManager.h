@@ -39,8 +39,8 @@ public:
 	//ENGINE_API void LateInit() { for (auto my_sys : Systems) my_sys.second->LateInit(); }
 
 	//== Game / System running loop
-	ENGINE_API void FixedUpdate();
-	ENGINE_API void Update();
+	ENGINE_API void FixedUpdate(bool& scene_running);
+	ENGINE_API void Update(bool& scene_running);
 
 
 	//== Game Asserts clear

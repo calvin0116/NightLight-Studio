@@ -9,9 +9,9 @@
 namespace NS_LOGIC
 {
   // Variable to decide whether to run function
-  bool SystemLogic::_isPlaying = false;
-  bool SystemLogic::_Loaded = false;
-  bool SystemLogic::_Inited = false;
+  //bool SystemLogic::_isPlaying = false;
+  //bool SystemLogic::_Loaded = false;
+  //bool SystemLogic::_Inited = false;
 
   void SystemLogic::Load()
   {
@@ -32,37 +32,23 @@ namespace NS_LOGIC
           MonoWrapper::ReloadScripts();
         }
       });
-
-    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("PlayLogic", SystemInput_ns::IKEY_NUMPAD_9, "PlayLogic", SystemInput_ns::OnRelease, [this]()
-      {
-        //Only if mouse wheel + alt button is pressed, camera will move.
-        //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
-        if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_9))
-        {
-          if (_isPlaying)
-          {
-            GameExit();
-          }
-          _isPlaying = !_isPlaying;
-          std::cout << "Logic Playing: " << _isPlaying << std::endl;
-        }
-      });
-
-    // Attach handler
     r.AttachHandler("ScriptRequest", &SystemLogic::HandleMsg, this);
   }
 
   void SystemLogic::GameLoad()
   {
-    if (!_isPlaying)
-      return;
+    //if (!_isPlaying)
+    //  return;
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
     for (; itr != itrEnd; ++itr)
     {
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
+      //if(myComp->_sName.toString)
       myComp->_pScript = AllScripts::Construct(myComp->_sName.toString());
-      myComp->_pScript->SetEntity(G_ECMANAGER->getEntity(itr));
+      // If constructed.
+      if(myComp->_pScript)
+        myComp->_pScript->SetEntity(G_ECMANAGER->getEntity(itr));
     }
     // new smth
     // C# Script
@@ -71,8 +57,8 @@ namespace NS_LOGIC
 
   void SystemLogic::GameInit()
   {
-    if (!_isPlaying)
-      return;
+    //if (!_isPlaying)
+    //  return;
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
     for (; itr != itrEnd; ++itr)
@@ -86,23 +72,23 @@ namespace NS_LOGIC
     // C# Script
     // Init CS
     MonoMethod* m_Init = MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
-    _Inited = true;
+    //_Inited = true;
   }
 
   void SystemLogic::Update()
   {
-    if (!_isPlaying)
-      return;
-    if (!_Loaded)
-    {
-      GameLoad();
-      _Loaded = true;
-    }
-    if (!_Inited)
-    {
-      GameInit();
-      _Inited = true;
-    }
+    //if (!_isPlaying)
+    //  return;
+    //if (!_Loaded)
+    //{
+    //  GameLoad();
+    //  _Loaded = true;
+    //}
+    //if (!_Inited)
+    //{
+    //  GameInit();
+    //  _Inited = true;
+    //}
     ////Run Script?
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
@@ -117,14 +103,14 @@ namespace NS_LOGIC
 
   void SystemLogic::FixedUpdate()
   {
-    if (!_isPlaying)
-      return;
+    //if (!_isPlaying)
+    //  return;
   }
 
   void SystemLogic::GameExit()
   {
-    _Inited = false;
-    _Loaded = false;
+    //_Inited = false;
+    //_Loaded = false;
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
     for (; itr != itrEnd; ++itr)
@@ -150,8 +136,8 @@ namespace NS_LOGIC
 
   void SystemLogic::OnCollisionEnter(Entity _obj1, Entity _obj2)
   {
-    if (!_isPlaying)
-      return;
+    //if (!_isPlaying)
+    //  return;
     ComponentCScript* comp1 = _obj1.getComponent<ComponentCScript>();
     ComponentCScript* comp2 = _obj2.getComponent<ComponentCScript>();
     if(comp1)
@@ -164,32 +150,32 @@ namespace NS_LOGIC
 
   void SystemLogic::OnCollisionStay(Entity _obj1, Entity _obj2)
   {
-    if (!_isPlaying)
-      return;
+    //if (!_isPlaying)
+    //  return;
   }
 
   void SystemLogic::OnCollisionExit(Entity _obj1, Entity _obj2)
   {
-    if (!_isPlaying)
-      return;
+    //if (!_isPlaying)
+    //  return;
   }
 
   void SystemLogic::OnTriggerEnter(Entity _obj1, Entity _obj2)
   {
-    if (!_isPlaying)
-      return;
+    //if (!_isPlaying)
+    //  return;
   }
 
   void SystemLogic::OnTriggerStay(Entity _obj1, Entity _obj2)
   {
-    if (!_isPlaying)
-      return;
+    //if (!_isPlaying)
+    //  return;
   }
 
   void SystemLogic::OnTriggerExit(Entity _obj1, Entity _obj2)
   {
-    if (!_isPlaying)
-      return;
+    //if (!_isPlaying)
+    //  return;
   }
 
   void SystemLogic::HandleMsg(MessageScriptRequest& msg)

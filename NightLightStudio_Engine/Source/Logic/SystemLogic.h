@@ -15,9 +15,9 @@ namespace NS_LOGIC
 
     // Temporary C++ scripting
     // Scripts stored in script component
-    static bool _isPlaying;
-    static bool _Loaded;
-    static bool _Inited;
+    //static bool _isPlaying;
+    //static bool _Loaded;
+    //static bool _Inited;
     
     // For receiving event/message
     SystemMessaging::SystemReceiver r;

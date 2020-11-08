@@ -28,11 +28,14 @@ class MySystem : public ISystem
 protected:
 	int id;
 	S_PRIORITY priority;	//Not used
-
+	bool isLogic;
 public:
 	MySystem()
 		: id{ -1 }
 		, priority{ S_PRIORITY::SP_NOT_INITIALISED }
+		, isLogic(false)
 	{};
 	virtual ~MySystem() {};
+	virtual void SetLogic() { isLogic = true; }
+	virtual bool GetLogic() { return isLogic; }
 };

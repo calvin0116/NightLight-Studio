@@ -19,6 +19,8 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
   // === Insert your system here to get them running === //
   // === Please follow how PhysicManager is created  === // 
 	//Systems[SYS_PHYSICS] = PhysicManager::GetInstance();
+	// Set logic
+	NS_LOGIC::SYS_LOGIC->SetLogic();
 	
 	Systems[S_PRIORITY::SP_WINDOW] = NS_WINDOW::SYS_WINDOW;
 	Systems[S_PRIORITY::SP_GRAPHICS] = NS_GRAPHICS::SYS_GRAPHICS;
@@ -222,7 +224,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 }
 
-void MySystemManager::FixedUpdate()
+void MySystemManager::FixedUpdate(bool& scene_running)
 {
 #ifdef _EDITOR
 	int i = 0;
@@ -243,8 +245,11 @@ void MySystemManager::FixedUpdate()
 		}
 		//auto t1 = std::chrono::high_resolution_clock::now();
 #endif
-
-		my_sys.second->FixedUpdate();
+		// Fixed Update
+		if (scene_running)
+			my_sys.second->FixedUpdate();
+		else if (!my_sys.second->GetLogic())
+			my_sys.second->FixedUpdate();
 
 #ifdef _EDITOR
 
@@ -268,7 +273,7 @@ void MySystemManager::FixedUpdate()
 	}
 }
 
-void MySystemManager::Update()
+void MySystemManager::Update(bool& scene_running)
 {
 #ifdef _EDITOR
 	int i = 0;
@@ -289,7 +294,11 @@ void MySystemManager::Update()
 		}
 		//auto t1 = std::chrono::high_resolution_clock::now();
 #endif
-		my_sys.second->Update();
+		// Update
+		if (scene_running)
+			my_sys.second->Update();
+		else if (!my_sys.second->GetLogic())
+			my_sys.second->Update();
 
 #ifdef _EDITOR
 

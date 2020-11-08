@@ -10,9 +10,22 @@ class ENGINE_API FluffyUnicornEngine
 		ENGINE_QUIT = 0,
 		ENGINE_UPDATE,
 	};
+
+	enum class GameState
+	{
+		Load = 0,
+		Init,
+		Update,
+		Exit
+	};
+
+	GameState gameState;
 	ENGINESTATE _engineState;
 	float _prevdt;
 	HINSTANCE hinstance;
+	bool engine_running = true;
+	//bool scene_running = true;
+	bool scene_running = false;	//This should come from game / logic system later on
 public:
 	FluffyUnicornEngine() = default;
 	~FluffyUnicornEngine() = default;
@@ -20,8 +33,7 @@ public:
 	void Init(HINSTANCE&);
 	void Run();
 	//**! Have and Exit or smth
-	void Exit();
-	
+	void Exit();	
 };
 
 
