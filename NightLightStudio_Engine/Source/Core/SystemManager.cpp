@@ -179,36 +179,36 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	//////// sample for get entity by tag
-	{
-		Entity newEntity = G_ECMANAGER->BuildEntity();
-		ComponentTransform newtransform;
-		newtransform._entityName = "test";
-		newEntity.AttachComponent<ComponentTransform>(newtransform);
-	}
-	{
-		Entity newEntity = G_ECMANAGER->BuildEntity();
-		ComponentTransform newtransform;
-		newtransform._entityName = "test0";
-		newEntity.AttachComponent<ComponentTransform>(newtransform);
-	}
-	{
-		Entity newEntity = G_ECMANAGER->BuildEntity();
-		ComponentTransform newtransform;
-		newtransform._entityName = "test";
-		newEntity.AttachComponent<ComponentTransform>(newtransform);
-	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////// sample for get entity by tag
+	//{
+	//	Entity newEntity = G_ECMANAGER->BuildEntity();
+	//	ComponentTransform newtransform;
+	//	newtransform._entityName = "test";
+	//	newEntity.AttachComponent<ComponentTransform>(newtransform);
+	//}
+	//{
+	//	Entity newEntity = G_ECMANAGER->BuildEntity();
+	//	ComponentTransform newtransform;
+	//	newtransform._entityName = "test0";
+	//	newEntity.AttachComponent<ComponentTransform>(newtransform);
+	//}
+	//{
+	//	Entity newEntity = G_ECMANAGER->BuildEntity();
+	//	ComponentTransform newtransform;
+	//	newtransform._entityName = "test";
+	//	newEntity.AttachComponent<ComponentTransform>(newtransform);
+	//}
 
-	std::vector<Entity> entityContainer = G_ECMANAGER->getEntityTagContainer("test");
+	//std::vector<Entity> entityContainer = G_ECMANAGER->getEntityTagContainer("test");
 
-	for (Entity e : entityContainer)
-	{
-		int id = e.getId();
-		(void)id;
-	}
-	//////// sample for get entity by tag END
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	//for (Entity e : entityContainer)
+	//{
+	//	int id = e.getId();
+	//	(void)id;
+	//}
+	////////// sample for get entity by tag END
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
