@@ -43,6 +43,9 @@ namespace NS_GRAPHICS
 		// can the cam zoom?
 		bool canThridPersonCamZoom;
 
+		float theThridPersonCamPitch;
+		float theThridPersonCamYaw;
+
 	public:
 		// Unique Singleton instance
 		static CameraSystem& GetInstance()
@@ -104,5 +107,7 @@ namespace NS_GRAPHICS
 		void SetThridPersonCamTarget(glm::vec3 tgt);
 		// set the camera distance of the thrid person cam
 		void SetThridPersonCamDistance(float dist);
+		// set pitch and yaw
+		void SetThridPersonCamPitchAndYaw(float pitch, float yaw);
 	};
 }

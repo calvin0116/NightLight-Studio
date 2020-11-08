@@ -23,6 +23,7 @@ namespace AllScripts
       //  int  MyID;
     glm::vec3 tgt;
     glm::vec3 initTgt;
+    glm::vec3 initPos;
     float dist;
     bool isActive;
 
@@ -60,6 +61,7 @@ namespace AllScripts
     CameraScript() :
       tgt(0.0f, 0.0f, 0.0f),
       initTgt(0.0f, 0.0f, 0.0f),
+      initPos(0.0f, 0.0f, 0.0f),
       dist(1.0f),
       isActive(false),
       canRotate(true),
@@ -95,6 +97,7 @@ namespace AllScripts
         tgt = compTrans->_position + viewVector * dist;
         initTgt = tgt;
         //tgt = compTrans->_position + viewVector;
+        initPos = compTrans->_position;
     };
 
     virtual void Update() override
@@ -103,12 +106,19 @@ namespace AllScripts
         {
             NS_GRAPHICS::CameraSystem& camSys = NS_GRAPHICS::CameraSystem::GetInstance();
 
-            if(canRotate)
+            //if(canRotate)
                 camSys.SetThridPersonCamTarget(tgt);
-            else
-                camSys.SetThridPersonCamTarget(initTgt);
+            //else
+            //    camSys.SetThridPersonCamTarget(initTgt);
 
             camSys.SetThridPersonCamDistance(dist);
+
+            if (!canRotate)
+            {
+                glm::vec3 vv = initTgt - initPos;
+
+                camSys.SetThridPersonCamPitchAndYaw(asin(-vv.y), atan2(vv.x, vv.z));
+            }
 
             camSys.SetThridPersonCamCanRotateAnot(canRotate);
 

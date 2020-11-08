@@ -299,9 +299,9 @@ void Player::OnCollisionEnter(Entity other)
 	{
 		// confirmed that player has collided with entity with possess script
 
-		// if player is not a butterfly do nothing
-		//if (getState() != PLAYERSTATE::BUTTERFLY)
-		//	return;
+		//if player is not a butterfly do nothing
+		if (getState() != PLAYERSTATE::BUTTERFLY)
+			return;
 
 
 		// get possess script

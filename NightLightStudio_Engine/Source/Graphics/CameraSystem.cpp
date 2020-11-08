@@ -255,6 +255,7 @@ namespace NS_GRAPHICS
 		glm::vec3 camFront = cam.GetFront();
 		camFront *= glm::vec3(zoomDistance, zoomDistance, zoomDistance);
 		cam.SetCameraPosition(tgt - camFront);
+		//_camera.SetCameraPosition(pos);
 
 		//NS_GRAPHICS::CameraSystem::GetInstance().ForceUpdate();
 
@@ -265,25 +266,10 @@ namespace NS_GRAPHICS
 			glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
 
 			// Rotation for left and right
-			cam.SetCameraYaw(cam.GetYaw() + mousePos.x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
+			_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
 
 			// Rotation for up and down
-			float offsetted = cam.GetPitch() + mousePos.y * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP;
-
-			if (offsetted > NS_GRAPHICS::MAX_PITCH)
-				offsetted = NS_GRAPHICS::MAX_PITCH;
-
-			if (offsetted < NS_GRAPHICS::MIN_PITCH)
-				offsetted = NS_GRAPHICS::MIN_PITCH;
-
-			cam.SetCameraPitch(offsetted);
-		}
-		else
-		{
-			glm::vec3 viewVec = _camera.GetFront();
-			_camera.SetCameraYaw(atan2(viewVec.x, viewVec.z));
-
-			float offsetted = asin(-viewVec.y);
+			float offsetted = _camera.GetPitch() + mousePos.y * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP;
 
 			if (offsetted > NS_GRAPHICS::MAX_PITCH)
 				offsetted = NS_GRAPHICS::MAX_PITCH;
@@ -292,6 +278,32 @@ namespace NS_GRAPHICS
 				offsetted = NS_GRAPHICS::MIN_PITCH;
 
 			_camera.SetCameraPitch(offsetted);
+		}
+		else
+		{
+			//glm::vec3 viewVec = _camera.GetFront();
+			//_camera.SetCameraYaw(atan2(viewVec.x, viewVec.z));
+
+			//float offsetted = asin(-viewVec.y);
+
+			//if (offsetted > NS_GRAPHICS::MAX_PITCH)
+			//	offsetted = NS_GRAPHICS::MAX_PITCH;
+
+			//if (offsetted < NS_GRAPHICS::MIN_PITCH)
+			//	offsetted = NS_GRAPHICS::MIN_PITCH;
+
+			//_camera.SetCameraPitch(offsetted);
+
+
+			if (theThridPersonCamPitch > NS_GRAPHICS::MAX_PITCH)
+				theThridPersonCamPitch = NS_GRAPHICS::MAX_PITCH;
+
+			if (theThridPersonCamPitch < NS_GRAPHICS::MIN_PITCH)
+				theThridPersonCamPitch = NS_GRAPHICS::MIN_PITCH;
+
+			_camera.SetCameraPitch(theThridPersonCamPitch);
+			_camera.SetCameraYaw(theThridPersonCamYaw);
+
 		}
 
 		// camera zoom control
@@ -386,16 +398,7 @@ namespace NS_GRAPHICS
 	}
 	void CameraSystem::SetThridPersonCamCanRotateAnot(bool _set)
 	{
-		if (canThridPersonCamRotate == _set) return;
-
 		canThridPersonCamRotate = _set;
-
-		//if (!canThridPersonCamRotate)
-		//{
-		//	glm::vec3 viewVec = _camera.GetFront();
-		//	_camera.SetCameraYaw(atan2(viewVec.x, viewVec.z));
-		//	_camera.SetCameraPitch(asin(-viewVec.y));
-		//}
 	}
 	void CameraSystem::SetThridPersonCamCanZoomAnot(bool _set)
 	{
@@ -409,4 +412,14 @@ namespace NS_GRAPHICS
 	{
 		zoomDistance = _dist;
 	}
+
+	void CameraSystem::SetThridPersonCamPitchAndYaw(float pitch, float yaw)
+	{
+
+		theThridPersonCamPitch = pitch;
+
+		theThridPersonCamYaw = yaw;
+
+	}
+
 }
