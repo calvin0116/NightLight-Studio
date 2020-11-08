@@ -14,6 +14,7 @@
 
 
 struct ISerializable;
+//class ComponentTransform;
 
 namespace NS_COMPONENT
 {
@@ -1040,20 +1041,10 @@ public:
 		EntityHandle getEntity(Iterator itr);
 		EntityHandle getEntity(int uid);
 
-		EntityHandle getEntity(std::string str)
-		{
-			auto itr = begin<TransformComponent>();
-			auto endItr = end<TransformComponent>();
-			for (; itr != endItr; ++itr)
-			{
-				TransformComponent* trans = getComponent<TransformComponent>(itr);
-				if (trans && trans->_entityName.toString() == str)
-				{
-					return getEntity(itr);
-				}
-			}
-			return EntityHandle(nullptr, -1);
-		}
+
+		//class ComponentTransform;
+		EntityHandle getEntity(std::string str);
+
 
 	private:
 

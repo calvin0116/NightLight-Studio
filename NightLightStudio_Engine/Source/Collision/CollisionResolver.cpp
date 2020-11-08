@@ -272,7 +272,8 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 
 		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity2, externalForceResolve, 100.0f);
 
-		
+		//Entity e = G_ECMANAGER->getEntity("hello");
+
 
 		// frictional force = friction co-efficient * normal force
 

@@ -906,6 +906,20 @@ ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentS
 	return obj;
 }
 
+ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::getEntity(std::string str)
+{
+	auto itr = begin<ComponentTransform>();
+	auto endItr = end<ComponentTransform>();
+	for (; itr != endItr; ++itr)
+	{
+		ComponentTransform* trans = getComponent<ComponentTransform>(itr);
+		if (trans && trans->_entityName.toString() == str)
+		{
+			return getEntity(itr);
+		}
+	}
+	return EntityHandle(nullptr, -1);
+}
 
 //// ComponentSetManager END
 ///////////////////////////////////////////////////////////////////////////////////////////////////
