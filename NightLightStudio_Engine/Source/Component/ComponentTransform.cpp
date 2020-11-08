@@ -33,6 +33,11 @@ glm::mat4 ComponentTransform::GetModelMatrix()
 
 void ComponentTransform::Read(Value& val)
 {
+	if (val.FindMember("EntityName") == val.MemberEnd())
+		std::cout << "No EntityName data has been found" << std::endl;
+	else
+		_entityName = val["EntityName"].GetString();
+
 	//Error checking for json data
 	if (val.FindMember("Position") == val.MemberEnd())
 		std::cout << "No position data has been found" << std::endl;
@@ -73,6 +78,8 @@ Value ComponentTransform::Write()
 {
 	Value val(rapidjson::kObjectType);
 
+	NS_SERIALISER::ChangeData(&val, "EntityName", rapidjson::StringRef(_entityName.c_str())); // Entity Name
+
 	Value position(rapidjson::kArrayType);
 	position.PushBack(_position.x, global_alloc);
 	position.PushBack(_position.y, global_alloc);
@@ -99,6 +106,9 @@ Value ComponentTransform::Write()
 
 Value& ComponentTransform::Write(Value& val)
 {
+
+	NS_SERIALISER::ChangeData(&val, "EntityName", rapidjson::StringRef(_entityName.c_str())); // Entity Name
+
 	// TODO: insert return statement here
 	Value position(rapidjson::kArrayType);
 	position.PushBack(_position.x, global_alloc);

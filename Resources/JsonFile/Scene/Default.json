@@ -2,6 +2,7 @@
     "Objects": {
         "Height_1_wall": {
             "TransformComponent": {
+                "EntityName": "Hello World",
                 "Position": [
                     -1.0,
                     0.5,
@@ -11,16 +12,26 @@
                     2.0,
                     1.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Camera": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.0,
                     2.0,
@@ -30,11 +41,17 @@
                     1.0,
                     1.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
                 ]
             }
         },
         "Plane": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     5.0,
                     2.0,
@@ -44,6 +61,11 @@
                     100.0,
                     100.0,
                     100.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
                 ]
             },
             "RigidBody": {
@@ -63,6 +85,7 @@
         },
         "Height_3_Wall": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -2.5,
                     1.5,
@@ -72,16 +95,26 @@
                     1.0,
                     3.0,
                     2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_2_Wall_2": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     0.5,
                     1.5,
@@ -91,16 +124,26 @@
                     1.0,
                     3.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Tree_H10_8": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.5,
                     5.0,
@@ -110,16 +153,26 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     0.5,
                     2.0,
@@ -129,16 +182,26 @@
                     1.0,
                     4.0,
                     2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_3_Wall_1": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -4.0,
                     1.5,
@@ -148,16 +211,26 @@
                     2.0,
                     3.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Tree_H10_2": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.5,
                     5.0,
@@ -167,16 +240,26 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Tree_H10_1": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -3.5,
                     5.0,
@@ -186,16 +269,26 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Tree_H10_7": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -3.5,
                     5.0,
@@ -205,16 +298,26 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Tree_H10_3": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -3.5,
                     5.0,
@@ -224,16 +327,26 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Tree_H10_4": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.5,
                     5.0,
@@ -243,16 +356,26 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Tree_H10_6": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.5,
                     5.0,
@@ -262,16 +385,26 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Tree_H10_5": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -3.5,
                     5.0,
@@ -281,16 +414,26 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_1": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.5,
                     2.0,
@@ -300,16 +443,26 @@
                     1.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_2": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -2.5,
                     2.0,
@@ -319,16 +472,26 @@
                     1.0,
                     4.0,
                     2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_3_Wall_2": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.5,
                     1.5,
@@ -338,16 +501,26 @@
                     1.0,
                     3.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_3": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -5.5,
                     2.0,
@@ -357,16 +530,26 @@
                     1.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_4": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.0,
                     2.0,
@@ -376,16 +559,26 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_5": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -0.5,
                     2.0,
@@ -395,16 +588,26 @@
                     1.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_7": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.0,
                     2.0,
@@ -414,16 +617,26 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_6": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -5.0,
                     2.0,
@@ -433,16 +646,26 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_8": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.5,
                     2.0,
@@ -452,16 +675,26 @@
                     1.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_9": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.5,
                     2.0,
@@ -471,16 +704,26 @@
                     1.0,
                     4.0,
                     2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_10": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     0.0,
                     2.0,
@@ -490,16 +733,26 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_11": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -5.0,
                     2.0,
@@ -509,16 +762,26 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_12": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -5.5,
                     2.0,
@@ -528,16 +791,26 @@
                     1.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_13": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     2.0,
                     2.0,
@@ -547,16 +820,26 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_14": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     3.0,
                     2.0,
@@ -566,16 +849,26 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_15": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -5.0,
                     2.0,
@@ -585,16 +878,26 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_16": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     0.0,
                     2.0,
@@ -604,16 +907,26 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_17": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.0,
                     2.0,
@@ -623,16 +936,26 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_18": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     1.5,
                     2.0,
@@ -642,16 +965,26 @@
                     1.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_19": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -4.5,
                     2.0,
@@ -661,16 +994,26 @@
                     1.0,
                     4.0,
                     2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_2_Wall_3": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -1.5,
                     1.0,
@@ -680,16 +1023,26 @@
                     1.0,
                     2.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_2_Wall_4": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -2.5,
                     1.0,
@@ -699,16 +1052,26 @@
                     1.0,
                     2.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         },
         "Height_4_Wall_15_copy": {
             "TransformComponent": {
+                "EntityName": "",
                 "Position": [
                     -6.5,
                     2.0,
@@ -718,12 +1081,21 @@
                     1.0,
                     4.0,
                     12.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
             }
         }
     }

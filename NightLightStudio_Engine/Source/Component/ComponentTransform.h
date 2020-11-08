@@ -6,11 +6,16 @@
 #include "../../framework.h"
 #include "../../ISerializable.h"
 
+#include "LocalString.h"
+
 typedef class ComponentTransform  : public ISerializable//: public IComponent
 {
 public:
 	//Name
 	char* name;
+
+	LocalString<256> _entityName;
+
 	//for collision check
 	NlMath::Vector3D _nextPos;
 
