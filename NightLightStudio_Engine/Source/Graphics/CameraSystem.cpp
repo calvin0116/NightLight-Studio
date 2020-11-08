@@ -4,6 +4,8 @@
 #include "../../glm/gtc/matrix_transform.hpp"
 #include "../../glm/gtc/quaternion.hpp"
 
+#include "../IO/Json/Config.h"
+
 #define TESTMOVETARGET 1
 
 namespace NS_GRAPHICS
@@ -16,7 +18,8 @@ namespace NS_GRAPHICS
 		tgt(0.0f, 0.0f, 0.0f),
 		useThridPersonCam{false},
 		canThridPersonCamRotate{true},
-		canThridPersonCamZoom{true}
+		canThridPersonCamZoom{true},
+		viewVector{}
 	{
 	}
 
@@ -27,6 +30,9 @@ namespace NS_GRAPHICS
 
 	void CameraSystem::Init()
 	{
+		_camera.SetDragSensitivity(CONFIG_DATA->GetConfigData()._positionSensitivity);
+		_camera.SetRotationSensitivity(CONFIG_DATA->GetConfigData()._rotationSensitivity);
+		_camera.SetZoomSensitivity(CONFIG_DATA->GetConfigData()._zoomSensitivity);
 		// Initialize all required cameras(if any)
 		// Currently only one test camera, thus no initialization required
 
@@ -126,7 +132,7 @@ namespace NS_GRAPHICS
 			}
 			else if (SYS_INPUT->GetSystemMousePos().GetIfScrollDown())
 			{
-				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * ZOOM_SENSITIVITY);
+				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * _camera.GetZoomSensitivity());
 				updated = true;
 			}
 		});
@@ -291,10 +297,7 @@ namespace NS_GRAPHICS
 	}
 	void CameraSystem::UpdateViewVector()
 	{
-		glm::vec3 camFront = _camera.GetFront();
-		glm::vec3 camPositron = _camera.GetPosition();
-		viewVector = camFront - camPositron;
-		viewVector = glm::normalize(viewVector);
+		viewVector = _camera.GetFront();
 	}
 	glm::vec3 CameraSystem::GetViewVector()
 	{

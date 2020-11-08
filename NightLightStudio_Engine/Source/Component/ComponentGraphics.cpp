@@ -102,22 +102,22 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("Normal") == val.MemberEnd())
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
-		_albedoFileName = val["Normal"].GetString();
+		_normalFileName = val["Normal"].GetString();
 
 	if (val.FindMember("Metallic") == val.MemberEnd())
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
-		_albedoFileName = val["Metallic"].GetString();
+		_metallicFileName = val["Metallic"].GetString();
 
 	if (val.FindMember("Roughness") == val.MemberEnd())
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
-		_albedoFileName = val["Roughness"].GetString();
+		_roughnessFileName = val["Roughness"].GetString();
 
 	if (val.FindMember("AmbientOcclusion") == val.MemberEnd())
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
-		_albedoFileName = val["AmbientOcclusion"].GetString();
+		_aoFileName = val["AmbientOcclusion"].GetString();
 
 }
 

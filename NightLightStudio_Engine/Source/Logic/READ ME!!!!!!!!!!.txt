@@ -1,0 +1,5 @@
+Script Tag used:
+0	for player
+1	for camera
+2	for possable
+3	for spawning point

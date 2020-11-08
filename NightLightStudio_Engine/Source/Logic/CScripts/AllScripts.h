@@ -7,6 +7,7 @@
 #include "../Player.h"
 #include "../CameraScript.h"
 #include "PossessScript.h"
+#include "../SpawnPoint.h"
 
 // Construct Scripts from string
 namespace AllScripts
@@ -23,5 +24,7 @@ namespace AllScripts
       return dynamic_cast<IScript*>(new CameraScript());
     else if (name == "Possess")
       return dynamic_cast<IScript*>(new PossessScript());
+    else if (name == "SpawnPoint")
+        return dynamic_cast<IScript*>(new SpawnPoint());
   }
 }

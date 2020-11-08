@@ -267,6 +267,7 @@
     <ClInclude Include="Source\Logic\CScripts\TestScript.h" />
     <ClInclude Include="Source\Logic\CScripts\TestScript2.h" />
     <ClInclude Include="Source\Logic\Player.h" />
+    <ClInclude Include="Source\Logic\SpawnPoint.h" />
     <ClInclude Include="Source\Logic\SystemLogic.h" />
     <ClInclude Include="Source\Math\Matrix3x3.h" />
     <ClInclude Include="Source\Math\Matrix4x4.h" />
@@ -361,6 +362,7 @@
     <ClCompile Include="Source\Logic\CameraScript.cpp" />
     <ClCompile Include="Source\Logic\CScripts\PossessScript.cpp" />
     <ClCompile Include="Source\Logic\Player.cpp" />
+    <ClCompile Include="Source\Logic\SpawnPoint.cpp" />
     <ClCompile Include="Source\Logic\SystemLogic.cpp" />
     <ClCompile Include="Source\Math\Matrix3x3.cpp" />
     <ClCompile Include="Source\Math\Matrix4x4.cpp" />

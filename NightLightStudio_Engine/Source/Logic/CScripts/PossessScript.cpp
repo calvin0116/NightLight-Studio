@@ -9,13 +9,14 @@ void PossessScript::Init()
 {
   // Fetch player entity here.
     playerTransform = nullptr;
+    
 
 }
 
 void PossessScript::Update()
 {
   //ChangeLight(10.0f);
-    
+
 }
 
 void PossessScript::Exit()
@@ -39,11 +40,15 @@ void PossessScript::OnCollisionEnter(Entity other)
               player->changeState(PLAYERSTATE::POSSESSED);
           }
          
-          //init player transform here
+          //change player transform here
           if (playerTransform == nullptr)
           {
               playerTransform = other.getComponent<ComponentTransform>();
-              playerTransform = MyID.getComponent<ComponentTransform>();
+              *playerTransform = *MyID.getComponent<ComponentTransform>();
+              //turn off own collider
+              MyID.getComponent<ComponentCollider>()->isCollidable = false;
+
+              
           }
 	  }
   }

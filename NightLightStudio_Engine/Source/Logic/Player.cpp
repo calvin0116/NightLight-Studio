@@ -3,8 +3,9 @@
 #include "../Component/ComponentCScript.h"
 #include "../Messaging/SystemBroadcaster.h"
 #include "../Messaging/Messages/MessageScriptRequest.h"
+#include "CScripts/PossessScript.h"
 
-#define PLAYER_MOVE_MAG 1000.0f
+#define PLAYER_MOVE_MAG 10000.0f
 #define PLAYER_FLY_MAG 500.0f
 
 /// <control mapping>
@@ -105,11 +106,12 @@ void Player::Init()
 
 void Player::Update()
 {
-	std::cout << "Position is X:" <<comRigid->velocity.x << "   Y:"<<comRigid->velocity.y << "  Z:"<<comRigid->velocity.z << std::endl;
+	/*std::cout << "Speed is X:" <<comRigid->velocity.x << "   Y:"<<comRigid->velocity.y << "  Z:"<<comRigid->velocity.z << std::endl;*/
 	switch (_playerState)
 	{
 	case PLAYERSTATE::HUMAN:
 	{
+		std::cout << "Player State is : Human" << std::endl;
 		 // update camera position with player position
 		camera->SetTarget(comTrans->_position);
 		camera->SetDistance(500);
@@ -118,6 +120,7 @@ void Player::Update()
 		
 	case PLAYERSTATE::BUTTERFLY:
 	{
+		std::cout << "Player State is : butterfly" << std::endl;
 		// update camera position with player position
 		camera->SetTarget(comTrans->_position);
 		camera->SetDistance(500);
@@ -129,6 +132,7 @@ void Player::Update()
 		
 	case PLAYERSTATE::POSSESSED:
 	{
+		std::cout << "Player State is : possessed" << std::endl;
 		//player will change to possessed state if it collides with the possessed
 		//logic is done in possess
 		
@@ -157,7 +161,7 @@ void Player::changeState(PLAYERSTATE state)
 	case PLAYERSTATE::HUMAN:
 	{
 		//enable rigid body
-		comRigid->isActive = true;
+		comRigid->isStatic = false;
 		comRigid->isGravity = true;
 		if (_prevPlayerState == PLAYERSTATE::POSSESSED)
 		{
@@ -209,13 +213,15 @@ void Player::changeState(PLAYERSTATE state)
 				comRigid->acceleration = (0, comRigid->acceleration.y, 0);
 				comRigid->velocity = (0, comRigid->velocity.y, 0);
 			});
+
+
 		break;
 	}
 
 	case PLAYERSTATE::BUTTERFLY:
 	{
 		//enable rigid body for player to move
-		comRigid->isActive = true;
+		comRigid->isStatic = false;
 		comRigid->isGravity = false;
 		// stop control for player
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk1");
@@ -231,7 +237,7 @@ void Player::changeState(PLAYERSTATE state)
 
 	case PLAYERSTATE::POSSESSED:
 	{
-		
+
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk1");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk2");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk3");
@@ -241,7 +247,7 @@ void Player::changeState(PLAYERSTATE state)
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop3");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop4");
 
-		comRigid->isActive = false;
+		comRigid->isStatic = true;
 
 		/*TO DO*/ //camera will change angle to possess state
 		break;
@@ -266,12 +272,24 @@ bool Player::enterPossession()
 
 void Player::OnCollisionEnter(Entity other)
 {
-	//ComponentCScript* tmp = other.getComponent<ComponentCScript>();
-	//if (tmp != nullptr)
+	//IScript* tmp = other.getComponent<ComponentCScript>()->_pScript;
+	//if (typeid(*tmp).hash_code() == typeid(PossessScript).hash_code())
 	//{
-	//	tmp->_iTag == 101;
-	//	tmp->_iTag == 102;
-	//	tmp->_iTag == 103;
-	//	tmp->_iTag == 104;
+	//	PossessScript* tmp1 = reinterpret_cast<PossessScript*>(tmp);
+	//	if (_playerState == PLAYERSTATE::BUTTERFLY)
+	//	{
+	//		//it will possess the object
+	//		changeState(PLAYERSTATE::POSSESSED);
+	//	}
+	//	ComponentTransform* comTransform = other.getComponent<ComponentTransform>();
+	//	std::vector<Entity> entityContainer =  G_ECMANAGER->getEntityTagContainer(comTransform->_entityName.toString());
+	//	for (Entity& entity : entityContainer )
+	//	{
+	//		IScript* tmp2 = entity.getComponent<ComponentCScript>()->_pScript;
+	//		if (typeid(*tmp2).hash_code() == typeid(AllScripts::CameraScript).hash_code())
+	//		{
+
+	//		}
+	//	}
 	//}
 }

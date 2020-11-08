@@ -399,6 +399,9 @@
     <ClInclude Include="Source\Logic\CScripts\TestScript2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Logic\SpawnPoint.h">
+      <Filter>Source Files\Logic</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Mono\Binding\Systems\ForceBind.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -649,9 +652,6 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Picking.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Mono\Binding\Systems\ForceBind.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
