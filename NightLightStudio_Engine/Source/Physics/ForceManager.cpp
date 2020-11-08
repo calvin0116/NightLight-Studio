@@ -33,7 +33,7 @@ void ForceManager::addForceToNextTick(Entity ent, NlMath::Vector3D direction, fl
 		//std::cout << "add Force Error" << std::endl;
 		// throw;
 	}
-	translationalForceMap.insert(std::pair<int, TranslationalForce>(ent.getId(), TranslationalForce(direction, magnitude)));
+	translationalForceMap_next.insert(std::pair<int, TranslationalForce>(ent.getId(), TranslationalForce(direction, magnitude)));
 }
 
 void ForceManager::updateTranslationalForces()

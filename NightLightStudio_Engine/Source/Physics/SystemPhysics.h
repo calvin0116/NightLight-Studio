@@ -8,6 +8,8 @@
 
 namespace NS_PHYSICS
 {
+	constexpr float MAX_SPEED = 10000.0f;
+
 	class PhysicsSystem : public MySystem, public Singleton<PhysicsSystem>
 	{
 		ForceManager _forceManager;
