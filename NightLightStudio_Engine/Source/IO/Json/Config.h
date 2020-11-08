@@ -28,6 +28,8 @@ struct ConfigData
 
 	//Selected Starting Screen (for ease of changing starting screen for debuggging purpose) 
 	std::string startscene;
+
+	int mouse_sensitivity;
 };
 
 class Config : public MySystem ,public Singleton<Config> {
@@ -59,6 +61,22 @@ public:
 
 		Value& config_val = parser["settings"];
 		config_d.startscene = config_val["startscene"].GetString();
+		config_d.mouse_sensitivity = config_val["mouse sensitivity"].GetFloat();
+	};
+
+	ENGINE_API void Free() 
+	{
+		Value& wind_val = parser["window"];
+
+		wind_val["height"].SetInt(config_d.height);
+		wind_val["width"].SetInt(config_d.width);
+		wind_val["fullscreen"].SetBool(config_d.toFullScreen);
+
+		Value& config_val = parser["settings"];
+		config_val["startscene"].SetString(rapidjson::StringRef(config_d.startscene.c_str()));
+		config_val["mouse sensitivity"].SetInt(config_d.mouse_sensitivity);
+
+		parser.Save();
 	};
 
 	ENGINE_API void Exit()
@@ -66,6 +84,7 @@ public:
 		DestroyInstance();
 	}
 
+	//Get config data to change
 	ConfigData& GetConfigData() { return config_d; };
 };
 
