@@ -18,12 +18,12 @@ namespace Unicorn
     public virtual void OnEnable() { }
     public virtual void OnDisable() { }
 
-    public virtual void OnCollisionEnter(uint other) { }
-    public virtual void OnCollisionStay(uint other) { }
-    public virtual void OnCollisionExit(uint other) { }
+    public virtual void OnCollisionEnter(int other) { }
+    public virtual void OnCollisionStay(int other) { }
+    public virtual void OnCollisionExit(int other) { }
 
-    public virtual void OnTriggerEnter(uint other) { }
-    public virtual void OnTriggerStay(uint other) { }
-    public virtual void OnTriggerExit(uint other) { }
+    public virtual void OnTriggerEnter(int other) { }
+    public virtual void OnTriggerStay(int other) { }
+    public virtual void OnTriggerExit(int other) { }
   }
 }

@@ -18,6 +18,12 @@ namespace NS_LOGIC
     static bool _isPlaying;
     static bool _Loaded;
     static bool _Inited;
+
+    // mono base methods
+    MonoMethod* baseInit;
+    MonoMethod* baseUpdate;
+    MonoMethod* baseExit;
+    MonoMethod* baseCollisionEnter;
     
     // For receiving event/message
     SystemMessaging::SystemReceiver r;

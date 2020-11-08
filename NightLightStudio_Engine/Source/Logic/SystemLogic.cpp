@@ -85,8 +85,13 @@ namespace NS_LOGIC
 
     // C# Script
     MonoBind::Bind();
-    // Init CS
-    MonoMethod* baseInit = MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
+    // Init base functions
+    baseInit =            MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
+    baseUpdate =          MonoWrapper::GetObjectMethod("Update", "UniBehaviour");
+    baseExit =            MonoWrapper::GetObjectMethod("Exit", "UniBehaviour");
+    baseCollisionEnter =  MonoWrapper::GetObjectMethod("OnCollisionEnter", "UniBehaviour");
+
+    // C# scripts init
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
     for (; itrS != itrE; ++itrS)
@@ -101,7 +106,6 @@ namespace NS_LOGIC
       MonoMethod* MyInit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseInit);
       MonoWrapper::InvokeMethod(MyInit, MyScript->_MonoData._pInstance);
     }
-
     _Inited = true;
   }
 
@@ -129,6 +133,18 @@ namespace NS_LOGIC
         continue;
       myComp->_pScript->Update();
     }
+
+    // C# Scripts Update
+    auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    auto itrE = G_ECMANAGER->end<ComponentScript>();
+    for (; itrS != itrE; ++itrS)
+    {
+      ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+      if (MyScript == nullptr || !MyScript->_isActive)
+        continue;
+      MonoMethod* MyUpdate = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseUpdate);
+      MonoWrapper::InvokeMethod(MyUpdate, MyScript->_MonoData._pInstance);
+    }
   }
 
   void SystemLogic::FixedUpdate()
@@ -154,13 +170,13 @@ namespace NS_LOGIC
       myComp->_pScript = nullptr;
     }
 
-    MonoMethod* baseExit = MonoWrapper::GetObjectMethod("Exit", "UniBehaviour");
+    // C# Scripts Exit
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
     for (; itrS != itrE; ++itrS)
     {
       ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
-      if (MyScript == nullptr && !MyScript->_isActive)
+      if (MyScript == nullptr || !MyScript->_isActive)
         continue;
       MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
       MonoMethod* MyExit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseExit);
@@ -189,6 +205,22 @@ namespace NS_LOGIC
     if(comp2)
         if (comp2->_pScript)
             comp2->_pScript->OnCollisionEnter(_obj1);
+
+    // C# script
+    ComponentScript* cs1 = _obj1.getComponent<ComponentScript>();
+    ComponentScript* cs2 = _obj2.getComponent<ComponentScript>();
+    if (cs1)
+    {
+      MonoMethod* MyCollisionEnter = MonoWrapper::GetDerivedMethod(cs1->_MonoData._pInstance, baseCollisionEnter);
+      int cs2id = _obj2.getId();
+      MonoWrapper::InvokeMethodParams(MyCollisionEnter, cs1->_MonoData._pInstance, cs2id);
+    }
+    if (cs2)
+    {
+      MonoMethod* MyCollisionEnter = MonoWrapper::GetDerivedMethod(cs2->_MonoData._pInstance, baseCollisionEnter);
+      int cs1id = _obj1.getId();
+      MonoWrapper::InvokeMethodParams(MyCollisionEnter, cs2->_MonoData._pInstance, cs1id);
+    }
   }
 
   void SystemLogic::OnCollisionStay(Entity _obj1, Entity _obj2)
