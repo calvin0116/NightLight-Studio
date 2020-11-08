@@ -68,6 +68,7 @@ namespace NS_LOGIC
     // new smth
     // C# Script
     MonoBind::Bind();
+    _Loaded = true;
   }
 
   void SystemLogic::GameInit()
@@ -94,6 +95,8 @@ namespace NS_LOGIC
   {
     if (!_isPlaying)
       return;
+    if (!_Loaded)
+      GameLoad();
     if (!_Inited)
       GameInit();
     ////Run Script?
