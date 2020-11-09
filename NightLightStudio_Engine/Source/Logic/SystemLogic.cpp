@@ -50,6 +50,8 @@ namespace NS_LOGIC
 
     // Attach handler
     r.AttachHandler("ScriptRequest", &SystemLogic::HandleMsg, this);
+    r.AttachHandler("ApplicationExit", &SystemLogic::HandleApplicationExit, this);
+    r.AttachHandler("TogglePlay", &SystemLogic::HandleTogglePlay, this);
   }
 
   void SystemLogic::GameLoad()
@@ -268,5 +270,18 @@ namespace NS_LOGIC
       // Break out of loop
       break;
     }
+  }
+
+  void SystemLogic::HandleApplicationExit(MessageApplicationExit& msg)
+  {
+    // Handle msg function here
+    std::cout << "Hello from SystemLogic!" << std::endl;
+  }
+
+  void SystemLogic::HandleTogglePlay(MessageTogglePlay& msg)
+  {
+    // Handle msg here.
+    std::cout << "Hello from SystemLogic!" << std::endl;
+    std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
   }
 }
