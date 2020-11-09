@@ -9,6 +9,11 @@
 namespace NS_LOGIC
 {
   // Variable to decide whether to run function
+// Getting the bool needed
+// #include "../IO/Json/Config.h"
+// ->  CONFIG_DATA->GetConfigData().isPlaying;      //Play button toggling bool
+// -> CONFIG_DATA->GetConfigData().engineRunning;
+// -> CONFIG_DATA->GetConfigData().sceneRunning;
   bool SystemLogic::_isPlaying = false;
   bool SystemLogic::_Loaded = false;
   bool SystemLogic::_Inited = false;

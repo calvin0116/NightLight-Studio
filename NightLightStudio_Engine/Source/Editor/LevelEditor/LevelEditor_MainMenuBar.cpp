@@ -108,9 +108,10 @@ void LevelEditor::LE_MainMenuBar()
 
         ImVec2 size = viewport->GetWorkSize();
         ImGui::SetCursorPosX(size.x / 2.0f);
-        LE_AddCheckbox("PLAY##MMBAR", &_runEngine, []()
+        LE_AddCheckbox("PLAY##MMBAR", &CONFIG_DATA->GetConfigData().isPlaying, []()
             {
                 // START/STOP ENGINE RUN HERE
+                std::cout << "Play button: " << CONFIG_DATA->GetConfigData().isPlaying << std::endl;
             });
 
         ImGui::EndMenuBar();
