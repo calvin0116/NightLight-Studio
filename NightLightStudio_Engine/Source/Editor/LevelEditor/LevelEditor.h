@@ -59,7 +59,7 @@ class LevelEditor
 {
 	HWND _window;
 
-	//bool _runEngine;
+	bool _runEngine;
 
 	bool _showGrid;
 
