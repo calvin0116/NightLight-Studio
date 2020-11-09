@@ -721,9 +721,9 @@ namespace NlMath
         float aMax = -FLT_MAX;
         float bMax = -FLT_MAX;
         float eMax = -FLT_MAX;
-        unsigned int aAxis = ~0;
-        unsigned int bAxis = ~0;
-        unsigned int eAxis = ~0;
+        unsigned int aAxis = (unsigned int)~0;
+        unsigned int bAxis = (unsigned int)~0;
+        unsigned int eAxis = (unsigned int)~0;
         Vec3 nA;
         Vec3 nB;
         Vec3 nE;
@@ -1239,7 +1239,7 @@ namespace NlMath
             {
                 cv.f = b.f;
                 cv.v = a.v + (b.v - a.v) * (da / (da - db));
-                cv.f.outR = clipEdge;
+                cv.f.outR = (unsigned char)clipEdge;
                 cv.f.outI = 0;
                 assert(outCount < 8);
                 out[outCount++] = cv;
@@ -1250,7 +1250,7 @@ namespace NlMath
             {
                 cv.f = a.f;
                 cv.v = a.v + (b.v - a.v) * (da / (da - db));
-                cv.f.inR = clipEdge;
+                cv.f.inR = (unsigned char)clipEdge;
                 cv.f.inI = 0;
                 assert(outCount < 8);
                 out[outCount++] = cv;
@@ -1267,8 +1267,8 @@ namespace NlMath
     
     unsigned int Clip(const Vec3& rPos, const Vec3& e, unsigned char* clipEdges, const Matrix4x4& basis, ClipVertex* incident, ClipVertex* outVerts, float* outDepths)
     {
-        int inCount = 4;
-        int outCount;
+        unsigned int inCount = 4;
+        unsigned int outCount;
         ClipVertex in[8];
         ClipVertex out[8];
     

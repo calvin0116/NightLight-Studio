@@ -24,7 +24,7 @@ void PossessScript::Exit()
 
 }
 
-void PossessScript::OnCollisionEnter(Entity other)
+void PossessScript::OnCollisionEnter(Entity /*other*/)
 {
   //ComponentCScript* tmp = other.getComponent<ComponentCScript>();
   //if (tmp != nullptr)

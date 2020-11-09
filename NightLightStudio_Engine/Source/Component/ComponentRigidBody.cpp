@@ -18,7 +18,7 @@ ComponentRigidBody::ComponentRigidBody() :
 	isGravity(false),
 	gravity(0.0f, -GRAVITY_DEF, 0.0f),
 	forceHandle(-1), //default -1 to ininit
-	friction(0.01)
+	friction(0.01f)
 {
 	strcpy_s(ser_name,"RigidBody");
 }

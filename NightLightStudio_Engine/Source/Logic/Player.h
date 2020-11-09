@@ -17,7 +17,7 @@
 enum class PLAYERSTATE
 {
 	HUMAN = 0,
-	BUTTERFLY,
+	MOTH,
 	POSSESSED
 };
 
@@ -26,6 +26,7 @@ class Player : public IScript
 	Entity playerEntity;
 	AllScripts::CameraScript*camera;
 	AllScripts::CameraScript* possessStateCamera;
+	float _playerEnergy;
 
 	NlMath::Vector3D currentCameraDirection;
 

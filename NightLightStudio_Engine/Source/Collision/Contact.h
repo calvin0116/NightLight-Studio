@@ -60,7 +60,7 @@ struct ClipVertex
 {
 	ClipVertex()
 	{
-		f.key = ~0;
+		f.key = (unsigned int)~0;
 	}
 
 	NlMath::Vec3 v;

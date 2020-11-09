@@ -5,9 +5,16 @@
 #include "../Messaging/Messages/MessageScriptRequest.h"
 #include "CScripts/PossessScript.h"
 #include "SpawnPoint.h"
+#include "../Core/DeltaTime.h"
 
+//need to be edited by designer
 #define PLAYER_MOVE_MAG 10000.0f
 #define PLAYER_FLY_MAG 500.0f
+#define PLAYER_MAX_ENERGY 10
+#define PLAYER_ENERGY_REGEN 1
+#define PLAYER_POSSESS_ENERGY_DRAIN 1
+#define PLAYER_MOTH_ENERGY_DRAIN 1
+#define CAMERA_DISTANCE 500
 
 /// <control mapping>
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,7 +27,9 @@
 /// </control mapping>
 
 Player::Player()
-	:comCol(nullptr), comRigid(nullptr), comTrans(nullptr), _playerState(PLAYERSTATE::HUMAN), _prevPlayerState(PLAYERSTATE::HUMAN), _front(0),camera(nullptr), possessStateCamera(nullptr)
+	:comCol(nullptr), comRigid(nullptr), comTrans(nullptr),
+	_playerState(PLAYERSTATE::HUMAN), _prevPlayerState(PLAYERSTATE::HUMAN),
+	_front(0), camera(nullptr), possessStateCamera(nullptr), _playerEnergy(PLAYER_MAX_ENERGY)
 {
 	spawnPoint._rotation = { 0,0,0 };
 	spawnPoint._position = { 0,0,0 };
@@ -52,8 +61,8 @@ void Player::Init()
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop1", WALKFRONT, "StopFront", SystemInput_ns::OnRelease, [this]()
 		{
-			comRigid->acceleration = (0, comRigid->acceleration.y, 0);
-			comRigid->velocity = (0, comRigid->velocity.y, 0);
+			comRigid->acceleration = (0.0f, comRigid->acceleration.y, 0.0f);
+			comRigid->velocity = (0.0f, comRigid->velocity.y, 0.0f);
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk2", WALKLEFT, "WalkLeft", SystemInput_ns::OnHold, [this]()
 		{
@@ -63,8 +72,8 @@ void Player::Init()
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop2", WALKLEFT, "Stopleft", SystemInput_ns::OnRelease, [this]()
 		{
-			comRigid->acceleration = (0, comRigid->acceleration.y, 0);
-			comRigid->velocity = (0, comRigid->velocity.y, 0);
+			comRigid->acceleration = (0.0f, comRigid->acceleration.y, 0.0f);
+			comRigid->velocity = (0.0f, comRigid->velocity.y, 0.0f);
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk3", WALKBACK, "WalkBack", SystemInput_ns::OnHold, [this]()
 		{
@@ -74,8 +83,8 @@ void Player::Init()
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop3", WALKBACK, "StopBack", SystemInput_ns::OnRelease, [this]()
 		{
-			comRigid->acceleration = (0, comRigid->acceleration.y, 0);
-			comRigid->velocity = (0, comRigid->velocity.y, 0);
+			comRigid->acceleration = (0.0f, comRigid->acceleration.y, 0.0f);
+			comRigid->velocity = (0.0f, comRigid->velocity.y, 0.0f);
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk4", WALKRIGHT, "WalkRight", SystemInput_ns::OnHold, [this]()
 		{
@@ -84,17 +93,17 @@ void Player::Init()
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop4", WALKRIGHT, "StopRight", SystemInput_ns::OnRelease, [this]()
 		{
-			comRigid->acceleration = (0, comRigid->acceleration.y, 0);
-			comRigid->velocity = (0, comRigid->velocity.y, 0);
+			comRigid->acceleration = (0.0f, comRigid->acceleration.y, 0.0f);
+			comRigid->velocity = (0.0f, comRigid->velocity.y, 0.0f);
 		});
 	//state change control
-	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Become Butterfly", POSSESS, "butterfly", SystemInput_ns::OnPress, [this]()
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Become Butterfly", POSSESS, "moth", SystemInput_ns::OnPress, [this]()
 		{
 			if (_playerState == PLAYERSTATE::HUMAN)
 			{
-				changeState(PLAYERSTATE::BUTTERFLY);
+				changeState(PLAYERSTATE::MOTH);
 			}
-			else if (_playerState == PLAYERSTATE::BUTTERFLY)
+			else if (_playerState == PLAYERSTATE::MOTH)
 			{
 				changeState(PLAYERSTATE::HUMAN);
 			}
@@ -114,17 +123,34 @@ void Player::Update()
 	{
 		std::cout << "Player State is : Human" << std::endl;
 		 // update camera position with player position
+
+		//refill energy
+		if (_playerEnergy <= PLAYER_MAX_ENERGY)
+		{
+			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
+			_playerEnergy += realDt * PLAYER_ENERGY_REGEN;
+		}
+		
+		//camera follow
 		camera->SetTarget(comTrans->_position);
-		camera->SetDistance(500);
+		camera->SetDistance(CAMERA_DISTANCE);
 		break;
 	}
 		
-	case PLAYERSTATE::BUTTERFLY:
+	case PLAYERSTATE::MOTH:
 	{
-		std::cout << "Player State is : butterfly" << std::endl;
+		std::cout << "Player State is : moth" << std::endl;
+		//reduce energy when flying
+		float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
+		_playerEnergy -= realDt * PLAYER_MOTH_ENERGY_DRAIN;
+		if (_playerEnergy <= 0)
+		{
+			changeState(PLAYERSTATE::HUMAN);
+		}
+
 		// update camera position with player position
 		camera->SetTarget(comTrans->_position);
-		camera->SetDistance(500);
+		camera->SetDistance(CAMERA_DISTANCE);
 		//uncontrolable motion
 		comRigid->velocity =  (NS_GRAPHICS::CameraSystem::GetInstance().GetViewVector()* PLAYER_FLY_MAG);
 		
@@ -133,10 +159,14 @@ void Player::Update()
 		
 	case PLAYERSTATE::POSSESSED:
 	{
-		std::cout << "Player State is : possessed" << std::endl;
-		//player will change to possessed state if it collides with the possessed
-		//logic is done in possess
-		
+		//std::cout << "Player State is : possessed" << std::endl;
+		//reduce energy
+		float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
+		_playerEnergy -= realDt;
+		if (_playerEnergy <= 0)
+		{
+			changeState(PLAYERSTATE::HUMAN);
+		}
 	}
 		break;
 	default:
@@ -146,6 +176,15 @@ void Player::Update()
 
 void Player::Exit()
 {
+	SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk1");
+	SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk2");
+	SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk3");
+	SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk4");
+	SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop1");
+	SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop2");
+	SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop3");
+	SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop4");
+	SYS_INPUT->GetSystemKeyPress().RemoveEvent("Become Butterfly");
 }
 
 PLAYERSTATE Player::getState()
@@ -164,11 +203,13 @@ void Player::changeState(PLAYERSTATE state)
 		//enable rigid body
 		comRigid->isStatic = false;
 		comRigid->isGravity = true;
+		// stop player from sliding if moving before the state change;
+		comRigid->velocity = 0;
+		comRigid->acceleration = 0;
+
+
 		if (_prevPlayerState == PLAYERSTATE::POSSESSED)
 		{
-			/*TO DO*/ 
-			//set player's transform to spawn point transform
-
 			// disable pos cam
 			possessStateCamera->SetActive(false);
 
@@ -196,8 +237,8 @@ void Player::changeState(PLAYERSTATE state)
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop1", WALKFRONT, "StopFront", SystemInput_ns::OnRelease, [this]()
 			{
-				comRigid->acceleration = (0, comRigid->acceleration.y, 0);
-				comRigid->velocity = (0, comRigid->velocity.y, 0);
+				comRigid->acceleration = (0.0f, comRigid->acceleration.y, 0.0f);
+				comRigid->velocity = (0.0f, comRigid->velocity.y, 0.0f);
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk2", WALKLEFT, "WalkLeft", SystemInput_ns::OnHold, [this]()
 			{
@@ -207,8 +248,8 @@ void Player::changeState(PLAYERSTATE state)
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop2", WALKLEFT, "Stopleft", SystemInput_ns::OnRelease, [this]()
 			{
-				comRigid->acceleration = (0, comRigid->acceleration.y, 0);
-				comRigid->velocity = (0, comRigid->velocity.y, 0);
+				comRigid->acceleration = (0.0f, comRigid->acceleration.y, 0.0f);
+				comRigid->velocity = (0.0f, comRigid->velocity.y, 0.0f);
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk3", WALKBACK, "WalkBack", SystemInput_ns::OnHold, [this]()
 			{
@@ -218,8 +259,8 @@ void Player::changeState(PLAYERSTATE state)
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop3", WALKBACK, "StopBack", SystemInput_ns::OnRelease, [this]()
 			{
-				comRigid->acceleration = (0, comRigid->acceleration.y, 0);
-				comRigid->velocity = (0, comRigid->velocity.y, 0);
+				comRigid->acceleration = (0.0f, comRigid->acceleration.y, 0.0f);
+				comRigid->velocity = (0.0f, comRigid->velocity.y, 0.0f);
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk4", WALKRIGHT, "WalkRight", SystemInput_ns::OnHold, [this]()
 			{
@@ -228,15 +269,15 @@ void Player::changeState(PLAYERSTATE state)
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop4", WALKRIGHT, "StopRight", SystemInput_ns::OnRelease, [this]()
 			{
-				comRigid->acceleration = (0, comRigid->acceleration.y, 0);
-				comRigid->velocity = (0, comRigid->velocity.y, 0);
+				comRigid->acceleration = (0.0f, comRigid->acceleration.y, 0.0f);
+				comRigid->velocity = (0.0f, comRigid->velocity.y, 0.0f);
 			});
 
 
 		break;
 	}
 
-	case PLAYERSTATE::BUTTERFLY:
+	case PLAYERSTATE::MOTH:
 	{
 		//enable rigid body for player to move
 		comRigid->isStatic = false;
@@ -299,13 +340,13 @@ void Player::OnCollisionEnter(Entity other)
 	{
 		// confirmed that player has collided with entity with possess script
 
-		//if player is not a butterfly do nothing
-		if (getState() != PLAYERSTATE::BUTTERFLY)
+		//if player is not a moth do nothing
+		if (getState() != PLAYERSTATE::MOTH)
 			return;
 
 
 		// get possess script
-		PossessScript* posScr = reinterpret_cast<PossessScript*>(tmp);
+		//PossessScript* posScr = reinterpret_cast<PossessScript*>(tmp);
 
 		// set camera to use possess script entity's camera
 		// get transform tag
