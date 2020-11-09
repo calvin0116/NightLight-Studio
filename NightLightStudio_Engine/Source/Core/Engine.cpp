@@ -21,30 +21,29 @@ void FluffyUnicornEngine::Init(HINSTANCE& hInstance)
 void FluffyUnicornEngine::Run()
 {
 	//Two running boolean that may need to be global depending on use case
-	bool engine_running = true;	
+	//bool engine_running = true;	
 	//bool scene_running = true;
-	bool scene_running = true;	//This should come from game / logic system later on
+	//bool scene_running = true;	//This should come from game / logic system later on
 
 	//=====System layer====//
     DELTA_T->load();
 	//System Init
 	SYS_MAN->Init();		// Master Sound Volume / Graphics settings (high res / lows) 
-	while (engine_running)
+	while (CONFIG_DATA->GetConfigData().engineRunning)
 	{
 		//=====Scene Layer====//
 		SYS_MAN->GameLoad();
-		scene_running = true;	//Re-initial scene running when exiting from scene
-		//SYS_SCENE_MANAGER->LoadScene();
-		while (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() == NS_SCENE::SC_NOCHANGE)	//Aka while scene not changed
+		//Re-initial scene running when exiting from scene
+		CONFIG_DATA->GetConfigData().sceneRunning = true;	
+		//Aka while scene not changed
+		while (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() == NS_SCENE::SC_NOCHANGE)	
 		{
 			SYS_MAN->GameInit();
-			//DELTA_T->end();			//To reset delta for scene change
-			while (scene_running)	//Scene / Game loop
+			while (CONFIG_DATA->GetConfigData().sceneRunning)	//Scene / Game loop
 			{
 				//fps start
 				DELTA_T->start();
 
-				//Exit if update fails
 				//Fixed update
 				while (DELTA_T->accumulatedTime >= DELTA_T->fixed_dt)
 				{
@@ -52,33 +51,22 @@ void FluffyUnicornEngine::Run()
 					++DELTA_T->currentNumberOfSteps;
 					SYS_MAN->FixedUpdate();
 				}
-				SYS_MAN->Update();
+				SYS_MAN->Update();		//Update
 
 				//Check for changing of scene
 				if (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() != NS_SCENE::SC_NOCHANGE)
 				{
-					scene_running = false;
+					CONFIG_DATA->GetConfigData().sceneRunning = false;
 					//If exit is being called -> Change scene to Scene Exit
 					if (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() == NS_SCENE::SC_EXIT)
 					{
-						engine_running = false;
+						CONFIG_DATA->GetConfigData().engineRunning = false;
 					}
 				}
-				//////
-				// fps end
 				DELTA_T->end();
-				//std::cout << fps << std::endl;
-				//std::cout << "60.00" << std::endl; // best solution for 60fps
-
-				//_sysMgr._currentFPS = fps;
-				// fps
-				//////
 			}
-
-			//SYS_SCENEMANAGER->Exit();
 		}
 		SYS_MAN->GameExit();
-		//SYS_SCENE_MANAGER->ExitScene();
 	}
 
 }

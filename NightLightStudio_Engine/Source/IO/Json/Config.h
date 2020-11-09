@@ -33,6 +33,12 @@ struct ConfigData
 	float _positionSensitivity;
 	float _rotationSensitivity;
 	float _zoomSensitivity;
+
+	//============= Run time variable ============//
+	bool engineRunning;
+	bool sceneRunning;
+	bool levelEditorMode;
+	bool isPlaying;
 };
 
 class Config : public MySystem ,public Singleton<Config> {
