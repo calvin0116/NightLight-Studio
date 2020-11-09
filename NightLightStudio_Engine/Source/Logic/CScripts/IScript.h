@@ -6,9 +6,9 @@
 class IScript
 {
 protected:
+  Entity  MyID; // Dont touch
 public:
-  Entity  MyID;
-  // IScript() {}
+  //IScript() = 0;
   virtual ~IScript() {}
   virtual void SetEntity(Entity _id) { MyID = _id; }
   virtual void Init() {};
