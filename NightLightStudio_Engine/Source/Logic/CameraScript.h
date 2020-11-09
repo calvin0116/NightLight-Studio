@@ -146,6 +146,7 @@ namespace AllScripts
     virtual void Exit() override
     {
 
+        NS_GRAPHICS::CameraSystem::GetInstance().SetUseThridPersonCam(false);
     };
 
     virtual void OnCollisionEnter(Entity) override
