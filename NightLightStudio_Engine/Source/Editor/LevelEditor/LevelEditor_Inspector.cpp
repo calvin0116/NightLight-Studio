@@ -71,6 +71,12 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<LightComponent>();
 			entComp._ent.getComponent<LightComponent>()->Read(*entComp._rjDoc);
 		}
+
+		else if (t == typeid(ScriptComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<ScriptComponent>();
+			entComp._ent.getComponent<ScriptComponent>()->Read(*entComp._rjDoc);
+		}
 		
 		else if (t == typeid(CScriptComponent).hash_code())
 		{
@@ -112,6 +118,12 @@ void InspectorWindow::Start()
 		{
 			entComp.Copy(entComp._ent.getComponent<LightComponent>()->Write());
 			entComp._ent.RemoveComponent<LightComponent>();
+		}
+
+		else if (t == typeid(ScriptComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<ScriptComponent>()->Write());
+			entComp._ent.RemoveComponent<ScriptComponent>();
 		}
 		
 		else if (t == typeid(CScriptComponent).hash_code())
@@ -486,104 +498,31 @@ void InspectorWindow::LightComp(Entity& ent)
 
 void InspectorWindow::ScriptComp(Entity& ent)
 {
-	//ScriptComponent* script_comp = ent.getComponent<ScriptComponent>();
-	//if (script_comp != nullptr)
-	//{
-	//	if (ImGui::CollapsingHeader("C#Script", &_notRemove))
-	//	{
-	//		//_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
-	//		//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
-	//		ImGui::Checkbox("IsActive", &script_comp->_isActive);
+	ScriptComponent* Script_comp = ent.getComponent<ScriptComponent>();
+	if (Script_comp != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Script component", &_notRemove))
+		{
+			ImGui::Checkbox("IsActive##CScript", &Script_comp->_isActive);
+			std::string tex = Script_comp->_ScriptName.toString();
 
-	//		if (ImGui::Button("Add Script")) //Need to change to drag and drop or create a new default scipt
-	//		{
-	//			script_comp->_Scripts.push_back(ComponentScript::data());
-	//		}
+			_levelEditor->LE_AddInputText("Script Name", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&tex, &Script_comp]()
+			{
+				Script_comp->_ScriptName = tex;
+			});
+		}
 
-	//		ImGuiTreeNodeFlags treeflag = ImGuiTreeNodeFlags_DefaultOpen;
-	//		int index = 0;
-	//		for (auto& script : script_comp->_Scripts)
-	//		{
-	//			if (std::string(script._ScriptName) == "")	//Temp for names
-	//				strcpy_s(script._ScriptName, "Script_" + index);
+		if (!_notRemove)
+		{
+			//ent.RemoveComponent<GraphicsComponent>();
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<ScriptComponent>()->Write(), typeid(ScriptComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
+		}
 
-	//			ImGui::Separator();
-	//			std::string header = "Script_" + std::to_string(index);
-	//			if (ImGui::CollapsingHeader(header.c_str(), treeflag))
-	//			{
-	//				std::string text = "Script name##" + header;
-	//				ImGui::InputText(text.c_str(), script._ScriptName, 128);
-	//				text = "IsActive##" + header;
-	//				ImGui::Checkbox(text.c_str(), &script._isActive);
-	//				text = "IsRunning##" + header;
-	//				ImGui::Checkbox(text.c_str(), &script._isRunning);
-	//			}
-	//			++index;
-	//		}
-	//	}
-
-	//	if (!_notRemove)
-	//	{
-	//		// Currently does not run Delete Component Command (Script Read Write not working)
-	//		ent.RemoveComponent<ScriptComponent>();
-	//	}
-
-	//	ImGui::Separator();
-	//}
-
-  ScriptComponent* Script_comp = ent.getComponent<ScriptComponent>();
-  if (Script_comp != nullptr)
-  {
-    if (ImGui::CollapsingHeader("C#Script component", &_notRemove))
-    {
-      const float OffSet = 10.0f;
-      ImGui::Checkbox("IsActive##C#Script", &Script_comp->_isActive);
-      ImGui::Dummy({ 0.0f, 0.0f });
-      ImGui::SameLine(0.0f, OffSet);
-      if (ImGui::CollapsingHeader("C#Script1", &_notRemove))
-      {
-        ImGui::Dummy({ 0.0f, 0.0f });
-        ImGui::SameLine(0.0f, 2 * OffSet);
-        ImGui::Checkbox("IsActive##C#Script1", &Script_comp->_Script1._isActive);
-        std::string tex = Script_comp->_Script1._ScriptName.toString();
-
-        ImGui::Dummy({ 0.0f, 0.0f });
-        ImGui::SameLine(0.0f, 2 * OffSet);
-        _levelEditor->LE_AddInputText("Script1 Name", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-          [&tex, &Script_comp]()
-          {
-            Script_comp->_Script1._ScriptName = tex;
-          });
-      }
-      ImGui::Dummy({ 0.0f, 0.0f });
-      ImGui::SameLine(0.0f, OffSet);
-      if (ImGui::CollapsingHeader("C#Script2", &_notRemove))
-      {
-        ImGui::Dummy({ 0.0f, 0.0f });
-        ImGui::SameLine(0.0f, 2 * OffSet);
-        ImGui::Checkbox("IsActive##C#Script2", &Script_comp->_Script2._isActive);
-        std::string tex = Script_comp->_Script2._ScriptName.toString();
-
-        ImGui::Dummy({ 0.0f, 0.0f });
-        ImGui::SameLine(0.0f, 2 * OffSet);
-        _levelEditor->LE_AddInputText("Script2 Name", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-          [&tex, &Script_comp]()
-          {
-            Script_comp->_Script2._ScriptName = tex;
-          });
-      }
-    }
-
-    if (!_notRemove)
-    {
-      //ent.RemoveComponent<GraphicsComponent>();
-      ENTITY_COMP_DOC comp{ ent, ent.getComponent<ScriptComponent>()->Write(), typeid(ScriptComponent).hash_code() };
-      _levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
-      _notRemove = true;
-    }
-
-    ImGui::Separator();
-  }
+		ImGui::Separator();
+	}
 }
 
 void InspectorWindow::CScriptComp(Entity& ent)
