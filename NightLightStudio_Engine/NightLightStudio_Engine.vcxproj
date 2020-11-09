@@ -187,6 +187,7 @@
     <ClInclude Include="Source\Collision\SystemCollision.h" />
     <ClInclude Include="Source\Component\ComponentAudio.h" />
     <ClInclude Include="Source\Component\ComponentCamera.h" />
+    <ClInclude Include="Source\Component\ComponentCanvas.h" />
     <ClInclude Include="Source\Component\ComponentCollider.h" />
     <ClInclude Include="Source\Component\ComponentCScript.h" />
     <ClInclude Include="Source\Component\ComponentGraphics.h" />
@@ -238,7 +239,6 @@
     <ClInclude Include="Source\Editor\SystemEditor.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
-    <ClInclude Include="Source\Graphics\ComponentCanvas.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
     <ClInclude Include="Source\Graphics\Lights.h" />
@@ -304,6 +304,7 @@
     <ClCompile Include="Source\Collision\SystemCollision.cpp" />
     <ClCompile Include="Source\Component\ComponentAudio.cpp" />
     <ClCompile Include="Source\Component\ComponentCamera.cpp" />
+    <ClCompile Include="Source\Component\ComponentCanvas.cpp" />
     <ClCompile Include="Source\Component\ComponentCollider.cpp" />
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
     <ClCompile Include="Source\Component\ComponentGraphics.cpp" />
@@ -345,7 +346,6 @@
     <ClCompile Include="Source\Editor\PrefabManager.cpp" />
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
-    <ClCompile Include="Source\Graphics\ComponentCanvas.cpp" />
     <ClCompile Include="Source\Graphics\DebugManager.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsSystem.cpp" />
     <ClCompile Include="Source\Graphics\LightSystem.cpp" />
