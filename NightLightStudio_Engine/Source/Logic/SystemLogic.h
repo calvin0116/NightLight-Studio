@@ -6,6 +6,8 @@
 // For messaging/event
 #include "../Messaging/SystemReceiver.h"
 #include "../Messaging/Messages/MessageScriptRequest.h"
+#include "../Messaging/Messages/MessageApplicationExit.h"
+#include "../Messaging/Messages/MessageTogglePlay.h"
 
 namespace NS_LOGIC
 {
@@ -53,6 +55,8 @@ namespace NS_LOGIC
     void OnTriggerExit(Entity _obj1, Entity _obj2);
 
     void HandleMsg(MessageScriptRequest&);
+    void HandleApplicationExit(MessageApplicationExit&);
+    void HandleTogglePlay(MessageTogglePlay&);
   };
 
   static SystemLogic* SYS_LOGIC = SystemLogic::GetInstance();

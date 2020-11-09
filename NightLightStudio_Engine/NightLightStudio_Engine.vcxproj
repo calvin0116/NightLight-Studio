@@ -272,7 +272,9 @@
     <ClInclude Include="Source\Math\Matrix3x3.h" />
     <ClInclude Include="Source\Math\Matrix4x4.h" />
     <ClInclude Include="Source\Math\Vector.h" />
+    <ClInclude Include="Source\Messaging\Messages\MessageApplicationExit.h" />
     <ClInclude Include="Source\Messaging\Messages\MessageScriptRequest.h" />
+    <ClInclude Include="Source\Messaging\Messages\MessageTogglePlay.h" />
     <ClInclude Include="Source\Messaging\SystemBroadcaster.h" />
     <ClInclude Include="Source\Messaging\SystemIMessage.h" />
     <ClInclude Include="Source\Messaging\SystemReceiver.h" />

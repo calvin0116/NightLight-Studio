@@ -55,6 +55,8 @@ namespace NS_LOGIC
 
     // Attach handler
     r.AttachHandler("ScriptRequest", &SystemLogic::HandleMsg, this);
+    r.AttachHandler("ApplicationExit", &SystemLogic::HandleApplicationExit, this);
+    r.AttachHandler("TogglePlay", &SystemLogic::HandleTogglePlay, this);
   }
 
   void SystemLogic::GameLoad()
@@ -97,7 +99,7 @@ namespace NS_LOGIC
     baseCollisionEnter =  MonoWrapper::GetObjectMethod("OnCollisionEnter", "UniBehaviour");
 
     // C# scripts init
-    auto itrS = G_ECMANAGER->begin<ComponentScript>();
+ /*   auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
     for (; itrS != itrE; ++itrS)
     {
@@ -110,7 +112,7 @@ namespace NS_LOGIC
       MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
       MonoMethod* MyInit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseInit);
       MonoWrapper::InvokeMethod(MyInit, MyScript->_MonoData._pInstance);
-    }
+    }*/
     _Inited = true;
   }
 
@@ -139,17 +141,17 @@ namespace NS_LOGIC
       myComp->_pScript->Update();
     }
 
-    // C# Scripts Update
-    auto itrS = G_ECMANAGER->begin<ComponentScript>();
-    auto itrE = G_ECMANAGER->end<ComponentScript>();
-    for (; itrS != itrE; ++itrS)
-    {
-      ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
-      if (MyScript == nullptr || !MyScript->_isActive)
-        continue;
-      MonoMethod* MyUpdate = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseUpdate);
-      MonoWrapper::InvokeMethod(MyUpdate, MyScript->_MonoData._pInstance);
-    }
+    //// C# Scripts Update
+    //auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    //auto itrE = G_ECMANAGER->end<ComponentScript>();
+    //for (; itrS != itrE; ++itrS)
+    //{
+    //  ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+    //  if (MyScript == nullptr || !MyScript->_isActive)
+    //    continue;
+    //  MonoMethod* MyUpdate = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseUpdate);
+    //  MonoWrapper::InvokeMethod(MyUpdate, MyScript->_MonoData._pInstance);
+    //}
   }
 
   void SystemLogic::FixedUpdate()
@@ -175,18 +177,18 @@ namespace NS_LOGIC
       myComp->_pScript = nullptr;
     }
 
-    // C# Scripts Exit
-    auto itrS = G_ECMANAGER->begin<ComponentScript>();
-    auto itrE = G_ECMANAGER->end<ComponentScript>();
-    for (; itrS != itrE; ++itrS)
-    {
-      ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
-      if (MyScript == nullptr || !MyScript->_isActive)
-        continue;
-      MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
-      MonoMethod* MyExit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseExit);
-      MonoWrapper::InvokeMethod(MyExit, MyScript->_MonoData._pInstance);
-    }
+    //// C# Scripts Exit
+    //auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    //auto itrE = G_ECMANAGER->end<ComponentScript>();
+    //for (; itrS != itrE; ++itrS)
+    //{
+    //  ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+    //  if (MyScript == nullptr || !MyScript->_isActive)
+    //    continue;
+    //  MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
+    //  MonoMethod* MyExit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseExit);
+    //  MonoWrapper::InvokeMethod(MyExit, MyScript->_MonoData._pInstance);
+    //}
   }
 
   void SystemLogic::Free()
@@ -273,5 +275,21 @@ namespace NS_LOGIC
       // Break out of loop
       break;
     }
+  }
+
+  void SystemLogic::HandleApplicationExit(MessageApplicationExit& msg)
+  {
+    // Handle msg function here
+    std::cout << "Hello from SystemLogic!" << std::endl;
+  }
+
+  void SystemLogic::HandleTogglePlay(MessageTogglePlay& msg)
+  {
+    // Handle msg here.
+    std::cout << "Hello from SystemLogic!" << std::endl;
+    std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
+    //_isPlaying = msg.isPlaying;
+    //if (!_isPlaying)
+    //  GameExit();
   }
 }
