@@ -76,6 +76,19 @@ inline void ComponentGraphics::Read(Value& val)
 		}
 	}
 
+	if (val.FindMember("Model file") == val.MemberEnd())
+		std::cout << "No Model file data has been found" << std::endl;
+	else
+	{
+		_modelFileName = val["Model file"].GetString();
+
+		if (!_modelFileName.empty())
+		{
+			NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(_modelFileName.toString());
+			_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
+		}
+	}
+
 	if (val.FindMember("Albedo") == val.MemberEnd())
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
