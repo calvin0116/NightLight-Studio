@@ -291,7 +291,10 @@ bool Player::enterPossession()
 void Player::OnCollisionEnter(Entity other)
 {
 	// find script
-	IScript* tmp = other.getComponent<ComponentCScript>()->_pScript;
+  ComponentCScript* otherScript = other.getComponent<ComponentCScript>();
+  IScript* tmp = nullptr;
+  if(otherScript)
+	  tmp = otherScript->_pScript;
 	// script not found return
 	if (tmp == nullptr) return;
 	// check script
