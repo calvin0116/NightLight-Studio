@@ -17,14 +17,12 @@ namespace NS_GRAPHICS
 		int _pLights_Num;
 		int _sLights_Num;
 
-		glm::vec3 _viewPos;
-		float _dummyPadding0 = 0.f;  // Note, padding is required to fit GLSL alignment
+		glm::vec4 _viewPos;
+		//float _dummyPadding0 = 0.f;  // Note, padding is required to fit GLSL alignment
 
 		DirLight _dLights[s_MaxLights];
 		PointLight _pLights[s_MaxLights];
 		SpotLight _sLights[s_MaxLights];
-
-		float _dummyPadding1 = 0.f;
 
 		LightBlock()
 			: _dLights_Num{ NULL },
