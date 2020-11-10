@@ -27,10 +27,17 @@ void DeltaTime::start()
 
 void DeltaTime::end()
 {
+	//////
+	// fps end
 	fps = 1000.0f / ((dt + _prevdt) * 0.5f);
 
 	_prevdt = dt;
-	
+	//std::cout << fps << std::endl;
+	//std::cout << "60.00" << std::endl; // best solution for 60fps
+
+	//_sysMgr._currentFPS = fps;
+	// fps
+	//////
 }
 
 void DeltaTime::Exit()

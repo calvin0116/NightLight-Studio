@@ -128,9 +128,9 @@ namespace NS_GRAPHICS
 		testtransformsphere._scale = {10.f,10.f,10.f};
 		testdrawSphere.AttachComponent<ComponentTransform>(testtransformsphere);
 
-		CreateSphere(testdrawSphere, glm::vec3(0.f,1.f,1.f));
+		CreateSphere(testdrawSphere, glm::vec3(0.f,1.f,1.f));*/
 
-		Entity testlight = G_ECMANAGER->BuildEntity();
+		/*Entity testlight = G_ECMANAGER->BuildEntity();
 		ComponentTransform testtransformlight;
 		testtransformlight._rotation = {15.f, 15.f,15.f};
 		

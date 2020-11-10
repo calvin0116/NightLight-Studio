@@ -117,6 +117,8 @@ void Player::Init()
 void Player::Update()
 {
 	/*std::cout << "Speed is X:" <<comRigid->velocity.x << "   Y:"<<comRigid->velocity.y << "  Z:"<<comRigid->velocity.z << std::endl;*/
+  if (camera == nullptr)
+    return;
 	switch (_playerState)
 	{
 	case PLAYERSTATE::HUMAN:
@@ -332,7 +334,10 @@ bool Player::enterPossession()
 void Player::OnCollisionEnter(Entity other)
 {
 	// find script
-	IScript* tmp = other.getComponent<ComponentCScript>()->_pScript;
+  ComponentCScript* otherScript = other.getComponent<ComponentCScript>();
+  IScript* tmp = nullptr;
+  if(otherScript)
+	  tmp = otherScript->_pScript;
 	// script not found return
 	if (tmp == nullptr) return;
 	// check script
@@ -375,7 +380,7 @@ void Player::OnCollisionEnter(Entity other)
 				// set player spawn position to possess spawn transfrom
 				ComponentTransform* myTf = MyID.getComponent<ComponentTransform>();
 				// get the transform
-				Entity possessSpawnEntity = spawn->MyID;
+				Entity possessSpawnEntity = entity;
 				ComponentTransform* possessSpawnTransform = possessSpawnEntity.getComponent< ComponentTransform>();
 				// set the data
 				myTf->_position = possessSpawnTransform->_position;

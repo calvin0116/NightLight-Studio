@@ -33,6 +33,12 @@ struct ConfigData
 	float _positionSensitivity;
 	float _rotationSensitivity;
 	float _zoomSensitivity;
+
+	//============= Run time variable ============//
+	bool engineRunning;
+	bool sceneRunning;
+	bool levelEditorMode;
+	bool isPlaying;
 };
 
 class Config : public MySystem ,public Singleton<Config> {
@@ -44,6 +50,8 @@ public:
 		:config_d{}
 		, parser{ "Config", json_path }
 	{
+		config_d.engineRunning = true;
+		config_d.sceneRunning = true;
 	};
 
 	ENGINE_API void Load()
@@ -62,6 +70,12 @@ public:
 		config_d._positionSensitivity = config_val["positionSensitivity"].GetFloat();
 		config_d._rotationSensitivity = config_val["rotationSensitivity"].GetFloat();
 		config_d._zoomSensitivity = config_val["zoomSensitivity"].GetFloat();
+
+		config_d.levelEditorMode = config_val["start_in_level_editor"].GetBool();
+		if (config_d.levelEditorMode)
+			config_d.isPlaying = true;
+		else
+			config_d.isPlaying = false;
 	}
 
 
@@ -83,6 +97,8 @@ public:
 		config_val["positionSensitivity"].SetFloat(config_d._positionSensitivity);
 		config_val["rotationSensitivity"].SetFloat(config_d._rotationSensitivity);
 		config_val["zoomSensitivity"].SetFloat(config_d._zoomSensitivity);
+
+		config_val["start_in_level_editor"].SetBool(config_d.levelEditorMode);
 
 		parser.Save();
 	};

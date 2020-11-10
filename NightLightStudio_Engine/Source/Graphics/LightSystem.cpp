@@ -217,6 +217,9 @@ namespace NS_GRAPHICS
 	{
 		ComponentLight* lightcomponent = entity.getComponent<ComponentLight>();
 
+		if (lightcomponent->_type == lightType)
+			return;
+
 		if (lightcomponent != nullptr)
 		{
 			// Delete current light from local data

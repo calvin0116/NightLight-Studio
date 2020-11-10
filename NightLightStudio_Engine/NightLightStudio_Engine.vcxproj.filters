@@ -411,6 +411,9 @@
     <ClInclude Include="Source\Messaging\Messages\MessageTogglePlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\ComponentCanvas.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -663,6 +666,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Mono\Binding\Systems\ForceBind.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentCanvas.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Logic\CScripts\AllScripts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

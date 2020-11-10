@@ -356,7 +356,69 @@ namespace NS_GRAPHICS
 			std::cout << "Reading Variables" << std::endl;
 			if (input.find("BEGIN") != std::string::npos)
 			{
-				std::string vertexCount = input.substr(input.find(" ")+1);
+				std::string vertexCount = input.substr(input.find(" ") + 1);
+				Mesh* newMesh = new Mesh();
+				newMesh->_vertexDatas.reserve((size_t)std::stoi(vertexCount));
+				newMesh->_indices.reserve((size_t)std::stoi(vertexCount));
+
+				std::getline(meshFile, input);
+				newMesh->_nodeName = input;
+
+				Mesh::VertexData vertex;
+
+				int index = 0;
+
+				while (std::getline(meshFile, input, ' '))
+				{
+					if (input == "v:")
+					{		
+						std::getline(meshFile, input);
+						std::string posX = input.substr(0, input.find(","));
+						std::string nextPos = input.substr(input.find(",")+1);
+						std::string posY = nextPos.substr(0, nextPos.find(","));
+						std::string posZ = input.substr(input.rfind(",")+1);
+
+						vertex._position.x = std::stof(posX);
+						vertex._position.y = std::stof(posY);
+						vertex._position.z = std::stof(posZ);
+
+					}
+
+					else if (input == "uv:")
+					{
+						std::getline(meshFile, input);
+						std::string u = input.substr(0, input.find(","));
+						std::string v = input.substr(input.rfind(",") + 1);
+
+						vertex._uv.x = std::stof(u);
+						vertex._uv.y = std::stof(v);
+					}
+
+					else if (input == "n:")
+					{
+						std::getline(meshFile, input);
+						std::string normalX = input.substr(0, input.find(","));
+						std::string normPos = input.substr(input.find(",") + 1);
+						std::string normalY = normPos.substr(0, normPos.find(","));
+						std::string normalZ = input.substr(input.rfind(",") + 1);
+
+						vertex._normals.x = std::stof(normalX);
+						vertex._normals.y = std::stof(normalY);
+						vertex._normals.z = std::stof(normalZ);
+
+						newMesh->_indices.push_back(index);
+						index++;
+						newMesh->_vertexDatas.push_back(vertex);
+
+						if (index >= std::stoi(vertexCount))
+						{
+							break;
+						}
+					}
+				}
+
+				std::getline(meshFile, input);
+				model->_meshes.push_back(newMesh);
 			}
 		}
 

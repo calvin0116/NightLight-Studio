@@ -7,6 +7,9 @@
 #include <set>
 #include "LevelEditor_Console.h"
 #include "../../Input/SystemInput.h"
+// Construct script
+#include "../../Logic/CScripts/AllScripts.h"
+//#include "../../Mono/MonoWrapper.h"
 
 void InspectorWindow::Start()
 {
@@ -505,12 +508,24 @@ void InspectorWindow::ScriptComp(Entity& ent)
 		{
 			ImGui::Checkbox("IsActive##CScript", &Script_comp->_isActive);
 			std::string tex = Script_comp->_ScriptName.toString();
+      std::string old = tex;
 
 			_levelEditor->LE_AddInputText("Script Name", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&tex, &Script_comp]()
 			{
 				Script_comp->_ScriptName = tex;
 			});
+
+      //// Changes occured
+      //if (tex != old)
+      //{
+      //  std::cout << "Constructing _pScript..." << std::endl;
+      //  if (Script_comp->_MonoData._GCHandle) // Already has a script
+      //  {
+
+      //  }
+      //  cScript_comp->_pScript = AllScripts::Construct(tex);
+      //}
 		}
 
 		if (!_notRemove)
@@ -535,12 +550,27 @@ void InspectorWindow::CScriptComp(Entity& ent)
       ImGui::Checkbox("IsActive##CScript", &cScript_comp->_isActive);
       ImGui::InputInt("Tag", &cScript_comp->_iTag);
       std::string tex = cScript_comp->_sName.toString();
-
+      std::string old = tex;
       _levelEditor->LE_AddInputText("Script Name", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
         [&tex, &cScript_comp]()
         {
           cScript_comp->_sName = tex;
         });
+      // Changes occured
+      if (tex != old)
+      {
+        if (cScript_comp->_pScript) // Already has a script
+        {
+          delete cScript_comp->_pScript;
+          cScript_comp->_pScript = nullptr;
+        }
+        cScript_comp->_pScript = AllScripts::Construct(tex);
+        if (cScript_comp->_pScript)
+        {
+          std::cout << "Constructed Script" << std::endl;
+          cScript_comp->_pScript->SetEntity(ent);
+        }
+      }
     }
 
     if (!_notRemove)
