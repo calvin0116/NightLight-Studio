@@ -10,7 +10,8 @@ ComponentGraphics::ComponentGraphics()
 	_normalFileName{}, _normalID{ NULL },
 	_metallicFileName{}, _metallicID{ NULL },
 	_roughnessFileName{}, _roughnessID{ NULL },
-	_aoFileName{}, _aoID{ NULL }
+	_aoFileName{}, _aoID{ NULL },
+	_specularFileName{}, _specularID{ NULL }
 {
 	strcpy_s(ser_name ,"GraphicsComponent");
 }
@@ -21,7 +22,8 @@ ComponentGraphics::ComponentGraphics(const int& meshID)
 	_normalFileName{}, _normalID{ NULL },
 	_metallicFileName{}, _metallicID{ NULL },
 	_roughnessFileName{}, _roughnessID{ NULL },
-	_aoFileName{}, _aoID{ NULL }
+	_aoFileName{}, _aoID{ NULL },
+	_specularFileName{}, _specularID{ NULL }
 {
 	strcpy_s(ser_name, "GraphicsComponent");
 }
@@ -79,28 +81,87 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("Albedo") == val.MemberEnd())
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
+	{
 		_albedoFileName = val["Albedo"].GetString();
 
+		if (!_albedoFileName.empty())
+		{
+			_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_albedoFileName.toString());
+		}
+	}
+
 	if (val.FindMember("Normal") == val.MemberEnd())
-		std::cout << "No Texture file data has been found" << std::endl;
+		std::cout << "No Normal file data has been found" << std::endl;
 	else
 		_normalFileName = val["Normal"].GetString();
 
 	if (val.FindMember("Metallic") == val.MemberEnd())
-		std::cout << "No Texture file data has been found" << std::endl;
+		std::cout << "No Metallic file data has been found" << std::endl;
 	else
 		_metallicFileName = val["Metallic"].GetString();
 
 	if (val.FindMember("Roughness") == val.MemberEnd())
-		std::cout << "No Texture file data has been found" << std::endl;
+		std::cout << "No Roughness file data has been found" << std::endl;
 	else
 		_roughnessFileName = val["Roughness"].GetString();
 
 	if (val.FindMember("AmbientOcclusion") == val.MemberEnd())
-		std::cout << "No Texture file data has been found" << std::endl;
+		std::cout << "No AmbientOcclusion file data has been found" << std::endl;
 	else
 		_aoFileName = val["AmbientOcclusion"].GetString();
 
+	if (val.FindMember("Specular") == val.MemberEnd())
+		std::cout << "No Specular file data has been found" << std::endl;
+	else
+	{
+		_specularFileName = val["Specular"].GetString();
+
+		if (!_specularFileName.empty())
+		{
+			_specularID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_specularFileName.toString());
+		}
+	}
+
+	//Error checking for json data
+	if (val.FindMember("DiffuseMat") == val.MemberEnd())
+		std::cout << "No Diffuse data has been found" << std::endl;
+	else
+	{
+		auto pos = val["DiffuseMat"].GetArray();
+
+		_materialData._diffuse.x = pos[0].GetFloat();
+		_materialData._diffuse.y = pos[1].GetFloat();
+		_materialData._diffuse.z = pos[2].GetFloat();
+	}
+
+	if (val.FindMember("AmbientMat") == val.MemberEnd())
+		std::cout << "No Ambient data has been found" << std::endl;
+	else
+	{
+		auto scale = val["AmbientMat"].GetArray();
+
+		_materialData._ambient.x = scale[0].GetFloat();
+		_materialData._ambient.y = scale[1].GetFloat();
+		_materialData._ambient.z = scale[2].GetFloat();
+	}
+
+	if (val.FindMember("SpecularMat") == val.MemberEnd())
+		std::cout << "No Specular data has been found" << std::endl;
+	else
+	{
+		auto rotate = val["SpecularMat"].GetArray();
+
+		_materialData._specular.x = rotate[0].GetFloat();
+		_materialData._specular.y = rotate[1].GetFloat();
+		_materialData._specular.z = rotate[2].GetFloat();
+	}
+
+	if (val.FindMember("ShininessMat") == val.MemberEnd())
+		std::cout << "No Shininess data has been found" << std::endl;
+	else
+	{
+		_materialData._shininess = val["ShininessMat"].GetFloat();
+	}
 }
 
 inline Value ComponentGraphics::Write() 
@@ -114,6 +175,30 @@ inline Value ComponentGraphics::Write()
 	NS_SERIALISER::ChangeData(&val, "Metallic", rapidjson::StringRef(_metallicFileName.c_str()));
 	NS_SERIALISER::ChangeData(&val, "Roughness", rapidjson::StringRef(_roughnessFileName.c_str()));
 	NS_SERIALISER::ChangeData(&val, "AmbientOcclusion", rapidjson::StringRef(_aoFileName.c_str()));
+	NS_SERIALISER::ChangeData(&val, "Specular", rapidjson::StringRef(_specularFileName.c_str()));
+
+	Value diffuse(rapidjson::kArrayType);
+	diffuse.PushBack(_materialData._diffuse.x, global_alloc);
+	diffuse.PushBack(_materialData._diffuse.y, global_alloc);
+	diffuse.PushBack(_materialData._diffuse.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "DiffuseMat", diffuse);
+
+	Value ambient(rapidjson::kArrayType);
+	ambient.PushBack(_materialData._ambient.x, global_alloc);
+	ambient.PushBack(_materialData._ambient.y, global_alloc);
+	ambient.PushBack(_materialData._ambient.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "AmbientMat", ambient);
+
+	Value specular(rapidjson::kArrayType);
+	specular.PushBack(_materialData._specular.x, global_alloc);
+	specular.PushBack(_materialData._specular.y, global_alloc);
+	specular.PushBack(_materialData._specular.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "SpecularMat", specular);
+
+	NS_SERIALISER::ChangeData(&val, "ShininessMat", _materialData._shininess);
 
 	return val;
 }
