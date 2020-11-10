@@ -12,16 +12,21 @@ namespace NS_GRAPHICS
 
 	struct LightBlock
 	{
+		// 7200 total
+		DirLight _dLights[s_MaxLights];		// 1920
+		PointLight _pLights[s_MaxLights];   // 2400
+		SpotLight _sLights[s_MaxLights];	// 2880
+		// 0 - 7199
+
 		// Number of lights currently in scene
-		int _dLights_Num;
-		int _pLights_Num;
-		int _sLights_Num;
-
-		glm::vec4 _viewPos;
-
-		DirLight _dLights[s_MaxLights];
-		PointLight _pLights[s_MaxLights];
-		SpotLight _sLights[s_MaxLights];
+		int _dLights_Num; // 7200 - 7203
+		int _pLights_Num; // 7204 - 7207
+		int _sLights_Num; // 7208 - 7211
+		// 7216
+		
+		// Compiler will align view pos to 7216
+		glm::vec4 _viewPos; // 7216 - 7231
+		// Extra 4 bytes of padding?
 
 		LightBlock()
 			: _dLights_Num{ NULL },

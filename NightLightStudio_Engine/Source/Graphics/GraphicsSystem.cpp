@@ -186,7 +186,7 @@ namespace NS_GRAPHICS
 
 		GLint blockSize;
 
-		glGetActiveUniformBlockiv(shaderManager->GetCurrentProgramHandle(), 1,
+		glGetActiveUniformBlockiv(shaderManager->GetCurrentProgramHandle(), 0,
 			GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
 
 		std::cout << "Light Uniform Block Size: " << blockSize << std::endl;

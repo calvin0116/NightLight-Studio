@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "../Window/WndUtils.h"
+#include "LightSystem.h"
 
 namespace NS_GRAPHICS
 {
@@ -8,7 +9,7 @@ namespace NS_GRAPHICS
 	{
 		static const unsigned s_max_shaders = 4;
 		static const unsigned s_view_projection_buffer_size = 128; // Inclusive of padding
-		static const unsigned s_lights_buffer_size = 6748; // Inclusive of padding
+		static const unsigned s_lights_buffer_size = sizeof(LightBlock); // Inclusive of padding
 
 		struct ShaderFile
 		{
