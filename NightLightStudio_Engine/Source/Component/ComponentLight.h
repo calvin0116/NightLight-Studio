@@ -40,6 +40,7 @@ public:
 	// Parametrized constructor 
 	ComponentLight(const int& lightID, const NS_GRAPHICS::Lights& Type);
 
+	// Assume create light function is called separately by light system
 	void AssignLight(const int& lightID, const NS_GRAPHICS::Lights& Type);
 
 	// Destructor, destroy all OpenGL objects via graphics system
