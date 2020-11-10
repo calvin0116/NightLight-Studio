@@ -65,6 +65,10 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<ComponentLight>(Comp_list, entity, component_name);
             }
+            else if (component_name == "PlayerStatsComponent")
+            {
+                CreateAndWriteComp<PlayerStatsComponent>(Comp_list, entity, component_name);
+            }
         }
     }
 

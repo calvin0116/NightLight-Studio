@@ -86,7 +86,11 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<CScriptComponent>();
 			entComp._ent.getComponent<CScriptComponent>()->Read(*entComp._rjDoc);
 		}
-		
+		else if (t == typeid(PlayerStatsComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<PlayerStatsComponent>();
+			entComp._ent.getComponent<PlayerStatsComponent>()->Read(*entComp._rjDoc);
+		}
 		return comp;
 	};
 
@@ -134,6 +138,11 @@ void InspectorWindow::Start()
 		{
 			entComp.Copy(entComp._ent.getComponent<CScriptComponent>()->Write());
 			entComp._ent.RemoveComponent<CScriptComponent>();
+		}
+		else if (t == typeid(PlayerStatsComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<PlayerStatsComponent>()->Write());
+			entComp._ent.RemoveComponent<PlayerStatsComponent>();
 		}
 		
 		return std::any(entComp);
@@ -229,6 +238,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	ScriptComp(ent);
 
   CScriptComp(ent);
+
+  PlayerStatsComp(ent);
 
 	AddSelectedComps(ent);
 }
@@ -594,6 +605,37 @@ void InspectorWindow::CScriptComp(Entity& ent)
   }
 }
 
+void InspectorWindow::PlayerStatsComp(Entity& ent)
+{
+	PlayerStatsComponent* psc = ent.getComponent<PlayerStatsComponent>();
+	if (psc != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Player Stats", &_notRemove))
+		{
+			//_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			ImGui::InputFloat("player_move_mag", &psc->player_move_mag);
+			ImGui::InputFloat("player_fly_mag", &psc->player_fly_mag);
+			ImGui::InputInt("player_max_energy", &psc->player_max_energy);
+			ImGui::InputInt("player_possess_energy_drain", &psc->player_possess_energy_drain);
+			ImGui::InputInt("player_moth_energy_drain", &psc->player_moth_energy_drain);
+			ImGui::InputFloat("camera_distance", &psc->camera_distance);
+			ImGui::InputFloat3("camera_offset", psc->camera_offset.m);
+			ImGui::InputFloat("player_max_speed", &psc->player_max_speed);
+
+		}
+
+		if (!_notRemove)
+		{
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<PlayerStatsComponent>()->Write(), typeid(PlayerStatsComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
+		}
+
+		ImGui::Separator();
+	}
+}
+
 void InspectorWindow::AddSelectedComps(Entity& ent)
 {
 	_levelEditor->LE_AddCombo("##AddComponentsCombo", _itemType,
@@ -609,9 +651,10 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  Plane Collider",
 			"  SphereCollider",
 			"  CapsuleCollider",
-      "------------",
-      "  CScript",
-			"  C#Script"
+			"------------",
+			"  CScript",
+			"  C#Script",
+			"  PlayerStats"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -724,8 +767,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 				//ColliderComponent capsule(COLLIDERS::CAPSULE);
 				//ent.AttachComponent(capsule);
-				break;
 			}
+			break;
 		}
 		
 		//case 11: -> ------
@@ -740,17 +783,27 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-    case 13: // C#Script
-    {
-      if (!ent.getComponent<ScriptComponent>())
-      {
-        // Currently not using Run Command as it will crash when it tries to read Scripts
-        ent.AddComponent<ScriptComponent>();
-        ENTITY_COMP_DOC comp{ ent, ScriptComponent().Write(),typeid(ScriptComponent).hash_code() };
-        _levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
-      }
-      break;
-    }
+		case 13: // C#Script
+		{
+		  if (!ent.getComponent<ScriptComponent>())
+		  {
+			// Currently not using Run Command as it will crash when it tries to read Scripts
+			ent.AddComponent<ScriptComponent>();
+			ENTITY_COMP_DOC comp{ ent, ScriptComponent().Write(),typeid(ScriptComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+		  }
+		  break;
+		}
+		case 14: // PlayerStats
+		{
+			if (!ent.getComponent<PlayerStatsComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, PlayerStatsComponent().Write(), typeid(PlayerStatsComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+
 		}
 		//if (next_lol == nullptr)
 		//{

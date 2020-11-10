@@ -1,0 +1,35 @@
+{
+    "Name": "Player_With_Stats",
+    "TransformComponent": {
+        "EntityName": "",
+        "Position": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Rotate": [
+            0.0,
+            -0.0,
+            0.0
+        ]
+    },
+    "PlayerStatsComponent": {
+        "player_move_mag": 3000.0,
+        "player_fly_mag": 4.0,
+        "player_max_energy": 15,
+        "player_possess_energy_drain": 1,
+        "player_moth_energy_drain": 1,
+        "camera_distance": 500.0,
+        "camera_offset": [
+            50.0,
+            10.0,
+            1.0
+        ],
+        "player_max_speed": 500.0
+    }
+}

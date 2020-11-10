@@ -14,6 +14,8 @@
 #include "ComponentRigidBody.h"
 #include "ComponentScript.h"
 #include "ComponentLight.h"
+
+#include "ComponentPlayerStats.h"
 // Temporary C++ script
 #include "ComponentCScript.h"
 
