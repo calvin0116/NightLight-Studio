@@ -38,7 +38,7 @@ namespace NS_LOGIC
         }
       });
 
-    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("PlayLogic", SystemInput_ns::IKEY_NUMPAD_9, "PlayLogic", SystemInput_ns::OnRelease, [this]()
+    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("PlayLogic", SystemInput_ns::IKEY_ALT, "PlayLogic", SystemInput_ns::OnHold, [this]()
       {
         //Only if mouse wheel + alt button is pressed, camera will move.
         //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
