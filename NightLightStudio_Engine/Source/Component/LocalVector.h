@@ -121,6 +121,26 @@ public:
 		--currentSize;
 	}
 
+	void erase(size_t index)
+	{
+		//size_t size = std::min((size_t)(N - 1), currentSize);
+		size_t size = currentSize;
+		size = size < (size_t)(N - 1) ? size : (size_t)(N - 1);
+
+		for (size_t i = index; i < size; ++i)
+		{
+			data[i] = data[i + 1];
+		}
+
+		if (currentSize >= N)
+		{
+			// gg
+			throw;
+		}
+
+		--currentSize;
+	}
+
 	void clear()
 	{
 		//ggvec.clear();
