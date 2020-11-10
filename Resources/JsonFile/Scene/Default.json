@@ -34,7 +34,7 @@
                 "EntityName": "Player",
                 "Position": [
                     12.903614044189454,
-                    1.0253686904907227,
+                    -551166.0625,
                     -5.172050476074219
                 ],
                 "Scale": [
@@ -58,12 +58,12 @@
                 "friction": 1.0,
                 "Force": [
                     0.0,
-                    0.0,
+                    -2000.0,
                     0.0
                 ],
                 "Accelaration": [
                     0.0,
-                    0.0,
+                    -100.0,
                     0.0
                 ]
             },
@@ -656,7 +656,7 @@
                 ],
                 "Rotate": [
                     0.0,
-                    0.0,
+                    -0.0,
                     0.0
                 ]
             },
@@ -685,7 +685,7 @@
                 ],
                 "Rotate": [
                     0.0,
-                    0.0,
+                    -0.0,
                     0.0
                 ]
             },
@@ -772,7 +772,7 @@
                 ],
                 "Rotate": [
                     0.0,
-                    0.0,
+                    -0.0,
                     0.0
                 ]
             },
@@ -1159,18 +1159,18 @@
                 "Tag": 1
             }
         },
-        "Entity_0": {
+        "LightTest": {
             "TransformComponent": {
                 "EntityName": "",
                 "Position": [
-                    0.0,
-                    -4.474631309509277,
-                    0.0
+                    4.158622741699219,
+                    4.31394100189209,
+                    5.578650951385498
                 ],
                 "Scale": [
-                    100.0,
-                    10.0,
-                    100.0
+                    0.9999103546142578,
+                    0.9999103546142578,
+                    0.9999736547470093
                 ],
                 "Rotate": [
                     0.0,
@@ -1178,24 +1178,27 @@
                     0.0
                 ]
             },
-            "ColliderComponent": {
-                "colliderType": "AABB"
-            },
-            "RigidBody": {
-                "isStatic": true,
-                "isGravity": false,
-                "mass": 1.0,
-                "friction": 0.009999999776482582,
-                "Force": [
+            "LightComponent": {
+                "LightType": "DIRECTIONAL",
+                "isActive": true,
+                "Diffuse": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Ambient": [
                     0.0,
                     0.0,
                     0.0
                 ],
-                "Accelaration": [
+                "Specular": [
                     0.0,
                     0.0,
                     0.0
-                ]
+                ],
+                "Attenuation": 100.0,
+                "CutOff": 0.0,
+                "OuterCutOff": 0.0
             }
         }
     }
