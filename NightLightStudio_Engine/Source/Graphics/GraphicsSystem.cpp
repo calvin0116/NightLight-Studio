@@ -37,6 +37,7 @@ namespace NS_GRAPHICS
 		_hasInit{ false },
 		_debugDrawing{ false },
 		_projectionMatrix{ glm::mat4(1.0f) },
+		_uiMatrix{ glm::mat4(1.0f) },
 		_viewMatrix{ glm::mat4(1.0f) }
 	{
 	}
@@ -59,6 +60,8 @@ namespace NS_GRAPHICS
 		UpdateLights();
 
 		Render();
+
+		//RenderUI();
 	}
 
 	void GraphicsSystem::Free()
@@ -230,14 +233,15 @@ namespace NS_GRAPHICS
 
 		// Set default values for projection matrix
 		SetProjectionMatrix();
+		//SetUIMatrix();
 
 		debugManager->Init();
 
 		// Enable depth buffering
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
-		//glEnable(GL_CULL_FACE);
-		//glCullFace(GL_BACK);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -366,6 +370,17 @@ namespace NS_GRAPHICS
 		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetViewProjectionUniformLocation());
 		glBufferSubData(GL_UNIFORM_BUFFER, 64, 64, glm::value_ptr(_projectionMatrix));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	}
+
+	void GraphicsSystem::SetUIMatrix()
+	{
+		/*_uiMatrix = glm::ortho(
+			(float)-width * _ratioWidth * 0.5f * 1.0f,
+			(float)width * _ratioWidth * 0.5f * 1.0f,
+			(float)-height * _ratioHeight * 0.5f * 1.0f,
+			(float)height * _ratioHeight * 0.5f * 1.0f,
+			_near,
+			_far);*/
 	}
 
 	void GraphicsSystem::UpdateLights()

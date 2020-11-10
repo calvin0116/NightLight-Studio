@@ -326,9 +326,17 @@ namespace NS_GRAPHICS
 	{
 		viewVector = _camera.GetFront();
 	}
+	glm::vec3 CameraSystem::GetUpVector()
+	{
+		return _camera.GetCameraUp();
+	}
+	glm::vec3 CameraSystem::GetRightVector()
+	{
+		return _camera.GetRight();
+	}
 	glm::vec3 CameraSystem::GetViewVector()
 	{
-		return viewVector;
+		return viewVector; 
 	}
 	glm::vec3 CameraSystem::GetXZViewVector()
 	{
