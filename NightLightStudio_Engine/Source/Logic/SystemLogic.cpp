@@ -68,8 +68,6 @@ namespace NS_LOGIC
     {
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
       myComp->_pScript = AllScripts::Construct(myComp->_sName.toString());
-      if(myComp->_pScript) // Check if script constructed
-        myComp->_pScript->SetEntity(G_ECMANAGER->getEntity(itr));
     }
     // new smth
     // C# Script
@@ -84,8 +82,10 @@ namespace NS_LOGIC
     for (; itr != itrEnd; ++itr)
     {
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
-      if (!myComp->_isActive)
+      if (myComp->_pScript == nullptr || !myComp->_isActive)
         continue;
+      Entity en = G_ECMANAGER->getEntity(itr);
+      myComp->_pScript->SetEntity(en);
       myComp->_pScript->Init();
     }
 
