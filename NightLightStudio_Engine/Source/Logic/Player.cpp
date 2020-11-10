@@ -8,13 +8,13 @@
 #include "../Core/DeltaTime.h"
 
 //need to be edited by designer
-#define PLAYER_MOVE_MAG 2000.0f
-#define PLAYER_FLY_MAG 2.0f
+#define PLAYER_MOVE_MAG 3000.0f
+#define PLAYER_FLY_MAG 4.0f
 #define PLAYER_MAX_ENERGY 15
 #define PLAYER_ENERGY_REGEN 1
 #define PLAYER_POSSESS_ENERGY_DRAIN 1
 #define PLAYER_MOTH_ENERGY_DRAIN 1
-#define CAMERA_DISTANCE 3
+#define CAMERA_DISTANCE 4
 #define PLAYER_MAX_SPEED 2
 
 /// <control mapping>
