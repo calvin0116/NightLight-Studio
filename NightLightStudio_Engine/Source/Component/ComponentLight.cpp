@@ -6,14 +6,11 @@
 
 ComponentLight::ComponentLight()
 	: _isActive{ true },
-	_lightID{ -1 }, _type{ NS_GRAPHICS::Lights::DIRECTIONAL },
+	_lightID{ -1 }, _type{ NS_GRAPHICS::Lights::INVALID_TYPE },
 	_ambient{}, _diffuse{}, _specular{}, _attenuation{}, _cutOff{}, _outerCutOff{},
 	_direction{1.f,0.f,0.f}
 {
 	strcpy_s(ser_name, "LightComponent");
-
-	// assign directional light by default
-	_lightID = NS_GRAPHICS::LightSystem::GetInstance().AddDirLight();
 }
 
 ComponentLight::ComponentLight(const int& lightID, const NS_GRAPHICS::Lights& Type)
@@ -33,9 +30,6 @@ void ComponentLight::AssignLight(const int& lightID, const NS_GRAPHICS::Lights& 
 
 ComponentLight::~ComponentLight()
 {
-	if (_lightID != -1)
-		NS_GRAPHICS::LightSystem::GetInstance().RemoveLight(_lightID, _type);
-
 }
 
 glm::vec3 ComponentLight::GetAmbient() const
@@ -254,21 +248,6 @@ void ComponentLight::SetAttenuation(const float& attenuation)
 	}
 }
 
-//// Type of light: POINT/DIRECTIONAL/SPOT
-//NS_GRAPHICS::Lights _type;
-//
-////Variables For Lighting
-////Standard variable
-//glm::vec3 _ambient;
-//glm::vec3 _diffuse;
-//glm::vec3 _specular;
-//
-////For point and spot
-//float _attenuation;
-//
-////For spot
-//float _cutOff;
-//float _outerCutOff;
 void ComponentLight::Read(Value& val)
 {
 	if (val.FindMember("isActive") == val.MemberEnd())
