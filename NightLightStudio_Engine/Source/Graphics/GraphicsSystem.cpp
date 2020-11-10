@@ -179,7 +179,7 @@ namespace NS_GRAPHICS
 
 		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));*/
 
-		shaderManager->StartProgram(1);
+		/*shaderManager->StartProgram(1);
 
 		GLint blockSize;
 
@@ -192,7 +192,7 @@ namespace NS_GRAPHICS
 		std::cout << "Spot Light Size(CPU): " << sizeof(SpotLight) << std::endl;
 		std::cout << "Point Light Size(CPU): " << sizeof(PointLight) << std::endl;
 
-		shaderManager->StopProgram();
+		shaderManager->StopProgram();*/
 
 		//std::ofstream logFile;
 		//logFile.open("custom.txt");
@@ -236,8 +236,8 @@ namespace NS_GRAPHICS
 		// Enable depth buffering
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_BACK);
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

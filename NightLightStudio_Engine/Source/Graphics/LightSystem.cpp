@@ -230,12 +230,15 @@ namespace NS_GRAPHICS
 				{
 				case Lights::DIRECTIONAL:
 					dLights_tracker[lightcomponent->_lightID] = false;
+					lightblock->_dLights_Num--;
 					break;
 				case Lights::POINT:
 					pLights_tracker[lightcomponent->_lightID] = false;
+					lightblock->_pLights_Num--;
 					break;
 				case Lights::SPOT:
 					sLights_tracker[lightcomponent->_lightID] = false;
+					lightblock->_sLights_Num--;
 					break;
 				default:
 					break;

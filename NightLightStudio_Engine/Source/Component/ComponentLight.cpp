@@ -11,6 +11,9 @@ ComponentLight::ComponentLight()
 	_direction{1.f,0.f,0.f}
 {
 	strcpy_s(ser_name, "LightComponent");
+
+	// assign directional light by default
+	_lightID = NS_GRAPHICS::LightSystem::GetInstance().AddDirLight();
 }
 
 ComponentLight::ComponentLight(const int& lightID, const NS_GRAPHICS::Lights& Type)
