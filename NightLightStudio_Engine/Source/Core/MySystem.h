@@ -25,14 +25,14 @@ enum class S_PRIORITY
 
 class MySystem : public ISystem
 {
-protected:
-	int id;
-	S_PRIORITY priority;	//Not used
+//protected:
+	//int id;
+	//S_PRIORITY priority;	//Not used
 
 public:
 	MySystem()
-		: id{ -1 }
-		, priority{ S_PRIORITY::SP_NOT_INITIALISED }
+		//: id{ -1 }
+		//, priority{ S_PRIORITY::SP_NOT_INITIALISED }
 	{};
 	virtual ~MySystem() {};
 };
