@@ -7,6 +7,9 @@ namespace NS_GRAPHICS
 	LightSystem::LightSystem()
 	{
 		lightblock = new LightBlock();
+		lightblock->_dLights_Num = 0;
+		lightblock->_sLights_Num = 0;
+		lightblock->_pLights_Num = 0;
 	}
 
 	LightSystem::~LightSystem()
@@ -197,15 +200,18 @@ namespace NS_GRAPHICS
 				{
 				case Lights::DIRECTIONAL:
 					dLights_tracker[lightcomponent->_lightID] = false;
+					lightcomponent->_lightID = -1;
 					lightblock->_dLights_Num--;
 					break;
 				case Lights::POINT:
 					pLights_tracker[lightcomponent->_lightID] = false;
 					lightblock->_pLights_Num--;
+					lightcomponent->_lightID = -1;
 					break;
 				case Lights::SPOT:
 					sLights_tracker[lightcomponent->_lightID] = false;
 					lightblock->_sLights_Num--;
+					lightcomponent->_lightID = -1;
 					break;
 				default:
 					break;
@@ -213,6 +219,30 @@ namespace NS_GRAPHICS
 			}
 			// Delete component
 			entity.RemoveComponent<ComponentLight>();
+		}
+	}
+
+	void LightSystem::RemoveLight(const int& id, Lights lightType)
+	{
+		if (id != -1)
+		{
+			switch (lightType)
+			{
+			case Lights::DIRECTIONAL:
+				dLights_tracker[id] = false;
+				lightblock->_dLights_Num--;
+				break;
+			case Lights::POINT:
+				pLights_tracker[id] = false;
+				lightblock->_pLights_Num--;
+				break;
+			case Lights::SPOT:
+				sLights_tracker[id] = false;
+				lightblock->_sLights_Num--;
+				break;
+			default:
+				break;
+			}
 		}
 	}
 

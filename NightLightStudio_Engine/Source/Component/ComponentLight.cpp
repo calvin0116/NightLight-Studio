@@ -33,6 +33,9 @@ void ComponentLight::AssignLight(const int& lightID, const NS_GRAPHICS::Lights& 
 
 ComponentLight::~ComponentLight()
 {
+	if (_lightID != -1)
+		NS_GRAPHICS::LightSystem::GetInstance().RemoveLight(_lightID, _type);
+
 }
 
 glm::vec3 ComponentLight::GetAmbient() const
