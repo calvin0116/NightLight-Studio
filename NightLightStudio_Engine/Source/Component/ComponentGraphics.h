@@ -13,9 +13,9 @@ struct MaterialData
 	float _shininess;    // Scattering / radius of specularity
 
 	MaterialData()
-		: _diffuse{ 0.5f,0.5f,0.5f },
-		_ambient{ 1.f, 1.f, 1.f },
-		_specular{ 0.5f,0.5f,0.5f },
+		: _diffuse{ 1.0f,1.0f,1.0f },
+		_ambient{ 1.0f, 1.0f, 1.0f },
+		_specular{ 1.0f,1.0f,1.0f },
 		_shininess{ 32.f } {}
 
 	~MaterialData() {}
@@ -55,6 +55,9 @@ public:
 	//Ambient Occlusion
 	LocalString<256> _aoFileName;
 	unsigned _aoID;
+
+	LocalString<256> _specularFileName;
+	unsigned _specularID;
 
 	/////////////////////////////////////////
 	/// Material without texture

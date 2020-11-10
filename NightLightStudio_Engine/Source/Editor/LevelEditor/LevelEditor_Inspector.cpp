@@ -381,6 +381,11 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 
 			std::string tex = graphics_comp->_albedoFileName.toString();
 			std::string mod = graphics_comp->_modelFileName.toString();
+			std::string normal = graphics_comp->_normalFileName.toString();
+			std::string specular = graphics_comp->_specularFileName.toString();
+			std::string metallic = graphics_comp->_metallicFileName.toString();
+			std::string ao = graphics_comp->_aoFileName.toString();
+			std::string roughness = graphics_comp->_roughnessFileName.toString();
 
 			_levelEditor->LE_AddInputText("Texture file", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&tex, &graphics_comp]()
@@ -401,6 +406,12 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 						mod = data;
 				});
 
+			_levelEditor->LE_AddInputText("Specular file", specular, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&specular, &graphics_comp]()
+				{
+				});
+
+
 			if (graphics_comp->_modelFileName.toString() != mod && !mod.empty())
 			{
 				graphics_comp->_modelFileName = mod;
@@ -413,6 +424,24 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				graphics_comp->_albedoFileName = tex;
 				graphics_comp->_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(graphics_comp->_albedoFileName.toString());
 			}
+
+			if (graphics_comp->_specularFileName.toString() != specular && !specular.empty())
+			{
+				graphics_comp->_specularFileName =  specular;
+				graphics_comp->_specularID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(graphics_comp->_specularFileName.toString());
+			}
+
+			ImGui::Separator();
+
+			ImGui::Text("Materials");
+
+			ImGui::InputFloat3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
+
+			ImGui::InputFloat3("Ambient##Graphics", glm::value_ptr(graphics_comp->_materialData._ambient));
+
+			ImGui::InputFloat3("Specular##Graphics", glm::value_ptr(graphics_comp->_materialData._specular));
+
+			ImGui::InputFloat("Shininess", &graphics_comp->_materialData._shininess);
 
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 		}
