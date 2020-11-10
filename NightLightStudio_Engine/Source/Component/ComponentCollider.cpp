@@ -95,7 +95,7 @@ ComponentCollider::ComponentCollider(const char* col)
 }
 
 ComponentCollider::ComponentCollider(ComponentCollider& rhs)
-	:colliderType(rhs.colliderType), collisionTime(FLT_MAX), colliderTag(rhs.colliderTag), bounciness(rhs.bounciness), friction(rhs.friction)
+	:colliderType(rhs.colliderType), collisionTime(FLT_MAX), colliderTag(rhs.colliderTag)
 {
 	switch (colliderType)
 	{
@@ -235,8 +235,6 @@ ComponentCollider& ComponentCollider::operator=(const ComponentCollider& rhs)
 	colliderType = rhs.colliderType;
 	collisionTime = FLT_MAX;
 	colliderTag = rhs.colliderTag;
-	bounciness = rhs.bounciness;
-	friction = rhs.friction;
 	isCollide = rhs.isCollide;
 
 	switch (colliderType)
@@ -276,36 +274,32 @@ ComponentCollider& ComponentCollider::operator=(const ComponentCollider& rhs)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //// Sphere
 SphereCollider::SphereCollider()
-	: ICollider(), center{ 0 }, radius{ 0 }
+	: ICollider(), center{ colliderPosition }, radius{ colliderScale.x }
 {
 
 
 }
 
 SphereCollider::SphereCollider(const SphereCollider& rhs)
-	:center(rhs.center), radius(rhs.radius)
+	:center(rhs.center ), radius(rhs.radius)
 {
 }
 
 SphereCollider::SphereCollider(NlMath::Vector3D Point, float Radius)
-	: ICollider(), center{ Point }, radius{ Radius }
+	: ICollider(), center{ Point+ colliderPosition }, radius{ Radius + colliderScale.x }
 {
 }
 
 SphereCollider& SphereCollider::operator=(const SphereCollider& rhs)
 {
-	center = rhs.center;
-	radius = rhs.radius;
+	center = rhs.center + colliderPosition;
+	radius = rhs.radius * colliderScale.x;
 	return *this;
 }
 
 void SphereCollider::posUpdate(ComponentTransform* transform)
 {
-	
-	center.x = transform->_position.x;
-	center.y = transform->_position.y;
-	center.z = transform->_position.z;
-
+	center = transform->_position + colliderPosition.x;
 	radius = transform->_scale.x * colliderScale.x;
 }
 
@@ -317,17 +311,17 @@ void SphereCollider::posUpdate(ComponentTransform* transform)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //// AABB
 AABBCollider::AABBCollider() 
-	: ICollider(), vecMax{ 0 }, vecMin{ 0 }
+	: ICollider(), vecMax{ colliderPosition + colliderScale}, vecMin{ colliderPosition- colliderScale }
 {
 }
 
 AABBCollider::AABBCollider(const AABBCollider& rhs)
-	:vecMax(rhs.vecMax),vecMin(rhs.vecMin)
+	: vecMax(rhs.vecMax), vecMin(rhs.vecMin)
 {
 }
 
 AABBCollider::AABBCollider(NlMath::Vector3D VecMax, NlMath::Vector3D VecMin)
-	: ICollider(), vecMax{ VecMax }, vecMin{ VecMin }
+	: ICollider(), vecMax{ VecMax+ colliderPosition }, vecMin{ VecMin + colliderPosition }
 {
 }
 
@@ -346,8 +340,8 @@ void AABBCollider::posUpdate(ComponentTransform* transform)
 		transform->_scale.z * colliderScale.z
 	);
 
-	vecMax = transform->_position + colscale;
-	vecMin= transform->_position - colscale;
+	vecMax = transform->_position + colscale + colliderPosition;
+	vecMin= transform->_position - colscale + colliderPosition;
 
 	//vecMax = transform->_position + transform->_scale;
 	//vecMin= transform->_position - transform->_scale;
@@ -394,7 +388,7 @@ void OBBCollider::posUpdate(ComponentTransform* transform)
 		transform->_scale.z * colliderScale.z
 	);
 
-	center = transform->_position;
+	center = transform->_position + colliderPosition;
 	extend = colscale;
 	glm::quat Quaternion(glm::radians(transform->_rotation));
 	glm::mat4 Rotate = glm::mat4_cast(Quaternion);
@@ -498,8 +492,8 @@ void CapsuleCollider::posUpdate(ComponentTransform* transform)
 	glm::mat4 tmtx(translate * rotate * scale);
 
 	// apply transform mtx
-	tip = tmtx * tip;
-	base = tmtx * base;
+	tip = (glm::vec3)(tmtx * tip) + colliderPosition;
+	base = (glm::vec3)(tmtx * base) + colliderPosition;
 }
 
 //// Capsule END

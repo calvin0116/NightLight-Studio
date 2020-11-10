@@ -65,7 +65,9 @@ enum class COLLIDERS
 struct ICollider
 {
 	NlMath::Vector3D colliderScale;
-	ICollider() : colliderScale(0.5f, 0.5f, 0.5f) {}
+	NlMath::Point3D colliderPosition;
+	ICollider() : colliderScale(0.5f, 0.5f, 0.5f), colliderPosition(0.0f, 0.0f, 0.0f) {}
+	ICollider(const NlMath::Vector3D& scale, NlMath::Point3D pos) :colliderScale(scale), colliderPosition(pos) {}
 };
 
 struct PlaneCollider : public ICollider
@@ -175,13 +177,18 @@ public:
 	void SetColliderT(const char* col);
 	COLLIDERS GetColliderT();
 
+	//////////////// Collider Scales, expose to editor///////////////////////////////////
+	NlMath::Point3D center;
+	NlMath::Vector3D extend;
+	NlMath::Vector3D rotation;
+	/// /////////////////////////////////////////////////////////////////////////////
+
 	Collider collider;
 	//time of collision for dynanmic collision
 	float collisionTime;
 	// For layering
 	int colliderTag = 1;
-	float bounciness = 0;
-	float friction = 0;
+
 	bool isCollide = false;
 	int lod = 0;
 	bool isTrigger = false;
