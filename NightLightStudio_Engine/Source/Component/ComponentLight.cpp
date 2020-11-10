@@ -342,7 +342,6 @@ void ComponentLight::Read(Value& val)
 	{
 		_lightID = NS_GRAPHICS::LightSystem::GetInstance().AddSpotLight(_direction, _cutOff, _outerCutOff, _attenuation, _ambient, _diffuse, _specular);
 	}
-	G_ECMANAGER->getEntity();
 }
 
 Value ComponentLight::Write()
