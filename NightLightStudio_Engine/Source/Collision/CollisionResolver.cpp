@@ -13,9 +13,20 @@ void CollisionResolver()
 
 }
 
-void CollsionResolver::addCollisionEvent(const CollisionEvent& _event)
+void CollsionResolver::addCollisionEvent(const CollisionEvent& newEvent)
 {
-	colEventList.push_back(_event);
+	colEventList.push_back(newEvent);
+}
+
+void CollsionResolver::addTriggerEvent(const TriggerEvent& newEvent)
+{
+	trigEventList.push_back(newEvent);
+}
+
+void CollsionResolver::addTriggerEvent(const Entity& object1, const Entity& object2)
+{
+	TriggerEvent newEvent(object1, object2);
+	trigEventList.push_back(newEvent);
 }
 
 void CollsionResolver::resolveCollision()
@@ -168,6 +179,36 @@ void CollsionResolver::resolveCollision()
 	// Resolve Logic events
 
 	// SYS LOGIC TODO!!!
+
+	for (TriggerEvent& trigEvent : trigEventList)
+	{
+		///////////////////////////////
+
+		// pass to syslogic
+		NS_LOGIC::SYS_LOGIC->OnTriggerEnter(trigEvent.entity1, trigEvent.entity2);
+
+
+
+/////////////////////////////dun touch///////////////////////////////
+		////colEvent.entity1;
+		////colEvent.entity2;
+		//bool flag = trigEvent.entity1.getComponent<ColliderComponent>()->triggerFlag;
+		//bool prevFlag = trigEvent.entity1.getComponent<ColliderComponent>()->prevTriggerFlag;
+		////on trigger here
+		//if (flag)
+		//{
+		//	//NS_LOGIC::SYS_LOGIC->OnTriggerEnter(colEvent.entity1, colEvent.entity2);
+		//}
+		//else if (flag||prevFlag)
+		//{
+		//	//NS_LOGIC::SYS_LOGIC->OnTriggerEnter(colEvent.entity1, colEvent.entity2);
+		//}
+		//else
+		//{
+		//	//NS_LOGIC::SYS_LOGIC->OnTriggerexit(colEvent.entity1, colEvent.entity2);
+		//}
+/////////////////////////////dun touch///////////////////////////////
+	}
 
 	for (CollisionEvent& colEvent : colEventList)
 	{

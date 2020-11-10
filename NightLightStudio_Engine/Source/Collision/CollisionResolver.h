@@ -8,6 +8,23 @@
 #include "Contact.cpp"
 #include "../Component/ComponentManager.h"
 
+struct TriggerEvent
+{
+	Entity entity1;
+	Entity entity2;
+
+	TriggerEvent() :
+		entity1(nullptr, -1),
+		entity2(nullptr, -1)
+	{
+	}
+	TriggerEvent(const Entity& object1, const Entity& object2) :
+		entity1(object1),
+		entity2(object2)
+	{
+	}
+};
+
 struct CollisionEvent
 {
 	// Type of collision
@@ -35,7 +52,13 @@ struct CollisionEvent
 
 	CollisionEvent() : 
 		entity1(nullptr, -1),
-		entity2(nullptr, -1)
+		entity2(nullptr, -1),
+		rigid1(nullptr),
+		rigid2(nullptr),
+		transform1(nullptr),
+		transform2(nullptr),
+		collider1(nullptr),
+		collider2(nullptr)
 	{
 	}
 
@@ -44,8 +67,11 @@ struct CollisionEvent
 struct CollsionResolver
 {
 	std::list<CollisionEvent> colEventList;
+	std::list<TriggerEvent> trigEventList;
 
-	void addCollisionEvent(const CollisionEvent& _event);
+	void addCollisionEvent(const CollisionEvent& newEvent);
+	void addTriggerEvent(const TriggerEvent& newEvent);
+	void addTriggerEvent(const Entity& object1, const Entity& object2);
 
 	void resolveCollision();
 

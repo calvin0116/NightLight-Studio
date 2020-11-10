@@ -34,7 +34,7 @@
                 "EntityName": "Player",
                 "Position": [
                     12.903614044189454,
-                    5.181280136108398,
+                    1.0253686904907227,
                     -5.172050476074219
                 ],
                 "Scale": [
@@ -52,13 +52,13 @@
                 "colliderType": "AABB"
             },
             "RigidBody": {
-                "isStatic": true,
+                "isStatic": false,
                 "isGravity": true,
                 "mass": 20.0,
                 "friction": 1.0,
                 "Force": [
                     0.0,
-                    -2000.0,
+                    0.0,
                     0.0
                 ],
                 "Accelaration": [

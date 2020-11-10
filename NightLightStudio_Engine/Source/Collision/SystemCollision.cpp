@@ -305,12 +305,33 @@ namespace NS_COLLISION
 				ComponentCollider* comCol1 = G_ECMANAGER->getComponent<ComponentCollider>(itr1);
 				ComponentCollider* comCol2 = G_ECMANAGER->getComponent<ComponentCollider>(itr2);
 
+				//update flags
+				comCol1->prevCollisionFlag = comCol1->collisionFlag;
+				comCol2->prevCollisionFlag = comCol2->collisionFlag;
+
+				comCol1->prevTriggerFlag = comCol1->triggerFlag;
+				comCol2->prevTriggerFlag = comCol2->triggerFlag;
+
 				//Get Transforms
 				ComponentTransform* comTrans1 = G_ECMANAGER->getComponent<ComponentTransform>(itr1);
 				ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
 
 				if (comTrans1 == nullptr || comTrans2 == nullptr) continue;
 
+				/////////////////////////check for collision trigger
+				if (CheckTrigger(comCol1, comCol2))
+				{
+					comCol1->triggerFlag = true;
+					comCol2->triggerFlag = true;
+					colResolver.addTriggerEvent(Ent1, Ent2);
+				}
+				else
+				{
+					comCol1->triggerFlag = false;
+					comCol2->triggerFlag = false;
+				}
+				
+				
 				//Get rigidBody for Collision Resolution
 				ComponentRigidBody* comRigid1 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr1);
 				ComponentRigidBody* comRigid2 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr2);
@@ -321,10 +342,15 @@ namespace NS_COLLISION
 
 				//UpdateCollisionBoxPos(comCol1, comTrans1);
 				
+
+
+
 				if (comCol1->isCollidable == false || comCol2->isCollidable == false)
 				{
 					continue;
 				}
+
+
 
 				//check for collision, also create collision event in CheckCollision if there is collision
 				if (CheckCollision(comCol1, comCol2, comRigid1, comRigid2, comTrans1, comTrans2, Ent1, Ent2))
@@ -404,10 +430,6 @@ namespace NS_COLLISION
 
 		//resolve collision here
 		colResolver.resolveCollision();
-
-
-
-
 	}
 	void CollisionSystem::GameExit()
 	{
@@ -474,6 +496,91 @@ namespace NS_COLLISION
 			break;
 		}
 
+	}
+
+	bool CollisionSystem::CheckTrigger(ComponentCollider* Collider1, ComponentCollider* Collider2)
+	{
+		/// <AABB Check Trigger>
+		/// ////////////////////////////////////////////////////////////////////////////////////////////
+
+		if (Collider1->GetColliderT() == COLLIDERS::AABB)
+		{
+			if (Collider2->GetColliderT() == COLLIDERS::AABB)
+			{
+				AABBCollider* a = &(Collider1->collider.aabb);
+				AABBCollider* b = &(Collider2->collider.aabb);
+				return NlMath::AABBtoAABB(*a,*b);
+			}
+			else if (Collider2->GetColliderT() == COLLIDERS::OBB)
+			{
+				return false;
+			}
+			else if (Collider2->GetColliderT() == COLLIDERS::CAPSULE)
+			{
+				AABBCollider* a = &(Collider1->collider.aabb);
+				CapsuleCollider* b = &(Collider2->collider.capsule);
+				NlMath::Vec3 useless;
+				if (NlMath::AABBToCapsule(*a, *b, useless) != SIDES::NO_COLLISION)
+				{
+					return true;
+				} 
+				return false;
+			}
+			else if (Collider2->GetColliderT() == COLLIDERS::SPHERE)
+			{
+				AABBCollider* a = &(Collider1->collider.aabb);
+				SphereCollider* b = &(Collider2->collider.sphere);
+				NlMath::Vec3 useless;
+				if (NlMath::AABB_SphereCollision(*a, *b, useless) != SIDES::NO_COLLISION)
+				{
+					return true;
+				}
+				return false;
+			}
+		}
+		/// ////////////////////////////////////////////////////////////////////////////////////////////
+		/// </AABB Check Trigger>
+
+		if (Collider1->GetColliderT() == COLLIDERS::OBB)
+		{
+			if (Collider2->GetColliderT() == COLLIDERS::AABB)
+			{
+				OBBCollider* a = &(Collider1->collider.obb);
+				AABBCollider* b = &(Collider2->collider.aabb);
+				return false;
+			}
+			else if (Collider2->GetColliderT() == COLLIDERS::OBB)
+			{
+				OBBCollider* a = &(Collider1->collider.obb);
+				OBBCollider* b = &(Collider2->collider.obb);
+
+				return NlMath::OBBToOBB(*a, *b);
+			}
+			else if (Collider2->GetColliderT() == COLLIDERS::CAPSULE)
+			{
+				OBBCollider* a = &(Collider1->collider.obb);
+				CapsuleCollider* b = &(Collider2->collider.capsule);
+				NlMath::Vec3 useless;
+				//if (NlMath::AABBToCapsule(*a, *b, useless) != SIDES::NO_COLLISION)
+				//{
+				//	return true;
+				//}
+				return false;
+			}
+			else if (Collider2->GetColliderT() == COLLIDERS::SPHERE)
+			{
+				OBBCollider* a = &(Collider1->collider.obb);
+				SphereCollider* b = &(Collider2->collider.sphere);
+				NlMath::Vec3 useless;
+				//if (NlMath::AABB_SphereCollision(*a, *b, useless) != SIDES::NO_COLLISION)
+				//{
+				//	return true;
+				//}
+				return false;
+			}
+		}
+
+		return false;
 	}
 
 	bool CollisionSystem::CheckCollision(

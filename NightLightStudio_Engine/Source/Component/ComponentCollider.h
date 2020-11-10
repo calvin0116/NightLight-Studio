@@ -194,6 +194,15 @@ public:
 	bool isTrigger = false;
 	//turn collider on and off
 	bool isCollidable = true;
+
+	//to check trigger and enter
+	bool triggerFlag = false;
+	bool prevTriggerFlag = false;
+
+	bool collisionFlag = false;
+	bool prevCollisionFlag = false;
+
+
 	////////////////////////////data end/////////////////////////////////
 	ComponentCollider(COLLIDERS col);
 	ComponentCollider(const char * col);
