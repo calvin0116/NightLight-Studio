@@ -8,13 +8,14 @@
 #include "../Core/DeltaTime.h"
 
 //need to be edited by designer
-#define PLAYER_MOVE_MAG 8000.0f
-#define PLAYER_FLY_MAG 250.0f
+#define PLAYER_MOVE_MAG 1000.0f
+#define PLAYER_FLY_MAG 5.0F
 #define PLAYER_MAX_ENERGY 15
 #define PLAYER_ENERGY_REGEN 1
 #define PLAYER_POSSESS_ENERGY_DRAIN 1
 #define PLAYER_MOTH_ENERGY_DRAIN 1
-#define CAMERA_DISTANCE 500
+#define CAMERA_DISTANCE 3
+#define PLAYER_MAX_SPEED 2000.0f
 
 /// <control mapping>
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,9 +59,10 @@ void Player::Init()
 		{
 			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector();
 			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
-
-
-
+			if (comRigid->force.length() >= PLAYER_MAX_SPEED)
+			{
+				comRigid->force = force * PLAYER_MAX_SPEED;
+			}
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop1", WALKFRONT, "StopFront", SystemInput_ns::OnRelease, [this]()
 		{
@@ -72,6 +74,11 @@ void Player::Init()
 
 			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector_Left();
 			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
+
+			if (comRigid->force.length() >= PLAYER_MAX_SPEED)
+			{
+				comRigid->force = force * PLAYER_MAX_SPEED;
+			}
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop2", WALKLEFT, "Stopleft", SystemInput_ns::OnRelease, [this]()
 		{
@@ -83,6 +90,11 @@ void Player::Init()
 			//negative direction
 			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector_Back();
 			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
+
+			if (comRigid->force.length() >= PLAYER_MAX_SPEED)
+			{
+				comRigid->force = force * PLAYER_MAX_SPEED;
+			}
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop3", WALKBACK, "StopBack", SystemInput_ns::OnRelease, [this]()
 		{
@@ -93,6 +105,11 @@ void Player::Init()
 		{
 			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector_Right();
 			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
+
+			if (comRigid->force.length() >= PLAYER_MAX_SPEED)
+			{
+				comRigid->force = force * PLAYER_MAX_SPEED;
+			}
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop4", WALKRIGHT, "StopRight", SystemInput_ns::OnRelease, [this]()
 		{
@@ -128,7 +145,6 @@ void Player::Update()
 	{
 		std::cout << "Player State is : Human" << std::endl;
 		 // update camera position with player position
-
 		//refill energy
 		if (_playerEnergy <= PLAYER_MAX_ENERGY)
 		{
@@ -211,7 +227,7 @@ void Player::changeState(PLAYERSTATE state)
 		// stop player from sliding if moving before the state change;
 		comRigid->velocity = 0;
 		comRigid->acceleration = 0;
-
+		comRigid->force = 0;
 
 		if (_prevPlayerState == PLAYERSTATE::POSSESSED)
 		{

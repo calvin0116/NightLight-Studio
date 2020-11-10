@@ -1,0 +1,30 @@
+{
+    "Name": "Entity_0",
+    "TransformComponent": {
+        "EntityName": "",
+        "Position": [
+            0.0,
+            170.08993530273438,
+            0.0
+        ],
+        "Scale": [
+            50.0,
+            50.0,
+            50.0
+        ],
+        "Rotate": [
+            0.0,
+            -0.0,
+            0.0
+        ]
+    },
+    "GraphicsComponent": {
+        "isActive": true,
+        "Model": "box.fbx",
+        "Albedo": "",
+        "Normal": "",
+        "Metallic": "",
+        "Roughness": "",
+        "AmbientOcclusion": ""
+    }
+}

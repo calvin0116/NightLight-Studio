@@ -2,7 +2,7 @@
     "Objects": {
         "Height_1_wall": {
             "TransformComponent": {
-                "EntityName": "Hello World",
+                "EntityName": "",
                 "Position": [
                     -1.0,
                     0.5,
@@ -15,13 +15,13 @@
                 ],
                 "Rotate": [
                     0.0,
-                    -0.0,
+                    0.0,
                     0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -29,13 +29,13 @@
                 "AmbientOcclusion": ""
             }
         },
-        "Camera": {
+        "Player": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "Player",
                 "Position": [
-                    1.0,
-                    2.0,
-                    3.0
+                    12.903614044189454,
+                    5.181280136108398,
+                    -5.172050476074219
                 ],
                 "Scale": [
                     1.0,
@@ -47,6 +47,39 @@
                     -0.0,
                     0.0
                 ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": true,
+                "mass": 20.0,
+                "friction": 1.0,
+                "Force": [
+                    0.0,
+                    -2000.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "Player",
+                "Tag": 0
             }
         },
         "Plane": {
@@ -70,6 +103,9 @@
             },
             "RigidBody": {
                 "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
                 "Force": [
                     0.0,
                     0.0,
@@ -98,13 +134,13 @@
                 ],
                 "Rotate": [
                     0.0,
-                    -0.0,
+                    0.0,
                     0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -127,13 +163,13 @@
                 ],
                 "Rotate": [
                     0.0,
-                    -0.0,
+                    0.0,
                     0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -162,7 +198,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -185,13 +221,13 @@
                 ],
                 "Rotate": [
                     0.0,
-                    -0.0,
+                    0.0,
                     0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -214,13 +250,13 @@
                 ],
                 "Rotate": [
                     0.0,
-                    -0.0,
+                    0.0,
                     0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -249,7 +285,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -278,7 +314,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -307,7 +343,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -336,7 +372,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -365,7 +401,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -394,7 +430,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -423,7 +459,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -452,7 +488,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -481,7 +517,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -510,7 +546,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -539,7 +575,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -568,7 +604,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -597,7 +633,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -626,7 +662,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -655,7 +691,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -684,7 +720,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -713,7 +749,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -742,7 +778,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -771,7 +807,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -800,7 +836,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -829,7 +865,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -858,7 +894,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -887,7 +923,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -916,7 +952,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -945,7 +981,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -974,7 +1010,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1003,7 +1039,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1032,7 +1068,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1061,7 +1097,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1090,12 +1126,76 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
                 "Roughness": "",
                 "AmbientOcclusion": ""
+            }
+        },
+        "PlayerCamera": {
+            "TransformComponent": {
+                "EntityName": "PlayerCamera",
+                "Position": [
+                    1.0,
+                    236.45419311523438,
+                    3.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "Camera",
+                "Tag": 1
+            }
+        },
+        "Entity_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    0.0,
+                    -4.474631309509277,
+                    0.0
+                ],
+                "Scale": [
+                    100.0,
+                    10.0,
+                    100.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB"
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 1.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             }
         }
     }

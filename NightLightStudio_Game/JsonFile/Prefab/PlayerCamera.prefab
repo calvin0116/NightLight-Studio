@@ -1,0 +1,26 @@
+{
+    "Name": "PlayerCamera",
+    "TransformComponent": {
+        "EntityName": "PlayerCamera",
+        "Position": [
+            1.0,
+            236.45419311523438,
+            3.0
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Rotate": [
+            0.0,
+            -0.0,
+            0.0
+        ]
+    },
+    "CScriptComponent": {
+        "isActive": true,
+        "Name": "Camera",
+        "Tag": 1
+    }
+}

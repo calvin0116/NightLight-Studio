@@ -1,0 +1,1234 @@
+{
+    "Objects": {
+        "Height_1_wall": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -1.0,
+                    0.5,
+                    1.5
+                ],
+                "Scale": [
+                    2.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Camera": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.0,
+                    2.0,
+                    3.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "Plane": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    5.0,
+                    2.0,
+                    1.0
+                ],
+                "Scale": [
+                    100.0,
+                    100.0,
+                    100.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "AudioManager": {}
+        },
+        "Height_3_Wall": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -2.5,
+                    1.5,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    3.0,
+                    2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_2_Wall_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    0.5,
+                    1.5,
+                    1.5
+                ],
+                "Scale": [
+                    1.0,
+                    3.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Tree_H10_8": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.5,
+                    5.0,
+                    -13.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    0.5,
+                    2.0,
+                    -1.0
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_3_Wall_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -4.0,
+                    1.5,
+                    -0.5
+                ],
+                "Scale": [
+                    2.0,
+                    3.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Tree_H10_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.5,
+                    5.0,
+                    1.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Tree_H10_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -3.5,
+                    5.0,
+                    1.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Tree_H10_7": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -3.5,
+                    5.0,
+                    -13.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Tree_H10_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -3.5,
+                    5.0,
+                    -3.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Tree_H10_4": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.5,
+                    5.0,
+                    -3.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Tree_H10_6": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.5,
+                    5.0,
+                    -8.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Tree_H10_5": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -3.5,
+                    5.0,
+                    -8.5
+                ],
+                "Scale": [
+                    1.0,
+                    10.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.5,
+                    2.0,
+                    -2.5
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -2.5,
+                    2.0,
+                    -1.0
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_3_Wall_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.5,
+                    1.5,
+                    0.5
+                ],
+                "Scale": [
+                    1.0,
+                    3.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -5.5,
+                    2.0,
+                    -1.5
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_4": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.0,
+                    2.0,
+                    -4.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_5": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -0.5,
+                    2.0,
+                    -5.5
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_7": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.0,
+                    2.0,
+                    -6.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_6": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -5.0,
+                    2.0,
+                    -5.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_8": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.5,
+                    2.0,
+                    -7.5
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_9": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.5,
+                    2.0,
+                    -10.0
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_10": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    0.0,
+                    2.0,
+                    -9.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_11": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -5.0,
+                    2.0,
+                    -9.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_12": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -5.5,
+                    2.0,
+                    -8.5
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_13": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    2.0,
+                    2.0,
+                    -11.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_14": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    3.0,
+                    2.0,
+                    -12.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_15": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -5.0,
+                    2.0,
+                    -12.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_16": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    0.0,
+                    2.0,
+                    -13.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_17": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.0,
+                    2.0,
+                    -14.5
+                ],
+                "Scale": [
+                    2.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_18": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    1.5,
+                    2.0,
+                    -15.5
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_19": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -4.5,
+                    2.0,
+                    -15.0
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_2_Wall_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -1.5,
+                    1.0,
+                    -13.5
+                ],
+                "Scale": [
+                    1.0,
+                    2.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_2_Wall_4": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -2.5,
+                    1.0,
+                    -14.5
+                ],
+                "Scale": [
+                    1.0,
+                    2.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Height_4_Wall_15_copy": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    -6.5,
+                    2.0,
+                    -7.0
+                ],
+                "Scale": [
+                    1.0,
+                    4.0,
+                    12.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Entity_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    3.8868770599365236,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    0.00009999999747378752,
+                    0.00009999999747378752,
+                    0.00009999999747378752
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\character_model.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Entity_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    5.794262409210205,
+                    0.027961254119873048,
+                    2.261216402053833
+                ],
+                "Scale": [
+                    0.00998079776763916,
+                    0.009999927133321762,
+                    0.009999698959290982
+                ],
+                "Rotate": [
+                    93.2245101928711,
+                    89.9998779296875,
+                    7.125016212463379
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "Entity_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    5.254115581512451,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    0.00009999999747378752,
+                    0.00009999999747378752,
+                    0.00009999999747378752
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\enemy_woman_1.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": ""
+            }
+        },
+        "directional": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Position": [
+                    0.0,
+                    6.356205463409424,
+                    0.0
+                ],
+                "Scale": [
+                    0.9999955296516419,
+                    0.9999955296516419,
+                    0.9999978542327881
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    125.94671630859375
+                ]
+            },
+            "LightComponent": {
+                "LightType": "DIRECTIONAL",
+                "isActive": true,
+                "Diffuse": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Ambient": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Specular": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Attenuation": 0.0,
+                "CutOff": 0.0,
+                "OuterCutOff": 0.0
+            }
+        }
+    }
+}
