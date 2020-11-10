@@ -10,6 +10,7 @@
 #include "PossessScript.h"
 #include "../SpawnPoint.h"
 #include "FanScript.h"
+#include "FanBlowScript.h"
 
 // Construct Scripts from string
 namespace AllScripts
@@ -30,6 +31,8 @@ namespace AllScripts
         return dynamic_cast<IScript*>(new SpawnPoint());
     else if (name == "FanScript")
       return dynamic_cast<IScript*>(new FanScript());
+    else if (name == "FanBlowScript")
+      return dynamic_cast<IScript*>(new FanBlowScript());
     return nullptr;
   }
 }

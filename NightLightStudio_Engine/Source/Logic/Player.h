@@ -10,7 +10,7 @@
 #include "CScripts/IScript.h"
 #include "CameraScript.h"
 #include "../Graphics/CameraSystem.h"
-
+#include "../Component/ComponentPlayerStats.h"
 
 
 
@@ -35,10 +35,24 @@ class Player : public IScript
 	ComponentRigidBody* comRigid;
 	ComponentTransform* comTrans;
 	ComponentTransform spawnPoint;
+	ComponentPlayerStats* playerStats;
 
 	PLAYERSTATE _prevPlayerState;
 	PLAYERSTATE _playerState;
 	NlMath::Vector3D _front;
+
+	//Player stats
+	float PLAYER_MOVE_MAG;
+	float PLAYER_FLY_MAG;
+	int		PLAYER_MAX_ENERGY;
+	int		PLAYER_ENERGY_REGEN;
+	int		PLAYER_POSSESS_ENERGY_DRAIN;
+	int		PLAYER_MOTH_ENERGY_DRAIN;
+	// Camera Variables
+	float CAMERA_DISTANCE;
+	float CAMERA_OFFSET_X;
+	float CAMERA_OFFSET_Y;
+	float PLAYER_MAX_SPEED;
 	
 public:
 	Player();

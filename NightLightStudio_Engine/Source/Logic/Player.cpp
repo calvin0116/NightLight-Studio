@@ -7,18 +7,18 @@
 #include "SpawnPoint.h"
 #include "../Core/DeltaTime.h"
 
-//need to be edited by designer
-#define PLAYER_MOVE_MAG 3000.0f
-#define PLAYER_FLY_MAG 4.0f
-#define PLAYER_MAX_ENERGY 15
-#define PLAYER_ENERGY_REGEN 1
-#define PLAYER_POSSESS_ENERGY_DRAIN 1
-#define PLAYER_MOTH_ENERGY_DRAIN 1
-//#define CAMERA_DISTANCE 4
-#define CAMERA_DISTANCE 500.0f
-#define CAMERA_OFFSET_X 50.0f
-#define CAMERA_OFFSET_Y 10.0f
-#define PLAYER_MAX_SPEED 500.0f
+////need to be edited by designer
+//#define PLAYER_MOVE_MAG 3000.0f
+//#define PLAYER_FLY_MAG 4.0f
+//#define PLAYER_MAX_ENERGY 15
+//#define PLAYER_ENERGY_REGEN 1
+//#define PLAYER_POSSESS_ENERGY_DRAIN 1
+//#define PLAYER_MOTH_ENERGY_DRAIN 1
+////#define CAMERA_DISTANCE 4
+//#define CAMERA_DISTANCE 500.0f
+//#define CAMERA_OFFSET_X 50.0f
+//#define CAMERA_OFFSET_Y 10.0f
+//#define PLAYER_MAX_SPEED 500.0f
 
 /// <control mapping>
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,6 +54,19 @@ void Player::Init()
 	comCol = MyID.getComponent<ColliderComponent>();
 	comRigid = MyID.getComponent<RigidBodyComponent>();
 	comTrans = MyID.getComponent<TransformComponent>();
+	playerStats = MyID.getComponent<PlayerStatsComponent>();
+	//Player stats
+	PLAYER_MOVE_MAG							= playerStats->player_move_mag;
+	PLAYER_FLY_MAG							= playerStats->player_fly_mag;
+	PLAYER_MAX_ENERGY						= playerStats->player_max_energy;
+	PLAYER_ENERGY_REGEN					= 1;
+	PLAYER_POSSESS_ENERGY_DRAIN	= playerStats->player_possess_energy_drain;
+	PLAYER_MOTH_ENERGY_DRAIN		= playerStats->player_moth_energy_drain;
+	PLAYER_MAX_SPEED						= playerStats->player_max_speed;
+	// Camera Variables
+	CAMERA_DISTANCE							= playerStats->camera_distance;
+	CAMERA_OFFSET_X							= playerStats->camera_offset.x;
+	CAMERA_OFFSET_Y							= playerStats->camera_offset.y;
 
 	// /*To Do*/ need to set a max force for the player
 
@@ -131,7 +144,7 @@ void Player::Update()
 	case PLAYERSTATE::HUMAN:
 	{
 
-		std::cout << "Player State is : Human" << std::endl;
+		//std::cout << "Player State is : Human" << std::endl;
 		 // update camera position with player position
 		float speedMag = comRigid->velocity.length();
 		if (speedMag > PLAYER_MAX_SPEED)
@@ -154,7 +167,7 @@ void Player::Update()
 		
 	case PLAYERSTATE::MOTH:
 	{
-		std::cout << "Player State is : moth" << std::endl;
+		//std::cout << "Player State is : moth" << std::endl;
 		//reduce energy when flying
 		float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
 		_playerEnergy -= realDt * PLAYER_MOTH_ENERGY_DRAIN;

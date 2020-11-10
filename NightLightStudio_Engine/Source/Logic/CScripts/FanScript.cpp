@@ -3,17 +3,23 @@
 #include "FanScript.h"
 #include "..\..\Core\DeltaTime.h"
 
+// Components
+#include "../../Component/ComponentCScript.h"
+
 // Player script to get their state
 #include "../Player.h"
+#include "FanBlowScript.h"
 
 
 void FanScript::Init()
 {
   // Fetch player entity here.
-  MyPlayerEntity = G_ECMANAGER->getEntity("Player");
-  MyPlayerID = MyPlayerEntity.getId();
+  MyPlayerEntity = G_ECMANAGER->getEntity(playerName);
+  //MyPlayerID = MyPlayerEntity.getId();
+  playerScriptComp = MyPlayerEntity.getComponent<ComponentCScript>();
   //talisman1 = G_ECMANAGER->getEntity("Talisman_1");
-  obb1 = G_ECMANAGER->getEntity("OBB_1");
+  obb1 = G_ECMANAGER->getEntity(obbName);
+  obb1ScriptComp = obb1.getComponent<ComponentCScript>();
 }
 
 void FanScript::Update()
@@ -22,7 +28,12 @@ void FanScript::Update()
   {
     if (timePassed >= wind_up_time)
     {
-      Player* playerScript = reinterpret_cast<Player*>(playerScriptComp->_pScript);
+      Player* playerScript = nullptr;
+      if(playerScriptComp)
+        playerScript = reinterpret_cast<Player*>(playerScriptComp->_pScript);
+      FanBlowScript* obb1Script = nullptr;
+      if (obb1ScriptComp)
+        obb1Script = reinterpret_cast<FanBlowScript*>(obb1ScriptComp->_pScript);
       if (playerScript)
       {
         if (playerScript->getState() == PLAYERSTATE::HUMAN)
@@ -30,10 +41,8 @@ void FanScript::Update()
           Activate = false;
           timePassed = 0.0f;
         }
-        else
-        {
-
-        }
+        if (obb1Script)
+          obb1Script->Activate = Activate;
       }
     }
     else
@@ -48,7 +57,7 @@ void FanScript::Exit()
 
 void FanScript::OnCollisionEnter(Entity other)
 {
-  if (other.getId() != MyPlayerID)
+  if (other.getId() != MyPlayerEntity.getId())
     return;
   if (playerScriptComp && playerScriptComp->_pScript)
   {

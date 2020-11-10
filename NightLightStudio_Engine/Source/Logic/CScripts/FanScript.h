@@ -4,6 +4,7 @@
 #include "IScript.h"
 // Testing
 #include <iostream>
+#include <string>
 #include "../../Component/ComponentCScript.h"
 #include "../../Component/ComponentTransform.h"
 
@@ -13,12 +14,16 @@ class FanScript : public IScript
 public:
   // Exposed variables
   Entity MyPlayerEntity;
-  int MyPlayerID;
+  //int MyPlayerID;
   //Entity talisman1;
   Entity obb1;
   bool Activate = false;
   float timePassed = 0.0f;
-  ComponentCScript* playerScriptComp;
+  ComponentCScript* playerScriptComp = nullptr;
+  ComponentCScript* obb1ScriptComp = nullptr;
+    
+  std::string playerName = "Player";
+  std::string obbName = "OBB_1";
 
   virtual void Init() override;
 

@@ -161,7 +161,7 @@ namespace NS_LOGIC
     for (; itr != itrEnd; ++itr)
     {
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
-      if (myComp->_isActive)
+      if (myComp->_isActive && myComp->_pScript)
         myComp->_pScript->Exit();
 
       // Delete memory
@@ -240,14 +240,14 @@ namespace NS_LOGIC
   {
     if (!_isPlaying)
       return;
-    ComponentCScript* comp1 = _obj1.getComponent<ComponentCScript>();
-    ComponentCScript* comp2 = _obj2.getComponent<ComponentCScript>();
-    if (comp1)
-      if (comp1->_pScript)
-        comp1->_pScript->OnCollisionEnter(_obj2);
-    if (comp2)
-      if (comp2->_pScript)
-        comp2->_pScript->OnCollisionEnter(_obj1);
+    //ComponentCScript* comp1 = _obj1.getComponent<ComponentCScript>();
+    //ComponentCScript* comp2 = _obj2.getComponent<ComponentCScript>();
+    //if (comp1)
+    //  if (comp1->_pScript)
+    //    comp1->_pScript->OnTriggerEnter(_obj2);
+    //if (comp2)
+    //  if (comp2->_pScript)
+    //    comp2->_pScript->OnTriggerEnter(_obj1);
   }
 
   void SystemLogic::OnTriggerStay(Entity _obj1, Entity _obj2)

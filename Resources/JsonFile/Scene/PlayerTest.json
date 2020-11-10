@@ -75,7 +75,7 @@
                 "EntityName": "Player",
                 "Position": [
                     12.903614044189454,
-                    82.10693359375,
+                    82.08133697509766,
                     76.12945556640625
                 ],
                 "Scale": [
@@ -99,12 +99,12 @@
                 "friction": 1.0,
                 "Force": [
                     0.0,
-                    0.0,
+                    -2000.0,
                     0.0
                 ],
                 "Accelaration": [
                     0.0,
-                    0.0,
+                    -100.0,
                     0.0
                 ]
             },
@@ -116,6 +116,20 @@
                 "Metallic": "",
                 "Roughness": "",
                 "AmbientOcclusion": ""
+            },
+            "PlayerStatsComponent": {
+                "player_move_mag": 3000.0,
+                "player_fly_mag": 4.0,
+                "player_max_energy": 15,
+                "player_possess_energy_drain": 1,
+                "player_moth_energy_drain": 1,
+                "camera_distance": 500.0,
+                "camera_offset": [
+                    50.0,
+                    10.0,
+                    1.0
+                ],
+                "player_max_speed": 500.0
             },
             "CScriptComponent": {
                 "isActive": true,

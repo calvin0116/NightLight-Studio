@@ -60,7 +60,7 @@ public:
     (void)MyID;
     // The other entity I collided with
     (void)other;
-    std::cout << "OnCollisionEnter from TestScript" << std::endl;
+    //std::cout << "OnCollisionEnter from TestScript" << std::endl;
   }
 
 };
