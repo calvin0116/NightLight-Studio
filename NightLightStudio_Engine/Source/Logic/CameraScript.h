@@ -25,6 +25,7 @@ namespace AllScripts
     glm::vec3 initTgt;
     glm::vec3 initPos;
     float dist;
+    float offsetX, offsetY;
     bool isActive;
 
     bool canRotate;
@@ -41,6 +42,11 @@ namespace AllScripts
     void SetDistance(float _dist)
     {
       dist = _dist;
+    }
+    void SetTargetOffsetXY(float x, float y)
+    {
+        offsetX = x;
+        offsetY = y;
     }
     // set camera active anot - only 1 cam active at a time
     void SetActive(bool _set)
@@ -63,6 +69,8 @@ namespace AllScripts
       initTgt(0.0f, 0.0f, 0.0f),
       initPos(0.0f, 0.0f, 0.0f),
       dist(1.0f),
+      offsetX(0.0f), 
+      offsetY(0.0f),
       isActive(false),
       canRotate(true),
       canZoom(true)
@@ -104,10 +112,50 @@ namespace AllScripts
     {
         if (isActive)
         {
+
             NS_GRAPHICS::CameraSystem& camSys = NS_GRAPHICS::CameraSystem::GetInstance();
 
+            // cam pos
+            //   o<- (get the cam pos)
+            //      \
+            //       \ dist (set by user)
+            //        \ view vec (set by camera sys)
+            //         \
+            //          x tgt (set by user)
+
+
+            // calculate offset
+            //    <---- move 
+            //  o<-   o<-
+            //    \     \
+            //     \     \ 
+            //   v  \     \ view vec 
+            //       \     \
+            //       -------x tgt
+            //       ^
+            //       offset
+
+            // move the view vect to v where v is the new view vector, v remains the same only tgt changes
+
+            // move vertex (tgt) along the plane
+            //
+            //          ^       ^  this normal n is the view vector
+            //          |  -->  |
+            //          |       |
+            //     -----x-------x------ le plane
+            //        tgt  --> tgt new
+
+
+            glm::vec3 y_upVector = camSys.GetUpVector();
+            glm::vec3 x_sideVector = camSys.GetRightVector();
+
+            glm::vec3 offset = y_upVector * offsetY;
+            offset = offset + x_sideVector * -offsetX;
+
+            glm::vec3 targetWoffset = tgt + offset;
+
             //if(canRotate)
-                camSys.SetThridPersonCamTarget(tgt);
+                camSys.SetThridPersonCamTarget(targetWoffset);
             //else
             //    camSys.SetThridPersonCamTarget(initTgt);
 
@@ -126,16 +174,12 @@ namespace AllScripts
 
             camSys.SetUseThridPersonCam(true);
 
-            // cam pos
-            //   o<- (get the cam pos)
-            //      \
-            //       \ dist (set by user)
-            //        \ view vec (set by camera sys)
-            //         \
-            //          x tgt (set by user)
+
+
             ComponentTransform* compTrans = MyID.getComponent<ComponentTransform>();
             glm::vec3 viewVector = camSys.GetViewVector();
-            compTrans->_position = tgt - viewVector * dist;
+            compTrans->_position = targetWoffset - viewVector * dist;
+
 
             // rotation?
             // how to check the view vector rot?

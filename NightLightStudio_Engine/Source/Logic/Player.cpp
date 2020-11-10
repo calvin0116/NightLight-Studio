@@ -14,8 +14,11 @@
 #define PLAYER_ENERGY_REGEN 1
 #define PLAYER_POSSESS_ENERGY_DRAIN 1
 #define PLAYER_MOTH_ENERGY_DRAIN 1
-#define CAMERA_DISTANCE 4
-#define PLAYER_MAX_SPEED 2
+//#define CAMERA_DISTANCE 4
+#define CAMERA_DISTANCE 500.0f
+#define CAMERA_OFFSET_X 50.0f
+#define CAMERA_OFFSET_Y 10.0f
+#define PLAYER_MAX_SPEED 500.0f
 
 /// <control mapping>
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,6 +148,7 @@ void Player::Update()
 		//camera follow
 		camera->SetTarget(comTrans->_position);
 		camera->SetDistance(CAMERA_DISTANCE);
+		camera->SetTargetOffsetXY(CAMERA_OFFSET_X, CAMERA_OFFSET_Y);
 		break;
 	}
 		
@@ -162,6 +166,7 @@ void Player::Update()
 		// update camera position with player position
 		camera->SetTarget(comTrans->_position);
 		camera->SetDistance(CAMERA_DISTANCE);
+		camera->SetTargetOffsetXY(CAMERA_OFFSET_X, CAMERA_OFFSET_Y);
 		//uncontrolable motion
 		comRigid->velocity =  (NS_GRAPHICS::CameraSystem::GetInstance().GetViewVector()* PLAYER_FLY_MAG);
 		
