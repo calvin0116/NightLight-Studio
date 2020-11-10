@@ -84,6 +84,11 @@ namespace NS_GRAPHICS
 		// update the view vector, view vector is normalsied
 		void UpdateViewVector();
 
+		// get upvector
+		glm::vec3 GetUpVector();
+		// get rightvector
+		glm::vec3 GetRightVector();
+
 		// get viewVector
 		glm::vec3 GetViewVector();
 		// get viewVector on XZ plane
