@@ -56,7 +56,7 @@ layout (std140) uniform LightCalcBlock
     int pLights_Num;
     int sLights_Num;
 
-    vec3 viewPos;
+    vec4 viewPos;
 
     DirLight dLights[MAX_LIGHTS];
     PointLight pLights[MAX_LIGHTS];
@@ -72,7 +72,7 @@ void main(void)
 {
     // properties
     vec3 norm = normalize(normal);
-    vec3 viewDir = normalize(viewPos - fragPos);
+    vec3 viewDir = normalize(viewPos.xyz - fragPos);
     vec3 result = vec3(0.f,0.f,0.f);
     
     // Calculation for all directional lights
