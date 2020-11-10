@@ -37,6 +37,7 @@ namespace NS_GRAPHICS
 		_hasInit{ false },
 		_debugDrawing{ false },
 		_projectionMatrix{ glm::mat4(1.0f) },
+		_uiMatrix{ glm::mat4(1.0f) },
 		_viewMatrix{ glm::mat4(1.0f) }
 	{
 	}
@@ -59,6 +60,8 @@ namespace NS_GRAPHICS
 		UpdateLights();
 
 		Render();
+
+		//RenderUI();
 	}
 
 	void GraphicsSystem::Free()
@@ -179,7 +182,7 @@ namespace NS_GRAPHICS
 
 		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));*/
 
-		/*shaderManager->StartProgram(1);
+		shaderManager->StartProgram(1);
 
 		GLint blockSize;
 
@@ -192,7 +195,7 @@ namespace NS_GRAPHICS
 		std::cout << "Spot Light Size(CPU): " << sizeof(SpotLight) << std::endl;
 		std::cout << "Point Light Size(CPU): " << sizeof(PointLight) << std::endl;
 
-		shaderManager->StopProgram();*/
+		shaderManager->StopProgram();
 
 		//std::ofstream logFile;
 		//logFile.open("custom.txt");
@@ -230,14 +233,15 @@ namespace NS_GRAPHICS
 
 		// Set default values for projection matrix
 		SetProjectionMatrix();
+		//SetUIMatrix();
 
 		debugManager->Init();
 
 		// Enable depth buffering
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
-		//glEnable(GL_CULL_FACE);
-		//glCullFace(GL_BACK);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -368,6 +372,17 @@ namespace NS_GRAPHICS
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
+	void GraphicsSystem::SetUIMatrix()
+	{
+		/*_uiMatrix = glm::ortho(
+			(float)-width * _ratioWidth * 0.5f * 1.0f,
+			(float)width * _ratioWidth * 0.5f * 1.0f,
+			(float)-height * _ratioHeight * 0.5f * 1.0f,
+			(float)height * _ratioHeight * 0.5f * 1.0f,
+			_near,
+			_far);*/
+	}
+
 	void GraphicsSystem::UpdateLights()
 	{
 		// Update light components in light block(CPU)
@@ -380,7 +395,7 @@ namespace NS_GRAPHICS
 		// Update view/camera position in light uniform block
 		LightBlock* lightblock = lightManager->GetLightBlock();
 
-		lightblock->_viewPos = cameraManager->GetCurrentCameraPosition();
+		lightblock->_viewPos = glm::vec4(cameraManager->GetCurrentCameraPosition(),1.0f);
 
 		// Update light uniform block(GPU)
 		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetLightUniformLocation());
