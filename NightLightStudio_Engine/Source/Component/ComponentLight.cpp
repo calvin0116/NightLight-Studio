@@ -39,15 +39,15 @@ glm::vec3 ComponentLight::GetAmbient() const
 		switch (_type)
 		{
 		case NS_GRAPHICS::Lights::DIRECTIONAL:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._ambient;
+			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._ambient);
 			break;
 
 		case NS_GRAPHICS::Lights::POINT:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._ambient;
+			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._ambient);
 			break;
 
 		case NS_GRAPHICS::Lights::SPOT:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._ambient;
+			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._ambient);
 			break;
 		}
 	}
@@ -62,15 +62,15 @@ void ComponentLight::SetAmbient(const glm::vec3& ambient)
 		switch (_type)
 		{
 		case NS_GRAPHICS::Lights::DIRECTIONAL:
-			NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._ambient = ambient;
+			NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._ambient = glm::vec4(ambient, 1.f);
 			break;
 
 		case NS_GRAPHICS::Lights::POINT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._ambient = ambient;
+			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._ambient = glm::vec4(ambient, 1.f);
 			break;
 
 		case NS_GRAPHICS::Lights::SPOT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._ambient = ambient;
+			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._ambient = glm::vec4(ambient, 1.f);
 			break;
 		}
 	}
@@ -83,15 +83,15 @@ glm::vec3 ComponentLight::GetDiffuse() const
 		switch (_type)
 		{
 		case NS_GRAPHICS::Lights::DIRECTIONAL:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._diffuse;
+			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._diffuse);
 			break;
 
 		case NS_GRAPHICS::Lights::POINT:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._diffuse;
+			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._diffuse);
 			break;
 
 		case NS_GRAPHICS::Lights::SPOT:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._diffuse;
+			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._diffuse);
 			break;
 		}
 	}
@@ -106,15 +106,15 @@ void ComponentLight::SetDiffuse(const glm::vec3& diffuse)
 		switch (_type)
 		{
 		case NS_GRAPHICS::Lights::DIRECTIONAL:
-			NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._diffuse = diffuse;
+			NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._diffuse = glm::vec4(diffuse, 1.f);
 			break;
 
 		case NS_GRAPHICS::Lights::POINT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._diffuse = diffuse;
+			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._diffuse = glm::vec4(diffuse, 1.f);
 			break;
 
 		case NS_GRAPHICS::Lights::SPOT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._diffuse = diffuse;
+			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._diffuse = glm::vec4(diffuse, 1.f);
 			break;
 		}
 	}
@@ -127,15 +127,15 @@ glm::vec3 ComponentLight::GetSpecular() const
 		switch (_type)
 		{
 		case NS_GRAPHICS::Lights::DIRECTIONAL:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._specular;
+			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._specular);
 			break;
 
 		case NS_GRAPHICS::Lights::POINT:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._specular;
+			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._specular);
 			break;
 
 		case NS_GRAPHICS::Lights::SPOT:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._specular;
+			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._specular);
 			break;
 		}
 	}
@@ -150,15 +150,15 @@ void ComponentLight::SetSpecular(const glm::vec3& specular)
 		switch (_type)
 		{
 		case NS_GRAPHICS::Lights::DIRECTIONAL:
-			NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._specular = specular;
+			NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._specular = glm::vec4(specular, 1.f);
 			break;
 
 		case NS_GRAPHICS::Lights::POINT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._specular = specular;
+			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._specular = glm::vec4(specular, 1.f);
 			break;
 
 		case NS_GRAPHICS::Lights::SPOT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._specular = specular;
+			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._specular = glm::vec4(specular, 1.f);
 			break;
 		}
 	}

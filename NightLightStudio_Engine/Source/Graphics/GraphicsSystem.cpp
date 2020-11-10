@@ -179,7 +179,7 @@ namespace NS_GRAPHICS
 
 		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));*/
 
-		/*shaderManager->StartProgram(1);
+		shaderManager->StartProgram(1);
 
 		GLint blockSize;
 
@@ -192,7 +192,7 @@ namespace NS_GRAPHICS
 		std::cout << "Spot Light Size(CPU): " << sizeof(SpotLight) << std::endl;
 		std::cout << "Point Light Size(CPU): " << sizeof(PointLight) << std::endl;
 
-		shaderManager->StopProgram();*/
+		shaderManager->StopProgram();
 
 		//std::ofstream logFile;
 		//logFile.open("custom.txt");
@@ -380,7 +380,7 @@ namespace NS_GRAPHICS
 		// Update view/camera position in light uniform block
 		LightBlock* lightblock = lightManager->GetLightBlock();
 
-		lightblock->_viewPos = cameraManager->GetCurrentCameraPosition();
+		lightblock->_viewPos = glm::vec4(cameraManager->GetCurrentCameraPosition(), 1.f);
 
 		// Update light uniform block(GPU)
 		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetLightUniformLocation());
