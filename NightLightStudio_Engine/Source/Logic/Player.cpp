@@ -8,9 +8,9 @@
 #include "../Core/DeltaTime.h"
 
 //need to be edited by designer
-#define PLAYER_MOVE_MAG 10000.0f
-#define PLAYER_FLY_MAG 500.0f
-#define PLAYER_MAX_ENERGY 10
+#define PLAYER_MOVE_MAG 8000.0f
+#define PLAYER_FLY_MAG 250.0f
+#define PLAYER_MAX_ENERGY 15
 #define PLAYER_ENERGY_REGEN 1
 #define PLAYER_POSSESS_ENERGY_DRAIN 1
 #define PLAYER_MOTH_ENERGY_DRAIN 1
@@ -58,6 +58,9 @@ void Player::Init()
 		{
 			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector();
 			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
+
+
+
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop1", WALKFRONT, "StopFront", SystemInput_ns::OnRelease, [this]()
 		{
