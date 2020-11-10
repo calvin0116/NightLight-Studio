@@ -395,7 +395,7 @@ namespace NS_GRAPHICS
 		// Update view/camera position in light uniform block
 		LightBlock* lightblock = lightManager->GetLightBlock();
 
-		lightblock->_viewPos = glm::vec4(cameraManager->GetCurrentCameraPosition(),1.0f);
+		lightblock->_viewPos = glm::vec4(cameraManager->GetCurrentCameraPosition(), 1.f);
 
 		// Update light uniform block(GPU)
 		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetLightUniformLocation());

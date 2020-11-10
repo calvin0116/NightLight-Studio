@@ -92,10 +92,10 @@ namespace NS_GRAPHICS
 		if (id >= s_MaxLights)
 			return -1;
 
-		lightblock->_dLights[id]._direction = direction;
-		lightblock->_dLights[id]._ambient = ambient;
-		lightblock->_dLights[id]._diffuse = diffuse;
-		lightblock->_dLights[id]._specular = specular;
+		lightblock->_dLights[id]._direction = glm::vec4(direction, 0.f);
+		lightblock->_dLights[id]._ambient = glm::vec4(ambient, 1.f);
+		lightblock->_dLights[id]._diffuse = glm::vec4(diffuse, 1.f);
+		lightblock->_dLights[id]._specular = glm::vec4(specular, 1.f);
 
 		// Set tracker
 		dLights_tracker[id] = true;
@@ -120,9 +120,9 @@ namespace NS_GRAPHICS
 			return -1;
 
 		lightblock->_pLights[id]._attenuation = attenuation;
-		lightblock->_pLights[id]._ambient = ambient;
-		lightblock->_pLights[id]._diffuse = diffuse;
-		lightblock->_pLights[id]._specular = specular;
+		lightblock->_pLights[id]._ambient = glm::vec4(ambient, 1.f);
+		lightblock->_pLights[id]._diffuse = glm::vec4(diffuse, 1.f);
+		lightblock->_pLights[id]._specular = glm::vec4(specular, 1.f);
 
 		// Set tracker
 		pLights_tracker[id] = true;
@@ -147,13 +147,13 @@ namespace NS_GRAPHICS
 		if (id >= s_MaxLights)
 			return -1;
 
-		lightblock->_sLights[id]._direction = direction;
+		lightblock->_sLights[id]._direction = glm::vec4(direction, 0.f);
 		lightblock->_sLights[id]._cutOff = cutoff;
 		lightblock->_sLights[id]._outerCutOff = outercutoff;
 		lightblock->_sLights[id]._attenuation = attenuation;
-		lightblock->_sLights[id]._ambient = ambient;
-		lightblock->_sLights[id]._diffuse = diffuse;
-		lightblock->_sLights[id]._specular = specular;
+		lightblock->_sLights[id]._ambient = glm::vec4(ambient, 1.f);
+		lightblock->_sLights[id]._diffuse = glm::vec4(diffuse, 1.f);
+		lightblock->_sLights[id]._specular = glm::vec4(specular, 1.f);
 
 		// Set tracker
 		sLights_tracker[id] = true;

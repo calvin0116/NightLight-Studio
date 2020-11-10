@@ -8,7 +8,7 @@ namespace NS_GRAPHICS
 	{
 		static const unsigned s_max_shaders = 4;
 		static const unsigned s_view_projection_buffer_size = 128; // Inclusive of padding
-		static const unsigned s_lights_buffer_size = 6272; // Inclusive of padding
+		static const unsigned s_lights_buffer_size = 6748; // Inclusive of padding
 
 		struct ShaderFile
 		{
