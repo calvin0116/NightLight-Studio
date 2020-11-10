@@ -70,6 +70,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Component\Player">
+      <UniqueIdentifier>{f503ea8e-ab3a-4167-983b-545223d6bcb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -414,6 +417,9 @@
     <ClInclude Include="Source\Component\ComponentCanvas.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\ComponentPlayerStats.h">
+      <Filter>Source Files\Component\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -673,6 +679,9 @@
     </ClCompile>
     <ClCompile Include="Source\Logic\CScripts\AllScripts.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentPlayerStats.cpp">
+      <Filter>Source Files\Component\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

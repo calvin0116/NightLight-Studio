@@ -196,6 +196,7 @@
     <ClInclude Include="Source\Component\ComponentManager.h" />
     <ClInclude Include="Source\Component\ComponentManagerTypedefs.h" />
     <ClInclude Include="Source\Component\ComponentMemoryManager.h" />
+    <ClInclude Include="Source\Component\ComponentPlayerStats.h" />
     <ClInclude Include="Source\Component\ComponentRigidBody.h" />
     <ClInclude Include="Source\Component\Components.h" />
     <ClInclude Include="Source\Component\ComponentScript.h" />
@@ -312,6 +313,7 @@
     <ClCompile Include="Source\Component\ComponentLoadAudio.cpp" />
     <ClCompile Include="Source\Component\ComponentManager.cpp" />
     <ClCompile Include="Source\Component\ComponentMemoryManager.cpp" />
+    <ClCompile Include="Source\Component\ComponentPlayerStats.cpp" />
     <ClCompile Include="Source\Component\ComponentRigidBody.cpp" />
     <ClCompile Include="Source\Component\Components.cpp" />
     <ClCompile Include="Source\Component\ComponentScript.cpp" />

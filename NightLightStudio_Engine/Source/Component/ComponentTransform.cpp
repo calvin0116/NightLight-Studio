@@ -103,7 +103,7 @@ Value ComponentTransform::Write()
 
 	return val;
 }
-
+//Testing only: Ignore for now
 Value& ComponentTransform::Write(Value& val)
 {
 

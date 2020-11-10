@@ -57,6 +57,18 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<ScriptComponent>(Comp_list, entity, component_name);
             }
+            else if (component_name == "ScriptComponent")
+            {
+                CreateAndWriteComp<ScriptComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "LightComponent")
+            {
+                CreateAndWriteComp<ComponentLight>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "PlayerStatsComponent")
+            {
+                CreateAndWriteComp<PlayerStatsComponent>(Comp_list, entity, component_name);
+            }
         }
     }
 
@@ -65,7 +77,7 @@ namespace NS_SERIALISER {
     {
         for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
         {
-            //std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
+            std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
             Entity ent_handle = G_ECMANAGER->BuildEntity(itr->name.GetString());		//Build entity
 
             Value& Component_list = Ent_list[itr->name.GetString()];					//Get component list
