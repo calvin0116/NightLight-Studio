@@ -16,4 +16,5 @@ public:
   virtual void Exit() {};
 
   virtual void OnCollisionEnter(Entity other) {};
+  virtual void OnTriggerEnter(Entity other) {};
 };

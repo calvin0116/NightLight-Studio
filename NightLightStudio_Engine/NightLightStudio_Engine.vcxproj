@@ -264,6 +264,7 @@
     <ClInclude Include="Source\Logic\CameraScript.h" />
     <ClInclude Include="Source\Logic\CScripts\AllScripts.h" />
     <ClInclude Include="Source\Logic\CScripts\APIScript.h" />
+    <ClInclude Include="Source\Logic\CScripts\FanScript.h" />
     <ClInclude Include="Source\Logic\CScripts\IScript.h" />
     <ClInclude Include="Source\Logic\CScripts\PossessScript.h" />
     <ClInclude Include="Source\Logic\CScripts\TestScript.h" />
@@ -367,6 +368,7 @@
     <ClCompile Include="Source\IO\SystemIO.cpp" />
     <ClCompile Include="Source\Logic\CameraScript.cpp" />
     <ClCompile Include="Source\Logic\CScripts\AllScripts.cpp" />
+    <ClCompile Include="Source\Logic\CScripts\FanScript.cpp" />
     <ClCompile Include="Source\Logic\CScripts\PossessScript.cpp" />
     <ClCompile Include="Source\Logic\Player.cpp" />
     <ClCompile Include="Source\Logic\SpawnPoint.cpp" />

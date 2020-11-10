@@ -420,6 +420,9 @@
     <ClInclude Include="Source\Component\ComponentPlayerStats.h">
       <Filter>Source Files\Component\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Logic\CScripts\FanScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -682,6 +685,9 @@
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentPlayerStats.cpp">
       <Filter>Source Files\Component\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Logic\CScripts\FanScript.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

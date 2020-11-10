@@ -38,7 +38,7 @@ namespace NS_LOGIC
         }
       });
 
-    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("PlayLogic", SystemInput_ns::IKEY_NUMPAD_9, "PlayLogic", SystemInput_ns::OnRelease, [this]()
+    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("PlayLogic", SystemInput_ns::IKEY_ALT, "PlayLogic", SystemInput_ns::OnHold, [this]()
       {
         //Only if mouse wheel + alt button is pressed, camera will move.
         //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
@@ -240,6 +240,14 @@ namespace NS_LOGIC
   {
     if (!_isPlaying)
       return;
+    ComponentCScript* comp1 = _obj1.getComponent<ComponentCScript>();
+    ComponentCScript* comp2 = _obj2.getComponent<ComponentCScript>();
+    if (comp1)
+      if (comp1->_pScript)
+        comp1->_pScript->OnCollisionEnter(_obj2);
+    if (comp2)
+      if (comp2->_pScript)
+        comp2->_pScript->OnCollisionEnter(_obj1);
   }
 
   void SystemLogic::OnTriggerStay(Entity _obj1, Entity _obj2)
