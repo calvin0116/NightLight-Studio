@@ -405,6 +405,15 @@
     <ClInclude Include="Source\Mono\Binding\Systems\ForceBind.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Messaging\Messages\MessageApplicationExit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Messaging\Messages\MessageTogglePlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentCanvas.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -652,6 +661,18 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Picking.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Logic\SpawnPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Systems\ForceBind.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentCanvas.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Logic\CScripts\AllScripts.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

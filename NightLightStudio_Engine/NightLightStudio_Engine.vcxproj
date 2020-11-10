@@ -187,6 +187,7 @@
     <ClInclude Include="Source\Collision\SystemCollision.h" />
     <ClInclude Include="Source\Component\ComponentAudio.h" />
     <ClInclude Include="Source\Component\ComponentCamera.h" />
+    <ClInclude Include="Source\Component\ComponentCanvas.h" />
     <ClInclude Include="Source\Component\ComponentCollider.h" />
     <ClInclude Include="Source\Component\ComponentCScript.h" />
     <ClInclude Include="Source\Component\ComponentGraphics.h" />
@@ -272,7 +273,9 @@
     <ClInclude Include="Source\Math\Matrix3x3.h" />
     <ClInclude Include="Source\Math\Matrix4x4.h" />
     <ClInclude Include="Source\Math\Vector.h" />
+    <ClInclude Include="Source\Messaging\Messages\MessageApplicationExit.h" />
     <ClInclude Include="Source\Messaging\Messages\MessageScriptRequest.h" />
+    <ClInclude Include="Source\Messaging\Messages\MessageTogglePlay.h" />
     <ClInclude Include="Source\Messaging\SystemBroadcaster.h" />
     <ClInclude Include="Source\Messaging\SystemIMessage.h" />
     <ClInclude Include="Source\Messaging\SystemReceiver.h" />
@@ -301,6 +304,7 @@
     <ClCompile Include="Source\Collision\SystemCollision.cpp" />
     <ClCompile Include="Source\Component\ComponentAudio.cpp" />
     <ClCompile Include="Source\Component\ComponentCamera.cpp" />
+    <ClCompile Include="Source\Component\ComponentCanvas.cpp" />
     <ClCompile Include="Source\Component\ComponentCollider.cpp" />
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
     <ClCompile Include="Source\Component\ComponentGraphics.cpp" />
@@ -360,6 +364,7 @@
     <ClCompile Include="Source\IO\Json\Parser.cpp" />
     <ClCompile Include="Source\IO\SystemIO.cpp" />
     <ClCompile Include="Source\Logic\CameraScript.cpp" />
+    <ClCompile Include="Source\Logic\CScripts\AllScripts.cpp" />
     <ClCompile Include="Source\Logic\CScripts\PossessScript.cpp" />
     <ClCompile Include="Source\Logic\Player.cpp" />
     <ClCompile Include="Source\Logic\SpawnPoint.cpp" />

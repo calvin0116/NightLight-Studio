@@ -12,6 +12,10 @@
 #include "../PrefabManager.h"
 #include "LevelEditor_ECHelper.h"
 
+// For message
+#include "..\..\Messaging\SystemBroadcaster.h"
+#include "..\..\Messaging\Messages\MessageTogglePlay.h"
+
 void LevelEditor::LE_MainMenuBar()
 {
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
@@ -108,9 +112,18 @@ void LevelEditor::LE_MainMenuBar()
 
         ImVec2 size = viewport->GetWorkSize();
         ImGui::SetCursorPosX(size.x / 2.0f);
-        LE_AddCheckbox("PLAY##MMBAR", &_runEngine, []()
+		
+		/*
+        LE_AddCheckbox("PLAY##MMBAR", &CONFIG_DATA->GetConfigData().isPlaying, []()
             {
                 // START/STOP ENGINE RUN HERE
+                std::cout << "Play button: " << CONFIG_DATA->GetConfigData().isPlaying << std::endl;
+*/
+        LE_AddCheckbox("PLAY##MMBAR", &_runEngine, [this]()
+            {
+              // START/STOP ENGINE RUN HERE
+            MessageTogglePlay isPlaying(_runEngine);
+            GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
             });
 
         ImGui::EndMenuBar();

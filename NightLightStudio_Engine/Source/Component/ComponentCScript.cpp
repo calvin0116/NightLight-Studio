@@ -2,14 +2,17 @@
 
 //#include "Components.h"   // inherit required functions
 
-ComponentCScript::ComponentCScript() : _isActive(false), _iTag(0)
+ComponentCScript::ComponentCScript() : _isActive(false), _pScript(nullptr), _iTag(0)
 {
     strcpy_s(ser_name, "CScriptComponent");
 }
 
 ComponentCScript::~ComponentCScript()
 {
-
+  // Delete memory
+  if(_pScript)
+    delete _pScript;
+  _pScript = nullptr;
 }
 
 void	ComponentCScript::Read(Value& val)

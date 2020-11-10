@@ -92,6 +92,11 @@
                 "Metallic": "",
                 "Roughness": "",
                 "AmbientOcclusion": ""
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "TestScript2",
+                "Tag": 0
             }
         },
         "UniqueEntity": {
