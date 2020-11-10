@@ -120,7 +120,8 @@ void InspectorWindow::Start()
 		else if (t == typeid(LightComponent).hash_code())
 		{
 			entComp.Copy(entComp._ent.getComponent<LightComponent>()->Write());
-			entComp._ent.RemoveComponent<LightComponent>();
+			NS_GRAPHICS::LightSystem::GetInstance().DetachLightComponent(entComp._ent);
+			//entComp._ent.RemoveComponent<LightComponent>();
 		}
 
 		else if (t == typeid(ScriptComponent).hash_code())
@@ -373,7 +374,6 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 			_levelEditor->LE_AddInputText("Texture file", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&tex, &graphics_comp]()
 				{
-					graphics_comp->_albedoFileName = tex;
 				});
 			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			// Drag and Drop from Asset Inspector onto Model File Name
@@ -395,6 +395,12 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				graphics_comp->_modelFileName = mod;
 				NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(graphics_comp->_modelFileName.toString());
 				graphics_comp->_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(graphics_comp->_modelFileName.toString());
+			}
+
+			if (graphics_comp->_albedoFileName.toString() != tex && !tex.empty())
+			{
+				graphics_comp->_albedoFileName = tex;
+				graphics_comp->_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(graphics_comp->_albedoFileName.toString());
 			}
 
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
@@ -442,8 +448,11 @@ void InspectorWindow::RigidBodyComp(Entity& ent)
 	}
 }
 
+
+
 void InspectorWindow::LightComp(Entity& ent)
 {
+	static int LIGHT = (int) NS_GRAPHICS::Lights::INVALID_TYPE;
 	ComponentLight* light = ent.getComponent<ComponentLight>();
 	if (light != nullptr)
 	{
@@ -451,8 +460,8 @@ void InspectorWindow::LightComp(Entity& ent)
 		{
 			ImGui::Checkbox("Is Active", &light->_isActive);
 
-			const char* lights[] = { "Directional", "Point", "Spot" };
-			static int LIGHT = (int) light->_type;
+			const char* lights[] = { "Directional", "Point", "Spot", "None" };
+			LIGHT = (int) light->_type;
 			if (ImGui::Combo("Light Type", &LIGHT, lights, IM_ARRAYSIZE(lights)))
 			{
 				NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(ent, (NS_GRAPHICS::Lights)LIGHT);
