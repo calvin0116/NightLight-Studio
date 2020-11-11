@@ -181,19 +181,21 @@ public:
 	NlMath::Point3D center;
 	NlMath::Vector3D extend;
 	NlMath::Vector3D rotation;
+
+	//turn colliding responds on and off
+	bool isCollidable = true;
+	// For layering
+	int colliderTag = 1;
 	/// /////////////////////////////////////////////////////////////////////////////
 
 	Collider collider;
 	//time of collision for dynanmic collision
 	float collisionTime;
-	// For layering
-	int colliderTag = 1;
+
 
 	bool isCollide = false;
 	int lod = 0;
 	bool isTrigger = false;
-	//turn collider on and off
-	bool isCollidable = true;
 
 	//to check trigger and enter
 	bool triggerFlag = false;

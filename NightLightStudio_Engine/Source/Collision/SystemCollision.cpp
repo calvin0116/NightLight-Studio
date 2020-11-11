@@ -44,6 +44,10 @@ namespace NS_COLLISION
 
 		///////////////////////////////////////////////////////////////////////////////////////////////
 		//// TestMesh Key Input
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("DebugDraw", SystemInput_ns::IKEY_INSERT, "INS", SystemInput_ns::OnPress, [this]()
+			{
+				doDrawLineMesh = !doDrawLineMesh;
+			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_INC", SystemInput_ns::IKEY_PGUP, "PGUP", SystemInput_ns::OnHold, [this]() 
 			{
 				MeshLod++;
@@ -318,18 +322,7 @@ namespace NS_COLLISION
 
 				if (comTrans1 == nullptr || comTrans2 == nullptr) continue;
 
-				/////////////////////////check for collision trigger
-				if (CheckTrigger(comCol1, comCol2))
-				{
-					comCol1->triggerFlag = true;
-					comCol2->triggerFlag = true;
-					colResolver.addTriggerEvent(Ent1, Ent2);
-				}
-				else
-				{
-					comCol1->triggerFlag = false;
-					comCol2->triggerFlag = false;
-				}
+
 				
 				
 				//Get rigidBody for Collision Resolution
@@ -347,13 +340,21 @@ namespace NS_COLLISION
 
 				if (comCol1->isCollidable == false || comCol2->isCollidable == false)
 				{
-					continue;
+					/////////////////////////check for collision trigger
+					if (CheckTrigger(comCol1, comCol2))
+					{
+						comCol1->triggerFlag = true;
+						comCol2->triggerFlag = true;
+						colResolver.addTriggerEvent(Ent1, Ent2);
+					}
+					else
+					{
+						comCol1->triggerFlag = false;
+						comCol2->triggerFlag = false;
+					}
 				}
-
-
-
 				//check for collision, also create collision event in CheckCollision if there is collision
-				if (CheckCollision(comCol1, comCol2, comRigid1, comRigid2, comTrans1, comTrans2, Ent1, Ent2))
+				else if (CheckCollision(comCol1, comCol2, comRigid1, comRigid2, comTrans1, comTrans2, Ent1, Ent2))
 				{
 					// store collision event
 					//NS_GRAPHICS::SYS_GRAPHICS->SetMeshColor(Ent1, glm::vec3(1.0f, 0.0f, 1.f));
@@ -1003,15 +1004,19 @@ namespace NS_COLLISION
 				//NlMath::Vector3D start = a->center;
 				//NlMath::Vector3D end = normal  + start;
 		
-
-				for (Contact& contact : tmp.contacts)
+				if (doDrawLineMesh)
 				{
-					if (contact.position == NlMath::Vec3(0,0,0))
+					for (Contact& contact : tmp.contacts)
 					{
-						continue;
+						if (contact.position == NlMath::Vec3(0, 0, 0))
+						{
+							continue;
+						}
+
+						NS_GRAPHICS::SYS_GRAPHICS->DrawLine(contact.position, contact.position + tmp.normal * 30);
 					}
-					NS_GRAPHICS::SYS_GRAPHICS->DrawLine(contact.position, contact.position + tmp.normal * 30);
 				}
+
 					
 
 				return check;
