@@ -199,6 +199,7 @@ namespace NS_GRAPHICS
 		LoadShader(std::string("../Resources/Shaders/withlights.vert"),std::string("../Resources/Shaders/withlights.frag"));
 		LoadShader(std::string("../Resources/Shaders/grid.vert"),std::string("../Resources/Shaders/grid.frag"));
 		LoadShader(std::string("../Resources/Shaders/withlights_textured.vert"), std::string("../Resources/Shaders/withlights_textured.frag"));
+		LoadShader(std::string("../Resources/Shaders/ui.vert"), std::string("../Resources/Shaders/ui.frag"));
 		//LoadShader("","");
 		//LoadShader("","");
 		//LoadShader("","");

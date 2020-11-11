@@ -91,6 +91,12 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<PlayerStatsComponent>();
 			entComp._ent.getComponent<PlayerStatsComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(CauldronStatsComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<CauldronStatsComponent>();
+			entComp._ent.getComponent<CauldronStatsComponent>()->Read(*entComp._rjDoc);
+		}
+
 		return comp;
 	};
 
@@ -144,7 +150,12 @@ void InspectorWindow::Start()
 			entComp.Copy(entComp._ent.getComponent<PlayerStatsComponent>()->Write());
 			entComp._ent.RemoveComponent<PlayerStatsComponent>();
 		}
-		
+		else if (t == typeid(CauldronStatsComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<CauldronStatsComponent>()->Write());
+			entComp._ent.RemoveComponent<CauldronStatsComponent>();
+		}
+
 		return std::any(entComp);
 	};
 
@@ -240,6 +251,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
   CScriptComp(ent);
 
   PlayerStatsComp(ent);
+
+  CauldronStatsComp(ent);
 
 	AddSelectedComps(ent);
 }
@@ -428,10 +441,6 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 			std::string ao = graphics_comp->_aoFileName.toString();
 			std::string roughness = graphics_comp->_roughnessFileName.toString();
 
-			_levelEditor->LE_AddInputText("Texture file", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-				[&tex, &graphics_comp]()
-				{
-				});
 			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			// Drag and Drop from Asset Inspector onto Model File Name
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
@@ -447,9 +456,16 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 						mod = data;
 				});
 
+			_levelEditor->LE_AddInputText("Texture file", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&tex, &graphics_comp]()
+				{
+					graphics_comp->AddAlbedoTexture(tex);
+				});
+
 			_levelEditor->LE_AddInputText("Specular file", specular, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&specular, &graphics_comp]()
 				{
+					graphics_comp->AddSpecularTexture(specular);
 				});
 
 
@@ -460,27 +476,15 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				graphics_comp->_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(graphics_comp->_modelFileName.toString());
 			}
 
-			if (graphics_comp->_albedoFileName.toString() != tex && !tex.empty())
-			{
-				graphics_comp->_albedoFileName = tex;
-				graphics_comp->_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(graphics_comp->_albedoFileName.toString());
-			}
-
-			if (graphics_comp->_specularFileName.toString() != specular && !specular.empty())
-			{
-				graphics_comp->_specularFileName =  specular;
-				graphics_comp->_specularID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(graphics_comp->_specularFileName.toString());
-			}
-
 			ImGui::Separator();
 
 			ImGui::Text("Materials");
 
-			ImGui::InputFloat3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
+			ImGui::ColorEdit3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
 
-			ImGui::InputFloat3("Ambient##Graphics", glm::value_ptr(graphics_comp->_materialData._ambient));
+			ImGui::ColorEdit3("Ambient##Graphics", glm::value_ptr(graphics_comp->_materialData._ambient));
 
-			ImGui::InputFloat3("Specular##Graphics", glm::value_ptr(graphics_comp->_materialData._specular));
+			ImGui::ColorEdit3("Specular##Graphics", glm::value_ptr(graphics_comp->_materialData._specular));
 
 			ImGui::InputFloat("Shininess", &graphics_comp->_materialData._shininess);
 
@@ -545,29 +549,29 @@ void InspectorWindow::LightComp(Entity& ent)
 			LIGHT = (int) light->_type;
 			if (ImGui::Combo("Light Type", &LIGHT, lights, IM_ARRAYSIZE(lights)))
 			{
-				NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(ent, (NS_GRAPHICS::Lights)LIGHT);
+				NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(light, (NS_GRAPHICS::Lights)LIGHT);
 			}
 
-			if (ImGui::InputFloat3("Diffuse", glm::value_ptr(light->_diffuse)))
+			if (ImGui::ColorEdit3("Diffuse", glm::value_ptr(light->_diffuse)))
 			{
 				light->SetDiffuse(light->_diffuse);
 			}
 			
-			if (ImGui::InputFloat3("Ambient", glm::value_ptr(light->_ambient)))
+			if (ImGui::ColorEdit3("Ambient", glm::value_ptr(light->_ambient)))
 			{
 				light->SetAmbient(light->_ambient);
 			}
 
-			if (ImGui::InputFloat3("Specular", glm::value_ptr(light->_specular)))
+			if (ImGui::ColorEdit3("Specular", glm::value_ptr(light->_specular)))
 			{
 				light->SetSpecular(light->_specular);
 			}
 
 			if (light->_type != NS_GRAPHICS::Lights::DIRECTIONAL)
 			{
-				if (ImGui::InputFloat("Attenuation", &light->_attenuation))
+				if (ImGui::InputFloat("Intensity", &light->_attenuation))
 				{
-					light->SetAttenuation(light->_attenuation);
+					light->SetIntensity(light->_attenuation);
 				}
 			}
 
@@ -706,6 +710,43 @@ void InspectorWindow::PlayerStatsComp(Entity& ent)
 	}
 }
 
+void InspectorWindow::CauldronStatsComp(Entity& ent)
+{
+	CauldronStatsComponent* csc = ent.getComponent<CauldronStatsComponent>();
+	if (csc != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Cauldron Stats", &_notRemove))
+		{
+			std::string talis = csc->talisman.toString();
+			_levelEditor->LE_AddInputText("talisman", talis, 256, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&talis, &csc]()
+				{
+					csc->talisman = talis;
+				});
+
+
+			std::string col = csc->collider.toString();
+			_levelEditor->LE_AddInputText("collider", col, 256, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&col, &csc]()
+				{
+					csc->collider = col;
+				});
+
+			ImGui::InputFloat("magnitude", &csc->magnitude);
+			ImGui::InputFloat3("direction", csc->direction.m);
+		}
+
+		if (!_notRemove)
+		{
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<CauldronStatsComponent>()->Write(), typeid(CauldronStatsComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
+		}
+
+		ImGui::Separator();
+	}
+}
+
 void InspectorWindow::AddSelectedComps(Entity& ent)
 {
 	_levelEditor->LE_AddCombo("##AddComponentsCombo", _itemType,
@@ -718,7 +759,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  Collider",
 			"  CScript",
 			"  C#Script",
-			"  PlayerStats"
+			"  PlayerStats",
+			"  CauldronStats"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -821,6 +863,15 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
+		case 9: // PlayerStats
+		{
+			if (!ent.getComponent<CauldronStatsComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, CauldronStatsComponent().Write(), typeid(CauldronStatsComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
 
 		}
 		//if (next_lol == nullptr)
@@ -871,22 +922,27 @@ bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjec
 	ImGui::Checkbox("", &_useSnap);
 	ImGui::SameLine();
 
+	float* snapPtr = nullptr;
+
 	switch (_mCurrentGizmoOperation)
 	{
 	case ImGuizmo::TRANSLATE:
-		ImGui::InputFloat3("Snap", &_snap[0]);
+		snapPtr = _snapTrans;
+		ImGui::InputFloat3("Snap", &_snapTrans[0]);
 		break;
 	case ImGuizmo::ROTATE:
-		ImGui::InputFloat("Angle Snap", &_snap[0]);
+		snapPtr = &_snapRotate;
+		ImGui::InputFloat("Angle Snap", &_snapRotate);
 		break;
 	case ImGuizmo::SCALE:
-		ImGui::InputFloat("Scale Snap", &_snap[0]);
+		snapPtr = &_snapScale;
+		ImGui::InputFloat("Scale Snap", &_snapScale);
 		break;
 	}
 
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-	return ImGuizmo::Manipulate(cameraView, cameraProjection, _mCurrentGizmoOperation, _mCurrentGizmoMode, matrix, NULL, _useSnap ? &_snap[0] : NULL, NULL, NULL);
+	return ImGuizmo::Manipulate(cameraView, cameraProjection, _mCurrentGizmoOperation, _mCurrentGizmoMode, matrix, NULL, _useSnap ? snapPtr : NULL, NULL, NULL);
 }
 
 void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)

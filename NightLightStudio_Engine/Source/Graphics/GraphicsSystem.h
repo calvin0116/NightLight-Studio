@@ -82,7 +82,7 @@ namespace NS_GRAPHICS
         void SetProjectionMatrix(const float& fov = 45.f, const float& aspect_ratio = 1.78f, const float& near_plane = 1.0f, const float& far_plane = 50000.f);
 
         // Sets ortho projection for UI
-        void SetUIMatrix();
+        void SetUIMatrix(const int& width, const int& height, const float& near_plane = 1.0f, const float& far_plane = 50000.f);
 
         // Updates uniform light variables based on active light components for all shaders
         // Temporarily hard set 1 type of light each
@@ -128,6 +128,7 @@ namespace NS_GRAPHICS
 
         bool _hasInit;
         bool _debugDrawing;
+        bool _uiDrawing;
 
         ShaderSystem* shaderManager;
         ModelLoader* modelLoader;

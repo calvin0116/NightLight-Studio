@@ -36,6 +36,7 @@ namespace NS_GRAPHICS
 		textureManager{ nullptr },
 		_hasInit{ false },
 		_debugDrawing{ false },
+		_uiDrawing{ false },
 		_projectionMatrix{ glm::mat4(1.0f) },
 		_uiMatrix{ glm::mat4(1.0f) },
 		_viewMatrix{ glm::mat4(1.0f) }
@@ -233,7 +234,8 @@ namespace NS_GRAPHICS
 
 		// Set default values for projection matrix
 		SetProjectionMatrix();
-		//SetUIMatrix();
+
+		SetUIMatrix(NS_WINDOW::SYS_WINDOW->GetResolutionWidth(), NS_WINDOW::SYS_WINDOW->GetResolutionHeight());
 
 		debugManager->Init();
 
@@ -335,7 +337,7 @@ namespace NS_GRAPHICS
 					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-					glDrawElements(GL_TRIANGLES, (unsigned)mesh->_indices.size(), GL_UNSIGNED_SHORT, 0);
+					glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
 					shaderManager->StopProgram();
 				}
 				else
@@ -358,7 +360,7 @@ namespace NS_GRAPHICS
 					// bind specular map
 					textureManager->BindSpecularTexture(graphicsComp->_specularID);
 
-					glDrawElements(GL_TRIANGLES, (unsigned)mesh->_indices.size(), GL_UNSIGNED_SHORT, 0);
+					glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
 					shaderManager->StopProgram();
 				}
 			}
@@ -400,15 +402,18 @@ namespace NS_GRAPHICS
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
-	void GraphicsSystem::SetUIMatrix()
+	void GraphicsSystem::SetUIMatrix(const int& width, const int& height, const float& near_plane, const float& far_plane)
 	{
-		/*_uiMatrix = glm::ortho(
-			(float)-width * _ratioWidth * 0.5f * 1.0f,
-			(float)width * _ratioWidth * 0.5f * 1.0f,
-			(float)-height * _ratioHeight * 0.5f * 1.0f,
-			(float)height * _ratioHeight * 0.5f * 1.0f,
-			_near,
-			_far);*/
+		float ratioWidth = width / NS_WINDOW::SYS_WINDOW->GetAppWidth();
+		float ratioHeight = height / NS_WINDOW::SYS_WINDOW->GetAppHeight();
+
+		_uiMatrix = glm::ortho(
+		(float)-width * ratioWidth * 0.5f,
+		(float)width * ratioWidth * 0.5f,
+		(float)-height * ratioHeight * 0.5f,
+		(float)height * ratioHeight * 0.5f,
+			near_plane,
+			far_plane);
 	}
 
 	void GraphicsSystem::UpdateLights()

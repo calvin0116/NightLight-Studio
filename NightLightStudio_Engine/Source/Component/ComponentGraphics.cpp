@@ -40,21 +40,37 @@ void ComponentGraphics::SetRenderType(const RENDERTYPE& rendertype)
 
 void ComponentGraphics::AddAlbedoTexture(std::string filename)
 {
-	_albedoFileName = filename;
-
-	if (!_albedoFileName.empty())
+	if (!filename.empty() && _albedoFileName.toString() != filename)
 	{
+		_albedoFileName = filename;
 		_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_albedoFileName.toString());
+	}
+
+	if (_albedoID > 0 || _specularID > 0)
+	{
+		_renderType = RENDERTYPE::TEXTURED;
+	}
+	else
+	{
+		_renderType = RENDERTYPE::SOLID;
 	}
 }
 
 void ComponentGraphics::AddSpecularTexture(std::string filename)
 {
-	_specularFileName = filename;
-
-	if (!_specularFileName.empty())
+	if (!filename.empty() && _specularFileName.toString() != filename)
 	{
+		_specularFileName = filename;
 		_specularID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_specularFileName.toString());
+	}
+
+	if (_albedoID > 0 || _specularID > 0)
+	{
+		_renderType = RENDERTYPE::TEXTURED;
+	}
+	else
+	{
+		_renderType = RENDERTYPE::SOLID;
 	}
 }
 
@@ -107,11 +123,11 @@ inline void ComponentGraphics::Read(Value& val)
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
 	{
-		_albedoFileName = val["Albedo"].GetString();
+		std::string albedo = val["Albedo"].GetString();
 
-		if (!_albedoFileName.empty())
+		if (!albedo.empty())
 		{
-			_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_albedoFileName.toString());
+			AddAlbedoTexture(albedo);
 		}
 	}
 

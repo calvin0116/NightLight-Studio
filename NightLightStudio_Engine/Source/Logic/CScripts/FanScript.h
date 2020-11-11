@@ -2,11 +2,14 @@
 // Temporary for C++ scripting
 // Always inherit this for scripting!
 #include "IScript.h"
+
 // Testing
 #include <iostream>
 #include <string>
+
+// Components
+#include "../../Component/ComponentCauldronStats.h"
 #include "../../Component/ComponentCScript.h"
-#include "../../Component/ComponentTransform.h"
 
 class FanScript : public IScript
 {
@@ -23,7 +26,7 @@ public:
   bool Activate = false;
   float timePassed = 0.0f;
 
-    
+  CauldronStatsComponent* stats;
   std::string playerName = "Player";
   std::string obbName = "OBB_1";
   std::string camName = "PlayerCamera";

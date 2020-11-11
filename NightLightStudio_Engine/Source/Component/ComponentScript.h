@@ -10,8 +10,9 @@ typedef class ComponentScript : public ISerializable
 public:
   struct data
   {
-    MonoObject*     _pInstance;
-    uint32_t        _GCHandle;
+    bool            _Inited = false;
+    MonoObject*     _pInstance = nullptr;
+    uint32_t        _GCHandle  = 0;
   };
   bool            _isActive;    // Show on editor, can edit
   bool            _isRunning;   // Show on editor, can edit

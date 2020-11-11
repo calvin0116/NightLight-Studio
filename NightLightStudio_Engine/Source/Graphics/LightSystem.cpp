@@ -246,31 +246,29 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	void LightSystem::ChangeLightType(Entity& entity, Lights lightType)
+	void LightSystem::ChangeLightType(ComponentLight* light, Lights lightType)
 	{
-		ComponentLight* lightcomponent = entity.getComponent<ComponentLight>();
-
-		if (lightcomponent->_type == lightType)
+		if (light->_type == lightType)
 			return;
 
-		if (lightcomponent != nullptr)
+		if (light != nullptr)
 		{
 			// Delete current light from local data
 			// Locate light in light tracker and set to false
-			if (lightcomponent->_lightID != -1)
+			if (light->_lightID != -1)
 			{
-				switch (lightcomponent->_type)
+				switch (light->_type)
 				{
 				case Lights::DIRECTIONAL:
-					dLights_tracker[lightcomponent->_lightID] = false;
+					dLights_tracker[light->_lightID] = false;
 					lightblock->_dLights_Num--;
 					break;
 				case Lights::POINT:
-					pLights_tracker[lightcomponent->_lightID] = false;
+					pLights_tracker[light->_lightID] = false;
 					lightblock->_pLights_Num--;
 					break;
 				case Lights::SPOT:
-					sLights_tracker[lightcomponent->_lightID] = false;
+					sLights_tracker[light->_lightID] = false;
 					lightblock->_sLights_Num--;
 					break;
 				default:
@@ -281,20 +279,20 @@ namespace NS_GRAPHICS
 			switch (lightType)
 			{
 			case Lights::DIRECTIONAL:
-				lightcomponent->AssignLight(AddDirLight(), Lights::DIRECTIONAL);
+				light->AssignLight(AddDirLight(), Lights::DIRECTIONAL);
 				break;
 			case Lights::POINT:
-				lightcomponent->AssignLight(AddPointLight(), Lights::POINT);
+				light->AssignLight(AddPointLight(), Lights::POINT);
 				break;
 			case Lights::SPOT:
-				lightcomponent->AssignLight(AddSpotLight(), Lights::SPOT);
+				light->AssignLight(AddSpotLight(), Lights::SPOT);
 				break;
 			default:
 				break;
 			}
 
 #ifdef _DEBUG
-			if (lightcomponent->_lightID == -1)
+			if (light->_lightID == -1)
 				std::cout << "ERROR: Failed to create light component, please check Light System" << std::endl;
 #endif
 		}

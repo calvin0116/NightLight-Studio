@@ -8,8 +8,7 @@
 void PossessScript::Init()
 {
   // Fetch player entity here.
-    playerTransform = nullptr;
-    
+    playerTransform = nullptr;   
 
 }
 

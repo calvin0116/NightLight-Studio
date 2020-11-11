@@ -70,7 +70,7 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Component\Player">
+    <Filter Include="Source Files\Component\Stats">
       <UniqueIdentifier>{f503ea8e-ab3a-4167-983b-545223d6bcb0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -418,13 +418,16 @@
       <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentPlayerStats.h">
-      <Filter>Source Files\Component\Player</Filter>
+      <Filter>Source Files\Component\Stats</Filter>
     </ClInclude>
     <ClInclude Include="Source\Logic\CScripts\FanScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Logic\CScripts\FanBlowScript.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentCauldronStats.h">
+      <Filter>Source Files\Component\Stats</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -687,13 +690,16 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentPlayerStats.cpp">
-      <Filter>Source Files\Component\Player</Filter>
+      <Filter>Source Files\Component\Stats</Filter>
     </ClCompile>
     <ClCompile Include="Source\Logic\CScripts\FanScript.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Logic\CScripts\FanBlowScript.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentCauldronStats.cpp">
+      <Filter>Source Files\Component\Stats</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

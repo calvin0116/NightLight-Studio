@@ -88,6 +88,20 @@ namespace NS_LOGIC
     }
   }
 
+  void SystemLogic::GamePreInit()
+  {
+    auto itr = G_ECMANAGER->begin<ComponentCScript>();
+    auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
+    for (; itr != itrEnd; ++itr)
+    {
+      ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
+      if (myComp->_pScript == nullptr)
+        continue;
+      Entity en = G_ECMANAGER->getEntity(itr);
+      myComp->_pScript->SetEntity(en);
+    }
+  }
+
   void SystemLogic::GameInit()
   {
     if (!_isPlaying)
@@ -99,8 +113,6 @@ namespace NS_LOGIC
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
       if (myComp->_pScript == nullptr || !myComp->_isActive)
         continue;
-      Entity en = G_ECMANAGER->getEntity(itr);
-      myComp->_pScript->SetEntity(en);
       myComp->_pScript->Init();
     }
 
@@ -136,8 +148,11 @@ namespace NS_LOGIC
   {
     if (!_isPlaying)
       return;
-    if(!_Inited)
+    if (!_Inited)
+    {
+      GamePreInit();
       GameInit();
+    }
     ////Run Script?
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();

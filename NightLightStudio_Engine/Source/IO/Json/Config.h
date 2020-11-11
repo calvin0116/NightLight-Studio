@@ -34,6 +34,14 @@ struct ConfigData
 	float _rotationSensitivity;
 	float _zoomSensitivity;
 
+	//Grid Variables
+	float _gridSize;
+	float _cellSize;
+	float _gridColourRed;
+	float _gridColourGreen;
+	float _gridColourBlue;
+	float _gridColourAlpha;
+
 	//============= Run time variable ============//
 	bool engineRunning;
 	bool sceneRunning;
@@ -70,6 +78,9 @@ public:
 		config_d._positionSensitivity = config_val["positionSensitivity"].GetFloat();
 		config_d._rotationSensitivity = config_val["rotationSensitivity"].GetFloat();
 		config_d._zoomSensitivity = config_val["zoomSensitivity"].GetFloat();
+
+		config_d._gridSize;
+		config_d._cellSize;
 
 		config_d.levelEditorMode = config_val["start_in_level_editor"].GetBool();
 		if (config_d.levelEditorMode)
