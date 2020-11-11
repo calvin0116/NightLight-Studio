@@ -8,6 +8,7 @@
 
 // Player script to get their state
 #include "../Player.h"
+#include "../CameraScript.h"
 #include "FanBlowScript.h"
 
 
@@ -20,6 +21,9 @@ void FanScript::Init()
   //talisman1 = G_ECMANAGER->getEntity("Talisman_1");
   obb1 = G_ECMANAGER->getEntity(obbName);
   obb1ScriptComp = obb1.getComponent<ComponentCScript>();
+
+  CameraEntity = G_ECMANAGER->getEntity(camName);
+  cameraScriptComp = CameraEntity.getComponent<ComponentCScript>();
 }
 
 void FanScript::Update()
@@ -62,10 +66,19 @@ void FanScript::OnCollisionEnter(Entity other)
   if (playerScriptComp && playerScriptComp->_pScript)
   {
     Player* playerScript = reinterpret_cast<Player*>(playerScriptComp->_pScript);
-    if (playerScript->getState() == PLAYERSTATE::MOTH)
+    AllScripts::CameraScript* camScript = reinterpret_cast<AllScripts::CameraScript*>(cameraScriptComp->_pScript);
+    if (playerScript && camScript)
     {
-      //playerScript->changeState(PLAYERSTATE::POSSESSED);
-      Activate = true;
+      if (playerScript->getState() == PLAYERSTATE::MOTH)
+      {
+        //playerScript->changeState(PLAYERSTATE::POSSESSED);
+        ComponentTransform* comTrans = MyID.getComponent<ComponentTransform>();
+        camScript->SetTarget(comTrans->_position);
+        camScript->SetDistance(playerScript->CAMERA_DISTANCE);
+        //camScript->SetTargetOffsetXY(playerScript->CAMERA_OFFSET_X, playerScript->CAMERA_OFFSET_Y);
+        //camScript->SetRotate(false);
+        Activate = true;
+      }
     }
   }
 }

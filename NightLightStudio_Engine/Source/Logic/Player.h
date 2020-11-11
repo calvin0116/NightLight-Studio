@@ -40,21 +40,22 @@ class Player : public IScript
 	PLAYERSTATE _prevPlayerState;
 	PLAYERSTATE _playerState;
 	NlMath::Vector3D _front;
-
-	//Player stats
-	float PLAYER_MOVE_MAG;
-	float PLAYER_FLY_MAG;
-	int		PLAYER_MAX_ENERGY;
-	int		PLAYER_ENERGY_REGEN;
-	int		PLAYER_POSSESS_ENERGY_DRAIN;
-	int		PLAYER_MOTH_ENERGY_DRAIN;
-	// Camera Variables
-	float CAMERA_DISTANCE;
-	float CAMERA_OFFSET_X;
-	float CAMERA_OFFSET_Y;
-	float PLAYER_MAX_SPEED;
 	
 public:
+  // Expose variables
+  //Player stats
+  float PLAYER_MOVE_MAG;
+  float PLAYER_FLY_MAG;
+  int		PLAYER_MAX_ENERGY;
+  int		PLAYER_ENERGY_REGEN;
+  int		PLAYER_POSSESS_ENERGY_DRAIN;
+  int		PLAYER_MOTH_ENERGY_DRAIN;
+  // Camera Variables
+  float CAMERA_DISTANCE;
+  float CAMERA_OFFSET_X;
+  float CAMERA_OFFSET_Y;
+  float PLAYER_MAX_SPEED;
+
 	Player();
 	void Init() override;
 	void Update() override;

@@ -162,6 +162,7 @@ void Player::Update()
 		camera->SetTarget(comTrans->_position);
 		camera->SetDistance(CAMERA_DISTANCE);
 		camera->SetTargetOffsetXY(CAMERA_OFFSET_X, CAMERA_OFFSET_Y);
+    camera->SetRotate(true);
 		break;
 	}
 		

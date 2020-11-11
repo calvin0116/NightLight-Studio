@@ -14,16 +14,19 @@ class FanScript : public IScript
 public:
   // Exposed variables
   Entity MyPlayerEntity;
-  //int MyPlayerID;
-  //Entity talisman1;
   Entity obb1;
-  bool Activate = false;
-  float timePassed = 0.0f;
+  Entity CameraEntity;
   ComponentCScript* playerScriptComp = nullptr;
   ComponentCScript* obb1ScriptComp = nullptr;
+  ComponentCScript* cameraScriptComp = nullptr;
+
+  bool Activate = false;
+  float timePassed = 0.0f;
+
     
   std::string playerName = "Player";
   std::string obbName = "OBB_1";
+  std::string camName = "PlayerCamera";
 
   virtual void Init() override;
 
