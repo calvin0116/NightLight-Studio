@@ -57,9 +57,9 @@ void Player::Init()
 	comTrans = MyID.getComponent<TransformComponent>();
 	//set this as a point light, scale to 0.001
 	comLight = MyID.getComponent<LightComponent>();
-	NS_GRAPHICS::LightSystem* systemLight = &NS_GRAPHICS::LightSystem::GetInstance();
-	systemLight->ChangeLightType(MyID, NS_GRAPHICS::Lights::POINT);
-	comLight->SetAttenuation(0.0001);
+	comLight->ChangeLightType(NS_GRAPHICS::Lights::POINT);
+	comLight->SetIntensity(1000);
+
 
 	//comLight->change
 	playerStats = MyID.getComponent<PlayerStatsComponent>();
@@ -231,6 +231,11 @@ void Player::Exit()
 PLAYERSTATE Player::getState()
 {
 	return _playerState;
+}
+
+float Player::getPlayerEnergy()
+{
+	return _playerEnergy;
 }
 
 void Player::changeState(PLAYERSTATE state)

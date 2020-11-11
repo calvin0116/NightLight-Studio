@@ -66,6 +66,7 @@ public:
 	void Update() override;
 	void Exit() override;
 	PLAYERSTATE getState();
+	float getPlayerEnergy();
 	void changeState(PLAYERSTATE state);
 	void setSpawnPoint(ComponentTransform& _spawnPoint);
 	bool enterPossession();
