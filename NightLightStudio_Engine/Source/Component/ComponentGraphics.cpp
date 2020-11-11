@@ -123,11 +123,11 @@ inline void ComponentGraphics::Read(Value& val)
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
 	{
-		_albedoFileName = val["Albedo"].GetString();
+		std::string albedo = val["Albedo"].GetString();
 
-		if (!_albedoFileName.empty())
+		if (!albedo.empty())
 		{
-			_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_albedoFileName.toString());
+			AddAlbedoTexture(albedo);
 		}
 	}
 
