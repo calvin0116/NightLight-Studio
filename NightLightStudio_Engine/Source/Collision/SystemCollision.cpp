@@ -32,7 +32,7 @@ namespace NS_COLLISION
 {
 	static int test_count = 0;
 
-	CollisionSystem::CollisionSystem() : MeshLod(0), doDrawLineMesh(true), compTtest0(nullptr), compRtest0(nullptr), entityTest0(nullptr, -1)
+	CollisionSystem::CollisionSystem() : MeshLod(0), doDrawLineMesh(false), compTtest0(nullptr), compRtest0(nullptr), entityTest0(nullptr, -1)
 	{
 	}
 	void CollisionSystem::Load()
@@ -267,7 +267,8 @@ namespace NS_COLLISION
 
 	void CollisionSystem::Update()
 	{
-
+		//draw debug mesh
+		if (doDrawLineMesh)
 		{
 			auto itr = G_ECMANAGER->begin<ComponentCollider>();
 			auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
@@ -276,9 +277,36 @@ namespace NS_COLLISION
 				ComponentCollider* comCol = G_ECMANAGER->getComponent<ComponentCollider>(itr);
 				ComponentTransform* comTrans = G_ECMANAGER->getComponent<ComponentTransform>(itr);
 
-				UpdateCollisionBoxPos(comCol, comTrans);
+				if (comCol->isCollide)
+				{
+					if (doDrawLineMesh)
+					{
+						DrawLineMesh(comTrans, comCol, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
+					}
+				}
+				else
+				{
+					if (doDrawLineMesh)
+					{
+						DrawLineMesh(comTrans, comCol, MeshLod);
+					}
+				}
+				comCol->isCollide = false;
 			}
 		}
+
+
+		
+		auto itr = G_ECMANAGER->begin<ComponentCollider>();
+		auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
+		for (; itr != itrEnd; ++itr)
+		{
+			ComponentCollider* comCol = G_ECMANAGER->getComponent<ComponentCollider>(itr);
+			ComponentTransform* comTrans = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+
+			UpdateCollisionBoxPos(comCol, comTrans);
+		}
+		
 
 		// clear collision events
 		colResolver.clear();
@@ -309,6 +337,7 @@ namespace NS_COLLISION
 				ComponentCollider* comCol1 = G_ECMANAGER->getComponent<ComponentCollider>(itr1);
 				ComponentCollider* comCol2 = G_ECMANAGER->getComponent<ComponentCollider>(itr2);
 
+
 				//update flags
 				comCol1->prevCollisionFlag = comCol1->collisionFlag;
 				comCol2->prevCollisionFlag = comCol2->collisionFlag;
@@ -323,7 +352,13 @@ namespace NS_COLLISION
 				if (comTrans1 == nullptr || comTrans2 == nullptr) continue;
 
 
-				
+
+				if (CollisionCuling(comTrans1, comTrans2))
+				{
+					continue;
+				}
+
+
 				
 				//Get rigidBody for Collision Resolution
 				ComponentRigidBody* comRigid1 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr1);
@@ -333,6 +368,7 @@ namespace NS_COLLISION
 
 				if (!comRigid1->isActive || !comRigid2->isActive) continue;
 
+				if (comRigid1->isStatic && comRigid2->isStatic) continue;
 				//UpdateCollisionBoxPos(comCol1, comTrans1);
 				
 
@@ -399,33 +435,6 @@ namespace NS_COLLISION
 				//comTrans1->_rotation.y += 1;
 				//comTrans1->_rotation.z += 1;
 				/////////////////////////////////////////////////////////////////////////////////////////
-			}
-		}
-
-		if (doDrawLineMesh)
-		{
-			auto itr = G_ECMANAGER->begin<ComponentCollider>();
-			auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
-			for (; itr != itrEnd; ++itr)
-			{
-				ComponentCollider* comCol = G_ECMANAGER->getComponent<ComponentCollider>(itr);
-				ComponentTransform* comTrans = G_ECMANAGER->getComponent<ComponentTransform>(itr);
-
-				if (comCol->isCollide)
-				{
-					if (doDrawLineMesh)
-					{
-						DrawLineMesh(comTrans, comCol, MeshLod, glm::vec3(1.0f, 1.0f, 0.0f));
-					}
-				}
-				else
-				{
-					if (doDrawLineMesh)
-					{
-						DrawLineMesh(comTrans, comCol, MeshLod);
-					}
-				}
-				comCol->isCollide = false;
 			}
 		}
 
@@ -507,6 +516,17 @@ namespace NS_COLLISION
 			break;
 		}
 
+	}
+
+	bool CollisionSystem::CollisionCuling(ComponentTransform* comTrans1, ComponentTransform* comTrans2)
+	{
+		//optimization, dont check collision if too far away
+		NlMath::Vec3 distance = comTrans1->_position - comTrans2->_position;
+		NlMath::Vec3 scale = comTrans1->_scale + comTrans2->_scale * 1.5f;
+		float sqrDistance = distance * distance;
+		//1.5 bias
+		float sqrScale = scale * scale ;
+		return sqrDistance > sqrScale;
 	}
 
 	bool CollisionSystem::CheckTrigger(ComponentCollider* Collider1, ComponentCollider* Collider2)
@@ -1059,7 +1079,7 @@ namespace NS_COLLISION
 				//colResolver.addCollisionEvent(newEvent);
 
 				// return true
-				return true;
+
 				//// OBB to OBB END
 				///////////////////////////////////////////////////////////////////////////////////
 			}

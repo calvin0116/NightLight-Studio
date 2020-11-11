@@ -40,6 +40,7 @@ namespace NS_COLLISION
 		ICollider* GetCollider(ComponentCollider* collider);
 
 		void UpdateCollisionBoxPos(ComponentCollider * comCol, ComponentTransform * comTrans);
+		bool CollisionCuling(ComponentTransform* comTrans1, ComponentTransform* comTrans2);
 		bool CheckTrigger(ComponentCollider* Collider1, ComponentCollider* Collider2);
 		bool CheckCollision(
 			ComponentCollider* Collider1, ComponentCollider* Collider2, 
