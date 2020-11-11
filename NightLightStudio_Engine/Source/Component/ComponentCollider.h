@@ -66,7 +66,7 @@ struct ICollider
 {
 	NlMath::Vector3D colliderScale;
 	NlMath::Point3D colliderPosition;
-	ICollider() : colliderScale(0.5f, 0.5f, 0.5f), colliderPosition(0.0f, 0.0f, 0.0f) {}
+	ICollider() : colliderScale(0.5f, 0.5f, 0.5), colliderPosition(0.0f, 0.0f, 0.0f) {}
 	ICollider(const NlMath::Vector3D& scale, NlMath::Point3D pos) :colliderScale(scale), colliderPosition(pos) {}
 };
 

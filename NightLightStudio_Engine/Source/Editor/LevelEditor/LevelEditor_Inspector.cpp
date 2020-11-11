@@ -91,6 +91,12 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<PlayerStatsComponent>();
 			entComp._ent.getComponent<PlayerStatsComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(CauldronStatsComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<CauldronStatsComponent>();
+			entComp._ent.getComponent<CauldronStatsComponent>()->Read(*entComp._rjDoc);
+		}
+
 		return comp;
 	};
 
@@ -144,7 +150,12 @@ void InspectorWindow::Start()
 			entComp.Copy(entComp._ent.getComponent<PlayerStatsComponent>()->Write());
 			entComp._ent.RemoveComponent<PlayerStatsComponent>();
 		}
-		
+		else if (t == typeid(CauldronStatsComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<CauldronStatsComponent>()->Write());
+			entComp._ent.RemoveComponent<CauldronStatsComponent>();
+		}
+
 		return std::any(entComp);
 	};
 
@@ -241,6 +252,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 
   PlayerStatsComp(ent);
 
+  CauldronStatsComp(ent);
+
 	AddSelectedComps(ent);
 }
 
@@ -312,7 +325,48 @@ void InspectorWindow::ColliderComp(Entity& ent)
 		//4. May need loop to loop through all collider
 		if (ImGui::CollapsingHeader(name.c_str(), &_notRemove))
 		{
-      ImGui::Checkbox("IsCollidable##Collider", &col_comp->isCollidable);
+			int colEnum = (int)col_comp->GetColliderT();
+
+			_levelEditor->LE_AddCombo("Collider Type##COLLIDER", colEnum, 
+				{
+					"Plane",
+					"AABB",
+					"Sphere",
+					"OBB",
+					"Capsule",
+				});
+
+			if (colEnum != (int)col_comp->GetColliderT())
+			{
+				col_comp->SetColliderT((COLLIDERS)colEnum);
+			}
+
+			glm::vec3 glmVal = { col_comp->center };
+			float* glmPtr = glm::value_ptr(glmVal);
+
+			ImGui::Checkbox("IsCollidable##Collider", &col_comp->isCollidable);
+			ImGui::InputInt("Collider Tag##COLTAG", &col_comp->colliderTag);
+
+			if (ImGui::InputFloat3("Center##COLLIDER", glmPtr, 3))
+			{
+				col_comp->center = glm::make_vec3(glmPtr);
+			}
+
+			glmVal = { col_comp->extend };
+			glmPtr = glm::value_ptr(glmVal);
+
+			if (ImGui::InputFloat3("Extend##COLLIDER", glmPtr, 3))
+			{
+				col_comp->extend = glm::make_vec3(glmPtr);
+			}
+
+			glmVal = { col_comp->rotation };
+			glmPtr = glm::value_ptr(glmVal);
+
+			if (ImGui::InputFloat3("Rotation##COLLIDER", glmPtr, 3))
+			{
+				col_comp->rotation = glm::make_vec3(glmPtr);
+			}
 		}
 
 		//Remove component
@@ -665,6 +719,43 @@ void InspectorWindow::PlayerStatsComp(Entity& ent)
 	}
 }
 
+void InspectorWindow::CauldronStatsComp(Entity& ent)
+{
+	CauldronStatsComponent* csc = ent.getComponent<CauldronStatsComponent>();
+	if (csc != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Cauldron Stats", &_notRemove))
+		{
+			std::string talis = csc->talisman.toString();
+			_levelEditor->LE_AddInputText("talisman", talis, 256, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&talis, &csc]()
+				{
+					csc->talisman = talis;
+				});
+
+
+			std::string col = csc->collider.toString();
+			_levelEditor->LE_AddInputText("collider", col, 256, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&col, &csc]()
+				{
+					csc->collider = col;
+				});
+
+			ImGui::InputFloat("magnitude", &csc->magnitude);
+			ImGui::InputFloat3("direction", csc->direction.m);
+		}
+
+		if (!_notRemove)
+		{
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<CauldronStatsComponent>()->Write(), typeid(CauldronStatsComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
+		}
+
+		ImGui::Separator();
+	}
+}
+
 void InspectorWindow::AddSelectedComps(Entity& ent)
 {
 	_levelEditor->LE_AddCombo("##AddComponentsCombo", _itemType,
@@ -674,16 +765,11 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  Audio",
 			"  Graphics",
 			"  Light   ",
-			"--Collider--",
-			"  AABB Colider",
-			"  OBB Collider",
-			"  Plane Collider",
-			"  SphereCollider",
-			"  CapsuleCollider",
-			"------------",
+			"  Collider",
 			"  CScript",
 			"  C#Script",
-			"  PlayerStats"
+			"  PlayerStats",
+			"  CauldronStats"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -743,65 +829,19 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			break;
 		}*/
 
-		case 6:
+		case 5:
 		{
 			if (!ent.getComponent<ColliderComponent>())
 			{
 				//ent.AttachComponent(aabb);
-				ENTITY_COMP_DOC comp{ ent, ColliderComponent(COLLIDERS::AABB).Write(), typeid(ColliderComponent).hash_code() };
+				ENTITY_COMP_DOC comp{ ent, ColliderComponent().Write(), typeid(ColliderComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
-			}
-			break;
-		}
-
-		case 7:
-		{
-			if (!ent.getComponent<ColliderComponent>())
-			{
-				//next_lol = ent.AddComponent<OBBCollider>();
-				//ent.AttachComponent(obb);
-				ENTITY_COMP_DOC comp{ ent, ColliderComponent(COLLIDERS::OBB).Write(), typeid(ColliderComponent).hash_code() };
-				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
-			}
-			break;
-		}
-		case 8:
-		{
-			if (!ent.getComponent<ColliderComponent>())
-			{
-				//next_lol = ent.AddComponent<PlaneCollider>();
-				//ent.AttachComponent(plane);
-				ENTITY_COMP_DOC comp{ ent, ColliderComponent(COLLIDERS::PLANE).Write(), typeid(ColliderComponent).hash_code() };
-				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
-			}
-			break;
-		}
-		case 9:
-		{
-			if (!ent.getComponent<ColliderComponent>())
-			{
-				//ent.AttachComponent(sphere);
-				ENTITY_COMP_DOC comp{ ent, ColliderComponent(COLLIDERS::SPHERE).Write(), typeid(ColliderComponent).hash_code() };
-				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
-			}
-			break;
-		}
-		case 10:
-		{
-			if (!ent.getComponent<ColliderComponent>())
-			{
-				//next_lol = ent.AddComponent<CapsuleCollider>();
-				//ent.AttachComponent(capsule);
-				ENTITY_COMP_DOC comp{ ent, ColliderComponent(COLLIDERS::CAPSULE).Write(), typeid(ColliderComponent).hash_code() };
-				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
-				//ColliderComponent capsule(COLLIDERS::CAPSULE);
-				//ent.AttachComponent(capsule);
 			}
 			break;
 		}
 		
 		//case 11: -> ------
-		case 12: // CScript
+		case 6: // CScript
 		{
 			if (!ent.getComponent<CScriptComponent>())
 			{
@@ -812,7 +852,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 13: // C#Script
+		case 7: // C#Script
 		{
 		  if (!ent.getComponent<ScriptComponent>())
 		  {
@@ -823,11 +863,20 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 		  }
 		  break;
 		}
-		case 14: // PlayerStats
+		case 8: // PlayerStats
 		{
 			if (!ent.getComponent<PlayerStatsComponent>())
 			{
 				ENTITY_COMP_DOC comp{ ent, PlayerStatsComponent().Write(), typeid(PlayerStatsComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		case 9: // PlayerStats
+		{
+			if (!ent.getComponent<CauldronStatsComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, CauldronStatsComponent().Write(), typeid(CauldronStatsComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;

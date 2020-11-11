@@ -77,10 +77,10 @@ void main(void)
         result += CalcDLight(dLights[i], norm, viewDir);
     // Calculation for all point lights
     for(int j = 0; j < pLights_Num; j++)
-        result += CalcPLight(pLights[j], norm, fragPos, viewDir);    
+        result += CalcPLight(pLights[j], norm, fragPos, viewDir);
     // Calculation for all spot lights
-    for(int k = 0; k < pLights_Num; k++)
-    result += CalcSLight(sLights[k], norm, fragPos, viewDir);    
+    for(int k = 0; k < sLights_Num; k++)
+        result += CalcSLight(sLights[k], norm, fragPos, viewDir);
     
     fragColor = vec4(result, 1.0);
 }
