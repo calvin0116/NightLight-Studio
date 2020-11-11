@@ -16,6 +16,8 @@
 #include "..\..\Messaging\SystemBroadcaster.h"
 #include "..\..\Messaging\Messages\MessageTogglePlay.h"
 
+static bool winFocus = false;
+
 void LevelEditor::LE_MainMenuBar()
 {
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
@@ -23,6 +25,11 @@ void LevelEditor::LE_MainMenuBar()
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_MenuBar;
     window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
     window_flags |= ImGuiWindowFlags_NoScrollbar;// | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+    if (winFocus)
+    {
+        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+    }
 
     // DockSpace
     ImGuiIO& io = ImGui::GetIO();
@@ -289,5 +296,11 @@ void LevelEditor::LE_MainMenuBar()
                 NS_GRAPHICS::SYS_GRAPHICS->AttachModel(ent, data);
             }
         }, ImGuiDragDropFlags_AcceptNoDrawDefaultRect);
+
+    if (ImGui::IsWindowFocused())
+    {
+       winFocus = true;
+    }
+
     ImGui::End();
 }
