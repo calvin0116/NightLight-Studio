@@ -199,18 +199,28 @@ namespace NS_GRAPHICS
 				switch (lightcomponent->_type)
 				{
 				case Lights::DIRECTIONAL:
-					dLights_tracker[lightcomponent->_lightID] = false;
+					if (lightcomponent->_lightID < lightblock->_dLights_Num - 1)
+						SortLights(Lights::DIRECTIONAL, lightcomponent->_lightID);
+					else
+						dLights_tracker[lightcomponent->_lightID] = false;
+
 					lightcomponent->_lightID = -1;
-					lightblock->_dLights_Num--;
 					break;
+
 				case Lights::POINT:
-					pLights_tracker[lightcomponent->_lightID] = false;
-					lightblock->_pLights_Num--;
+					if (lightcomponent->_lightID < lightblock->_pLights_Num - 1)
+						SortLights(Lights::POINT, lightcomponent->_lightID);
+					else
+						pLights_tracker[lightcomponent->_lightID] = false;
+
 					lightcomponent->_lightID = -1;
 					break;
 				case Lights::SPOT:
-					sLights_tracker[lightcomponent->_lightID] = false;
-					lightblock->_sLights_Num--;
+					if (lightcomponent->_lightID < lightblock->_sLights_Num - 1)
+						SortLights(Lights::SPOT, lightcomponent->_lightID);
+					else
+						sLights_tracker[lightcomponent->_lightID] = false;
+
 					lightcomponent->_lightID = -1;
 					break;
 				default:
@@ -222,27 +232,94 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	void LightSystem::RemoveLight(const int& id, Lights lightType)
+	//void LightSystem::RemoveLight(const int& id, Lights lightType)
+	//{
+	//	if (id != -1)
+	//	{
+	//		switch (lightType)
+	//		{
+	//		case Lights::DIRECTIONAL:
+	//			dLights_tracker[id] = false;
+	//			lightblock->_dLights_Num--;
+	//			break;
+	//		case Lights::POINT:
+	//			pLights_tracker[id] = false;
+	//			lightblock->_pLights_Num--;
+	//			break;
+	//		case Lights::SPOT:
+	//			sLights_tracker[id] = false;
+	//			lightblock->_sLights_Num--;
+	//			break;
+	//		default:
+	//			break;
+	//		}
+	//	}
+	//}
+
+	void LightSystem::SortLights(const Lights& lightType, const int& deletedIndex)
 	{
-		if (id != -1)
+		auto itr = G_ECMANAGER->begin<ComponentLight>();
+		auto itrEnd = G_ECMANAGER->end<ComponentLight>();
+
+		if (lightType == Lights::DIRECTIONAL)
 		{
-			switch (lightType)
+			// Decrement all valid light component IDs more than deleted index by 1 to pack tightly
+			while (itr != itrEnd)
 			{
-			case Lights::DIRECTIONAL:
-				dLights_tracker[id] = false;
-				lightblock->_dLights_Num--;
-				break;
-			case Lights::POINT:
-				pLights_tracker[id] = false;
-				lightblock->_pLights_Num--;
-				break;
-			case Lights::SPOT:
-				sLights_tracker[id] = false;
-				lightblock->_sLights_Num--;
-				break;
-			default:
-				break;
+				ComponentLight* lightcomp = G_ECMANAGER->getComponent<ComponentLight>(itr);
+
+				if (lightcomp->_lightID != -1 && lightcomp->_type == Lights::DIRECTIONAL && lightcomp->_lightID > deletedIndex)
+				{
+					lightcomp->_lightID--;
+				}
+				++itr;
 			}
+
+			// Shift all  directional lights in array by 1 to the left
+			for (int i = deletedIndex + 1; i < lightblock->_dLights_Num; ++i)
+				lightblock->_dLights[i - 1] = lightblock->_dLights[i];
+
+			lightblock->_dLights_Num--; // decrement total number of lights
+		}
+		else if (lightType == Lights::POINT)
+		{
+			// Decrement all valid light component IDs more than deleted index by 1 to pack tightly
+			while (itr != itrEnd)
+			{
+				ComponentLight* lightcomp = G_ECMANAGER->getComponent<ComponentLight>(itr);
+
+				if (lightcomp->_lightID != -1 && lightcomp->_type == Lights::POINT && lightcomp->_lightID > deletedIndex)
+				{
+					lightcomp->_lightID--;
+				}
+				++itr;
+			}
+
+			// Shift all  directional lights in array by 1 to the left
+			for (int i = deletedIndex + 1; i < lightblock->_pLights_Num; ++i)
+				lightblock->_pLights[i - 1] = lightblock->_pLights[i];
+
+			lightblock->_pLights_Num--; // decrement total number of lights
+		}
+		else if(lightType == Lights::SPOT)
+		{
+			// Decrement all valid light component IDs more than deleted index by 1 to pack tightly
+			while (itr != itrEnd)
+			{
+				ComponentLight* lightcomp = G_ECMANAGER->getComponent<ComponentLight>(itr);
+
+				if (lightcomp->_lightID != -1 && lightcomp->_type == Lights::SPOT && lightcomp->_lightID > deletedIndex)
+				{
+					lightcomp->_lightID--;
+				}
+				++itr;
+			}
+
+			// Shift all  directional lights in array by 1 to the left
+			for (int i = deletedIndex + 1; i < lightblock->_sLights_Num; ++i)
+				lightblock->_sLights[i - 1] = lightblock->_sLights[i];
+
+			lightblock->_sLights_Num--; // decrement total number of lights
 		}
 	}
 
