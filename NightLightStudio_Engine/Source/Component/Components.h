@@ -15,7 +15,9 @@
 #include "ComponentScript.h"
 #include "ComponentLight.h"
 
+//Stats components
 #include "ComponentPlayerStats.h"
+#include "ComponentCauldronStats.h"
 
 #include "ComponentCanvas.h"
 // Temporary C++ script
