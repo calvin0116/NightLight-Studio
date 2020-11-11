@@ -22,7 +22,7 @@ void LevelEditor::LE_MainMenuBar()
     // because it would be confusing to have two docking targets within each others.
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_MenuBar;
     window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoScrollbar;
+    window_flags |= ImGuiWindowFlags_NoScrollbar; // ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | 
 
     // DockSpace
     ImGuiIO& io = ImGui::GetIO();
@@ -45,6 +45,13 @@ void LevelEditor::LE_MainMenuBar()
     ImGui::Begin("DockSpace Demo", nullptr, window_flags);
 
     ImGui::PopStyleVar();
+
+    // Sets dockspace for other objects
+    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+    {
+        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+    }
 
     if (ImGui::BeginMenuBar())
     {
@@ -197,13 +204,6 @@ void LevelEditor::LE_MainMenuBar()
         }
 
         ImGui::EndMenuBar();
-    }
-
-    // Sets dockspace for other objects
-    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-    {
-        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
     }
 
     ImGui::EndChild();
