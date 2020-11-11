@@ -91,6 +91,12 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<PlayerStatsComponent>();
 			entComp._ent.getComponent<PlayerStatsComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(CauldronStatsComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<CauldronStatsComponent>();
+			entComp._ent.getComponent<CauldronStatsComponent>()->Read(*entComp._rjDoc);
+		}
+
 		return comp;
 	};
 
@@ -144,7 +150,12 @@ void InspectorWindow::Start()
 			entComp.Copy(entComp._ent.getComponent<PlayerStatsComponent>()->Write());
 			entComp._ent.RemoveComponent<PlayerStatsComponent>();
 		}
-		
+		else if (t == typeid(CauldronStatsComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<CauldronStatsComponent>()->Write());
+			entComp._ent.RemoveComponent<CauldronStatsComponent>();
+		}
+
 		return std::any(entComp);
 	};
 
@@ -240,6 +251,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
   CScriptComp(ent);
 
   PlayerStatsComp(ent);
+
+  CauldronStatsComp(ent);
 
 	AddSelectedComps(ent);
 }
@@ -706,6 +719,43 @@ void InspectorWindow::PlayerStatsComp(Entity& ent)
 	}
 }
 
+void InspectorWindow::CauldronStatsComp(Entity& ent)
+{
+	CauldronStatsComponent* csc = ent.getComponent<CauldronStatsComponent>();
+	if (csc != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Cauldron Stats", &_notRemove))
+		{
+			std::string talis = csc->talisman.toString();
+			_levelEditor->LE_AddInputText("talisman", talis, 256, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&talis, &csc]()
+				{
+					csc->talisman = talis;
+				});
+
+
+			std::string col = csc->collider.toString();
+			_levelEditor->LE_AddInputText("collider", col, 256, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&col, &csc]()
+				{
+					csc->collider = col;
+				});
+
+			ImGui::InputFloat("magnitude", &csc->magnitude);
+			ImGui::InputFloat3("direction", csc->direction.m);
+		}
+
+		if (!_notRemove)
+		{
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<CauldronStatsComponent>()->Write(), typeid(CauldronStatsComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
+		}
+
+		ImGui::Separator();
+	}
+}
+
 void InspectorWindow::AddSelectedComps(Entity& ent)
 {
 	_levelEditor->LE_AddCombo("##AddComponentsCombo", _itemType,
@@ -718,7 +768,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  Collider",
 			"  CScript",
 			"  C#Script",
-			"  PlayerStats"
+			"  PlayerStats",
+			"  CauldronStats"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -817,6 +868,15 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			if (!ent.getComponent<PlayerStatsComponent>())
 			{
 				ENTITY_COMP_DOC comp{ ent, PlayerStatsComponent().Write(), typeid(PlayerStatsComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		case 9: // PlayerStats
+		{
+			if (!ent.getComponent<CauldronStatsComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, CauldronStatsComponent().Write(), typeid(CauldronStatsComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;
