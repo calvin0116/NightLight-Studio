@@ -4,9 +4,9 @@
             "TransformComponent": {
                 "EntityName": "PlayerCamera",
                 "Position": [
-                    1.0,
-                    236.45419311523438,
-                    3.0
+                    -231.58343505859376,
+                    470.84429931640627,
+                    219.736083984375
                 ],
                 "Scale": [
                     1.0,
@@ -64,20 +64,15 @@
                     0.0
                 ]
             },
-            "AudioManager": {},
-            "CScriptComponent": {
-                "isActive": true,
-                "Name": "TestScript2",
-                "Tag": 101
-            }
+            "AudioManager": {}
         },
         "Player": {
             "TransformComponent": {
                 "EntityName": "Player",
                 "Position": [
-                    12.903614044189454,
-                    82.08133697509766,
-                    76.12945556640625
+                    55.57057571411133,
+                    82.10693359375,
+                    81.80198669433594
                 ],
                 "Scale": [
                     50.0,
@@ -101,12 +96,12 @@
                 "friction": 1.0,
                 "Force": [
                     0.0,
-                    -2000.0,
+                    0.0,
                     0.0
                 ],
                 "Accelaration": [
                     0.0,
-                    -100.0,
+                    0.0,
                     0.0
                 ]
             },
@@ -492,11 +487,11 @@
         },
         "Talisman_1": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "Talisman_1",
                 "Position": [
                     112.7315673828125,
-                    72.10693359375,
-                    11.827709197998047
+                    72.08133697509766,
+                    28.129776000976564
                 ],
                 "Scale": [
                     30.0,
@@ -516,23 +511,23 @@
             "RigidBody": {
                 "isStatic": false,
                 "isGravity": true,
-                "mass": 1.1920928955078126e-7,
-                "friction": 0.009999999776482582,
+                "mass": 10.0,
+                "friction": 1.0,
                 "Force": [
                     0.0,
-                    0.0,
+                    -1000.0,
                     0.0
                 ],
                 "Accelaration": [
                     0.0,
-                    0.0,
+                    -100.0,
                     0.0
                 ]
             }
         },
         "OBB_1": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "OBB_1",
                 "Position": [
                     111.15057373046875,
                     83.83958435058594,
@@ -598,6 +593,51 @@
             "CScriptComponent": {
                 "isActive": true,
                 "Name": "FanBlowScript",
+                "Tag": 0
+            }
+        },
+        "Fan_1": {
+            "TransformComponent": {
+                "EntityName": "Fan_1",
+                "Position": [
+                    115.89183044433594,
+                    85.13795471191406,
+                    78.69195556640625
+                ],
+                "Scale": [
+                    50.0,
+                    50.0,
+                    50.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "isCollidable": true
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "FanScript",
                 "Tag": 0
             }
         }

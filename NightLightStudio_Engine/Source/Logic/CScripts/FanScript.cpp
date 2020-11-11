@@ -64,7 +64,7 @@ void FanScript::OnCollisionEnter(Entity other)
     Player* playerScript = reinterpret_cast<Player*>(playerScriptComp->_pScript);
     if (playerScript->getState() == PLAYERSTATE::MOTH)
     {
-      playerScript->changeState(PLAYERSTATE::POSSESSED);
+      //playerScript->changeState(PLAYERSTATE::POSSESSED);
       Activate = true;
     }
   }

@@ -10,7 +10,7 @@
 
 class FanScript : public IScript
 {
-  const float wind_up_time = 5.0f;
+  const float wind_up_time = 1.0f;
 public:
   // Exposed variables
   Entity MyPlayerEntity;

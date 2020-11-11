@@ -229,6 +229,7 @@ void CollsionResolver::resolveCollision()
 void CollsionResolver::clear()
 {
 	colEventList.clear();
+  trigEventList.clear();
 }
 
 void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
