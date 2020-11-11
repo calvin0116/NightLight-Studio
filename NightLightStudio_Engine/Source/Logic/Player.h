@@ -19,7 +19,8 @@ enum class PLAYERSTATE
 {
 	HUMAN = 0,
 	MOTH,
-	POSSESSED
+	POSSESSED,
+  POSSESSED_FAN
 };
 
 class Player : public IScript
