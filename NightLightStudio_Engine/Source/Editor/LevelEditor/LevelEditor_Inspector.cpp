@@ -441,10 +441,6 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 			std::string ao = graphics_comp->_aoFileName.toString();
 			std::string roughness = graphics_comp->_roughnessFileName.toString();
 
-			_levelEditor->LE_AddInputText("Texture file", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-				[&tex, &graphics_comp]()
-				{
-				});
 			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			// Drag and Drop from Asset Inspector onto Model File Name
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
@@ -460,9 +456,16 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 						mod = data;
 				});
 
+			_levelEditor->LE_AddInputText("Texture file", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&tex, &graphics_comp]()
+				{
+					graphics_comp->AddAlbedoTexture(tex);
+				});
+
 			_levelEditor->LE_AddInputText("Specular file", specular, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&specular, &graphics_comp]()
 				{
+					graphics_comp->AddSpecularTexture(specular);
 				});
 
 
@@ -473,27 +476,15 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				graphics_comp->_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(graphics_comp->_modelFileName.toString());
 			}
 
-			if (graphics_comp->_albedoFileName.toString() != tex && !tex.empty())
-			{
-				graphics_comp->_albedoFileName = tex;
-				graphics_comp->_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(graphics_comp->_albedoFileName.toString());
-			}
-
-			if (graphics_comp->_specularFileName.toString() != specular && !specular.empty())
-			{
-				graphics_comp->_specularFileName =  specular;
-				graphics_comp->_specularID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(graphics_comp->_specularFileName.toString());
-			}
-
 			ImGui::Separator();
 
 			ImGui::Text("Materials");
 
-			ImGui::InputFloat3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
+			ImGui::ColorEdit3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
 
-			ImGui::InputFloat3("Ambient##Graphics", glm::value_ptr(graphics_comp->_materialData._ambient));
+			ImGui::ColorEdit3("Ambient##Graphics", glm::value_ptr(graphics_comp->_materialData._ambient));
 
-			ImGui::InputFloat3("Specular##Graphics", glm::value_ptr(graphics_comp->_materialData._specular));
+			ImGui::ColorEdit3("Specular##Graphics", glm::value_ptr(graphics_comp->_materialData._specular));
 
 			ImGui::InputFloat("Shininess", &graphics_comp->_materialData._shininess);
 
@@ -558,29 +549,29 @@ void InspectorWindow::LightComp(Entity& ent)
 			LIGHT = (int) light->_type;
 			if (ImGui::Combo("Light Type", &LIGHT, lights, IM_ARRAYSIZE(lights)))
 			{
-				NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(ent, (NS_GRAPHICS::Lights)LIGHT);
+				NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(light, (NS_GRAPHICS::Lights)LIGHT);
 			}
 
-			if (ImGui::InputFloat3("Diffuse", glm::value_ptr(light->_diffuse)))
+			if (ImGui::ColorEdit3("Diffuse", glm::value_ptr(light->_diffuse)))
 			{
 				light->SetDiffuse(light->_diffuse);
 			}
 			
-			if (ImGui::InputFloat3("Ambient", glm::value_ptr(light->_ambient)))
+			if (ImGui::ColorEdit3("Ambient", glm::value_ptr(light->_ambient)))
 			{
 				light->SetAmbient(light->_ambient);
 			}
 
-			if (ImGui::InputFloat3("Specular", glm::value_ptr(light->_specular)))
+			if (ImGui::ColorEdit3("Specular", glm::value_ptr(light->_specular)))
 			{
 				light->SetSpecular(light->_specular);
 			}
 
 			if (light->_type != NS_GRAPHICS::Lights::DIRECTIONAL)
 			{
-				if (ImGui::InputFloat("Attenuation", &light->_attenuation))
+				if (ImGui::InputFloat("Intensity", &light->_attenuation))
 				{
-					light->SetAttenuation(light->_attenuation);
+					light->SetIntensity(light->_attenuation);
 				}
 			}
 

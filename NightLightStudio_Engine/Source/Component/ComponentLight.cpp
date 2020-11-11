@@ -7,7 +7,7 @@
 ComponentLight::ComponentLight()
 	: _isActive{ true },
 	_lightID{ -1 }, _type{ NS_GRAPHICS::Lights::INVALID_TYPE },
-	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _attenuation{}, _cutOff{}, _outerCutOff{},
+	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _attenuation{ 1.0f }, _cutOff{}, _outerCutOff{},
 	_direction{ 1.f,0.f,0.f }
 {
 	strcpy_s(ser_name, "LightComponent");
@@ -16,7 +16,7 @@ ComponentLight::ComponentLight()
 ComponentLight::ComponentLight(const int& lightID, const NS_GRAPHICS::Lights& Type)
 	: _isActive{ true },
 	_lightID{ lightID }, _type{ Type },
-	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _attenuation{}, _cutOff{}, _outerCutOff{},
+	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _attenuation{ 1.0f }, _cutOff{}, _outerCutOff{},
 	_direction{ 1.f,0.f,0.f }
 {
 	strcpy_s(ser_name, "LightComponent");
@@ -30,6 +30,11 @@ void ComponentLight::AssignLight(const int& lightID, const NS_GRAPHICS::Lights& 
 
 ComponentLight::~ComponentLight()
 {
+}
+
+void ComponentLight::ChangeLightType(const NS_GRAPHICS::Lights& Type)
+{
+	NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(this, Type);
 }
 
 glm::vec3 ComponentLight::GetAmbient() const
@@ -272,15 +277,15 @@ void ComponentLight::Read(Value& val)
 		std::string lightName = val["LightType"].GetString();
 		if (lightName == "DIRECTIONAL")
 		{
-			_type = NS_GRAPHICS::Lights::DIRECTIONAL;
+			ChangeLightType(NS_GRAPHICS::Lights::DIRECTIONAL);
 		}
 		else if (lightName == "POINT")
 		{
-			_type = NS_GRAPHICS::Lights::POINT;
+			ChangeLightType(NS_GRAPHICS::Lights::POINT);
 		}
 		else if (lightName == "SPOT")
 		{
-			_type = NS_GRAPHICS::Lights::SPOT;
+			ChangeLightType(NS_GRAPHICS::Lights::SPOT);
 		}
 	}
 
@@ -340,18 +345,10 @@ void ComponentLight::Read(Value& val)
 		_outerCutOff = val["OuterCutOff"].GetFloat();
 	}
 
-	if (_type == NS_GRAPHICS::Lights::DIRECTIONAL)
-	{
-		_lightID = NS_GRAPHICS::LightSystem::GetInstance().AddDirLight(_direction, _ambient, _diffuse, _specular);
-	}
-	else if(_type == NS_GRAPHICS::Lights::POINT)
-	{
-		_lightID = NS_GRAPHICS::LightSystem::GetInstance().AddPointLight(_attenuation, _ambient, _diffuse, _specular);
-	}
-	else if (_type == NS_GRAPHICS::Lights::SPOT)
-	{
-		_lightID = NS_GRAPHICS::LightSystem::GetInstance().AddSpotLight(_direction, _cutOff, _outerCutOff, _attenuation, _ambient, _diffuse, _specular);
-	}
+	SetAmbient(_ambient);
+	SetDiffuse(_diffuse);
+	SetIntensity(_attenuation);
+	SetSpecular(_specular);
 }
 
 Value ComponentLight::Write()
