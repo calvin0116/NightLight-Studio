@@ -312,7 +312,7 @@ void InspectorWindow::ColliderComp(Entity& ent)
 		//4. May need loop to loop through all collider
 		if (ImGui::CollapsingHeader(name.c_str(), &_notRemove))
 		{
-
+      ImGui::Checkbox("IsCollidable##Collider", &col_comp->isCollidable);
 		}
 
 		//Remove component

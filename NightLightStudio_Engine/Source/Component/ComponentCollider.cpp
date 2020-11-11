@@ -175,6 +175,11 @@ void ComponentCollider::Read(Value& val)
 			colliderType = COLLIDERS::SPHERE;
 			collider.sphere = SphereCollider();
 		}
+    // Set is collidable
+    if (val.FindMember("isCollidable") == val.MemberEnd())
+      std::cout << "No isCollidable data has been found" << std::endl;
+    else
+      isCollidable = val["isCollidable"].GetBool();
 	}
 
 }
@@ -203,7 +208,8 @@ inline Value ComponentCollider::Write()
 	default:
 		break;
 	}
-	
+  // Other component variables
+  NS_SERIALISER::ChangeData(&val, "isCollidable", isCollidable);		//Bool
 
 	return val;
 

@@ -45,7 +45,10 @@ namespace NS_LOGIC
         if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_9))
         {
           if (_isPlaying)
+          {
+            GameGameExit();
             _Inited = false;
+          }
             //GameExit();
           _isPlaying = !_isPlaying;
           std::cout << "Logic Playing: " << _isPlaying << std::endl;
@@ -71,6 +74,18 @@ namespace NS_LOGIC
     }
     // new smth
     // C# Script
+  }
+
+  void SystemLogic::GameGameExit()
+  {
+    auto itr = G_ECMANAGER->begin<ComponentCScript>();
+    auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
+    for (; itr != itrEnd; ++itr)
+    {
+      ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
+      if (myComp->_isActive && myComp->_pScript)
+        myComp->_pScript->Exit();
+    }
   }
 
   void SystemLogic::GameInit()
@@ -161,9 +176,6 @@ namespace NS_LOGIC
     for (; itr != itrEnd; ++itr)
     {
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
-      if (myComp->_isActive && myComp->_pScript)
-        myComp->_pScript->Exit();
-
       // Delete memory
       delete myComp->_pScript;
       myComp->_pScript = nullptr;

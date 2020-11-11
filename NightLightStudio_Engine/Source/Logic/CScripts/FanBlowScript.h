@@ -13,7 +13,7 @@ class FanBlowScript : public IScript
 public:
   bool Activate = true;
   NlMath::Vector3D Direction = {0.0f, 0.0f, -1.0f};
-  float Magnitude = 1000.0f;
+  float Magnitude = 3000.0f;
   std::string talismanName = "Talisman_1";
 
   virtual void Init() override;

@@ -37,6 +37,7 @@ namespace NS_LOGIC
     //void LateInit() override {};
 
     void GameLoad() override;
+    void GameGameExit();
     void GameInit() override;
 
     void Update() override;
