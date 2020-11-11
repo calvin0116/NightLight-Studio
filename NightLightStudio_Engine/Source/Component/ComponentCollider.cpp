@@ -16,30 +16,35 @@ void ComponentCollider::SetColliderT(COLLIDERS _col)
 	{
 		strcpy_s(ser_name, "ColliderComponent");
 		collider.plane = PlaneCollider();
+		colliderType = COLLIDERS::PLANE;
 		break;
 	}
 	case COLLIDERS::AABB:
 	{
 		strcpy_s(ser_name, "ColliderComponent");
 		collider.aabb = AABBCollider();
+		colliderType = COLLIDERS::AABB;
 		break;
 	}
 	case COLLIDERS::SPHERE:
 	{
 		strcpy_s(ser_name, "ColliderComponent");
 		collider.sphere = SphereCollider();
+		colliderType = COLLIDERS::SPHERE;
 		break;
 	}
 	case COLLIDERS::OBB:
 	{
 		strcpy_s(ser_name, "ColliderComponent");
 		collider.obb = OBBCollider();
+		colliderType = COLLIDERS::OBB;
 		break;
 	}
 	case COLLIDERS::CAPSULE:
 	{
 		strcpy_s(ser_name, "ColliderComponent");
 		collider.capsule = CapsuleCollider();
+		colliderType = COLLIDERS::CAPSULE;
 		break;
 	}
 	}
