@@ -62,7 +62,9 @@ private:
 	ImGuizmo::OPERATION _mCurrentGizmoOperation;
 	ImGuizmo::MODE _mCurrentGizmoMode;
 	bool _useSnap;
-	float _snap[3];
+	float _snapTrans[3];
+	float _snapRotate;
+	float _snapScale;
 
 	bool _lastPos_Start;
 	bool _lastEnter;
@@ -91,8 +93,8 @@ private:
 public:
 	InspectorWindow()
 		: selected_index{ -1 }, _mCurrentGizmoOperation{ ImGuizmo::TRANSLATE }, _mCurrentGizmoMode{ ImGuizmo::WORLD },
-		_useSnap{ false }, _snap{ 1.0f, 1.0f, 1.0f }, _lastEnter{ false }, _lastPos_Start{ false }, _lastPos_ELP{ false },
-		_itemType{ 0 }, _notRemove{ true }
+		_useSnap{ false }, _snapTrans{ 1.0f, 1.0f, 1.0f }, _lastEnter{ false }, _lastPos_Start{ false }, _lastPos_ELP{ false },
+		_itemType{ 0 }, _notRemove{ true }, _snapRotate{ 1.0f }, _snapScale{ 1.0f }
 	{};
 	~InspectorWindow() {};
 

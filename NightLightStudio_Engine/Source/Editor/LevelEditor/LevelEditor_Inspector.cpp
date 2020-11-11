@@ -931,22 +931,27 @@ bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjec
 	ImGui::Checkbox("", &_useSnap);
 	ImGui::SameLine();
 
+	float* snapPtr = nullptr;
+
 	switch (_mCurrentGizmoOperation)
 	{
 	case ImGuizmo::TRANSLATE:
-		ImGui::InputFloat3("Snap", &_snap[0]);
+		snapPtr = _snapTrans;
+		ImGui::InputFloat3("Snap", &_snapTrans[0]);
 		break;
 	case ImGuizmo::ROTATE:
-		ImGui::InputFloat("Angle Snap", &_snap[0]);
+		snapPtr = &_snapRotate;
+		ImGui::InputFloat("Angle Snap", &_snapRotate);
 		break;
 	case ImGuizmo::SCALE:
-		ImGui::InputFloat("Scale Snap", &_snap[0]);
+		snapPtr = &_snapScale;
+		ImGui::InputFloat("Scale Snap", &_snapScale);
 		break;
 	}
 
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-	return ImGuizmo::Manipulate(cameraView, cameraProjection, _mCurrentGizmoOperation, _mCurrentGizmoMode, matrix, NULL, _useSnap ? &_snap[0] : NULL, NULL, NULL);
+	return ImGuizmo::Manipulate(cameraView, cameraProjection, _mCurrentGizmoOperation, _mCurrentGizmoMode, matrix, NULL, _useSnap ? snapPtr : NULL, NULL, NULL);
 }
 
 void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
