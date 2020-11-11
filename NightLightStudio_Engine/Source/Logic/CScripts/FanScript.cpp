@@ -25,8 +25,11 @@ void FanScript::Init()
   CameraEntity = G_ECMANAGER->getEntity(camName);
   cameraScriptComp = CameraEntity.getComponent<ComponentCScript>();
 
-  //stats = MyID.getComponent<ComponentCauldronStats>();
-  //obbName = stats->collider.toString();
+  stats = MyID.getComponent<ComponentCauldronStats>();
+  FanBlowScript* obbScript = reinterpret_cast<FanBlowScript*>(obb1ScriptComp->_pScript);
+  obbName = stats->collider.toString();
+  obbScript->Magnitude = stats->magnitude;
+  obbScript->Direction = stats->direction;
 }
 
 void FanScript::Update()
