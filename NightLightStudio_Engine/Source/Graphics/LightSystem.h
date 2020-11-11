@@ -27,6 +27,7 @@ namespace NS_GRAPHICS
 		// Compiler will align view pos to 7216
 		glm::vec4 _viewPos; // 7216 - 7231
 		// Extra 4 bytes of padding?
+		float _dummyPadding0 = 0.f;
 
 		LightBlock()
 			: _dLights_Num{ NULL },
