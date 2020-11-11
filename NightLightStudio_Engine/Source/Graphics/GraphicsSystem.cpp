@@ -404,8 +404,8 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::SetUIMatrix(const int& width, const int& height, const float& near_plane, const float& far_plane)
 	{
-		float ratioWidth = width / NS_WINDOW::SYS_WINDOW->GetAppWidth();
-		float ratioHeight = height / NS_WINDOW::SYS_WINDOW->GetAppHeight();
+		float ratioWidth = (float)width / NS_WINDOW::SYS_WINDOW->GetAppWidth();
+		float ratioHeight = (float)height / NS_WINDOW::SYS_WINDOW->GetAppHeight();
 
 		_uiMatrix = glm::ortho(
 		(float)-width * ratioWidth * 0.5f,

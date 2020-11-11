@@ -180,6 +180,7 @@ namespace NS_GRAPHICS
 
 	bool TextureLoader::LoadOtherImage(const std::string& file, const std::string& newFile)
 	{
+		(void)newFile;
 		std::cout << "Loading Other Images " << file << std::endl;
 		int width, height, channel;
 		unsigned char* textureData = SOIL_load_image(file.c_str(), &width, &height, &channel, SOIL_LOAD_AUTO);

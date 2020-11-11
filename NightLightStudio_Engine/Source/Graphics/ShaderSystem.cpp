@@ -213,7 +213,7 @@ namespace NS_GRAPHICS
 	{
 		if (programType >= 0)
 		{
-			if (programs[programType] == currentProgramID)
+			if (programs[programType] == (unsigned)currentProgramID)
 				return;
 
 			glUseProgram(programs[programType]);

@@ -433,13 +433,13 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 		{
 			ImGui::Checkbox("IsActive##Grahpic", &graphics_comp->_isActive);
 
-			std::string tex = graphics_comp->_albedoFileName.toString();
 			std::string mod = graphics_comp->_modelFileName.toString();
+			std::string tex = graphics_comp->_albedoFileName.toString();
 			std::string normal = graphics_comp->_normalFileName.toString();
-			std::string specular = graphics_comp->_specularFileName.toString();
 			std::string metallic = graphics_comp->_metallicFileName.toString();
-			std::string ao = graphics_comp->_aoFileName.toString();
 			std::string roughness = graphics_comp->_roughnessFileName.toString();
+			std::string ao = graphics_comp->_aoFileName.toString();
+			std::string specular = graphics_comp->_specularFileName.toString();
 
 			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			// Drag and Drop from Asset Inspector onto Model File Name
@@ -453,7 +453,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "fbx" || fileType == "obj")
+					{
 						mod = data;
+						graphics_comp->AddModel(mod);
+					}
 				});
 
 			_levelEditor->LE_AddInputText("Texture file", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
@@ -462,19 +465,35 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					graphics_comp->AddAlbedoTexture(tex);
 				});
 
+			_levelEditor->LE_AddInputText("Normal file", normal, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&normal, &graphics_comp]()
+				{
+					graphics_comp->AddNormalTexture(normal);
+				});
+
+			_levelEditor->LE_AddInputText("Metallic file", metallic, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&metallic, &graphics_comp]()
+				{
+					graphics_comp->AddMetallicTexture(metallic);
+				});
+
+			_levelEditor->LE_AddInputText("Roughness file", roughness, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&roughness, &graphics_comp]()
+				{
+					graphics_comp->AddRoughnessTexture(roughness);
+				});
+
+			_levelEditor->LE_AddInputText("AO file", ao, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&ao, &graphics_comp]()
+				{
+					graphics_comp->AddAOTexture(ao);
+				});
+
 			_levelEditor->LE_AddInputText("Specular file", specular, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&specular, &graphics_comp]()
 				{
 					graphics_comp->AddSpecularTexture(specular);
 				});
-
-
-			if (graphics_comp->_modelFileName.toString() != mod && !mod.empty())
-			{
-				graphics_comp->_modelFileName = mod;
-				NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(graphics_comp->_modelFileName.toString());
-				graphics_comp->_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(graphics_comp->_modelFileName.toString());
-			}
 
 			ImGui::Separator();
 
