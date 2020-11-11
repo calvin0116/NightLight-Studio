@@ -93,6 +93,8 @@ namespace NS_GRAPHICS
 
 		// Just in case component is destroyed before detach light component is called
 		void RemoveLight(const int& id, Lights lightType);
+
+		void SortLights(const Lights& lightType, const int& deletedIndex);
 		
 		// TO DO: All getters and setters should be done in system
 		void ChangeLightType(ComponentLight* light, Lights lightType);
