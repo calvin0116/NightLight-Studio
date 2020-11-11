@@ -92,7 +92,7 @@ namespace NS_GRAPHICS
 		void DetachLightComponent(Entity& entity);
 
 		// Just in case component is destroyed before detach light component is called
-		//void RemoveLight(const int& id, Lights lightType);
+		void RemoveLight(const int& id, Lights lightType);
 
 		void SortLights(const Lights& lightType, const int& deletedIndex);
 		

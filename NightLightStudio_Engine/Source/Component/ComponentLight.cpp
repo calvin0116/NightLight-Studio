@@ -30,6 +30,7 @@ void ComponentLight::AssignLight(const int& lightID, const NS_GRAPHICS::Lights& 
 
 ComponentLight::~ComponentLight()
 {
+	NS_GRAPHICS::LightSystem::GetInstance().RemoveLight(_lightID, _type);
 }
 
 void ComponentLight::ChangeLightType(const NS_GRAPHICS::Lights& Type)

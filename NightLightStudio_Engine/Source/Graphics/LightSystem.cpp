@@ -232,29 +232,36 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	//void LightSystem::RemoveLight(const int& id, Lights lightType)
-	//{
-	//	if (id != -1)
-	//	{
-	//		switch (lightType)
-	//		{
-	//		case Lights::DIRECTIONAL:
-	//			dLights_tracker[id] = false;
-	//			lightblock->_dLights_Num--;
-	//			break;
-	//		case Lights::POINT:
-	//			pLights_tracker[id] = false;
-	//			lightblock->_pLights_Num--;
-	//			break;
-	//		case Lights::SPOT:
-	//			sLights_tracker[id] = false;
-	//			lightblock->_sLights_Num--;
-	//			break;
-	//		default:
-	//			break;
-	//		}
-	//	}
-	//}
+	void LightSystem::RemoveLight(const int& id, Lights lightType)
+	{
+		if (id != -1)
+		{
+			switch (lightType)
+			{
+			case Lights::DIRECTIONAL:
+				if (id < lightblock->_dLights_Num - 1)
+					SortLights(Lights::DIRECTIONAL, id);
+				else
+					dLights_tracker[id] = false;
+				break;
+
+			case Lights::POINT:
+				if (id < lightblock->_pLights_Num - 1)
+					SortLights(Lights::POINT, id);
+				else
+					pLights_tracker[id] = false;
+				break;
+			case Lights::SPOT:
+				if (id < lightblock->_sLights_Num - 1)
+					SortLights(Lights::SPOT, id);
+				else
+					sLights_tracker[id] = false;
+				break;
+			default:
+				break;
+			}
+		}
+	}
 
 	void LightSystem::SortLights(const Lights& lightType, const int& deletedIndex)
 	{
