@@ -4,7 +4,7 @@
 #include "..\..\Core\DeltaTime.h"
 
 // Components
-#include "../../Component/ComponentCScript.h"
+#include "../../Component/ComponentTransform.h"
 
 // Player script to get their state
 #include "../Player.h"
@@ -24,6 +24,9 @@ void FanScript::Init()
 
   CameraEntity = G_ECMANAGER->getEntity(camName);
   cameraScriptComp = CameraEntity.getComponent<ComponentCScript>();
+
+  //stats = MyID.getComponent<ComponentCauldronStats>();
+  //obbName = stats->collider.toString();
 }
 
 void FanScript::Update()
