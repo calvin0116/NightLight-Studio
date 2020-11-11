@@ -314,6 +314,12 @@ namespace NS_GRAPHICS
 				continue;
 			}
 
+			if (!graphicsComp->_isActive)
+			{
+				++itr;
+				continue;
+			}
+
 			Model* model = modelManager->_models[graphicsComp->_modelID];
 
 			// get transform component
