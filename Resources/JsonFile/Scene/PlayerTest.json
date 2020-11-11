@@ -4,9 +4,9 @@
             "TransformComponent": {
                 "EntityName": "PlayerCamera",
                 "Position": [
-                    -231.58343505859376,
-                    470.84429931640627,
-                    219.736083984375
+                    8.224109649658204,
+                    208.90504455566407,
+                    568.7796020507813
                 ],
                 "Scale": [
                     1.0,
@@ -70,9 +70,9 @@
             "TransformComponent": {
                 "EntityName": "Player",
                 "Position": [
-                    55.57057571411133,
+                    62.1806755065918,
                     82.10693359375,
-                    81.80198669433594
+                    85.44647216796875
                 ],
                 "Scale": [
                     50.0,
@@ -490,7 +490,7 @@
                 "EntityName": "Talisman_1",
                 "Position": [
                     112.7315673828125,
-                    72.08133697509766,
+                    72.10693359375,
                     28.129776000976564
                 ],
                 "Scale": [
@@ -515,12 +515,12 @@
                 "friction": 1.0,
                 "Force": [
                     0.0,
-                    -1000.0,
+                    0.0,
                     0.0
                 ],
                 "Accelaration": [
                     0.0,
-                    -100.0,
+                    0.0,
                     0.0
                 ]
             }
@@ -633,6 +633,16 @@
                     0.0,
                     0.0,
                     0.0
+                ]
+            },
+            "CauldronStatsComponent": {
+                "talisman": "Talisman_1",
+                "collider": "OBB_1",
+                "magnitude": 2000.0,
+                "direction": [
+                    0.0,
+                    0.0,
+                    -1.0
                 ]
             },
             "CScriptComponent": {

@@ -5,6 +5,7 @@
 //#include <algorithm>
 
 #include <iostream>
+#include <algorithm>
 
 //#define N 100
 
@@ -139,6 +140,11 @@ public:
 		}
 
 		--currentSize;
+	}
+
+	void sort()
+	{
+		std::sort(std::begin(data), std::begin(data)+currentSize);
 	}
 
 	void clear()

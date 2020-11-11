@@ -2,6 +2,7 @@
 
 #include "../../framework.h"
 #include "../Component/ComponentManager.h"
+#include "../Component/ComponentLight.h"
 #include <array>
 
 #include "Lights.h"
@@ -94,7 +95,7 @@ namespace NS_GRAPHICS
 		void RemoveLight(const int& id, Lights lightType);
 		
 		// TO DO: All getters and setters should be done in system
-		void ChangeLightType(Entity& entity, Lights lightType);
+		void ChangeLightType(ComponentLight* light, Lights lightType);
 		
 		DirLight& GetDirLight(const int& id);
 		SpotLight& GetSpotLight(const int& id);

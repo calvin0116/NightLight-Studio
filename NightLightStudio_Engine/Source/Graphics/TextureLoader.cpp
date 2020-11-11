@@ -14,6 +14,7 @@ namespace NS_GRAPHICS
 
 	bool TextureLoader::LoadDDSImage(const std::string& file)
 	{
+		std::cout << "Loading DDS Images " << file << std::endl;
 		DDSImageData* image;
 
 		image = LoadDDSImageData(file);
@@ -179,6 +180,7 @@ namespace NS_GRAPHICS
 
 	bool TextureLoader::LoadOtherImage(const std::string& file, const std::string& newFile)
 	{
+		std::cout << "Loading Other Images " << file << std::endl;
 		int width, height, channel;
 		unsigned char* textureData = SOIL_load_image(file.c_str(), &width, &height, &channel, SOIL_LOAD_AUTO);
 
@@ -214,8 +216,8 @@ namespace NS_GRAPHICS
 		}
 
 		//SAVES CUSTOM DDS HERE
-		SOIL_save_image(newFile.c_str(), SOIL_SAVE_TYPE_DDS, width, height, channel, textureData);
-
+		//SOIL_save_image(newFile.c_str(), SOIL_SAVE_TYPE_DDS, width, height, channel, textureData);
+		//
 		SOIL_free_image_data(textureData);
 
 		return true;
@@ -223,8 +225,12 @@ namespace NS_GRAPHICS
 
 	unsigned TextureLoader::LoadTexture(const std::string & file)
 	{
+		if (file.empty())
+		{
+			return 0;
+		}
 		//Generate a texture Id for use and bind it to the active texture unit
-		unsigned texture;
+		unsigned texture = 0;
 
 		glGenTextures(1, &texture);
 		glBindTexture(GL_TEXTURE_2D, texture);
@@ -240,26 +246,26 @@ namespace NS_GRAPHICS
 		}
 		else
 		{
-			//Checks for the file name
-			std::string name;
-			size_t pos = file.rfind("\\");
-			//Get just the string after the last path
-			if (pos != std::string::npos)
-			{
-				name = file.substr(pos + 1);
-			}
-			else
-			{
-				name = file;
-			}
+			////Checks for the file name
+			//std::string name;
+			//size_t pos = file.rfind("\\");
+			////Get just the string after the last path
+			//if (pos != std::string::npos)
+			//{
+			//	name = file.substr(pos + 1);
+			//}
+			//else
+			//{
+			//	name = file;
+			//}
 
-			//Trim the extension to get the file name
-			std::string newName;
-			name.erase(name.rfind("."));
-			newName = s_LocalTexturePathName + name + s_DDSFileFormat;
-			finalFileName = newName;
+			////Trim the extension to get the file name
+			//std::string newName;
+			//name.erase(name.rfind("."));
+			//newName = s_LocalTexturePathName + name + s_DDSFileFormat;
+			//finalFileName = newName;
 
-			result = LoadOtherImage(file, newName);
+			result = LoadOtherImage(file, file);
 		}
 
 		if(!result)

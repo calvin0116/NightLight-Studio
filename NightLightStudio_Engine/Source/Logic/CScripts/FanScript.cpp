@@ -27,7 +27,10 @@ void FanScript::Init()
 
   stats = MyID.getComponent<ComponentCauldronStats>();
   FanBlowScript* obbScript = reinterpret_cast<FanBlowScript*>(obb1ScriptComp->_pScript);
+  if (stats->collider.empty() || stats->talisman.empty())
+    std::cout << "ComponentStats for fan is empty!" << std::endl;
   obbName = stats->collider.toString();
+  obbScript->talismanName = stats->talisman.toString();
   obbScript->Magnitude = stats->magnitude;
   obbScript->Direction = stats->direction;
 }
@@ -78,9 +81,9 @@ void FanScript::OnCollisionEnter(Entity other)
       if (playerScript->getState() == PLAYERSTATE::MOTH)
       {
         //playerScript->changeState(PLAYERSTATE::POSSESSED);
-        ComponentTransform* comTrans = MyID.getComponent<ComponentTransform>();
-        camScript->SetTarget(comTrans->_position);
-        camScript->SetDistance(playerScript->CAMERA_DISTANCE);
+        //ComponentTransform* comTrans = MyID.getComponent<ComponentTransform>();
+        //camScript->SetTarget(comTrans->_position);
+        //camScript->SetDistance(playerScript->CAMERA_DISTANCE);
         //camScript->SetTargetOffsetXY(playerScript->CAMERA_OFFSET_X, playerScript->CAMERA_OFFSET_Y);
         //camScript->SetRotate(false);
         Activate = true;

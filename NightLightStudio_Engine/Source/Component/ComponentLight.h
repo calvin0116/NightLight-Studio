@@ -48,6 +48,8 @@ public:
 
 	/////////// GETTERS/SETTERS ////////////
 
+	void ChangeLightType(const NS_GRAPHICS::Lights& Type);
+
 	// Applicable for all lights
 	glm::vec3 GetAmbient() const;
 	// Applicable for all lights
