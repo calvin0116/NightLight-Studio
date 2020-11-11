@@ -93,6 +93,16 @@ namespace NS_GRAPHICS
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 		glBindBufferRange(GL_UNIFORM_BUFFER, 1, lights_uniformBlockLocation, 0, s_lights_buffer_size);
+
+		// Setup uniform texture locations for textured shaders
+		// For now, assume 4th shader is textured shader
+		if (quantity >= 4)
+		{
+			StartProgram(3);
+			glUniform1i(glGetUniformLocation(currentProgramID, "diffuse_texture"), 0); // Diffuse
+			glUniform1i(glGetUniformLocation(currentProgramID, "specular_texture"), 1); // Specular
+			StopProgram();
+		}
 	}
 
 	bool ShaderSystem::CompileLoadedShaders()
@@ -188,6 +198,7 @@ namespace NS_GRAPHICS
 		LoadShader(std::string("../Resources/Shaders/default.vert"),std::string("../Resources/Shaders/uniformsolid.frag"));
 		LoadShader(std::string("../Resources/Shaders/withlights.vert"),std::string("../Resources/Shaders/withlights.frag"));
 		LoadShader(std::string("../Resources/Shaders/grid.vert"),std::string("../Resources/Shaders/grid.frag"));
+		LoadShader(std::string("../Resources/Shaders/withlights_textured.vert"), std::string("../Resources/Shaders/withlights_textured.frag"));
 		//LoadShader("","");
 		//LoadShader("","");
 		//LoadShader("","");
@@ -201,6 +212,9 @@ namespace NS_GRAPHICS
 	{
 		if (programType >= 0)
 		{
+			if (programs[programType] == currentProgramID)
+				return;
+
 			glUseProgram(programs[programType]);
 			currentProgramID = programs[programType];
 		}

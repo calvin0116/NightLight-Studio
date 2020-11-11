@@ -8,7 +8,7 @@ ComponentLight::ComponentLight()
 	: _isActive{ true },
 	_lightID{ -1 }, _type{ NS_GRAPHICS::Lights::INVALID_TYPE },
 	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _attenuation{}, _cutOff{}, _outerCutOff{},
-	_direction{1.f,0.f,0.f}
+	_direction{ 1.f,0.f,0.f }
 {
 	strcpy_s(ser_name, "LightComponent");
 }
@@ -166,16 +166,18 @@ void ComponentLight::SetSpecular(const glm::vec3& specular)
 
 float ComponentLight::GetIntensity()
 {
+	// Recall that attenuation = 1.f / intensity
+	// thus intensity = 1.f / attenuation
 	if (_lightID != -1)
 	{
 		switch (_type)
 		{
 		case NS_GRAPHICS::Lights::POINT:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._attenuation;
+			return (1.f / NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._attenuation);
 			break;
 
 		case NS_GRAPHICS::Lights::SPOT:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._attenuation;
+			return (1.f / NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._attenuation);
 			break;
 
 		default:
@@ -188,16 +190,24 @@ float ComponentLight::GetIntensity()
 
 void ComponentLight::SetIntensity(const float& intensity)
 {
+	// Calculate intensity to be 1.f / intensity
+	// E.g. intensity = 100.f, attenuation = 1.f / 100f = 0.01f
+	// E.g. intensity = 10.f, attenuation = 1.f / 10f = 0.1f
+	// lesser attenuation = greater range
+	float attenuation = 0.f;
+	if (intensity > 0.f)
+		attenuation = 1.f / intensity;
+
 	if (_lightID != -1)
 	{
 		switch (_type)
 		{
 		case NS_GRAPHICS::Lights::POINT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._attenuation = intensity;
+			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._attenuation = attenuation;
 			break;
 
 		case NS_GRAPHICS::Lights::SPOT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._attenuation = intensity;
+			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._attenuation = attenuation;
 			break;
 
 		default:

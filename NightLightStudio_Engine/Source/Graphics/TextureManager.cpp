@@ -44,4 +44,16 @@ namespace NS_GRAPHICS
 			glDeleteTextures(1, &texture.second);
 		}
 	}
+
+	void TextureManager::BindDiffuseTexture(const unsigned& id)
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, id);
+	}
+
+	void TextureManager::BindSpecularTexture(const unsigned& id)
+	{
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, id);
+	}
 }

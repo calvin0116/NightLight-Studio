@@ -33,6 +33,31 @@ void ComponentGraphics::AttachMesh(const int& meshID)
 	_modelID = meshID;
 }
 
+void ComponentGraphics::SetRenderType(const RENDERTYPE& rendertype)
+{
+	_renderType = rendertype;
+}
+
+void ComponentGraphics::AddAlbedoTexture(std::string filename)
+{
+	_albedoFileName = filename;
+
+	if (!_albedoFileName.empty())
+	{
+		_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_albedoFileName.toString());
+	}
+}
+
+void ComponentGraphics::AddSpecularTexture(std::string filename)
+{
+	_specularFileName = filename;
+
+	if (!_specularFileName.empty())
+	{
+		_specularID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_specularFileName.toString());
+	}
+}
+
 ComponentGraphics::~ComponentGraphics()
 {
 }

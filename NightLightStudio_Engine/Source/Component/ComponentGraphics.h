@@ -21,10 +21,17 @@ struct MaterialData
 	~MaterialData() {}
 };
 
+enum class RENDERTYPE
+{
+	SOLID = 0,
+	TEXTURED
+};
+
 typedef class ComponentGraphics : public ISerializable//: public IComponent
 {
 public:
 	// Temporarily make them public for easy access
+	RENDERTYPE _renderType = RENDERTYPE::SOLID;
 
 	bool _isActive; // Temporarily set to true at beginning
 
@@ -71,6 +78,11 @@ public:
 	ComponentGraphics(const int& meshID);
 
 	void AttachMesh(const int& meshID);
+
+	void SetRenderType(const RENDERTYPE& rendertype);
+
+	void AddAlbedoTexture(std::string filename);
+	void AddSpecularTexture(std::string filename);
 
 	// Destructor, destroy all OpenGL objects via graphics system
 	~ComponentGraphics();

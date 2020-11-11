@@ -64,7 +64,9 @@ public:
 	void SetSpecular(const glm::vec3& specular);
 
 	// Applicable for spot and spot light
+	// Calculates intensity based on current attenuation
 	float GetIntensity();
+	// Calculates attenuation based on provided intensity
 	void SetIntensity(const float& intensity);
 
 	// Alternate way to set attenuation/intensity

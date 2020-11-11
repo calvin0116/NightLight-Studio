@@ -35,5 +35,10 @@ namespace NS_GRAPHICS
 		// Free all existing OpenGL Objects and removes texture from memory, if any
 		// This should be called upon graphics system shutdown
 		void DumpTextureData();
+
+		// Bind textures to uniform in shader
+		void BindDiffuseTexture(const unsigned& id);
+
+		void BindSpecularTexture(const unsigned& id);
 	};
 }

@@ -298,7 +298,7 @@ namespace NS_GRAPHICS
 #endif
 
 #ifdef DRAW_WITH_LIGHTS
-		shaderManager->StartProgram(1);
+		
 
 		auto itr = G_ECMANAGER->begin<ComponentGraphics>();
 		auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
@@ -321,23 +321,51 @@ namespace NS_GRAPHICS
 			
 			for (auto& mesh : model->_meshes)
 			{
-				glBindVertexArray(mesh->VAO);
+				if (graphicsComp->_renderType == RENDERTYPE::SOLID)
+				{
+					shaderManager->StartProgram(1); // solid program
+					glBindVertexArray(mesh->VAO);
 
-				// Update model and uniform for material
-				glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
-				glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
-				glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
+					// Update model and uniform for material
+					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
+					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
+					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
+					glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
 
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-				glDrawElements(GL_TRIANGLES, (unsigned)mesh->_indices.size(), GL_UNSIGNED_SHORT, 0);
+					glDrawElements(GL_TRIANGLES, (unsigned)mesh->_indices.size(), GL_UNSIGNED_SHORT, 0);
+					shaderManager->StopProgram();
+				}
+				else
+				{
+					shaderManager->StartProgram(3); // textured program
+					glBindVertexArray(mesh->VAO);
+
+					// Update model and uniform for material
+					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
+					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
+					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
+					glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
+
+					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+					// Bind textures
+					// bind diffuse map
+					textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
+					// bind specular map
+					textureManager->BindSpecularTexture(graphicsComp->_specularID);
+
+					glDrawElements(GL_TRIANGLES, (unsigned)mesh->_indices.size(), GL_UNSIGNED_SHORT, 0);
+					shaderManager->StopProgram();
+				}
 			}
 			itr++;
 		}
 
-		shaderManager->StopProgram();
+		
 #endif
 
 #ifdef DRAW_DEBUG_GRID
@@ -388,7 +416,7 @@ namespace NS_GRAPHICS
 		// Update light components in light block(CPU)
 
 		// Shader program must be started to fill in uniform data
-		shaderManager->StartProgram(1);
+		//shaderManager->StartProgram(1);
 
 		lightManager->Update();
 
@@ -402,7 +430,7 @@ namespace NS_GRAPHICS
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(LightBlock), &*lightblock);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-		shaderManager->StopProgram();
+		//shaderManager->StopProgram();
 	}
 
 	void GraphicsSystem::CreateCube(Entity& entity, const glm::vec3& rgb)
