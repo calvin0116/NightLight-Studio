@@ -465,30 +465,40 @@ namespace NS_COLLISION
 		case COLLIDERS::PLANE:
 		{
 			PlaneCollider* tmp = &(comCol->collider.plane);
+			tmp->colliderPosition = comCol->center;
+			tmp->colliderScale = comCol->extend;
 			tmp->posUpdate(comTrans);
 			break;
 		}
 		case COLLIDERS::SPHERE:
 		{
 			SphereCollider* tmp = &(comCol->collider.sphere);
+			tmp->colliderPosition = comCol->center;
+			tmp->colliderScale = comCol->extend;
 			tmp->posUpdate(comTrans);
 			break;
 		}
 		case COLLIDERS::AABB:
 		{
 			AABBCollider* tmp = &(comCol->collider.aabb);
+			tmp->colliderPosition = comCol->center;
+			tmp->colliderScale = comCol->extend;
 			tmp->posUpdate(comTrans);
 			break;
 		}
 		case COLLIDERS::OBB:
 		{
 			OBBCollider* tmp = &(comCol->collider.obb);
+			tmp->colliderPosition = comCol->center;
+			tmp->colliderScale = comCol->extend;
 			tmp->posUpdate(comTrans);
 			break;
 		}
 		case COLLIDERS::CAPSULE:
 		{
 			CapsuleCollider* tmp = &(comCol->collider.capsule);
+			tmp->colliderPosition = comCol->center;
+			tmp->colliderScale = comCol->extend;
 			tmp->posUpdate(comTrans);
 			break;
 		}
@@ -1148,7 +1158,7 @@ namespace NS_COLLISION
 			break;
 		}
 		
-		NS_COLDEBUGTEST::TransformMesh(mesh, comTrans->_position, comTrans->_rotation, colscale);
+		NS_COLDEBUGTEST::TransformMesh(mesh, comCol->center + comTrans->_position, comTrans->_rotation, colscale);
 
 
 		NS_COLDEBUGTEST::DrawMesh(mesh, color, lod);

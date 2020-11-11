@@ -6,6 +6,7 @@
 #include "CScripts/PossessScript.h"
 #include "SpawnPoint.h"
 #include "../Core/DeltaTime.h"
+#include "../Graphics/LightSystem.h"
 
 ////need to be edited by designer
 //#define PLAYER_MOVE_MAG 3000.0f
@@ -31,7 +32,7 @@
 /// </control mapping>
 
 Player::Player()
-	:comCol(nullptr), comRigid(nullptr), comTrans(nullptr),
+	:comCol(nullptr), comRigid(nullptr), comTrans(nullptr),comLight(nullptr),
 	_playerState(PLAYERSTATE::HUMAN), _prevPlayerState(PLAYERSTATE::HUMAN),
 	_front(0), camera(nullptr), possessStateCamera(nullptr), _playerEnergy(PLAYER_MAX_ENERGY)
 {
@@ -54,6 +55,13 @@ void Player::Init()
 	comCol = MyID.getComponent<ColliderComponent>();
 	comRigid = MyID.getComponent<RigidBodyComponent>();
 	comTrans = MyID.getComponent<TransformComponent>();
+	//set this as a point light, scale to 0.001
+	comLight = MyID.getComponent<LightComponent>();
+	NS_GRAPHICS::LightSystem* systemLight = &NS_GRAPHICS::LightSystem::GetInstance();
+	systemLight->ChangeLightType(MyID, NS_GRAPHICS::Lights::POINT);
+	comLight->SetAttenuation(0.0001);
+
+	//comLight->change
 	playerStats = MyID.getComponent<PlayerStatsComponent>();
 	//Player stats
 	PLAYER_MOVE_MAG							= playerStats->player_move_mag;
@@ -67,6 +75,9 @@ void Player::Init()
 	CAMERA_DISTANCE							= playerStats->camera_distance;
 	CAMERA_OFFSET_X							= playerStats->camera_offset.x;
 	CAMERA_OFFSET_Y							= playerStats->camera_offset.y;
+	//for state change
+	init_CAMERA_DISTANCE =					CAMERA_DISTANCE;
+	init_CAMERA_OFFSET_X =					CAMERA_OFFSET_X;
 
 	// /*To Do*/ need to set a max force for the player
 
@@ -230,15 +241,21 @@ void Player::changeState(PLAYERSTATE state)
 	{
 	case PLAYERSTATE::HUMAN:
 	{
+		comTrans->_scale *= 3.0f;
 		//enable rigid body
 		comRigid->isStatic = false;
 		comRigid->isGravity = true;
-		// stop player from sliding if moving before the state change;
-		comRigid->velocity = 0;
-		comRigid->acceleration = 0;
 
+		if (_prevPlayerState == PLAYERSTATE::MOTH)
+		{
+			CAMERA_DISTANCE = init_CAMERA_DISTANCE;
+			CAMERA_OFFSET_X = init_CAMERA_OFFSET_X;
 
-		if (_prevPlayerState == PLAYERSTATE::POSSESSED)
+			// stop player from sliding if moving before the state change;
+			comRigid->velocity = 0;
+			comRigid->acceleration = 0;
+		}
+		else if (_prevPlayerState == PLAYERSTATE::POSSESSED)
 		{
 			// disable pos cam
 			possessStateCamera->SetActive(false);
@@ -309,6 +326,10 @@ void Player::changeState(PLAYERSTATE state)
 
 	case PLAYERSTATE::MOTH:
 	{
+		comTrans->_scale /= 3.0f;
+		//reset camera
+		CAMERA_DISTANCE = 100;
+		CAMERA_OFFSET_X = 0;
 		//enable rigid body for player to move
 		comRigid->isStatic = false;
 		comRigid->isGravity = false;
@@ -321,12 +342,15 @@ void Player::changeState(PLAYERSTATE state)
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop2");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop3");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop4");
+
+		//light!
+		comLight->_isActive = false;
 		break;
 	}
 
 	case PLAYERSTATE::POSSESSED:
 	{
-
+		comTrans->_scale /= 3.0f;
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk1");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk2");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk3");
