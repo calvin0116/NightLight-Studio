@@ -86,13 +86,13 @@ COLLIDERS ComponentCollider::GetColliderT()
 }
 
 ComponentCollider::ComponentCollider(COLLIDERS _col)
-	: collisionTime{ FLT_MAX }, colliderType(_col)
+	: collisionTime{ FLT_MAX }, colliderType(_col),extend(0.5)
 {
 	SetColliderT(_col);
 }
 
 ComponentCollider::ComponentCollider(const char* col) 
-	: collisionTime(FLT_MAX), colliderType(COLLIDERS::AABB)
+	: collisionTime(FLT_MAX), colliderType(COLLIDERS::AABB), extend(0.5)
 {
 	strcpy_s(ser_name, "ColliderComponent");
 
@@ -137,7 +137,7 @@ ComponentCollider::ComponentCollider(ComponentCollider& rhs)
 	}
 }
 
-ComponentCollider::ComponentCollider() : collisionTime{ FLT_MAX }, colliderType(COLLIDERS::AABB) // default this
+ComponentCollider::ComponentCollider() : collisionTime{ FLT_MAX }, colliderType(COLLIDERS::AABB), extend(0.5) // default this
 {
 	strcpy_s(ser_name, "ColliderComponent");
 }
@@ -187,6 +187,47 @@ void ComponentCollider::Read(Value& val)
       isCollidable = val["isCollidable"].GetBool();
 	}
 
+	if (val.FindMember("tag") == val.MemberEnd())
+		std::cout << "No mass data has been found" << std::endl;
+	else
+	{
+		colliderTag = val["tag"].GetInt();
+	}
+
+
+	if (val.FindMember("Center") == val.MemberEnd())
+		std::cout << "No Center data has been found" << std::endl;
+	else
+	{
+		auto f = val["Center"].GetArray();
+
+		center.x = f[0].GetFloat();
+		center.y = f[1].GetFloat();
+		center.z = f[2].GetFloat();
+	}
+
+	if (val.FindMember("Extend") == val.MemberEnd())
+		std::cout << "No Extend data has been found" << std::endl;
+	else
+	{
+		auto f = val["Extend"].GetArray();
+
+		extend.x = f[0].GetFloat();
+		extend.y = f[1].GetFloat();
+		extend.z = f[2].GetFloat();
+	}
+
+	if (val.FindMember("Rotation") == val.MemberEnd())
+		std::cout << "No Rotation data has been found" << std::endl;
+	else
+	{
+		auto f = val["Rotation"].GetArray();
+
+		rotation.x = f[0].GetFloat();
+		rotation.y = f[1].GetFloat();
+		rotation.z = f[2].GetFloat();
+	}
+
 }
 
 inline Value ComponentCollider::Write()
@@ -213,8 +254,32 @@ inline Value ComponentCollider::Write()
 	default:
 		break;
 	}
+
+	NS_SERIALISER::ChangeData(&val, "tag", colliderTag);	//Float
+
   // Other component variables
   NS_SERIALISER::ChangeData(&val, "isCollidable", isCollidable);		//Bool
+
+  Value saveCenter(rapidjson::kArrayType);
+  saveCenter.PushBack(center.x, global_alloc);
+  saveCenter.PushBack(center.y, global_alloc);
+  saveCenter.PushBack(center.z, global_alloc);
+
+  NS_SERIALISER::ChangeData(&val, "Center", saveCenter);		//Array
+
+  Value saveExtend(rapidjson::kArrayType);
+  saveExtend.PushBack(extend.x, global_alloc);
+  saveExtend.PushBack(extend.y, global_alloc);
+  saveExtend.PushBack(extend.z, global_alloc);
+
+  NS_SERIALISER::ChangeData(&val, "Extend", saveExtend);		//Array
+
+  Value saveRotation(rapidjson::kArrayType);
+  saveRotation.PushBack(rotation.x, global_alloc);
+  saveRotation.PushBack(rotation.y, global_alloc);
+  saveRotation.PushBack(rotation.z, global_alloc);
+
+  NS_SERIALISER::ChangeData(&val, "Rotation", saveRotation);		//Array
 
 	return val;
 

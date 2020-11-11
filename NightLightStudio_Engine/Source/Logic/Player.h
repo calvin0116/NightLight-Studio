@@ -13,6 +13,7 @@
 #include "../Component/ComponentPlayerStats.h"
 
 
+class ComponentLight;
 
 enum class PLAYERSTATE
 {
@@ -36,6 +37,7 @@ class Player : public IScript
 	ComponentTransform* comTrans;
 	ComponentTransform spawnPoint;
 	ComponentPlayerStats* playerStats;
+	ComponentLight* comLight;
 
 	PLAYERSTATE _prevPlayerState;
 	PLAYERSTATE _playerState;
@@ -44,8 +46,8 @@ class Player : public IScript
 public:
   // Expose variables
   //Player stats
-  float PLAYER_MOVE_MAG;
-  float PLAYER_FLY_MAG;
+  float		PLAYER_MOVE_MAG;
+  float		PLAYER_FLY_MAG;
   int		PLAYER_MAX_ENERGY;
   int		PLAYER_ENERGY_REGEN;
   int		PLAYER_POSSESS_ENERGY_DRAIN;
@@ -56,11 +58,15 @@ public:
   float CAMERA_OFFSET_Y;
   float PLAYER_MAX_SPEED;
 
+  float init_CAMERA_DISTANCE;
+  float init_CAMERA_OFFSET_X;
+
 	Player();
 	void Init() override;
 	void Update() override;
 	void Exit() override;
 	PLAYERSTATE getState();
+	float getPlayerEnergy();
 	void changeState(PLAYERSTATE state);
 	void setSpawnPoint(ComponentTransform& _spawnPoint);
 	bool enterPossession();

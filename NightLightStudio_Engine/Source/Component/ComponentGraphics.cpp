@@ -38,6 +38,16 @@ void ComponentGraphics::SetRenderType(const RENDERTYPE& rendertype)
 	_renderType = rendertype;
 }
 
+void ComponentGraphics::AddModel(std::string filename)
+{
+	if (_modelFileName.toString() != filename && !filename.empty())
+	{
+		_modelFileName = filename;
+		NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(_modelFileName.toString());
+		_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
+	}
+}
+
 void ComponentGraphics::AddAlbedoTexture(std::string filename)
 {
 	if (!filename.empty() && _albedoFileName.toString() != filename)
@@ -46,7 +56,79 @@ void ComponentGraphics::AddAlbedoTexture(std::string filename)
 		_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_albedoFileName.toString());
 	}
 
-	if (_albedoID > 0 || _specularID > 0)
+	if (_albedoID > 0 || _normalID > 0 || _metallicID > 0 || _roughnessID > 0 || _aoID > 0 || _specularID > 0)
+	{
+		_renderType = RENDERTYPE::TEXTURED;
+	}
+	else
+	{
+		_renderType = RENDERTYPE::SOLID;
+	}
+}
+
+void ComponentGraphics::AddNormalTexture(std::string filename)
+{
+	if (!filename.empty() && _normalFileName.toString() != filename)
+	{
+		_normalFileName = filename;
+		_normalID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_normalFileName.toString());
+	}
+
+	if (_albedoID > 0 || _normalID > 0 || _metallicID > 0 || _roughnessID > 0 || _aoID > 0 || _specularID > 0)
+	{
+		_renderType = RENDERTYPE::TEXTURED;
+	}
+	else
+	{
+		_renderType = RENDERTYPE::SOLID;
+	}
+}
+
+void ComponentGraphics::AddMetallicTexture(std::string filename)
+{
+	if (!filename.empty() && _metallicFileName.toString() != filename)
+	{
+		_metallicFileName = filename;
+		_metallicID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_metallicFileName.toString());
+	}
+
+	if (_albedoID > 0 || _normalID > 0 || _metallicID > 0 || _roughnessID > 0 || _aoID > 0 || _specularID > 0)
+	{
+		_renderType = RENDERTYPE::TEXTURED;
+	}
+	else
+	{
+		_renderType = RENDERTYPE::SOLID;
+	}
+}
+
+void ComponentGraphics::AddRoughnessTexture(std::string filename)
+{
+	if (!filename.empty() && _roughnessFileName.toString() != filename)
+	{
+		_roughnessFileName = filename;
+		_roughnessID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_roughnessFileName.toString());
+	}
+
+	if (_albedoID > 0 || _normalID > 0 || _metallicID > 0 || _roughnessID > 0 || _aoID > 0 || _specularID > 0)
+	{
+		_renderType = RENDERTYPE::TEXTURED;
+	}
+	else
+	{
+		_renderType = RENDERTYPE::SOLID;
+	}
+}
+
+void ComponentGraphics::AddAOTexture(std::string filename)
+{
+	if (!filename.empty() && _aoFileName.toString() != filename)
+	{
+		_aoFileName = filename;
+		_aoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_aoFileName.toString());
+	}
+
+	if (_albedoID > 0 || _normalID > 0 || _metallicID > 0 || _roughnessID > 0 || _aoID > 0 || _specularID > 0)
 	{
 		_renderType = RENDERTYPE::TEXTURED;
 	}
@@ -64,7 +146,7 @@ void ComponentGraphics::AddSpecularTexture(std::string filename)
 		_specularID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_specularFileName.toString());
 	}
 
-	if (_albedoID > 0 || _specularID > 0)
+	if (_albedoID > 0 || _normalID > 0 || _metallicID > 0 || _roughnessID > 0 || _aoID > 0 || _specularID > 0)
 	{
 		_renderType = RENDERTYPE::TEXTURED;
 	}
@@ -123,43 +205,71 @@ inline void ComponentGraphics::Read(Value& val)
 		std::cout << "No Texture file data has been found" << std::endl;
 	else
 	{
-		_albedoFileName = val["Albedo"].GetString();
+		std::string albedo = val["Albedo"].GetString();
 
-		if (!_albedoFileName.empty())
+		if (!albedo.empty())
 		{
-			_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_albedoFileName.toString());
+			AddAlbedoTexture(albedo);
 		}
 	}
 
 	if (val.FindMember("Normal") == val.MemberEnd())
 		std::cout << "No Normal file data has been found" << std::endl;
 	else
-		_normalFileName = val["Normal"].GetString();
+	{
+		std::string normal = val["Normal"].GetString();
+
+		if (!normal.empty())
+		{
+			AddNormalTexture(normal);
+		}
+	}
 
 	if (val.FindMember("Metallic") == val.MemberEnd())
 		std::cout << "No Metallic file data has been found" << std::endl;
 	else
-		_metallicFileName = val["Metallic"].GetString();
+	{
+		std::string metallic = val["Metallic"].GetString();
+
+		if (!metallic.empty())
+		{
+			AddMetallicTexture(metallic);
+		}
+	}
 
 	if (val.FindMember("Roughness") == val.MemberEnd())
 		std::cout << "No Roughness file data has been found" << std::endl;
 	else
-		_roughnessFileName = val["Roughness"].GetString();
+	{
+		std::string roughness = val["Roughness"].GetString();
+
+		if (!roughness.empty())
+		{
+			AddRoughnessTexture(roughness);
+		}
+	}
 
 	if (val.FindMember("AmbientOcclusion") == val.MemberEnd())
 		std::cout << "No AmbientOcclusion file data has been found" << std::endl;
 	else
-		_aoFileName = val["AmbientOcclusion"].GetString();
+	{
+		std::string ao = val["AmbientOcclusion"].GetString();
+
+		if (!ao.empty())
+		{
+			AddAOTexture(ao);
+		}
+	}
 
 	if (val.FindMember("Specular") == val.MemberEnd())
 		std::cout << "No Specular file data has been found" << std::endl;
 	else
 	{
-		_specularFileName = val["Specular"].GetString();
+		std::string specular = val["Specular"].GetString();
 
-		if (!_specularFileName.empty())
+		if (!specular.empty())
 		{
-			_specularID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_specularFileName.toString());
+			AddSpecularTexture(specular);
 		}
 	}
 

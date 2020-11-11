@@ -4,9 +4,9 @@
             "TransformComponent": {
                 "EntityName": "PlayerCamera",
                 "Position": [
-                    8.224109649658204,
-                    208.90504455566407,
-                    568.7796020507813
+                    -348.5997009277344,
+                    367.08685302734377,
+                    199.18313598632813
                 ],
                 "Scale": [
                     1.0,
@@ -46,7 +46,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": true
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             },
             "RigidBody": {
                 "isStatic": true,
@@ -70,9 +86,9 @@
             "TransformComponent": {
                 "EntityName": "Player",
                 "Position": [
-                    62.1806755065918,
+                    46.69929504394531,
                     82.10693359375,
-                    85.44647216796875
+                    76.19879150390625
                 ],
                 "Scale": [
                     50.0,
@@ -87,7 +103,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": true
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             },
             "RigidBody": {
                 "isStatic": false,
@@ -131,9 +163,31 @@
                 ],
                 "ShininessMat": 32.0
             },
+            "LightComponent": {
+                "LightType": "POINT",
+                "isActive": false,
+                "Diffuse": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Ambient": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Specular": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Attenuation": 1.0,
+                "CutOff": 0.0,
+                "OuterCutOff": 0.0
+            },
             "PlayerStatsComponent": {
                 "player_move_mag": 3000.0,
-                "player_fly_mag": 4.0,
+                "player_fly_mag": 40.0,
                 "player_max_energy": 15,
                 "player_possess_energy_drain": 1,
                 "player_moth_energy_drain": 1,
@@ -172,7 +226,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": true
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             },
             "RigidBody": {
                 "isStatic": true,
@@ -242,7 +312,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": true
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             },
             "RigidBody": {
                 "isStatic": true,
@@ -312,7 +398,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": true
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             }
         },
         "Pillar_1": {
@@ -336,7 +438,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": true
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             }
         },
         "Pillar_2": {
@@ -360,7 +478,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": true
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             }
         },
         "Pillar_3": {
@@ -384,7 +518,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": true
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             }
         },
         "Pillar_4": {
@@ -408,7 +558,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": true
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             }
         },
         "Pillar_5": {
@@ -432,7 +598,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": true
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             }
         },
         "PossessableSpawn": {
@@ -490,7 +672,7 @@
                 "EntityName": "Talisman_1",
                 "Position": [
                     112.7315673828125,
-                    72.10693359375,
+                    72.08133697509766,
                     28.129776000976564
                 ],
                 "Scale": [
@@ -506,7 +688,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": true
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             },
             "RigidBody": {
                 "isStatic": false,
@@ -515,12 +713,12 @@
                 "friction": 1.0,
                 "Force": [
                     0.0,
-                    0.0,
+                    -1000.0,
                     0.0
                 ],
                 "Accelaration": [
                     0.0,
-                    0.0,
+                    -100.0,
                     0.0
                 ]
             }
@@ -546,7 +744,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": false
+                "tag": 1,
+                "isCollidable": false,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             },
             "RigidBody": {
                 "isStatic": true,
@@ -617,7 +831,23 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "isCollidable": true
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             },
             "RigidBody": {
                 "isStatic": true,
