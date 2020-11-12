@@ -358,10 +358,10 @@ namespace NS_COLLISION
 
 
 
-				if (CollisionCuling(comTrans1, comTrans2))
-				{
-					continue;
-				}
+				//if (CollisionCuling(comTrans1, comTrans2))
+				//{
+				//	continue;
+				//}
 
 
 				
