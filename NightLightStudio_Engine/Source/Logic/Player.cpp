@@ -6,8 +6,7 @@
 #include "CScripts/PossessScript.h"
 #include "SpawnPoint.h"
 #include "../Core/DeltaTime.h"
-#include "../Graphics/LightSystem.h"
-#include "../Component/ComponentGraphics.h"
+
 
 #include "CScripts/FanScript.h"
 
@@ -64,6 +63,12 @@ void Player::Init()
 	comLight->SetIntensity(1000);
 	comLight->SetActive(false);
 	 light = &NS_GRAPHICS::LightSystem::GetInstance();
+
+	 //toggle model
+	 comGraphics = MyID.getComponent<ComponentGraphics>();
+	 comGraphics->AddModel("\\Asset\\3D model\\Moth.FBX");
+	 comGraphics->AddModel("box.fbx");
+
 
 	//comLight->change
 	playerStats = MyID.getComponent<PlayerStatsComponent>();
@@ -366,10 +371,9 @@ void Player::changeState(PLAYERSTATE state)
 
 	case PLAYERSTATE::MOTH:
 	{
-		
 		light->SetAllDirectionalLights(false);
-
 		comLight->SetActive(true);
+
 		comTrans->_scale /= 3.0f;
 		//reset camera
 		CAMERA_DISTANCE = 100;
