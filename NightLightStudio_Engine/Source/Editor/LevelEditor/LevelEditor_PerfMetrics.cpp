@@ -161,7 +161,7 @@ void PerformanceMetrics::Run()
 				*/
 
 			std::vector<std::string> sysNamesManual =
-			{ "Window", "IO", "Input", "Graphics", "Collision", "Physics", "Audio", "Scene Manager", "Components", "Editor", "Scripting" };
+			{ "Window", "Graphics", "Input", "IO", "Audio", "SceneManager", "Physics", "Component", "Collision", "Logic", "Editor"};
 
 			//_levelEditor->LE_AddHistogram("Systems Use", _systemsUsage, false, 0, 0.0f, 100.0f, ImVec2(0, 50));
 			for (int i = 0; i < orig.size(); ++i)
