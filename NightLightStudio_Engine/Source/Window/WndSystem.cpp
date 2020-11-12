@@ -362,6 +362,7 @@ namespace NS_WINDOW
 		}
 
 		hasInit = true;
+		SetFullScreenMode(true);
 		return;
 	}
 
