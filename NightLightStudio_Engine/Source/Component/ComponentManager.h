@@ -434,12 +434,17 @@ public:
 			//return compSetMgr->AttachComponent<T>(*this, comp);
 
 			// not efficient but future me can deal with it
-			T* comp = reinterpret_cast<T*>(malloc(sizeof(T)));
-			if (comp == nullptr) throw;
-			memset(comp, 0, sizeof(T));
-			T* returnComp = AttachComponent<T>(ent, *comp);
-			free(reinterpret_cast<void*>(comp));
-			return returnComp;
+			//T* comp = reinterpret_cast<T*>(malloc(sizeof(T)));
+			//if (comp == nullptr) throw;
+			//memset(comp, 0, sizeof(T));
+			//T* returnComp = AttachComponent<T>(ent, *comp);
+			//free(reinterpret_cast<void*>(comp));
+
+			//T* returnComp = compSetMgr->AttachComponent<T>(ent, T());
+
+			//return returnComp;
+
+			return ent.AddComponent<T>();
 		}
 
 	private:
