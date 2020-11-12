@@ -64,8 +64,8 @@ void Player::Init()
 
 	 //toggle model
 	 comGraphics = MyID.getComponent<ComponentGraphics>();
-	 comGraphics->AddModel("\\Asset\\3D model\\Moth.FBX");
-	 comGraphics->AddModel("box.fbx");
+	 comGraphics->AddModel("\\Asset\\3D model\\mothtest.FBX");
+	 comGraphics->AddModel("\\Asset\\3D model\\New_Character_Model.fbx");
 
 
 	//comLight->change
@@ -87,16 +87,17 @@ void Player::Init()
 	init_CAMERA_DISTANCE =					CAMERA_DISTANCE;
 	init_CAMERA_OFFSET_X =					CAMERA_OFFSET_X;
 
-	// /*To Do*/ need to set a max force for the player
+	_playerEnergy = PLAYER_MAX_ENERGY;
+	timer = 0;
+
+	colorChange = 255 / PLAYER_MAX_ENERGY;
+	currentAmbient = comLight->GetAmbient().z;
 
 	//initially the player is a human with human controls
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk1", WALKFRONT, "WalkFront", SystemInput_ns::OnHold, [this]()
 		{
 			glm::vec3 force = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector();
 			NS_PHYSICS::USE_THE_FORCE.addForce(playerEntity, force, PLAYER_MOVE_MAG);
-
-
-
 		});
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Stop1", WALKFRONT, "StopFront", SystemInput_ns::OnRelease, [this]()
 		{
@@ -167,35 +168,91 @@ void Player::Update()
 	{
 	case PLAYERSTATE::HUMAN:
 	{
+		timer = 0;
+		comGraphics->AddModel("\\Asset\\3D model\\New_Character_Model.fbx");
+		//model rotate
+		//NlMath::Vec3 direction= NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector();
+		//NlMath::Vec3 upVector = (0, 1, 0);
+		//NlMath::Vec3 vectorH = (direction.x, direction.y, 0);
+		//float angle_H = std::atan2(direction.y, direction.x);
+		//float angle_P = std::asin(direction.z);
+		//NlMath::Vec3 W0 = (-direction.y, direction.x, 0);
+		//NlMath::Vec3 U0 = NlMath::Vector3DCrossProduct(W0, direction);
+		////float angle_B = std::atan2((W0* U) / W0.length(), Dot(U0, U) / (U0).length());
+		glm::vec3 rotation = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector();
+
+		float r = std::sqrt(rotation.x * rotation.x + rotation.z * rotation.z);
+		float	p = std::acos(rotation.z / r)/3.14 * 180;
+		if (rotation.x <0)
+		{
+			comTrans->_rotation = glm::vec3(0, -p, 0);
+		}
+		else
+		{
+			comTrans->_rotation = glm::vec3(0, p, 0);
+		}
+		
+		std::cout << "rotation x is:" << r << "rotation z is:" << rotation.z << "currentRotation is" << comTrans->_rotation .y<< std::endl;
+
+
+		//glm::vec3 tmp2 = NS_GRAPHICS::CameraSystem::GetInstance().GetCurrentCameraPosition() + NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector();
+		//glm::vec3 tmp3 = tmp2 - comTrans->_position;
+		//tmp3 = glm::normalize(tmp3);
+		//glm::quat tmp = glm::quatLookAt(tmp3, glm::vec3(0, 1, 0));
+		////glm::vec3 tmp2 = glm::eulerAngles(tmp);
+
+		//comTrans->_rotation = glm::eulerAngles(tmp);
+
 
 		//std::cout << "Player State is : Human" << std::endl;
 		 // update camera position with player position
-		float speedMag = comRigid->velocity.length();
+		float speedMag = comRigid->velocity.x * comRigid->velocity.x + comRigid->velocity.z * comRigid->velocity.z;
 		if (speedMag > PLAYER_MAX_SPEED)
 		{
-			comRigid->velocity = (comRigid->velocity / speedMag) * PLAYER_MAX_SPEED;
+			comRigid->velocity.x = (comRigid->velocity.x / speedMag) * PLAYER_MAX_SPEED;
+			comRigid->velocity.z = (comRigid->velocity.z / speedMag) * PLAYER_MAX_SPEED;
+
 		}
 		//refill energy
 		if (_playerEnergy <= PLAYER_MAX_ENERGY)
 		{
 			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
 			_playerEnergy += realDt * PLAYER_ENERGY_REGEN;
+			currentAmbient += realDt * colorChange;
+			comLight->SetAmbient(glm::vec3(255,currentAmbient, currentAmbient));
 		}
 		
+
 		//camera follow
 		camera->SetTarget(comTrans->_position);
 		camera->SetDistance(CAMERA_DISTANCE);
 		camera->SetTargetOffsetXY(CAMERA_OFFSET_X, CAMERA_OFFSET_Y);
-    camera->SetRotate(true);
+		camera->SetRotate(true);
 		break;
 	}
 		
 	case PLAYERSTATE::MOTH:
 	{
+		glm::vec3 rotation = NS_GRAPHICS::CameraSystem::GetInstance().GetXZViewVector();
+
+		float r = std::sqrt(rotation.x * rotation.x + rotation.z * rotation.z);
+		float	p = std::acos(rotation.z / r) / 3.14 * 180;
+		if (rotation.x < 0)
+		{
+			comTrans->_rotation = glm::vec3(0, -p , 0);
+		}
+		else
+		{
+			comTrans->_rotation = glm::vec3(0, p, 0);
+		}
+
+		timer = 0;
 		//std::cout << "Player State is : moth" << std::endl;
 		//reduce energy when flying
 		float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
 		_playerEnergy -= realDt * PLAYER_MOTH_ENERGY_DRAIN;
+		currentAmbient -= realDt * colorChange;
+		comLight->SetAmbient(glm::vec3(255, currentAmbient, currentAmbient));
 		if (_playerEnergy <= 0)
 		{
 			changeState(PLAYERSTATE::HUMAN);
@@ -225,9 +282,15 @@ void Player::Update()
 		break;
   case PLAYERSTATE::POSSESSED_FAN:
   {
+	  
     // reduce energy
     float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
-    _playerEnergy -= realDt;
+	timer += realDt;
+	if (timer>2)
+	{
+		_playerEnergy -= realDt;
+	}
+
     if (_playerEnergy <= 0)
     {
       changeState(PLAYERSTATE::HUMAN);
@@ -270,18 +333,22 @@ void Player::changeState(PLAYERSTATE state)
 	{
 	case PLAYERSTATE::HUMAN:
 	{
+		comCol->center.y = 80;
+		comCol->extend *= 3;
+		comCol->extend.y *= 2;
+		//model change
+		comGraphics->AddModel("box.fbx");
 		lightSys->SetAllDirectionalLights(true);
 		comLight->SetActive(false);
-		comTrans->_scale *= 3.0f;
+
 		//enable rigid body
 		comRigid->isStatic = false;
 		comRigid->isGravity = true;
+		CAMERA_DISTANCE = init_CAMERA_DISTANCE;
+		CAMERA_OFFSET_X = init_CAMERA_OFFSET_X;
 
 		if (_prevPlayerState == PLAYERSTATE::MOTH)
 		{
-			CAMERA_DISTANCE = init_CAMERA_DISTANCE;
-			CAMERA_OFFSET_X = init_CAMERA_OFFSET_X;
-
 			// stop player from sliding if moving before the state change;
 			comRigid->velocity = 0;
 			comRigid->acceleration = 0;
@@ -369,10 +436,14 @@ void Player::changeState(PLAYERSTATE state)
 
 	case PLAYERSTATE::MOTH:
 	{
+		comCol->center.y = 0;
+		comCol->extend /= 3;
+		comCol->extend.y /= 2;
 		lightSys->SetAllDirectionalLights(false);
 		comLight->SetActive(true);
 		comLight->SetIntensity(1000);
-		comTrans->_scale /= 3.0f;
+		//model change
+		comGraphics->AddModel("\\Asset\\3D model\\mothtest.FBX");
 		//reset camera
 		CAMERA_DISTANCE = 100;
 		CAMERA_OFFSET_X = 0;
@@ -394,8 +465,10 @@ void Player::changeState(PLAYERSTATE state)
 	case PLAYERSTATE::POSSESSED:
 	{
 		lightSys->SetAllDirectionalLights(true);
-		comLight->SetActive(false);
-		comTrans->_scale /= 3.0f;
+		comLight->SetActive(true);
+
+		comCol->extend /= 3;
+		comCol->extend.y /= 2;
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk1");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk2");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk3");
@@ -406,6 +479,7 @@ void Player::changeState(PLAYERSTATE state)
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop4");
 
 		comRigid->isStatic = true;
+
 
 		/*TO DO*/ //camera will change angle to possess state
 		break;
@@ -512,6 +586,10 @@ void Player::OnCollisionEnter(Entity other)
     camera->SetTarget(otherTransComp->_position);
     camera->SetDistance(init_CAMERA_DISTANCE);
     //camera->SetRotate(false);
+	lightSys->SetAllDirectionalLights(true);
+	comLight->SetActive(true);
+	// change player state
+	//changeState(PLAYERSTATE::POSSESSED_FAN);
     // turn off collider
     MyID.getComponent<ComponentCollider>()->isCollide = false;
     MyID.getComponent<ComponentCollider>()->isCollidable = false;

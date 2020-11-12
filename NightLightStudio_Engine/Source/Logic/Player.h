@@ -46,6 +46,11 @@ class Player : public IScript
 	PLAYERSTATE _prevPlayerState;
 	PLAYERSTATE _playerState;
 	NlMath::Vector3D _front;
+
+	float colorChange;
+	float currentAmbient;
+
+	float timer;
 	
 public:
   // Expose variables

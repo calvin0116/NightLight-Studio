@@ -297,11 +297,6 @@ namespace NS_COLLISION
 			}
 		}
 
-		if (!_isPlaying)
-		{
-			return;
-		}
-		
 		auto itr = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
 		for (; itr != itrEnd; ++itr)
@@ -311,6 +306,13 @@ namespace NS_COLLISION
 
 			UpdateCollisionBoxPos(comCol, comTrans);
 		}
+
+		if (!_isPlaying)
+		{
+			return;
+		}
+		
+
 		
 
 		// clear collision events
@@ -342,7 +344,6 @@ namespace NS_COLLISION
 				ComponentCollider* comCol1 = G_ECMANAGER->getComponent<ComponentCollider>(itr1);
 				ComponentCollider* comCol2 = G_ECMANAGER->getComponent<ComponentCollider>(itr2);
 
-
 				//update flags
 				comCol1->prevCollisionFlag = comCol1->collisionFlag;
 				comCol2->prevCollisionFlag = comCol2->collisionFlag;
@@ -355,15 +356,6 @@ namespace NS_COLLISION
 				ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
 
 				if (comTrans1 == nullptr || comTrans2 == nullptr) continue;
-
-
-
-				//if (CollisionCuling(comTrans1, comTrans2))
-				//{
-				//	continue;
-				//}
-
-
 				
 				//Get rigidBody for Collision Resolution
 				ComponentRigidBody* comRigid1 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr1);
@@ -527,10 +519,10 @@ namespace NS_COLLISION
 	{
 		//optimization, dont check collision if too far away
 		NlMath::Vec3 distance = comTrans1->_position - comTrans2->_position;
-		NlMath::Vec3 scale = comTrans1->_scale + comTrans2->_scale * 1.5f;
-		float sqrDistance = distance * distance;
+		float sqrScale = glm::dot(comTrans1->_scale , comTrans1->_scale) + glm::dot(comTrans2->_scale , comTrans2->_scale);
+		float sqrDistance = distance * distance ;
 		//1.5 bias
-		float sqrScale = scale * scale ;
+		sqrScale *= 1.5;
 		return sqrDistance > sqrScale;
 	}
 
