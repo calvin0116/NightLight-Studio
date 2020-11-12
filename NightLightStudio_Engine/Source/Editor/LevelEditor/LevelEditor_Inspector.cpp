@@ -489,6 +489,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (fileType[0] == '\\')
+						{
+							fileType.erase(0, 1);
+						}
 						tex = data;
 						graphics_comp->AddAlbedoTexture(tex);
 					}
@@ -511,7 +515,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
 						normal = data;
-						graphics_comp->AddAlbedoTexture(normal);
+						graphics_comp->AddNormalTexture(normal);
 					}
 				});
 
@@ -532,7 +536,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
 						metallic = data;
-						graphics_comp->AddAlbedoTexture(metallic);
+						graphics_comp->AddMetallicTexture(metallic);
 					}
 				});
 
@@ -553,7 +557,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
 						roughness = data;
-						graphics_comp->AddAlbedoTexture(roughness);
+						graphics_comp->AddRoughnessTexture(roughness);
 					}
 				});
 
@@ -574,7 +578,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
 						ao = data;
-						graphics_comp->AddAlbedoTexture(ao);
+						graphics_comp->AddAOTexture(ao);
 					}
 				});
 
