@@ -1,14 +1,14 @@
 #version 330 core
-out vec4 fragmentColor;
-in vec2 fragmentTexture;
 
-// texture sampler
-// Read in from glBindTexture
-uniform sampler2D texture1;
-uniform vec4 Colour;
+in vec2 texCoords;
+out vec4 fragColor;
+
+// Fragment material
+uniform sampler2D diffuse_texture; // used for taking in diffuse texture
+uniform vec4 colour;
 
 void main()
 {
-	vec4 fragColor = texture(texture1, fragmentTexture);
-	fragmentColor = fragColor * vec4(Colour)*fragColor.a;
+	vec4 image = texture(diffuse_texture, texCoords);
+	fragColor = image * colour *image.a;
 }

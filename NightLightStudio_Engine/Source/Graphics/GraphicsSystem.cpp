@@ -34,11 +34,11 @@ namespace NS_GRAPHICS
 		debugManager{ nullptr },
 		cameraManager{ nullptr },
 		textureManager{ nullptr },
+		uiSystem{ nullptr },
 		_hasInit{ false },
 		_debugDrawing{ false },
 		_uiDrawing{ false },
 		_projectionMatrix{ glm::mat4(1.0f) },
-		_uiMatrix{ glm::mat4(1.0f) },
 		_viewMatrix{ glm::mat4(1.0f) }
 	{
 	}
@@ -62,7 +62,7 @@ namespace NS_GRAPHICS
 
 		Render();
 
-		//RenderUI();
+		uiSystem->Update();
 	}
 
 	void GraphicsSystem::Free()
@@ -71,6 +71,10 @@ namespace NS_GRAPHICS
 		// Includes VAO, VBO, EBO, ModelMatrixBO
 		modelManager->Free();
 		textureManager->Free();
+
+		CONFIG_DATA->GetConfigData()._lastCamPosX = cameraManager->GetCamera().GetPosition().x;
+		CONFIG_DATA->GetConfigData()._lastCamPosY = cameraManager->GetCamera().GetPosition().y;
+		CONFIG_DATA->GetConfigData()._lastCamPosZ = cameraManager->GetCamera().GetPosition().z;
 	}
 
 	void GraphicsSystem::Init()
@@ -91,6 +95,7 @@ namespace NS_GRAPHICS
 		debugManager = &DebugManager::GetInstance();
 		cameraManager = &CameraSystem::GetInstance();
 		textureManager = &TextureManager::GetInstance();
+		uiSystem = &UISystem::GetInstance();
 
 		modelLoader->Init();
 		
@@ -104,6 +109,8 @@ namespace NS_GRAPHICS
 		cameraManager->Init();
 
 		lightManager->Init();
+
+		uiSystem->Init();
 		
 		//////////////////////////////////////////////////////
 		///// Commented to test level editor drag and drop
@@ -234,8 +241,6 @@ namespace NS_GRAPHICS
 
 		// Set default values for projection matrix
 		SetProjectionMatrix();
-
-		SetUIMatrix(NS_WINDOW::SYS_WINDOW->GetResolutionWidth(), NS_WINDOW::SYS_WINDOW->GetResolutionHeight());
 
 		debugManager->Init();
 
@@ -406,20 +411,6 @@ namespace NS_GRAPHICS
 		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetViewProjectionUniformLocation());
 		glBufferSubData(GL_UNIFORM_BUFFER, 64, 64, glm::value_ptr(_projectionMatrix));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	}
-
-	void GraphicsSystem::SetUIMatrix(const int& width, const int& height, const float& near_plane, const float& far_plane)
-	{
-		float ratioWidth = (float)width / NS_WINDOW::SYS_WINDOW->GetAppWidth();
-		float ratioHeight = (float)height / NS_WINDOW::SYS_WINDOW->GetAppHeight();
-
-		_uiMatrix = glm::ortho(
-		(float)-width * ratioWidth * 0.5f,
-		(float)width * ratioWidth * 0.5f,
-		(float)-height * ratioHeight * 0.5f,
-		(float)height * ratioHeight * 0.5f,
-			near_plane,
-			far_plane);
 	}
 
 	void GraphicsSystem::UpdateLights()

@@ -33,6 +33,11 @@ struct ConfigData
 	float _positionSensitivity;
 	float _rotationSensitivity;
 	float _zoomSensitivity;
+	float _lastCamPosX;
+	float _lastCamPosY;
+	float _lastCamPosZ;
+	float _lastCamPitch;
+	float _lastCamYaw;
 
 	//Grid Variables
 	float _gridSize;

@@ -1,11 +1,16 @@
 #include "ComponentCanvas.h"
+#include "../../glm/gtc/matrix_transform.hpp"
+#include "../../glm/gtc/quaternion.hpp"
+#include "../Graphics/UISystem.h"
 
 ComponentCanvas::ComponentCanvas() : _isActive{ true }
 {
+	strcpy_s(ser_name, "CanvasComponent");
 }
 
 ComponentCanvas::~ComponentCanvas()
 {
+	strcpy_s(ser_name, "CanvasComponent");
 }
 
 void ComponentCanvas::AddUI()
@@ -19,26 +24,17 @@ void ComponentCanvas::RemoveUI(size_t index)
 	_uiElements.erase(index);
 }
 
+void ComponentCanvas::Sort()
+{
+	_uiElements.sort();
+}
+
 void ComponentCanvas::Read(Value& val)
 {
 	if (val.FindMember("isActive") == val.MemberEnd())
 		std::cout << "No active data has been found" << std::endl;
 	else
 		_isActive = val["isActive"].GetBool();
-
-	//if (val.FindMember("Model") == val.MemberEnd())
-	//	std::cout << "No Model file data has been found" << std::endl;
-	//else
-	//{
-	//	
-	//}
-
-	//if (val.FindMember("Albedo") == val.MemberEnd())
-	//	std::cout << "No Texture file data has been found" << std::endl;
-	//else
-	//{
-	//	
-	//}
 
 	size_t loopCount = 0;
 
@@ -62,11 +58,14 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(spriteName.c_str()) == val.MemberEnd())
 			std::cout << "No sprite data has been found" << std::endl;
 		else
+		{
 			toPush._fileName = val[spriteName.c_str()].GetString();
+			toPush.AddTexture(toPush._fileName.toString());
+		}
 
 		std::string position = std::string("UIPosition").append(std::to_string(i));
 		if (val.FindMember(position.c_str()) == val.MemberEnd())
-			std::cout << "No Diffuse data has been found" << std::endl;
+			std::cout << "No position data has been found" << std::endl;
 		else
 		{
 			auto pos = val[position.c_str()].GetArray();
@@ -76,77 +75,33 @@ void ComponentCanvas::Read(Value& val)
 			toPush._position.z = pos[2].GetFloat();
 		}
 
-	/*	UISize;
-		UIColour;*/
+		std::string uvName = std::string("UISize").append(std::to_string(i));
+		if (val.FindMember(uvName.c_str()) == val.MemberEnd())
+			std::cout << "No uv data has been found" << std::endl;
+		else
+		{
+			auto uv = val[uvName.c_str()].GetArray();
+
+			toPush._size.x = uv[0].GetFloat();
+			toPush._size.y = uv[1].GetFloat();
+		}
+
+		std::string col = std::string("UIColour").append(std::to_string(i));
+		if (val.FindMember(col.c_str()) == val.MemberEnd())
+			std::cout << "No colour data has been found" << std::endl;
+		else
+		{
+			auto colour = val[col.c_str()].GetArray();
+
+			toPush._colour.x = colour[0].GetFloat();
+			toPush._colour.y = colour[1].GetFloat();
+			toPush._colour.z = colour[2].GetFloat();
+			toPush._colour.w = colour[3].GetFloat();
+		}
+
+		_uiElements.push_back(toPush);
 	}
 
-	//if (val.FindMember("Metallic") == val.MemberEnd())
-	//	std::cout << "No Metallic file data has been found" << std::endl;
-	//else
-	//	_metallicFileName = val["Metallic"].GetString();
-
-	//if (val.FindMember("Roughness") == val.MemberEnd())
-	//	std::cout << "No Roughness file data has been found" << std::endl;
-	//else
-	//	_roughnessFileName = val["Roughness"].GetString();
-
-	//if (val.FindMember("AmbientOcclusion") == val.MemberEnd())
-	//	std::cout << "No AmbientOcclusion file data has been found" << std::endl;
-	//else
-	//	_aoFileName = val["AmbientOcclusion"].GetString();
-
-	//if (val.FindMember("Specular") == val.MemberEnd())
-	//	std::cout << "No Specular file data has been found" << std::endl;
-	//else
-	//{
-	//	_specularFileName = val["Specular"].GetString();
-
-	//	if (!_specularFileName.empty())
-	//	{
-	//		_specularID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_specularFileName.toString());
-	//	}
-	//}
-
-	//Error checking for json data
-	/*if (val.FindMember("DiffuseMat") == val.MemberEnd())
-		std::cout << "No Diffuse data has been found" << std::endl;
-	else
-	{
-		auto pos = val["DiffuseMat"].GetArray();
-
-		_materialData._diffuse.x = pos[0].GetFloat();
-		_materialData._diffuse.y = pos[1].GetFloat();
-		_materialData._diffuse.z = pos[2].GetFloat();
-	}
-
-	if (val.FindMember("AmbientMat") == val.MemberEnd())
-		std::cout << "No Ambient data has been found" << std::endl;
-	else
-	{
-		auto scale = val["AmbientMat"].GetArray();
-
-		_materialData._ambient.x = scale[0].GetFloat();
-		_materialData._ambient.y = scale[1].GetFloat();
-		_materialData._ambient.z = scale[2].GetFloat();
-	}
-
-	if (val.FindMember("SpecularMat") == val.MemberEnd())
-		std::cout << "No Specular data has been found" << std::endl;
-	else
-	{
-		auto rotate = val["SpecularMat"].GetArray();
-
-		_materialData._specular.x = rotate[0].GetFloat();
-		_materialData._specular.y = rotate[1].GetFloat();
-		_materialData._specular.z = rotate[2].GetFloat();
-	}
-
-	if (val.FindMember("ShininessMat") == val.MemberEnd())
-		std::cout << "No Shininess data has been found" << std::endl;
-	else
-	{
-		_materialData._shininess = val["ShininessMat"].GetFloat();
-	}*/
 }
 
 Value ComponentCanvas::Write()
@@ -179,6 +134,7 @@ Value ComponentCanvas::Write()
 		colour.PushBack(_uiElements.at(i)._colour.x, global_alloc);
 		colour.PushBack(_uiElements.at(i)._colour.y, global_alloc);
 		colour.PushBack(_uiElements.at(i)._colour.z, global_alloc);
+		colour.PushBack(_uiElements.at(i)._colour.w, global_alloc);
 
 		NS_SERIALISER::ChangeData(&val, std::string("UIColour").append(std::to_string(i)), colour);
 	}
@@ -186,6 +142,23 @@ Value ComponentCanvas::Write()
 	return val;
 }
 
+
+glm::mat4 UI_Element::GetModelMatrix()
+{
+	glm::mat4 Translate = glm::translate(glm::mat4(1.f), _position);
+
+	glm::mat4 Scale = glm::scale(glm::mat4(1.f), glm::vec3(_size, 1.0f));
+
+	return (Translate * Scale);
+}
+
+void UI_Element::AddTexture(std::string filename)
+{
+	if (!filename.empty())
+	{
+		_imageID = NS_GRAPHICS::UISystem::GetInstance().LoadTexture(filename);
+	}
+}
 
 bool UI_Element::operator<(const UI_Element& rhs)
 {

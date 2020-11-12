@@ -106,7 +106,7 @@ namespace NS_GRAPHICS
 									FbxVector2 fbxUV = elementUV->GetDirectArray().GetAt(uvIndex);
 
 									glm::vec2 currentUV = { fbxUV[0], fbxUV[1] };
-									currentUV.y = std::abs(1.0f - currentUV.y);
+									currentUV.y = 1.0f - currentUV.y;
 
 									newVertex._uv = currentUV;
 								}

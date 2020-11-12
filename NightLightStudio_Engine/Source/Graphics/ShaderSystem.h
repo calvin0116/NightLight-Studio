@@ -11,18 +11,6 @@ namespace NS_GRAPHICS
 		static const unsigned s_view_projection_buffer_size = 128; // Inclusive of padding
 		static const unsigned s_lights_buffer_size = sizeof(LightBlock); // Inclusive of padding
 
-		//Made it explicit abit
-		enum ShaderType
-		{
-			DEFAULT,
-			WITH_LIGHTS,
-			GRID,
-			WITH_LIGHTS_TEXTURED,
-			UI,
-			PARTICLE,
-			TOTAL_SHADER
-		};
-
 		struct ShaderFile
 		{
 			// File data
@@ -61,6 +49,18 @@ namespace NS_GRAPHICS
 		int currentProgramID;
 
 	public:
+
+		//Made it explicit abit
+		enum ShaderType
+		{
+			DEFAULT,
+			WITH_LIGHTS,
+			GRID,
+			WITH_LIGHTS_TEXTURED,
+			UI,
+			PARTICLE,
+			TOTAL_SHADER
+		};
 
 		// Unique Singleton instance
 		static ShaderSystem& GetInstance()

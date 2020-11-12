@@ -105,6 +105,9 @@ namespace NS_GRAPHICS
 				glVertexAttribDivisor(5, 1);
 				glVertexAttribDivisor(6, 1);
 
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				glBindVertexArray(0);
+
 				model->_meshes.push_back(mesh);
 			}
 			

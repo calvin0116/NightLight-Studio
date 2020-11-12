@@ -80,6 +80,12 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<ScriptComponent>();
 			entComp._ent.getComponent<ScriptComponent>()->Read(*entComp._rjDoc);
 		}
+
+		else if (t == typeid(CanvasComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<CanvasComponent>();
+			entComp._ent.getComponent<CanvasComponent>()->Read(*entComp._rjDoc);
+		}
 		
 		else if (t == typeid(CScriptComponent).hash_code())
 		{
@@ -138,6 +144,12 @@ void InspectorWindow::Start()
 		{
 			entComp.Copy(entComp._ent.getComponent<ScriptComponent>()->Write());
 			entComp._ent.RemoveComponent<ScriptComponent>();
+		}
+
+		else if (t == typeid(CanvasComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<CanvasComponent>()->Write());
+			entComp._ent.RemoveComponent<CanvasComponent>();
 		}
 		
 		else if (t == typeid(CScriptComponent).hash_code())
@@ -247,6 +259,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	RigidBodyComp(ent);
 
 	ScriptComp(ent);
+
+	CanvasComp(ent);
 
   CScriptComp(ent);
 
@@ -441,7 +455,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 			else
 				graphics_comp->SetRenderType(RENDERTYPE::TEXTURED);
 
-			ImGui::Checkbox("IsActive##Grahpic", &graphics_comp->_isActive);
+			ImGui::Checkbox("IsActive##Graphic", &graphics_comp->_isActive);
 
 			std::string mod = graphics_comp->_modelFileName.toString();
 			std::string tex = graphics_comp->_albedoFileName.toString();
@@ -774,6 +788,95 @@ void InspectorWindow::ScriptComp(Entity& ent)
 	}
 }
 
+void InspectorWindow::CanvasComp(Entity& ent)
+{
+	CanvasComponent* canvas = ent.getComponent<CanvasComponent>();
+	if (canvas != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Canvas component", &_notRemove))
+		{
+			ImGui::Checkbox("IsActive##Canvas", &canvas->_isActive);
+
+			size_t uiCount = canvas->_uiElements.size();
+			for (size_t i = 0; i < uiCount; ++i)
+			{
+				if (ImGui::Button(std::string("X##").append(std::to_string(i)).c_str()))
+				{
+					canvas->RemoveUI(i);
+				}
+
+				ImGui::SameLine();
+
+				std::string tex = canvas->_uiElements.at(i)._fileName.toString();
+				std::string uiName = canvas->_uiElements.at(i)._uiName.toString();
+				canvas->_uiElements.at(i)._position;
+				canvas->_uiElements.at(i)._size;
+
+				ImGui::InputFloat3(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._position), 3);
+				ImGui::InputFloat2(std::string("UISize##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._size), 3);
+
+				_levelEditor->LE_AddInputText(std::string("UIName##").append(std::to_string(i)).c_str(), uiName, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+					[&uiName, &canvas, &i]()
+					{
+						canvas->_uiElements.at(i)._uiName = uiName;
+					});
+
+				_levelEditor->LE_AddInputText(std::string("Image##").append(std::to_string(i)).c_str(), tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+					[&tex, &canvas, &i]()
+					{
+						canvas->_uiElements.at(i).AddTexture(tex);
+						canvas->_uiElements.at(i)._fileName = tex;
+					});
+				_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+					[this, &tex, &canvas, &i](std::string* str)
+					{
+						std::string data = *str;
+						std::transform(data.begin(), data.end(), data.begin(),
+							[](unsigned char c)
+							{ return (char)std::tolower(c); });
+
+						std::string fileType = LE_GetFileType(data);
+						if (fileType == "png" || fileType == "tga" || fileType == "dds")
+						{
+							//SOIL doesnt deal with preceding slash
+							if (data[0] == '\\')
+							{
+								data.erase(0, 1);
+							}
+							tex = data;
+							canvas->_uiElements.at(i).AddTexture(tex);
+							canvas->_uiElements.at(i)._fileName = tex;
+						}
+					});
+
+
+				ImGui::ColorEdit4(std::string("Colour##Canvas").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._colour));
+
+				ImGui::Separator();
+			}
+
+			if (ImGui::Button("Add UI"))
+			{
+				canvas->AddUI();
+			}
+
+			ImGui::SameLine();
+
+			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+		}
+
+		if (!_notRemove)
+		{
+			//ent.RemoveComponent<GraphicsComponent>();
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<GraphicsComponent>()->Write(), typeid(GraphicsComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
+		}
+
+		ImGui::Separator();
+	}
+}
+
 void InspectorWindow::CScriptComp(Entity& ent)
 {
   CScriptComponent* cScript_comp = ent.getComponent<CScriptComponent>();
@@ -899,6 +1002,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  Collider",
 			"  CScript",
 			"  C#Script",
+			"  Canvas",
 			"  PlayerStats",
 			"  CauldronStats"
 		});
@@ -994,7 +1098,18 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 		  }
 		  break;
 		}
-		case 8: // PlayerStats
+		case 8: // Canvas
+		{
+			if (!ent.getComponent<CanvasComponent>())
+			{
+				// Currently not using Run Command as it will crash when it tries to read Scripts
+				ent.AddComponent<CanvasComponent>();
+				ENTITY_COMP_DOC comp{ ent, CanvasComponent().Write(),typeid(CanvasComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		case 9: // PlayerStats
 		{
 			if (!ent.getComponent<PlayerStatsComponent>())
 			{
@@ -1003,7 +1118,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 9: // PlayerStats
+		case 10: // PlayerStats
 		{
 			if (!ent.getComponent<CauldronStatsComponent>())
 			{

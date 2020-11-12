@@ -18,9 +18,13 @@ struct UI_Element
 	//Z will be the depth for drawing order
 	glm::vec3 _position;
 	glm::vec2 _size;
-	glm::vec3 _colour;
+	glm::vec4 _colour;
 
 	LocalString<256> _fileName;
+	unsigned _imageID;
+
+	glm::mat4 GetModelMatrix();
+	void AddTexture(std::string filename);
 
 	bool operator<(const UI_Element& rhs);
 };
@@ -45,7 +49,8 @@ public:
 
 	void AddUI();
 	void RemoveUI(size_t index);
-		
+	void Sort();
+
 	//read and write function for initialization from saved files
 	void	Read(Value&);
 	Value	Write();

@@ -77,6 +77,11 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<CauldronStatsComponent>(Comp_list, entity, component_name);
             }
+            else if (component_name == "CanvasComponent")
+            {
+                CreateAndWriteComp<ComponentCanvas>(Comp_list, entity, component_name);
+            }
+
         }
     }
 
