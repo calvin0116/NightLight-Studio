@@ -255,20 +255,32 @@ namespace NS_GRAPHICS
 				if (id < lightblock->_dLights_Num - 1)
 					SortLights(Lights::DIRECTIONAL, id);
 				else
+				{
 					dLights_tracker[id] = false;
+					lightblock->_dLights_Num--;
+				}
+					
 				break;
 
 			case Lights::POINT:
 				if (id < lightblock->_pLights_Num - 1)
 					SortLights(Lights::POINT, id);
 				else
+				{
 					pLights_tracker[id] = false;
+					lightblock->_pLights_Num--;
+				}
+					
 				break;
 			case Lights::SPOT:
 				if (id < lightblock->_sLights_Num - 1)
 					SortLights(Lights::SPOT, id);
 				else
+				{
 					sLights_tracker[id] = false;
+					lightblock->_sLights_Num--;
+				}
+					
 				break;
 			default:
 				break;
@@ -301,6 +313,7 @@ namespace NS_GRAPHICS
 
 
 			lightblock->_dLights_Num--; // decrement total number of lights
+			dLights_tracker[lightblock->_dLights_Num] = false;
 		}
 		else if (lightType == Lights::POINT)
 		{
@@ -321,6 +334,8 @@ namespace NS_GRAPHICS
 				lightblock->_pLights[i - 1] = lightblock->_pLights[i];
 
 			lightblock->_pLights_Num--; // decrement total number of lights
+
+			pLights_tracker[lightblock->_pLights_Num] = false;
 		}
 		else if(lightType == Lights::SPOT)
 		{
@@ -341,6 +356,8 @@ namespace NS_GRAPHICS
 				lightblock->_sLights[i - 1] = lightblock->_sLights[i];
 
 			lightblock->_sLights_Num--; // decrement total number of lights
+
+			sLights_tracker[lightblock->_sLights_Num] = false;
 		}
 	}
 
@@ -397,17 +414,21 @@ namespace NS_GRAPHICS
 			{
 			case Lights::DIRECTIONAL:
 				light->AssignLight(AddDirLight(glm::vec3(1.f,0.f,0.f), light->_ambient, light->_diffuse, light->_specular), Lights::DIRECTIONAL);
+				light->_isActive = true;
 				break;
 			case Lights::POINT:
 				light->AssignLight(AddPointLight(light->_intensity, light->_ambient, light->_diffuse, light->_specular), Lights::POINT);
+				light->_isActive = true;
 				break;
 			case Lights::SPOT:
 				light->AssignLight(AddSpotLight(glm::vec3(1.f, 0.f, 0.f), light->_cutOff, light->_outerCutOff, light->_intensity, light->_ambient,
 												light->_diffuse, light->_specular), Lights::SPOT);
+				light->_isActive = true;
 				break;
 
 			case Lights::INVALID_TYPE:
 				light->AssignLight(-1, Lights::INVALID_TYPE);
+				light->_isActive = false;
 				break;
 
 			default:

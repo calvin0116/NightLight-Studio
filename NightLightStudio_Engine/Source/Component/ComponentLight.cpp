@@ -5,7 +5,7 @@
 
 
 ComponentLight::ComponentLight()
-	: _isActive{ true },
+	: _isActive{ false },
 	_lightID{ -1 }, _type{ NS_GRAPHICS::Lights::INVALID_TYPE },
 	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _intensity{ 1.0f }, _cutOff{}, _outerCutOff{},
 	_direction{ 1.f,0.f,0.f }
@@ -14,7 +14,7 @@ ComponentLight::ComponentLight()
 }
 
 ComponentLight::ComponentLight(const int& lightID, const NS_GRAPHICS::Lights& Type)
-	: _isActive{ true },
+	: _isActive{ false },
 	_lightID{ lightID }, _type{ Type },
 	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _intensity{ 1.0f }, _cutOff{}, _outerCutOff{},
 	_direction{ 1.f,0.f,0.f }
