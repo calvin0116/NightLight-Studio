@@ -211,8 +211,8 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Test
-	Entity newEntity = G_ECMANAGER->BuildEntity();
-	G_ECMANAGER->AddComponent<ComponentTransform>(newEntity);
+	//Entity newEntity = G_ECMANAGER->BuildEntity();
+	//G_ECMANAGER->AddComponent<ComponentTransform>(newEntity);
 	//
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
