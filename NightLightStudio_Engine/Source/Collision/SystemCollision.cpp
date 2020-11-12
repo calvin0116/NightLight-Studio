@@ -40,6 +40,7 @@ namespace NS_COLLISION
 	}
 	void CollisionSystem::Init()
 	{
+		receiver.AttachHandler("TogglePlay", &CollisionSystem::HandleTogglePlay, this);
 		colResolver.clear();
 
 		///////////////////////////////////////////////////////////////////////////////////////////////
@@ -267,6 +268,7 @@ namespace NS_COLLISION
 
 	void CollisionSystem::Update()
 	{
+
 		//draw debug mesh
 		if (doDrawLineMesh)
 		{
@@ -295,7 +297,10 @@ namespace NS_COLLISION
 			}
 		}
 
-
+		if (!_isPlaying)
+		{
+			return;
+		}
 		
 		auto itr = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
@@ -353,10 +358,10 @@ namespace NS_COLLISION
 
 
 
-				if (CollisionCuling(comTrans1, comTrans2))
-				{
-					continue;
-				}
+				//if (CollisionCuling(comTrans1, comTrans2))
+				//{
+				//	continue;
+				//}
 
 
 				
@@ -1110,6 +1115,17 @@ namespace NS_COLLISION
 		}
 
 		return false;
+	}
+
+	void CollisionSystem::HandleTogglePlay(MessageTogglePlay& msg)
+	{
+		// Handle msg here.
+		std::cout << "Hello from collision!" << std::endl;
+		std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
+
+		_isPlaying = msg.isPlaying;
+		//if (!_isPlaying)
+		//  GameExit();
 	}
 
 

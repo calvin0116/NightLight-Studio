@@ -9,6 +9,12 @@
 #include "CollisionResolver.h"
 #include "../Component/ComponentManager.h"
 
+//messaging for toggle play
+#include "../Messaging/SystemReceiver.h"
+#include "../Messaging/Messages/MessageScriptRequest.h"
+#include "../Messaging/Messages/MessageApplicationExit.h"
+#include "../Messaging/Messages/MessageTogglePlay.h"
+
 namespace NS_COLLISION
 {
 	class CollisionSystem : public MySystem, public Singleton<CollisionSystem>
@@ -16,6 +22,9 @@ namespace NS_COLLISION
 		CollsionResolver colResolver;
 
 		friend Singleton<CollisionSystem>;
+
+		bool _isPlaying;
+		SystemMessaging::SystemReceiver receiver;
 	public:
 
 
@@ -48,7 +57,7 @@ namespace NS_COLLISION
 			ComponentTransform* Transform1, ComponentTransform* Transform2,
 			Entity Entity1, Entity Entity2
 		);
-
+		void HandleTogglePlay(MessageTogglePlay& msg);
 	private:
 
 		// test var

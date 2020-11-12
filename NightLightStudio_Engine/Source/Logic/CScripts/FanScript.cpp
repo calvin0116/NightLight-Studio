@@ -19,17 +19,17 @@ void FanScript::Init()
   //MyPlayerID = MyPlayerEntity.getId();
   playerScriptComp = MyPlayerEntity.getComponent<ComponentCScript>();
   //talisman1 = G_ECMANAGER->getEntity("Talisman_1");
-  obb1 = G_ECMANAGER->getEntity(obbName);
-  obb1ScriptComp = obb1.getComponent<ComponentCScript>();
 
   CameraEntity = G_ECMANAGER->getEntity(camName);
   cameraScriptComp = CameraEntity.getComponent<ComponentCScript>();
 
   stats = MyID.getComponent<ComponentCauldronStats>();
+  obbName = stats->collider.toString();
+  obb1 = G_ECMANAGER->getEntity(obbName);
+  obb1ScriptComp = obb1.getComponent<ComponentCScript>();
   FanBlowScript* obbScript = reinterpret_cast<FanBlowScript*>(obb1ScriptComp->_pScript);
   if (stats->collider.empty() || stats->talisman.empty())
     std::cout << "ComponentStats for fan is empty!" << std::endl;
-  obbName = stats->collider.toString();
   obbScript->talismanName = stats->talisman.toString();
   obbScript->Magnitude = stats->magnitude;
   obbScript->Direction = stats->direction;

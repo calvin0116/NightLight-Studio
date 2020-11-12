@@ -13,7 +13,7 @@ namespace NS_PHYSICS
 {
 
 	PhysicsSystem::PhysicsSystem()
-		:_maxspeed(MAX_SPEED)
+		:_maxspeed(MAX_SPEED), _isPlaying(false)
 	{
 	}
 
@@ -28,10 +28,15 @@ namespace NS_PHYSICS
 
 	void PhysicsSystem::Init()
 	{
+		receiver.AttachHandler("TogglePlay", &PhysicsSystem::HandleTogglePlay, this);
 	}
 
 	void PhysicsSystem::FixedUpdate()
 	{
+		if (!_isPlaying)
+		{
+			return;
+		}
 		//TA's example
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*struct ComponentView
@@ -272,6 +277,7 @@ namespace NS_PHYSICS
 		//return true;
 	}
 
+
 	void PhysicsSystem::Exit()
 	{
 		DestroyInstance();
@@ -284,4 +290,16 @@ namespace NS_PHYSICS
 	void PhysicsSystem::Unload()
 	{
 	}
+
+	void PhysicsSystem::HandleTogglePlay(MessageTogglePlay& msg)
+	{
+		// Handle msg here.
+		std::cout << "Hello from physics!" << std::endl;
+		std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
+
+		_isPlaying = msg.isPlaying;
+		//if (!_isPlaying)
+		//  GameExit();
+	}
+
 }

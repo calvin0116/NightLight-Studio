@@ -14,9 +14,11 @@ public:
   bool Activate = false;
   NlMath::Vector3D Direction = {0.0f, 0.0f, -1.0f};
   float Magnitude = 3000.0f;
-  std::string talismanName = "Talisman_1";
+  std::string talismanName;
 
   virtual void Init() override;
+
+  virtual void LateInit() override;
 
   virtual void Update() override;
 

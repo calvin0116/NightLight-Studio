@@ -40,6 +40,7 @@ namespace NS_LOGIC
     void GameGameExit();
     void GamePreInit();
     void GameInit() override;
+    void GameLateInit();
 
     void Update() override;
     void FixedUpdate() override;

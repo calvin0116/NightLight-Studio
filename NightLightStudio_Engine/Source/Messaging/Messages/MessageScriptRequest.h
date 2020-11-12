@@ -1,6 +1,8 @@
 #pragma once
 #include "..\SystemIMessage.h"
 
+class IScript;
+
 struct MessageScriptRequest : public SystemMessaging::IMessage
 {
   MessageScriptRequest(int uniqueTagID) : IMessage("ScriptRequest"), tagID(uniqueTagID), _pScript(nullptr) {}
