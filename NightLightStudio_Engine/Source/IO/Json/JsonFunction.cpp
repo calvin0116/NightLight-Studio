@@ -9,9 +9,13 @@ namespace NS_SERIALISER {
     template <typename T>
     inline void CreateAndWriteComp(Value& Comp_list, Entity& entity, std::string& component_name)
     {
-        T comp;
-        static_cast<ISerializable*>(&comp)->Read(Comp_list[component_name.c_str()]);
-        G_ECMANAGER->AttachComponent<T>(entity, comp);
+        //T comp;
+        //static_cast<ISerializable*>(&comp)->Read(Comp_list[component_name.c_str()]);
+        //G_ECMANAGER->AttachComponent<T>(entity, comp);
+
+        T* comp = G_ECMANAGER->AddComponent<T>(entity);
+        static_cast<ISerializable*>(comp)->Read(Comp_list[component_name.c_str()]);
+        
     }
 
     inline void ComponentsCreation(Value& Comp_list, Entity& entity)
