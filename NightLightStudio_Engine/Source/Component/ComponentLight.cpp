@@ -7,7 +7,7 @@
 ComponentLight::ComponentLight()
 	: _isActive{ true },
 	_lightID{ -1 }, _type{ NS_GRAPHICS::Lights::INVALID_TYPE },
-	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _attenuation{ 1.0f }, _cutOff{}, _outerCutOff{},
+	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _intensity{ 1.0f }, _cutOff{}, _outerCutOff{},
 	_direction{ 1.f,0.f,0.f }
 {
 	strcpy_s(ser_name, "LightComponent");
@@ -16,7 +16,7 @@ ComponentLight::ComponentLight()
 ComponentLight::ComponentLight(const int& lightID, const NS_GRAPHICS::Lights& Type)
 	: _isActive{ true },
 	_lightID{ lightID }, _type{ Type },
-	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _attenuation{ 1.0f }, _cutOff{}, _outerCutOff{},
+	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _intensity{ 1.0f }, _cutOff{}, _outerCutOff{},
 	_direction{ 1.f,0.f,0.f }
 {
 	strcpy_s(ser_name, "LightComponent");
@@ -373,22 +373,22 @@ void ComponentLight::Read(Value& val)
 		_specular.z = rotate[2].GetFloat();
 	}
 
-	if (val.FindMember("Attenuation") == val.MemberEnd())
-		std::cout << "No Specular data has been found" << std::endl;
+	if (val.FindMember("Attenuation") == val.MemberEnd()) // Should be intensity
+		std::cout << "No Attenuation data has been found" << std::endl;
 	else
 	{
-		_attenuation = val["Attenuation"].GetFloat();
+		_intensity = val["Attenuation"].GetFloat(); // Should be intensity
 	}
 
 	if (val.FindMember("CutOff") == val.MemberEnd())
-		std::cout << "No Specular data has been found" << std::endl;
+		std::cout << "No CutOff data has been found" << std::endl;
 	else
 	{
 		_cutOff = val["CutOff"].GetFloat();
 	}
 
-	if (val.FindMember("Attenuation") == val.MemberEnd())
-		std::cout << "No Specular data has been found" << std::endl;
+	if (val.FindMember("OuterCutOff") == val.MemberEnd())
+		std::cout << "No OuterCutOff data has been found" << std::endl;
 	else
 	{
 		_outerCutOff = val["OuterCutOff"].GetFloat();
@@ -396,7 +396,7 @@ void ComponentLight::Read(Value& val)
 
 	SetAmbient(_ambient);
 	SetDiffuse(_diffuse);
-	SetIntensity(_attenuation);
+	SetAttenuation(1.0f / _intensity);
 	SetSpecular(_specular);
 }
 
@@ -442,7 +442,7 @@ Value ComponentLight::Write()
 
 	NS_SERIALISER::ChangeData(&val, "Specular", specular);
 
-	NS_SERIALISER::ChangeData(&val, "Attenuation", _attenuation);
+	NS_SERIALISER::ChangeData(&val, "Attenuation", _intensity); // Should be intensity
 	NS_SERIALISER::ChangeData(&val, "CutOff", _cutOff);
 	NS_SERIALISER::ChangeData(&val, "OuterCutOff", _outerCutOff);
 

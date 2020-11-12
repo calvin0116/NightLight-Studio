@@ -595,9 +595,14 @@ void InspectorWindow::LightComp(Entity& ent)
 
 			if (light->_type != NS_GRAPHICS::Lights::DIRECTIONAL)
 			{
-				if (ImGui::InputFloat("Intensity", &light->_attenuation))
+				// This is fucked
+				float intensity = light->_intensity;
+				if (ImGui::DragFloat("Intensity", &intensity))
 				{
-					light->SetIntensity(light->_attenuation);
+					if (intensity < 0.f)
+						intensity = 0.f;
+					light->SetAttenuation(1.f / intensity);
+					light->_intensity = intensity;
 				}
 			}
 

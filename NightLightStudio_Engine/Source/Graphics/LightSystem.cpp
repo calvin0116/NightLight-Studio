@@ -60,12 +60,14 @@ namespace NS_GRAPHICS
 				{
 					PointLight& pointlight = lightblock->_pLights[lightcomp->_lightID];
 					pointlight.position = transformComp->GetModelMatrix() * glm::vec4(0.f, 0.f, 0.f, 1.f); // w = 1 for point
+					pointlight._attenuation = 1.f / lightcomp->_intensity;
 				}
 				else if (lightcomp->_type == Lights::SPOT)
 				{
 					SpotLight& spotlight = lightblock->_sLights[lightcomp->_lightID];
 					spotlight._direction = transformComp->GetModelMatrix() * glm::vec4(1.f, 0.f, 0.f, 0.f); // w = 0 for vector
 					spotlight.position = transformComp->GetModelMatrix() * glm::vec4(0.f, 0.f, 0.f, 1.f); // w = 1 for point
+					spotlight._attenuation = 1.f / lightcomp->_intensity;
 				}
 			}
 			++itr;
@@ -104,7 +106,7 @@ namespace NS_GRAPHICS
 		return id;
 	}
 
-	int LightSystem::AddPointLight(const float& attenuation, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
+	int LightSystem::AddPointLight(const float& intensity, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
 	{
 		// Locate available slot for light
 		int id = 0;
@@ -119,7 +121,7 @@ namespace NS_GRAPHICS
 		if (id >= s_MaxLights)
 			return -1;
 
-		lightblock->_pLights[id]._attenuation = attenuation;
+		lightblock->_pLights[id]._attenuation = 1.f / intensity;
 		lightblock->_pLights[id]._ambient = glm::vec4(ambient, 1.f);
 		lightblock->_pLights[id]._diffuse = glm::vec4(diffuse, 1.f);
 		lightblock->_pLights[id]._specular = glm::vec4(specular, 1.f);
@@ -132,7 +134,7 @@ namespace NS_GRAPHICS
 	}
 
 	int LightSystem::AddSpotLight(const glm::vec3& direction, const float& cutoff, const float& outercutoff,
-									const float& attenuation, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
+									const float& intensity, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
 	{
 		// Locate available slot for light
 		int id = 0;
@@ -150,7 +152,7 @@ namespace NS_GRAPHICS
 		lightblock->_sLights[id]._direction = glm::vec4(direction, 0.f);
 		lightblock->_sLights[id]._cutOff = cutoff;
 		lightblock->_sLights[id]._outerCutOff = outercutoff;
-		lightblock->_sLights[id]._attenuation = attenuation;
+		lightblock->_sLights[id]._attenuation = 1.f / intensity;
 		lightblock->_sLights[id]._ambient = glm::vec4(ambient, 1.f);
 		lightblock->_sLights[id]._diffuse = glm::vec4(diffuse, 1.f);
 		lightblock->_sLights[id]._specular = glm::vec4(specular, 1.f);
@@ -286,6 +288,7 @@ namespace NS_GRAPHICS
 			for (int i = deletedIndex + 1; i < lightblock->_dLights_Num; ++i)
 				lightblock->_dLights[i - 1] = lightblock->_dLights[i];
 
+
 			lightblock->_dLights_Num--; // decrement total number of lights
 		}
 		else if (lightType == Lights::POINT)
@@ -347,20 +350,32 @@ namespace NS_GRAPHICS
 					if (light->_lightID < lightblock->_dLights_Num - 1)
 						SortLights(Lights::DIRECTIONAL, light->_lightID);
 					else
+					{
 						dLights_tracker[light->_lightID] = false;
+
+						lightblock->_dLights_Num--;
+					}
 					break;
 
 				case Lights::POINT:
 					if (light->_lightID < lightblock->_pLights_Num - 1)
 						SortLights(Lights::POINT, light->_lightID);
 					else
+					{
 						pLights_tracker[light->_lightID] = false;
+						lightblock->_pLights_Num--;
+					}
+						
 					break;
 				case Lights::SPOT:
 					if (light->_lightID < lightblock->_sLights_Num - 1)
 						SortLights(Lights::SPOT, light->_lightID);
 					else
+					{
 						sLights_tracker[light->_lightID] = false;
+						lightblock->_sLights_Num--;
+					}
+						
 					break;
 				default:
 					break;
@@ -373,10 +388,10 @@ namespace NS_GRAPHICS
 				light->AssignLight(AddDirLight(glm::vec3(1.f,0.f,0.f), light->_ambient, light->_diffuse, light->_specular), Lights::DIRECTIONAL);
 				break;
 			case Lights::POINT:
-				light->AssignLight(AddPointLight(light->_attenuation, light->_ambient, light->_diffuse, light->_specular), Lights::POINT);
+				light->AssignLight(AddPointLight(light->_intensity, light->_ambient, light->_diffuse, light->_specular), Lights::POINT);
 				break;
 			case Lights::SPOT:
-				light->AssignLight(AddSpotLight(glm::vec3(1.f, 0.f, 0.f), light->_cutOff, light->_outerCutOff, light->_attenuation, light->_ambient,
+				light->AssignLight(AddSpotLight(glm::vec3(1.f, 0.f, 0.f), light->_cutOff, light->_outerCutOff, light->_intensity, light->_ambient,
 												light->_diffuse, light->_specular), Lights::SPOT);
 				break;
 
@@ -388,10 +403,10 @@ namespace NS_GRAPHICS
 				break;
 			}
 
-#ifdef _DEBUG
-			if (light->_lightID == -1)
-				std::cout << "ERROR: Failed to create light component, please check Light System" << std::endl;
-#endif
+//#ifdef _DEBUG
+//			if (light->_lightID == -1)
+//				std::cout << "ERROR: Failed to create light component, please check Light System" << std::endl;
+//#endif
 		}
 	}
 

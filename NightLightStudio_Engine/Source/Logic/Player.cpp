@@ -62,6 +62,8 @@ void Player::Init()
 	comLight = MyID.getComponent<LightComponent>();
 	comLight->ChangeLightType(NS_GRAPHICS::Lights::POINT);
 	comLight->SetIntensity(1000);
+	comLight->SetActive(false);
+	 light = &NS_GRAPHICS::LightSystem::GetInstance();
 
 	//comLight->change
 	playerStats = MyID.getComponent<PlayerStatsComponent>();
@@ -264,6 +266,8 @@ void Player::changeState(PLAYERSTATE state)
 	{
 	case PLAYERSTATE::HUMAN:
 	{
+		light->SetAllDirectionalLights(true);
+		comLight->SetActive(false);
 		comTrans->_scale *= 3.0f;
 		//enable rigid body
 		comRigid->isStatic = false;
@@ -362,6 +366,10 @@ void Player::changeState(PLAYERSTATE state)
 
 	case PLAYERSTATE::MOTH:
 	{
+		
+		light->SetAllDirectionalLights(false);
+
+		comLight->SetActive(true);
 		comTrans->_scale /= 3.0f;
 		//reset camera
 		CAMERA_DISTANCE = 100;

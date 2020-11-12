@@ -102,9 +102,12 @@ bool LevelEditor::Update(float)
         ImGui::End();
     }
     */
-    LE_RunWindows();
+    if (!_runEngine)
+    {
+        LE_RunWindows();
 
-    _lePicking.LE_PickingRun();
+        _lePicking.LE_PickingRun();
+    }
 
     // Rendering
     ImGui::Render();
