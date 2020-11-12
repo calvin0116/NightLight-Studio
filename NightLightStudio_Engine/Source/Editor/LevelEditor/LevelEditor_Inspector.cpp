@@ -431,6 +431,16 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 	{
 		if (ImGui::CollapsingHeader("Graphics component", &_notRemove))
 		{
+			bool renderTextures = !(graphics_comp->_renderType == RENDERTYPE::SOLID);
+
+			//ImGui::Checkbox("Is Active", &light->_isActive);
+			ImGui::Checkbox("Render Textures", &renderTextures);
+
+			if (!renderTextures)
+				graphics_comp->SetRenderType(RENDERTYPE::SOLID);
+			else
+				graphics_comp->SetRenderType(RENDERTYPE::TEXTURED);
+
 			ImGui::Checkbox("IsActive##Grahpic", &graphics_comp->_isActive);
 
 			std::string mod = graphics_comp->_modelFileName.toString();
