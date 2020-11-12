@@ -599,7 +599,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
 						specular = data;
-						graphics_comp->AddAlbedoTexture(specular);
+						graphics_comp->AddSpecularTexture(specular);
 					}
 				});
 
