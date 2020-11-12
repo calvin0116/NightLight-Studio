@@ -26,11 +26,53 @@ void ComponentLight::AssignLight(const int& lightID, const NS_GRAPHICS::Lights& 
 {
 	_lightID = lightID;
 	_type = Type;
+
+	// Save active type, if valid light is provided
+	if (Type != NS_GRAPHICS::Lights::INVALID_TYPE)
+		_inactive_type = Type;
 }
 
 ComponentLight::~ComponentLight()
 {
 	NS_GRAPHICS::LightSystem::GetInstance().RemoveLight(_lightID, _type);
+}
+
+void ComponentLight::SetActive(const bool& set)
+{
+	// No action required if set is same as prev
+	if (set == _isActive)
+		return;
+
+	if (set == true)
+	{
+		// Activate light (Add and assign light to component)
+		if (_lightID == -1)
+		{
+			ChangeLightType(_inactive_type);
+		}
+	}
+	else
+	{
+		// Deactivate light (Delete light from component)
+		if (_lightID != -1)
+		{
+			_inactive_type = _type;
+			ChangeLightType(NS_GRAPHICS::Lights::INVALID_TYPE);
+		}
+	}
+
+	// Set isActive variable to set
+	_isActive = set;
+}
+
+bool ComponentLight::GetActive() const
+{
+	return _isActive;
+}
+
+NS_GRAPHICS::Lights ComponentLight::GetInactiveType() const
+{
+	return _inactive_type;
 }
 
 void ComponentLight::ChangeLightType(const NS_GRAPHICS::Lights& Type)
@@ -272,7 +314,7 @@ void ComponentLight::Read(Value& val)
 	if (val.FindMember("isActive") == val.MemberEnd())
 		std::cout << "No active data has been found" << std::endl;
 	else
-		_isActive = val["isActive"].GetBool();
+		SetActive(val["isActive"].GetBool());
 
 	if (val.FindMember("LightType") == val.MemberEnd())
 		std::cout << "No active data has been found" << std::endl;

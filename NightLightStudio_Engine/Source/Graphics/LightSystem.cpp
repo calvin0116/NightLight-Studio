@@ -379,6 +379,11 @@ namespace NS_GRAPHICS
 				light->AssignLight(AddSpotLight(glm::vec3(1.f, 0.f, 0.f), light->_cutOff, light->_outerCutOff, light->_attenuation, light->_ambient,
 												light->_diffuse, light->_specular), Lights::SPOT);
 				break;
+
+			case Lights::INVALID_TYPE:
+				light->AssignLight(-1, Lights::INVALID_TYPE);
+				break;
+
 			default:
 				break;
 			}
@@ -387,6 +392,22 @@ namespace NS_GRAPHICS
 			if (light->_lightID == -1)
 				std::cout << "ERROR: Failed to create light component, please check Light System" << std::endl;
 #endif
+		}
+	}
+
+	void LightSystem::SetAllDirectionalLights(const bool& setter)
+	{
+		auto itr = G_ECMANAGER->begin<ComponentLight>();
+		auto itrEnd = G_ECMANAGER->end<ComponentLight>();
+
+		while (itr != itrEnd)
+		{
+			ComponentLight* lightcomp = G_ECMANAGER->getComponent<ComponentLight>(itr);
+
+			if (lightcomp->GetInactiveType() == Lights::DIRECTIONAL)
+				lightcomp->SetActive(setter);
+
+				++itr;
 		}
 	}
 

@@ -4,6 +4,10 @@
 
 typedef class ComponentLight : public ISerializable //: public IComponent
 {
+	// Inactive/Active data
+	// Used to store initial light type for activation and deactivation
+	NS_GRAPHICS::Lights _inactive_type = NS_GRAPHICS::Lights::INVALID_TYPE;
+
 public:
 	// Temporarily make them public for easy access
 
@@ -47,6 +51,13 @@ public:
 	~ComponentLight();
 
 	/////////// GETTERS/SETTERS ////////////
+
+	// Must use this function for setting active/inactive for light
+	void SetActive(const bool& set);
+
+	bool GetActive() const;
+
+	NS_GRAPHICS::Lights GetInactiveType() const;
 
 	void ChangeLightType(const NS_GRAPHICS::Lights& Type);
 

@@ -98,6 +98,8 @@ namespace NS_GRAPHICS
 		
 		// TO DO: All getters and setters should be done in system
 		void ChangeLightType(ComponentLight* light, Lights lightType);
+
+		void SetAllDirectionalLights(const bool& setter);
 		
 		DirLight& GetDirLight(const int& id);
 		SpotLight& GetSpotLight(const int& id);
