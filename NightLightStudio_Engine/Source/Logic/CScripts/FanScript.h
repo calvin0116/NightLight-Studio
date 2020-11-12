@@ -28,7 +28,7 @@ public:
 
   CauldronStatsComponent* stats;
   std::string playerName = "Player";
-  std::string obbName = "OBB_1";
+  std::string obbName;
   std::string camName = "PlayerCamera";
 
   virtual void Init() override;
