@@ -314,7 +314,7 @@ void Player::changeState(PLAYERSTATE state)
       // turn off collider
       MyID.getComponent<ComponentCollider>()->isCollide = true;
       MyID.getComponent<ComponentCollider>()->isCollidable = true;
-      //MyID.getComponent<ComponentGraphics>()->_isActive = true;
+      MyID.getComponent<ComponentGraphics>()->_isActive = true;
       comRigid->isStatic = false;
       comRigid->isActive = true;
     }
@@ -518,7 +518,7 @@ void Player::OnCollisionEnter(Entity other)
     // turn off collider
     MyID.getComponent<ComponentCollider>()->isCollide = false;
     MyID.getComponent<ComponentCollider>()->isCollidable = false;
-    //MyID.getComponent<ComponentGraphics>()->_isActive = false;
+    MyID.getComponent<ComponentGraphics>()->_isActive = false;
     // set rigid body to static
     comRigid->isStatic = true;
     comRigid->isActive = false;
