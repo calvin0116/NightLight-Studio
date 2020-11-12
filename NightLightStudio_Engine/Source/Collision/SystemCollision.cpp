@@ -268,10 +268,7 @@ namespace NS_COLLISION
 
 	void CollisionSystem::Update()
 	{
-		if (!_isPlaying)
-		{
-			return;
-		}
+
 		//draw debug mesh
 		if (doDrawLineMesh)
 		{
@@ -300,7 +297,10 @@ namespace NS_COLLISION
 			}
 		}
 
-
+		if (!_isPlaying)
+		{
+			return;
+		}
 		
 		auto itr = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
