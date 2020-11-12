@@ -38,6 +38,7 @@ class Player : public IScript
 	ComponentTransform spawnPoint;
 	ComponentPlayerStats* playerStats;
 	ComponentLight* comLight;
+	NS_GRAPHICS::LightSystem* light;
 
 	PLAYERSTATE _prevPlayerState;
 	PLAYERSTATE _playerState;
