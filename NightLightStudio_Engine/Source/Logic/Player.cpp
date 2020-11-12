@@ -198,7 +198,7 @@ void Player::Update()
 		// update camera position with player position
 		camera->SetTarget(comTrans->_position);
 		camera->SetDistance(CAMERA_DISTANCE);
-		camera->SetTargetOffsetXY(CAMERA_OFFSET_X, CAMERA_OFFSET_Y);
+		camera->SetTargetOffsetXY(CAMERA_OFFSET_X, CAMERA_OFFSET_Y + 10);
 		//uncontrolable motion
 		comRigid->velocity =  (NS_GRAPHICS::CameraSystem::GetInstance().GetViewVector()* PLAYER_FLY_MAG);
 		
