@@ -40,6 +40,7 @@ namespace NS_COLLISION
 	}
 	void CollisionSystem::Init()
 	{
+		receiver.AttachHandler("TogglePlay", &CollisionSystem::HandleTogglePlay, this);
 		colResolver.clear();
 
 		///////////////////////////////////////////////////////////////////////////////////////////////
@@ -267,6 +268,10 @@ namespace NS_COLLISION
 
 	void CollisionSystem::Update()
 	{
+		if (!_isPlaying)
+		{
+			return;
+		}
 		//draw debug mesh
 		if (doDrawLineMesh)
 		{
@@ -1110,6 +1115,17 @@ namespace NS_COLLISION
 		}
 
 		return false;
+	}
+
+	void CollisionSystem::HandleTogglePlay(MessageTogglePlay& msg)
+	{
+		// Handle msg here.
+		std::cout << "Hello from collision!" << std::endl;
+		std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
+
+		_isPlaying = msg.isPlaying;
+		//if (!_isPlaying)
+		//  GameExit();
 	}
 
 

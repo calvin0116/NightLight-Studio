@@ -388,9 +388,6 @@ void Player::changeState(PLAYERSTATE state)
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop2");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop3");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop4");
-
-		//lightSys!
-		comLight->SetActive(false);
 		break;
 	}
 
