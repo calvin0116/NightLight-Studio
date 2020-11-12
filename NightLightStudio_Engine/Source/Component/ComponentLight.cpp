@@ -266,6 +266,9 @@ void ComponentLight::SetAttenuation(const float& attenuation)
 
 void ComponentLight::Read(Value& val)
 {
+	// Remove if any
+	NS_GRAPHICS::LightSystem::GetInstance().RemoveLight(_lightID, _type);
+
 	if (val.FindMember("isActive") == val.MemberEnd())
 		std::cout << "No active data has been found" << std::endl;
 	else
@@ -278,15 +281,18 @@ void ComponentLight::Read(Value& val)
 		std::string lightName = val["LightType"].GetString();
 		if (lightName == "DIRECTIONAL")
 		{
-			ChangeLightType(NS_GRAPHICS::Lights::DIRECTIONAL);
+			//ChangeLightType(NS_GRAPHICS::Lights::DIRECTIONAL);
+			AssignLight(NS_GRAPHICS::LightSystem::GetInstance().AddDirLight(), NS_GRAPHICS::Lights::DIRECTIONAL);
 		}
 		else if (lightName == "POINT")
 		{
-			ChangeLightType(NS_GRAPHICS::Lights::POINT);
+			//ChangeLightType(NS_GRAPHICS::Lights::POINT);
+			AssignLight(NS_GRAPHICS::LightSystem::GetInstance().AddPointLight(), NS_GRAPHICS::Lights::POINT);
 		}
 		else if (lightName == "SPOT")
 		{
-			ChangeLightType(NS_GRAPHICS::Lights::SPOT);
+			//ChangeLightType(NS_GRAPHICS::Lights::SPOT);
+			AssignLight(NS_GRAPHICS::LightSystem::GetInstance().AddSpotLight(), NS_GRAPHICS::Lights::SPOT);
 		}
 	}
 

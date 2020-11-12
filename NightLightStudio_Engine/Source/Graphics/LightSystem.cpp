@@ -344,16 +344,23 @@ namespace NS_GRAPHICS
 				switch (light->_type)
 				{
 				case Lights::DIRECTIONAL:
-					dLights_tracker[light->_lightID] = false;
-					lightblock->_dLights_Num--;
+					if (light->_lightID < lightblock->_dLights_Num - 1)
+						SortLights(Lights::DIRECTIONAL, light->_lightID);
+					else
+						dLights_tracker[light->_lightID] = false;
 					break;
+
 				case Lights::POINT:
-					pLights_tracker[light->_lightID] = false;
-					lightblock->_pLights_Num--;
+					if (light->_lightID < lightblock->_pLights_Num - 1)
+						SortLights(Lights::POINT, light->_lightID);
+					else
+						pLights_tracker[light->_lightID] = false;
 					break;
 				case Lights::SPOT:
-					sLights_tracker[light->_lightID] = false;
-					lightblock->_sLights_Num--;
+					if (light->_lightID < lightblock->_sLights_Num - 1)
+						SortLights(Lights::SPOT, light->_lightID);
+					else
+						sLights_tracker[light->_lightID] = false;
 					break;
 				default:
 					break;
@@ -363,13 +370,14 @@ namespace NS_GRAPHICS
 			switch (lightType)
 			{
 			case Lights::DIRECTIONAL:
-				light->AssignLight(AddDirLight(), Lights::DIRECTIONAL);
+				light->AssignLight(AddDirLight(glm::vec3(1.f,0.f,0.f), light->_ambient, light->_diffuse, light->_specular), Lights::DIRECTIONAL);
 				break;
 			case Lights::POINT:
-				light->AssignLight(AddPointLight(), Lights::POINT);
+				light->AssignLight(AddPointLight(light->_attenuation, light->_ambient, light->_diffuse, light->_specular), Lights::POINT);
 				break;
 			case Lights::SPOT:
-				light->AssignLight(AddSpotLight(), Lights::SPOT);
+				light->AssignLight(AddSpotLight(glm::vec3(1.f, 0.f, 0.f), light->_cutOff, light->_outerCutOff, light->_attenuation, light->_ambient,
+												light->_diffuse, light->_specular), Lights::SPOT);
 				break;
 			default:
 				break;
