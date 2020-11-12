@@ -34,7 +34,7 @@ void ComponentLight::AssignLight(const int& lightID, const NS_GRAPHICS::Lights& 
 
 ComponentLight::~ComponentLight()
 {
-	NS_GRAPHICS::LightSystem::GetInstance().RemoveLight(_lightID, _type);
+	//NS_GRAPHICS::LightSystem::GetInstance().RemoveLight(_lightID, _type);
 }
 
 void ComponentLight::SetActive(const bool& set)
