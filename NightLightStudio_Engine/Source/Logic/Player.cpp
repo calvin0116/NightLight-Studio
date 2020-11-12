@@ -7,6 +7,9 @@
 #include "SpawnPoint.h"
 #include "../Core/DeltaTime.h"
 #include "../Graphics/LightSystem.h"
+#include "../Component/ComponentGraphics.h"
+
+#include "CScripts/FanScript.h"
 
 ////need to be edited by designer
 //#define PLAYER_MOVE_MAG 3000.0f
@@ -59,7 +62,6 @@ void Player::Init()
 	comLight = MyID.getComponent<LightComponent>();
 	comLight->ChangeLightType(NS_GRAPHICS::Lights::POINT);
 	comLight->SetIntensity(1000);
-
 
 	//comLight->change
 	playerStats = MyID.getComponent<PlayerStatsComponent>();
@@ -138,10 +140,15 @@ void Player::Init()
 			{
 				changeState(PLAYERSTATE::HUMAN);
 			}
-			else if (_playerState == PLAYERSTATE::POSSESSED)
+			else if (_playerState == PLAYERSTATE::POSSESSED || _playerState == PLAYERSTATE::POSSESSED_FAN)
 			{
 				changeState(PLAYERSTATE::HUMAN);
 			}
+      //else if (_playerState == PLAYERSTATE::POSSESSED_FAN)
+      //{
+      //  //std::cout << "Exiting POSSESED FAN" << std::endl;
+      //  changeState()
+      //}
 		});
 }
 
@@ -210,6 +217,17 @@ void Player::Update()
 		}
 	}
 		break;
+  case PLAYERSTATE::POSSESSED_FAN:
+  {
+    // reduce energy
+    float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
+    _playerEnergy -= realDt;
+    if (_playerEnergy <= 0)
+    {
+      changeState(PLAYERSTATE::HUMAN);
+    }
+    break;
+  }
 	default:
 		break;
 	}
@@ -280,6 +298,19 @@ void Player::changeState(PLAYERSTATE state)
 			MyID.getComponent<ComponentRigidBody>()->isStatic = false;
 			
 		}
+    else if (_prevPlayerState == PLAYERSTATE::POSSESSED_FAN)
+    {
+
+      camera->SetTarget(comTrans->_position);
+      camera->SetDistance(init_CAMERA_DISTANCE);
+      //camera->SetRotate(false);
+      // turn off collider
+      MyID.getComponent<ComponentCollider>()->isCollide = true;
+      MyID.getComponent<ComponentCollider>()->isCollidable = true;
+      //MyID.getComponent<ComponentGraphics>()->_isActive = true;
+      comRigid->isStatic = false;
+      comRigid->isActive = true;
+    }
 		//player is a human with human controls
 	//initially the player is a human with human controls
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk1", WALKFRONT, "WalkFront", SystemInput_ns::OnHold, [this]()
@@ -349,7 +380,7 @@ void Player::changeState(PLAYERSTATE state)
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop4");
 
 		//light!
-		comLight->_isActive = false;
+		comLight->SetActive(false);
 		break;
 	}
 
@@ -392,6 +423,7 @@ void Player::OnCollisionEnter(Entity other)
 {
 	// find script
   ComponentCScript* otherScript = other.getComponent<ComponentCScript>();
+  TransformComponent* otherTransComp = other.getComponent<TransformComponent>();
   IScript* tmp = nullptr;
   if(otherScript)
 	  tmp = otherScript->_pScript;
@@ -463,4 +495,22 @@ void Player::OnCollisionEnter(Entity other)
 		rgb->acceleration = NlMath::Vector3D(0.0f, 0.0f, 0.0f);
 
 	}
+  else if(typeid(*tmp).hash_code() == typeid(FanScript).hash_code())
+  {
+    //if player is not a moth do nothing
+    if (getState() != PLAYERSTATE::MOTH)
+      return;
+    camera->SetTarget(otherTransComp->_position);
+    camera->SetDistance(init_CAMERA_DISTANCE);
+    //camera->SetRotate(false);
+    // turn off collider
+    MyID.getComponent<ComponentCollider>()->isCollide = false;
+    MyID.getComponent<ComponentCollider>()->isCollidable = false;
+    //MyID.getComponent<ComponentGraphics>()->_isActive = false;
+    // set rigid body to static
+    comRigid->isStatic = true;
+    comRigid->isActive = false;
+    comRigid->velocity = NlMath::Vector3D(0.0f, 0.0f, 0.0f);
+    comRigid->acceleration = NlMath::Vector3D(0.0f, 0.0f, 0.0f);
+  }
 }
