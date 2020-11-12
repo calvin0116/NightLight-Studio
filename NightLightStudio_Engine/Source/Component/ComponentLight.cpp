@@ -348,6 +348,7 @@ void ComponentLight::Read(Value& val)
 		_diffuse.x = pos[0].GetFloat();
 		_diffuse.y = pos[1].GetFloat();
 		_diffuse.z = pos[2].GetFloat();
+		SetDiffuse(_diffuse);
 	}
 
 
@@ -360,6 +361,7 @@ void ComponentLight::Read(Value& val)
 		_ambient.x = scale[0].GetFloat();
 		_ambient.y = scale[1].GetFloat();
 		_ambient.z = scale[2].GetFloat();
+		SetAmbient(_ambient);
 	}
 
 	if (val.FindMember("Specular") == val.MemberEnd())
@@ -371,6 +373,7 @@ void ComponentLight::Read(Value& val)
 		_specular.x = rotate[0].GetFloat();
 		_specular.y = rotate[1].GetFloat();
 		_specular.z = rotate[2].GetFloat();
+		SetSpecular(_specular);
 	}
 
 	if (val.FindMember("Attenuation") == val.MemberEnd()) // Should be intensity
@@ -378,6 +381,7 @@ void ComponentLight::Read(Value& val)
 	else
 	{
 		_intensity = val["Attenuation"].GetFloat(); // Should be intensity
+		SetAttenuation(1.0f / _intensity);
 	}
 
 	if (val.FindMember("CutOff") == val.MemberEnd())
@@ -385,6 +389,7 @@ void ComponentLight::Read(Value& val)
 	else
 	{
 		_cutOff = val["CutOff"].GetFloat();
+		// Assign cutoff to spot light, if any
 	}
 
 	if (val.FindMember("OuterCutOff") == val.MemberEnd())
@@ -392,12 +397,8 @@ void ComponentLight::Read(Value& val)
 	else
 	{
 		_outerCutOff = val["OuterCutOff"].GetFloat();
+		// Assign outercuttoff to spotlight, if any
 	}
-
-	SetAmbient(_ambient);
-	SetDiffuse(_diffuse);
-	SetAttenuation(1.0f / _intensity);
-	SetSpecular(_specular);
 }
 
 Value ComponentLight::Write()

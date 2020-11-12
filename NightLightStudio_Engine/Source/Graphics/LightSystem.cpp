@@ -55,12 +55,18 @@ namespace NS_GRAPHICS
 				{
 					DirLight& dirlight = lightblock->_dLights[lightcomp->_lightID];
 					dirlight._direction = transformComp->GetModelMatrix() * glm::vec4(1.f, 0.f, 0.f, 0.f); // w = 0 for vector
+					dirlight._ambient = glm::vec4(lightcomp->_ambient, 1.f);
+					dirlight._diffuse = glm::vec4(lightcomp->_diffuse, 1.f);
+					dirlight._specular = glm::vec4(lightcomp->_diffuse, 1.f);
 				}
 				else if (lightcomp->_type == Lights::POINT)
 				{
 					PointLight& pointlight = lightblock->_pLights[lightcomp->_lightID];
 					pointlight.position = transformComp->GetModelMatrix() * glm::vec4(0.f, 0.f, 0.f, 1.f); // w = 1 for point
 					pointlight._attenuation = 1.f / lightcomp->_intensity;
+					pointlight._ambient = glm::vec4(lightcomp->_ambient, 1.f);
+					pointlight._diffuse = glm::vec4(lightcomp->_diffuse, 1.f);
+					pointlight._specular = glm::vec4(lightcomp->_diffuse, 1.f);
 				}
 				else if (lightcomp->_type == Lights::SPOT)
 				{
@@ -68,6 +74,11 @@ namespace NS_GRAPHICS
 					spotlight._direction = transformComp->GetModelMatrix() * glm::vec4(1.f, 0.f, 0.f, 0.f); // w = 0 for vector
 					spotlight.position = transformComp->GetModelMatrix() * glm::vec4(0.f, 0.f, 0.f, 1.f); // w = 1 for point
 					spotlight._attenuation = 1.f / lightcomp->_intensity;
+					spotlight._ambient = glm::vec4(lightcomp->_ambient, 1.f);
+					spotlight._diffuse = glm::vec4(lightcomp->_diffuse, 1.f);
+					spotlight._specular = glm::vec4(lightcomp->_diffuse, 1.f);
+					spotlight._cutOff = lightcomp->_cutOff;
+					spotlight._outerCutOff = lightcomp->_outerCutOff;
 				}
 			}
 			++itr;
