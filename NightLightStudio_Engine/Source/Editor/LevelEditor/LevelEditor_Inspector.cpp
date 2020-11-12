@@ -489,9 +489,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
-						if (fileType[0] == '\\')
+						//SOIL doesnt deal with preceding slash
+						if (data[0] == '\\')
 						{
-							fileType.erase(0, 1);
+							data.erase(0, 1);
 						}
 						tex = data;
 						graphics_comp->AddAlbedoTexture(tex);
