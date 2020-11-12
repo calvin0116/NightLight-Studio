@@ -431,6 +431,16 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 	{
 		if (ImGui::CollapsingHeader("Graphics component", &_notRemove))
 		{
+			bool renderTextures = !(graphics_comp->_renderType == RENDERTYPE::SOLID);
+
+			//ImGui::Checkbox("Is Active", &light->_isActive);
+			ImGui::Checkbox("Render Textures", &renderTextures);
+
+			if (!renderTextures)
+				graphics_comp->SetRenderType(RENDERTYPE::SOLID);
+			else
+				graphics_comp->SetRenderType(RENDERTYPE::TEXTURED);
+
 			ImGui::Checkbox("IsActive##Grahpic", &graphics_comp->_isActive);
 
 			std::string mod = graphics_comp->_modelFileName.toString();
@@ -441,7 +451,11 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 			std::string ao = graphics_comp->_aoFileName.toString();
 			std::string specular = graphics_comp->_specularFileName.toString();
 
-			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&graphics_comp, &mod]()
+				{
+					graphics_comp->AddModel(mod);
+				});
 			// Drag and Drop from Asset Inspector onto Model File Name
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
 				[this, &mod, &graphics_comp](std::string* str)
@@ -464,11 +478,41 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				{
 					graphics_comp->AddAlbedoTexture(tex);
 				});
+			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+				[this, &tex, &graphics_comp](std::string* str)
+				{
+					std::string data = *str;
+					std::transform(data.begin(), data.end(), data.begin(),
+						[](unsigned char c)
+						{ return (char)std::tolower(c); });
+
+					std::string fileType = LE_GetFileType(data);
+					if (fileType == "png" || fileType == "tga" || fileType == "dds")
+					{
+						tex = data;
+						graphics_comp->AddAlbedoTexture(tex);
+					}
+				});
 
 			_levelEditor->LE_AddInputText("Normal file", normal, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&normal, &graphics_comp]()
 				{
 					graphics_comp->AddNormalTexture(normal);
+				});
+			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+				[this, &normal, &graphics_comp](std::string* str)
+				{
+					std::string data = *str;
+					std::transform(data.begin(), data.end(), data.begin(),
+						[](unsigned char c)
+						{ return (char)std::tolower(c); });
+
+					std::string fileType = LE_GetFileType(data);
+					if (fileType == "png" || fileType == "tga" || fileType == "dds")
+					{
+						normal = data;
+						graphics_comp->AddAlbedoTexture(normal);
+					}
 				});
 
 			_levelEditor->LE_AddInputText("Metallic file", metallic, 500, ImGuiInputTextFlags_EnterReturnsTrue,
@@ -476,11 +520,41 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				{
 					graphics_comp->AddMetallicTexture(metallic);
 				});
+			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+				[this, &metallic, &graphics_comp](std::string* str)
+				{
+					std::string data = *str;
+					std::transform(data.begin(), data.end(), data.begin(),
+						[](unsigned char c)
+						{ return (char)std::tolower(c); });
+
+					std::string fileType = LE_GetFileType(data);
+					if (fileType == "png" || fileType == "tga" || fileType == "dds")
+					{
+						metallic = data;
+						graphics_comp->AddAlbedoTexture(metallic);
+					}
+				});
 
 			_levelEditor->LE_AddInputText("Roughness file", roughness, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&roughness, &graphics_comp]()
 				{
 					graphics_comp->AddRoughnessTexture(roughness);
+				});
+			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+				[this, &roughness, &graphics_comp](std::string* str)
+				{
+					std::string data = *str;
+					std::transform(data.begin(), data.end(), data.begin(),
+						[](unsigned char c)
+						{ return (char)std::tolower(c); });
+
+					std::string fileType = LE_GetFileType(data);
+					if (fileType == "png" || fileType == "tga" || fileType == "dds")
+					{
+						roughness = data;
+						graphics_comp->AddAlbedoTexture(roughness);
+					}
 				});
 
 			_levelEditor->LE_AddInputText("AO file", ao, 500, ImGuiInputTextFlags_EnterReturnsTrue,
@@ -488,11 +562,41 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				{
 					graphics_comp->AddAOTexture(ao);
 				});
+			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+				[this, &ao, &graphics_comp](std::string* str)
+				{
+					std::string data = *str;
+					std::transform(data.begin(), data.end(), data.begin(),
+						[](unsigned char c)
+						{ return (char)std::tolower(c); });
+
+					std::string fileType = LE_GetFileType(data);
+					if (fileType == "png" || fileType == "tga" || fileType == "dds")
+					{
+						ao = data;
+						graphics_comp->AddAlbedoTexture(ao);
+					}
+				});
 
 			_levelEditor->LE_AddInputText("Specular file", specular, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&specular, &graphics_comp]()
 				{
 					graphics_comp->AddSpecularTexture(specular);
+				});
+			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+				[this, &specular, &graphics_comp](std::string* str)
+				{
+					std::string data = *str;
+					std::transform(data.begin(), data.end(), data.begin(),
+						[](unsigned char c)
+						{ return (char)std::tolower(c); });
+
+					std::string fileType = LE_GetFileType(data);
+					if (fileType == "png" || fileType == "tga" || fileType == "dds")
+					{
+						specular = data;
+						graphics_comp->AddAlbedoTexture(specular);
+					}
 				});
 
 			ImGui::Separator();
