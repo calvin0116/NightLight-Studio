@@ -2,18 +2,39 @@
 #include "../Logic/CScripts/AllScripts.h"
 
 //#include "Components.h"   // inherit required functions
+int ComponentCScript::_blkCtrl = 0;
 
 ComponentCScript::ComponentCScript() : _isActive(false), _pScript(nullptr), _iTag(0)
 {
     strcpy_s(ser_name, "CScriptComponent");
+    ++_blkCtrl;
 }
 
 ComponentCScript::~ComponentCScript()
 {
-  //// Delete memory
-  //if(_pScript)
-  //  delete _pScript;
-  //_pScript = nullptr;
+  --_blkCtrl;
+  if (_blkCtrl > 0)
+    _pScript = nullptr;
+  // Delete memory
+  else
+  {
+    if (_pScript)
+      delete _pScript;
+    _pScript = nullptr;
+  }
+}
+
+ComponentCScript::ComponentCScript(const ComponentCScript& rhs) : _isActive(false), _pScript(nullptr), _iTag(0)
+{
+  *this = rhs;
+  ++_blkCtrl;
+}
+
+ComponentCScript& ComponentCScript::operator=(const ComponentCScript& rhs)
+{
+  *this = rhs;
+  ++_blkCtrl;
+  return *this;
 }
 
 void	ComponentCScript::Read(Value& val)
@@ -35,7 +56,7 @@ void	ComponentCScript::Read(Value& val)
         delete _pScript;
         _pScript = nullptr;
       }
-      _pScript = AllScripts::Construct(_sName.toString());
+      _pScript = AllScripts::MyConstruct(_sName.toString());
     }
   }
 

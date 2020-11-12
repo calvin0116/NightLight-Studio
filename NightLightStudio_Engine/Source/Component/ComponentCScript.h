@@ -12,7 +12,7 @@ namespace ScriptType
 // Only BGM will use this the most.3D sound will follow this component's ObjID pos by default.
 typedef class ComponentCScript : public ISerializable
 {
-  //static int _blkCtrl;
+  static int _blkCtrl;
 public:
   bool            _isActive;  // Expose, can edit
   LocalString<20> _sName;     // Expose, can edit
@@ -21,6 +21,8 @@ public:
 
   ComponentCScript();
 	~ComponentCScript();
+  ComponentCScript(const ComponentCScript&);
+  ComponentCScript& operator=(const ComponentCScript&);
 
 	//read and write function for initialization from saved files
   void	Read(Value&) override;

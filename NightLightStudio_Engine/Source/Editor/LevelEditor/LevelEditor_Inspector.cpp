@@ -677,7 +677,7 @@ void InspectorWindow::CScriptComp(Entity& ent)
           delete cScript_comp->_pScript;
           cScript_comp->_pScript = nullptr;
         }
-        cScript_comp->_pScript = AllScripts::Construct(tex);
+        cScript_comp->_pScript = AllScripts::MyConstruct(tex);
         if (cScript_comp->_pScript)
         {
           std::cout << "Constructed Script" << std::endl;

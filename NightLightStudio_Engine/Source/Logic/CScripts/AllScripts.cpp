@@ -16,7 +16,7 @@
 // Construct Scripts from string
 namespace AllScripts
 {
-  IScript* Construct(std::string name)
+  IScript* MyConstruct(std::string name)
   {
     if (name == "TestScript")
       return dynamic_cast<IScript*>(new TestScript());

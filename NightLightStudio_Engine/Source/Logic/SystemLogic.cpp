@@ -74,7 +74,7 @@ namespace NS_LOGIC
     for (; itr != itrEnd; ++itr)
     {
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
-      myComp->_pScript = AllScripts::Construct(myComp->_sName.toString());
+      myComp->_pScript = AllScripts::MyConstruct(myComp->_sName.toString());
     }
 #else
     // new smth
