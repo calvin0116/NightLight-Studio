@@ -41,7 +41,7 @@ class Player : public IScript
 	ComponentPlayerStats* playerStats;
 	ComponentGraphics* comGraphics;
 	ComponentLight* comLight;
-	NS_GRAPHICS::LightSystem* light;
+	NS_GRAPHICS::LightSystem* lightSys;
 
 	PLAYERSTATE _prevPlayerState;
 	PLAYERSTATE _playerState;
