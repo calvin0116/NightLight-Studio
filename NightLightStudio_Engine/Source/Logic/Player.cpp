@@ -6,8 +6,6 @@
 #include "CScripts/PossessScript.h"
 #include "SpawnPoint.h"
 #include "../Core/DeltaTime.h"
-
-
 #include "CScripts/FanScript.h"
 
 ////need to be edited by designer
@@ -57,12 +55,12 @@ void Player::Init()
 	comCol = MyID.getComponent<ColliderComponent>();
 	comRigid = MyID.getComponent<RigidBodyComponent>();
 	comTrans = MyID.getComponent<TransformComponent>();
-	//set this as a point light, scale to 0.001
+	//set this as a point lightSys, scale to 0.001
 	comLight = MyID.getComponent<LightComponent>();
 	comLight->ChangeLightType(NS_GRAPHICS::Lights::POINT);
 	comLight->SetIntensity(1000);
 	comLight->SetActive(false);
-	 light = &NS_GRAPHICS::LightSystem::GetInstance();
+	 lightSys = &NS_GRAPHICS::LightSystem::GetInstance();
 
 	 //toggle model
 	 comGraphics = MyID.getComponent<ComponentGraphics>();
@@ -271,7 +269,7 @@ void Player::changeState(PLAYERSTATE state)
 	{
 	case PLAYERSTATE::HUMAN:
 	{
-		light->SetAllDirectionalLights(true);
+		lightSys->SetAllDirectionalLights(true);
 		comLight->SetActive(false);
 		comTrans->_scale *= 3.0f;
 		//enable rigid body
@@ -309,7 +307,6 @@ void Player::changeState(PLAYERSTATE state)
 		}
     else if (_prevPlayerState == PLAYERSTATE::POSSESSED_FAN)
     {
-
       camera->SetTarget(comTrans->_position);
       camera->SetDistance(init_CAMERA_DISTANCE);
       //camera->SetRotate(false);
@@ -371,9 +368,9 @@ void Player::changeState(PLAYERSTATE state)
 
 	case PLAYERSTATE::MOTH:
 	{
-		light->SetAllDirectionalLights(false);
+		lightSys->SetAllDirectionalLights(false);
 		comLight->SetActive(true);
-
+		comLight->SetIntensity(1000);
 		comTrans->_scale /= 3.0f;
 		//reset camera
 		CAMERA_DISTANCE = 100;
@@ -391,13 +388,15 @@ void Player::changeState(PLAYERSTATE state)
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop3");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop4");
 
-		//light!
+		//lightSys!
 		comLight->SetActive(false);
 		break;
 	}
 
 	case PLAYERSTATE::POSSESSED:
 	{
+		lightSys->SetAllDirectionalLights(true);
+		comLight->SetActive(false);
 		comTrans->_scale /= 3.0f;
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk1");
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Walk2");
