@@ -32,7 +32,7 @@ public:
 
 	// For point and spot
 	// Also known as intensity
-	float _attenuation;
+	float _intensity;
 
 	// For spot
 	float _cutOff;

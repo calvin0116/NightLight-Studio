@@ -76,12 +76,12 @@ namespace NS_GRAPHICS
 			const glm::vec3& diffuse = glm::vec3(0.5f, 0.5f, 0.5f), const glm::vec3& specular = glm::vec3(1.f, 1.f, 1.f));
 
 		// Adds Point Light to scene, returns the id token for currently added light
-		int AddPointLight(const float& attenuation = 0.2f, const glm::vec3& ambient = glm::vec3(1.f, 1.f, 1.f),
+		int AddPointLight(const float& intensity = 0.2f, const glm::vec3& ambient = glm::vec3(1.f, 1.f, 1.f),
 			const glm::vec3& diffuse = glm::vec3(1.f, 1.f, 1.f), const glm::vec3& specular = glm::vec3(1.f, 1.f, 1.f));
 
 		// Adds Spot Light to scene, returns the id token for currently added light
 		int AddSpotLight(const glm::vec3& direction = glm::vec3(1.f, 0.f, 0.f), const float& cutoff = 1.f, const float& outercutoff = 100.f,
-			const float& attenuation = 100.f, const glm::vec3& ambient = glm::vec3(1.f, 1.f, 1.f),
+			const float& intensity = 100.f, const glm::vec3& ambient = glm::vec3(1.f, 1.f, 1.f),
 			const glm::vec3& diffuse = glm::vec3(1.f, 1.f, 1.f), const glm::vec3& specular = glm::vec3(1.f, 1.f, 1.f));
 
 		// Creates and attaches light component to entity
