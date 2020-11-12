@@ -286,6 +286,7 @@ namespace NS_GRAPHICS
 			for (int i = deletedIndex + 1; i < lightblock->_dLights_Num; ++i)
 				lightblock->_dLights[i - 1] = lightblock->_dLights[i];
 
+
 			lightblock->_dLights_Num--; // decrement total number of lights
 		}
 		else if (lightType == Lights::POINT)
@@ -347,20 +348,32 @@ namespace NS_GRAPHICS
 					if (light->_lightID < lightblock->_dLights_Num - 1)
 						SortLights(Lights::DIRECTIONAL, light->_lightID);
 					else
+					{
 						dLights_tracker[light->_lightID] = false;
+
+						lightblock->_dLights_Num--;
+					}
 					break;
 
 				case Lights::POINT:
 					if (light->_lightID < lightblock->_pLights_Num - 1)
 						SortLights(Lights::POINT, light->_lightID);
 					else
+					{
 						pLights_tracker[light->_lightID] = false;
+						lightblock->_pLights_Num--;
+					}
+						
 					break;
 				case Lights::SPOT:
 					if (light->_lightID < lightblock->_sLights_Num - 1)
 						SortLights(Lights::SPOT, light->_lightID);
 					else
+					{
 						sLights_tracker[light->_lightID] = false;
+						lightblock->_sLights_Num--;
+					}
+						
 					break;
 				default:
 					break;
@@ -388,10 +401,10 @@ namespace NS_GRAPHICS
 				break;
 			}
 
-#ifdef _DEBUG
-			if (light->_lightID == -1)
-				std::cout << "ERROR: Failed to create light component, please check Light System" << std::endl;
-#endif
+//#ifdef _DEBUG
+//			if (light->_lightID == -1)
+//				std::cout << "ERROR: Failed to create light component, please check Light System" << std::endl;
+//#endif
 		}
 	}
 
