@@ -82,6 +82,7 @@ void Player::Init()
 	CAMERA_DISTANCE							= playerStats->camera_distance;
 	CAMERA_OFFSET_X							= playerStats->camera_offset.x;
 	CAMERA_OFFSET_Y							= playerStats->camera_offset.y;
+  moth_CAMERA_OFFSET_Y        = playerStats->camera_offset.z;
 	//for state change
 	init_CAMERA_DISTANCE =					CAMERA_DISTANCE;
 	init_CAMERA_OFFSET_X =					CAMERA_OFFSET_X;
@@ -203,7 +204,7 @@ void Player::Update()
 		// update camera position with player position
 		camera->SetTarget(comTrans->_position);
 		camera->SetDistance(CAMERA_DISTANCE);
-		camera->SetTargetOffsetXY(CAMERA_OFFSET_X, CAMERA_OFFSET_Y + 10);
+		camera->SetTargetOffsetXY(CAMERA_OFFSET_X, moth_CAMERA_OFFSET_Y);
 		//uncontrolable motion
 		comRigid->velocity =  (NS_GRAPHICS::CameraSystem::GetInstance().GetViewVector()* PLAYER_FLY_MAG);
 		
