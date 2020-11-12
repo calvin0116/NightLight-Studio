@@ -429,6 +429,9 @@
     <ClInclude Include="Source\Component\ComponentCauldronStats.h">
       <Filter>Source Files\Component\Stats</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Logic\CScripts\CauldronScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -700,6 +703,9 @@
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentCauldronStats.cpp">
       <Filter>Source Files\Component\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Logic\CScripts\CauldronScript.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

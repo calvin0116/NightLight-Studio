@@ -6,8 +6,14 @@
 #include "LevelEditor_Inspector.h"
 #include "../imgui/imguizmo/ImGuizmo.h"
 
+#include "../../Input/SystemInput.h"
+
 //Added by Teck Wei
 #include "LevelEditor_ECHelper.h"
+
+// For message
+#include "..\..\Messaging\SystemBroadcaster.h"
+#include "..\..\Messaging\Messages\MessageTogglePlay.h"
 
 LevelEditor::LevelEditor() : _window{ nullptr }, _showGrid{ true }
 //, _runEngine{ false }
@@ -29,6 +35,17 @@ void LevelEditor::Init(HWND window)
     LE_CreateWindow<InspectorWindow>("Inspector", true);
 
     _window = window;
+
+    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ENGINE_PLAY_BUTTON_EX", SystemInput_ns::IKEY_P, "PLAYBUTTONIDET_EX", SystemInput_ns::OnPress,
+        [this]()
+        {
+            if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ALT))
+            {
+                _runEngine = !_runEngine;
+                MessageTogglePlay isPlaying(_runEngine);
+                GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
+            }
+        });
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();

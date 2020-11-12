@@ -11,11 +11,12 @@
 #include "../SpawnPoint.h"
 #include "FanScript.h"
 #include "FanBlowScript.h"
+#include "CauldronScript.h"
 
 // Construct Scripts from string
 namespace AllScripts
 {
-  IScript* Construct(std::string name)
+  IScript* MyConstruct(std::string name)
   {
     if (name == "TestScript")
       return dynamic_cast<IScript*>(new TestScript());
@@ -33,6 +34,8 @@ namespace AllScripts
       return dynamic_cast<IScript*>(new FanScript());
     else if (name == "FanBlowScript")
       return dynamic_cast<IScript*>(new FanBlowScript());
+    else if (name == "CauldronScript")
+      return dynamic_cast<IScript*>(new CauldronScript());
     return nullptr;
   }
 }

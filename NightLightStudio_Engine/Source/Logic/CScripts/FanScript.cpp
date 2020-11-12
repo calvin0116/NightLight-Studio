@@ -47,13 +47,13 @@ void FanScript::Update()
       FanBlowScript* obb1Script = nullptr;
       if (obb1ScriptComp)
         obb1Script = reinterpret_cast<FanBlowScript*>(obb1ScriptComp->_pScript);
+      if (playerScript->getState() == PLAYERSTATE::HUMAN)
+      {
+        Activate = false;
+        timePassed = 0.0f;
+      }
       if (playerScript)
       {
-        if (playerScript->getState() == PLAYERSTATE::HUMAN)
-        {
-          Activate = false;
-          timePassed = 0.0f;
-        }
         if (obb1Script)
           obb1Script->Activate = Activate;
       }
@@ -62,6 +62,18 @@ void FanScript::Update()
       timePassed += DELTA_T->dt;
   }
 }
+
+//void FanScript::Deactivate()
+//{
+//  Player* playerScript = nullptr;
+//  if (playerScriptComp)
+//    playerScript = reinterpret_cast<Player*>(playerScriptComp->_pScript);
+//  if (playerScript->getState() == PLAYERSTATE::HUMAN)
+//  {
+//    Activate = false;
+//    timePassed = 0.0f;
+//  }
+//}
 
 void FanScript::Exit()
 {
@@ -75,11 +87,11 @@ void FanScript::OnCollisionEnter(Entity other)
   if (playerScriptComp && playerScriptComp->_pScript)
   {
     Player* playerScript = reinterpret_cast<Player*>(playerScriptComp->_pScript);
-    AllScripts::CameraScript* camScript = reinterpret_cast<AllScripts::CameraScript*>(cameraScriptComp->_pScript);
-    if (playerScript && camScript)
+    if (playerScript)
     {
       if (playerScript->getState() == PLAYERSTATE::MOTH)
       {
+        playerScript->changeState(PLAYERSTATE::POSSESSED_FAN);
         //playerScript->changeState(PLAYERSTATE::POSSESSED);
         //ComponentTransform* comTrans = MyID.getComponent<ComponentTransform>();
         //camScript->SetTarget(comTrans->_position);

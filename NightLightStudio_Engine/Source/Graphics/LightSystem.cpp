@@ -232,29 +232,36 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	//void LightSystem::RemoveLight(const int& id, Lights lightType)
-	//{
-	//	if (id != -1)
-	//	{
-	//		switch (lightType)
-	//		{
-	//		case Lights::DIRECTIONAL:
-	//			dLights_tracker[id] = false;
-	//			lightblock->_dLights_Num--;
-	//			break;
-	//		case Lights::POINT:
-	//			pLights_tracker[id] = false;
-	//			lightblock->_pLights_Num--;
-	//			break;
-	//		case Lights::SPOT:
-	//			sLights_tracker[id] = false;
-	//			lightblock->_sLights_Num--;
-	//			break;
-	//		default:
-	//			break;
-	//		}
-	//	}
-	//}
+	void LightSystem::RemoveLight(const int& id, Lights lightType)
+	{
+		if (id != -1)
+		{
+			switch (lightType)
+			{
+			case Lights::DIRECTIONAL:
+				if (id < lightblock->_dLights_Num - 1)
+					SortLights(Lights::DIRECTIONAL, id);
+				else
+					dLights_tracker[id] = false;
+				break;
+
+			case Lights::POINT:
+				if (id < lightblock->_pLights_Num - 1)
+					SortLights(Lights::POINT, id);
+				else
+					pLights_tracker[id] = false;
+				break;
+			case Lights::SPOT:
+				if (id < lightblock->_sLights_Num - 1)
+					SortLights(Lights::SPOT, id);
+				else
+					sLights_tracker[id] = false;
+				break;
+			default:
+				break;
+			}
+		}
+	}
 
 	void LightSystem::SortLights(const Lights& lightType, const int& deletedIndex)
 	{
@@ -337,16 +344,23 @@ namespace NS_GRAPHICS
 				switch (light->_type)
 				{
 				case Lights::DIRECTIONAL:
-					dLights_tracker[light->_lightID] = false;
-					lightblock->_dLights_Num--;
+					if (light->_lightID < lightblock->_dLights_Num - 1)
+						SortLights(Lights::DIRECTIONAL, light->_lightID);
+					else
+						dLights_tracker[light->_lightID] = false;
 					break;
+
 				case Lights::POINT:
-					pLights_tracker[light->_lightID] = false;
-					lightblock->_pLights_Num--;
+					if (light->_lightID < lightblock->_pLights_Num - 1)
+						SortLights(Lights::POINT, light->_lightID);
+					else
+						pLights_tracker[light->_lightID] = false;
 					break;
 				case Lights::SPOT:
-					sLights_tracker[light->_lightID] = false;
-					lightblock->_sLights_Num--;
+					if (light->_lightID < lightblock->_sLights_Num - 1)
+						SortLights(Lights::SPOT, light->_lightID);
+					else
+						sLights_tracker[light->_lightID] = false;
 					break;
 				default:
 					break;
@@ -356,14 +370,20 @@ namespace NS_GRAPHICS
 			switch (lightType)
 			{
 			case Lights::DIRECTIONAL:
-				light->AssignLight(AddDirLight(), Lights::DIRECTIONAL);
+				light->AssignLight(AddDirLight(glm::vec3(1.f,0.f,0.f), light->_ambient, light->_diffuse, light->_specular), Lights::DIRECTIONAL);
 				break;
 			case Lights::POINT:
-				light->AssignLight(AddPointLight(), Lights::POINT);
+				light->AssignLight(AddPointLight(light->_attenuation, light->_ambient, light->_diffuse, light->_specular), Lights::POINT);
 				break;
 			case Lights::SPOT:
-				light->AssignLight(AddSpotLight(), Lights::SPOT);
+				light->AssignLight(AddSpotLight(glm::vec3(1.f, 0.f, 0.f), light->_cutOff, light->_outerCutOff, light->_attenuation, light->_ambient,
+												light->_diffuse, light->_specular), Lights::SPOT);
 				break;
+
+			case Lights::INVALID_TYPE:
+				light->AssignLight(-1, Lights::INVALID_TYPE);
+				break;
+
 			default:
 				break;
 			}
@@ -372,6 +392,22 @@ namespace NS_GRAPHICS
 			if (light->_lightID == -1)
 				std::cout << "ERROR: Failed to create light component, please check Light System" << std::endl;
 #endif
+		}
+	}
+
+	void LightSystem::SetAllDirectionalLights(const bool& setter)
+	{
+		auto itr = G_ECMANAGER->begin<ComponentLight>();
+		auto itrEnd = G_ECMANAGER->end<ComponentLight>();
+
+		while (itr != itrEnd)
+		{
+			ComponentLight* lightcomp = G_ECMANAGER->getComponent<ComponentLight>(itr);
+
+			if (lightcomp->GetInactiveType() == Lights::DIRECTIONAL)
+				lightcomp->SetActive(setter);
+
+				++itr;
 		}
 	}
 

@@ -40,4 +40,6 @@ public:
   virtual void OnCollisionEnter(Entity other) override;
 
   virtual void OnTriggerEnter(Entity other) override;
+
+  void Deactivate();
 };

@@ -19,7 +19,8 @@ enum class PLAYERSTATE
 {
 	HUMAN = 0,
 	MOTH,
-	POSSESSED
+	POSSESSED,
+  POSSESSED_FAN
 };
 
 class Player : public IScript
@@ -27,7 +28,6 @@ class Player : public IScript
 	Entity playerEntity;
 	AllScripts::CameraScript*camera;
 	AllScripts::CameraScript* possessStateCamera;
-	float _playerEnergy;
 
 	NlMath::Vector3D currentCameraDirection;
 
@@ -60,6 +60,7 @@ public:
 
   float init_CAMERA_DISTANCE;
   float init_CAMERA_OFFSET_X;
+  float _playerEnergy;
 
 	Player();
 	void Init() override;

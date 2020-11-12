@@ -562,7 +562,14 @@ void InspectorWindow::LightComp(Entity& ent)
 	{
 		if (ImGui::CollapsingHeader("Light", &_notRemove))
 		{
-			ImGui::Checkbox("Is Active", &light->_isActive);
+			// use tmp variable to store active
+			// this is so that we can call the function to set active state
+			bool active_state = light->GetActive();
+
+			//ImGui::Checkbox("Is Active", &light->_isActive);
+			ImGui::Checkbox("Is Active", &active_state);
+
+			light->SetActive(active_state);
 
 			const char* lights[] = { "Directional", "Point", "Spot", "None" };
 			LIGHT = (int) light->_type;
@@ -677,7 +684,7 @@ void InspectorWindow::CScriptComp(Entity& ent)
           delete cScript_comp->_pScript;
           cScript_comp->_pScript = nullptr;
         }
-        cScript_comp->_pScript = AllScripts::Construct(tex);
+        cScript_comp->_pScript = AllScripts::MyConstruct(tex);
         if (cScript_comp->_pScript)
         {
           std::cout << "Constructed Script" << std::endl;

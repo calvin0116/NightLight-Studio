@@ -26,10 +26,53 @@ void ComponentLight::AssignLight(const int& lightID, const NS_GRAPHICS::Lights& 
 {
 	_lightID = lightID;
 	_type = Type;
+
+	// Save active type, if valid light is provided
+	if (Type != NS_GRAPHICS::Lights::INVALID_TYPE)
+		_inactive_type = Type;
 }
 
 ComponentLight::~ComponentLight()
 {
+	NS_GRAPHICS::LightSystem::GetInstance().RemoveLight(_lightID, _type);
+}
+
+void ComponentLight::SetActive(const bool& set)
+{
+	// No action required if set is same as prev
+	if (set == _isActive)
+		return;
+
+	if (set == true)
+	{
+		// Activate light (Add and assign light to component)
+		if (_lightID == -1)
+		{
+			ChangeLightType(_inactive_type);
+		}
+	}
+	else
+	{
+		// Deactivate light (Delete light from component)
+		if (_lightID != -1)
+		{
+			_inactive_type = _type;
+			ChangeLightType(NS_GRAPHICS::Lights::INVALID_TYPE);
+		}
+	}
+
+	// Set isActive variable to set
+	_isActive = set;
+}
+
+bool ComponentLight::GetActive() const
+{
+	return _isActive;
+}
+
+NS_GRAPHICS::Lights ComponentLight::GetInactiveType() const
+{
+	return _inactive_type;
 }
 
 void ComponentLight::ChangeLightType(const NS_GRAPHICS::Lights& Type)
@@ -265,10 +308,13 @@ void ComponentLight::SetAttenuation(const float& attenuation)
 
 void ComponentLight::Read(Value& val)
 {
+	// Remove if any
+	NS_GRAPHICS::LightSystem::GetInstance().RemoveLight(_lightID, _type);
+
 	if (val.FindMember("isActive") == val.MemberEnd())
 		std::cout << "No active data has been found" << std::endl;
 	else
-		_isActive = val["isActive"].GetBool();
+		SetActive(val["isActive"].GetBool());
 
 	if (val.FindMember("LightType") == val.MemberEnd())
 		std::cout << "No active data has been found" << std::endl;
@@ -277,15 +323,18 @@ void ComponentLight::Read(Value& val)
 		std::string lightName = val["LightType"].GetString();
 		if (lightName == "DIRECTIONAL")
 		{
-			ChangeLightType(NS_GRAPHICS::Lights::DIRECTIONAL);
+			//ChangeLightType(NS_GRAPHICS::Lights::DIRECTIONAL);
+			AssignLight(NS_GRAPHICS::LightSystem::GetInstance().AddDirLight(), NS_GRAPHICS::Lights::DIRECTIONAL);
 		}
 		else if (lightName == "POINT")
 		{
-			ChangeLightType(NS_GRAPHICS::Lights::POINT);
+			//ChangeLightType(NS_GRAPHICS::Lights::POINT);
+			AssignLight(NS_GRAPHICS::LightSystem::GetInstance().AddPointLight(), NS_GRAPHICS::Lights::POINT);
 		}
 		else if (lightName == "SPOT")
 		{
-			ChangeLightType(NS_GRAPHICS::Lights::SPOT);
+			//ChangeLightType(NS_GRAPHICS::Lights::SPOT);
+			AssignLight(NS_GRAPHICS::LightSystem::GetInstance().AddSpotLight(), NS_GRAPHICS::Lights::SPOT);
 		}
 	}
 

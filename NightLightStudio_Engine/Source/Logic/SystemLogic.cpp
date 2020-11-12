@@ -5,6 +5,7 @@
 #include "../Input/SystemInput.h" // For testing
 #include "CScripts/AllScripts.h"
 
+#define C_ENV
 
 namespace NS_LOGIC
 {
@@ -38,22 +39,22 @@ namespace NS_LOGIC
         }
       });
 
-    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("PlayLogic", SystemInput_ns::IKEY_ALT, "PlayLogic", SystemInput_ns::OnHold, [this]()
-      {
-        //Only if mouse wheel + alt button is pressed, camera will move.
-        //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
-        if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_9))
-        {
-          if (_isPlaying)
-          {
-            GameGameExit();
-            _Inited = false;
-          }
-            //GameExit();
-          _isPlaying = !_isPlaying;
-          std::cout << "Logic Playing: " << _isPlaying << std::endl;
-        }
-      });
+    //SYS_INPUT->GetSystemKeyPress().CreateNewEvent("PlayLogic", SystemInput_ns::IKEY_ALT, "PlayLogic", SystemInput_ns::OnHold, [this]()
+    //  {
+    //    //Only if mouse wheel + alt button is pressed, camera will move.
+    //    //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
+    //    if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_9))
+    //    {
+    //      if (_isPlaying)
+    //      {
+    //        GameGameExit();
+    //        _Inited = false;
+    //      }
+    //        //GameExit();
+    //      _isPlaying = !_isPlaying;
+    //      std::cout << "Logic Playing: " << _isPlaying << std::endl;
+    //    }
+    //  });
 
     // Attach handler
     r.AttachHandler("ScriptRequest", &SystemLogic::HandleMsg, this);
@@ -65,19 +66,25 @@ namespace NS_LOGIC
   {
     //if (!_isPlaying)
       //return;
+
+
+#ifdef C_ENV
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
     for (; itr != itrEnd; ++itr)
     {
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
-      myComp->_pScript = AllScripts::Construct(myComp->_sName.toString());
+      myComp->_pScript = AllScripts::MyConstruct(myComp->_sName.toString());
     }
+#else
     // new smth
     // C# Script
+#endif
   }
 
   void SystemLogic::GameGameExit()
   {
+#ifdef C_ENV
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
     for (; itr != itrEnd; ++itr)
@@ -86,10 +93,14 @@ namespace NS_LOGIC
       if (myComp->_isActive && myComp->_pScript)
         myComp->_pScript->Exit();
     }
+#else
+    // C#
+#endif
   }
 
   void SystemLogic::GamePreInit()
   {
+#ifdef C_ENV
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
     for (; itr != itrEnd; ++itr)
@@ -100,12 +111,29 @@ namespace NS_LOGIC
       Entity en = G_ECMANAGER->getEntity(itr);
       myComp->_pScript->SetEntity(en);
     }
+#else
+    // C#
+    auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    auto itrE = G_ECMANAGER->end<ComponentScript>();
+    for (; itrS != itrE; ++itrS)
+    {
+      ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+      if (MyScript == nullptr)
+        continue;
+      MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
+      MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
+      int ID = G_ECMANAGER->getObjId(itrS);
+      MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
+    }
+#endif
   }
 
   void SystemLogic::GameInit()
   {
     if (!_isPlaying)
       return;
+    _Inited = true;
+#ifdef C_ENV
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
     for (; itr != itrEnd; ++itr)
@@ -115,7 +143,7 @@ namespace NS_LOGIC
         continue;
       myComp->_pScript->Init();
     }
-
+#else
     // C# Script
     MonoBind::Bind();
     // Init base functions
@@ -124,24 +152,18 @@ namespace NS_LOGIC
     baseExit =            MonoWrapper::GetObjectMethod("Exit", "UniBehaviour");
     baseCollisionEnter =  MonoWrapper::GetObjectMethod("OnCollisionEnter", "UniBehaviour");
 
-    //// C# scripts init
-    //auto itrS = G_ECMANAGER->begin<ComponentScript>();
-    //auto itrE = G_ECMANAGER->end<ComponentScript>();
-    //for (; itrS != itrE; ++itrS)
-    //{
-    //  ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
-    //  if (MyScript == nullptr)
-    //    continue;
-    //  MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
-    //  MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
-    //  int ID = G_ECMANAGER->getObjId(itrS);
-    //  MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
-    //  if (!MyScript->_isActive)
-    //    continue;
-    //  MonoMethod* MyInit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseInit);
-    //  MonoWrapper::InvokeMethod(MyInit, MyScript->_MonoData._pInstance);
-    //}
-    _Inited = true;
+    // C# scripts init
+    auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    auto itrE = G_ECMANAGER->end<ComponentScript>();
+    for (; itrS != itrE; ++itrS)
+    {
+      ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+      if (MyScript == nullptr || !MyScript->_isActive)
+        continue;
+      MonoMethod* MyInit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseInit);
+      MonoWrapper::InvokeMethod(MyInit, MyScript->_MonoData._pInstance);
+    }
+#endif
   }
 
   void SystemLogic::Update()
@@ -154,6 +176,7 @@ namespace NS_LOGIC
       GameInit();
     }
     ////Run Script?
+#ifdef C_ENV
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
     for (; itr != itrEnd; ++itr)
@@ -163,18 +186,19 @@ namespace NS_LOGIC
         continue;
       myComp->_pScript->Update();
     }
-
-    //// C# Scripts Update
-    //auto itrS = G_ECMANAGER->begin<ComponentScript>();
-    //auto itrE = G_ECMANAGER->end<ComponentScript>();
-    //for (; itrS != itrE; ++itrS)
-    //{
-    //  ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
-    //  if (MyScript == nullptr || !MyScript->_isActive)
-    //    continue;
-    //  MonoMethod* MyUpdate = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseUpdate);
-    //  MonoWrapper::InvokeMethod(MyUpdate, MyScript->_MonoData._pInstance);
-    //}
+#else
+    // C# Scripts Update
+    auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    auto itrE = G_ECMANAGER->end<ComponentScript>();
+    for (; itrS != itrE; ++itrS)
+    {
+      ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+      if (MyScript == nullptr || !MyScript->_isActive)
+        continue;
+      MonoMethod* MyUpdate = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseUpdate);
+      MonoWrapper::InvokeMethod(MyUpdate, MyScript->_MonoData._pInstance);
+    }
+#endif
   }
 
   void SystemLogic::FixedUpdate()
@@ -186,6 +210,7 @@ namespace NS_LOGIC
   void SystemLogic::GameExit()
   {
     _Loaded = false;
+#ifdef C_ENV
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
     for (; itr != itrEnd; ++itr)
@@ -195,21 +220,22 @@ namespace NS_LOGIC
       delete myComp->_pScript;
       myComp->_pScript = nullptr;
     }
-
-    //// C# Scripts Exit
-    //auto itrS = G_ECMANAGER->begin<ComponentScript>();
-    //auto itrE = G_ECMANAGER->end<ComponentScript>();
-    //for (; itrS != itrE; ++itrS)
-    //{
-    //  ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
-    //  if (MyScript == nullptr)
-    //    continue;
-    //  MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
-    //  if (!MyScript->_isActive)
-    //    continue;
-    //  MonoMethod* MyExit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseExit);
-    //  MonoWrapper::InvokeMethod(MyExit, MyScript->_MonoData._pInstance);
-    //}
+#else
+    // C# Scripts Exit
+    auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    auto itrE = G_ECMANAGER->end<ComponentScript>();
+    for (; itrS != itrE; ++itrS)
+    {
+      ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+      if (MyScript == nullptr)
+        continue;
+      MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
+      if (!MyScript->_isActive)
+        continue;
+      MonoMethod* MyExit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseExit);
+      MonoWrapper::InvokeMethod(MyExit, MyScript->_MonoData._pInstance);
+    }
+#endif
   }
 
   void SystemLogic::Free()
@@ -225,6 +251,7 @@ namespace NS_LOGIC
   {
     if (!_isPlaying)
       return;
+#ifdef C_ENV
     ComponentCScript* comp1 = _obj1.getComponent<ComponentCScript>();
     ComponentCScript* comp2 = _obj2.getComponent<ComponentCScript>();
     if(comp1)
@@ -233,22 +260,23 @@ namespace NS_LOGIC
     if(comp2)
         if (comp2->_pScript)
             comp2->_pScript->OnCollisionEnter(_obj1);
-
-    //// C# script
-    //ComponentScript* cs1 = _obj1.getComponent<ComponentScript>();
-    //ComponentScript* cs2 = _obj2.getComponent<ComponentScript>();
-    //if (cs1 && cs2)
-    //{
-    //  MonoMethod* MyCollisionEnter = MonoWrapper::GetDerivedMethod(cs1->_MonoData._pInstance, baseCollisionEnter);
-    //  int cs2id = _obj2.getId();
-    //  MonoWrapper::InvokeMethodParams(MyCollisionEnter, cs1->_MonoData._pInstance, cs2id);
-    //}
-    //if (cs2)
-    //{
-    //  MonoMethod* MyCollisionEnter = MonoWrapper::GetDerivedMethod(cs2->_MonoData._pInstance, baseCollisionEnter);
-    //  int cs1id = _obj1.getId();
-    //  MonoWrapper::InvokeMethodParams(MyCollisionEnter, cs2->_MonoData._pInstance, cs1id);
-    //}
+#else
+    // C# script
+    ComponentScript* cs1 = _obj1.getComponent<ComponentScript>();
+    ComponentScript* cs2 = _obj2.getComponent<ComponentScript>();
+    if (cs1 && cs2)
+    {
+      MonoMethod* MyCollisionEnter = MonoWrapper::GetDerivedMethod(cs1->_MonoData._pInstance, baseCollisionEnter);
+      int cs2id = _obj2.getId();
+      MonoWrapper::InvokeMethodParams(MyCollisionEnter, cs1->_MonoData._pInstance, cs2id);
+    }
+    if (cs2)
+    {
+      MonoMethod* MyCollisionEnter = MonoWrapper::GetDerivedMethod(cs2->_MonoData._pInstance, baseCollisionEnter);
+      int cs1id = _obj1.getId();
+      MonoWrapper::InvokeMethodParams(MyCollisionEnter, cs2->_MonoData._pInstance, cs1id);
+    }
+#endif
   }
 
   void SystemLogic::OnCollisionStay(Entity _obj1, Entity _obj2)
@@ -267,6 +295,7 @@ namespace NS_LOGIC
   {
     if (!_isPlaying)
       return;
+#ifdef C_ENV
     ComponentCScript* comp1 = _obj1.getComponent<ComponentCScript>();
     ComponentCScript* comp2 = _obj2.getComponent<ComponentCScript>();
     if (comp1)
@@ -275,6 +304,9 @@ namespace NS_LOGIC
     if (comp2)
       if (comp2->_pScript)
         comp2->_pScript->OnTriggerEnter(_obj1);
+#else
+
+#endif
   }
 
   void SystemLogic::OnTriggerStay(Entity _obj1, Entity _obj2)
@@ -292,6 +324,7 @@ namespace NS_LOGIC
   void SystemLogic::HandleMsg(MessageScriptRequest& msg)
   {
     std::cout << "Received Request for script!" << std::endl;
+#ifdef C_ENV
     auto itr = G_ECMANAGER->begin<CScriptComponent>();
     auto eitr = G_ECMANAGER->end<CScriptComponent>();
     for (; itr != eitr; ++itr)
@@ -304,6 +337,9 @@ namespace NS_LOGIC
       // Break out of loop
       break;
     }
+#else
+
+#endif
   }
 
   void SystemLogic::HandleApplicationExit(MessageApplicationExit& msg)
@@ -317,7 +353,13 @@ namespace NS_LOGIC
     // Handle msg here.
     std::cout << "Hello from SystemLogic!" << std::endl;
     std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
-    //_isPlaying = msg.isPlaying;
+
+    _isPlaying = msg.isPlaying;
+    if (_isPlaying)
+    {
+      GameGameExit();
+      _Inited = false;
+    }
     //if (!_isPlaying)
     //  GameExit();
   }

@@ -6,5 +6,5 @@
 // Construct Scripts from string
 namespace AllScripts
 {
-  IScript* Construct(std::string name);
+  IScript* MyConstruct(std::string name);
 }
