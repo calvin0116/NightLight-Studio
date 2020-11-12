@@ -380,7 +380,7 @@ void Player::changeState(PLAYERSTATE state)
 		SYS_INPUT->GetSystemKeyPress().RemoveEvent("Stop4");
 
 		//light!
-		comLight->_isActive = false;
+		comLight->SetActive(false);
 		break;
 	}
 
