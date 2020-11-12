@@ -39,22 +39,22 @@ namespace NS_LOGIC
         }
       });
 
-    SYS_INPUT->GetSystemKeyPress().CreateNewEvent("PlayLogic", SystemInput_ns::IKEY_ALT, "PlayLogic", SystemInput_ns::OnHold, [this]()
-      {
-        //Only if mouse wheel + alt button is pressed, camera will move.
-        //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
-        if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_9))
-        {
-          if (_isPlaying)
-          {
-            GameGameExit();
-            _Inited = false;
-          }
-            //GameExit();
-          _isPlaying = !_isPlaying;
-          std::cout << "Logic Playing: " << _isPlaying << std::endl;
-        }
-      });
+    //SYS_INPUT->GetSystemKeyPress().CreateNewEvent("PlayLogic", SystemInput_ns::IKEY_ALT, "PlayLogic", SystemInput_ns::OnHold, [this]()
+    //  {
+    //    //Only if mouse wheel + alt button is pressed, camera will move.
+    //    //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
+    //    if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_9))
+    //    {
+    //      if (_isPlaying)
+    //      {
+    //        GameGameExit();
+    //        _Inited = false;
+    //      }
+    //        //GameExit();
+    //      _isPlaying = !_isPlaying;
+    //      std::cout << "Logic Playing: " << _isPlaying << std::endl;
+    //    }
+    //  });
 
     // Attach handler
     r.AttachHandler("ScriptRequest", &SystemLogic::HandleMsg, this);
@@ -353,7 +353,13 @@ namespace NS_LOGIC
     // Handle msg here.
     std::cout << "Hello from SystemLogic!" << std::endl;
     std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
-    //_isPlaying = msg.isPlaying;
+
+    _isPlaying = msg.isPlaying;
+    if (_isPlaying)
+    {
+      GameGameExit();
+      _Inited = false;
+    }
     //if (!_isPlaying)
     //  GameExit();
   }
