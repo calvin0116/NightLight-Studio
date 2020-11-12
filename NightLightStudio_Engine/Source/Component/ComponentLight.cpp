@@ -384,6 +384,14 @@ void ComponentLight::Read(Value& val)
 		SetAttenuation(1.0f / _intensity);
 	}
 
+	if (val.FindMember("Intensity") == val.MemberEnd()) // Should be intensity
+		std::cout << "No Intensity data has been found" << std::endl;
+	else
+	{
+		_intensity = val["Intensity"].GetFloat(); // Should be intensity
+		SetIntensity(_intensity);
+	}
+
 	if (val.FindMember("CutOff") == val.MemberEnd())
 		std::cout << "No CutOff data has been found" << std::endl;
 	else
@@ -443,7 +451,7 @@ Value ComponentLight::Write()
 
 	NS_SERIALISER::ChangeData(&val, "Specular", specular);
 
-	NS_SERIALISER::ChangeData(&val, "Attenuation", _intensity); // Should be intensity
+	NS_SERIALISER::ChangeData(&val, "Intensity", _intensity); // Should be intensity
 	NS_SERIALISER::ChangeData(&val, "CutOff", _cutOff);
 	NS_SERIALISER::ChangeData(&val, "OuterCutOff", _outerCutOff);
 

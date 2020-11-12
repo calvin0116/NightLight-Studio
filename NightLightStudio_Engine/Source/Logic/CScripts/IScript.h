@@ -12,6 +12,7 @@ public:
   virtual ~IScript() {}
   virtual void SetEntity(Entity _id) { MyID = _id; }
   virtual void Init() {};
+  virtual void LateInit() {};
   virtual void Update() {};
   virtual void Exit() {};
 

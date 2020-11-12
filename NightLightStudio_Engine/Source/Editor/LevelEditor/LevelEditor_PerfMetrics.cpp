@@ -148,20 +148,21 @@ void PerformanceMetrics::Run()
 
 			/*
 				SP_TOOLS = 0,
-				SP_WINDOW,
 				SP_IO,
+				SP_SCENEMANAGER,
+				SP_WINDOW,
 				SP_INPUT,
 				SP_GRAPHICS,
 				SP_COLLISION,
 				SP_PHYSICS,
 				SP_AUDIO,
-				SP_SCENEMANAGER,
 				SP_COMPONENT,
-				SP_EDITOR
+				SP_EDITOR,
+				SP_LOGIC
 				*/
 
 			std::vector<std::string> sysNamesManual =
-			{ "Window", "IO", "Input", "Graphics", "Collision", "Physics", "Audio", "Scene Manager", "Components", "Editor", "Scripting" };
+			{ "IO", "SceneManager", "Window", "Input", "Graphics", "Collision", "Physics", "Audio", "Component", "Editor", "Logic"};
 
 			//_levelEditor->LE_AddHistogram("Systems Use", _systemsUsage, false, 0, 0.0f, 100.0f, ImVec2(0, 50));
 			for (int i = 0; i < orig.size(); ++i)

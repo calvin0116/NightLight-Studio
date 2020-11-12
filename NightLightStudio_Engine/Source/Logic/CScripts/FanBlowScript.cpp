@@ -10,12 +10,16 @@
 
 void FanBlowScript::Init()
 {
-  Talisman1 = G_ECMANAGER->getEntity(talismanName);
   //Talisman1ID = Talisman1.getId();
   //ComponentCollider* colComp = MyID.getComponent<ComponentCollider>();
   //colComp->isTrigger = true;
   //std::cout << "Turned off Col for Entity: " << MyID.getId() << std::endl;
   //colComp->isCollidable = false;
+}
+
+void FanBlowScript::LateInit()
+{
+  Talisman1 = G_ECMANAGER->getEntity(talismanName);
 }
 
 void FanBlowScript::Update()

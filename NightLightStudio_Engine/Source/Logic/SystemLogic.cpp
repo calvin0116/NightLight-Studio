@@ -166,6 +166,22 @@ namespace NS_LOGIC
 #endif
   }
 
+  void SystemLogic::GameLateInit()
+  {
+#ifdef C_ENV
+    auto itr = G_ECMANAGER->begin<ComponentCScript>();
+    auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
+    for (; itr != itrEnd; ++itr)
+    {
+      ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
+      if (myComp->_pScript == nullptr || !myComp->_isActive)
+        continue;
+      myComp->_pScript->LateInit();
+    }
+#else
+#endif
+  }
+
   void SystemLogic::Update()
   {
     if (!_isPlaying)
@@ -174,6 +190,7 @@ namespace NS_LOGIC
     {
       GamePreInit();
       GameInit();
+      GameLateInit();
     }
     ////Run Script?
 #ifdef C_ENV

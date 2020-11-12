@@ -60,6 +60,7 @@ public:
   float CAMERA_DISTANCE;
   float CAMERA_OFFSET_X;
   float CAMERA_OFFSET_Y;
+  float moth_CAMERA_OFFSET_Y;
   float PLAYER_MAX_SPEED;
 
   float init_CAMERA_DISTANCE;

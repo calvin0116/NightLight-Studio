@@ -6,6 +6,12 @@
 #include "../Core/DeltaTime.h"
 #include "ForceManager.h"
 
+//messaging for toggle play
+#include "../Messaging/SystemReceiver.h"
+#include "../Messaging/Messages/MessageScriptRequest.h"
+#include "../Messaging/Messages/MessageApplicationExit.h"
+#include "../Messaging/Messages/MessageTogglePlay.h"
+
 namespace NS_PHYSICS
 {
 	constexpr float MAX_SPEED = 10000.0f;
@@ -14,9 +20,12 @@ namespace NS_PHYSICS
 	{
 		ForceManager _forceManager;
 		NlMath::Vector3D _maxspeed;
+		bool _isPlaying;
 		
 		friend Singleton<PhysicsSystem>;
 		
+		// For receiving event/message
+		SystemMessaging::SystemReceiver receiver;
 	public:
 		
 		ForceManager* getForceManager()
@@ -40,7 +49,7 @@ namespace NS_PHYSICS
 
 		void Unload();
 
-
+		void HandleTogglePlay(MessageTogglePlay& msg);
 	};
 
 	static PhysicsSystem* SYS_PHYSICS = PhysicsSystem::GetInstance();
