@@ -11,6 +11,8 @@
 #include "CameraScript.h"
 #include "../Graphics/CameraSystem.h"
 #include "../Component/ComponentPlayerStats.h"
+#include "../Graphics/LightSystem.h"
+#include "../Component/ComponentGraphics.h"
 
 
 class ComponentLight;
@@ -37,6 +39,7 @@ class Player : public IScript
 	ComponentTransform* comTrans;
 	ComponentTransform spawnPoint;
 	ComponentPlayerStats* playerStats;
+	ComponentGraphics* comGraphics;
 	ComponentLight* comLight;
 	NS_GRAPHICS::LightSystem* light;
 
