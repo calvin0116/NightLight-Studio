@@ -23,6 +23,7 @@ void SystemAudio::ReleaseSounds()
 {
   for (auto& [name, sound] : _sounds)
     sound->release();
+  _sounds.clear();
 }
 
 void SystemAudio::Pause(const int _channelID)
@@ -196,9 +197,6 @@ void SystemAudio::Load()
 
 void SystemAudio::Init()
 {
-  // For testing
-  //LoadSound("Asset/Sounds/TestAudio.ogg", "TestAudio");
-
   // Numpad 0 = Normal both speakers
   SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TestAudio", SystemInput_ns::IKEY_ALT, "AudioTest", SystemInput_ns::OnHold, [this]()
     {
@@ -247,6 +245,8 @@ void SystemAudio::GameInit()
 
 void SystemAudio::MyGameInit()
 {
+  // For testing
+  LoadSound("asset/Sounds/TestAudio.ogg", "TestAudio");
   // Loading
   auto itr = G_ECMANAGER->begin<ComponentLoadAudio>();
   auto itrEnd = G_ECMANAGER->end<ComponentLoadAudio>();
