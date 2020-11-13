@@ -1,6 +1,7 @@
 #pragma once
 
 // Components
+#include "Components/ComponentTransformBind.h"
 
 // Custom types
 #include "CustomTypes/Vector3DBind.h"
