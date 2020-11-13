@@ -39,6 +39,9 @@ ComponentLight::~ComponentLight()
 
 void ComponentLight::SetActive(const bool& set)
 {
+	if (_type == NS_GRAPHICS::Lights::INVALID_TYPE)
+		return;
+
 	// No action required if set is same as prev
 	if (set == _isActive)
 		return;

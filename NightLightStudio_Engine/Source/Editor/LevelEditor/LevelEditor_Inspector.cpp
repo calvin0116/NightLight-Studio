@@ -407,7 +407,7 @@ void InspectorWindow::AudioComp(Entity& ent)
 			{
 				aud_manager->_sounds.push_back(ComponentLoadAudio::data());
 			}
-
+      int index = 1;
 
 			for (auto& [path, name] : aud_manager->_sounds)
 			{
@@ -420,9 +420,12 @@ void InspectorWindow::AudioComp(Entity& ent)
 			  ImGui::SameLine(0, 10);
 			  ImGui::InputText("##OTHERNAME", buf2, 256);
 			  */
-				ImGui::InputText("##AUDIOPATH", path, 512);
+        std::string p = "##AUDIOPATH" + std::to_string(index);
+        std::string n = "##AUDIONAME" + std::to_string(index);
+				ImGui::InputText(p.c_str(), path, 512);
+        ++index;
 				ImGui::SameLine(0, 10);
-				ImGui::InputText("##AUDIONAME", name, 256);
+				ImGui::InputText(n.c_str(), name, 256);
 			}
 		}
 

@@ -38,7 +38,7 @@ inline Value ComponentLoadAudio::Write() {
     Value soundlist(rapidjson::kArrayType);
     for (int i = 0; i < _sounds.size(); ++i)
     {
-        data d = _sounds.at(1);
+        data d = _sounds.at(i);
         std::string fullpath = std::string(d.path) + std::string(d.name);
         soundlist.PushBack(rapidjson::StringRef(fullpath.c_str()), global_alloc);
     }
