@@ -166,6 +166,70 @@ namespace NS_SCENE
 		current_scene = next_scene;
 	}
 
+	void SceneManager::TempSave()
+	{
+		std::string output_filename = "Scene/Output"; //<- For testing
+		NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath() );
+
+		struct stat buffer;
+		if (stat(scene.GetFilePath().c_str(), &buffer) != 0)
+		{
+			std::cout << "file does not exist, creating file....." << std::endl;
+			//Creates file
+			std::ofstream MyFile(scene.GetFilePath().c_str());
+
+			MyFile << "{\n}";
+		}
+
+		scene.Load();
+		scene.CleanDoc();
+		//Add Objects objects
+		Value* obj_val = new Value;
+		obj_val->SetObject();
+
+		//Entity loop
+		//auto itr = G_ECMANAGER->begin<TransformComponent>();
+
+		//for (auto ent : EntityName)
+		for (Entity ent : G_ECMANAGER->getEntityContainer())
+		{
+			Value* ent_val = new Value;
+			ent_val->SetObject();
+			//~~!! Need to know what component the Entity have and loop through them
+			//Component Loop
+
+			for (ISerializable* comp : ent.getEntityComponentContainer())
+			{
+				//const std::type_info& tinf = typeid(*comp);
+				//std::cout << tinf.name() << std::endl;
+				Value comp_val = comp->Write();
+
+				if (comp_val.IsObject())
+					NS_SERIALISER::ChangeData(ent_val, comp->ser_name, comp_val.GetObject());
+				else
+				{
+					const std::type_info& tinf = typeid(*comp);
+					std::cout << "Wrong data given from component: " << tinf.name() << std::endl;
+				}
+			}
+
+			NS_SERIALISER::ChangeData(obj_val, EntityName[ent.getId()], ent_val->GetObject());
+
+			delete ent_val;
+		}
+		scene.AddData("Objects", obj_val);
+
+		//delete obj_val;
+
+		//scene.PrintDataList();
+		scene.Save();
+
+	}
+
+	void SceneManager::TempLoad()
+	{
+	}
+
 	void SceneManager::LoadScene(std::string scene_name)
 	{
 #ifdef _DEBUG 

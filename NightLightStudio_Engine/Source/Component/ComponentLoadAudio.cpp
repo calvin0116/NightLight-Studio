@@ -35,5 +35,14 @@ void	ComponentLoadAudio::Read(Value& val)
 inline Value ComponentLoadAudio::Write() { 
 	Value val(rapidjson::kObjectType);
 	//NS_SERIALISER::ChangeData(&val, my, rapidjson::StringRef(_modelFileName.c_str()));
+    Value soundlist(rapidjson::kArrayType);
+    for (int i = 0; i < _sounds.size(); ++i)
+    {
+        data d = _sounds.at(1);
+        std::string fullpath = std::string(d.path) + std::string(d.name);
+        soundlist.PushBack(rapidjson::StringRef(fullpath.c_str()), global_alloc);
+    }
+    NS_SERIALISER::ChangeData(&val, "ListOfSound", soundlist);
+
 	return val;
 }

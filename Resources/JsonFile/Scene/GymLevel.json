@@ -60,7 +60,9 @@
                     0.0
                 ]
             },
-            "AudioManager": {}
+            "AudioManager": {
+                "ListOfSound": []
+            }
         },
         "Player": {
             "TransformComponent": {
@@ -160,7 +162,7 @@
                     0.0,
                     0.0
                 ],
-                "Attenuation": 1.0,
+                "Intensity": 1.0,
                 "CutOff": 0.0,
                 "OuterCutOff": 0.0
             },
@@ -578,7 +580,7 @@
                     0.0,
                     0.0
                 ],
-                "Attenuation": 1.0,
+                "Intensity": 1.0,
                 "CutOff": 0.0,
                 "OuterCutOff": 0.0
             }
@@ -2512,7 +2514,7 @@
                     0.0,
                     0.0
                 ],
-                "Attenuation": 0.0,
+                "Intensity": 0.0,
                 "CutOff": 0.0,
                 "OuterCutOff": 0.0
             }

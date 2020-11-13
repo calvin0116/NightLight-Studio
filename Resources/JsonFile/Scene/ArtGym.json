@@ -84,7 +84,11 @@
                     0.0
                 ]
             },
-            "AudioManager": {}
+            "AudioManager": {
+				"ListOfSound": [ 
+					"Asset/Sounds/TestAudio.ogg"
+				]
+			}
         },
         "Height_3_Wall": {
             "TransformComponent": {

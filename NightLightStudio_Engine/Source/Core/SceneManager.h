@@ -59,7 +59,9 @@ namespace NS_SCENE
 		void InitScene();
 		void ExitScene();
 
-
+		//Temp scene
+		void TempSave();
+		void TempLoad();
 		//Component creation for entitiy using Json data
 		//void ComponentsCreation(Value& Comp_list, Entity& entity);
 	public:
