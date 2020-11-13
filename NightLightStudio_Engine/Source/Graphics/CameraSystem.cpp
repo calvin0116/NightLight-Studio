@@ -33,6 +33,13 @@ namespace NS_GRAPHICS
 		_camera.SetDragSensitivity(CONFIG_DATA->GetConfigData()._positionSensitivity);
 		_camera.SetRotationSensitivity(CONFIG_DATA->GetConfigData()._rotationSensitivity);
 		_camera.SetZoomSensitivity(CONFIG_DATA->GetConfigData()._zoomSensitivity);
+
+		//Not working properly
+		//glm::vec3 newPos = glm::vec3(CONFIG_DATA->GetConfigData()._lastCamPosX, CONFIG_DATA->GetConfigData()._lastCamPosY, CONFIG_DATA->GetConfigData()._lastCamPosZ);
+		//_camera.SetCameraPosition(newPos);
+
+		//_camera.SetCameraPitch(CONFIG_DATA->GetConfigData()._lastCamPitch);
+		//_camera.SetCameraYaw(CONFIG_DATA->GetConfigData()._lastCamYaw);
 		// Initialize all required cameras(if any)
 		// Currently only one test camera, thus no initialization required
 
@@ -119,6 +126,10 @@ namespace NS_GRAPHICS
 					//Position += CameraUp * velocity;
 					_camera.SetCameraPosition(_camera.GetPosition() + newCameraOffset);
 					updated = true;
+
+					CONFIG_DATA->GetConfigData()._lastCamPosX = _camera.GetPosition().x;
+					CONFIG_DATA->GetConfigData()._lastCamPosY = _camera.GetPosition().y;
+					CONFIG_DATA->GetConfigData()._lastCamPosZ = _camera.GetPosition().z;
 				}
 			});
 
@@ -129,11 +140,19 @@ namespace NS_GRAPHICS
 			{
 				_camera.SetCameraPosition(_camera.GetPosition() + _camera.GetFront() * _camera.GetZoomSensitivity());
 				updated = true;
+
+				CONFIG_DATA->GetConfigData()._lastCamPosX = _camera.GetPosition().x;
+				CONFIG_DATA->GetConfigData()._lastCamPosY = _camera.GetPosition().y;
+				CONFIG_DATA->GetConfigData()._lastCamPosZ = _camera.GetPosition().z;
 			}
 			else if (SYS_INPUT->GetSystemMousePos().GetIfScrollDown())
 			{
 				_camera.SetCameraPosition(_camera.GetPosition() - _camera.GetFront() * _camera.GetZoomSensitivity());
 				updated = true;
+
+				CONFIG_DATA->GetConfigData()._lastCamPosX = _camera.GetPosition().x;
+				CONFIG_DATA->GetConfigData()._lastCamPosY = _camera.GetPosition().y;
+				CONFIG_DATA->GetConfigData()._lastCamPosZ = _camera.GetPosition().z;
 			}
 		});
 
@@ -152,12 +171,15 @@ namespace NS_GRAPHICS
 					// Rotation for up and down
 					float offsetted = _camera.GetPitch() + mousePos.y * _camera.GetRotationSensitivity() * ONE_ROT_STEP;
 
-					if (offsetted > MAX_PITCH)
-						offsetted = MAX_PITCH;
+					while (offsetted > MAX_PITCH)
+						offsetted = MAX_PITCH - _camera.GetRotationSensitivity() * ONE_ROT_STEP;
 
 					_camera.SetCameraPitch(offsetted);
 
 					updatedRot = true;
+
+					CONFIG_DATA->GetConfigData()._lastCamPitch = _camera.GetPitch();
+					CONFIG_DATA->GetConfigData()._lastCamYaw = _camera.GetYaw();
 				}
 			});
 	}
