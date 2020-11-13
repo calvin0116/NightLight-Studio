@@ -25,27 +25,27 @@ namespace ECSBind
     TransformComponent* trans = en.getComponent<TransformComponent>();
     MonoWrapper::SetNativeHandle(monoObj, trans);
 
-    if (trans == nullptr)
-      static_assert("get_Transform_handle nullptr");
+    //if (trans == nullptr)
+    //  static_assert("get_Transform_handle nullptr");
 
-    MonoObject* monoVec3;
-    // Construct and set position(Vec3) native handle and values
-    monoVec3 = MonoWrapper::ConstructObject("Vector3");
-    if(trans)
-      MonoWrapper::SetNativeHandle(monoVec3, &(trans->_position));
-    MonoWrapper::SetObjectFieldValue(monoObj, "position", monoVec3);
-    
-    // Construct and set rotation(Vec3) native handle and values
-    monoVec3 = MonoWrapper::ConstructObject("Vector3");
-    if(trans)
-      MonoWrapper::SetNativeHandle(monoVec3, &(trans->_rotation));
-    MonoWrapper::SetObjectFieldValue(monoObj, "rotation", monoVec3);
+    //MonoObject* monoVec3;
+    //// Construct and set position(Vec3) native handle and values
+    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
+    //if(trans)
+    //  MonoWrapper::SetNativeHandle(monoVec3, &(trans->_position));
+    //MonoWrapper::SetObjectFieldValue(monoObj, "position", monoVec3);
+    //
+    //// Construct and set rotation(Vec3) native handle and values
+    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
+    //if(trans)
+    //  MonoWrapper::SetNativeHandle(monoVec3, &(trans->_rotation));
+    //MonoWrapper::SetObjectFieldValue(monoObj, "rotation", monoVec3);
 
-    // Construct and set rotation(Vec3) native handle and values
-    monoVec3 = MonoWrapper::ConstructObject("Vector3");
-    if(trans)
-      MonoWrapper::SetNativeHandle(monoVec3, &(trans->_scale));
-    MonoWrapper::SetObjectFieldValue(monoObj, "scale", monoVec3);
+    //// Construct and set rotation(Vec3) native handle and values
+    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
+    //if(trans)
+    //  MonoWrapper::SetNativeHandle(monoVec3, &(trans->_scale));
+    //MonoWrapper::SetObjectFieldValue(monoObj, "scale", monoVec3);
 
     return monoObj;
   }
