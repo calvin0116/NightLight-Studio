@@ -198,12 +198,18 @@ void LevelEditor::LE_MainMenuBar()
                 if (ImGui::InputFloat2("##GRIDGRID", gridCell, 3, ImGuiInputTextFlags_EnterReturnsTrue))
                 {
                     dm.SetGridLength(gridCell[0]); dm.SetCellLength(gridCell[1]);
+                    CONFIG_DATA->GetConfigData()._gridSize = gridCell[0];
+                    CONFIG_DATA->GetConfigData()._cellSize = gridCell[1];
                 }
                 //ImGui::Separator();
                 //ImGui::SetNextItemWidth(150);
                 if (ImGui::ColorEdit4("##GRIDCOLOR", glm::value_ptr(gridCol)))
                 {
                     dm.SetGridColor(gridCol);
+                    CONFIG_DATA->GetConfigData()._gridColourRed = gridCol.r;
+                    CONFIG_DATA->GetConfigData()._gridColourGreen = gridCol.g;
+                    CONFIG_DATA->GetConfigData()._gridColourBlue = gridCol.b;
+                    CONFIG_DATA->GetConfigData()._gridColourAlpha = gridCol.a;
                 }
                 ImGui::Separator();
                 ImGui::EndMenu();

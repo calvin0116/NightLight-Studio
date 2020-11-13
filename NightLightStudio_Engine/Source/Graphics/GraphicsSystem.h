@@ -136,7 +136,7 @@ namespace NS_GRAPHICS
         DebugManager* debugManager;
         CameraSystem* cameraManager;
         TextureManager* textureManager;
-        UISystem* uiSystem;
+        UISystem* uiManager;
         //Renderer* renderer;
 
         // Should NOT be calculated every frame

@@ -34,7 +34,7 @@ namespace NS_GRAPHICS
 		debugManager{ nullptr },
 		cameraManager{ nullptr },
 		textureManager{ nullptr },
-		uiSystem{ nullptr },
+		uiManager{ nullptr },
 		_hasInit{ false },
 		_debugDrawing{ false },
 		_uiDrawing{ false },
@@ -62,7 +62,7 @@ namespace NS_GRAPHICS
 
 		Render();
 
-		uiSystem->Update();
+		uiManager->Update();
 	}
 
 	void GraphicsSystem::Free()
@@ -71,10 +71,6 @@ namespace NS_GRAPHICS
 		// Includes VAO, VBO, EBO, ModelMatrixBO
 		modelManager->Free();
 		textureManager->Free();
-
-		CONFIG_DATA->GetConfigData()._lastCamPosX = cameraManager->GetCamera().GetPosition().x;
-		CONFIG_DATA->GetConfigData()._lastCamPosY = cameraManager->GetCamera().GetPosition().y;
-		CONFIG_DATA->GetConfigData()._lastCamPosZ = cameraManager->GetCamera().GetPosition().z;
 	}
 
 	void GraphicsSystem::Init()
@@ -95,7 +91,7 @@ namespace NS_GRAPHICS
 		debugManager = &DebugManager::GetInstance();
 		cameraManager = &CameraSystem::GetInstance();
 		textureManager = &TextureManager::GetInstance();
-		uiSystem = &UISystem::GetInstance();
+		uiManager = &UISystem::GetInstance();
 
 		modelLoader->Init();
 		
@@ -110,7 +106,7 @@ namespace NS_GRAPHICS
 
 		lightManager->Init();
 
-		uiSystem->Init();
+		uiManager->Init();
 		
 		//////////////////////////////////////////////////////
 		///// Commented to test level editor drag and drop
@@ -247,8 +243,8 @@ namespace NS_GRAPHICS
 		// Enable depth buffering
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_BACK);
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -257,6 +253,23 @@ namespace NS_GRAPHICS
 		glDepthFunc(GL_LESS);
 
 		SetLineThickness();
+
+
+		//Set Grid Last Settings
+		//If not is not available
+		if (CONFIG_DATA->GetConfigData()._cellSize != 0.0f)
+		{
+			glm::vec4 gridColour = glm::vec4(CONFIG_DATA->GetConfigData()._gridColourRed,
+				CONFIG_DATA->GetConfigData()._gridColourGreen,
+				CONFIG_DATA->GetConfigData()._gridColourBlue,
+				CONFIG_DATA->GetConfigData()._gridColourAlpha);
+
+			debugManager->SetGridColor(gridColour);
+
+			debugManager->SetCellLength(CONFIG_DATA->GetConfigData()._cellSize);
+			debugManager->SetGridLength(CONFIG_DATA->GetConfigData()._gridSize);
+		}
+
 	}
 
 	void GraphicsSystem::Exit()

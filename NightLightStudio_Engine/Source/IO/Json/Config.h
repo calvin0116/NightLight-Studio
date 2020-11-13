@@ -80,12 +80,35 @@ public:
 
 		Value& config_val = parser["settings"];
 		config_d.startscene = config_val["startscene"].GetString();
+
 		config_d._positionSensitivity = config_val["positionSensitivity"].GetFloat();
 		config_d._rotationSensitivity = config_val["rotationSensitivity"].GetFloat();
 		config_d._zoomSensitivity = config_val["zoomSensitivity"].GetFloat();
 
-		config_d._gridSize;
-		config_d._cellSize;
+		//Not Working properly
+		//config_d._lastCamPosX = config_val["camPosX"].GetFloat();
+		//config_d._lastCamPosY = config_val["camPosY"].GetFloat();
+		//config_d._lastCamPosZ = config_val["camPosZ"].GetFloat();
+		//config_d._lastCamPitch = config_val["camPitch"].GetFloat();
+		//config_d._lastCamYaw = config_val["camYaw"].GetFloat();
+
+		if(config_val.FindMember("gridSize") != config_val.MemberEnd())
+			config_d._gridSize = config_val["gridSize"].GetFloat();
+
+		if (config_val.FindMember("cellSize") != config_val.MemberEnd())
+			config_d._cellSize = config_val["cellSize"].GetFloat();
+
+		if (config_val.FindMember("gridColourRed") != config_val.MemberEnd())
+			config_d._gridColourRed = config_val["gridColourRed"].GetFloat();
+
+		if (config_val.FindMember("gridColourGreen") != config_val.MemberEnd())
+			config_d._gridColourGreen = config_val["gridColourGreen"].GetFloat();
+
+		if (config_val.FindMember("gridColourBlue") != config_val.MemberEnd())
+			config_d._gridColourBlue = config_val["gridColourBlue"].GetFloat();
+
+		if (config_val.FindMember("gridColourAlpha") != config_val.MemberEnd())
+			config_d._gridColourAlpha = config_val["gridColourAlpha"].GetFloat();
 
 		config_d.levelEditorMode = config_val["start_in_level_editor"].GetBool();
 		if (config_d.levelEditorMode)
@@ -113,6 +136,21 @@ public:
 		config_val["positionSensitivity"].SetFloat(config_d._positionSensitivity);
 		config_val["rotationSensitivity"].SetFloat(config_d._rotationSensitivity);
 		config_val["zoomSensitivity"].SetFloat(config_d._zoomSensitivity);
+
+		//config_val["camPosX"].SetFloat(config_d._lastCamPosX);
+		//config_val["camPosY"].SetFloat(config_d._lastCamPosY);
+		//config_val["camPosZ"].SetFloat(config_d._lastCamPosZ);
+		//config_val["camPitch"].SetFloat(config_d._lastCamPitch);
+		//config_val["camYaw"].SetFloat(config_d._lastCamYaw);
+
+		config_val["gridSize"].SetFloat(config_d._gridSize);
+		config_val["cellSize"].SetFloat(config_d._cellSize);
+
+		config_val["gridColourRed"].SetFloat(config_d._gridColourRed);
+		config_val["gridColourGreen"].SetFloat(config_d._gridColourGreen);
+		config_val["gridColourBlue"].SetFloat(config_d._gridColourBlue);
+		config_val["gridColourAlpha"].SetFloat(config_d._gridColourAlpha);
+
 
 		config_val["start_in_level_editor"].SetBool(config_d.levelEditorMode);
 
