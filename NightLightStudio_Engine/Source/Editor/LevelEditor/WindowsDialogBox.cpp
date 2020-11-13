@@ -16,8 +16,6 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "WindowsDialogBox.h"
 #include <filesystem>
 
-#ifdef _EDITOR
-
 // Convert wide Unicode String to an UTF8 string
 std::string UTF8_encode(const std::wstring& wstr)
 {
@@ -217,5 +215,3 @@ std::string WindowsSaveFileBox(HWND handle, COMDLG_FILTERSPEC* options, UINT siz
 	// return filename;
 #endif
 }
-
-#endif
