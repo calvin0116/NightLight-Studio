@@ -23,7 +23,7 @@ namespace NS_SCENE
 		scene_list.clear();
 	}
 
-	inline void SceneManager::Load()
+	 void SceneManager::Load()
 	{
 		//Load up scene manager's parser
 		scene_parser.Load();
@@ -55,8 +55,9 @@ namespace NS_SCENE
 			scene_indexes[index] = cur_path_name.stem().string();
 			++index;
 		}
-		//r.AttachHandler("BeforePlay", &SceneManager::TempSave, this);
-		//r.AttachHandler("AfterPlay", &SceneManager::TempLoad, this);;
+		
+		r.AttachHandler("BeforePlay", &SceneManager::HandleMsg, this);
+		r.AttachHandler("AfterPlay", &SceneManager::HandleMsg, this);;
 	}
 
 	void SceneManager::GameLoad()
@@ -168,8 +169,25 @@ namespace NS_SCENE
 		current_scene = next_scene;
 	}
 
+	void SceneManager::HandleMsg(MessageTogglePlay& mst)
+	{
+		if (mst.isPlaying)
+		{
+			// Game started playing
+			TempSave();
+		}
+		else
+		{
+			// Game exit
+			TempLoad();
+		}
+
+	}
+
 	void SceneManager::TempSave()
 	{
+		std::cout << "Tempsaving" << std::endl;
+
 		std::string output_filename = "Scene/Output"; //<- For testing
 		NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath() );
 
@@ -230,6 +248,15 @@ namespace NS_SCENE
 
 	void SceneManager::TempLoad()
 	{
+		std::cout << "Temploading" << std::endl;
+
+		//Delete all entity
+		for (Entity ent : G_ECMANAGER->getEntityContainer())
+		{
+			G_ECMANAGER->FreeEntity(ent.getId());
+		}
+
+		//Reloading all entity
 		std::string output_filename = "Scene/Output"; //<- For testing
 		NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath());
 
@@ -246,7 +273,7 @@ namespace NS_SCENE
 		scene.Load();
 		//~~!Create object using data
 		std::cout << "===============================================" << std::endl;
-		std::cout << "Loading Scene: " << current_scene << std::endl;
+		std::cout << "Loading Scene: " << output_filename << std::endl;
 		if (scene.CheckForMember("Objects"))
 		{
 			std::cout << "Initialising Objects....." << std::endl;
@@ -257,6 +284,7 @@ namespace NS_SCENE
 			std::cout << "Failed to find object to initailise....." << std::endl;
 		}
 		std::cout << "===============================================" << std::endl;
+
 	}
 
 	void SceneManager::LoadScene(std::string scene_name)

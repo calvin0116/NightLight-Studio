@@ -64,6 +64,7 @@ namespace NS_SCENE
 		void ExitScene();
 
 		//Temp scene
+		void HandleMsg(MessageTogglePlay& mst);
 		void TempSave();
 		void TempLoad();
 		//Component creation for entitiy using Json data

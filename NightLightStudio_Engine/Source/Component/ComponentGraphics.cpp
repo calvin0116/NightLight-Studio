@@ -194,7 +194,7 @@ inline void ComponentGraphics::Read(Value& val)
 			}
 
 			//Trim the extension to get the file name
-			name.erase(name.rfind("."));
+			name.erase(name.rfind("."));dsadsa
 			//model->_fileName = s_LocalPathName + name + s_ModelFileType;
 			*/
 			_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());

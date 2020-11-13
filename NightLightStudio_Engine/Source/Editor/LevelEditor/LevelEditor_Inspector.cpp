@@ -405,27 +405,40 @@ void InspectorWindow::AudioComp(Entity& ent)
 		{
 			if (ImGui::Button("Add Audio"))
 			{
-				aud_manager->_sounds.push_back(ComponentLoadAudio::data());
+				static int i = 0;
+				std::string s = std::to_string(i);
+				ComponentLoadAudio::data d;
+				strcpy_s(d.name, 128, s.c_str());
+				strcpy_s(d.path, 512, "");
+				aud_manager->_sounds.push_back(d);
+				++i;
+				
 			}
       int index = 1;
 
-			for (auto& [path, name] : aud_manager->_sounds)
+			for (auto& data : aud_manager->_sounds) //[path, name]
 			{
-				/*
-			  char buf[512];
-			  char buf2[256];
-			  strcpy_s(buf, 512, path.c_str());
-			  strcpy_s(buf2, 256, name.c_str());
-			  ImGui::InputText("##NAME", buf, 512);
-			  ImGui::SameLine(0, 10);
-			  ImGui::InputText("##OTHERNAME", buf2, 256);
-			  */
-        std::string p = "##AUDIOPATH" + std::to_string(index);
-        std::string n = "##AUDIONAME" + std::to_string(index);
-				ImGui::InputText(p.c_str(), path, 512);
-        ++index;
+				std::string p = "##AUDIOPATH" + std::to_string(index);
+				std::string n = "##AUDIONAME" + std::to_string(index);
+				//ImGui::InputText(p.c_str(), data.path, 512);
+				++index;
+				//ImGui::InputText(n.c_str(), data.name, 256);
+
+				std::string s_name = data.name;
+				_levelEditor->LE_AddInputText(n, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
+					[&data, &s_name]()
+					{
+						strcpy_s(data.name,s_name.c_str());
+					});
+
 				ImGui::SameLine(0, 10);
-				ImGui::InputText(n.c_str(), name, 256);
+				std::string s_path = data.path;
+				_levelEditor->LE_AddInputText(p, s_path, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+					[&data, &s_path]()
+					{
+						strcpy_s(data.path, s_path.c_str());
+					});
+
 			}
 		}
 

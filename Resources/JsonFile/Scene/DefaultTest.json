@@ -22,9 +22,9 @@
 			
 			},
 		  "AudioManager":{
-			"ListOfSound": [ 
-			  "Asset/Sounds/TestAudio.ogg"
-			  ]
+			"ListOfSound": { 
+			  "1" :"Asset/Sounds/TestAudio.ogg"
+			}
 		  }
 		}
 	}
