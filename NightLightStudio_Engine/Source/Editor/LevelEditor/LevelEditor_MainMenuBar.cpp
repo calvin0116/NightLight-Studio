@@ -12,6 +12,8 @@
 #include "../PrefabManager.h"
 #include "LevelEditor_ECHelper.h"
 
+#include "../../Window/WndSystem.h"
+
 // For message
 #include "..\..\Messaging\SystemBroadcaster.h"
 #include "..\..\Messaging\Messages\MessageTogglePlay.h"
@@ -99,6 +101,25 @@ void LevelEditor::LE_MainMenuBar()
                 [this]() { LE_AccessWindowFunc("Console", &ConsoleLog::UndoLastCommand); },
                 [this]() { LE_AccessWindowFunc("Console", &ConsoleLog::RedoLastCommand); }
             });
+
+        if (NS_WINDOW::SYS_WINDOW->GetWindowedMode())
+        {
+            LE_AddMenuWithItems("Options",
+                { "FullScreen" },
+                { "", "" },
+            {
+                 []() { NS_WINDOW::SYS_WINDOW->SetFullScreenMode(true); }
+            });
+        }
+        else
+        {
+            LE_AddMenuWithItems("Options",
+                { "Windowed" },
+                { "", "" },
+            {
+                []() { NS_WINDOW::SYS_WINDOW->SetFullScreenMode(false); }
+            });
+        }
 
 
 

@@ -6,6 +6,7 @@
 #include "../Input/SystemInput.h" // For testing
 
 const float SystemAudio::s_UNITS_PER_METER = 100.0f;
+bool SystemAudio::_isPlaying = false;
 
 void SystemAudio::LoadSound(const std::string& _soundPath, const std::string& _name)
 {
@@ -16,6 +17,13 @@ void SystemAudio::LoadSound(const std::string& _soundPath, const std::string& _n
     _system->createSound(_soundPath.c_str(), FMOD_LOOP_OFF, 0, &temp);
     _sounds.emplace(_name, temp);
   }
+}
+
+void SystemAudio::ReleaseSounds()
+{
+  for (auto& [name, sound] : _sounds)
+    sound->release();
+  _sounds.clear();
 }
 
 void SystemAudio::Pause(const int _channelID)
@@ -189,9 +197,6 @@ void SystemAudio::Load()
 
 void SystemAudio::Init()
 {
-  // For testing
-  //LoadSound("Asset/Sounds/TestAudio.ogg", "TestAudio");
-
   // Numpad 0 = Normal both speakers
   SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TestAudio", SystemInput_ns::IKEY_ALT, "AudioTest", SystemInput_ns::OnHold, [this]()
     {
@@ -224,6 +229,9 @@ void SystemAudio::Init()
         PlayBGM("StreetAmbienceHaunting");
       }
     });
+
+  // Register receiver to message
+  r.AttachHandler("TogglePlay", &SystemAudio::HandleTogglePlay, this);
 }
 
 void SystemAudio::GameLoad()
@@ -232,12 +240,19 @@ void SystemAudio::GameLoad()
 
 void SystemAudio::GameInit()
 {
+
+}
+
+void SystemAudio::MyGameInit()
+{
+  // For testing
+  //LoadSound("asset/Sounds/TestAudio.ogg", "TestAudio");
   // Loading
   auto itr = G_ECMANAGER->begin<ComponentLoadAudio>();
   auto itrEnd = G_ECMANAGER->end<ComponentLoadAudio>();
   for (; itr != itrEnd; ++itr)
   {
-      std::cout << G_ECMANAGER->getObjId(itr) << std::endl;
+    std::cout << G_ECMANAGER->getObjId(itr) << std::endl;
     // Load the following audios from load audio component
     ComponentLoadAudio* myComp = G_ECMANAGER->getComponent<ComponentLoadAudio>(itr);
     for (const auto& [path, name] : myComp->_sounds)
@@ -278,6 +293,11 @@ void SystemAudio::GameInit()
 
 void SystemAudio::Update()
 {
+  if (_isPlaying && _Inited == false)
+  {
+    _Inited = true;
+    MyGameInit();
+  }
   // position update here
   _system->update();
   // Update 3D positions
@@ -313,4 +333,18 @@ void SystemAudio::Exit()
   _system->release();
 
   DestroyInstance();
+}
+
+void SystemAudio::HandleTogglePlay(MessageTogglePlay& msg)
+{
+  // Handle msg here.
+  std::cout << "Hello from SystemLogic!" << std::endl;
+  std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
+
+  _isPlaying = msg.isPlaying;
+  if (!_isPlaying)
+  {
+    ReleaseSounds();
+    _Inited = false;
+  }
 }

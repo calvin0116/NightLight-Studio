@@ -458,6 +458,37 @@ namespace NS_GRAPHICS
 		}
 	}
 
+	void LightSystem::SetAllPointLights(const bool& setter)
+	{
+		auto itr = G_ECMANAGER->begin<ComponentLight>();
+		auto itrEnd = G_ECMANAGER->end<ComponentLight>();
+
+		while (itr != itrEnd)
+		{
+			ComponentLight* lightcomp = G_ECMANAGER->getComponent<ComponentLight>(itr);
+
+			if (lightcomp->GetInactiveType() == Lights::POINT)
+				lightcomp->SetActive(setter);
+
+			++itr;
+		}
+	}
+
+	void LightSystem::SetAllLights(const bool& setter)
+	{
+		auto itr = G_ECMANAGER->begin<ComponentLight>();
+		auto itrEnd = G_ECMANAGER->end<ComponentLight>();
+
+		while (itr != itrEnd)
+		{
+			ComponentLight* lightcomp = G_ECMANAGER->getComponent<ComponentLight>(itr);
+
+			lightcomp->SetActive(setter);
+
+			++itr;
+		}
+	}
+
 	DirLight& LightSystem::GetDirLight(const int& id)
 	{
 		return lightblock->_dLights[id];

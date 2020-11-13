@@ -55,6 +55,8 @@ namespace NS_SCENE
 			scene_indexes[index] = cur_path_name.stem().string();
 			++index;
 		}
+		//r.AttachHandler("BeforePlay", &SceneManager::TempSave, this);
+		//r.AttachHandler("AfterPlay", &SceneManager::TempLoad, this);;
 	}
 
 	void SceneManager::GameLoad()
@@ -149,7 +151,7 @@ namespace NS_SCENE
 
 	void SceneManager::InitScene()
 	{
-		NS_SERIALISER::Parser* scene = scene_list[current_scene];
+		//NS_SERIALISER::Parser* scene = scene_list[current_scene];
 		//~~!Insert data back to the objects
 	}
 
@@ -228,6 +230,33 @@ namespace NS_SCENE
 
 	void SceneManager::TempLoad()
 	{
+		std::string output_filename = "Scene/Output"; //<- For testing
+		NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath());
+
+		struct stat buffer;
+		if (stat(scene.GetFilePath().c_str(), &buffer) != 0)
+		{
+			std::cout << "file does not exist, creating file....." << std::endl;
+			//Creates file
+			std::ofstream MyFile(scene.GetFilePath().c_str());
+
+			MyFile << "{\n}";
+		}
+
+		scene.Load();
+		//~~!Create object using data
+		std::cout << "===============================================" << std::endl;
+		std::cout << "Loading Scene: " << current_scene << std::endl;
+		if (scene.CheckForMember("Objects"))
+		{
+			std::cout << "Initialising Objects....." << std::endl;
+			NS_SERIALISER::EntityListCreation(scene["Objects"]);
+		}
+		else
+		{
+			std::cout << "Failed to find object to initailise....." << std::endl;
+		}
+		std::cout << "===============================================" << std::endl;
 	}
 
 	void SceneManager::LoadScene(std::string scene_name)
