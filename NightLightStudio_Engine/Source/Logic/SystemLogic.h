@@ -23,9 +23,11 @@ namespace NS_LOGIC
 
     // mono base methods
     MonoMethod* baseInit;
+    MonoMethod* baseLateInit;
     MonoMethod* baseUpdate;
     MonoMethod* baseExit;
     MonoMethod* baseCollisionEnter;
+    MonoMethod* baseTriggerEnter;
     
     // For receiving event/message
     SystemMessaging::SystemReceiver r;
