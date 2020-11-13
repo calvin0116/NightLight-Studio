@@ -6,6 +6,7 @@ namespace Unicorn
   {    
     int findID = -1;
     Transform trans;
+    Vector3 upVec;
     
     public override void Init()
     {
@@ -17,6 +18,7 @@ namespace Unicorn
       Audio.PlayOnce("TestAudio");
       trans = GetTransform(findID);
       Console.WriteLine(trans.Name);
+      //upVec = Camera.
     }
 
     public override void LateInit()
