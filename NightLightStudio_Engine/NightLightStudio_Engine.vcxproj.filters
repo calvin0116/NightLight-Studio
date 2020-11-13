@@ -438,6 +438,9 @@
     <ClInclude Include="Source\Graphics\UISystem.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Systems\ECSBind.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -715,9 +718,12 @@
     </ClCompile>
     <ClCompile Include="Source\Mono\Binding\Components\ComponentTransformBind.cpp">
       <Filter>Source Files</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Source\Graphics\UISystem.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Systems\ECSBind.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

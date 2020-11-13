@@ -17,6 +17,7 @@ namespace MonoBind
   {
     BindCustomTypes();
     BindComponentsGetSet();
+    ECSBind::BindECS();
     AudioBind::BindAudio();
     ForceBind::BindForce();
   }
