@@ -72,9 +72,6 @@ void SystemAudio::PlayOnce(const std::string& _name)
     temp->setMode(FMOD_LOOP_OFF);
     temp->setMode(FMOD_2D);
     temp->setPaused(false);
-
-    //// Setting group channel
-    //ErrorCheck(it->second.second->setChannelGroup(SFX));
   }
 }
 
@@ -217,6 +214,14 @@ void SystemAudio::Init()
       if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_2))
       {
         Play3DOnce("TestAudio", 1.0f, 0.0f, 0.0f);
+      }
+    });
+
+  SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TestAmbient", SystemInput_ns::IKEY_ALT, "Ambient", SystemInput_ns::OnHold, [this]()
+    {
+      if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_5))
+      {
+        PlayBGM("StreetAmbienceHaunting");
       }
     });
 }

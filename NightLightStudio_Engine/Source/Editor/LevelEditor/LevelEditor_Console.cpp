@@ -124,7 +124,7 @@ void ConsoleLog::Run()
 	ImGui::Separator();
 	_levelEditor->LE_AddText("Input");
 	ImGui::SameLine();
-	ImGuiInputTextFlags inputFlag = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackHistory;
+	ImGuiInputTextFlags inputFlag = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackHistory | ImGuiInputTextFlags_NoUndoRedo;
 	_levelEditor->LE_AddInputText("##Input", _inputBuffer, 100, inputFlag,
 		[this]() 
 		{

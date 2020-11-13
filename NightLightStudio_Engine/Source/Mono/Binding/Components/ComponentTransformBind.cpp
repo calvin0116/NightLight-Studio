@@ -4,7 +4,7 @@
 
 namespace ComponentTransformBind
 {
-  void BindAudioSource()
+  void BindComponentTransform()
   {
     MonoWrapper::BindClassFunction(get_Name_Internal, "get_Name_Internal",
       "Transform");
