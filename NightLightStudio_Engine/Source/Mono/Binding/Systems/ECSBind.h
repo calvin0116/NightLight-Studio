@@ -4,6 +4,7 @@
 namespace ECSBind
 {
   int GameObjectFind(MonoString* _name);
+  MonoObject* GetTransform(int id);
 
   void BindECS();    
 }

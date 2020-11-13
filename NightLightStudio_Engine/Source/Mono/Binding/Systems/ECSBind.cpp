@@ -8,6 +8,7 @@ namespace ECSBind
   void BindECS()
   {
     MonoWrapper::BindClassFunction(GameObjectFind, "GameObjectFind", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
   }
 
   int GameObjectFind(MonoString* _name)
@@ -16,12 +17,13 @@ namespace ECSBind
     return en.getId();
   }
 
-  MonoObject* get_Transform_handle(int id)
+  MonoObject* GetTransform(int id)
   {
     // Create C# side component
     MonoObject* monoObj = MonoWrapper::ConstructObject("Transform");
     Entity en = G_ECMANAGER->getEntity(id);
     TransformComponent* trans = en.getComponent<TransformComponent>();
+    MonoWrapper::SetNativeHandle(monoObj, trans);
 
     if (trans == nullptr)
       static_assert("get_Transform_handle nullptr");
