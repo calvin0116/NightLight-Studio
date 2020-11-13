@@ -21,8 +21,6 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include <string>
 #include "../../../framework.h"
 
-#ifdef _EDITOR
-
 // Converts Wide String to String
 std::string UTF8_encode(const std::wstring& wstr);
 
@@ -31,7 +29,5 @@ std::wstring UTF8_decode(const std::string& str);
 
 std::string WindowsOpenFileBox(HWND handle, COMDLG_FILTERSPEC* options, UINT size);
 std::string WindowsSaveFileBox(HWND handle, COMDLG_FILTERSPEC* options, UINT size);
-
-#endif
 
 #endif

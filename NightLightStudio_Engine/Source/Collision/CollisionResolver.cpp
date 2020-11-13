@@ -220,6 +220,36 @@ void CollsionResolver::resolveCollision()
 	}
 
 
+	//auto itr = colEventList.begin();
+	//auto itrEnd = colEventList.end();
+
+	//while (itr != itrEnd)
+	//{
+	//	//colEvent.entity1;
+	//	//colEvent.entity2;
+
+	//	// pass to syslogic
+
+	//	CollisionEvent& colEvent = *itr;
+
+	//	if (colEvent.collidingFrames == 0)
+	//	{
+	//		NS_LOGIC::SYS_LOGIC->OnCollisionEnter(colEvent.entity1, colEvent.entity2);
+	//	}
+
+	//	else if (colEvent.collidingFrames < COLLIDING_FRAMES_TRASHOLD)
+	//	{
+	//		NS_LOGIC::SYS_LOGIC->OnCollisionStay(colEvent.entity1, colEvent.entity2);
+	//		++colEvent.collidingFrames;
+	//	}
+	//	else
+	//	{
+	//		NS_LOGIC::SYS_LOGIC->OnCollisionExit(colEvent.entity1, colEvent.entity2);
+	//		colEventList.erase(itr); //
+	//	}
+	//	++itr;
+	//}
+
 
 	// clear event list
 	// collision events should be cleared before collision detection

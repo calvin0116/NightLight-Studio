@@ -23,7 +23,7 @@ namespace NS_SCENE
 		scene_list.clear();
 	}
 
-	inline void SceneManager::Load()
+	 void SceneManager::Load()
 	{
 		//Load up scene manager's parser
 		scene_parser.Load();
@@ -55,6 +55,9 @@ namespace NS_SCENE
 			scene_indexes[index] = cur_path_name.stem().string();
 			++index;
 		}
+		
+		r.AttachHandler("BeforePlay", &SceneManager::HandleMsg, this);
+		r.AttachHandler("AfterPlay", &SceneManager::HandleMsg, this);;
 	}
 
 	void SceneManager::GameLoad()
@@ -149,7 +152,7 @@ namespace NS_SCENE
 
 	void SceneManager::InitScene()
 	{
-		NS_SERIALISER::Parser* scene = scene_list[current_scene];
+		//NS_SERIALISER::Parser* scene = scene_list[current_scene];
 		//~~!Insert data back to the objects
 	}
 
@@ -164,6 +167,124 @@ namespace NS_SCENE
 		}
 
 		current_scene = next_scene;
+	}
+
+	void SceneManager::HandleMsg(MessageTogglePlay& mst)
+	{
+		if (mst.isPlaying)
+		{
+			// Game started playing
+			TempSave();
+		}
+		else
+		{
+			// Game exit
+			TempLoad();
+		}
+
+	}
+
+	void SceneManager::TempSave()
+	{
+		std::cout << "Tempsaving" << std::endl;
+
+		std::string output_filename = "Scene/Output"; //<- For testing
+		NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath() );
+
+		struct stat buffer;
+		if (stat(scene.GetFilePath().c_str(), &buffer) != 0)
+		{
+			std::cout << "file does not exist, creating file....." << std::endl;
+			//Creates file
+			std::ofstream MyFile(scene.GetFilePath().c_str());
+
+			MyFile << "{\n}";
+		}
+
+		scene.Load();
+		scene.CleanDoc();
+		//Add Objects objects
+		Value* obj_val = new Value;
+		obj_val->SetObject();
+
+		//Entity loop
+		//auto itr = G_ECMANAGER->begin<TransformComponent>();
+
+		//for (auto ent : EntityName)
+		for (Entity ent : G_ECMANAGER->getEntityContainer())
+		{
+			Value* ent_val = new Value;
+			ent_val->SetObject();
+			//~~!! Need to know what component the Entity have and loop through them
+			//Component Loop
+
+			for (ISerializable* comp : ent.getEntityComponentContainer())
+			{
+				//const std::type_info& tinf = typeid(*comp);
+				//std::cout << tinf.name() << std::endl;
+				Value comp_val = comp->Write();
+
+				if (comp_val.IsObject())
+					NS_SERIALISER::ChangeData(ent_val, comp->ser_name, comp_val.GetObject());
+				else
+				{
+					const std::type_info& tinf = typeid(*comp);
+					std::cout << "Wrong data given from component: " << tinf.name() << std::endl;
+				}
+			}
+
+			NS_SERIALISER::ChangeData(obj_val, EntityName[ent.getId()], ent_val->GetObject());
+
+			delete ent_val;
+		}
+		scene.AddData("Objects", obj_val);
+
+		//delete obj_val;
+
+		//scene.PrintDataList();
+		scene.Save();
+
+	}
+
+	void SceneManager::TempLoad()
+	{
+		std::cout << "Temploading" << std::endl;
+
+		//Delete all entity
+		for (Entity ent : G_ECMANAGER->getEntityContainer())
+		{
+			G_ECMANAGER->FreeEntity(ent.getId());
+		}
+
+		//Reloading all entity
+		std::string output_filename = "Scene/Output"; //<- For testing
+		NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath());
+
+		struct stat buffer;
+		if (stat(scene.GetFilePath().c_str(), &buffer) != 0)
+		{
+			std::cout << "file does not exist, creating file....." << std::endl;
+			//Creates file
+			std::ofstream MyFile(scene.GetFilePath().c_str());
+
+			MyFile << "{\n}";
+		}
+
+		scene.Load();
+		//~~!Create object using data
+		std::cout << "===============================================" << std::endl;
+		std::cout << "Loading Scene: " << output_filename << std::endl;
+		if (scene.CheckForMember("Objects"))
+		{
+			std::cout << "Initialising Objects....." << std::endl;
+			NS_SERIALISER::EntityListCreation(scene["Objects"]);
+		}
+		else
+		{
+			std::cout << "Failed to find object to initailise....." << std::endl;
+		}
+		std::cout << "===============================================" << std::endl;
+
 	}
 
 	void SceneManager::LoadScene(std::string scene_name)

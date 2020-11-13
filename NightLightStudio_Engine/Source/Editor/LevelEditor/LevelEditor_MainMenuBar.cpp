@@ -12,6 +12,8 @@
 #include "../PrefabManager.h"
 #include "LevelEditor_ECHelper.h"
 
+#include "../../Window/WndSystem.h"
+
 // For message
 #include "..\..\Messaging\SystemBroadcaster.h"
 #include "..\..\Messaging\Messages\MessageTogglePlay.h"
@@ -100,6 +102,25 @@ void LevelEditor::LE_MainMenuBar()
                 [this]() { LE_AccessWindowFunc("Console", &ConsoleLog::RedoLastCommand); }
             });
 
+        if (NS_WINDOW::SYS_WINDOW->GetWindowedMode())
+        {
+            LE_AddMenuWithItems("Options",
+                { "FullScreen" },
+                { "", "" },
+            {
+                 []() { NS_WINDOW::SYS_WINDOW->SetFullScreenMode(true); }
+            });
+        }
+        else
+        {
+            LE_AddMenuWithItems("Options",
+                { "Windowed" },
+                { "", "" },
+            {
+                []() { NS_WINDOW::SYS_WINDOW->SetFullScreenMode(false); }
+            });
+        }
+
 
 
         std::vector<std::string> editorNames;
@@ -129,8 +150,19 @@ void LevelEditor::LE_MainMenuBar()
         LE_AddCheckbox("PLAY##MMBAR", &_runEngine, [this]()
             {
               // START/STOP ENGINE RUN HERE
-            MessageTogglePlay isPlaying(_runEngine);
-            GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
+                MessageTogglePlay isPlaying(_runEngine);
+                if (_runEngine)
+                {
+                    MessageTogglePlay isPlaying_1(_runEngine, "BeforePlay");
+                    GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_1);
+                    GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
+                }
+                else
+                {
+                    MessageTogglePlay isPlaying_2(_runEngine, "AfterPlay");
+                    GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
+                    GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_2);
+                }
             });
 
         ImGui::EndMenuBar();

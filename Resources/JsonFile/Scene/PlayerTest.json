@@ -4,9 +4,9 @@
             "TransformComponent": {
                 "EntityName": "PlayerCamera",
                 "Position": [
-                    -20.844072341918947,
-                    337.4521789550781,
-                    503.7928771972656
+                    735.556884765625,
+                    406.2033386230469,
+                    297.36224365234377
                 ],
                 "Scale": [
                     1.0,
@@ -68,7 +68,7 @@
                 "isStatic": true,
                 "isGravity": false,
                 "mass": 0.009999999776482582,
-                "friction": 1.0,
+                "friction": 0.10000000149011612,
                 "Force": [
                     0.0,
                     0.0,
@@ -80,25 +80,27 @@
                     0.0
                 ]
             },
-            "AudioManager": {}
+            "AudioManager": {
+                "ListOfSound": []
+            }
         },
         "Player": {
             "TransformComponent": {
                 "EntityName": "Player",
                 "Position": [
-                    46.69929504394531,
-                    82.08133697509766,
-                    76.19879150390625
+                    373.12762451171877,
+                    81.88165283203125,
+                    170.05743408203126
                 ],
                 "Scale": [
-                    50.0,
-                    50.0,
-                    50.0
+                    1.0,
+                    1.0,
+                    1.0
                 ],
                 "Rotate": [
-                    0.0,
-                    -0.0,
-                    0.0
+                    -179.99989318847657,
+                    -78.07322692871094,
+                    -179.99989318847657
                 ]
             },
             "ColliderComponent": {
@@ -107,13 +109,13 @@
                 "isCollidable": true,
                 "Center": [
                     0.0,
-                    0.0,
+                    80.0,
                     0.0
                 ],
                 "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
+                    25.0,
+                    80.0,
+                    25.0
                 ],
                 "Rotation": [
                     0.0,
@@ -125,21 +127,21 @@
                 "isStatic": false,
                 "isGravity": true,
                 "mass": 20.0,
-                "friction": 1.0,
+                "friction": 0.10000000149011612,
                 "Force": [
                     0.0,
-                    -2000.0,
+                    -17600.0,
                     0.0
                 ],
                 "Accelaration": [
                     0.0,
-                    -100.0,
+                    0.0,
                     0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\Asset\\3D model\\New_Character_Model.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -181,13 +183,13 @@
                     0.0,
                     0.0
                 ],
-                "Attenuation": 1.0,
+                "Intensity": 1.0,
                 "CutOff": 0.0,
                 "OuterCutOff": 0.0
             },
             "PlayerStatsComponent": {
-                "player_move_mag": 3000.0,
-                "player_fly_mag": 40.0,
+                "player_move_mag": 5000.0,
+                "player_fly_mag": 200.0,
                 "player_max_energy": 15,
                 "player_possess_energy_drain": 1,
                 "player_moth_energy_drain": 1,
@@ -197,7 +199,7 @@
                     10.0,
                     1.0
                 ],
-                "player_max_speed": 500.0
+                "player_max_speed": 100.0
             },
             "CScriptComponent": {
                 "isActive": true,
@@ -672,7 +674,7 @@
                 "EntityName": "Talisman_1",
                 "Position": [
                     112.7315673828125,
-                    72.08133697509766,
+                    71.88165283203125,
                     28.129776000976564
                 ],
                 "Scale": [
@@ -713,12 +715,12 @@
                 "friction": 1.0,
                 "Force": [
                     0.0,
-                    -1000.0,
+                    -8800.0,
                     0.0
                 ],
                 "Accelaration": [
                     0.0,
-                    -100.0,
+                    -880.0,
                     0.0
                 ]
             }

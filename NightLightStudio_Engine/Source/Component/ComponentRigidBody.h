@@ -5,7 +5,7 @@
 
 typedef struct ComponentRigidBody : public ISerializable //: public IComponent
 {
-	bool isActive;
+	bool isActive;      // Expose
 
 	//sum of all forces acting on the object
 	NlMath::Vector3D force;
@@ -18,15 +18,15 @@ typedef struct ComponentRigidBody : public ISerializable //: public IComponent
 	//previous position
 	NlMath::Vector3D nextPos;
 	//determine if it is a static object, a static object will not receive update
-	bool isStatic;
+	bool isStatic;      // Expose
 	//mass of the object
-	float mass;
+	float mass;         // Expose
 	//determine if the object is affected by gravity
-	bool isGravity;
+	bool isGravity;       // Expose
 	//gravity accleration of the object
 	NlMath::Vector3D gravity;
 	// friction coefficient of the object
-	float friction;
+	float friction;       // Expose
 
 	// handle to the force handled by force manager
 	int forceHandle;

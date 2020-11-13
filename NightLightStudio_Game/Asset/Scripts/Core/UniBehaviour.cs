@@ -26,5 +26,11 @@ namespace Unicorn
     public virtual void OnTriggerEnter(int other) { }
     public virtual void OnTriggerStay(int other) { }
     public virtual void OnTriggerExit(int other) { }
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static int GameObjectFind(string name);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Transform GetTransform(int id);
   }
 }
