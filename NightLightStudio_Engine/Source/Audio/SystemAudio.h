@@ -8,6 +8,10 @@
 #include "..\Core\MySystem.h"
 //#include "..\..\dep\FMOD\inc\fmod_errors.h"
 
+// For messaging/event
+#include "../Messaging/SystemReceiver.h"
+#include "../Messaging/Messages/MessageTogglePlay.h"
+
 class SystemAudio : public MySystem, public  Singleton<SystemAudio>
 {
   // Singleton
@@ -41,6 +45,12 @@ class SystemAudio : public MySystem, public  Singleton<SystemAudio>
   void  ReleaseSounds();
   // Overloaded function for testing only! Do not use this function!
   void  Play3DOnce(const std::string& name, float x, float y, float z);
+
+
+  // For receiving event/message
+  SystemMessaging::SystemReceiver r;
+  static bool _isPlaying;
+  bool _Inited = false;
 public: // Suppose to be private and use messaging, but since SystemAudio is singleton might as well make it public.
   // Audio System functions
   void  Pause(const int _channelID);
@@ -75,14 +85,20 @@ public:
 // void EarlyInit() override {};
   void Init() override;
   //void LateInit() override {};
+
+  // Not used
   void GameLoad() override;
   void GameInit() override;
+
+  void MyGameInit();
 
   void FixedUpdate() override {};
   void Update() override;
 
 	void Free();
   void Exit() override;
+
+  void HandleTogglePlay(MessageTogglePlay&);
 };
 
 // Global ptr
