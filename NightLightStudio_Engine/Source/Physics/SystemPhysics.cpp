@@ -7,7 +7,7 @@
 
 //#define USEVEL 0
 //#define USEVEL 1
-
+#define EPSILON 0.1f
 
 namespace NS_PHYSICS
 {
@@ -183,6 +183,25 @@ namespace NS_PHYSICS
 				else
 					changeInDisplacement.z = _maxspeed.z;
 			}
+
+			
+				// update smoothing
+			if (abs(changeInDisplacement.x) < EPSILON)
+			{
+				changeInDisplacement.x = 0;
+			}
+			// update smoothing
+			if (abs(changeInDisplacement.y) < EPSILON)
+			{
+				changeInDisplacement.y = 0;
+			}
+
+			// update smoothing
+			if (abs(changeInDisplacement.z) < EPSILON)
+			{
+				changeInDisplacement.z = 0;
+			}
+
 
 			compT->_position += changeInDisplacement;
 

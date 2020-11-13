@@ -4,7 +4,7 @@
 //#include "ComponentTransform.h"
 
 
-constexpr float GRAVITY_DEF = 100.0f;
+constexpr float GRAVITY_DEF = 980.0f;
 
 ComponentRigidBody::ComponentRigidBody() :
 	isActive(true),

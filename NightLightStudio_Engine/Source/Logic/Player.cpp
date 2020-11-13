@@ -43,6 +43,7 @@ Player::Player()
 
 void Player::Init()
 {
+
 	// Pass in entity name that script is attached to !! Name must be unique, duplicate names will result in getting the one with lower Entity ID !!
 	MessageScriptRequest msg(1);
 	// Process the request
@@ -209,10 +210,15 @@ void Player::Update()
 		float speedMag = comRigid->velocity.x * comRigid->velocity.x + comRigid->velocity.z * comRigid->velocity.z;
 		if (speedMag > PLAYER_MAX_SPEED)
 		{
-			comRigid->velocity.x = (comRigid->velocity.x / speedMag) * PLAYER_MAX_SPEED;
-			comRigid->velocity.z = (comRigid->velocity.z / speedMag) * PLAYER_MAX_SPEED;
+			comRigid->velocity.x = (comRigid->velocity.x / speedMag) * PLAYER_MAX_SPEED* PLAYER_MAX_SPEED;
+			comRigid->velocity.z = (comRigid->velocity.z / speedMag) * PLAYER_MAX_SPEED* PLAYER_MAX_SPEED;
+			comRigid->acceleration.x = 0;
+			comRigid->acceleration.z = 0;
 
 		}
+
+
+
 		//refill energy
 		if (_playerEnergy <= PLAYER_MAX_ENERGY)
 		{

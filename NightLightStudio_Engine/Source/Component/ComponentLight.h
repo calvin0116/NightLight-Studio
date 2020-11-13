@@ -11,7 +11,7 @@ typedef class ComponentLight : public ISerializable //: public IComponent
 public:
 	// Temporarily make them public for easy access
 
-	bool _isActive; // Temporarily set to true at beginning
+	bool _isActive; // Temporarily set to true at beginning // Expose
 
 	// value is -1 if no light is assigned
 	int _lightID;
@@ -21,9 +21,9 @@ public:
 
 	//Variables For Lighting
 	//Standard variable
-	glm::vec3 _ambient;
-	glm::vec3 _diffuse;
-	glm::vec3 _specular;
+	glm::vec3 _ambient;   // Expose
+	glm::vec3 _diffuse;   // Expose
+	glm::vec3 _specular;  // Expose
 
 	// For spot and directional
 	// used as reference only
@@ -32,11 +32,11 @@ public:
 
 	// For point and spot
 	// Also known as intensity
-	float _intensity;
+	float _intensity; // Expose
 
 	// For spot
-	float _cutOff;
-	float _outerCutOff;
+	float _cutOff;        // Expose
+	float _outerCutOff;   // Expose
 
 	// Default constructor
 	ComponentLight();
@@ -59,32 +59,32 @@ public:
 
 	NS_GRAPHICS::Lights GetInactiveType() const;
 
-	void ChangeLightType(const NS_GRAPHICS::Lights& Type);
+	void ChangeLightType(const NS_GRAPHICS::Lights& Type);  // Expose
 
 	// Applicable for all lights
-	glm::vec3 GetAmbient() const;
+	glm::vec3 GetAmbient() const;               // Expose
 	// Applicable for all lights
-	void SetAmbient(const glm::vec3& ambient);
+	void SetAmbient(const glm::vec3& ambient);  // Expose
 
 	// Applicable for all lights
-	glm::vec3 GetDiffuse() const;
+	glm::vec3 GetDiffuse() const;               // Expose
 	// Applicable for all lights
-	void SetDiffuse(const glm::vec3& diffuse);
+	void SetDiffuse(const glm::vec3& diffuse);  // Expose
 
 	// Applicable for all lights
-	glm::vec3 GetSpecular() const;
+	glm::vec3 GetSpecular() const;              // Expose
 	// Applicable for all lights
-	void SetSpecular(const glm::vec3& specular);
+	void SetSpecular(const glm::vec3& specular); // Expose
 
 	// Applicable for spot and spot light
 	// Calculates intensity based on current attenuation
-	float GetIntensity();
+	float GetIntensity();                         // Expose
 	// Calculates attenuation based on provided intensity
-	void SetIntensity(const float& intensity);
+	void SetIntensity(const float& intensity);     // Expose
 
 	// Alternate way to set attenuation/intensity
-	float GetAttenuation();
-	void SetAttenuation(const float& attenuation);
+	float GetAttenuation();                         // Expose
+	void SetAttenuation(const float& attenuation);  // Expose
 
 
 	//TO DO

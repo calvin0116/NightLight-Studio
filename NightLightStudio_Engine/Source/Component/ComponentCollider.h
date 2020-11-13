@@ -183,7 +183,7 @@ public:
 	NlMath::Vector3D rotation;
 
 	//turn colliding responds on and off
-	bool isCollidable = true;
+	bool isCollidable = true;   
 	// For layering
 	int colliderTag = 1;
 	/// /////////////////////////////////////////////////////////////////////////////

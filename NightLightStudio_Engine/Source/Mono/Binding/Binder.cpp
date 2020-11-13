@@ -22,6 +22,7 @@ namespace MonoBind
     ECSBind::BindECS();
     AudioBind::BindAudio();
     ForceBind::BindForce();
+    CameraBind::BindCamera();
   }
 
   void Bind()
