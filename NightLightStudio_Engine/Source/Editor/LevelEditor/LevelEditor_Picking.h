@@ -8,7 +8,8 @@
 
 class LE_Picking
 {
-	std::vector<Entity> _hitEntities;
+	std::vector<int> _hitEntities;
+	int _hitEntityNum = 0;
 public:
 	LE_Picking();
 	~LE_Picking();

@@ -246,7 +246,7 @@ void SystemAudio::GameInit()
 void SystemAudio::MyGameInit()
 {
   // For testing
-  LoadSound("asset/Sounds/TestAudio.ogg", "TestAudio");
+  //LoadSound("asset/Sounds/TestAudio.ogg", "TestAudio");
   // Loading
   auto itr = G_ECMANAGER->begin<ComponentLoadAudio>();
   auto itrEnd = G_ECMANAGER->end<ComponentLoadAudio>();
