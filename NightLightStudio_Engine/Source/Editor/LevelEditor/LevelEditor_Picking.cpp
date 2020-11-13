@@ -12,7 +12,7 @@
 bool UnProject(float winX, float winY, float winZ,
     const glm::mat4& invMat, glm::vec3& worldCoordinates);
 
-LE_Picking::LE_Picking()
+LE_Picking::LE_Picking() : _hitEntityNum {0}
 {
 }
 
@@ -37,34 +37,47 @@ void LE_Picking::LE_PickingRun()
 
         NlMath::Point3D startRay = { startPos.x, startPos.y, startPos.z }, endRay = { endPos.x, endPos.y, endPos.z };
 
-        _hitEntities.clear();
+        std::vector<int> hitList;
 
         for (Entity ent : G_ECMANAGER->getEntityContainer())
         {
             AABBCollider aabb;
-            aabb.posUpdate(ent.getComponent<ComponentTransform>());
+            if (ent.getComponent<ComponentCollider>() && ent.getComponent<ComponentCollider>()->GetColliderT() == COLLIDERS::AABB)
+            {
+                aabb = ent.getComponent<ComponentCollider>()->collider.aabb;
+            }
+            else
+                aabb.posUpdate(ent.getComponent<ComponentTransform>());
+
             if (NlMath::RayToAABB(aabb, startRay, endRay))
             {
-                if (LE_ECHELPER->GetSelectedEntityID() != ent.getId())
-                {
-                    _hitEntities.push_back(ent);
-                    //LE_ECHELPER->SelectEntity(ent.getId());
-                    //break;
-                }
+                hitList.push_back(ent.getId());
             }
         }
 
-        std::sort(std::begin(_hitEntities), std::end(_hitEntities), 
-            [&startPos](Entity ent1, Entity ent2)
+
+        std::sort(std::begin(hitList), std::end(hitList),
+            [&startPos](int ent1, int ent2)
             { 
-                if (glm::dot(startPos, ent1.getComponent<TransformComponent>()->_position) < glm::dot(startPos, ent2.getComponent<TransformComponent>()->_position))
+                if (glm::dot(startPos, G_ECMANAGER->getEntity(ent1).getComponent<TransformComponent>()->_position) 
+                    < glm::dot(startPos, G_ECMANAGER->getEntity(ent2).getComponent<TransformComponent>()->_position))
                     return true; 
                 return false;
             });
 
-        if (_hitEntities.size())
+
+        if (_hitEntities.size() && _hitEntities == hitList)
         {
-            LE_ECHELPER->SelectEntity(_hitEntities[0].getId());
+            _hitEntityNum++;
+            if (_hitEntityNum >= _hitEntities.size())
+                _hitEntityNum = 0;
+            LE_ECHELPER->SelectEntity(_hitEntities[_hitEntityNum]);
+        }
+        else if (hitList.size())
+        {
+            _hitEntityNum = 0;
+            _hitEntities = hitList;
+            LE_ECHELPER->SelectEntity(_hitEntities[_hitEntityNum]);
         }
     }
 }
