@@ -5,6 +5,8 @@
 #include "Singleton.h"
 
 #include "../IO/Json/Parser.h"
+#include "../Messaging/SystemReceiver.h"
+#include "../Messaging/Messages/MessageTogglePlay.h"
 
 namespace NS_SCENE
 {
@@ -27,9 +29,9 @@ namespace NS_SCENE
 		//Parser for Scene manager
 		NS_SERIALISER::Parser scene_parser;
 
-		//Scene manipulation
 		FILE_NAME current_scene;
 		FILE_NAME next_scene;
+		//Scene manipulation
 		SCENE_CHANGE to_change_scene;
 		//bool to_exit;
 
@@ -41,6 +43,8 @@ namespace NS_SCENE
 		//Path for scenes
 		std::string scenes_path;
 
+		SystemMessaging::SystemReceiver r;
+		bool isPlay;
 	protected:
 		SceneManager()
 			:scene_parser{ "SceneConfig" , json_path },
