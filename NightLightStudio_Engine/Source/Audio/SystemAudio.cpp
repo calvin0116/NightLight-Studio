@@ -193,25 +193,25 @@ void SystemAudio::Init()
   //LoadSound("Asset/Sounds/TestAudio.ogg", "TestAudio");
 
   // Numpad 0 = Normal both speakers
-  SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TestAudio", SystemInput_ns::IKEY_NUMPAD_0, "AudioTest", SystemInput_ns::OnRelease, [this]()
+  SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TestAudio", SystemInput_ns::IKEY_ALT, "AudioTest", SystemInput_ns::OnHold, [this]()
     {
-      if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_0))
+      if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_0))
       {
         PlayOnce("TestAudio");
       }
     });
   // Numpad 1 = 3D BGM on left side
-  SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Test1Audio", SystemInput_ns::IKEY_NUMPAD_1, "Audio1Test", SystemInput_ns::OnRelease, [this]()
+  SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Test1Audio", SystemInput_ns::IKEY_ALT, "Audio1Test", SystemInput_ns::OnHold, [this]()
     {
-      if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_1))
+      if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_1))
       {
         Play3DOnce("TestAudio", -1.0f, 0.0f, 0.0f);
       }
     });
   // Numpad 2 = 3D BGM on right side
-  SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Test2Audio", SystemInput_ns::IKEY_NUMPAD_2, "Audio2Test", SystemInput_ns::OnRelease, [this]()
+  SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Test2Audio", SystemInput_ns::IKEY_ALT, "Audio2Test", SystemInput_ns::OnHold, [this]()
     {
-      if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_NUMPAD_2))
+      if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_2))
       {
         Play3DOnce("TestAudio", 1.0f, 0.0f, 0.0f);
       }
@@ -219,7 +219,7 @@ void SystemAudio::Init()
 
   SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TestAmbient", SystemInput_ns::IKEY_ALT, "Ambient", SystemInput_ns::OnHold, [this]()
     {
-      if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_5))
+      if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_3))
       {
         PlayBGM("StreetAmbienceHaunting");
       }
