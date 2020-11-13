@@ -100,6 +100,10 @@ namespace NS_GRAPHICS
 		void ChangeLightType(ComponentLight* light, Lights lightType);
 
 		void SetAllDirectionalLights(const bool& setter);
+
+		void SetAllPointLights(const bool& setter);
+
+		void SetAllLights(const bool& setter);
 		
 		DirLight& GetDirLight(const int& id);
 		SpotLight& GetSpotLight(const int& id);
