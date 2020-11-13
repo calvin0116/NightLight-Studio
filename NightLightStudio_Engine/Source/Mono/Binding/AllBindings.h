@@ -9,6 +9,7 @@
 // Systems
 #include "Systems/AudioBind.h"
 #include "Systems/ForceBind.h"
+#include "Systems/CameraBind.h"
 #include "Systems/ECSBind.h"
 
 // Engine tools ?

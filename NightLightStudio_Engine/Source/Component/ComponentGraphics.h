@@ -81,13 +81,13 @@ public:
 
 	void SetRenderType(const RENDERTYPE& rendertype);
 
-	void AddModel(std::string filename);
-	void AddAlbedoTexture(std::string filename);
-	void AddNormalTexture(std::string filename);
-	void AddMetallicTexture(std::string filename);
-	void AddRoughnessTexture(std::string filename);
-	void AddAOTexture(std::string filename);
-	void AddSpecularTexture(std::string filename);
+	void AddModel(std::string filename);              // Expose
+	void AddAlbedoTexture(std::string filename);      // Expose
+	void AddNormalTexture(std::string filename);      // Expose
+	void AddMetallicTexture(std::string filename);    // Expose
+	void AddRoughnessTexture(std::string filename);   // Expose
+	void AddAOTexture(std::string filename);          // Expose
+	void AddSpecularTexture(std::string filename);    // Expose
 
 
 	// Destructor, destroy all OpenGL objects via graphics system
