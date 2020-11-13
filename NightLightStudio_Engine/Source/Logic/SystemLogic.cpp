@@ -6,6 +6,7 @@
 #include "CScripts/AllScripts.h"
 
 #define C_ENV
+//#define CS_ENV
 
 namespace NS_LOGIC
 {
@@ -59,7 +60,8 @@ namespace NS_LOGIC
       ComponentCScript* myComp = G_ECMANAGER->getComponent<ComponentCScript>(itr);
       myComp->_pScript = AllScripts::MyConstruct(myComp->_sName.toString());
     }
-#else
+#endif
+#ifdef CS_ENV
     // new smth
     // C# Script
 #endif
@@ -78,7 +80,8 @@ namespace NS_LOGIC
       Entity en = G_ECMANAGER->getEntity(itr);
       myComp->_pScript->SetEntity(en);
     }
-#else
+#endif
+#ifdef CS_ENV
     // C#
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
@@ -110,7 +113,8 @@ namespace NS_LOGIC
         continue;
       myComp->_pScript->Init();
     }
-#else
+#endif
+#ifdef CS_ENV
     // C# Script
     MonoBind::Bind();
     // Init base functions
@@ -147,7 +151,8 @@ namespace NS_LOGIC
         continue;
       myComp->_pScript->LateInit();
     }
-#else
+#endif
+#ifdef CS_ENV
     // C# scripts init
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
@@ -183,7 +188,8 @@ namespace NS_LOGIC
         continue;
       myComp->_pScript->Update();
     }
-#else
+#endif
+#ifdef CS_ENV
     // C# Scripts Update
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
@@ -215,7 +221,8 @@ namespace NS_LOGIC
       if (myComp->_isActive && myComp->_pScript)
         myComp->_pScript->Exit();
     }
-#else
+#endif
+#ifdef CS_ENV
     // C# Scripts Exit
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
@@ -247,7 +254,8 @@ namespace NS_LOGIC
       delete myComp->_pScript;
       myComp->_pScript = nullptr;
     }
-#else
+#endif
+#ifdef CS_ENV
 #endif
   }
 
@@ -273,7 +281,8 @@ namespace NS_LOGIC
     if(comp2)
         if (comp2->_pScript)
             comp2->_pScript->OnCollisionEnter(_obj1);
-#else
+#endif
+#ifdef CS_ENV
     // C# script
     ComponentScript* cs1 = _obj1.getComponent<ComponentScript>();
     ComponentScript* cs2 = _obj2.getComponent<ComponentScript>();
@@ -317,7 +326,8 @@ namespace NS_LOGIC
     if (comp2)
       if (comp2->_pScript)
         comp2->_pScript->OnTriggerEnter(_obj1);
-#else
+#endif
+#ifdef CS_ENV
     // C# script
     ComponentScript* cs1 = _obj1.getComponent<ComponentScript>();
     ComponentScript* cs2 = _obj2.getComponent<ComponentScript>();
@@ -364,7 +374,8 @@ namespace NS_LOGIC
       // Break out of loop
       break;
     }
-#else
+#endif
+#ifdef CS_ENV
 
 #endif
   }
