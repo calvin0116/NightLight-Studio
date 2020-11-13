@@ -18,6 +18,12 @@ void SystemAudio::LoadSound(const std::string& _soundPath, const std::string& _n
   }
 }
 
+void SystemAudio::ReleaseSounds()
+{
+  for (auto& [name, sound] : _sounds)
+    sound->release();
+}
+
 void SystemAudio::Pause(const int _channelID)
 {
   if (_channelID < 0 || _channelID >= s_MAX_CHANNELS)

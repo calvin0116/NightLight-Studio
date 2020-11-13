@@ -38,6 +38,7 @@ class SystemAudio : public MySystem, public  Singleton<SystemAudio>
   FMOD::ChannelGroup* _sfx;
 
   void  LoadSound(const std::string& _soundPath, const std::string& _name);
+  void  ReleaseSounds();
   // Overloaded function for testing only! Do not use this function!
   void  Play3DOnce(const std::string& name, float x, float y, float z);
 public: // Suppose to be private and use messaging, but since SystemAudio is singleton might as well make it public.
