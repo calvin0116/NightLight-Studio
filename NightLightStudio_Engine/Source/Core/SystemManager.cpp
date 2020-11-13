@@ -215,6 +215,126 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	//G_ECMANAGER->AddComponent<ComponentTransform>(newEntity);
 	//
 
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////// parent and child SAMPLE
+
+	//Entity newEntity = G_ECMANAGER->BuildEntity();
+	//ComponentTransform* ct = newEntity.AddComponent<ComponentTransform>();
+	//ct->_entityName = "root0";
+
+	//std::function<Entity(Entity, std::string)> makeChild = [&](Entity parentEntity, std::string childName)
+	//{
+	//	Entity newChildEntity = parentEntity.makeChild();
+	//	ComponentTransform* ct = newChildEntity.AddComponent<ComponentTransform>();
+	//	ct->_entityName = childName;
+
+	//	if(newChildEntity.getGeneration() < 3)
+	//		for (int i = 0; i < 2; ++i)
+	//		{
+	//			std::string newChildName = childName;
+	//			newChildName.append("_child").append(std::to_string(i));
+	//			makeChild(newChildEntity, newChildName);
+	//		}
+
+	//	return newChildEntity;
+	//};
+
+	//makeChild(newEntity, "root0_child0");
+	//makeChild(newEntity, "root0_child1");
+
+	//newEntity = G_ECMANAGER->BuildEntity();
+	//ct = newEntity.AddComponent<ComponentTransform>();
+	//ct->_entityName = "root1";
+	//makeChild(newEntity, "root1_child0");
+	//
+
+
+	//auto print = [&]()
+	//{
+	//	// G_UICOMPSET
+	//	auto itr = G_ECMANAGER->begin<ComponentTransform>();
+	//	auto itrEnd = G_ECMANAGER->end<ComponentTransform>();
+	//	while (itr != itrEnd)
+	//	{
+	//		// get the entity from the iterator
+	//		Entity entity = G_ECMANAGER->getEntity(itr);
+
+	//		std::cout << "Root Entity id:" << entity.getId() << std::endl;
+
+	//		// get transform component
+	//		ComponentTransform* compT = entity.getComponent<ComponentTransform>();
+	//		if (compT != nullptr) // nullptr -> uninitialised or deleted
+	//			std::cout << "name:" << compT->_entityName.c_str() << std::endl;
+
+	//		////////////
+	//		// childrens
+
+	//		// recursive fn to do to all children
+
+	//		auto printSpacing = [](int no)
+	//		{
+	//			for (int i = 0; i < no; ++i)
+	//				std::cout << "  ";
+	//		};
+
+	//		std::function<void(NS_COMPONENT::ComponentManager::ChildContainerT*)> doChildrens = [&](NS_COMPONENT::ComponentManager::ChildContainerT* childrens)
+	//		{
+	//			for (int uid : *childrens)
+	//			{
+	//				Entity childEntity = G_ECMANAGER->getEntity(uid);
+
+	//				std::cout << std::endl;
+	//				printSpacing(childEntity.getGeneration());
+	//				std::cout << "Print child : " << std::endl;
+
+	//				printSpacing(childEntity.getGeneration());
+	//				std::cout << "childEntity generation :" << childEntity.getGeneration() << std::endl;
+
+	//				printSpacing(childEntity.getGeneration());
+	//				std::cout << "childEntity id         :" << childEntity.getId() << std::endl;
+	//				printSpacing(childEntity.getGeneration());
+	//				std::cout << "childEntity numChild   :" << childEntity.getNumChildren() << std::endl;
+	//				printSpacing(childEntity.getGeneration());
+	//				std::cout << "childEntity numDec     :" << childEntity.getNumDecendants() << std::endl;
+	//				printSpacing(childEntity.getGeneration());
+	//				std::cout << "childEntity parentuid  :" << childEntity.getParentId() << std::endl;
+
+	//				// get transform component
+	//				ComponentTransform* compT = childEntity.getComponent<ComponentTransform>();
+	//				if (compT != nullptr) // nullptr -> uninitialised or deleted
+	//				{
+	//					printSpacing(childEntity.getGeneration());
+	//					std::cout << "name                   :" << compT->_entityName.c_str() << std::endl;
+	//				}
+
+	//				std::cout << std::endl;
+
+	//				// call recursive fn for each child
+	//				doChildrens(G_ECMANAGER->getEntity(uid).getChildren());
+	//			}
+	//		};
+
+	//		// call fn
+	//		doChildrens(entity.getChildren());
+
+	//		// iterate
+	//		++itr;
+	//	}
+	//};
+
+
+	//print();
+
+
+	//print();
+
+	////////// parent and child SAMPLE END
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// Systems OnFirst start
 	for (auto my_sys : Systems)
