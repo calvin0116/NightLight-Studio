@@ -4,6 +4,8 @@
 
 namespace ComponentGraphicsBind
 {
+  bool get_isActive_Internal(ComponentGraphics* graphics);
+  void set_isActive_Internal(ComponentGraphics* graphics, bool val);
   void csAddModel(ComponentGraphics* graphics, MonoString* file);
   void csAddAlbedoTexture(ComponentGraphics* graphics, MonoString* file);
   void csAddNormalTexture(ComponentGraphics* graphics, MonoString* file);

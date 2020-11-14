@@ -41,6 +41,7 @@ namespace Unicorn
       rb.friction = 1.0f;
       g = GetGraphics(findID);
       g.AddModel("\\Asset\\3D model\\mothtest.FBX");
+      g.isActive = false;
     }
 
     public override void Update()

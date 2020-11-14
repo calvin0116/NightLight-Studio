@@ -33,7 +33,7 @@ public:
 	// Temporarily make them public for easy access
 	RENDERTYPE _renderType = RENDERTYPE::SOLID;
 
-	bool _isActive; // Temporarily set to true at beginning
+	bool _isActive; // Temporarily set to true at beginning // Expose
 
 	//Serializing doesnt really save IDS? i think might have to add in a file name as well
 	//int MeshID; // value is -1 if no mesh is assigned

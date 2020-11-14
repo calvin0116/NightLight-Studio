@@ -6,6 +6,12 @@ namespace ComponentGraphicsBind
 {
   void BindComponentGraphics()
   {
+    MonoWrapper::BindClassFunction(get_isActive_Internal, "get_isActive_Internal",
+      "Graphics");
+
+    MonoWrapper::BindClassFunction(set_isActive_Internal, "set_isActive_Internal",
+      "Graphics");
+
     MonoWrapper::BindClassFunction(csAddModel, "csAddModel",
       "Graphics");
 
@@ -26,6 +32,16 @@ namespace ComponentGraphicsBind
 
     MonoWrapper::BindClassFunction(csAddSpecularTexture, "csAddSpecularTexture",
       "Graphics");
+  }
+
+  bool get_isActive_Internal(ComponentGraphics* graphics)
+  {
+    return graphics->_isActive;
+  }
+
+  void set_isActive_Internal(ComponentGraphics* graphics, bool val)
+  {
+    graphics->_isActive = val;
   }
 
   void csAddModel(ComponentGraphics* graphics, MonoString* file)

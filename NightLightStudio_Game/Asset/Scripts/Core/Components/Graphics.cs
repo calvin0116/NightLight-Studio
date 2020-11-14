@@ -10,6 +10,12 @@ namespace Unicorn
     // Native handle for this component
     private IntPtr native_handle = IntPtr.Zero;
 
+    public bool isActive
+    {
+      get { return get_isActive_Internal(this.native_handle); }
+      set { set_isActive_Internal(this.native_handle, value); }
+    }
+
     public void AddModel(string file)
     {
       csAddModel(native_handle, file);
@@ -38,6 +44,14 @@ namespace Unicorn
     {
       csAddSpecularTexture(native_handle, file);
     }
+        
+    // Getter/Setter for isActive
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool get_isActive_Internal(IntPtr native_handle);
+
+    // Getter/Setter for isActive
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_isActive_Internal(IntPtr native_handle, bool val);
 
     // Graphics Functions
     [MethodImpl(MethodImplOptions.InternalCall)]
