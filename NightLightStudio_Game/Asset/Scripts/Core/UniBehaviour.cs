@@ -27,10 +27,14 @@ namespace Unicorn
     public virtual void OnTriggerStay(int other) { }
     public virtual void OnTriggerExit(int other) { }
 
+    // Useful functions
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static int GameObjectFind(string name);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Transform GetTransform(int id);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Collider GetCollider(int id);
   }
 }

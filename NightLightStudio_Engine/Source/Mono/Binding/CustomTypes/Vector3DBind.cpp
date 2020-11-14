@@ -6,17 +6,43 @@ namespace Vector3DBind
 {
   void BindVector3D()
   {
-    MonoWrapper::BindClassFunction(get_Axis_Internal, "get_Axis_Internal", "Vector3");
-    MonoWrapper::BindClassFunction(set_Axis_Internal, "set_Axis_Internal", "Vector3");
+    MonoWrapper::BindClassFunction(get_xAxis_Internal, "get_xAxis_Internal", "Vector3");
+    MonoWrapper::BindClassFunction(set_xAxis_Internal, "set_xAxis_Internal", "Vector3");
+
+    MonoWrapper::BindClassFunction(get_yAxis_Internal, "get_yAxis_Internal", "Vector3");
+    MonoWrapper::BindClassFunction(set_yAxis_Internal, "set_yAxis_Internal", "Vector3");
+
+    MonoWrapper::BindClassFunction(get_zAxis_Internal, "get_zAxis_Internal", "Vector3");
+    MonoWrapper::BindClassFunction(set_zAxis_Internal, "set_zAxis_Internal", "Vector3");
   }
 
-  float get_Axis_Internal(const NlMath::Vector3D* vec, int index)
+  float get_xAxis_Internal(const NlMath::Vector3D* vec)
   {
-    return vec->m[index];
+    return vec->x;
   }
 
-  void set_Axis_Internal(NlMath::Vector3D* vec, float val, int index)
+  void set_xAxis_Internal(NlMath::Vector3D* vec, float val)
   {
-    vec->m[index] = val;
+    vec->x = val;
+  }
+
+  float get_yAxis_Internal(const NlMath::Vector3D* vec)
+  {
+    return vec->y;
+  }
+
+  void set_yAxis_Internal(NlMath::Vector3D* vec, float val)
+  {
+    vec->y = val;
+  }
+
+  float get_zAxis_Internal(const NlMath::Vector3D* vec)
+  {
+    return vec->z;
+  }
+
+  void set_zAxis_Internal(NlMath::Vector3D* vec, float val)
+  {
+    vec->z = val;
   }
 }

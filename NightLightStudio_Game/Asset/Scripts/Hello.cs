@@ -1,14 +1,20 @@
 using System;
+using System.CodeDom.Compiler;
+using System.Collections.Specialized;
 
 namespace Unicorn
 {
   public class Hello : UniBehaviour
   {    
     int findID = -1;
-    Transform trans;
-    Vector3 upVec;
+    Collider col;
 
     public override void Init()
+    {
+
+    }
+
+    public override void LateInit()
     {
       Console.WriteLine("Hello from C#");
       Console.WriteLine(id);
@@ -16,20 +22,15 @@ namespace Unicorn
       Console.WriteLine("The ID found is :");
       Console.WriteLine(findID);
       Audio.PlayOnce("TestAudio");
-      trans = GetTransform(findID);
-      Console.WriteLine(trans.Name);
-      //upVec = Camera.
-      upVec = Camera.GetRightVector();
-      Console.WriteLine(upVec.x);
-      Console.WriteLine(upVec.y);
-      Console.WriteLine(upVec.z);
+      col = GetCollider(findID);
+      Console.WriteLine(col.isCollidable);
+      Console.WriteLine(col.tag);
+      col.setCenter(new Vector3(1.0f, 1.0f, 1.0f));
+      Console.WriteLine(col.getCenter().x);
+      Console.WriteLine(col.getCenter().y);
+      Console.WriteLine(col.getCenter().z);
       //Console.WriteLine(trans.getPosition().x);
       //trans.pos.x = 10.0f;
-    }
-
-    public override void LateInit()
-    {
-      
     }
 
     public override void Update()

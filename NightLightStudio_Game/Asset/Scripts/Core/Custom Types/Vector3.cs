@@ -35,13 +35,19 @@ namespace Unicorn
       get
       {
         if (native_handle != IntPtr.Zero)
-          X = get_Axis_Internal(this.native_handle, 0);
+        {
+          Console.WriteLine("InteropGetX");
+          X = get_xAxis_Internal(this.native_handle);
+        }
         return X;
       }
       set
       {
         if (native_handle != IntPtr.Zero)
-          set_Axis_Internal(this.native_handle, value, 0);
+        {
+          Console.WriteLine("InteropSetX");
+          set_xAxis_Internal(this.native_handle, value);
+        }
         X = value;
       }
     }
@@ -51,13 +57,19 @@ namespace Unicorn
       get
       {
         if (native_handle != IntPtr.Zero)
-          Y = get_Axis_Internal(this.native_handle, 1);
+        {
+          Console.WriteLine("InteropGetY");
+          Y = get_xAxis_Internal(this.native_handle);
+        }
         return Y;
       }
       set
       {
         if (native_handle != IntPtr.Zero)
-          set_Axis_Internal(this.native_handle, value, 1);
+        {
+          Console.WriteLine("InteropSetY");
+          set_xAxis_Internal(this.native_handle, value);
+        }
         Y = value;
       }
     }
@@ -67,13 +79,19 @@ namespace Unicorn
       get
       {
         if (native_handle != IntPtr.Zero)
-          Z = get_Axis_Internal(this.native_handle, 2);
+        {
+          Console.WriteLine("InteropGetZ");
+          Z = get_zAxis_Internal(this.native_handle);
+        }
         return Z;
       }
       set
       {
         if (native_handle != IntPtr.Zero)
-          set_Axis_Internal(this.native_handle, value, 2);
+        {
+          Console.WriteLine("InteropSetZ");
+          set_zAxis_Internal(this.native_handle, value);
+        }
         Z = value;
       }
     }
@@ -205,9 +223,21 @@ namespace Unicorn
     }
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static float get_Axis_Internal(IntPtr native_handle, int index);
+    public extern static float get_xAxis_Internal(IntPtr native_handle);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static void set_Axis_Internal(IntPtr native_handle, float val, int index);
+    public extern static void set_xAxis_Internal(IntPtr native_handle, float val);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float get_yAxis_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_yAxis_Internal(IntPtr native_handle, float val);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float get_zAxis_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_zAxis_Internal(IntPtr native_handle, float val);
   }
 }

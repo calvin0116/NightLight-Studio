@@ -6,6 +6,12 @@ namespace Vector3DBind
 {
   void BindVector3D();
 
-  float get_Axis_Internal(const NlMath::Vector3D* vec, int index);
-  void set_Axis_Internal(NlMath::Vector3D* vec, float val, int index);
+  float get_xAxis_Internal(const NlMath::Vector3D* vec);
+  void set_xAxis_Internal(NlMath::Vector3D* vec, float val);
+
+  float get_yAxis_Internal(const NlMath::Vector3D* vec);
+  void set_yAxis_Internal(NlMath::Vector3D* vec, float val);
+
+  float get_zAxis_Internal(const NlMath::Vector3D* vec);
+  void set_zAxis_Internal(NlMath::Vector3D* vec, float val);
 }

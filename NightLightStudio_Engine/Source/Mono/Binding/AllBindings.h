@@ -2,6 +2,7 @@
 
 // Components
 #include "Components/ComponentTransformBind.h"
+#include "Components/ComponentColliderBind.h"
 
 // Custom types
 #include "CustomTypes/Vector3DBind.h"

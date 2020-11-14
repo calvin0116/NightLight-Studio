@@ -4,21 +4,22 @@
 
 namespace MonoBind
 {
+  // none custom types
+  void BindComponentsGetSet()
+  {
+    ComponentTransformBind::BindComponentTransform();
+    ComponentColliderBind::BindComponentCollider();
+  }
+
   // Custom types
   void BindCustomTypes()
   {
     Vector3DBind::BindVector3D();
   }
 
-  // none custom types
-  void BindComponentsGetSet()
-  {
-    ComponentTransformBind::BindComponentTransform();
-  }
-
+  // Systems
   void BindSystems()
   {
-    // Systems
     ECSBind::BindECS();
     AudioBind::BindAudio();
     ForceBind::BindForce();

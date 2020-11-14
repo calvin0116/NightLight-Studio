@@ -9,6 +9,7 @@ namespace ECSBind
   {
     MonoWrapper::BindClassFunction(GameObjectFind, "GameObjectFind", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetCollider, "GetCollider", "UniBehaviour");
   }
 
   int GameObjectFind(MonoString* _name)
@@ -46,6 +47,36 @@ namespace ECSBind
     //if(trans)
     //  MonoWrapper::SetNativeHandle(monoVec3, &(trans->_scale));
     //MonoWrapper::SetObjectFieldValue(monoObj, "scale", monoVec3);
+
+    return monoObj;
+  }
+
+  MonoObject* GetCollider(int id)
+  {
+    // Create C# side component
+    MonoObject* monoObj = MonoWrapper::ConstructObject("Collider");
+    Entity en = G_ECMANAGER->getEntity(id);
+    ColliderComponent* col = en.getComponent<ColliderComponent>();
+    MonoWrapper::SetNativeHandle(monoObj, col);
+
+    ////if (trans == nullptr)
+    ////  static_assert("get_Transform_handle nullptr");
+
+    //MonoObject* monoVec3;
+    //// Construct and set position(Vec3) native handle and values
+    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
+    //MonoWrapper::SetNativeHandle(monoVec3, &(col->center));
+    //MonoWrapper::SetObjectFieldValue(monoObj, "Center", monoVec3);
+    //
+    //// Construct and set rotation(Vec3) native handle and values
+    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
+    //MonoWrapper::SetNativeHandle(monoVec3, &(col->extend));
+    //MonoWrapper::SetObjectFieldValue(monoObj, "Extend", monoVec3);
+
+    //// Construct and set rotation(Vec3) native handle and values
+    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
+    //MonoWrapper::SetNativeHandle(monoVec3, &(col->rotation));
+    //MonoWrapper::SetObjectFieldValue(monoObj, "Rotation", monoVec3);
 
     return monoObj;
   }

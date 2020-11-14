@@ -444,6 +444,9 @@
     <ClInclude Include="Source\Mono\Binding\Systems\CameraBind.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentColliderBind.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -729,6 +732,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Mono\Binding\Systems\CameraBind.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentColliderBind.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
