@@ -13,5 +13,20 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Vector3 GetRightVector();
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 GetViewVector();
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 GetXZViewVector();
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 GetXZViewVector_Back();
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 GetXZViewVector_Left();
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 GetXZViewVector_Right();
   }
 }

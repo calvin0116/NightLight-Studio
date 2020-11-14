@@ -19,14 +19,10 @@ namespace Unicorn
       trans = GetTransform(findID);
       Console.WriteLine(trans.Name);
       //upVec = Camera.
-      upVec = trans.getPosition();
+      upVec = Camera.GetRightVector();
       Console.WriteLine(upVec.x);
-      upVec.x = 100.0f;
-      upVec.y = 110.0f;
-      upVec.z = 120.0f;
-      trans.setPosition(upVec);
-      trans.setRotation(upVec);
-      trans.setScale(upVec);
+      Console.WriteLine(upVec.y);
+      Console.WriteLine(upVec.z);
       //Console.WriteLine(trans.getPosition().x);
       //trans.pos.x = 10.0f;
     }
