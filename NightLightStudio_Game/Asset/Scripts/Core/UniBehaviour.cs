@@ -36,5 +36,8 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Collider GetCollider(int id);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static RigidBody GetRigidBody(int id);
   }
 }

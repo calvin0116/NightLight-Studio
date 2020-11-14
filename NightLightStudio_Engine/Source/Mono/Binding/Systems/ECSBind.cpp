@@ -10,6 +10,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(GameObjectFind, "GameObjectFind", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetCollider, "GetCollider", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetRigidBody, "GetRigidBody", "UniBehaviour");
   }
 
   int GameObjectFind(MonoString* _name)
@@ -77,6 +78,17 @@ namespace ECSBind
     //monoVec3 = MonoWrapper::ConstructObject("Vector3");
     //MonoWrapper::SetNativeHandle(monoVec3, &(col->rotation));
     //MonoWrapper::SetObjectFieldValue(monoObj, "Rotation", monoVec3);
+
+    return monoObj;
+  }
+
+  MonoObject* GetRigidBody(int id)
+  {
+    // Create C# side component
+    MonoObject* monoObj = MonoWrapper::ConstructObject("RigidBody");
+    Entity en = G_ECMANAGER->getEntity(id);
+    RigidBodyComponent* col = en.getComponent<RigidBodyComponent>();
+    MonoWrapper::SetNativeHandle(monoObj, col);
 
     return monoObj;
   }

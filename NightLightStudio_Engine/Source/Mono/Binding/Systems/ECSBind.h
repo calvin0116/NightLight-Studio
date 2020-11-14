@@ -8,6 +8,7 @@ namespace ECSBind
   // Get components from object ID
   MonoObject* GetTransform(int id);
   MonoObject* GetCollider(int id);
+  MonoObject* GetRigidBody(int id);
 
   void BindECS();    
 }
