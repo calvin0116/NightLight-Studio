@@ -32,6 +32,9 @@ namespace Unicorn
     public extern static int GameObjectFind(string name);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static dynamic GetScript(int id);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Transform GetTransform(int id);
 
     [MethodImpl(MethodImplOptions.InternalCall)]

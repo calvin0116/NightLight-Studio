@@ -8,6 +8,7 @@ namespace ECSBind
   void BindECS()
   {
     MonoWrapper::BindClassFunction(GameObjectFind, "GameObjectFind", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetScript, "GetScript", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetCollider, "GetCollider", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetRigidBody, "GetRigidBody", "UniBehaviour");
@@ -18,6 +19,15 @@ namespace ECSBind
   {
     Entity en = G_ECMANAGER->getEntity(MonoWrapper::ToString(_name));
     return en.getId();
+  }
+
+  MonoObject* GetScript(int id)
+  {
+    Entity en = G_ECMANAGER->getEntity(id);
+    ScriptComponent* script = en.getComponent<ScriptComponent>();
+    if (script && script->_MonoData._pInstance)
+      return script->_MonoData._pInstance; // Found script
+    return nullptr; // nope
   }
 
   MonoObject* GetTransform(int id)
