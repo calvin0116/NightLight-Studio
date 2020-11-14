@@ -1,4 +1,4 @@
-#include "ComponentColliderBind.h"
+#include "ComponentRigidBodyBind.h"
 #include "../../MonoWrapper.h"
 
 
