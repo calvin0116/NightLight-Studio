@@ -10,5 +10,8 @@ namespace Unicorn
   {
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Vector3 GetUpVector();
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 GetRightVector();
   }
 }

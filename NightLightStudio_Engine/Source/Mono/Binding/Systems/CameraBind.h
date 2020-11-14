@@ -10,7 +10,7 @@ namespace CameraBind
   // UP vector
   MonoObject* csGetUpVector();
   // RIGHT vector
-  //MonoObject* csGetRightVector();
+  MonoObject* csGetRightVector();
   //// View Vectors
   //// get viewVector
   //MonoObject* csGetViewVector();
