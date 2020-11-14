@@ -8,6 +8,7 @@ namespace Unicorn
   {    
     int findID = -1;
     Collider col;
+    RigidBody rb;
 
     public override void Init()
     {
@@ -31,6 +32,12 @@ namespace Unicorn
       Console.WriteLine(col.getCenter().z);
       //Console.WriteLine(trans.getPosition().x);
       //trans.pos.x = 10.0f;
+      rb = GetRigidBody(findID);
+      Console.WriteLine(rb.isStatic);
+      rb.isStatic = false;
+      rb.isGravity = false;
+      rb.mass = 100.0f;
+      rb.friction = 1.0f;
     }
 
     public override void Update()

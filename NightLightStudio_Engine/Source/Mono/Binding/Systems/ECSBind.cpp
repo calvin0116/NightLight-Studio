@@ -87,8 +87,8 @@ namespace ECSBind
     // Create C# side component
     MonoObject* monoObj = MonoWrapper::ConstructObject("RigidBody");
     Entity en = G_ECMANAGER->getEntity(id);
-    RigidBodyComponent* col = en.getComponent<RigidBodyComponent>();
-    MonoWrapper::SetNativeHandle(monoObj, col);
+    RigidBodyComponent* rb = en.getComponent<RigidBodyComponent>();
+    MonoWrapper::SetNativeHandle(monoObj, rb);
 
     return monoObj;
   }

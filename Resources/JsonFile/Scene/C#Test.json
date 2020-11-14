@@ -24,9 +24,9 @@
                 "tag": 2,
                 "isCollidable": true,
                 "Center": [
-                    10.0,
-                    11.0,
-                    12.0
+                    1.0,
+                    1.0,
+                    1.0
                 ],
                 "Extend": [
                     1.0,
@@ -41,7 +41,7 @@
             },
             "RigidBody": {
                 "isStatic": true,
-                "isGravity": false,
+                "isGravity": true,
                 "mass": 0.0,
                 "friction": 0.009999999776482582,
                 "Force": [
