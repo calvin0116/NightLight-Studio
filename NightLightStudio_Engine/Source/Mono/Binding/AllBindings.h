@@ -4,6 +4,7 @@
 #include "Components/ComponentTransformBind.h"
 #include "Components/ComponentColliderBind.h"
 #include "Components/ComponentRigidBodyBind.h"
+#include "Components/ComponentGraphicsBind.h"
 
 // Custom types
 #include "CustomTypes/Vector3DBind.h"

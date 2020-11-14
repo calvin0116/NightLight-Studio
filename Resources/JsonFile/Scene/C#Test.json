@@ -4,7 +4,7 @@
             "TransformComponent": {
                 "EntityName": "Entity_0",
                 "Position": [
-                    -62.5025520324707,
+                    -42.052513122558597,
                     70.83599853515625,
                     -9.536764764561668e-7
                 ],
@@ -54,6 +54,32 @@
                     0.0,
                     0.0
                 ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0
             },
             "AudioManager": {
                 "ListOfSound": {

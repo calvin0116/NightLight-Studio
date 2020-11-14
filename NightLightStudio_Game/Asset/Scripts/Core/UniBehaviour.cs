@@ -39,5 +39,8 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static RigidBody GetRigidBody(int id);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Graphics GetGraphics(int id);
   }
 }

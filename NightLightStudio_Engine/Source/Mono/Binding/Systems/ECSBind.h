@@ -9,6 +9,7 @@ namespace ECSBind
   MonoObject* GetTransform(int id);
   MonoObject* GetCollider(int id);
   MonoObject* GetRigidBody(int id);
+  MonoObject* GetGraphics(int id);
 
   void BindECS();    
 }

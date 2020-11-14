@@ -9,6 +9,7 @@ namespace Unicorn
     int findID = -1;
     Collider col;
     RigidBody rb;
+    Graphics g;
 
     public override void Init()
     {
@@ -38,6 +39,8 @@ namespace Unicorn
       rb.isGravity = false;
       rb.mass = 100.0f;
       rb.friction = 1.0f;
+      g = GetGraphics(findID);
+      g.AddModel("\\Asset\\3D model\\mothtest.FBX");
     }
 
     public override void Update()
