@@ -39,7 +39,8 @@ namespace NS_GRAPHICS
 		_debugDrawing{ false },
 		_uiDrawing{ false },
 		_projectionMatrix{ glm::mat4(1.0f) },
-		_viewMatrix{ glm::mat4(1.0f) }
+		_viewMatrix{ glm::mat4(1.0f) },
+		_orthoMatrix{ glm::mat4(1.0f) }
 	{
 	}
 
@@ -237,6 +238,7 @@ namespace NS_GRAPHICS
 
 		// Set default values for projection matrix
 		SetProjectionMatrix();
+		SetUIMatrix(NS_WINDOW::SYS_WINDOW->GetResolutionWidth(), NS_WINDOW::SYS_WINDOW->GetResolutionHeight());
 
 		debugManager->Init();
 
@@ -424,6 +426,27 @@ namespace NS_GRAPHICS
 		glBindBuffer(GL_UNIFORM_BUFFER, shaderManager->GetViewProjectionUniformLocation());
 		glBufferSubData(GL_UNIFORM_BUFFER, 64, 64, glm::value_ptr(_projectionMatrix));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	}
+
+	void GraphicsSystem::SetUIMatrix(const int& width, const int& height, const float& near_plane, const float& far_plane)
+	{
+		shaderManager->StartProgram(4);
+
+		//Scales with screen or not?
+		//float ratioWidth = (float)width / NS_WINDOW::SYS_WINDOW->GetAppWidth();
+		//float ratioHeight = (float)height / NS_WINDOW::SYS_WINDOW->GetAppHeight();
+
+		_orthoMatrix = glm::ortho(
+			(float)-width * 0.5f,
+			(float)width * 0.5f,
+			(float)-height * 0.5f,
+			(float)height * 0.5f,
+			near_plane,
+			far_plane);
+
+		glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ortho_proj"), 1, GL_FALSE, &_orthoMatrix[0][0]);
+
+		shaderManager->StopProgram();
 	}
 
 	void GraphicsSystem::UpdateLights()

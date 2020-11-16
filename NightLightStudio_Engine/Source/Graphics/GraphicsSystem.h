@@ -82,6 +82,9 @@ namespace NS_GRAPHICS
         // DO NOT, DO NOT CHANGE NEAR PLANE
         void SetProjectionMatrix(const float& fov = 45.f, const float& aspect_ratio = 1.78f, const float& near_plane = 1.0f, const float& far_plane = 50000.f);
 
+        // Sets ortho projection for UI
+        void SetUIMatrix(const int& width, const int& height, const float& near_plane = -100.0f, const float& far_plane = 100.f);
+
         // Updates uniform light variables based on active light components for all shaders
         // Temporarily hard set 1 type of light each
         void UpdateLights();
@@ -137,13 +140,15 @@ namespace NS_GRAPHICS
         CameraSystem* cameraManager;
         TextureManager* textureManager;
         UISystem* uiManager;
-        //Renderer* renderer;
 
         // Should NOT be calculated every frame
         glm::mat4 _projectionMatrix;
 
         //temporary view matrix, to be removed after camera system implementation
         glm::mat4 _viewMatrix;
+
+        // Should NOT be calculated every frame
+        glm::mat4 _orthoMatrix;
     };
 
     //GLOBAL pointer to an instance of graphic system

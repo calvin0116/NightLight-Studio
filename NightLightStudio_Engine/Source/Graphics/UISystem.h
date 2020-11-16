@@ -26,6 +26,8 @@ namespace NS_GRAPHICS
         UISystem();
         ~UISystem();
 
+        //UIQuad _base;
+
     public:
         static UISystem& GetInstance()
         {
@@ -37,21 +39,20 @@ namespace NS_GRAPHICS
         void Update();
         void RenderUI();
 
-        // Sets ortho projection for UI
-        void SetUIMatrix(const int& width, const int& height, const float& near_plane = 1.0f, const float& far_plane = 50000.f);
         unsigned LoadTexture(std::string filename);
 
     private:
 
         bool _uiDrawing;
 
-        // Should NOT be calculated every frame
-        glm::mat4 _uiMatrix;
-
+        // Referenced object for instancing
         GLuint _vao;
         GLuint _vbo;
         GLuint _ebo;
+
+        // Individual elements
         GLuint _mmbo;
+        //GLuint _cbo;
 
         TextureManager* _textureManager;
         ShaderSystem* _shaderSystem;
