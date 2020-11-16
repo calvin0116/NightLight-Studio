@@ -105,24 +105,6 @@ namespace NS_GRAPHICS
 			glUniform1i(glGetUniformLocation(currentProgramID, "specular_texture"), 1); // Specular
 			StopProgram();
 		}
-
-		if (quantity >= 5)
-		{
-			StartProgram(4);
-
-			// Create orthogonal projection
-			RECT rect; // Making a rect to ensure that size is proper
-			GetClientRect(NS_WINDOW::WndSystem::GetInstance()->GetHandlerToWindow(), &rect);
-
-			float screenwidth = static_cast<float>(rect.right - rect.left);
-			float screenheight = static_cast<float>(rect.bottom - rect.top);
-
-			glm::mat4 ortho = glm::ortho(-screenwidth / 2, screenwidth / 2, -screenheight / 2, screenheight / 2, -1.0f, 1000.0f);
-
-			glUniformMatrix4fv(glGetUniformLocation(currentProgramID, "ortho_proj"), 1, GL_FALSE, &ortho[0][0]);
-
-			StopProgram();
-		}
 	}
 
 	bool ShaderSystem::CompileLoadedShaders()
