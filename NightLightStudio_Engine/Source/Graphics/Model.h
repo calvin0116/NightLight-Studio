@@ -16,6 +16,8 @@ namespace NS_GRAPHICS
 		std::string _fileName;
 		std::vector<Mesh*> _meshes;
 
+		bool _isAnimatable;
+
 		Model() = default;
 		~Model() = default;
 	};
