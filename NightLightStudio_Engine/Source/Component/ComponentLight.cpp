@@ -80,6 +80,7 @@ NS_GRAPHICS::Lights ComponentLight::GetInactiveType() const
 
 void ComponentLight::ChangeLightType(const NS_GRAPHICS::Lights& Type)
 {
+	_type = Type;
 	NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(this, Type);
 }
 
