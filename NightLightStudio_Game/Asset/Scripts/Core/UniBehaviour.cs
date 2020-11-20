@@ -45,5 +45,8 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Graphics GetGraphics(int id);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Light GetLight(int id);
   }
 }

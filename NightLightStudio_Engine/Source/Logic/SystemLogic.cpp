@@ -6,7 +6,7 @@
 #include "CScripts/AllScripts.h"
 
 #define C_ENV
-//#define CS_ENV
+#define CS_ENV
 
 namespace NS_LOGIC
 {

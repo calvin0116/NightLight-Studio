@@ -291,6 +291,7 @@
     <ClInclude Include="Source\Mono\Binding\Binder.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentColliderBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentGraphicsBind.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentLightBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentTransformBind.h" />
     <ClInclude Include="Source\Mono\Binding\Systems\AudioBind.h" />
@@ -399,6 +400,7 @@
     <ClCompile Include="Source\Mono\Binding\Binder.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentColliderBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentGraphicsBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentLightBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentTransformBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Systems\AudioBind.cpp" />

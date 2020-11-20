@@ -11,6 +11,7 @@ namespace ECSBind
   MonoObject* GetCollider(int id);
   MonoObject* GetRigidBody(int id);
   MonoObject* GetGraphics(int id);
+  MonoObject* GetLight(int id);
 
   void BindECS();    
 }
