@@ -108,6 +108,7 @@ glm::vec3 ComponentLight::GetAmbient() const
 
 void ComponentLight::SetAmbient(const glm::vec3& ambient)
 {
+	_ambient = ambient;
 	if (_lightID != -1)
 	{
 		switch (_type)
@@ -152,6 +153,7 @@ glm::vec3 ComponentLight::GetDiffuse() const
 
 void ComponentLight::SetDiffuse(const glm::vec3& diffuse)
 {
+	_diffuse = diffuse;
 	if (_lightID != -1)
 	{
 		switch (_type)
@@ -196,6 +198,7 @@ glm::vec3 ComponentLight::GetSpecular() const
 
 void ComponentLight::SetSpecular(const glm::vec3& specular)
 {
+	_specular = specular;
 	if (_lightID != -1)
 	{
 		switch (_type)
@@ -241,6 +244,7 @@ float ComponentLight::GetIntensity()
 
 void ComponentLight::SetIntensity(const float& intensity)
 {
+	_intensity = intensity;
 	// Calculate intensity to be 1.f / intensity
 	// E.g. intensity = 100.f, attenuation = 1.f / 100f = 0.01f
 	// E.g. intensity = 10.f, attenuation = 1.f / 10f = 0.1f
