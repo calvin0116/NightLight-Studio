@@ -299,6 +299,7 @@
     <ClInclude Include="Source\Mono\Binding\Systems\CameraBind.h" />
     <ClInclude Include="Source\Mono\Binding\Systems\ECSBind.h" />
     <ClInclude Include="Source\Mono\Binding\Systems\ForceBind.h" />
+    <ClInclude Include="Source\Mono\Binding\Systems\InputBind.h" />
     <ClInclude Include="Source\Mono\MonoWrapper.h" />
     <ClInclude Include="Source\Physics\ForceManager.h" />
     <ClInclude Include="Source\Physics\SystemPhysics.h" />
@@ -408,6 +409,7 @@
     <ClCompile Include="Source\Mono\Binding\Systems\CameraBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Systems\ECSBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Systems\ForceBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Systems\InputBind.cpp" />
     <ClCompile Include="Source\Mono\MonoWrapper.cpp" />
     <ClCompile Include="Source\Physics\ForceManager.cpp" />
     <ClCompile Include="Source\Physics\SystemPhysics.cpp" />
