@@ -49,7 +49,7 @@ namespace NS_GRAPHICS
 				const int totalBufferSize = mesh->GetPolygonVertexCount();
 				FbxVector4* vertexs = mesh->GetControlPoints();
 
-				newMesh->_indices.reserve(totalBufferSize);
+				//newMesh->_indices.reserve(totalBufferSize);
 				newMesh->_vertexDatas.reserve(totalBufferSize);
 
 				int vertexID = 0;
@@ -149,7 +149,7 @@ namespace NS_GRAPHICS
 							}
 						}
 
-						newMesh->_indices.push_back((unsigned short)vertexID);
+						//newMesh->_indices.push_back((unsigned short)vertexID);
 						newMesh->_vertexDatas.push_back(newVertex);
 
 						vertexID++;
@@ -168,19 +168,6 @@ namespace NS_GRAPHICS
 			ProcessMesh(node->GetChild(i), model);
 		}
 	}
-
-	/*void ModelLoader::LoadFBX(const std::string& fileName, Mesh& mesh)
-	{
-		FbxImporter* fbxImport = FbxImporter::Create(_fbxManager, "");
-
-		if (!fbxImport->Initialize(fileName.c_str(), -1, _fbxManager->GetIOSettings())) {
-			exit(-1);
-		}
-
-		mesh.fbxScene = FbxScene::Create(_fbxManager, fileName.c_str());
-		fbxImport->Import(mesh.fbxScene);
-		fbxImport->Destroy();
-	}*/
 
 	void ModelLoader::Init()
 	{
@@ -247,13 +234,6 @@ namespace NS_GRAPHICS
 		FbxNode* root = _fbxScene->GetRootNode();
 		if (root)
 		{
-			/*FbxNode* parentNode = root->GetParent();
-
-			if (parentNode)
-			{
-				ProcessMesh(parentNode, model);
-			}*/
-
 			for (int i = 0; i < root->GetChildCount(); i++)
 			{
 				ProcessMesh(root->GetChild(i), model);
@@ -365,7 +345,7 @@ namespace NS_GRAPHICS
 				std::string vertexCount = input.substr(input.find(" ") + 1);
 				Mesh* newMesh = new Mesh();
 				newMesh->_vertexDatas.reserve((size_t)std::stoi(vertexCount));
-				newMesh->_indices.reserve((size_t)std::stoi(vertexCount));
+				//newMesh->_indices.reserve((size_t)std::stoi(vertexCount));
 
 				std::getline(meshFile, input);
 				newMesh->_nodeName = input;
@@ -412,7 +392,7 @@ namespace NS_GRAPHICS
 						vertex._normals.y = std::stof(normalY);
 						vertex._normals.z = std::stof(normalZ);
 
-						newMesh->_indices.push_back((unsigned short)index);
+						//newMesh->_indices.push_back((unsigned short)index);
 						index++;
 						newMesh->_vertexDatas.push_back(vertex);
 

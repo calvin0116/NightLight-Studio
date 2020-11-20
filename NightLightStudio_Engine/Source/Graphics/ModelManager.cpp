@@ -58,14 +58,9 @@ namespace NS_GRAPHICS
 				Mesh* mesh = new Mesh();
 
 				mesh->_vertexDatas = check->second->_meshes[meshIndex]->_vertexDatas;
-				mesh->_indices = check->second->_meshes[meshIndex]->_indices;
 
 				glGenVertexArrays(1, &mesh->VAO);
 				glGenBuffers(1, &mesh->VBO);
-				glGenBuffers(1, &mesh->EBO);
-				//glGenBuffers(1, &mesh->CBO);
-				glGenBuffers(1, &mesh->NBO);
-				glGenBuffers(1, &mesh->UVBO);
 				glGenBuffers(1, &mesh->ModelMatrixBO);
 
 				glBindVertexArray(mesh->VAO);
@@ -82,10 +77,6 @@ namespace NS_GRAPHICS
 				// normals attribute
 				glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), (void*)(sizeof(glm::vec3) + sizeof(glm::vec2)));
 				glEnableVertexAttribArray(2);
-
-				// Indices
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * mesh->_indices.size(), &mesh->_indices[0], GL_STATIC_DRAW);
 
 				// Model Matrix
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
@@ -164,9 +155,6 @@ namespace NS_GRAPHICS
 			for (auto& mesh : m->_meshes)
 			{
 				glDeleteBuffers(1, &mesh->VBO);
-				glDeleteBuffers(1, &mesh->UVBO);
-				glDeleteBuffers(1, &mesh->CBO);
-				glDeleteBuffers(1, &mesh->EBO);
 				glDeleteBuffers(1, &mesh->ModelMatrixBO);
 				glDeleteVertexArrays(1, &mesh->VAO);
 
@@ -181,9 +169,6 @@ namespace NS_GRAPHICS
 			for (auto& del : n.second->_meshes)
 			{
 				glDeleteBuffers(1, &del->VBO);
-				glDeleteBuffers(1, &del->UVBO);
-				glDeleteBuffers(1, &del->CBO);
-				glDeleteBuffers(1, &del->EBO);
 				glDeleteBuffers(1, &del->ModelMatrixBO);
 				glDeleteVertexArrays(1, &del->VAO);
 				
