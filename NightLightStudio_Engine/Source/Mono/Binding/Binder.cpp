@@ -11,6 +11,7 @@ namespace MonoBind
     ComponentColliderBind::BindComponentCollider();
     ComponentRigidBodyBind::BindComponentRigidBody();
     ComponentGraphicsBind::BindComponentGraphics();
+    ComponentLightBind::BindComponentLight();
   }
 
   // Custom types

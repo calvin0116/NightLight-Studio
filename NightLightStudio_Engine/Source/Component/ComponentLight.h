@@ -11,7 +11,7 @@ typedef class ComponentLight : public ISerializable //: public IComponent
 public:
 	// Temporarily make them public for easy access
 
-	bool _isActive; // Temporarily set to true at beginning // Expose
+	bool _isActive; // Temporarily set to true at beginning 
 
 	// value is -1 if no light is assigned
 	int _lightID;
@@ -21,9 +21,9 @@ public:
 
 	//Variables For Lighting
 	//Standard variable
-	glm::vec3 _ambient;   // Expose
-	glm::vec3 _diffuse;   // Expose
-	glm::vec3 _specular;  // Expose
+	glm::vec3 _ambient;  
+	glm::vec3 _diffuse;  
+	glm::vec3 _specular; 
 
 	// For spot and directional
 	// used as reference only
@@ -53,9 +53,9 @@ public:
 	/////////// GETTERS/SETTERS ////////////
 
 	// Must use this function for setting active/inactive for light
-	void SetActive(const bool& set);
+	void SetActive(const bool& set);            // Expose
 
-	bool GetActive() const;
+	bool GetActive() const;                     // Expose
 
 	NS_GRAPHICS::Lights GetInactiveType() const;
 

@@ -453,6 +453,9 @@
     <ClInclude Include="Source\Mono\Binding\Components\ComponentGraphicsBind.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentLightBind.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -747,6 +750,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Mono\Binding\Components\ComponentGraphicsBind.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentLightBind.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
