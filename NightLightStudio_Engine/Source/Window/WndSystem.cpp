@@ -362,7 +362,7 @@ namespace NS_WINDOW
 		}
 
 		hasInit = true;
-		SetFullScreenMode(true);
+		SetFullScreenMode(CONFIG_DATA->GetConfigData().toFullScreen); //<- Use json to control
 		return;
 	}
 

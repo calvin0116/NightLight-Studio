@@ -171,12 +171,12 @@ namespace NS_SCENE
 
 	void SceneManager::HandleMsg(MessageTogglePlay& mst)
 	{
-		if (mst.isPlaying)
+		if (mst.GetID() == "BeforePlay")
 		{
 			// Game started playing
 			TempSave();
 		}
-		else
+		else if (mst.GetID() == "AfterPlay")
 		{
 			// Game exit
 			TempLoad();
@@ -233,7 +233,7 @@ namespace NS_SCENE
 				}
 			}
 
-			NS_SERIALISER::ChangeData(obj_val, EntityName[ent.getId()], ent_val->GetObject());
+			NS_SERIALISER::ChangeData(obj_val, SYS_COMPONENT->EntityName[ent.getId()], ent_val->GetObject());
 
 			delete ent_val;
 		}
@@ -249,12 +249,12 @@ namespace NS_SCENE
 	void SceneManager::TempLoad()
 	{
 		std::cout << "Temploading" << std::endl;
-
+		/*
 		//Delete all entity
 		for (Entity ent : G_ECMANAGER->getEntityContainer())
 		{
 			G_ECMANAGER->FreeEntity(ent.getId());
-		}
+		}*/
 
 		//Reloading all entity
 		std::string output_filename = "Scene/Output"; //<- For testing
@@ -277,7 +277,7 @@ namespace NS_SCENE
 		if (scene.CheckForMember("Objects"))
 		{
 			std::cout << "Initialising Objects....." << std::endl;
-			NS_SERIALISER::EntityListCreation(scene["Objects"]);
+			NS_SERIALISER::EntityListInit(scene["Objects"]);
 		}
 		else
 		{
@@ -361,7 +361,7 @@ namespace NS_SCENE
 				}
 			}
 
-			NS_SERIALISER::ChangeData(obj_val, EntityName[ent.getId()], ent_val->GetObject());
+			NS_SERIALISER::ChangeData(obj_val, SYS_COMPONENT->EntityName[ent.getId()], ent_val->GetObject());
 
 			delete ent_val;
 		}

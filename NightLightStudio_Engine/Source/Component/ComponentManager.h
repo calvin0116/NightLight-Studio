@@ -220,7 +220,8 @@ public:
 	typedef LocalVector<int, MAX_CHILDREN> ChildContainerT;
 
 	ComponentMemoryManager cmm;
-
+	//Storing of entity name according to object id
+	std::map<int, std::string> EntityName;
 	//class ComponentSet; // fwd decl
 	class ComponentSetFactory; 
 	class ComponentSetManager; 
@@ -1049,6 +1050,11 @@ public:
 
 		//class ComponentTransform;
 		EntityHandle getEntity(std::string str);
+
+
+		// get component using entity name
+		ComponentManager::ComponentSetManager::EntityHandle getEntityUsingEntName(std::string str);
+
 
 		std::vector<EntityHandle> getEntityTagContainer(std::string str);
 

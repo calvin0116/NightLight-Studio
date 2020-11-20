@@ -19,7 +19,10 @@ namespace NS_GRAPHICS
 		useThridPersonCam{false},
 		canThridPersonCamRotate{true},
 		canThridPersonCamZoom{true},
-		viewVector{}
+		viewVector{},
+		savedTgt(0.0f, 0.0f, 0.0f),
+		savedPitch(0.0f),
+		savedYaw(0.0f)
 	{
 	}
 
@@ -450,6 +453,26 @@ namespace NS_GRAPHICS
 
 		theThridPersonCamYaw = yaw;
 
+	}
+
+	void CameraSystem::SavePosition()
+	{
+		savedTgt = tgt;
+		savedPitch = _camera.GetPitch();
+		savedYaw = _camera.GetYaw();
+	}
+
+	void CameraSystem::MoveToSavedPosition()
+	{
+		tgt = savedTgt;
+
+		theThridPersonCamPitch = savedPitch;
+		theThridPersonCamYaw = savedYaw;
+
+		_camera.SetCameraPitch(theThridPersonCamPitch);
+		_camera.SetCameraYaw(theThridPersonCamYaw);
+
+		SetUseThridPersonCam(false);
 	}
 
 }

@@ -12,7 +12,7 @@ typedef class ComponentTransform  : public ISerializable//: public IComponent
 {
 public:
 	//Name
-	char* name;
+	//char* name;
 
 	LocalString<256> _entityName;
 

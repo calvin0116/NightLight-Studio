@@ -14,6 +14,7 @@
 // For message
 #include "..\..\Messaging\SystemBroadcaster.h"
 #include "..\..\Messaging\Messages\MessageTogglePlay.h"
+#include "..\..\Graphics\GraphicsSystem.h"
 
 LevelEditor::LevelEditor() : _window{ nullptr }, _showGrid{ true }
 //, _runEngine{ false }
@@ -43,8 +44,28 @@ void LevelEditor::Init(HWND window)
             {
                 _runEngine = !_runEngine;
                 MessageTogglePlay isPlaying(_runEngine);
-                GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
+                //GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
+
+                //MessageTogglePlay isPlaying(_runEngine);
+                if (_runEngine)
+                {
+                    MessageTogglePlay isPlaying_1(_runEngine, "BeforePlay");
+                    NS_GRAPHICS::CameraSystem::GetInstance().SavePosition();
+                    GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_1);
+                    GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
+                   
+                }
+                else
+                {
+                    MessageTogglePlay isPlaying_2(_runEngine, "AfterPlay");
+                    GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
+                    GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_2);
+
+                    NS_GRAPHICS::CameraSystem::GetInstance().MoveToSavedPosition();
+                }
             }
+
+
         });
 
     // Setup Dear ImGui context

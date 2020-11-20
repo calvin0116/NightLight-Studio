@@ -20,6 +20,10 @@
 
 #include "..\..\\ISerializable.h"
 
+
+
+#include "ComponentManagerTypedefs.h"
+
 namespace NS_COMPONENT
 {
 
@@ -134,7 +138,9 @@ ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentS
 		++compSet->unknown_ent_id;
 	}
 	
-	NS_SCENE::SYS_SCENE_MANAGER->EntityName[objId + compSet->idIndexModifier] = name;
+	SYS_COMPONENT->EntityName[objId + compSet->idIndexModifier] = name;
+
+	//EntityName[objId + compSet->idIndexModifier] = name;
 	//----------------------------------------//
 	//return objId + compSet->idIndexModifier;
 
@@ -918,6 +924,40 @@ ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentS
 			return getEntity(itr);
 		}
 	}
+	return EntityHandle(nullptr, -1);
+}
+
+ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::getEntityUsingEntName(std::string str)
+{
+	/*
+	auto itr = SYS_COMPONENT->EntityName.begin();
+	auto itrEnd = SYS_COMPONENT->EntityName.end();
+
+	while (itr != itrEnd)
+	{
+		if((*itr)->)
+
+		++itr;
+	}*/
+
+	for (auto& i : SYS_COMPONENT->EntityName)
+	{
+		if (i.second == str)
+			return getEntity(i.first);
+	}
+	/*
+	for (Entity ent : getEntityContainer())
+	{
+
+		auto itr = SYS_COMPONENT->EntityName.find(ent.getId());
+
+		if (itr != SYS_COMPONENT->EntityName.end())
+		{
+			// found !!
+			
+		}
+	}*/
+	// not found
 	return EntityHandle(nullptr, -1);
 }
 

@@ -46,6 +46,10 @@ namespace NS_GRAPHICS
 		float theThridPersonCamPitch;
 		float theThridPersonCamYaw;
 
+		glm::vec3 savedTgt;
+		float savedPitch;
+		float savedYaw;
+
 	public:
 		// Unique Singleton instance
 		static CameraSystem& GetInstance()
@@ -114,5 +118,9 @@ namespace NS_GRAPHICS
 		void SetThridPersonCamDistance(float dist);                //Expose
 		// set pitch and yaw                                       //Expose
 		void SetThridPersonCamPitchAndYaw(float pitch, float yaw); //Expose
+
+
+		void SavePosition();
+		void MoveToSavedPosition();
 	};
 }
