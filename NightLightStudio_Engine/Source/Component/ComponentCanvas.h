@@ -18,7 +18,7 @@ struct UI_Element
 	//Z will be the depth for drawing order
 	glm::vec3 _position;
 	glm::vec2 _size;
-	glm::vec4 _colour;
+	glm::vec4 _colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	LocalString<256> _fileName;
 	unsigned _imageID;
