@@ -45,6 +45,9 @@ namespace ComponentLightBind
       "Light");
     MonoWrapper::BindClassFunction(set_Specular_Internal, "set_Specular_Internal",
       "Light");
+
+    MonoWrapper::BindClassFunction(ChangeLightType_Internal, "ChangeLightType_Internal",
+      "Light");
   }
 
   bool get_isActive_Internal(ComponentLight* trans)
@@ -151,5 +154,10 @@ namespace ComponentLightBind
     vec.y = MonoWrapper::GetObjectFieldValue<float>(val, "Y");
     vec.z = MonoWrapper::GetObjectFieldValue<float>(val, "Z");
     trans->SetSpecular(vec);
+  }
+
+  void ChangeLightType_Internal(ComponentLight* trans, NS_GRAPHICS::Lights val)
+  {
+    trans->ChangeLightType(val);
   }
 }

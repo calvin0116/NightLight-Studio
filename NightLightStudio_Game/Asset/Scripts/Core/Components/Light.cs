@@ -65,6 +65,7 @@ namespace Unicorn
 
     public void SetDiffuse(Vector3 val)
     {
+      Console.WriteLine("Set diffuse!");
       set_Diffuse_Internal(native_handle, val);
     }
 
@@ -76,6 +77,11 @@ namespace Unicorn
     public void SetSpecular(Vector3 val)
     {
       set_Specular_Internal(native_handle, val);
+    }
+
+    public void ChangeLightType(Type val)
+    {
+      ChangeLightType_Internal(native_handle, val);
     }
 
     // Getter/Setter for name
@@ -134,6 +140,8 @@ namespace Unicorn
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void set_Specular_Internal(IntPtr native_handle, Vector3 val);
 
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void ChangeLightType_Internal(IntPtr native_handle, Type val);
   }
 }
 

@@ -57,7 +57,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -90,6 +90,28 @@
                 "isActive": true,
                 "isRunning": true,
                 "ScriptName": "Hello"
+            },
+            "LightComponent": {
+                "LightType": "DIRECTIONAL",
+                "isActive": false,
+                "Diffuse": [
+                    0.5,
+                    0.0,
+                    0.0
+                ],
+                "Ambient": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Specular": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Intensity": 1.0,
+                "CutOff": 0.0,
+                "OuterCutOff": 0.0
             }
         }
     }
