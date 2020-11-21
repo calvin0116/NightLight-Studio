@@ -30,6 +30,12 @@ namespace Unicorn
     // Useful functions
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static int GameObjectFind(string name);
+    // Delta time
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float dt();
+    // Delta time in seconds
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float RealDt();
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static dynamic GetScript(int id);

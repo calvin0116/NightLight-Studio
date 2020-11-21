@@ -150,7 +150,7 @@ void LevelEditor::LE_MainMenuBar()
         LE_AddCheckbox("PLAY##MMBAR", &_runEngine, [this]()
             {
               // START/STOP ENGINE RUN HERE
-                MessageTogglePlay isPlaying(_runEngine);
+                MessageTogglePlay isPlaying(_runEngine, "TogglePlay");
                 if (_runEngine)
                 {
                     MessageTogglePlay isPlaying_1(_runEngine, "BeforePlay");

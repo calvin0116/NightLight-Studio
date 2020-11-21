@@ -1111,10 +1111,6 @@ namespace NS_COLLISION
 
 	void CollisionSystem::HandleTogglePlay(MessageTogglePlay& msg)
 	{
-		// Handle msg here.
-		std::cout << "Hello from collision!" << std::endl;
-		std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
-
 		_isPlaying = msg.isPlaying;
 		//if (!_isPlaying)
 		//  GameExit();

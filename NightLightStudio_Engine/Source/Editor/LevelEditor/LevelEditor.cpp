@@ -43,7 +43,7 @@ void LevelEditor::Init(HWND window)
             if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ALT))
             {
                 _runEngine = !_runEngine;
-                MessageTogglePlay isPlaying(_runEngine);
+                MessageTogglePlay isPlaying(_runEngine, "TogglePlay");
                 //GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
 
                 //MessageTogglePlay isPlaying(_runEngine);
