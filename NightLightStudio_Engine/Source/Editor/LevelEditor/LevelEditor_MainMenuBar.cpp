@@ -306,6 +306,12 @@ void LevelEditor::LE_MainMenuBar()
                 transEnt._position = { 0.f, 0.f,0.f };
                 ent.AttachComponent<ComponentTransform>(transEnt);
 
+                //assimp doesnt deal with preceding slash
+                if (data[0] == '\\')
+                {
+                    data.erase(0, 1);
+                }
+
                 NS_GRAPHICS::SYS_GRAPHICS->LoadModel(data);
 
                 /*if (LE_GetFileType(data) == "fbx")
