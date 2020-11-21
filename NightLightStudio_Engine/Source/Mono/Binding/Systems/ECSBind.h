@@ -5,6 +5,9 @@ namespace ECSBind
 {
   // Find object ID from name
   int GameObjectFind(MonoString* _name);
+  // Delta Time
+  float dt();
+  float realDt();
   // Get components from object ID
   MonoObject* GetScript(int id);
   MonoObject* GetTransform(int id);
