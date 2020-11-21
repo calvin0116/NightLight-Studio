@@ -95,18 +95,6 @@ namespace Unicorn
         Z = value;
       }
     }
-    
-    public static Vector3 MoveTowards(Vector3 current, Vector3 target, float maxDistanceDelta)
-    {
-      Vector3 dir = target - current;
-      dir.z = 0.0f;
-      float dist = dir.magnitude;
-      
-      if(dist <= maxDistanceDelta || dist == 0.0f)
-        return new Vector3(target.x, target.y, current.z);
-    
-      return current + dir / dist * maxDistanceDelta;          
-    }
   
     public static Vector3 down
     {
@@ -144,7 +132,7 @@ namespace Unicorn
     {
       get
       {
-        return x*x + y*y;
+        return x*x + y*y + z*z;
       }
     }
     
@@ -170,31 +158,39 @@ namespace Unicorn
     public static Vector3 operator +(Vector3 lhs, Vector3 rhs)
     {
       Vector3 result = new Vector3(lhs.x + rhs.x, lhs.y + rhs.y,
-      lhs.z);
+      lhs.z + rhs.z);
       return result;
     }
   
     public static Vector3 operator -(Vector3 lhs, Vector3 rhs)
     {
       Vector3 result = new Vector3(lhs.x - rhs.x, lhs.y - rhs.y,
-      lhs.z);
-      return result;
-    }
-    
-    public static Vector3 operator *(Vector3 vec, float f)
-    {
-      Vector3 result = new Vector3(vec.x * f, vec.y * f, vec.z);
+      lhs.z - rhs.z);
       return result;
     }
 
-    public static float operator *(Vector3 vec1, Vector3 vec2)
+    // Unary -
+    public static Vector3 operator -(Vector3 rhs)
     {
-        return vec1.x * vec2.x + vec1.y * vec2.y;
+      Vector3 result = new Vector3(-rhs.x, -rhs.y, -rhs.z);
+      return result;
+    }
+
+    public static Vector3 operator *(Vector3 vec, float f)
+    {
+      Vector3 result = new Vector3(vec.x * f, vec.y * f, vec.z * f);
+      return result;
     }
 
     public static Vector3 operator *(float f, Vector3 vec)
     {
       return vec * f;
+    }
+
+    // Dot product
+    public static float operator *(Vector3 vec1, Vector3 vec2)
+    {
+        return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
     }
     
     public static Vector3 operator /(Vector3 vec, float f)
@@ -204,14 +200,23 @@ namespace Unicorn
     
     public static bool operator ==(Vector3 lhs, Vector3 rhs)
     {
-      return lhs.x == rhs.x && lhs.y == rhs.y;
+      return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
     }
     
     public static bool operator !=(Vector3 lhs, Vector3 rhs)
     {
       return !(lhs == rhs);
     }
-    
+
+    public static Vector3 Cross(Vector3 lhs, Vector3 rhs)
+    {
+      Vector3 result = new Vector3();
+      result.x = lhs.y * rhs.z - lhs.z * rhs.y;
+      result.y = lhs.z * rhs.x - lhs.x * rhs.z;
+      result.z = lhs.x * rhs.y - lhs.y * rhs.x;
+      return result;
+    }
+
     public override bool Equals(object obj)
     {
       return this == (Vector3)obj;

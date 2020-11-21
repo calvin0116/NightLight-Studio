@@ -383,22 +383,18 @@ namespace NS_LOGIC
   void SystemLogic::HandleApplicationExit(MessageApplicationExit& msg)
   {
     // Handle msg function here
-    std::cout << "Hello from SystemLogic!" << std::endl;
   }
 
   void SystemLogic::HandleTogglePlay(MessageTogglePlay& msg)
   {
     // Handle msg here.
-    std::cout << "Hello from SystemLogic!" << std::endl;
-    std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
-
+    if (msg.GetID() != "TogglePlay")
+      return;
     _isPlaying = msg.isPlaying;
     if (!_isPlaying)
     {
       GameGameExit();
       _Inited = false;
     }
-    //if (!_isPlaying)
-    //  GameExit();
   }
 }
