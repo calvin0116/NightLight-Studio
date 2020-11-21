@@ -38,6 +38,7 @@ namespace NS_GRAPHICS
 		_hasInit{ false },
 		_debugDrawing{ false },
 		_uiDrawing{ false },
+		_hdrID{ 0 },
 		_projectionMatrix{ glm::mat4(1.0f) },
 		_viewMatrix{ glm::mat4(1.0f) },
 		_orthoMatrix{ glm::mat4(1.0f) }
@@ -638,5 +639,9 @@ namespace NS_GRAPHICS
 	glm::mat4 GraphicsSystem::GetInverseViewMatrix()
 	{
 		return (glm::inverse(cameraManager->GetViewMatrix()) * glm::inverse(_projectionMatrix));
+	}
+	void GraphicsSystem::SetHDRTexture(const std::string& filename)
+	{
+		_hdrID = textureManager->GetTexture(filename);
 	}
 }
