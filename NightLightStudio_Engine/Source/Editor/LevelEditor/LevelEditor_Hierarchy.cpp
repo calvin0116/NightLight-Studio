@@ -53,7 +53,7 @@ void HierarchyInspector::Start()
 				if (trans_comp != NULL)
 				{
 					std::string newName;
-					newName = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
+					newName = SYS_COMPONENT->EntityName[ent.getId()];
 					if (newName == "")
 						newName = "Entity_";
 					else
@@ -89,7 +89,7 @@ void HierarchyInspector::Start()
 							reset = false;
 							std::string tempName = actualName;
 							tempName.append("_" + std::to_string(num));
-							for (auto entsName : NS_SCENE::SYS_SCENE_MANAGER->EntityName)
+							for (auto entsName : SYS_COMPONENT->EntityName)
 							{
 								if (entsName.second.rfind(tempName) != std::string::npos)
 								{
@@ -195,7 +195,7 @@ void HierarchyInspector::Run()
 	for (Entity ent : G_ECMANAGER->getEntityContainer())
 	{
 		// For searching
-		std::string ent_name = NS_SCENE::SYS_SCENE_MANAGER->EntityName[ent.getId()];
+		std::string ent_name = SYS_COMPONENT->EntityName[ent.getId()];
 		//Check if entity is related to the search string inserted
 		if (_search != "" && findCaseInsensitive(ent_name, _search) == std::string::npos)
 		{
@@ -287,7 +287,7 @@ void HierarchyInspector::InitBeforeRun()
 #ifdef _EDITOR
 	int n = 1;
 	//EntityName
-	for (auto& ent : NS_SCENE::SYS_SCENE_MANAGER->EntityName)
+	for (auto& ent : SYS_COMPONENT->EntityName)
 	{
 		//Set level editor id to be able to get Object id
 		LE_ECHELPER->LevelEditorId_EntityIdMap()[n] = ent.first;

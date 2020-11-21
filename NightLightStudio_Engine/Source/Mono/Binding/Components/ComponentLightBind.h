@@ -28,5 +28,7 @@ namespace ComponentLightBind
   MonoObject* get_Specular_Internal(ComponentLight* trans);
   void set_Specular_Internal(ComponentLight* trans, MonoObject* val);
 
+  void ChangeLightType_Internal(ComponentLight* trans, NS_GRAPHICS::Lights val);
+
   void BindComponentLight();
 }

@@ -154,14 +154,17 @@ void LevelEditor::LE_MainMenuBar()
                 if (_runEngine)
                 {
                     MessageTogglePlay isPlaying_1(_runEngine, "BeforePlay");
+                    NS_GRAPHICS::CameraSystem::GetInstance().SavePosition();
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_1);
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
+
                 }
                 else
                 {
                     MessageTogglePlay isPlaying_2(_runEngine, "AfterPlay");
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_2);
+                    NS_GRAPHICS::CameraSystem::GetInstance().MoveToSavedPosition();
                 }
             });
 
