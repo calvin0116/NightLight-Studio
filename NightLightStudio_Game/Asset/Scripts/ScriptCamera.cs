@@ -6,20 +6,32 @@ namespace Unicorn
 {
   public class ScriptCamera : UniBehaviour
   {
+    public string sPlayer = "Player";
+    int playerID; // Player ID
+    // Trans to follow position
+    Transform playerTrans;
+    Transform otherTrans;
 
     public override void Init()
     {
+      // Order matters!
+      playerID = GameObjectFind(sPlayer);
+      playerTrans = GetTransform(playerID);
+
+      Camera.SetUseThirdPersonCam(true);
+      Camera.SetThirdPersonCamCanRotateAnot(true);
+      Camera.SetThirdPersonCamCanZoomAnot(false);
     }
 
     public override void LateInit()
     {
+
     }
 
     public override void Update()
     {
-      // Console.WriteLine("Update");
-      // Force.Apply(id, Vector3.up, 2000.0f);
     }
+
     public override void FixedUpdate()
     {
     }
@@ -34,12 +46,9 @@ namespace Unicorn
 
     public override void Exit()
     {
-    }
-
-    // Player functions
-    public Vector3 ForwardVector()
-    {
-      return Vector3.Cross(Camera.GetUpVector(), Camera.GetRightVector());
+      Camera.SetUseThirdPersonCam(false);
+      Camera.SetThirdPersonCamCanRotateAnot(true);
+      Camera.SetThirdPersonCamCanZoomAnot(true);
     }
   }
 }

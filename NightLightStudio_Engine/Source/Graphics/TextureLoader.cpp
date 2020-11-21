@@ -178,6 +178,28 @@ namespace NS_GRAPHICS
 		}
 	}
 
+	bool TextureLoader::LoadHDR(const std::string& file)
+	{
+		std::cout << "Loading HDR : " << file << std::endl;
+		int width, height, nrComp;
+		float* data = stbi_loadf(file.c_str(), &width, &height, &nrComp, 0);
+
+		if (data)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
+
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+			stbi_image_free(data);
+			return true;
+		}
+
+		return false;
+	}
+
 	bool TextureLoader::LoadOtherImage(const std::string& file, const std::string& newFile)
 	{
 		(void)newFile;
@@ -245,6 +267,10 @@ namespace NS_GRAPHICS
 		if (file.find(".dds") != std::string::npos)
 		{
 			result = LoadDDSImage(file);
+		}
+		else if (file.find(".hdr") != std::string::npos)
+		{
+			result = LoadHDR(file);
 		}
 		else
 		{
