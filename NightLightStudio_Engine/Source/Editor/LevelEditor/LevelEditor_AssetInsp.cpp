@@ -243,9 +243,30 @@ void AssetInspector::Run()
                         //draw_list->AddImage((void*)(intptr_t)val, { p0.x + 20.0f, p0.y - 40.0f }, { p1.x - 20.0f, p1.y - 40.0f }, ImVec2(0,0), ImVec2(1,1), ImColor(252,186,3));
                         draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(255, 252, 54));
                     else
+                    {
                         // File image goes here
                         //draw_list->AddImage((void*)(intptr_t)val, { p0.x + 20.0f, p0.y - 40.0f }, { p1.x - 20.0f, p1.y - 40.0f });
-                        draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(111, 111, 111));
+                        std::string fileType = LE_GetFileType(files[i]);
+                        std::transform(fileType.begin(), fileType.end(), fileType.begin(),
+                            [](unsigned char c)
+                            { return (char)std::tolower(c); });
+                        if (fileType == "tga" || fileType == "png" || fileType == "jpeg")
+                        {
+                            draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(0, 0, 255));
+                        }
+                        else if (fileType == "json")
+                        {
+                            draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(0, 255, 0));
+                        }
+                        else if (fileType == "fbx")
+                        {
+                            draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(225, 0, 255));
+                        }
+                        else
+                        {
+                            draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(111, 111, 111));
+                        }
+                    }
                     //draw_list->AddText({ p0.x, p0.y + 90.0f }, IM_COL32_WHITE, _GetFilename(files[i]).c_str()); // Filename goes here
                     draw_list->AddText(io.Fonts->Fonts[0], 13.0f, { p0.x, p0.y + 65.0f }, IM_COL32_WHITE, LE_GetFilename(files[i]).c_str(), nullptr, size.x + 10.0f);
                     draw_list->PopClipRect();
