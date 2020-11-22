@@ -527,7 +527,7 @@ void CollsionResolver::ComputeBasis(const NlMath::Vec3& normal, NlMath::Vec3* ta
 
 void CollsionResolver::setIteration(unsigned int iteration)
 {
-	_iteration = max(1, iteration);
+	_iteration = std::max((unsigned int)1, iteration);
 }
 
 NlMath::Matrix4x4 CollsionResolver::ComputeIntertia(OBBCollider* collider, ComponentRigidBody* rigid)
@@ -602,7 +602,7 @@ void CollsionResolver::preSolveOBB(CollisionEvent& colEvent)
 
 			// Precalculate bias factor
 			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
-			contact.bias = -0.2f * (1.0f / realDt) * min(float(0.0), contact.penetration + 0.05f);
+			contact.bias = -0.2f * (1.0f / realDt) * std::min(float(0.0), contact.penetration + 0.05f);
 
 			// Warm start contact
 			NlMath::Vec3 P = colEvent.manifold.normal * contact.normalImpulse;
@@ -693,7 +693,7 @@ void CollsionResolver::solveOBB(CollisionEvent& colEvent)
 
 			// Clamp impulse
 			float tempPN = contact.normalImpulse;
-			contact.normalImpulse = max(tempPN + lambda, float(0.0));
+			contact.normalImpulse = std::max(tempPN + lambda, float(0.0));
 			lambda = contact.normalImpulse - tempPN;
 
 			// Apply impulse
@@ -746,25 +746,25 @@ void CollsionResolver::init(CollisionEvent& colEvent)
 	{
 		Contact* contact = manifold->contacts + i;
 		contact->tangentImpulse[0] = contact->tangentImpulse[1] = contact->normalImpulse = float(0.0);
-		unsigned char oldWarmStart = contact->warmStarted;
-		contact->warmStarted = unsigned char(0);
+		//unsigned char oldWarmStart = contact->warmStarted;
+		//contact->warmStarted = unsigned char(0);
 
-		for (unsigned int j = 0; j < oldManifold.contactCount; ++j)
-		{
-			//old contact
-			Contact* oldContact = oldManifold.contacts + j;
-			if (contact->fp.key == oldContact->fp.key)
-			{
-				contact->normalImpulse = oldContact->normalImpulse;
-
-				// Attempt to re-project old friction solutions
-				NlMath::Vec3 friction = oldTangent0 * oldContact->tangentImpulse[0] + oldTangent1 * oldContact->tangentImpulse[1];
-				contact->tangentImpulse[0] = friction * manifold->tangentVectors[0];
-				contact->tangentImpulse[1] = friction * manifold->tangentVectors[1];
-				contact->warmStarted = max(oldWarmStart, unsigned char(oldWarmStart + 1));
-				break;
-			}
-		}
+		//for (unsigned int j = 0; j < oldManifold.contactCount; ++j)
+		//{
+		//	//old contact
+		//	Contact* oldContact = oldManifold.contacts + j;
+		//	if (contact->fp.key == oldContact->fp.key)
+		//	{
+		//		contact->normalImpulse = oldContact->normalImpulse;
+		//
+		//		// Attempt to re-project old friction solutions
+		//		NlMath::Vec3 friction = oldTangent0 * oldContact->tangentImpulse[0] + oldTangent1 * oldContact->tangentImpulse[1];
+		//		contact->tangentImpulse[0] = friction * manifold->tangentVectors[0];
+		//		contact->tangentImpulse[1] = friction * manifold->tangentVectors[1];
+		//		contact->warmStarted = std::max(oldWarmStart, unsigned char(oldWarmStart + 1));
+		//		break;
+		//	}
+		//}
 	}
 }
 

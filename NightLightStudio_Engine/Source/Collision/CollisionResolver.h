@@ -29,27 +29,27 @@ struct CollisionEvent
 {
 	// Type of collision
 	COLRESTYPE collisionType = COLRESTYPE::COLRESTYPE_ERR;
+	//for AABB, obb dont use this
+	SIDES colidingSide = SIDES::NO_COLLISION;
+	NlMath::Vector3D collisionNormal;
+
 
 	//for OBB angular physics, aabb dont use this
 	bool rotationEnabledEvent = false;
 	Manifold manifold;
 
+	//calculated during solve
 	NlMath::Matrix4x4 inertia1;
 	NlMath::Matrix4x4 inertia2;
+	
 
-	//for AABB, obb dont use this
-	SIDES colidingSide = SIDES::NO_COLLISION;
-	NlMath::Vector3D collisionNormal;
-
-	//for all colision
+	//for all colision, to be set on creation
 	ComponentRigidBody* rigid1;
 	ComponentRigidBody* rigid2;
-
 	ComponentTransform* transform1;
 	ComponentTransform* transform2;
 	ComponentCollider* collider1;
 	ComponentCollider* collider2;
-
 	Entity entity1;
 	Entity entity2;
 

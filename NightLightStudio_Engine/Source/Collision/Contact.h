@@ -43,18 +43,17 @@ struct Contact
 
 struct Manifold
 {
+	//OBBCollider* A;
+	//OBBCollider* B;
 
-	OBBCollider* A;
-	OBBCollider* B;
-
-	NlMath::Vec3 normal;									// From A to B
+	NlMath::Vec3 normal;						// From A to B
 	NlMath::Vec3 tangentVectors[2];				// Tangent vectors
 	Contact contacts[8];
 	unsigned int contactCount;
 
 	//for compound object
-	Manifold* next;
-	Manifold* prev;
+	//Manifold* next;
+	//Manifold* prev;
 };
 
 struct ClipVertex
