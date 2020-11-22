@@ -338,9 +338,6 @@ void SystemAudio::Exit()
 void SystemAudio::HandleTogglePlay(MessageTogglePlay& msg)
 {
   // Handle msg here.
-  std::cout << "Hello from SystemLogic!" << std::endl;
-  std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
-
   _isPlaying = msg.isPlaying;
   if (!_isPlaying)
   {

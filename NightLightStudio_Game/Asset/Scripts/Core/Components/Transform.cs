@@ -51,39 +51,6 @@ namespace Unicorn
       set_Scale_Internal(this.native_handle, vec);
     }
 
-    //public Vector3 Position
-    //{
-    //  get { return position; }
-    //  set
-    //  {
-    //    position.x = value.x;
-    //    position.y = value.y;
-    //    position.z = value.z;
-    //  }
-    //}
-
-    //public Vector3 Rotation
-    //{
-    //  get { return rotation; }
-    //  set
-    //  {
-    //    rotation.x = value.x;
-    //    rotation.y = value.y;
-    //    rotation.z = value.z;
-    //  }
-    //}
-
-    //public Vector3 Scale
-    //{
-    //  get { return scale; }
-    //  set
-    //  {
-    //    scale.x = value.x;
-    //    scale.y = value.y;
-    //    scale.z = value.z;
-    //  }
-    //}
-
     // Getter/Setter for name
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static string get_Name_Internal(IntPtr native_handle);

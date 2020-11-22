@@ -28,5 +28,26 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Vector3 GetXZViewVector_Right();
+    // Camera functions
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void SetUseThirdPersonCam(bool set);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void ToggleUseThirdPersonCam();
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void SetThirdPersonCamCanRotateAnot(bool set);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void SetThirdPersonCamCanZoomAnot(bool set);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void SetThirdPersonCamTarget(Vector3 tgt);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void SetThirdPersonCamDistance(float dist);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void SetThirdPersonCamPitchAndYaw(float pitch, float yaw);
   }
 }

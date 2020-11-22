@@ -150,7 +150,7 @@ void LevelEditor::LE_MainMenuBar()
         LE_AddCheckbox("PLAY##MMBAR", &_runEngine, [this]()
             {
               // START/STOP ENGINE RUN HERE
-                MessageTogglePlay isPlaying(_runEngine);
+                MessageTogglePlay isPlaying(_runEngine, "TogglePlay");
                 if (_runEngine)
                 {
                     MessageTogglePlay isPlaying_1(_runEngine, "BeforePlay");
@@ -305,6 +305,12 @@ void LevelEditor::LE_MainMenuBar()
                 ComponentTransform transEnt;
                 transEnt._position = { 0.f, 0.f,0.f };
                 ent.AttachComponent<ComponentTransform>(transEnt);
+
+                //assimp doesnt deal with preceding slash
+                if (data[0] == '\\')
+                {
+                    data.erase(0, 1);
+                }
 
                 NS_GRAPHICS::SYS_GRAPHICS->LoadModel(data);
 

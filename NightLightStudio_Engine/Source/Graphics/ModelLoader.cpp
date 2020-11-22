@@ -1,7 +1,5 @@
 #include "ModelLoader.h"
 #include "../../framework.h"
-#include "../glm/gtc/matrix_transform.hpp"
-#include "../../glm/gtc/quaternion.hpp"
 #include <iostream>
 #include <string>
 
@@ -14,8 +12,7 @@
 
 namespace NS_GRAPHICS
 {
-	ModelLoader::ModelLoader() : _fbxManager{ nullptr }, _fbxScene{ nullptr }, _fbxImport{ nullptr },
-		_axisSystem{ FbxAxisSystem::eYAxis, FbxAxisSystem::eParityOdd, FbxAxisSystem::eRightHanded },
+	ModelLoader::ModelLoader() :
 		_modelManager{ &ModelManager::GetInstance() }
 	{
 		std::cout << "Model Loader Created" << std::endl;
@@ -23,223 +20,83 @@ namespace NS_GRAPHICS
 
 	ModelLoader::~ModelLoader()
 	{
-		_fbxManager->Destroy();
 	}
 
-	void ModelLoader::ProcessMesh(FbxNode* node, Model*& model)
+	void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene, Model*& model)
 	{
-		std::cout << "Model Loader: Checking " << node->GetName() << std::endl;
-
-		for (int i = 0; i < node->GetNodeAttributeCount(); ++i)
+		model->_meshes.reserve(node->mNumMeshes);
+		for (unsigned int i = 0; i < node->mNumMeshes; i++)
 		{
-			FbxNodeAttribute* nodeType = node->GetNodeAttributeByIndex(i);
+			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+			model->_meshes.push_back(ProcessMesh(node, mesh, scene));
+		}
+		// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
+		for (unsigned int i = 0; i < node->mNumChildren; i++)
+		{
+			ProcessNode(node->mChildren[i], scene, model);
+		}
+	}
 
-			if (nodeType->GetAttributeType() == FbxNodeAttribute::eMesh)
+	Mesh* ModelLoader::ProcessMesh(aiNode* node, aiMesh* mesh, const aiScene* scene)
+	{
+		Mesh* newMesh = new Mesh();
+		newMesh->_nodeName = mesh->mName.C_Str();
+		newMesh->_vertexDatas.reserve((size_t)mesh->mNumVertices);
+		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+		{
+			Mesh::VertexData vertexData;
+
+			vertexData._position.x = mesh->mVertices[i].x;
+			vertexData._position.y = mesh->mVertices[i].y;
+			vertexData._position.z = mesh->mVertices[i].z;
+
+			if (mesh->HasNormals())
 			{
-				FbxMesh* mesh = node->GetMesh();
+				//Only Load Normal if there is 1
+				vertexData._normals.x = mesh->mNormals[i].x;
+				vertexData._normals.y = mesh->mNormals[i].y;
+				vertexData._normals.z = mesh->mNormals[i].z;
+			}
 
-				//Old way of loading fbx
-				Mesh* newMesh = new Mesh();
+			if (mesh->mTextureCoords[0])
+			{
+				//Takes the first set of uv datas
+				vertexData._uv.x = mesh->mTextureCoords[0][i].x;
+				vertexData._uv.y = mesh->mTextureCoords[0][i].y;
+			}
 
-				std::cout << "Model Loader: Loading " << node->GetName() << std::endl;
-				newMesh->_nodeName = node->GetName();
-
-				//GET THE INDICES, UV AND NORMALS
-				//Might update this part
-				const int totalBufferSize = mesh->GetPolygonVertexCount();
-				FbxVector4* vertexs = mesh->GetControlPoints();
-
-				//newMesh->_indices.reserve(totalBufferSize);
-				newMesh->_vertexDatas.reserve(totalBufferSize);
-
-				int vertexID = 0;
-				
-				const int polygonCount = mesh->GetPolygonCount();
-				//Loops Faces
-				for (int polygonIndex = 0; polygonIndex < polygonCount; ++polygonIndex)
-				{
-					const int verticeCount = mesh->GetPolygonSize(polygonIndex);
-					//Loops vertices within faces
-					for (int verticeIndex = 0; verticeIndex < verticeCount; ++verticeIndex)
-					{					
-						int controlPointIndex = mesh->GetPolygonVertex(polygonIndex, verticeIndex);
-
-						//Checks for corrupted mesh
-						if (controlPointIndex < 0)
-						{
-							//<0 means corrupted mesh
-							delete newMesh;
-
-							return;
-						}
-
-						FbxVector4 finalPosition = Transform(node ,vertexs[controlPointIndex]);
-
-						glm::vec3 vertex;
-
-						vertex = { (float)finalPosition[0],
-									(float)finalPosition[1],
-									(float)finalPosition[2]};
-
-
-						Mesh::VertexData newVertex;
-						newVertex._position = vertex;
-
-						FbxGeometryElementUV* elementUV = mesh->GetElementUV(0);
-
-						//Assumes 1 uv mapping
-						if (elementUV)
-						{
-							switch (elementUV->GetMappingMode())
-							{
-							default:
-								break;
-
-							case FbxGeometryElement::eByPolygonVertex:
-							{
-								int uvIndex = mesh->GetTextureUVIndex(polygonIndex, verticeIndex);
-								switch (elementUV->GetReferenceMode())
-								{
-								case FbxGeometryElement::eDirect:
-								case FbxGeometryElement::eIndexToDirect:
-								{
-									FbxVector2 fbxUV = elementUV->GetDirectArray().GetAt(uvIndex);
-
-									glm::vec2 currentUV = { fbxUV[0], fbxUV[1] };
-									currentUV.y = 1.0f - currentUV.y;
-
-									newVertex._uv = currentUV;
-								}
-								break;
-								default:
-									break; // other reference modes not shown here!
-								}
-							}
-							break;
-							}
-						}
-
-						//GET THE NORMALS
-						FbxGeometryElementNormal* normalElement = mesh->GetElementNormal();
-
-						if (normalElement)
-						{
-							if (normalElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
-							{
-								FbxVector4 fbxNormal; 
-
-								//reference mode is direct, the normal index is same as indexPolygonVertex.
-								if (normalElement->GetReferenceMode() == FbxGeometryElement::eDirect)
-								{
-									fbxNormal = normalElement->GetDirectArray().GetAt(vertexID);
-								}
-
-								//reference mode is index-to-direct, get normals by the index-to-direct
-								if (normalElement->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)
-								{
-									int index = normalElement->GetIndexArray().GetAt(vertexID);
-									fbxNormal = normalElement->GetDirectArray().GetAt(index);
-								}
-
-								glm::vec3 normal = { (float)fbxNormal[0],
-														(float)fbxNormal[1],
-														(float)fbxNormal[2] };
-
-								newVertex._normals = normal;
-							}
-						}
-
-						//newMesh->_indices.push_back((unsigned short)vertexID);
-						newMesh->_vertexDatas.push_back(newVertex);
-
-						vertexID++;
-					}
-				}
-
-				mesh->Destroy();
-
-				//NEW WAY
-				model->_meshes.push_back(newMesh);
-			}	
+			newMesh->_vertexDatas.push_back(vertexData);
 		}
 
-		for (int i = 0; i < node->GetChildCount(); i++)
+		newMesh->_indices.reserve((size_t)mesh->mNumFaces * 3);
+		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 		{
-			ProcessMesh(node->GetChild(i), model);
+			aiFace face = mesh->mFaces[i];
+			
+			newMesh->_indices.push_back(face.mIndices[0]);
+			newMesh->_indices.push_back(face.mIndices[1]);
+			newMesh->_indices.push_back(face.mIndices[2]);
 		}
-	}
 
-	void ModelLoader::Init()
-	{
-		_fbxManager = FbxManager::Create();
-		FbxIOSettings* settings = FbxIOSettings::Create(_fbxManager, IOSROOT);
-		_fbxManager->SetIOSettings(settings);
-
-		//Might be removed in the future
-		if (!_fbxManager)
-		{
-			printf("Error: Unable to create FBX scene!\n");
-			exit(1);
-		}
+		return newMesh;
 	}
 
 	bool ModelLoader::LoadFBX(Model*& model)
 	{
 		std::cout << "Loading FBX..." << std::endl;
-		if (_fbxScene)
+
+		Assimp::Importer import;
+		const aiScene* scene = import.ReadFile(model->_fileName, aiProcess_Triangulate | 
+																 aiProcess_FlipUVs | 
+																 aiProcess_JoinIdenticalVertices);
+
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			_fbxScene->Destroy();
-			_fbxScene = NULL;
-		}
-
-		// Create an importer using the SDK manager.
-		_fbxImport = FbxImporter::Create(_fbxManager, "");
-
-		// Load the fbx using the importer.
-		if (!_fbxImport->Initialize(model->_fileName.c_str(), -1, _fbxManager->GetIOSettings())) {
-			printf("Call to FbxImporter::Initialize() failed.\n");
-			printf("%s\n", model->_fileName.c_str());
-			printf("Error returned: %s\n\n", _fbxImport->GetStatus().GetErrorString());
+			cout << "Load Failed. Reason: " << import.GetErrorString() << endl;
 			return false;
-			//exit(-1);
 		}
 
-		_fbxScene = FbxScene::Create(_fbxManager, model->_fileName.c_str());
-		_fbxImport->Import(_fbxScene);
-		_fbxImport->Destroy();
-
-		// Convert Axis System
-		FbxAxisSystem currentAxis = _fbxScene->GetGlobalSettings().GetAxisSystem();
-		if (currentAxis != _axisSystem)
-		{
-			_axisSystem.ConvertScene(_fbxScene);
-		}
-
-		// Convert Unit System Into Centimeter
-		FbxSystemUnit currentSystemUnit = _fbxScene->GetGlobalSettings().GetSystemUnit();
-		if (currentSystemUnit != FbxSystemUnit::cm)
-		{
-			FbxSystemUnit::cm.ConvertScene(_fbxScene);
-		}
-
-		// Convert mesh, NURBS and patch into triangle mesh
-		FbxGeometryConverter toTriangulate(_fbxManager);
-		toTriangulate.Triangulate(_fbxScene, true, true);
-		//Not sure needed anot
-		toTriangulate.SplitMeshesPerMaterial(_fbxScene, true);
-
-		// Recursively goes through the scene to get all the meshes
-		// Root nodes should not contain any attributes.
-		//int offset = 0;
-		FbxNode* root = _fbxScene->GetRootNode();
-		if (root)
-		{
-			for (int i = 0; i < root->GetChildCount(); i++)
-			{
-				ProcessMesh(root->GetChild(i), model);
-			}
-		}
-
+		ProcessNode(scene->mRootNode, scene, model);
 		return true;
 	}
 	void ModelLoader::LoadModel(const std::string& fileName)
@@ -479,33 +336,5 @@ namespace NS_GRAPHICS
 		logFile << "Total Points : " << lineCount << std::endl;
 
 		logFile.close();
-	}
-
-	FbxVector4 ModelLoader::Transform(FbxNode* node, FbxVector4 vector)
-	{
-		FbxAMatrix geomMatrix;
-		geomMatrix.SetIdentity();
-		if (node->GetNodeAttribute())
-		{
-			const FbxVector4 lT = node->GetGeometricTranslation(FbxNode::eSourcePivot);
-			const FbxVector4 lR = node->GetGeometricRotation(FbxNode::eSourcePivot);
-			const FbxVector4 lS = node->GetGeometricScaling(FbxNode::eSourcePivot);
-			geomMatrix.SetT(lT);
-			geomMatrix.SetR(lR);
-			geomMatrix.SetS(lS);
-		}
-		FbxAMatrix localMatrix = node->EvaluateLocalTransform();
-
-		FbxNode* parentNode = node->GetParent();
-		FbxAMatrix parentMatrix = parentNode->EvaluateLocalTransform();
-		while (parentNode != NULL)
-		{
-			parentMatrix = parentNode->EvaluateLocalTransform() * parentMatrix;
-			parentNode = parentNode->GetParent();
-		}
-
-		FbxAMatrix matrix = parentMatrix * localMatrix * geomMatrix;
-		FbxVector4 result = matrix.MultT(vector);
-		return result;
 	}
 }
