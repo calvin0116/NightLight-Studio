@@ -54,4 +54,5 @@ namespace NS_PHYSICS
 
 	static PhysicsSystem* SYS_PHYSICS = PhysicsSystem::GetInstance();
 	static ForceManager& USE_THE_FORCE = *(SYS_PHYSICS->getForceManager());
+
 }

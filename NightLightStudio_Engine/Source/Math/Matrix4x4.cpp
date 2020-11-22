@@ -295,6 +295,14 @@ namespace NlMath
 		m30 = 0;		m31 = 0;		m32 = 0;		m33 = 1;
 	}
 
+	void Matrix4x4::SetDiagonal(const Vec3& x)
+	{
+		m00 = x.x;		m01 = 0;		m02 = 0;		m03 = 0;
+		m10 = 0;		m11 = x.y;		m12 = 0;		m13 = 0;
+		m20 = 0;		m21 = 0;		m22 = x.z;		m23 = 0;
+		m30 = 0;		m31 = 0;		m32 = 0;		m33 = 1;
+	}
+
 	std::ostream& operator<<(std::ostream& os, const Matrix4x4 mtx)
 	{
 		os  << "(" << mtx.m00 << ", " << mtx.m01 << ", " << mtx.m02 << ", " << mtx.m03 << ")" << std::endl
@@ -677,6 +685,20 @@ namespace NlMath
 		pResult.m31 = pResult.m31 * det;
 		pResult.m32 = pResult.m32 * det;
 		pResult.m33 = pResult.m33 * det;
+	}
+
+	Matrix4x4 Mtx44OuterProduct(const Vector3D& pVec0, const Vector3D& pVec1)
+	{
+		Vec3 a = pVec1 * pVec0.x;
+		Vec3 b = pVec1 * pVec0.y;
+		Vec3 c = pVec1 * pVec0.z;
+
+		return Matrix4x4(
+			a.x, a.y, a.z, 0.0f,
+			b.x, b.y, b.z, 0.0f,
+			c.x, c.y, c.z, 0.0f,
+			0.0f, 0.0f, 0.0f, 1.0f
+		);
 	}
 
 }

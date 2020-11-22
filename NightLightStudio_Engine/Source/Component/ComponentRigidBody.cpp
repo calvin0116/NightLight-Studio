@@ -9,8 +9,11 @@ constexpr float GRAVITY_DEF = 980.0f;
 ComponentRigidBody::ComponentRigidBody() :
 	isActive(true),
 	force(0.0f, 0.0f, 0.0f),
+	angularForce(0.0f, 0.0f, 0.0f),
 	acceleration(0.0f, 0.0f, 0.0f),
+	angularAcceleration(0.0f, 0.0f, 0.0f),
 	velocity(0.0f, 0.0f, 0.0f),
+	angularVelocity(0.0f, 0.0f, 0.0f),
 	prevPos(0.0f, 0.0f, 0.0f),
 	nextPos(0.0f, 0.0f, 0.0f),
 	isStatic(true),

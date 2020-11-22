@@ -11,6 +11,8 @@ namespace NlMath
 #pragma warning( disable : 4201 )
 #endif
 
+	//predefine
+	union Vector3D;
 /**************************************************************************/
 /*!
 	An abstraction of 3x3 matrix
@@ -66,6 +68,7 @@ namespace NlMath
 
 		void SetRows(const Vec3 x, const Vec3 y, const Vec3 z);
 		void SetColumns(const Vec3 x, const Vec3 y, const Vec3 z);
+		void SetDiagonal(const Vec3& x);
 
 	} Matrix4x4, Matrix4x4, Mtx44;
 
@@ -177,4 +180,11 @@ namespace NlMath
 	*/
 	/**************************************************************************/
 	void Mtx44Inverse(Matrix4x4& pResult, const Matrix4x4& pMtx);
+
+	/**************************************************************************/
+	/*!
+		This function returns the tensor matrix
+	*/
+	/**************************************************************************/
+	Matrix4x4	Mtx44OuterProduct(const Vector3D& pVec0, const Vector3D& pVec1);
 }

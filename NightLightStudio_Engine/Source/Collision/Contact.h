@@ -52,6 +52,7 @@ struct Manifold
 	Contact contacts[8];
 	unsigned int contactCount;
 
+	//for compound object
 	Manifold* next;
 	Manifold* prev;
 };

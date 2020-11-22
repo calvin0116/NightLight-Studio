@@ -1,6 +1,6 @@
 #pragma once
 #include "..\\Math\Vector.h"
-
+#include "..\\Math\Matrix4x4.h"
 #include "..\\..\ISerializable.h"
 
 typedef struct ComponentRigidBody : public ISerializable //: public IComponent
@@ -9,10 +9,18 @@ typedef struct ComponentRigidBody : public ISerializable //: public IComponent
 
 	//sum of all forces acting on the object
 	NlMath::Vector3D force;
+	//sum of all angular forces acting on the object
+	NlMath::Vector3D angularForce;
 	//acceleration of the object
 	NlMath::Vector3D acceleration;
+	//angular acceleration of the object
+	NlMath::Vector3D angularAcceleration;
 	//velocity of the object
 	NlMath::Vector3D velocity;
+	//angular velocity of the object
+	NlMath::Vector3D angularVelocity;
+	//inertia 
+	NlMath::Matrix4x4 inertia;
 	//previous position
 	NlMath::Vector3D prevPos;
 	//previous position
