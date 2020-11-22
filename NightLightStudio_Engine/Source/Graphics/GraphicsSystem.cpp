@@ -95,7 +95,7 @@ namespace NS_GRAPHICS
 		textureManager = &TextureManager::GetInstance();
 		uiManager = &UISystem::GetInstance();
 
-		modelLoader->Init();
+		//modelLoader->Init();
 		
 		// Initialize sub systems and managers
 		shaderManager->Init();

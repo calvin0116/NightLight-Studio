@@ -10,8 +10,8 @@ namespace ECSBind
   void BindECS()
   {
     MonoWrapper::BindClassFunction(GameObjectFind, "GameObjectFind", "UniBehaviour");
-    MonoWrapper::BindClassFunction(dt, "dt", "UniBehaviour");
-    MonoWrapper::BindClassFunction(realDt, "realDt", "UniBehaviour");
+    MonoWrapper::BindClassFunction(dt, "DT", "UniBehaviour");
+    MonoWrapper::BindClassFunction(realDt, "RealDT", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetScript, "GetScript", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetCollider, "GetCollider", "UniBehaviour");
