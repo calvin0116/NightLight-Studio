@@ -29,9 +29,9 @@ void LevelEditor::Init(HWND window)
 {
     // CREATE WINDOWS HERE
     //LE_CreateWindow<TestCase>("Test", false, 0);
-    LE_CreateWindow<ConsoleLog>("Console", false, 0);
+    LE_CreateWindow<ConsoleLog>("Console", true, 0);
     LE_CreateWindow<AssetInspector>("Asset Inspector", true);
-    LE_CreateWindow<PerformanceMetrics>("Performance Metrics", true);
+    LE_CreateWindow<PerformanceMetrics>("Performance Metrics", false);
     LE_CreateWindow<HierarchyInspector>("Heirarchy", true);
     LE_CreateWindow<InspectorWindow>("Inspector", true);
 
@@ -172,6 +172,11 @@ std::vector<float>* LevelEditor::LE_GetSystemsUsage()
     }
 #endif
     return nullptr;
+}
+
+void LevelEditor::LE_ConsoleOut(const std::string& out)
+{
+    LE_AccessWindowFunc("Console", &ConsoleLog::AddLog, out);
 }
 
 void LevelEditor::LE_AddMenuWithItems(const std::string& name, const std::vector<std::string>& menuItems,

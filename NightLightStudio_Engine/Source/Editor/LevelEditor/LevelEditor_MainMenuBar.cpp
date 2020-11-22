@@ -58,7 +58,7 @@ void LevelEditor::LE_MainMenuBar()
     if (ImGui::BeginMenuBar())
     {
         LE_AddMenuWithItems("File", 
-            { "Open" , "Save", "Save Test"},
+            { "Open" , "Save", "Save As"},
             { "" , "Ctrl-S", "" },
             {
                 // Opens a Window Dialog Box for Opening a .json file
