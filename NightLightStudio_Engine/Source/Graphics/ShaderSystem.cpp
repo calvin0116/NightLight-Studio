@@ -105,6 +105,15 @@ namespace NS_GRAPHICS
 			glUniform1i(glGetUniformLocation(currentProgramID, "specular_texture"), 1); // Specular
 			StopProgram();
 		}
+
+		// Setup uniform values for PBR
+		/*if (quantity >= 6)
+		{
+			StartProgram(5);
+			glUniform1f(glGetUniformLocation(currentProgramID, "Metallic"), 0.0f);
+			glUniform1f(glGetUniformLocation(currentProgramID, "Roughness"), 0.0f);
+			StopProgram();
+		}*/
 	}
 
 	bool ShaderSystem::CompileLoadedShaders()
@@ -197,12 +206,12 @@ namespace NS_GRAPHICS
 		// Load all available shaders
 
 		// Shader path example: ../Resources/Shaders/default.vertxs
-		LoadShader(std::string("../Resources/Shaders/default.vert"),std::string("../Resources/Shaders/uniformsolid.frag"));
-		LoadShader(std::string("../Resources/Shaders/withlights.vert"),std::string("../Resources/Shaders/withlights.frag"));
-		LoadShader(std::string("../Resources/Shaders/grid.vert"),std::string("../Resources/Shaders/grid.frag"));
-		LoadShader(std::string("../Resources/Shaders/withlights_textured.vert"), std::string("../Resources/Shaders/withlights_textured.frag"));
-		LoadShader(std::string("../Resources/Shaders/ui.vert"), std::string("../Resources/Shaders/ui.frag"));
-		//LoadShader("","");
+		LoadShader(std::string("../Resources/Shaders/default.vert"),std::string("../Resources/Shaders/uniformsolid.frag")); // 1
+		LoadShader(std::string("../Resources/Shaders/withlights.vert"),std::string("../Resources/Shaders/withlights.frag")); // 2
+		LoadShader(std::string("../Resources/Shaders/grid.vert"),std::string("../Resources/Shaders/grid.frag")); // 3
+		LoadShader(std::string("../Resources/Shaders/withlights_textured.vert"), std::string("../Resources/Shaders/withlights_textured.frag")); // 4
+		LoadShader(std::string("../Resources/Shaders/ui.vert"), std::string("../Resources/Shaders/ui.frag")); // 5
+		LoadShader(std::string("../Resources/Shaders/PBR.vert"), std::string("../Resources/Shaders/PBR.frag")); // 6
 		//LoadShader("","");
 		//LoadShader("","");
 		//LoadShader("","");

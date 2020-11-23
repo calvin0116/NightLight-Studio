@@ -21,6 +21,20 @@ struct MaterialData
 	~MaterialData() {}
 };
 
+struct PBRMaterialData
+{
+	glm::vec3 _albedo;  // Base color
+	float _metallic; // from 0.f to 1.f
+	float _roughness;
+
+	PBRMaterialData()
+		: _albedo{ 1.0f,0.0f,0.0f },
+		_metallic{ 1.0f },
+		_roughness{ 0.0f }{}
+
+	~PBRMaterialData() {}
+};
+
 enum class RENDERTYPE
 {
 	SOLID = 0,
@@ -70,6 +84,8 @@ public:
 	/// Material without texture
 	/////////////////////////////////////////
 	MaterialData _materialData;
+
+	PBRMaterialData _pbrData;
 
 	// Default constructor
 	ComponentGraphics();
