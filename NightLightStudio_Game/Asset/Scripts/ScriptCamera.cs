@@ -30,6 +30,7 @@ namespace Unicorn
 
     public override void Update()
     {
+      Camera.SetThirdPersonCamTarget(playerTrans.getPosition());
     }
 
     public override void FixedUpdate()
