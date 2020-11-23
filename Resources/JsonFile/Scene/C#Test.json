@@ -4,8 +4,8 @@
             "TransformComponent": {
                 "EntityName": "Player",
                 "Position": [
-                    -175.88418579101563,
-                    32.011253356933597,
+                    2161.015869140625,
+                    47.03723907470703,
                     0.0
                 ],
                 "Scale": [
@@ -57,7 +57,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "\\box.fbx",
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",

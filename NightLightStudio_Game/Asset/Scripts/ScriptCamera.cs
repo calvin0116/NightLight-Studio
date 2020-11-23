@@ -9,8 +9,14 @@ namespace Unicorn
     public string sPlayer = "Player";
     int playerID; // Player ID
     // Trans to follow position
-    Transform playerTrans;
-    Transform otherTrans;
+    Transform playerTrans; // Player's transform
+    Transform otherTrans;  // Prop's transform
+    Vector3 oldTgtPos;
+
+    // Direction to move camera
+    Vector3 dir = new Vector3(0.0f, 0.0f, 0.0f);
+    float Threshold = 100.0f; // Distance to move before camera follows player
+    float FollowTime = 1.0f; // How long for the camera to catch up to player
 
     public override void Init()
     {
@@ -21,6 +27,9 @@ namespace Unicorn
       Camera.SetUseThirdPersonCam(true);
       Camera.SetThirdPersonCamCanRotateAnot(true);
       Camera.SetThirdPersonCamCanZoomAnot(false);
+      // Init camera position
+      oldTgtPos = playerTrans.getPosition();
+      Camera.SetThirdPersonCamTarget(playerTrans.getPosition());
     }
 
     public override void LateInit()
@@ -30,7 +39,9 @@ namespace Unicorn
 
     public override void Update()
     {
-      Camera.SetThirdPersonCamTarget(playerTrans.getPosition());
+      SetDir(playerTrans.getPosition());
+      if(toLerp(Threshold))
+        Camera.SetThirdPersonCamTarget(Lerp());
     }
 
     public override void FixedUpdate()
@@ -50,6 +61,25 @@ namespace Unicorn
       Camera.SetUseThirdPersonCam(false);
       Camera.SetThirdPersonCamCanRotateAnot(true);
       Camera.SetThirdPersonCamCanZoomAnot(true);
+    }
+
+    public void SetDir(Vector3 otherPos)
+    {
+      dir = otherPos - oldTgtPos;
+    }
+
+    public bool toLerp(float threshold)
+    {
+      if (dir.magnitude <= threshold)
+        return false;
+      return true;
+    }
+
+    public Vector3 Lerp()
+    {
+      Vector3 LerpPos = oldTgtPos + (dir * RealDT());
+      oldTgtPos = LerpPos;
+      return LerpPos;
     }
   }
 }
