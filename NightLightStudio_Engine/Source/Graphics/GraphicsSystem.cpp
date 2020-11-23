@@ -349,49 +349,100 @@ namespace NS_GRAPHICS
 
 			glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
 			
-			for (auto& mesh : model->_meshes)
+			if (model->_isAnimated)
 			{
-				if (graphicsComp->_renderType == RENDERTYPE::SOLID)
+				for (auto& mesh : model->_animatedMeshes)
 				{
-					shaderManager->StartProgram(1); // solid program
-					glBindVertexArray(mesh->VAO);
+					if (graphicsComp->_renderType == RENDERTYPE::SOLID)
+					{
+						shaderManager->StartProgram(1); // solid program
+						glBindVertexArray(mesh->VAO);
 
-					// Update model and uniform for material
-					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
-					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
-					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
-					glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
+						// Update model and uniform for material
+						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
+						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
+						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
+						glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
 
-					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-					//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
-					glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0); 
-					shaderManager->StopProgram();
+						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+						shaderManager->StopProgram();
+					}
+					else
+					{
+						shaderManager->StartProgram(3); // textured program
+						glBindVertexArray(mesh->VAO);
+
+						// Update model and uniform for material
+						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
+						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
+						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
+						glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
+
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						// Bind textures
+						// bind diffuse map
+						textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
+						// bind specular map
+						textureManager->BindSpecularTexture(graphicsComp->_specularID);
+
+						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+						shaderManager->StopProgram();
+					}
 				}
-				else
+			}
+			else
+			{
+				for (auto& mesh : model->_meshes)
 				{
-					shaderManager->StartProgram(3); // textured program
-					glBindVertexArray(mesh->VAO);
+					if (graphicsComp->_renderType == RENDERTYPE::SOLID)
+					{
+						shaderManager->StartProgram(1); // solid program
+						glBindVertexArray(mesh->VAO);
 
-					// Update model and uniform for material
-					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
-					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
-					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
-					glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
+						// Update model and uniform for material
+						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
+						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
+						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
+						glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
 
-					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-					// Bind textures
-					// bind diffuse map
-					textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
-					// bind specular map
-					textureManager->BindSpecularTexture(graphicsComp->_specularID);
+						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+						shaderManager->StopProgram();
+					}
+					else
+					{
+						shaderManager->StartProgram(3); // textured program
+						glBindVertexArray(mesh->VAO);
 
-					//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
-					glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
-					shaderManager->StopProgram();
+						// Update model and uniform for material
+						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
+						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
+						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
+						glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
+
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						// Bind textures
+						// bind diffuse map
+						textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
+						// bind specular map
+						textureManager->BindSpecularTexture(graphicsComp->_specularID);
+
+						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+						shaderManager->StopProgram();
+					}
 				}
 			}
 			itr++;

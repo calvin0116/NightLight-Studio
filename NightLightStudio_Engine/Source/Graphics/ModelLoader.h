@@ -20,7 +20,12 @@ namespace NS_GRAPHICS
 		~ModelLoader();
 
 		void ProcessNode(aiNode* node, const aiScene* scene, Model*& model);
-		Mesh* ProcessMesh(aiNode* node, aiMesh* mesh, const aiScene* scene);
+		Mesh* ProcessMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model);
+		AnimatedMesh* ProcessAnimatedMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model);
+
+		void ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, AnimatedMesh* animatedMesh);
+
+		void AiToGLM(const aiMatrix4x4& ai, glm::mat4& glm);
 
 	public:
 		// Unique Singleton instance

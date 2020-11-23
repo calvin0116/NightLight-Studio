@@ -22,13 +22,93 @@ namespace NS_GRAPHICS
 	{
 	}
 
-	void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene, Model*& model)
+	//Debug Function
+	void MaxInfluencePerVertex(const aiMesh* mesh)
 	{
-		model->_meshes.reserve(node->mNumMeshes);
+		std::vector<int> counts;
+		std::vector<float> weights;
+		counts.resize(mesh->mNumVertices);
+		weights.resize(mesh->mNumVertices);
+		for (int i = 0; i < mesh->mNumBones; i++) {
+			const aiBone* bone = mesh->mBones[i];
+			for (int j = 0; j < bone->mNumWeights; j++) {
+				const aiVertexWeight* weight = &bone->mWeights[j];
+				counts[weight->mVertexId]++;
+				weights[weight->mVertexId] += weight->mWeight;
+			}
+		}
+		int max = 0;
+		int index = 0;
+		for (int i = 0; i < mesh->mNumVertices; i++) {
+			if (max < counts[i])
+			{
+				max = counts[i];
+				index = i;
+			}
+		}
+
+		std::cout << "Max Bone Influence Per Vertex : " << max << std::endl;
+		std::cout << "Total Weights at max bone influence index: " << weights[index] << std::endl;
+	}
+
+	//Debug Function
+	void SeeAllSkeleton(aiNode* node, const aiScene* scene, Model*& model)
+	{
 		for (unsigned int i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			model->_meshes.push_back(ProcessMesh(node, mesh, scene));
+
+			std::cout << "Mesh Name: " << mesh->mName.C_Str() << std::endl;
+			std::cout << "Node Name: " << node->mName.C_Str() << std::endl;
+
+			for (unsigned int j = 0; j < mesh->mNumBones; j++)
+			{
+				std::cout << "Bone " << j << ": " << mesh->mBones[j]->mName.C_Str() << std::endl;
+				BoneData bone;
+
+				bone._boneID = j;
+				bone._boneName = mesh->mBones[j]->mName.C_Str();
+
+				model->_bones.push_back(bone);
+				
+				//std::cout << "Bone Weights : ";
+				//for (unsigned int k = 0; k < mesh->mBones[j]->mNumWeights; k++)
+				//{
+				//	std::cout << mesh->mBones[j]->mWeights[k].mWeight << " ";
+				//}
+				//std::cout << std::endl;
+			}
+		}
+		for (unsigned int i = 0; i < node->mNumChildren; i++)
+		{
+			SeeAllSkeleton(node->mChildren[i], scene, model);
+		}
+	}
+
+	//Debug Function
+	void SeeAllAnimation(aiNode* node, const aiScene* scene)
+	{
+		for (unsigned int i = 0; i < scene->mNumAnimations; i++)
+		{
+			std::cout << "Animation " << i << ": " << scene->mAnimations[i]->mName.C_Str() << std::endl;
+		}
+	}
+
+	void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene, Model*& model)
+	{
+		for (unsigned int i = 0; i < node->mNumMeshes; i++)
+		{
+			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+			std::cout << "Loading " << mesh->mName.C_Str() << std::endl;
+			
+			if (model->_isAnimated)
+			{
+				model->_animatedMeshes.push_back(ProcessAnimatedMesh(node, mesh, scene, model));
+			}
+			else
+			{
+				model->_meshes.push_back(ProcessMesh(node, mesh, scene, model));
+			}
 		}
 		// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -37,14 +117,14 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	Mesh* ModelLoader::ProcessMesh(aiNode* node, aiMesh* mesh, const aiScene* scene)
+	Mesh* ModelLoader::ProcessMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model)
 	{
 		Mesh* newMesh = new Mesh();
 		newMesh->_nodeName = mesh->mName.C_Str();
 		newMesh->_vertexDatas.reserve((size_t)mesh->mNumVertices);
 		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 		{
-			Mesh::VertexData vertexData;
+			Mesh::VertexData vertexData{};
 
 			vertexData._position.x = mesh->mVertices[i].x;
 			vertexData._position.y = mesh->mVertices[i].y;
@@ -81,6 +161,112 @@ namespace NS_GRAPHICS
 		return newMesh;
 	}
 
+	AnimatedMesh* ModelLoader::ProcessAnimatedMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model)
+	{
+		MaxInfluencePerVertex(mesh);
+		AnimatedMesh* newAnimatedMesh = new AnimatedMesh();
+		newAnimatedMesh->_nodeName = mesh->mName.C_Str();
+		newAnimatedMesh->_vertexDatas.reserve((size_t)mesh->mNumVertices);
+
+		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+		{
+			AnimatedMesh::VertexData vertexData{};
+
+			vertexData._position.x = mesh->mVertices[i].x;
+			vertexData._position.y = mesh->mVertices[i].y;
+			vertexData._position.z = mesh->mVertices[i].z;
+
+			if (mesh->HasNormals())
+			{
+				//Only Load Normal if there is 1
+				vertexData._normals.x = mesh->mNormals[i].x;
+				vertexData._normals.y = mesh->mNormals[i].y;
+				vertexData._normals.z = mesh->mNormals[i].z;
+			}
+
+			if (mesh->mTextureCoords[0])
+			{
+				//Takes the first set of uv datas
+				vertexData._uv.x = mesh->mTextureCoords[0][i].x;
+				vertexData._uv.y = mesh->mTextureCoords[0][i].y;
+			}
+
+			newAnimatedMesh->_vertexDatas.push_back(vertexData);
+		}
+
+		ProcessBone(node, mesh, scene, model, newAnimatedMesh);
+
+		newAnimatedMesh->_indices.reserve((size_t)mesh->mNumFaces * 3);
+		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+		{
+			aiFace face = mesh->mFaces[i];
+
+			newAnimatedMesh->_indices.push_back(face.mIndices[0]);
+			newAnimatedMesh->_indices.push_back(face.mIndices[1]);
+			newAnimatedMesh->_indices.push_back(face.mIndices[2]);
+		}
+
+		return newAnimatedMesh;
+	}
+
+	void ModelLoader::ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, AnimatedMesh* animatedMesh)
+	{
+		for (size_t i = 0; i < mesh->mNumBones; i++) 
+		{
+			unsigned boneID = 0;
+			std::string boneName = mesh->mBones[i]->mName.C_Str();
+
+			if (model->_boneMapping.find(boneName) == model->_boneMapping.end()) 
+			{
+				// Allocate an index for a new bone
+				boneID = model->_boneCount;
+				model->_boneCount++;
+				BoneData bone;
+				bone._boneID = boneID;
+				bone._boneName = boneName;				
+				AiToGLM(mesh->mBones[i]->mOffsetMatrix, bone._boneTransformOffset);
+
+				model->_bones.push_back(bone);
+				model->_boneMapping[boneName] = boneID;
+			}
+			else 
+			{
+				boneID = model->_boneMapping[boneName];
+			}
+
+			for (size_t j = 0; j < mesh->mBones[i]->mNumWeights; j++) 
+			{
+				unsigned vertexID = mesh->mBones[i]->mWeights[j].mVertexId;
+				float weight = mesh->mBones[i]->mWeights[j].mWeight;
+
+				animatedMesh->_vertexDatas[vertexID].AddBoneData(boneID, weight);
+			}
+		}
+	}
+
+	void ModelLoader::AiToGLM(const aiMatrix4x4& ai, glm::mat4& glm)
+	{
+		glm[0][0] = ai.a1; 
+		glm[0][1] = ai.b1;  
+		glm[0][2] = ai.c1; 
+		glm[0][3] = ai.d1;
+
+		glm[1][0] = ai.a2;
+		glm[1][1] = ai.b2;  
+		glm[1][2] = ai.c2;
+		glm[1][3] = ai.d2;
+
+		glm[2][0] = ai.a3; 
+		glm[2][1] = ai.b3;  
+		glm[2][2] = ai.c3; 
+		glm[2][3] = ai.d3;
+
+		glm[3][0] = ai.a4; 
+		glm[3][1] = ai.b4;  
+		glm[3][2] = ai.c4; 
+		glm[3][3] = ai.d4;
+	}
+
 	bool ModelLoader::LoadFBX(Model*& model)
 	{
 		std::cout << "Loading FBX..." << std::endl;
@@ -96,7 +282,25 @@ namespace NS_GRAPHICS
 			return false;
 		}
 
+		if (scene->HasAnimations())
+		{
+			//SeeAllSkeleton(scene->mRootNode, scene, model);
+			//SeeAllAnimation(scene->mRootNode, scene);
+
+			model->_isAnimated = true;
+			model->_animatedMeshes.reserve(scene->mNumMeshes);
+
+			//Process Bone Data
+			//ProcessBone();
+		}
+		else
+		{
+			model->_isAnimated = false;
+			model->_meshes.reserve(scene->mNumMeshes);
+		}
+
 		ProcessNode(scene->mRootNode, scene, model);
+
 		return true;
 	}
 	void ModelLoader::LoadModel(const std::string& fileName)
