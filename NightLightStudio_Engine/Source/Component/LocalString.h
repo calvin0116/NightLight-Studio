@@ -100,4 +100,10 @@ public:
 		return stringData[0] == 0;
 	}
 
+	// implicitly-convert to std::string // std::string str = this;
+	operator std::string() const
+	{
+		return std::string(stringData);
+	}
+
 };

@@ -23,7 +23,7 @@ namespace NS_LOGIC
   void SystemLogic::Load()
   {
     MonoWrapper::InitMono();
-    MonoWrapper::ReloadScripts();
+    //MonoWrapper::ReloadScripts();
   }
 
   void SystemLogic::Init()
@@ -35,7 +35,6 @@ namespace NS_LOGIC
         //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
         if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_END))
         {
-          printf("Recompiling...\n");
           MonoWrapper::ReloadScripts();
         }
       });
@@ -83,6 +82,8 @@ namespace NS_LOGIC
 #endif
 #ifdef CS_ENV
     // C#
+    // Reload Scripts
+    MonoWrapper::ReloadScripts();
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
     for (; itrS != itrE; ++itrS)
