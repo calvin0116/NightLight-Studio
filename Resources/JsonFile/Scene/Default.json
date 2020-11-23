@@ -49,7 +49,10 @@
                 "IntList": [
                     5
                 ],
-                "StringList": [],
+                "StringList": [
+                    "lol",
+                    "wtf"
+                ],
                 "FloatList": [
                     4.0
                 ]

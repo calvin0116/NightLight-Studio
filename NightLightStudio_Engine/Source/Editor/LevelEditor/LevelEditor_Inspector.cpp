@@ -1064,8 +1064,6 @@ void InspectorWindow::VariableComp(Entity& ent)
 				int_index++;
 			}
 
-			//In progress
-			/*
 			if (ImGui::Button("Add String"))
 			{
 				LocalString ls;
@@ -1076,7 +1074,7 @@ void InspectorWindow::VariableComp(Entity& ent)
 			for (LocalString<125>& str : comp_var->string_list) //[path, name]
 			{
 				std::string p = "String_" + std::to_string(str_index);
-				/*
+				
 				std::string s_name = str;
 				_levelEditor->LE_AddInputText(p, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
 					[&str, &s_name]()
@@ -1084,7 +1082,7 @@ void InspectorWindow::VariableComp(Entity& ent)
 						str = s_name.c_str();
 					});
 				str_index++;
-			}*/
+			}
 
 		}
 	}
