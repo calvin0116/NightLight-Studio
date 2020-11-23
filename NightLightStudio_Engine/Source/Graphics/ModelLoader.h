@@ -24,6 +24,7 @@ namespace NS_GRAPHICS
 		AnimatedMesh* ProcessAnimatedMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model);
 
 		void ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, AnimatedMesh* animatedMesh);
+		void ProcessAnimation(aiNode* node, const aiScene* scene, Model*& model);
 
 		void AiToGLM(const aiMatrix4x4& ai, glm::mat4& glm);
 

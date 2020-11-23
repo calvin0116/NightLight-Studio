@@ -244,6 +244,19 @@ namespace NS_GRAPHICS
 		}
 	}
 
+	void ModelLoader::ProcessAnimation(aiNode* node, const aiScene* scene, Model*& model)
+	{
+		for (unsigned int i = 0; i < scene->mNumAnimations; ++i)
+		{
+			Animation* newAnim = new Animation();
+			model->_animations.insert(std::make_pair(scene->mAnimations[i]->mName.C_Str(), newAnim));
+			//for (unsigned j = 0; j < scene->mAnimations[i]->mNumChannels; ++j)
+			//{
+
+			//}
+		}
+	}
+
 	void ModelLoader::AiToGLM(const aiMatrix4x4& ai, glm::mat4& glm)
 	{
 		glm[0][0] = ai.a1; 
@@ -300,6 +313,7 @@ namespace NS_GRAPHICS
 		}
 
 		ProcessNode(scene->mRootNode, scene, model);
+		ProcessAnimation(scene->mRootNode, scene, model);
 
 		return true;
 	}
