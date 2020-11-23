@@ -14,7 +14,7 @@ void ConsoleLog::Start()
 				RedoLastCommand();
 		});
 
-	
+	/*
 	AddCommand("TEST_COMMAND", 
 		[this](std::any value)
 		{
@@ -73,7 +73,7 @@ void ConsoleLog::Start()
 	UndoLastCommand();
 	UndoLastCommand();
 
-	
+	*/
 }
 
 void ConsoleLog::Init()
@@ -151,7 +151,7 @@ void ConsoleLog::Run()
 }
 
 // Might need to expand
-void ConsoleLog::AddLog(const std::string& item)
+void ConsoleLog::AddLog(const std::string item)
 {
 	if (_inputItems.size() >= MAX_SIZE_INPUTS)
 		_inputItems.erase(std::begin(_inputItems));

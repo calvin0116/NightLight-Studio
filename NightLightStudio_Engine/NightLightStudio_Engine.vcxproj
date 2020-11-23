@@ -99,7 +99,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>$(SolutionDir)Include\rapidjson;$(SolutionDir)Include\FMOD\inc;$(SolutionDir)Include\FBX_SDK;$(SolutionDir)Include\mono\include\mono-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Include\rapidjson;$(SolutionDir)Include\FMOD\inc;$(SolutionDir)Include\Assimp;$(SolutionDir)Include\mono\include\mono-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ShowIncludes>false</ShowIncludes>
@@ -111,7 +111,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\Mono\lib;$(SolutionDir)Bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>mono-2.0-sgen.lib;fmod_vc.lib;glew32s.lib;soil.lib;libfbxsdk.lib;XINPUT9_1_0.LIB;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mono-2.0-sgen.lib;fmod_vc.lib;glew32s.lib;soil.lib;assimp-vc142-mt.lib;XINPUT9_1_0.LIB;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -141,7 +141,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>$(SolutionDir)Include\rapidjson;$(SolutionDir)Include\FMOD\inc;$(SolutionDir)Include\FBX_SDK;$(SolutionDir)Include\mono\include\mono-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Include\rapidjson;$(SolutionDir)Include\FMOD\inc;$(SolutionDir)Include\Assimp;$(SolutionDir)Include\mono\include\mono-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -150,7 +150,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\Mono\lib;$(SolutionDir)Bin\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>mono-2.0-sgen.lib;soil.lib;fmod_vc.lib;libfbxsdk.lib;opengl32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;XINPUT9_1_0.LIB;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mono-2.0-sgen.lib;soil.lib;fmod_vc.lib;assimp-vc142-mtd.lib;opengl32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;XINPUT9_1_0.LIB;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -203,6 +203,7 @@
     <ClInclude Include="Source\Component\ComponentScript.h" />
     <ClInclude Include="Source\Component\ComponentTest.h" />
     <ClInclude Include="Source\Component\ComponentTransform.h" />
+    <ClInclude Include="Source\Component\ComponentVariables.h" />
     <ClInclude Include="Source\Component\LocalString.h" />
     <ClInclude Include="Source\Component\LocalVector.h" />
     <ClInclude Include="Source\Component\MemoryThingy.h" />
@@ -291,6 +292,7 @@
     <ClInclude Include="Source\Mono\Binding\Binder.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentColliderBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentGraphicsBind.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentLightBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentTransformBind.h" />
     <ClInclude Include="Source\Mono\Binding\Systems\AudioBind.h" />
@@ -298,6 +300,7 @@
     <ClInclude Include="Source\Mono\Binding\Systems\CameraBind.h" />
     <ClInclude Include="Source\Mono\Binding\Systems\ECSBind.h" />
     <ClInclude Include="Source\Mono\Binding\Systems\ForceBind.h" />
+    <ClInclude Include="Source\Mono\Binding\Systems\InputBind.h" />
     <ClInclude Include="Source\Mono\MonoWrapper.h" />
     <ClInclude Include="Source\Physics\ForceManager.h" />
     <ClInclude Include="Source\Physics\SystemPhysics.h" />
@@ -332,6 +335,7 @@
     <ClCompile Include="Source\Component\Components.cpp" />
     <ClCompile Include="Source\Component\ComponentScript.cpp" />
     <ClCompile Include="Source\Component\ComponentTransform.cpp" />
+    <ClCompile Include="Source\Component\ComponentVariables.cpp" />
     <ClCompile Include="Source\Core\DeltaTime.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
     <ClCompile Include="Source\Core\SceneManager.cpp" />
@@ -399,6 +403,7 @@
     <ClCompile Include="Source\Mono\Binding\Binder.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentColliderBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentGraphicsBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentLightBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentTransformBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Systems\AudioBind.cpp" />
@@ -406,6 +411,7 @@
     <ClCompile Include="Source\Mono\Binding\Systems\CameraBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Systems\ECSBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Systems\ForceBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Systems\InputBind.cpp" />
     <ClCompile Include="Source\Mono\MonoWrapper.cpp" />
     <ClCompile Include="Source\Physics\ForceManager.cpp" />
     <ClCompile Include="Source\Physics\SystemPhysics.cpp" />

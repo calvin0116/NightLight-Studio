@@ -2,23 +2,39 @@
 #include "../../MonoWrapper.h"
 // Get components etc
 #include "../../../Component/Components.h" 
+// Delta time
+#include "../../../Core/DeltaTime.h"
 
 namespace ECSBind
 {
   void BindECS()
   {
     MonoWrapper::BindClassFunction(GameObjectFind, "GameObjectFind", "UniBehaviour");
+    MonoWrapper::BindClassFunction(dt, "DT", "UniBehaviour");
+    MonoWrapper::BindClassFunction(realDt, "RealDT", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetScript, "GetScript", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetCollider, "GetCollider", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetRigidBody, "GetRigidBody", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetGraphics, "GetGraphics", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetLight, "GetLight", "UniBehaviour");
   }
 
   int GameObjectFind(MonoString* _name)
   {
     Entity en = G_ECMANAGER->getEntity(MonoWrapper::ToString(_name));
     return en.getId();
+  }
+
+  // Delta Time
+  float dt()
+  {
+    return DELTA_T->dt;
+  }
+
+  float realDt()
+  {
+    return DELTA_T->dt / CLOCKS_PER_SEC;
   }
 
   MonoObject* GetScript(int id)
@@ -111,6 +127,16 @@ namespace ECSBind
     Entity en = G_ECMANAGER->getEntity(id);
     GraphicsComponent* rb = en.getComponent<GraphicsComponent>();
     MonoWrapper::SetNativeHandle(monoObj, rb);
+
+    return monoObj;
+  }
+
+  MonoObject* GetLight(int id)
+  {
+    MonoObject* monoObj = MonoWrapper::ConstructObject("Light");
+    Entity en = G_ECMANAGER->getEntity(id);
+    LightComponent* lc = en.getComponent<LightComponent>();
+    MonoWrapper::SetNativeHandle(monoObj, lc);
 
     return monoObj;
   }

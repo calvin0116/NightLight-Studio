@@ -5,6 +5,7 @@
 #include "Components/ComponentColliderBind.h"
 #include "Components/ComponentRigidBodyBind.h"
 #include "Components/ComponentGraphicsBind.h"
+#include "Components/ComponentLightBind.h"
 
 // Custom types
 #include "CustomTypes/Vector3DBind.h"
@@ -13,6 +14,7 @@
 #include "Systems/AudioBind.h"
 #include "Systems/ForceBind.h"
 #include "Systems/CameraBind.h"
+#include "Systems/InputBind.h"
 #include "Systems/ECSBind.h"
 
 // Engine tools ?

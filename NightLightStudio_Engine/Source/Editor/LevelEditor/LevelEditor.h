@@ -139,6 +139,8 @@ public:
 	// ONLY USED FOR PERFORMANCE METRICS, DOES NOTHING OTHERWISE
 	std::vector<float>* LE_GetSystemsUsage();
 
+	void LE_ConsoleOut(const std::string& out);
+
 	/**********************************************************************/
 
 	/******************************* Menus ***************************************/

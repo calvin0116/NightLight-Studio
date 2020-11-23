@@ -223,7 +223,7 @@ void InspectorWindow::Run()
 		if (ImGui::InputText("Name", buf, 256, itf))
 			NS_SCENE::SYS_SCENE_MANAGER->EntityName[LE_ECHELPER->GetSelectedEntityID()] = std::string(buf);
 		*/
-		_levelEditor->LE_AddInputText("Name##Entity", NS_SCENE::SYS_SCENE_MANAGER->EntityName[LE_ECHELPER->GetSelectedEntityID()], 256);
+		_levelEditor->LE_AddInputText("Name##Entity", SYS_COMPONENT->EntityName[LE_ECHELPER->GetSelectedEntityID()], 256);
 
 		// Print out the ID of the entity (Debug purposes)
 		ImGui::SameLine(0, 10);
@@ -498,6 +498,11 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "fbx" || fileType == "obj")
 					{
+						//assimp doesnt deal with preceding slash
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						mod = data;
 						graphics_comp->AddModel(mod);
 					}

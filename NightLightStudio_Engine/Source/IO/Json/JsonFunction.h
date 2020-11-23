@@ -11,10 +11,11 @@ namespace NS_SERIALISER {
 
     //~~~! Helper function that is not declared in class due to Entity not declared in .h
     inline void ComponentsCreation(Value& Comp_list, Entity& entity);
-
 	ENGINE_API inline void EntityListCreation(Value& Ent_list);
 
 
+	inline void ComponentsInit(Value& Comp_list, Entity& entity);
+	ENGINE_API inline void EntityListInit(Value& Ent_list);
 	//For object access change
 	template<typename d_type>
 	inline void ChangeData(Value* val, std::string d_name, d_type data)

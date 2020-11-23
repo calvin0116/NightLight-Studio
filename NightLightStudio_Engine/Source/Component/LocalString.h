@@ -30,38 +30,44 @@ public:
 	}
 	
 	// init from std::string ctor
-	LocalString(std::string& rhs)
+	LocalString(const std::string& rhs)
 	{
 		memset(stringData, 0, N);
 		copyFromString(rhs);
 	}
 
 	// copy ctor
-	LocalString(LocalString& rhs)
+	LocalString(const LocalString& rhs)
 	{
 		copyFromLocalString(rhs);
 	}
 
 	// move ctor
-	LocalString(LocalString&& rhs)
+	LocalString(const LocalString&& rhs)
 	{
 		copyFromLocalString(rhs);
 	}
 
 	// ass op
-	void operator=(LocalString& rhs)
+	void operator=(const LocalString& rhs)
 	{
 		copyFromLocalString(rhs);
 	}
 
 	// move op
-	void operator=(LocalString&& rhs)
+	void operator=(const LocalString&& rhs)
 	{
 		copyFromLocalString(rhs);
 	}
 
 	// = std::String operator
-	void operator=(std::string& rhs)
+	void operator=(const std::string& rhs)
+	{
+		copyFromString(rhs);
+	}
+
+	// = std::String mov operator
+	void operator=(const std::string&& rhs)
 	{
 		copyFromString(rhs);
 	}

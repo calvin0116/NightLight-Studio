@@ -5,6 +5,8 @@
 // Windows Header Files
 //#include <windows.h>
 //#define NOGDI
+//THIS IS TO PREVENT STD::MIN AND MIN MACRO CONFLICT
+#define NOMINMAX
 
 //C++ Header
 #include <iostream>

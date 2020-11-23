@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cmath>
 
+
 #include "../glm/glm.hpp"   
 namespace NlMath
 {
@@ -10,6 +11,8 @@ namespace NlMath
 	// Supress warning: nonstandard extension used : nameless struct/union
 #pragma warning( disable : 4201 )
 #endif
+	union Matrix4x4;
+
 	typedef union Vector3D
 	{
 		struct
@@ -134,6 +137,8 @@ namespace NlMath
 	*/
 	/**************************************************************************/
 	Vector3D	Vector3DProjection(const Vector3D& pVec0, const Vector3D& pVec1);
+
+
 }
 	
 	

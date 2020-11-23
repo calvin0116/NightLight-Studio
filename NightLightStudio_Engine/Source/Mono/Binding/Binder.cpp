@@ -11,6 +11,7 @@ namespace MonoBind
     ComponentColliderBind::BindComponentCollider();
     ComponentRigidBodyBind::BindComponentRigidBody();
     ComponentGraphicsBind::BindComponentGraphics();
+    ComponentLightBind::BindComponentLight();
   }
 
   // Custom types
@@ -26,6 +27,7 @@ namespace MonoBind
     AudioBind::BindAudio();
     ForceBind::BindForce();
     CameraBind::BindCamera();
+    InputBind::BindInput();
   }
 
   void Bind()

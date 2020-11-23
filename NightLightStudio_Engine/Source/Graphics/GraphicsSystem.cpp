@@ -39,6 +39,7 @@ namespace NS_GRAPHICS
 		_hasInit{ false },
 		_debugDrawing{ false },
 		_uiDrawing{ false },
+		_hdrID{ 0 },
 		_projectionMatrix{ glm::mat4(1.0f) },
 		_viewMatrix{ glm::mat4(1.0f) },
 		_orthoMatrix{ glm::mat4(1.0f) }
@@ -95,7 +96,7 @@ namespace NS_GRAPHICS
 		textureManager = &TextureManager::GetInstance();
 		uiManager = &UISystem::GetInstance();
 
-		modelLoader->Init();
+		//modelLoader->Init();
 		
 		// Initialize sub systems and managers
 		shaderManager->Init();
@@ -364,7 +365,8 @@ namespace NS_GRAPHICS
 					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-					glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+					//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+					glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0); 
 					shaderManager->StopProgram();
 				}
 				else
@@ -387,7 +389,8 @@ namespace NS_GRAPHICS
 					// bind specular map
 					textureManager->BindSpecularTexture(graphicsComp->_specularID);
 
-					glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+					//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+					glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
 					shaderManager->StopProgram();
 				}
 			}
@@ -715,5 +718,9 @@ namespace NS_GRAPHICS
 	glm::mat4 GraphicsSystem::GetInverseViewMatrix()
 	{
 		return (glm::inverse(cameraManager->GetViewMatrix()) * glm::inverse(_projectionMatrix));
+	}
+	void GraphicsSystem::SetHDRTexture(const std::string& filename)
+	{
+		_hdrID = textureManager->GetTexture(filename);
 	}
 }

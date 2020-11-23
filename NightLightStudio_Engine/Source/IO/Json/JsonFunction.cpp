@@ -18,6 +18,18 @@ namespace NS_SERIALISER {
         
     }
 
+    template <typename T>
+    inline void ReadComp(Value& Comp_list, Entity& entity, std::string& component_name)
+    {
+        //T comp;
+        //static_cast<ISerializable*>(&comp)->Read(Comp_list[component_name.c_str()]);
+        //G_ECMANAGER->AttachComponent<T>(entity, comp);
+
+        T* comp = entity.getComponent<T>();
+        static_cast<ISerializable*>(comp)->Read(Comp_list[component_name.c_str()]);
+
+    }
+
     inline void ComponentsCreation(Value& Comp_list, Entity& entity)
     {
         for (auto itr = Comp_list.MemberBegin(); itr != Comp_list.MemberEnd(); ++itr)
@@ -85,7 +97,6 @@ namespace NS_SERIALISER {
         }
     }
 
-
     inline void EntityListCreation(Value& Ent_list)
     {
         for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
@@ -103,5 +114,78 @@ namespace NS_SERIALISER {
         }
     }
 
+    inline void EntityListInit(Value& Ent_list)
+    {
+        for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
+        {
+            std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
+            Entity ent_handle = G_ECMANAGER->getEntityUsingEntName(itr->name.GetString());		//Build entity
+            std::cout << "Entity ID: " << ent_handle.getId() << std::endl;
 
+            Value& Component_list = Ent_list[itr->name.GetString()];					//Get component list
+
+            ComponentsInit(Component_list, ent_handle);
+        }
+    }
+
+    inline void ComponentsInit(Value& Comp_list, Entity& entity)
+    {
+        for (auto itr = Comp_list.MemberBegin(); itr != Comp_list.MemberEnd(); ++itr)
+        {
+
+            std::string component_name = itr->name.GetString();
+            if (component_name == "TransformComponent")
+            {
+                ReadComp<TransformComponent>(Comp_list, entity, component_name);
+
+            }
+            //~~! Add your own component creation here ~~!//
+            else if (component_name == "ColliderComponent")
+            {
+                //CreateAndWriteComp<ColliderComponent>(Comp_list, entity, component_name);
+                ReadComp<ColliderComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "RigidBody")
+            {
+                ReadComp<RigidBody>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "AudioManager")
+            {
+                ReadComp<ComponentLoadAudio>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "GraphicsComponent")
+            {
+                ReadComp<GraphicsComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "CScriptComponent")
+            {
+                ReadComp<CScriptComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "ScriptComponent")
+            {
+                ReadComp<ScriptComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "ScriptComponent")
+            {
+                ReadComp<ScriptComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "LightComponent")
+            {
+                ReadComp<ComponentLight>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "PlayerStatsComponent")
+            {
+                ReadComp<PlayerStatsComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "CauldronStatsComponent")
+            {
+                ReadComp<CauldronStatsComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "CanvasComponent")
+            {
+                ReadComp<ComponentCanvas>(Comp_list, entity, component_name);
+            }
+
+        }
+    }
 }

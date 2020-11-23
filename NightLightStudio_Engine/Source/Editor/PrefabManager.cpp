@@ -38,7 +38,7 @@ namespace Prefab_Function {
 
 	void WritePrefab(std::string file, Entity& prefab_ent)
 	{
-		std::string ent_name = NS_SCENE::SYS_SCENE_MANAGER->EntityName[prefab_ent.getId()];
+		std::string ent_name = SYS_COMPONENT->EntityName[prefab_ent.getId()];
 		NS_SERIALISER::Parser prefab_parser(ent_name,file, ".prefab" );
 
 		struct stat buffer;
