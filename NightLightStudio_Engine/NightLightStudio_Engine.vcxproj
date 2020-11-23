@@ -244,7 +244,6 @@
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
-    <ClInclude Include="Source\Graphics\Joint.h" />
     <ClInclude Include="Source\Graphics\Lights.h" />
     <ClInclude Include="Source\Graphics\LightSystem.h" />
     <ClInclude Include="Source\Graphics\Mesh.h" />
@@ -368,7 +367,6 @@
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
     <ClCompile Include="Source\Graphics\DebugManager.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsSystem.cpp" />
-    <ClCompile Include="Source\Graphics\Joint.cpp" />
     <ClCompile Include="Source\Graphics\LightSystem.cpp" />
     <ClCompile Include="Source\Graphics\Mesh.cpp" />
     <ClCompile Include="Source\Graphics\Model.cpp" />
