@@ -1,8 +1,12 @@
 #pragma once
-#include "../FBX_SDK/fbxsdk.h"
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
 #include "Mesh.h"
 #include "ModelManager.h"
 #include "Model.h"
+#include "../glm/gtc/matrix_transform.hpp"
+#include "../../glm/gtc/quaternion.hpp"
 
 namespace NS_GRAPHICS
 {
@@ -10,17 +14,13 @@ namespace NS_GRAPHICS
 
 	class ModelLoader
 	{
-		FbxManager* _fbxManager;
-		FbxScene* _fbxScene;
-		FbxImporter* _fbxImport;
-		FbxAxisSystem _axisSystem;
-
 		ModelManager* _modelManager;
 
 		ModelLoader();
 		~ModelLoader();
 
-		void ProcessMesh(FbxNode* node, Model*& model);
+		void ProcessNode(aiNode* node, const aiScene* scene, Model*& model);
+		Mesh* ProcessMesh(aiNode* node, aiMesh* mesh, const aiScene* scene);
 
 	public:
 		// Unique Singleton instance
@@ -30,8 +30,6 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
-		void Init();
-
 		//void LoadFBX(const std::string& fileName, Mesh& mesh);
 		bool LoadFBX(Model*& model);
 		void LoadModel(const std::string& fileName);
@@ -39,6 +37,5 @@ namespace NS_GRAPHICS
 		bool SaveCustomMesh(Model*& model);
 
 		void DebugToFile(const std::string& fileName);
-		FbxVector4 Transform(FbxNode* node, FbxVector4 vector);
 	};
 }

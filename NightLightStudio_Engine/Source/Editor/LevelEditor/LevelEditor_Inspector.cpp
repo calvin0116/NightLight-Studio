@@ -498,6 +498,11 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "fbx" || fileType == "obj")
 					{
+						//assimp doesnt deal with preceding slash
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						mod = data;
 						graphics_comp->AddModel(mod);
 					}

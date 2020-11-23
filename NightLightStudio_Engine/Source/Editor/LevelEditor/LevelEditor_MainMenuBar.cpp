@@ -58,7 +58,7 @@ void LevelEditor::LE_MainMenuBar()
     if (ImGui::BeginMenuBar())
     {
         LE_AddMenuWithItems("File", 
-            { "Open" , "Save", "Save Test"},
+            { "Open" , "Save", "Save As"},
             { "" , "Ctrl-S", "" },
             {
                 // Opens a Window Dialog Box for Opening a .json file
@@ -150,7 +150,7 @@ void LevelEditor::LE_MainMenuBar()
         LE_AddCheckbox("PLAY##MMBAR", &_runEngine, [this]()
             {
               // START/STOP ENGINE RUN HERE
-                MessageTogglePlay isPlaying(_runEngine);
+                MessageTogglePlay isPlaying(_runEngine, "TogglePlay");
                 if (_runEngine)
                 {
                     MessageTogglePlay isPlaying_1(_runEngine, "BeforePlay");
@@ -306,6 +306,12 @@ void LevelEditor::LE_MainMenuBar()
                 transEnt._position = { 0.f, 0.f,0.f };
                 ent.AttachComponent<ComponentTransform>(transEnt);
 
+                //assimp doesnt deal with preceding slash
+                if (data[0] == '\\')
+                {
+                    data.erase(0, 1);
+                }
+
                 NS_GRAPHICS::SYS_GRAPHICS->LoadModel(data);
 
                 /*if (LE_GetFileType(data) == "fbx")
@@ -335,6 +341,11 @@ void LevelEditor::LE_MainMenuBar()
                     data = meshName;
                 }*/
                 NS_GRAPHICS::SYS_GRAPHICS->AttachModel(ent, data);
+            }
+
+            if (LE_GetFileType(data) == "json")
+            {
+                NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(data);
             }
         }, ImGuiDragDropFlags_AcceptNoDrawDefaultRect);
 

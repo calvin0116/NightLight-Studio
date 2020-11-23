@@ -278,7 +278,7 @@ namespace NS_COLLISION
 			{
 				ComponentCollider* comCol = G_ECMANAGER->getComponent<ComponentCollider>(itr);
 				ComponentTransform* comTrans = G_ECMANAGER->getComponent<ComponentTransform>(itr);
-
+				UpdateCollisionBoxPos(comCol, comTrans);
 				if (comCol->isCollide)
 				{
 					if (doDrawLineMesh)
@@ -297,19 +297,9 @@ namespace NS_COLLISION
 			}
 		}
 
-		auto itr = G_ECMANAGER->begin<ComponentCollider>();
-		auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
-		for (; itr != itrEnd; ++itr)
-		{
-			ComponentCollider* comCol = G_ECMANAGER->getComponent<ComponentCollider>(itr);
-			ComponentTransform* comTrans = G_ECMANAGER->getComponent<ComponentTransform>(itr);
-
-			UpdateCollisionBoxPos(comCol, comTrans);
-		}
-
 		if (!_isPlaying)
 		{
-			return;
+			//return;
 		}
 		
 
@@ -1044,8 +1034,25 @@ namespace NS_COLLISION
 					}
 				}
 
-					
-
+				CollisionEvent newEvent;
+				if (check == true)
+				{
+					// add rigid body
+					newEvent.rigid1 = Rigid1;
+					newEvent.rigid2 = Rigid2;
+					newEvent.collider1 = Collider1;
+					newEvent.collider2 = Collider2;
+					newEvent.transform1 = Transform1;
+					newEvent.transform2 = Transform2;
+					newEvent.entity1 = Entity1;
+					newEvent.entity2 = Entity2;
+					//shallow copy
+					newEvent.manifold = tmp;
+					// set type
+					newEvent.collisionType = COLRESTYPE::OBB_OBB;
+					// add event
+					colResolver.addCollisionEvent(newEvent);
+				}
 				return check;
 
 				//// yes collision add to collision event and return true
@@ -1111,10 +1118,6 @@ namespace NS_COLLISION
 
 	void CollisionSystem::HandleTogglePlay(MessageTogglePlay& msg)
 	{
-		// Handle msg here.
-		std::cout << "Hello from collision!" << std::endl;
-		std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
-
 		_isPlaying = msg.isPlaying;
 		//if (!_isPlaying)
 		//  GameExit();

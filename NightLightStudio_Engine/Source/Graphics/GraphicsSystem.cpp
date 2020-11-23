@@ -22,6 +22,7 @@
 //#define DRAW_WITH_COMPONENTS
 #define DRAW_WITH_LIGHTS
 #define DRAW_DEBUG_GRID
+//#define PBR_DRAWING
 
 namespace NS_GRAPHICS
 {
@@ -38,6 +39,7 @@ namespace NS_GRAPHICS
 		_hasInit{ false },
 		_debugDrawing{ false },
 		_uiDrawing{ false },
+		_hdrID{ 0 },
 		_projectionMatrix{ glm::mat4(1.0f) },
 		_viewMatrix{ glm::mat4(1.0f) },
 		_orthoMatrix{ glm::mat4(1.0f) }
@@ -94,7 +96,7 @@ namespace NS_GRAPHICS
 		textureManager = &TextureManager::GetInstance();
 		uiManager = &UISystem::GetInstance();
 
-		modelLoader->Init();
+		//modelLoader->Init();
 		
 		// Initialize sub systems and managers
 		shaderManager->Init();
@@ -363,7 +365,8 @@ namespace NS_GRAPHICS
 					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-					glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+					//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+					glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0); 
 					shaderManager->StopProgram();
 				}
 				else
@@ -386,7 +389,8 @@ namespace NS_GRAPHICS
 					// bind specular map
 					textureManager->BindSpecularTexture(graphicsComp->_specularID);
 
-					glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+					//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+					glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
 					shaderManager->StopProgram();
 				}
 			}
@@ -394,6 +398,82 @@ namespace NS_GRAPHICS
 		}
 
 		
+#endif
+
+#ifdef PBR_DRAWING
+		// Perform PBR update here
+		// One for solids, one for textured
+		auto itr = G_ECMANAGER->begin<ComponentGraphics>();
+		auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
+		while (itr != itrEnd)
+		{
+			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
+
+			if (graphicsComp->_modelID < 0)
+			{
+				++itr;
+				continue;
+			}
+
+			if (!graphicsComp->_isActive)
+			{
+				++itr;
+				continue;
+			}
+
+			Model* model = modelManager->_models[graphicsComp->_modelID];
+
+			// get transform component
+			ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
+
+			glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
+
+			for (auto& mesh : model->_meshes)
+			{
+				if (graphicsComp->_renderType == RENDERTYPE::SOLID)
+				{
+					shaderManager->StartProgram(5); // solid program
+					glBindVertexArray(mesh->VAO);
+
+					// Update model and uniform for material
+					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Albedo"), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+					glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Roughness"), graphicsComp->_pbrData._roughness);
+					glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Metallic"), graphicsComp->_pbrData._metallic);
+
+					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+					glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+					shaderManager->StopProgram();
+				}
+				else
+				{
+					// Might be same program?
+
+					//shaderManager->StartProgram(3); // textured program
+					//glBindVertexArray(mesh->VAO);
+
+					//// Update model and uniform for material
+					//glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
+					//glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
+					//glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
+					//glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
+
+					//glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+					//glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+					//// Bind textures
+					//// bind diffuse map
+					//textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
+					//// bind specular map
+					//textureManager->BindSpecularTexture(graphicsComp->_specularID);
+
+					//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+					//shaderManager->StopProgram();
+				}
+			}
+			itr++;
+		}
 #endif
 
 #ifdef DRAW_DEBUG_GRID
@@ -638,5 +718,9 @@ namespace NS_GRAPHICS
 	glm::mat4 GraphicsSystem::GetInverseViewMatrix()
 	{
 		return (glm::inverse(cameraManager->GetViewMatrix()) * glm::inverse(_projectionMatrix));
+	}
+	void GraphicsSystem::SetHDRTexture(const std::string& filename)
+	{
+		_hdrID = textureManager->GetTexture(filename);
 	}
 }

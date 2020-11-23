@@ -2,6 +2,7 @@
 #include <string>
 #include "../Window/WndUtils.h"
 #include "../../SOIL/SOIL.h"
+#include "../SOIL/stb_image_aug.h"
 #include "TextureManager.h"
 
 namespace NS_GRAPHICS
@@ -58,6 +59,7 @@ namespace NS_GRAPHICS
 
 		bool LoadDDSImage(const std::string& file);
 		DDSImageData* LoadDDSImageData(const std::string& file);
+		bool LoadHDR(const std::string& file);
 		bool LoadOtherImage(const std::string& file, const std::string& newFile);
 
 	public:

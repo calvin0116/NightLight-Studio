@@ -42,7 +42,7 @@ public:
 
 	void Exit() override {}
 
-	void AddLog(const std::string& item);
+	void AddLog(const std::string item);
 
 	// COMMAND -> std::pair < std::function <void(std::any)>, std::any >
 	// std::function <std::any(std::any)> -> The function that takes in an arbitrary value state to run, and returns the initial value state.

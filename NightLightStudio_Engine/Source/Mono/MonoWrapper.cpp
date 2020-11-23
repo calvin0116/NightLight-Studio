@@ -7,6 +7,9 @@
 #include <mono/metadata/debug-helpers.h>
 #include <mono/metadata/mono-gc.h>
 
+// Custom systems
+#include "../Editor/SystemEditor.h" // For editor console cout
+
 namespace MonoWrapper 
 {
   MonoImage* currImage = nullptr;
@@ -72,6 +75,7 @@ namespace MonoWrapper
 
   bool CompileScripts()
   {
+    ED_OUT("Compiling...\n");
     bool bSucceeded = true;
     static const std::string compileCommand =
       std::string(MONO_COMPILER_PATH) + std::string(" -recurse:") + std::string(SCRIPTS_PATH) +
@@ -85,19 +89,19 @@ namespace MonoWrapper
 
     if (compileOutput != NULL)
     {
-      printf("Compilation output: ");
+      ED_OUT("Compilation output: ");
       while (fgets(buffer, static_cast<int>(sizeof(buffer)), compileOutput) != nullptr)
       {
-        printf("%s\n", buffer);
+        ED_OUT(std::string(buffer));
         bSucceeded = false;
       }
-      printf("Compilation completed\n");
+      ED_OUT("Compilation completed\n");
 
       _pclose(compileOutput);
     }
     else
     {
-      printf("Script Compilation failed\n");
+      ED_OUT("Script Compilation failed\n");
     }
     return bSucceeded;
   }

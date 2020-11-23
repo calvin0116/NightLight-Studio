@@ -125,6 +125,8 @@ namespace NS_GRAPHICS
 
         glm::mat4 GetInverseViewMatrix();
 
+        void SetHDRTexture(const std::string& filename);
+
     private:
 
         bool _hasInit;
@@ -140,6 +142,9 @@ namespace NS_GRAPHICS
         CameraSystem* cameraManager;
         TextureManager* textureManager;
         UISystem* uiManager;
+
+        //1 HDR PER SCENE
+        unsigned _hdrID;
 
         // Should NOT be calculated every frame
         glm::mat4 _projectionMatrix;

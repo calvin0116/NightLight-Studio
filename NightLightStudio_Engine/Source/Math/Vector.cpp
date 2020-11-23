@@ -324,4 +324,5 @@ namespace NlMath
 		Vector3D resultVector = normVec0 * Vector3DDotProduct(normVec0, pVec1);
 		return resultVector;
 	}
+
 }

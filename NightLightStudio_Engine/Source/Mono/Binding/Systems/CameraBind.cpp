@@ -20,6 +20,28 @@ namespace CameraBind
       "Camera");
     MonoWrapper::BindClassFunction(csGetXZViewVector_Right, "GetXZViewVector_Right",
       "Camera");
+
+    // Camera functions
+    MonoWrapper::BindClassFunction(csSetUseThirdPersonCam, "SetUseThirdPersonCam",
+      "Camera");
+
+    MonoWrapper::BindClassFunction(csToggleUseThirdPersonCam, "ToggleUseThirdPersonCam",
+      "Camera");
+
+    MonoWrapper::BindClassFunction(csSetThirdPersonCamCanRotateAnot, "SetThirdPersonCamCanRotateAnot",
+      "Camera");
+
+    MonoWrapper::BindClassFunction(csSetThirdPersonCamCanZoomAnot, "SetThirdPersonCamCanZoomAnot",
+      "Camera");
+
+    MonoWrapper::BindClassFunction(csSetThirdPersonCamTarget, "SetThirdPersonCamTarget",
+      "Camera");
+
+    MonoWrapper::BindClassFunction(csSetThirdPersonCamDistance, "SetThirdPersonCamDistance",
+      "Camera");
+
+    MonoWrapper::BindClassFunction(csSetThirdPersonCamPitchAndYaw, "SetThirdPersonCamPitchAndYaw",
+      "Camera");
   }
 
   // Directional Vectors
@@ -92,5 +114,45 @@ namespace CameraBind
     MonoWrapper::SetObjectFieldValue<float>(monoVec3, "Y", Vec3.y);
     MonoWrapper::SetObjectFieldValue<float>(monoVec3, "Z", Vec3.z);
     return monoVec3;
+  }
+
+  // Camera Functions
+  void csSetUseThirdPersonCam(bool set)
+  {
+    NS_GRAPHICS::CameraSystem::GetInstance().SetUseThridPersonCam(set);
+  }
+
+  void csToggleUseThirdPersonCam()
+  {
+    NS_GRAPHICS::CameraSystem::GetInstance().ToggleUseThridPersonCam();
+  }
+
+  void csSetThirdPersonCamCanRotateAnot(bool set)
+  {
+    NS_GRAPHICS::CameraSystem::GetInstance().SetThridPersonCamCanRotateAnot(set);
+  }
+
+  void csSetThirdPersonCamCanZoomAnot(bool set)
+  {
+    NS_GRAPHICS::CameraSystem::GetInstance().SetThridPersonCamCanZoomAnot(set);
+  }
+
+  void csSetThirdPersonCamTarget(MonoObject* tgt)
+  {
+    glm::vec3 vec;
+    vec.x = MonoWrapper::GetObjectFieldValue<float>(tgt, "X");
+    vec.y = MonoWrapper::GetObjectFieldValue<float>(tgt, "Y");
+    vec.z = MonoWrapper::GetObjectFieldValue<float>(tgt, "Z");
+    NS_GRAPHICS::CameraSystem::GetInstance().SetThridPersonCamTarget(vec);
+  }
+
+  void csSetThirdPersonCamDistance(float dist)
+  {
+    NS_GRAPHICS::CameraSystem::GetInstance().SetThridPersonCamDistance(dist);
+  }
+
+  void csSetThirdPersonCamPitchAndYaw(float pitch, float yaw)
+  {
+    NS_GRAPHICS::CameraSystem::GetInstance().SetThridPersonCamPitchAndYaw(pitch, yaw);
   }
 }
