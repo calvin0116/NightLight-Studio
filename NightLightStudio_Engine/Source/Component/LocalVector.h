@@ -8,9 +8,11 @@
 #include <algorithm>
 
 //#define N 100
+#include "LocalString.h"
 
-template<typename T, size_t N>
-class LocalVector
+template<typename T, size_t N = 24>
+class
+	LocalVector
 {
 	T data[N];
 	size_t currentSize;

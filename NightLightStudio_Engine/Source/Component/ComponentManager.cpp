@@ -1193,8 +1193,6 @@ ComponentManager::ComponentSetManager* ComponentManager::getComponentSetMgr(COMP
 
 void ComponentManager::ComponentCreation()
 {
-
-
 	// factory
 	ComponentManager::ComponentSetFactory comsetFac;
 
@@ -1220,8 +1218,9 @@ void ComponentManager::ComponentCreation()
 		
 		comsetFac.AddComponentContainer<ComponentPlayerStats>();
 		comsetFac.AddComponentContainer<ComponentCauldronStats>();
-    // Temporary C++ Scripting component
-    comsetFac.AddComponentContainer<ComponentCScript>();
+		// Temporary C++ Scripting component
+		comsetFac.AddComponentContainer<ComponentCScript>();
+		comsetFac.AddComponentContainer<ComponentVariables>();
 
 
 		// builds the component set

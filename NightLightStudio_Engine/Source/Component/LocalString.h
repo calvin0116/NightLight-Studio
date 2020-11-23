@@ -2,10 +2,9 @@
 
 #include <string>
 
-template<size_t N>
+template<size_t N = 125>
 class LocalString
 {
-
 	char stringData[N];
 
 private:

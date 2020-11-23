@@ -20,11 +20,6 @@ void FluffyUnicornEngine::Init(HINSTANCE& hInstance)
 
 void FluffyUnicornEngine::Run()
 {
-	//Two running boolean that may need to be global depending on use case
-	//bool engine_running = true;	
-	//bool scene_running = true;
-	//bool scene_running = true;	//This should come from game / logic system later on
-
 	//=====System layer====//
     DELTA_T->load();
 	//System Init

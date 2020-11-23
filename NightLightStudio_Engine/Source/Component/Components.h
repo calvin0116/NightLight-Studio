@@ -19,7 +19,7 @@
 //Stats components
 #include "ComponentPlayerStats.h"
 #include "ComponentCauldronStats.h"
-
+#include "ComponentVariables.h"
 
 // Temporary C++ script
 #include "ComponentCScript.h"

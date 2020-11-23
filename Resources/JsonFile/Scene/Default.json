@@ -44,6 +44,15 @@
                     1.0
                 ],
                 "ShininessMat": 32.0
+            },
+            "ComponentVariables": {
+                "IntList": [
+                    5
+                ],
+                "StringList": [],
+                "FloatList": [
+                    4.0
+                ]
             }
         },
         "Entity_0": {

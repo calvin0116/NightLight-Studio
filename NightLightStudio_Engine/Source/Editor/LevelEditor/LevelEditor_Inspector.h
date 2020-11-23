@@ -85,6 +85,7 @@ private:
   void CScriptComp(Entity& ent);
   void PlayerStatsComp(Entity& ent);
   void CauldronStatsComp(Entity& ent);
+	  void VariableComp(Entity& ent);
 
 	void AddSelectedComps(Entity& ent);
 

@@ -102,6 +102,11 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<CauldronStatsComponent>();
 			entComp._ent.getComponent<CauldronStatsComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(VariablesComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<VariablesComponent>();
+			entComp._ent.getComponent<VariablesComponent>()->Read(*entComp._rjDoc);
+		}
 
 		return comp;
 	};
@@ -167,6 +172,12 @@ void InspectorWindow::Start()
 			entComp.Copy(entComp._ent.getComponent<CauldronStatsComponent>()->Write());
 			entComp._ent.RemoveComponent<CauldronStatsComponent>();
 		}
+		else if (t == typeid(VariablesComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<VariablesComponent>()->Write());
+			entComp._ent.RemoveComponent<VariablesComponent>();
+		}
+
 
 		return std::any(entComp);
 	};
@@ -268,6 +279,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 
   CauldronStatsComp(ent);
 
+  VariableComp(ent);
+
 	AddSelectedComps(ent);
 }
 
@@ -277,7 +290,7 @@ void InspectorWindow::TransformComp(Entity& ent)
 	if (trans_comp != NULL)
 	{
 		std::string enam = trans_comp->_entityName.toString();
-
+		ImGui::NewLine();
 		_levelEditor->LE_AddInputText("Entity Name", enam, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 		[&enam, &trans_comp]()
 		{
@@ -1011,6 +1024,82 @@ void InspectorWindow::CauldronStatsComp(Entity& ent)
 	}
 }
 
+void InspectorWindow::VariableComp(Entity& ent)
+{
+	ComponentVariables* comp_var = ent.getComponent<ComponentVariables>();
+	if (comp_var != nullptr)
+	{
+
+		if (ImGui::CollapsingHeader("Variable component", &_notRemove))
+		{
+
+			if (ImGui::Button("Add Float"))
+			{
+				float fl = 0.0f;
+				comp_var->float_list.push_back(fl);
+			}
+
+			int float_index = 1;
+			for (float& f : comp_var->float_list) //[path, name]
+			{
+				std::string p = "Float_" + std::to_string(float_index);
+
+				_levelEditor->LE_AddInputFloatProperty(p, f, []() {},ImGuiInputTextFlags_EnterReturnsTrue);
+				float_index++;
+			}
+
+			if (ImGui::Button("Add Interger"))
+			{
+				int interger = 0;
+				comp_var->int_list.push_back(interger);
+			}
+			int int_index = 1;
+
+			for (int& i : comp_var->int_list) //[path, name]
+			{
+				std::string p = "Int_" + std::to_string(int_index);
+
+				std::string s_name = std::to_string(int_index);
+				_levelEditor->LE_AddInputIntProperty(p, i, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
+				int_index++;
+			}
+
+			//In progress
+			/*
+			if (ImGui::Button("Add String"))
+			{
+				LocalString ls;
+				comp_var->string_list.push_back(ls);
+			}
+			int str_index = 1;
+
+			for (LocalString<125>& str : comp_var->string_list) //[path, name]
+			{
+				std::string p = "String_" + std::to_string(str_index);
+				/*
+				std::string s_name = str;
+				_levelEditor->LE_AddInputText(p, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
+					[&str, &s_name]()
+					{
+						str = s_name.c_str();
+					});
+				str_index++;
+			}*/
+
+		}
+	}
+
+	if (!_notRemove)
+	{
+		//ent.RemoveComponent<ComponentLoadAudio>();
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentLoadAudio>()->Write(), typeid(ComponentLoadAudio).hash_code() };
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+		_notRemove = true;
+	}
+
+	ImGui::Separator();
+}
+
 void InspectorWindow::AddSelectedComps(Entity& ent)
 {
 	_levelEditor->LE_AddCombo("##AddComponentsCombo", _itemType,
@@ -1025,7 +1114,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  C#Script",
 			"  Canvas",
 			"  PlayerStats",
-			"  CauldronStats"
+			"  CauldronStats",
+			"  VariablesComp"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -1144,6 +1234,15 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			if (!ent.getComponent<CauldronStatsComponent>())
 			{
 				ENTITY_COMP_DOC comp{ ent, CauldronStatsComponent().Write(), typeid(CauldronStatsComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		case 11: // ComponentVariable
+		{
+			if (!ent.getComponent<ComponentVariables>())
+			{
+				ENTITY_COMP_DOC comp{ ent, ComponentVariables().Write(), typeid(ComponentVariables).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;
