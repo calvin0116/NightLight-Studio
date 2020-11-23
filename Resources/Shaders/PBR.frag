@@ -39,16 +39,15 @@ struct SpotLight {
 };
 
 // PBR Materials
-
-
-// Fragment material
-uniform vec3 ambient;
-uniform vec3 diffuse;
-uniform vec3 specular;
-uniform float shininess;
+uniform vec3 Albedo;
+uniform float Metallic;
+uniform float Roughness;
 
 // Current maximum permitted lights per type
 #define MAX_LIGHTS 30
+
+// defined PI
+const float PI = 3.14159265359f;
 
 layout (std140) uniform LightCalcBlock
 {
@@ -69,92 +68,220 @@ vec3 CalcDLight(DirLight light, vec3 Normal, vec3 viewDir);
 vec3 CalcPLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSLight(SpotLight light, vec3 Normal, vec3 fragPos, vec3 viewDir);
 
+float DistributionGGX(float NdotH, float roughness); // Normal distribution
+vec3 GeometrySchlickGGX(float HdotV, vec3 BaseReflectivity); // Fresnel Schlick
+// I MIXED THESE UP FUCK
+
+float GeometrySmith(float NdotV, float NdotL, float roughness); // Smith's method
+
+
+
+
+
 void main(void)
 {
+    vec3 albedo = Albedo;
+    float metallic = Metallic;
+    float roughness = Roughness;
+    float ao = 1.f;
+
+    // In case of textures, calculate properties for each point
+    //vec3 albedo = texture(albedoTex, texCoords).rgb;
+    //float metallic = texture(metallicTex, texCoords).r;
+    //float roughness = texture(roughnessTex, texCoords).r;
+    //float ao = texture(aoTex, texCoords).r;
+
     // properties
-    vec3 norm = normalize(normal);
-    vec3 viewDir = normalize(viewPos - fragPos);
-    vec3 result = vec3(0.f,0.f,0.f);
-    
+    vec3 N = normalize(normal); // required normal vector
+    vec3 V = normalize(viewPos - fragPos); // required view vector
+
+    // required Base reflectivity
+    vec3 F0 = vec3(0.04f);
+
+    // calculate reflectance at normal incidence
+    // mix function interpolates between two values, F0 and albedo in our case
+    // if dia-electric(metallic = 0), we get F0
+    // if metal(metallic = 1), we get albedo
+
+    // for metallic between 0 to 1, we get interpolated values in between the two
+    // in this case, if metallic is closer to 1, we get value closer to albedo
+    F0 = mix(F0, albedo, metallic);
+
+    // Reflectance equation
+    // We accumulate the output luminance in this variable
+    vec3 Lo = vec3(0.f);
+
+    // Calculate lights here
     // Calculation for all directional lights
+    // light vector is handled differently
     for(int i = 0; i < dLights_Num; i++)
-        result += CalcDLight(dLights[i], norm, viewDir);
+    {
+        // calculate per-light radiance
+    }
+
     // Calculation for all point lights
+    // Should be quite easy due to sample code
     for(int j = 0; j < pLights_Num; j++)
-        result += CalcPLight(pLights[j], norm, fragPos, viewDir);
+    {
+        // calculate per-light radiance
+        vec3 L = normalize(pLights[j].position - fragPos); // light vector
+        vec3 H = normalize(V + L); // Halfway-bisecting vector
+        float distance = length(pLights[j].position - fragPos);
+        float attenuation = 1.f / (distance * distance); // inverse squared
+        //float attenuation = 1.f / ((1.f + pLights[j].attenuation) * (distance * distance));
+        vec3 radiance = pLights[j].diffuse * attenuation; // diffuse used in place of color
+        //vec3 radiance = vec3(1.f) * attenuation; // diffuse used in place of color
+
+        // Cook-Torrance BRDF
+        // epsilon to avoid division by zero
+        float NdotV = max(dot(N, V), 0.0000001f); 
+        float NdotL = max(dot(N, L), 0.0000001f);
+        float HdotV = max(dot(H, V), 0.0f);
+        float NdotH = max(dot(norm, H), 0.0f);
+
+        float D = DistributionGGX(NdotH, roughness);
+        float G = GeometrySmith(NdotV, NdotL, roughness);
+        vec3 F = GeometrySchlickGGX(HdotV, F0); // kS
+
+        vec3 specular = D * G * F;
+        specular /= 4.f * NdotV * NdotL;
+
+        // Energy Conservation where diffuse + specular <= 1.f
+        // Calculation of diffuse factor
+        vec3 kD = vec3(1.f) - F;
+
+        // Multiply kD by inverse metalness
+        // since only dia-electric materials have diffuse lighting
+        // Linear blend if partially metal
+        kD *= 1.f - metallic;
+
+        // angle of light to surface affects specular and diffuse
+        // Mix albedo with diffuse, but not specular
+        // This is just how reality works
+        // Specular component bounces off the surface
+        Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+    }
+
     // Calculation for all spot lights
-    for(int k = 0; k < pLights_Num; k++)
-    result += CalcSLight(sLights[k], norm, fragPos, viewDir);
-    
-    fragColor = vec4(result, 1.0);
+    // Similar to point light calculation
+    // for(int k = 0; k < sLights_Num; k++)
+    // {
+
+    // }
+
+
+    // ambient lighting(should be replaced later with environment lighting)
+    vec3 finalAmbient = vec3(0.03f) * albedo * ao;
+
+    vec3 resultColor = finalAmbient + Lo;
+
+    // Tonemapping
+    resultColor = resultColor / (resultColor + vec3(1.0f));
+
+    // Gamma correction
+    // 2.2f is a default gamma value that is the average gamma for most displays
+    // Might replace with uniform gamma value
+    resultColor = pow(resultColor, vec3(1.0f/2.2f));
+
+    fragColor = vec4(resultColor, 1.f); // 1.f should be replaced with uniform later
+
+    // End of PBR calculation
 }
 
 // calculates the color when using a directional light.
-vec3 CalcDLight(DirLight light, vec3 Normal, vec3 viewDir)
+// vec3 CalcDLight(DirLight light, vec3 Normal, vec3 viewDir)
+// {
+//     //vec3 lightDir = normalize(-vec3(viewtransform * vec4(light.direction, 1.0f)));
+//     vec3 lightDir = normalize(-light.direction);
+//     // diffuse shading
+//     float diff = max(dot(Normal, lightDir), 0.0f);
+//     // specular shading
+//     vec3 reflectDir = reflect(-lightDir, Normal);
+//     float spec = pow(max(dot(viewDir, reflectDir), 0.0f), shininess);
+//     // combine results
+//     vec3 retAmbient = light.ambient * ambient;
+//     vec3 retDiffuse = light.diffuse * diff * diffuse;
+//     vec3 retSpecular = light.specular * spec * specular;
+//     return (retAmbient + retDiffuse + retSpecular);
+// }
+
+// // calculates the color when using a point light.
+// vec3 CalcPLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir)
+// {
+//     //vec3 lightDir = normalize(vec3(viewtransform * vec4(light.position, 1.0f)) - fragPos);
+//     vec3 lightDir = normalize(light.position - fragPos);
+//     // diffuse shading
+//     float diff = max(dot(Normal, lightDir), 0.0f);
+//     // specular shading
+//     vec3 reflectDir = reflect(-lightDir, Normal);
+//     float spec = pow(max(dot(viewDir, reflectDir), 0.0f), shininess);
+//     // attenuation
+//     //float distance = length(vec3(viewtransform * vec4(light.position, 1.0f)) - fragPos);
+//     float distance = length(light.position- fragPos);
+//     float attenuation = 1.0f / (1.0f + light.attenuation * (distance * distance));
+//     // combine results
+//     vec3 retAmbient = light.ambient * ambient;
+//     vec3 retDiffuse = light.diffuse * diff * diffuse;
+//     vec3 retSpecular = light.specular * spec * specular;
+//     retAmbient *= attenuation;
+//     retDiffuse *= attenuation;
+//     retSpecular *= attenuation;
+//     return (retAmbient + retDiffuse + retSpecular);
+// }
+
+// // calculates the color when using a spot light.
+// vec3 CalcSLight(SpotLight light, vec3 Normal, vec3 fragPos, vec3 viewDir)
+// {
+//     //vec3 lightDir = normalize(vec3(viewtransform * vec4(light.position, 1.0f)) - fragPos);
+//     vec3 lightDir = normalize(light.position - fragPos);
+//     // diffuse shading
+//     float diff = max(dot(Normal, lightDir), 0.0f);
+//     // specular shading
+//     vec3 reflectDir = reflect(-lightDir, Normal);
+//     float spec = pow(max(dot(viewDir, reflectDir), 0.0f), shininess);
+//     // attenuation
+//     //float distance = length(vec3(viewtransform * vec4(light.position, 1.0f)) - fragPos);
+//     float distance = length(light.position- fragPos);
+//     float attenuation = 1.0f / (1.0f + light.attenuation * (distance * distance));    
+//     // spotlight intensity
+//     //float theta = dot(lightDir, normalize(-vec3(viewtransform * vec4(light.direction, 1.0f)))); 
+//     float theta = dot(lightDir, normalize(-light.direction)); 
+//     float epsilon = light.cutOff - light.outerCutOff;
+//     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0f, 1.0f);
+//     // combine results
+//     vec3 retAmbient = light.ambient * ambient;
+//     vec3 retDiffuse = light.diffuse * diff * diffuse;
+//     vec3 retSpecular = light.specular * spec * specular;
+//     retAmbient *= attenuation * intensity;
+//     retDiffuse *= attenuation * intensity;
+//     retSpecular *= attenuation * intensity;
+//     return (retAmbient + retDiffuse + retSpecular);
+// }
+
+float DistributionGGX(float NdotH, float roughness)
 {
-    //vec3 lightDir = normalize(-vec3(viewtransform * vec4(light.direction, 1.0f)));
-    vec3 lightDir = normalize(-light.direction);
-    // diffuse shading
-    float diff = max(dot(Normal, lightDir), 0.0f);
-    // specular shading
-    vec3 reflectDir = reflect(-lightDir, Normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0f), shininess);
-    // combine results
-    vec3 retAmbient = light.ambient * ambient;
-    vec3 retDiffuse = light.diffuse * diff * diffuse;
-    vec3 retSpecular = light.specular * spec * specular;
-    return (retAmbient + retDiffuse + retSpecular);
+    float a = roughness * roughness;
+    float aSqred = a * a;
+    float denom = NdotH * NdotH * (aSqred - 1.0f) + 1.0f;
+    denom = PI * denom * denom;
+    return aSqred / max(denom, 0.0000001f); // MUST avoid division by 0
 }
 
-// calculates the color when using a point light.
-vec3 CalcPLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir)
+vec3 GeometrySchlickGGX(float HdotV, vec3 BaseReflectivity)
 {
-    //vec3 lightDir = normalize(vec3(viewtransform * vec4(light.position, 1.0f)) - fragPos);
-    vec3 lightDir = normalize(light.position - fragPos);
-    // diffuse shading
-    float diff = max(dot(Normal, lightDir), 0.0f);
-    // specular shading
-    vec3 reflectDir = reflect(-lightDir, Normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0f), shininess);
-    // attenuation
-    //float distance = length(vec3(viewtransform * vec4(light.position, 1.0f)) - fragPos);
-    float distance = length(light.position- fragPos);
-    float attenuation = 1.0f / (1.0f + light.attenuation * (distance * distance));
-    // combine results
-    vec3 retAmbient = light.ambient * ambient;
-    vec3 retDiffuse = light.diffuse * diff * diffuse;
-    vec3 retSpecular = light.specular * spec * specular;
-    retAmbient *= attenuation;
-    retDiffuse *= attenuation;
-    retSpecular *= attenuation;
-    return (retAmbient + retDiffuse + retSpecular);
+    // Base Reflectivity will always be in range of 0.f to 1.f
+    // SchlickGGX returns range of BaseReflectivity to 1.f
+    // Return value increases as HdotV decreases
+    // More reflectivity/increased highlights when surface viewed at larger angles
+    return BaseReflectivity + (1.0f - BaseReflectivity) * pow(1.0f - HdotV, 5);
 }
 
-// calculates the color when using a spot light.
-vec3 CalcSLight(SpotLight light, vec3 Normal, vec3 fragPos, vec3 viewDir)
+float GeometrySmith(float NdotV, float NdotL, float roughness)
 {
-    //vec3 lightDir = normalize(vec3(viewtransform * vec4(light.position, 1.0f)) - fragPos);
-    vec3 lightDir = normalize(light.position - fragPos);
-    // diffuse shading
-    float diff = max(dot(Normal, lightDir), 0.0f);
-    // specular shading
-    vec3 reflectDir = reflect(-lightDir, Normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0f), shininess);
-    // attenuation
-    //float distance = length(vec3(viewtransform * vec4(light.position, 1.0f)) - fragPos);
-    float distance = length(light.position- fragPos);
-    float attenuation = 1.0f / (1.0f + light.attenuation * (distance * distance));    
-    // spotlight intensity
-    //float theta = dot(lightDir, normalize(-vec3(viewtransform * vec4(light.direction, 1.0f)))); 
-    float theta = dot(lightDir, normalize(-light.direction)); 
-    float epsilon = light.cutOff - light.outerCutOff;
-    float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0f, 1.0f);
-    // combine results
-    vec3 retAmbient = light.ambient * ambient;
-    vec3 retDiffuse = light.diffuse * diff * diffuse;
-    vec3 retSpecular = light.specular * spec * specular;
-    retAmbient *= attenuation * intensity;
-    retDiffuse *= attenuation * intensity;
-    retSpecular *= attenuation * intensity;
-    return (retAmbient + retDiffuse + retSpecular);
+    float r = roughness + 1.0f;
+    float k = (r * r) / 8.0f;
+    float ggx1 = NdotV / (NdotV * (1.0f - k) + k);
+    float ggx2 = NdotL / (NdotL * (1.0f - k) + k);
+
+    return ggx1 * ggx2;
 }
