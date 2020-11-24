@@ -13,23 +13,27 @@ void DeltaTime::start()
 {
 	currentNumberOfSteps = 0;
 
-	//dt = (float)clock() - t_start; // dt = fixed_dt
+	dt = (float)clock() - t_start; // dt = fixed_dt
 	t_start = clock();
 
-	//while (dt < fixed_dt)
-	//{
-	//	dt = (float)clock() - t_start;
-	//}
+	while (dt < fixed_dt)
+	{
+		dt = (float)clock() - t_start;
+	}
 	// fps is limited in system gfx
 
 	accumulatedTime += dt;
+
+	if (accumulatedTime > (fixed_dt * 5)) // this limits accumulated frames to 5 frames
+		accumulatedTime = (fixed_dt * 5);
 }
 
 void DeltaTime::end()
 {
 	//////
 	// fps end
-	fps = 1000.0f / ((dt + _prevdt) * 0.5f);
+	//fps = 1000.0f / ((dt + _prevdt) * 0.5f);
+	fps = 1000.0f / dt;
 
 	_prevdt = dt;
 	//std::cout << fps << std::endl;
