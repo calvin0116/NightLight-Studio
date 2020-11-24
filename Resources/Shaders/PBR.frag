@@ -7,35 +7,34 @@ in vec3 normal;
 out vec4 fragColor;
 
 struct DirLight {
-    vec3 direction;
-	
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    vec4 direction;
+
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
 };
 
 struct PointLight {
-    vec3 position;
-    
-    float attenuation;
+    vec4 position;
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
+
+    float attenuation;
 };
 
 struct SpotLight {
-    vec3 position;
+    vec4 position;
+    vec4 direction;
+
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
+
     float cutOff;
-
-    vec3 direction;
     float outerCutOff;
-
-    vec3 ambient;
     float attenuation;
-
-    vec3 diffuse;
-    vec3 specular;       
 };
 
 // PBR Materials
@@ -51,32 +50,45 @@ const float PI = 3.14159265359f;
 
 layout (std140) uniform LightCalcBlock
 {
+    DirLight dLights[MAX_LIGHTS];
+    PointLight pLights[MAX_LIGHTS];
+    SpotLight sLights[MAX_LIGHTS];
+
     // Number of lights currently in scene
     int dLights_Num;
     int pLights_Num;
     int sLights_Num;
 
-    vec3 viewPos;
-
-    DirLight dLights[MAX_LIGHTS];
-    PointLight pLights[MAX_LIGHTS];
-    SpotLight sLights[MAX_LIGHTS];
+    vec4 viewPos;
 };
 
-// Function declarations
-vec3 CalcDLight(DirLight light, vec3 Normal, vec3 viewDir);
-vec3 CalcPLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir);
-vec3 CalcSLight(SpotLight light, vec3 Normal, vec3 fragPos, vec3 viewDir);
+float DistributionGGX(float NdotH, float roughness)
+{
+    float a = roughness * roughness;
+    float aSqred = a * a;
+    float denom = (NdotH * NdotH) * (aSqred - 1.0f) + 1.0f;
+    denom = PI * denom * denom;
+    return aSqred / max(denom, 0.0000001f); // MUST avoid division by 0
+}
 
-float DistributionGGX(float NdotH, float roughness); // Normal distribution
-vec3 GeometrySchlickGGX(float HdotV, vec3 BaseReflectivity); // Fresnel Schlick
-// I MIXED THESE UP FUCK
+vec3 FresnelSchlick(float cosTheta, vec3 F0)
+{
+    // Base Reflectivity will always be in range of 0.f to 1.f
+    // SchlickGGX returns range of BaseReflectivity to 1.f
+    // Return value increases as HdotV decreases
+    // More reflectivity/increased highlights when surface viewed at larger angles
+    return F0 + (1.0f - F0) * pow(1.0f - cosTheta, 5);
+}
 
-float GeometrySmith(float NdotV, float NdotL, float roughness); // Smith's method
+float GeometrySmith(float NdotV, float NdotL, float roughness)
+{
+    float r = roughness + 1.0f;
+    float k = (r * r) / 8.0f;
+    float ggx1 = NdotV / (NdotV * (1.0f - k) + k);
+    float ggx2 = NdotL / (NdotL * (1.0f - k) + k);
 
-
-
-
+    return ggx1 * ggx2;
+}
 
 void main(void)
 {
@@ -93,7 +105,7 @@ void main(void)
 
     // properties
     vec3 N = normalize(normal); // required normal vector
-    vec3 V = normalize(viewPos - fragPos); // required view vector
+    vec3 V = normalize(viewPos.xyz - fragPos); // required view vector
 
     // required Base reflectivity
     vec3 F0 = vec3(0.04f);
@@ -117,6 +129,41 @@ void main(void)
     for(int i = 0; i < dLights_Num; i++)
     {
         // calculate per-light radiance
+        vec3 L = normalize(-dLights[i].direction.xyz); // light vector
+        vec3 H = normalize(V + L); // Halfway-bisecting vector
+        vec3 radiance = dLights[i].diffuse.xyz;
+
+        // Cook-Torrance BRDF
+        // epsilon to avoid division by zero
+        float NdotV = max(dot(N, V), 0.0000001f); 
+        float NdotL = max(dot(N, L), 0.0000001f);
+        float HdotV = max(dot(H, V), 0.0f);
+        float NdotH = max(dot(N, H), 0.0f);
+
+        //fragColor = vec4(NdotH,0.f,0.f, 1.f); // 1.f should be replaced with uniform later
+        //return;
+
+        float D = DistributionGGX(NdotH, roughness);
+        float G = GeometrySmith(NdotV, NdotL, roughness);
+        vec3 F = FresnelSchlick(HdotV, F0); // kS
+
+        vec3 specular = D * G * F;
+        specular /= (4.f * NdotV * NdotL);
+
+        // Energy Conservation where diffuse + specular <= 1.f
+        // Calculation of diffuse factor
+        vec3 kD = vec3(1.f) - F;
+
+        // Multiply kD by inverse metalness
+        // since only dia-electric materials have diffuse lighting
+        // Linear blend if partially metal
+        kD *= 1.f - metallic;
+
+        // angle of light to surface affects specular and diffuse
+        // Mix albedo with diffuse, but not specular
+        // This is just how reality works
+        // Specular component bounces off the surface
+        Lo += (kD * albedo / PI + specular) * radiance * NdotL;
     }
 
     // Calculation for all point lights
@@ -124,27 +171,28 @@ void main(void)
     for(int j = 0; j < pLights_Num; j++)
     {
         // calculate per-light radiance
-        vec3 L = normalize(pLights[j].position - fragPos); // light vector
+        vec3 L = normalize(pLights[j].position.xyz - fragPos); // light vector
         vec3 H = normalize(V + L); // Halfway-bisecting vector
-        float distance = length(pLights[j].position - fragPos);
+        float distance = length(pLights[j].position.xyz - fragPos);
         float attenuation = 1.f / (distance * distance); // inverse squared
-        //float attenuation = 1.f / ((1.f + pLights[j].attenuation) * (distance * distance));
-        vec3 radiance = pLights[j].diffuse * attenuation; // diffuse used in place of color
-        //vec3 radiance = vec3(1.f) * attenuation; // diffuse used in place of color
+        vec3 radiance = (pLights[j].diffuse.xyz * (1.f/pLights[j].attenuation)) * attenuation; // diffuse used in place of color
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
         float NdotV = max(dot(N, V), 0.0000001f); 
         float NdotL = max(dot(N, L), 0.0000001f);
         float HdotV = max(dot(H, V), 0.0f);
-        float NdotH = max(dot(norm, H), 0.0f);
+        float NdotH = max(dot(N, H), 0.0f);
+
+        //fragColor = vec4(NdotH,0.f,0.f, 1.f); // 1.f should be replaced with uniform later
+        //return;
 
         float D = DistributionGGX(NdotH, roughness);
         float G = GeometrySmith(NdotV, NdotL, roughness);
-        vec3 F = GeometrySchlickGGX(HdotV, F0); // kS
+        vec3 F = FresnelSchlick(HdotV, F0); // kS
 
         vec3 specular = D * G * F;
-        specular /= 4.f * NdotV * NdotL;
+        specular /= (4.f * NdotV * NdotL);
 
         // Energy Conservation where diffuse + specular <= 1.f
         // Calculation of diffuse factor
@@ -257,31 +305,3 @@ void main(void)
 //     retSpecular *= attenuation * intensity;
 //     return (retAmbient + retDiffuse + retSpecular);
 // }
-
-float DistributionGGX(float NdotH, float roughness)
-{
-    float a = roughness * roughness;
-    float aSqred = a * a;
-    float denom = NdotH * NdotH * (aSqred - 1.0f) + 1.0f;
-    denom = PI * denom * denom;
-    return aSqred / max(denom, 0.0000001f); // MUST avoid division by 0
-}
-
-vec3 GeometrySchlickGGX(float HdotV, vec3 BaseReflectivity)
-{
-    // Base Reflectivity will always be in range of 0.f to 1.f
-    // SchlickGGX returns range of BaseReflectivity to 1.f
-    // Return value increases as HdotV decreases
-    // More reflectivity/increased highlights when surface viewed at larger angles
-    return BaseReflectivity + (1.0f - BaseReflectivity) * pow(1.0f - HdotV, 5);
-}
-
-float GeometrySmith(float NdotV, float NdotL, float roughness)
-{
-    float r = roughness + 1.0f;
-    float k = (r * r) / 8.0f;
-    float ggx1 = NdotV / (NdotV * (1.0f - k) + k);
-    float ggx2 = NdotL / (NdotL * (1.0f - k) + k);
-
-    return ggx1 * ggx2;
-}

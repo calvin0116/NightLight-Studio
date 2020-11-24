@@ -2,7 +2,7 @@
 #include "../Input/SystemInput.h"
 
 #include "../../glm/gtc/matrix_transform.hpp"
-#include "../../glm/gtc/quaternion.hpp"
+//#include "../../glm/gtc/quaternion.hpp"
 
 #include "../IO/Json/Config.h"
 
@@ -22,7 +22,10 @@ namespace NS_GRAPHICS
 		viewVector{},
 		savedTgt(0.0f, 0.0f, 0.0f),
 		savedPitch(0.0f),
-		savedYaw(0.0f)
+		savedYaw(0.0f),
+		_activeSceneCamera{ false },
+		theThridPersonCamPitch{ 0.f },
+		theThridPersonCamYaw{ 0.f }
 	{
 	}
 

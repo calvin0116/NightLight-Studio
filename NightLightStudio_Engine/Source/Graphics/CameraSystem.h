@@ -2,6 +2,7 @@
 
 #include "Camera.h"
 #include "..\Core\DeltaTime.h"
+#include <vector>
 
 namespace NS_GRAPHICS
 {
@@ -13,8 +14,14 @@ namespace NS_GRAPHICS
 		~CameraSystem();
 
 		// Currently only 1 camera
-		// Will be changed to vector of cameras in the future
+		// Editor camera
 		Camera _camera;
+
+		// Vector of cameras, used to cycle through scene cameras
+		std::vector<Camera> _cameras;
+
+		// Check if scene camera is active, if any
+		bool _activeSceneCamera;
 
 		// Check if rotation has been changed
 		bool updatedRot;
@@ -77,6 +84,26 @@ namespace NS_GRAPHICS
 		const float& GetRotationSensitivity();
 		const float& GetDragSensitivity();
 		const float& GetZoomSensitivity();
+
+		////////////////////////////////////////////
+		///NEW QUATERNION CAMERA FUNCTIONS
+		////////////////////////////////////////////
+		
+		// Set current active camera
+		void SetCurrentCamera(const int& cameraID);
+		
+		// Create camera based on provided parameters
+		int CreateCamera(const glm::vec3& position = glm::vec3(0.f,0.f,0.f), const glm::vec3& rotation = glm::vec3(0.f, 0.f, 0.f));
+
+		void RotateCamera();
+
+		void AddRotationToCamera();
+
+		void TranslateCamera();
+
+
+		////////////////////////////////////////////
+
 
 		// Added by LJM
 		void ForceUpdate();

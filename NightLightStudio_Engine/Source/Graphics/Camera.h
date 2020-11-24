@@ -2,6 +2,7 @@
 
 #include "../glm/glm.hpp"
 #include "../glm/gtc/matrix_transform.hpp" // glm::lookAt
+#include "../../glm/gtc/quaternion.hpp"
 #include "CameraSystem.h"
 
 namespace NS_GRAPHICS
@@ -15,7 +16,6 @@ namespace NS_GRAPHICS
 	static const float  MIN_PITCH = -MAX_PITCH;
 	static const float  ROTATION_SENSITIVITY = 1000.f;
 	static const float  POSITION_SENSITIVITY = 600.f;
-	//static const float  ZOOM_SENSITIVITY = 150.f;
 	static const float  ZOOM_SENSITIVITY = 15.f;
 
 	class Camera
@@ -28,6 +28,7 @@ namespace NS_GRAPHICS
 		glm::vec3 cameraFront;
 		glm::vec3 cameraRight;
 		glm::vec3 cameraUp;
+		glm::quat m_orientation;
 
 		// Dictates how fast the camera will move
 		float _rotation_sensitivity = 1000.f;
@@ -38,19 +39,29 @@ namespace NS_GRAPHICS
 		// Given in radians
 		float cameraYaw;	// x-axis rotation (Rotation about y axis vector)
 		float cameraPitch;  // y-axis rotation (Rotation about x axis vector)
+		float cameraRoll;   // z-axis rotation (Rotation about z axis vector)
+
+		// Quaternion camera functions
 
 		//////////////////////////////////////////////////////////////
 		///// PUBLIC FUNCTIONS
 	public:
 		Camera()
 			: globalUp(0.f, 1.f, 0.f),
-			cameraPos(0.f, 20.f, 500.f),
+			cameraPos(0.f, 50.f, 300.f),
 			cameraFront(0.f, 0.f, -1.f),
 			cameraRight{ glm::normalize(glm::cross(cameraFront, globalUp)) },
 			cameraUp{ glm::normalize(glm::cross(cameraRight, cameraFront)) },
 			cameraYaw{ -HALF_PI },
-			cameraPitch{ 0.f }
+			cameraPitch{ 0.f },
+			cameraRoll{ 0.f }
 		{
+			glm::quat qPitch = glm::angleAxis(cameraPitch, glm::vec3(1, 0, 0));
+			glm::quat qYaw = glm::angleAxis(cameraYaw, glm::vec3(0, 1, 0));
+
+			//For a FPS camera we can omit roll
+			m_orientation = qPitch * qYaw;
+			m_orientation = glm::normalize(m_orientation);
 		}
 
 		~Camera() = default;
@@ -58,6 +69,20 @@ namespace NS_GRAPHICS
 		glm::mat4 GetViewMatrix()
 		{
 			return glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+
+			//FPS camera:  RotationX(pitch) * RotationY(yaw)
+			//glm::quat qPitch = glm::angleAxis(cameraPitch, glm::vec3(1, 0, 0));
+			//glm::quat qYaw = glm::angleAxis(cameraYaw, glm::vec3(0, 1, 0));
+			////glm::quat qRoll = glm::angleAxis(cameraRoll, glm::vec3(0, 0, 1));
+
+			////For a FPS camera we can omit roll
+			//m_orientation = qPitch * qYaw;
+			//m_orientation = glm::normalize(m_orientation);
+			//glm::mat4 rotate = glm::mat4_cast(m_orientation);
+
+			//glm::mat4 translate = glm::translate(glm::mat4(1.f), -cameraPos);
+
+			//return rotate * translate;
 		}
 
 		const glm::vec3& GetPosition()

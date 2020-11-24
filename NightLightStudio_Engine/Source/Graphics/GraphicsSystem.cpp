@@ -443,7 +443,7 @@ namespace NS_GRAPHICS
 					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-					glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
+					glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
 					shaderManager->StopProgram();
 				}
 				else
