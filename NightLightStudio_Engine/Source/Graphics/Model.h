@@ -4,28 +4,35 @@
 #include "Mesh.h"
 #include "../Window/WndUtils.h"
 #include "../glm/mat4x4.hpp"
+#include "../glm/gtx/quaternion.hpp"
 
 namespace NS_GRAPHICS
 {
 	//Local Path For Custom Graphics Files
 	static std::string s_LocalPathName = "Asset\\Model\\";
 	static std::string s_ModelFileType = ".model";
+	const unsigned MAX_BONE_COUNT = 64;
 
 	struct Animation
 	{
-		struct Keyframes
+		struct KeyFrames
 		{
 			struct JointTransforms
 			{
 				glm::vec3 _position;
-				glm::vec3 _rotation;
+				glm::quat _rotation;
+				glm::vec3 _scale;
 			};
+
+			KeyFrames() { _jointTransforms.resize(MAX_BONE_COUNT); _time = 0.0f; }
+			~KeyFrames() = default;
 
 			std::vector<JointTransforms> _jointTransforms;
 			float _time;
 		};
 
-		std::vector<Keyframes> _frames;
+		std::vector<KeyFrames> _frames;
+		std::vector<unsigned> _frameCount;
 		std::string _animName;
 
 	};
@@ -59,6 +66,8 @@ namespace NS_GRAPHICS
 		std::vector<BoneData> _bones;
 		std::map<std::string, unsigned> _boneMapping;
 		unsigned _boneCount = 0;
+
+		glm::mat4 _globalInverseTransform;
 
 		Model() = default;
 		~Model() = default;

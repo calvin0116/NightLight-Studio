@@ -42,7 +42,8 @@ namespace NS_GRAPHICS
 		_hdrID{ 0 },
 		_projectionMatrix{ glm::mat4(1.0f) },
 		_viewMatrix{ glm::mat4(1.0f) },
-		_orthoMatrix{ glm::mat4(1.0f) }
+		_orthoMatrix{ glm::mat4(1.0f) },
+		_testTimeElapsed{0.0f}
 	{
 	}
 
@@ -53,6 +54,8 @@ namespace NS_GRAPHICS
 	void GraphicsSystem::Update()
 	{
 		cameraManager->Update();
+		//0.01f ms to s
+		_testTimeElapsed += DELTA_T->dt * DT_SCALE;
 
 		if (cameraManager->CheckUpdate())
 		{
@@ -66,6 +69,8 @@ namespace NS_GRAPHICS
 		Render();
 
 		uiManager->Update();
+
+		//std::cout << "Time current passed: " << _testTimeElapsed << std::endl;
 	}
 
 	void GraphicsSystem::Free()
@@ -355,7 +360,7 @@ namespace NS_GRAPHICS
 				{
 					if (graphicsComp->_renderType == RENDERTYPE::SOLID)
 					{
-						shaderManager->StartProgram(1); // solid program
+						shaderManager->StartProgram(6); // solid program
 						glBindVertexArray(mesh->VAO);
 
 						// Update model and uniform for material

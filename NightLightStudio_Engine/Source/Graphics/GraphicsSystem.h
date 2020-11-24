@@ -154,6 +154,8 @@ namespace NS_GRAPHICS
 
         // Should NOT be calculated every frame
         glm::mat4 _orthoMatrix;
+
+        float _testTimeElapsed;
     };
 
     //GLOBAL pointer to an instance of graphic system

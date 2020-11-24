@@ -2,6 +2,7 @@
 #include "../../framework.h"
 #include <iostream>
 #include <string>
+#include <../glm/gtx/quaternion.hpp>
 
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -248,8 +249,8 @@ namespace NS_GRAPHICS
 	{
 		for (unsigned int i = 0; i < scene->mNumAnimations; ++i)
 		{
-			Animation* newAnim = new Animation();
-			model->_animations.insert(std::make_pair(scene->mAnimations[i]->mName.C_Str(), newAnim));
+			//Animation* newAnim = new Animation();
+			//model->_animations.insert(std::make_pair(scene->mAnimations[i]->mName.C_Str(), newAnim));
 			//for (unsigned j = 0; j < scene->mAnimations[i]->mNumChannels; ++j)
 			//{
 
@@ -280,6 +281,211 @@ namespace NS_GRAPHICS
 		glm[3][3] = ai.d4;
 	}
 
+	void ModelLoader::CalcInterpolatedScaling(glm::vec3& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
+	{
+		if (pNodeAnim->mNumScalingKeys == 1) {
+			Out.x = pNodeAnim->mScalingKeys[0].mValue.x;
+			Out.y = pNodeAnim->mScalingKeys[0].mValue.y;
+			Out.z = pNodeAnim->mScalingKeys[0].mValue.z;
+			return;
+		}
+
+		unsigned ScalingIndex = FindScaling(AnimationTime, pNodeAnim);
+		unsigned NextScalingIndex = (ScalingIndex + 1);
+		assert(NextScalingIndex < pNodeAnim->mNumScalingKeys);
+		float DeltaTime = (float)(pNodeAnim->mScalingKeys[NextScalingIndex].mTime - pNodeAnim->mScalingKeys[ScalingIndex].mTime);
+		float Factor = (AnimationTime - (float)pNodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
+		assert(Factor >= 0.0f && Factor <= 1.0f);
+		const aiVector3D& Start = pNodeAnim->mScalingKeys[ScalingIndex].mValue;
+		const aiVector3D& End = pNodeAnim->mScalingKeys[NextScalingIndex].mValue;
+		aiVector3D Delta = End - Start;
+		glm::vec3 deltaScale;
+		deltaScale.x = Delta.x;
+		deltaScale.y = Delta.y;
+		deltaScale.z = Delta.z;
+
+		glm::vec3 startScale;
+		startScale.x = Start.x;
+		startScale.y = Start.y;
+		startScale.z = Start.z;
+
+		glm::vec3 endScale;
+		endScale.x = End.x;
+		endScale.y = End.y;
+		endScale.z = End.z;
+
+		Out = startScale + endScale * deltaScale;
+	}
+
+	void ModelLoader::CalcInterpolatedRotation(glm::quat& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
+	{
+		// we need at least two values to interpolate...
+		if (pNodeAnim->mNumRotationKeys == 1) {
+			Out.x = pNodeAnim->mRotationKeys[0].mValue.x;
+			Out.y = pNodeAnim->mRotationKeys[0].mValue.y;
+			Out.z = pNodeAnim->mRotationKeys[0].mValue.z;
+			Out.w = pNodeAnim->mRotationKeys[0].mValue.w;
+			return;
+		}
+
+		unsigned RotationIndex = FindRotation(AnimationTime, pNodeAnim);
+		unsigned NextRotationIndex = (RotationIndex + 1);
+		assert(NextRotationIndex < pNodeAnim->mNumRotationKeys);
+		float DeltaTime = (float)(pNodeAnim->mRotationKeys[NextRotationIndex].mTime - pNodeAnim->mRotationKeys[RotationIndex].mTime);
+		float Factor = (AnimationTime - (float)pNodeAnim->mRotationKeys[RotationIndex].mTime) / DeltaTime;
+		assert(Factor >= 0.0f && Factor <= 1.0f);
+		aiQuaternion currentRotate;
+		const aiQuaternion& StartRotationQ = pNodeAnim->mRotationKeys[RotationIndex].mValue;
+		const aiQuaternion& EndRotationQ = pNodeAnim->mRotationKeys[NextRotationIndex].mValue;
+		aiQuaternion::Interpolate(currentRotate, StartRotationQ, EndRotationQ, Factor);
+		currentRotate = currentRotate.Normalize();
+
+		Out.x = currentRotate.x;
+		Out.y = currentRotate.y;
+		Out.z = currentRotate.z;
+		Out.w = currentRotate.w;
+	}
+
+	void ModelLoader::CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
+	{
+		if (pNodeAnim->mNumPositionKeys == 1) {
+			Out.x = pNodeAnim->mPositionKeys[0].mValue.x;
+			Out.y = pNodeAnim->mPositionKeys[0].mValue.y;
+			Out.z = pNodeAnim->mPositionKeys[0].mValue.z;
+			return;
+		}
+
+		unsigned PositionIndex = FindPosition(AnimationTime, pNodeAnim);
+		unsigned NextPositionIndex = (PositionIndex + 1);
+		assert(NextPositionIndex < pNodeAnim->mNumPositionKeys);
+		float DeltaTime = (float)(pNodeAnim->mPositionKeys[NextPositionIndex].mTime - pNodeAnim->mPositionKeys[PositionIndex].mTime);
+		float Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
+		assert(Factor >= 0.0f && Factor <= 1.0f);
+		const aiVector3D& Start = pNodeAnim->mPositionKeys[PositionIndex].mValue;
+		const aiVector3D& End = pNodeAnim->mPositionKeys[NextPositionIndex].mValue;
+		aiVector3D Delta = End - Start;
+		
+		glm::vec3 deltaPos;
+		deltaPos.x = Delta.x;
+		deltaPos.y = Delta.y;
+		deltaPos.z = Delta.z;
+
+		glm::vec3 startPos;
+		startPos.x = Start.x;
+		startPos.y = Start.y;
+		startPos.z = Start.z;
+
+		glm::vec3 endPos;
+		endPos.x = End.x;
+		endPos.y = End.y;
+		endPos.z = End.z;
+
+		Out = startPos + endPos * deltaPos;
+	}
+
+	unsigned ModelLoader::FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim)
+	{
+		if (pNodeAnim->mNumScalingKeys > 0)
+		{
+			for (unsigned i = 0; i < pNodeAnim->mNumScalingKeys - 1; i++) {
+				if (AnimationTime < (float)pNodeAnim->mScalingKeys[i + 1].mTime) {
+					return i;
+				}
+			}
+		}
+		return 0;
+	}
+
+	unsigned ModelLoader::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim)
+	{
+		if (pNodeAnim->mNumRotationKeys > 0)
+		{
+			for (unsigned i = 0; i < pNodeAnim->mNumRotationKeys - 1; i++) {
+				if (AnimationTime < (float)pNodeAnim->mRotationKeys[i + 1].mTime) {
+					return i;
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	unsigned ModelLoader::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
+	{
+
+		for (unsigned i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++) {
+			if (AnimationTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime) {
+				return i;
+			}
+		}
+
+		return 0;
+	}
+
+	const aiNodeAnim* ModelLoader::FindNodeAnim(const aiAnimation* pAnimation, const string NodeName)
+	{
+		for (unsigned i = 0; i < pAnimation->mNumChannels; i++) {
+			const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
+
+			if (string(pNodeAnim->mNodeName.data) == NodeName) {
+				return pNodeAnim;
+			}
+		}
+
+		return NULL;
+	}
+
+	void ModelLoader::ReadNodeHeirarchy(const aiScene* scene, float AnimationTime, const aiNode* pNode, const glm::mat4x4& ParentTransform, Model* model)
+	{
+		string NodeName(pNode->mName.data);
+
+		const aiAnimation* pAnimation = scene->mAnimations[0];
+
+		
+		glm::mat4 NodeTransformation;
+
+		AiToGLM(pNode->mTransformation, NodeTransformation);
+
+		const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
+
+		if (pNodeAnim) {
+			// Interpolate scaling and generate scaling transformation matrix
+			//aiVector3D Scaling;
+			glm::vec3 Scaling;
+			CalcInterpolatedScaling(Scaling, AnimationTime, pNodeAnim);
+			glm::mat4 ScalingM;
+			glm::scale(ScalingM, glm::vec3(Scaling.x, Scaling.y, Scaling.z));
+			//ScalingM.InitScaleTransform(Scaling.x, Scaling.y, Scaling.z);
+
+			// Interpolate rotation and generate rotation transformation matrix
+			glm::quat rot;
+			CalcInterpolatedRotation(rot, AnimationTime, pNodeAnim);
+			glm::mat4 rotMat = glm::mat4_cast(rot);
+
+			// Interpolate translation and generate translation transformation matrix
+			glm::vec3 Translation;
+			CalcInterpolatedPosition(Translation, AnimationTime, pNodeAnim);
+			//Matrix4f TranslationM;
+			glm::mat4 TranslationM;
+			glm::translate(TranslationM, glm::vec3(Translation.x, Translation.y, Translation.z));
+			//TranslationM.InitTranslationTransform(Translation.x, Translation.y, Translation.z);
+
+			// Combine the above transformations
+			NodeTransformation = TranslationM * rotMat * ScalingM;
+		}
+
+		glm::mat4 GlobalTransformation = ParentTransform * NodeTransformation;
+
+		if (model->_boneMapping.find(NodeName) != model->_boneMapping.end()) {
+			unsigned BoneIndex = model->_boneMapping[NodeName];
+			model->_bones[BoneIndex]._boneTransform = model->_globalInverseTransform * GlobalTransformation * model->_bones[BoneIndex]._boneTransformOffset;
+		}
+
+		for (unsigned i = 0; i < pNode->mNumChildren; i++) {
+			ReadNodeHeirarchy(scene, AnimationTime, pNode->mChildren[i], GlobalTransformation, model);
+		}
+	}
+
 	bool ModelLoader::LoadFBX(Model*& model)
 	{
 		std::cout << "Loading FBX..." << std::endl;
@@ -302,6 +508,9 @@ namespace NS_GRAPHICS
 
 			model->_isAnimated = true;
 			model->_animatedMeshes.reserve(scene->mNumMeshes);
+
+			AiToGLM(scene->mRootNode->mTransformation, model->_globalInverseTransform);
+			model->_globalInverseTransform = glm::inverse(model->_globalInverseTransform);
 
 			//Process Bone Data
 			//ProcessBone();

@@ -28,6 +28,15 @@ namespace NS_GRAPHICS
 
 		void AiToGLM(const aiMatrix4x4& ai, glm::mat4& glm);
 
+		void CalcInterpolatedScaling(glm::vec3& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+		void CalcInterpolatedRotation(glm::quat& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+		void CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+		unsigned FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
+		unsigned FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
+		unsigned FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
+		const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
+		void ReadNodeHeirarchy(const aiScene* scene, float AnimationTime, const aiNode* pNode, const glm::mat4x4& ParentTransform, Model* model);
+
 	public:
 		// Unique Singleton instance
 		static ModelLoader& GetInstance()

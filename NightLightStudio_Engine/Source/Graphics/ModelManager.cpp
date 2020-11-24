@@ -42,6 +42,8 @@ namespace NS_GRAPHICS
 	{
 		auto check = _modelList.find(modelkey);
 
+		std::cout << "Size of animated mesh size : " << sizeof(AnimatedMesh::VertexData) << std::endl;;
+
 		if (check != _modelList.end())
 		{
 			// Make new copy of model
@@ -79,6 +81,12 @@ namespace NS_GRAPHICS
 					// normals attribute
 					glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData), (void*)(sizeof(glm::vec3) + sizeof(glm::vec2)));
 					glEnableVertexAttribArray(2);
+					// bone id
+					glVertexAttribIPointer(3, 4, GL_INT, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData), (void*)(sizeof(glm::vec3) + sizeof(glm::vec2) + sizeof(glm::vec3)));
+					glEnableVertexAttribArray(3);
+					// bone weight
+					glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData), (void*)(sizeof(glm::vec3) + sizeof(glm::vec2) + sizeof(glm::vec3) + sizeof(glm::ivec4)));
+					glEnableVertexAttribArray(4);
 
 					// Indices
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
@@ -88,19 +96,33 @@ namespace NS_GRAPHICS
 					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 					glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
 
-					glEnableVertexAttribArray(3);
-					glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
-					glEnableVertexAttribArray(4);
-					glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
-					glEnableVertexAttribArray(5);
-					glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
-					glEnableVertexAttribArray(6);
-					glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+					//glEnableVertexAttribArray(3);
+					//glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+					//glEnableVertexAttribArray(4);
+					//glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+					//glEnableVertexAttribArray(5);
+					//glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+					//glEnableVertexAttribArray(6);
+					//glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
 
-					glVertexAttribDivisor(3, 1);
-					glVertexAttribDivisor(4, 1);
+					//glVertexAttribDivisor(3, 1);
+					//glVertexAttribDivisor(4, 1);
+					//glVertexAttribDivisor(5, 1);
+					//glVertexAttribDivisor(6, 1);
+
+					glEnableVertexAttribArray(5);
+					glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+					glEnableVertexAttribArray(6);
+					glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+					glEnableVertexAttribArray(7);
+					glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+					glEnableVertexAttribArray(8);
+					glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+
 					glVertexAttribDivisor(5, 1);
 					glVertexAttribDivisor(6, 1);
+					glVertexAttribDivisor(7, 1);
+					glVertexAttribDivisor(8, 1);
 
 					glBindBuffer(GL_ARRAY_BUFFER, 0);
 					glBindVertexArray(0);

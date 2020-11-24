@@ -212,6 +212,7 @@ namespace NS_GRAPHICS
 		LoadShader(std::string("../Resources/Shaders/withlights_textured.vert"), std::string("../Resources/Shaders/withlights_textured.frag")); // 4
 		LoadShader(std::string("../Resources/Shaders/ui.vert"), std::string("../Resources/Shaders/ui.frag")); // 5
 		LoadShader(std::string("../Resources/Shaders/PBR.vert"), std::string("../Resources/Shaders/PBR.frag")); // 6
+		LoadShader(std::string("../Resources/Shaders/withlights_animated.vert"), std::string("../Resources/Shaders/withlights_animated.frag")); // 7
 		//LoadShader("","");
 		//LoadShader("","");
 		//LoadShader("","");
