@@ -266,7 +266,7 @@ namespace NS_COLLISION
 		}
 	}
 
-	void CollisionSystem::Update()
+	void CollisionSystem::FixedUpdate()
 	{
 
 		//draw debug mesh

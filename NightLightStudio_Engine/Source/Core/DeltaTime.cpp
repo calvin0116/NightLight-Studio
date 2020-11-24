@@ -22,10 +22,22 @@ void DeltaTime::start()
 	}
 	// fps is limited in system gfx
 
-	accumulatedTime += dt;
+	//accumulatedTime += dt;
 
-	if (accumulatedTime > (fixed_dt * 5)) // this limits accumulated frames to 5 frames
-		accumulatedTime = (fixed_dt * 5);
+	//
+	int steps = (dt / fixed_dt);
+	float timeSteps = steps * fixed_dt;
+	//accumulatedTime += timeSteps;
+	accumulatedTime = timeSteps;
+
+	const int maxAccFrames = 1;
+	if (accumulatedTime > (fixed_dt * maxAccFrames)) // this limits accumulated frames to x frames
+		accumulatedTime = (fixed_dt * maxAccFrames);
+
+	// fml
+	real_dt = dt;
+	dt = fixed_dt;
+	//accumulatedTime = fixed_dt;
 }
 
 void DeltaTime::end()
@@ -33,7 +45,8 @@ void DeltaTime::end()
 	//////
 	// fps end
 	//fps = 1000.0f / ((dt + _prevdt) * 0.5f);
-	fps = 1000.0f / dt;
+	//fps = 1000.0f / dt;
+	fps = 1000.0f / real_dt;
 
 	_prevdt = dt;
 	//std::cout << fps << std::endl;
