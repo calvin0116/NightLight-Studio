@@ -17,20 +17,34 @@ inline void ComponentVariables::Read(Value& val)
 		if (itr->name == "IntList")
 		{
 			auto int_list_val = itr->value.GetArray();
-			for (int i = 0; i < int_list_val.Size(); ++i)
-				int_list.push_back(int_list_val[i].GetInt());
+			if(int_list.size() == 0)
+				for (int i = 0; i < int_list_val.Size(); ++i)
+					int_list.push_back(int_list_val[i].GetInt());
+			else
+				for (int i = 0; i < int_list_val.Size(); ++i)
+					int_list.at(i) = int_list_val[i].GetInt();
 		}
 		else if(itr->name == "FloatList")
 		{
 			auto float_list_val = itr->value.GetArray();
-			for (int i = 0; i < float_list_val.Size(); ++i)
-				float_list.push_back(float_list_val[i].GetFloat());
+			
+			if (float_list.size() == 0)
+				for (int i = 0; i < float_list_val.Size(); ++i)
+					float_list.push_back(float_list_val[i].GetFloat());
+			else
+				for (int i = 0; i < float_list_val.Size(); ++i)
+					float_list.at(i) = float_list_val[i].GetFloat();
 		}
 		else if (itr->name == "StringList")
 		{
 			auto string_list_val = itr->value.GetArray();
-			for (int i = 0; i < string_list_val.Size(); ++i)
-				string_list.push_back(LocalString(string_list_val[i].GetString()) );		//May not work
+			
+			if (string_list.size() == 0)
+				for (int i = 0; i < string_list_val.Size(); ++i)
+					string_list.push_back(LocalString(string_list_val[i].GetString()) );		
+			else
+				for (int i = 0; i < string_list_val.Size(); ++i)
+					string_list.at(i) = LocalString(string_list_val[i].GetString());
 		}
 	}
 }
