@@ -175,7 +175,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ComponentAnimation.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="LocalString.h" />
