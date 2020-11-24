@@ -179,6 +179,8 @@
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="LocalString.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Source\Ai\AiManager.h" />
+    <ClInclude Include="Source\Ai\WayPointManager.h" />
     <ClInclude Include="Source\Audio\SystemAudio.h" />
     <ClInclude Include="Source\Collision\CollisionDebugLines.h" />
     <ClInclude Include="Source\Collision\CollisionMathLib.h" />

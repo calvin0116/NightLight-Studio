@@ -238,6 +238,8 @@
     <ClInclude Include="Source\Window\WndUtils.h" />
     <ClInclude Include="Source\Mono\Binding\Systems\InputBind.h" />
     <ClInclude Include="Source\Component\ComponentVariables.h" />
+    <ClInclude Include="Source\Ai\AiManager.h" />
+    <ClInclude Include="Source\Ai\WayPointManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
