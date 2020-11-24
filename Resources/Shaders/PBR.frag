@@ -212,10 +212,51 @@ void main(void)
 
     // Calculation for all spot lights
     // Similar to point light calculation
-    // for(int k = 0; k < sLights_Num; k++)
-    // {
+    for(int k = 0; k < sLights_Num; k++)
+    {
+        // calculate per-light radiance
+        vec3 L = normalize(sLights[k].position.xyz - fragPos); // light vector
+        vec3 H = normalize(V + L); // Halfway-bisecting vector
+        float distance = length(sLights[k].position.xyz - fragPos);
+        float attenuation = 1.f / (distance * distance); // inverse squared
 
-    // }
+        float theta = dot(L, normalize(-sLights[k].direction.xyz)); 
+        float epsilon = sLights[k].cutOff - sLights[k].outerCutOff;
+
+        float intensity = clamp((theta - sLights[k].outerCutOff) / epsilon, 0.f, 1.f);
+
+        vec3 radiance = (sLights[k].diffuse.xyz * (1.f/sLights[k].attenuation))
+                        * attenuation * intensity; // diffuse used in place of color
+
+        // Cook-Torrance BRDF
+        // epsilon to avoid division by zero
+        float NdotV = max(dot(N, V), 0.0000001f); 
+        float NdotL = max(dot(N, L), 0.0000001f);
+        float HdotV = max(dot(H, V), 0.0f);
+        float NdotH = max(dot(N, H), 0.0f);
+
+        float D = DistributionGGX(NdotH, roughness);
+        float G = GeometrySmith(NdotV, NdotL, roughness);
+        vec3 F = FresnelSchlick(HdotV, F0); // kS
+
+        vec3 specular = D * G * F;
+        specular /= (4.f * NdotV * NdotL);
+
+        // Energy Conservation where diffuse + specular <= 1.f
+        // Calculation of diffuse factor
+        vec3 kD = vec3(1.f) - F;
+
+        // Multiply kD by inverse metalness
+        // since only dia-electric materials have diffuse lighting
+        // Linear blend if partially metal
+        kD *= 1.f - metallic;
+
+        // angle of light to surface affects specular and diffuse
+        // Mix albedo with diffuse, but not specular
+        // This is just how reality works
+        // Specular component bounces off the surface
+        Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+    }
 
 
     // ambient lighting(should be replaced later with environment lighting)
@@ -235,73 +276,3 @@ void main(void)
 
     // End of PBR calculation
 }
-
-// calculates the color when using a directional light.
-// vec3 CalcDLight(DirLight light, vec3 Normal, vec3 viewDir)
-// {
-//     //vec3 lightDir = normalize(-vec3(viewtransform * vec4(light.direction, 1.0f)));
-//     vec3 lightDir = normalize(-light.direction);
-//     // diffuse shading
-//     float diff = max(dot(Normal, lightDir), 0.0f);
-//     // specular shading
-//     vec3 reflectDir = reflect(-lightDir, Normal);
-//     float spec = pow(max(dot(viewDir, reflectDir), 0.0f), shininess);
-//     // combine results
-//     vec3 retAmbient = light.ambient * ambient;
-//     vec3 retDiffuse = light.diffuse * diff * diffuse;
-//     vec3 retSpecular = light.specular * spec * specular;
-//     return (retAmbient + retDiffuse + retSpecular);
-// }
-
-// // calculates the color when using a point light.
-// vec3 CalcPLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir)
-// {
-//     //vec3 lightDir = normalize(vec3(viewtransform * vec4(light.position, 1.0f)) - fragPos);
-//     vec3 lightDir = normalize(light.position - fragPos);
-//     // diffuse shading
-//     float diff = max(dot(Normal, lightDir), 0.0f);
-//     // specular shading
-//     vec3 reflectDir = reflect(-lightDir, Normal);
-//     float spec = pow(max(dot(viewDir, reflectDir), 0.0f), shininess);
-//     // attenuation
-//     //float distance = length(vec3(viewtransform * vec4(light.position, 1.0f)) - fragPos);
-//     float distance = length(light.position- fragPos);
-//     float attenuation = 1.0f / (1.0f + light.attenuation * (distance * distance));
-//     // combine results
-//     vec3 retAmbient = light.ambient * ambient;
-//     vec3 retDiffuse = light.diffuse * diff * diffuse;
-//     vec3 retSpecular = light.specular * spec * specular;
-//     retAmbient *= attenuation;
-//     retDiffuse *= attenuation;
-//     retSpecular *= attenuation;
-//     return (retAmbient + retDiffuse + retSpecular);
-// }
-
-// // calculates the color when using a spot light.
-// vec3 CalcSLight(SpotLight light, vec3 Normal, vec3 fragPos, vec3 viewDir)
-// {
-//     //vec3 lightDir = normalize(vec3(viewtransform * vec4(light.position, 1.0f)) - fragPos);
-//     vec3 lightDir = normalize(light.position - fragPos);
-//     // diffuse shading
-//     float diff = max(dot(Normal, lightDir), 0.0f);
-//     // specular shading
-//     vec3 reflectDir = reflect(-lightDir, Normal);
-//     float spec = pow(max(dot(viewDir, reflectDir), 0.0f), shininess);
-//     // attenuation
-//     //float distance = length(vec3(viewtransform * vec4(light.position, 1.0f)) - fragPos);
-//     float distance = length(light.position- fragPos);
-//     float attenuation = 1.0f / (1.0f + light.attenuation * (distance * distance));    
-//     // spotlight intensity
-//     //float theta = dot(lightDir, normalize(-vec3(viewtransform * vec4(light.direction, 1.0f)))); 
-//     float theta = dot(lightDir, normalize(-light.direction)); 
-//     float epsilon = light.cutOff - light.outerCutOff;
-//     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0f, 1.0f);
-//     // combine results
-//     vec3 retAmbient = light.ambient * ambient;
-//     vec3 retDiffuse = light.diffuse * diff * diffuse;
-//     vec3 retSpecular = light.specular * spec * specular;
-//     retAmbient *= attenuation * intensity;
-//     retDiffuse *= attenuation * intensity;
-//     retSpecular *= attenuation * intensity;
-//     return (retAmbient + retDiffuse + retSpecular);
-// }

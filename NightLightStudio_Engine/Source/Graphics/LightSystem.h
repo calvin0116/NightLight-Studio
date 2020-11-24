@@ -108,5 +108,20 @@ namespace NS_GRAPHICS
 		DirLight& GetDirLight(const int& id);
 		SpotLight& GetSpotLight(const int& id);
 		PointLight& GetPointLight(const int& id);
+
+		// NEW INTERFACE FOR LIGHTS
+		// Sets directional light to provided component
+		void SetDirectionalLight(ComponentLight*& comp);
+
+		// Sets point light to provided component
+		void SetPointLight(ComponentLight*& comp);
+
+		// Sets spot light to provided component
+		void SetSpotLight(ComponentLight*& comp);
+
+		// Removes tracker from light component / deletes light
+		void RemoveLight(ComponentLight*& comp);
+
+		void SetActive(ComponentLight*& comp);
 	};
 }
