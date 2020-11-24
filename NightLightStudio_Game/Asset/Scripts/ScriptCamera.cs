@@ -15,8 +15,7 @@ namespace Unicorn
 
     // Direction to move camera
     Vector3 dir = new Vector3(0.0f, 0.0f, 0.0f);
-    float Threshold = 100.0f; // Distance to move before camera follows player
-    float FollowTime = 1.0f; // How long for the camera to catch up to player
+    float Threshold = 50.0f; // Distance to move before camera follows player
 
     public override void Init()
     {
