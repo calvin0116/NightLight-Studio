@@ -19,11 +19,12 @@ struct WayPoint
 	bool isActive;         			//True for usual, false for when obstacle contains the point
 	//NlMath::Vector3D position;
 	//NlMath::Vector3D radius;	    // 0 for none circular waypoint
-	SphereCollider* sphere_col;
+	SphereCollider sphere_col;
 
 	//float cost;               //<-self inserted cost	
 	std::map<CV, int> cost_var;
-	std::shared_ptr<Edges> connected_edges;
+	//std::vector<std::shared_ptr<Edges>> connected_edges;	
+	LocalVector<int> connected_edges;	//Keep track of connecting edges
 };
 
 //Edges that connects two points
@@ -58,24 +59,33 @@ class WayPointManager
 public:
 	void InsertWayPoint(WayPoint& wp) {
 		//0 way point
-		if (!waypoint_list.size())
-			waypoint_list.push_back(std::shared_ptr<WayPoint>(new WayPoint(wp)));
+		waypoint_list.push_back(std::shared_ptr<WayPoint>(new WayPoint(wp)));
 
-		for (auto wp : waypoint_list)
+		for (auto cur_wp : waypoint_list)
 		{
-		
+			float dist = NlMath::Sphere_SphereCollision(cur_wp->sphere_col, wp.sphere_col).length();
+			if (!dist)
+			{
+				Edges* new_edge = new Edges;
+				new_edge->wp1 = waypoint_list.back();
+				new_edge->wp2 = cur_wp;
+				new_edge->cost_var[CV::Distance] = dist;
+
+				edges_list.push_back(std::shared_ptr<Edges>(new_edge));
+			}
 		}
 	}
-	
-	void InsertWayPoint(NlMath::Vector3D position, NlMath::Vector3D radius)
+
+	void InsertWayPoint(NlMath::Vector3D position, float radius)
 	{
 		WayPoint wp;
-		//wp.position = position;
+		wp.sphere_col.colliderPosition = position;
+		wp.sphere_col.radius = radius;
 		//wp.radius = radius;
-		//wp.radius = radius;
+		
 		InsertWayPoint(wp);
 	};
-	
+
 
 	//Void InsertObstacle(AABB aabb collider);
 
@@ -84,5 +94,5 @@ public:
 
 	void Update() {}; //Check for both edges and waypoint if they have been obstructed
 
-	std::vector<NlMath::Vector3D> AstarPathFinding();
+	std::vector<NlMath::Vector3D> AstarPathFinding() {};
 };

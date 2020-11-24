@@ -5,8 +5,9 @@
 
 #include <shellapi.h>
 #include "../../Component/Components.h"
-#include "../PrefabManager.h"
+
 #include "../../Core/SceneManager.h"
+#include "LevelEditor_ECHelper.h"
 
 void AssetInspector::_RecursiveDirectoryTree(const std::string& path)
 {
@@ -225,8 +226,17 @@ void AssetInspector::Run()
                 {
                     if (i >= filesStart && ImGui::IsItemClicked(0))
                     {
+                        
                         _selectedFilePath = files[i];
                         _dragDropFilePath = LE_EraseSubStr(files[i], _currentFilePath);
+
+                        std::string fileType = LE_GetFileType(files[i]);
+                        //For prefab seletion and showcase
+                        if (fileType == "prefab")
+                        {
+                            LE_ECHELPER->SelectPrefab(files[i]);
+                            //LE_ECHELPER->prefab_inst.isActive = true;
+                        }
                     }
 
                     const ImVec2 p0 = ImGui::GetItemRectMin();

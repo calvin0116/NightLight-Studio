@@ -1,6 +1,7 @@
 #pragma once
 #include "../../../framework.h"
 #include "../../Core/Singleton.h"
+#include "../PrefabManager.h"
 
 class LE_ECHelper: public Singleton<LE_ECHelper>
 {
@@ -11,6 +12,7 @@ protected:
 		:selected_ent_amt{0}
 		, selected_ent_id{-1}
 		, setFocus{false}
+		, prefabMode{false}
 	{};
 	~LE_ECHelper() {};
 
@@ -26,7 +28,11 @@ protected:
 	//First = level editor id, second = entity id
 	std::map<int, int> le_id_to_object_id;
 
+	Prefab_Function::PrefabInstances prefab_inst;  //For prefab
+	bool prefabMode;
 public:
+
+
 	//Window focus for inspecter
 	bool setFocus;
 
@@ -37,6 +43,12 @@ public:
 		if(selected_ent_id!= -1)
 			DeSelectEntity(selected_ent_id);
 
+		if (prefab_inst.prefab_id != -1)
+		{
+			prefab_inst.SavePrefab();
+			prefab_inst.prefab_id = -1;		//Deselect prefab
+			prefab_inst.isActive = false;
+		}
 		//Select current entity
 		selected_ents[id] = true;
 		++selected_ent_amt;
@@ -49,6 +61,17 @@ public:
 	{
 		selected_ents[id] = false;
 		--selected_ent_amt;
+	}
+
+	void SelectPrefab(std::string file)
+	{
+		//Deselect Previous entity
+		if (selected_ent_id != -1) {
+			DeSelectEntity(selected_ent_id);
+			selected_ent_id = -1;
+		}
+		prefab_inst.CreatePrefabInstance(file);
+		prefab_inst.isActive = true;
 	}
 
 	//=====================================//
@@ -81,6 +104,10 @@ public:
 		return le_id_to_object_id;
 	}
 
+	Prefab_Function::PrefabInstances GetPrefabInst()
+	{
+		return prefab_inst;
+	}
 };
 
 static LE_ECHelper* LE_ECHELPER = LE_ECHelper::GetInstance();

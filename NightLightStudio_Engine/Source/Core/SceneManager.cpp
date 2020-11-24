@@ -233,7 +233,7 @@ namespace NS_SCENE
 				}
 			}
 
-			NS_SERIALISER::ChangeData(obj_val, SYS_COMPONENT->EntityName[ent.getId()], ent_val->GetObject());
+			NS_SERIALISER::ChangeData(obj_val, G_ECMANAGER->EntityName[ent.getId()], ent_val->GetObject());
 
 			delete ent_val;
 		}
@@ -361,7 +361,7 @@ namespace NS_SCENE
 				}
 			}
 
-			NS_SERIALISER::ChangeData(obj_val, SYS_COMPONENT->EntityName[ent.getId()], ent_val->GetObject());
+			NS_SERIALISER::ChangeData(obj_val, G_ECMANAGER->EntityName[ent.getId()], ent_val->GetObject());
 
 			delete ent_val;
 		}
