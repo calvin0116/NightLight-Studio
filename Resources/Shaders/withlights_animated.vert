@@ -1,6 +1,6 @@
 #version 330 core
 
-const int MAX_JOINTS = 50;
+const int MAX_JOINTS = 64;
 
 layout (location = 0) in vec3 pos;
 layout (location = 1) in vec2 uv;
@@ -22,20 +22,21 @@ out vec3 fragPos;
 out vec3 normal;
 
 void main(void) {
-	vec4 currPose = vec4(0);
-	vec4 currNormal = vec4(0);
+	//vec4 currPose = vec4(0);
+	//vec4 currNormal = vec4(0);
 
-	for(int i = 0; i < 4; i++)
-	{
+	//for(int i = 0; i < 4; i++)
+	//{
 		//Position
-		mat4 transforms = jointsMat[boneID[i]];
-		vec4 posePos = transforms * vec4(pos, 1.0f)
-		currPose += posePos;
+		//mat4 transforms = jointsMat[boneID[i]];
+		//vec4 posePos = transforms * vec4(pos, 1.0f)
+		//currPose += posePos;
 		
 		//Normals
-	}
+	//}
+	
     fragPos = vec3(model * vec4(pos, 1.0f));
-    gl_Position = projection * view * model * currPose;
+    gl_Position = projection * view * model * vec4(pos,1.0f);
     normal = vec3(transpose(inverse(model)) * vec4(norm, 0.f));
     texCoords = uv;
 }
