@@ -175,10 +175,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ComponentAnimation.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="LocalString.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Source\Ai\AiManager.h" />
+    <ClInclude Include="Source\Ai\WayPointManager.h" />
     <ClInclude Include="Source\Audio\SystemAudio.h" />
     <ClInclude Include="Source\Collision\CollisionDebugLines.h" />
     <ClInclude Include="Source\Collision\CollisionMathLib.h" />
@@ -197,6 +200,7 @@
     <ClInclude Include="Source\Component\ComponentManager.h" />
     <ClInclude Include="Source\Component\ComponentManagerTypedefs.h" />
     <ClInclude Include="Source\Component\ComponentMemoryManager.h" />
+    <ClInclude Include="Source\Component\ComponentNavigator.h" />
     <ClInclude Include="Source\Component\ComponentPlayerStats.h" />
     <ClInclude Include="Source\Component\ComponentRigidBody.h" />
     <ClInclude Include="Source\Component\Components.h" />
@@ -240,11 +244,11 @@
     <ClInclude Include="Source\Editor\LevelEditor\WindowsDialogBox.h" />
     <ClInclude Include="Source\Editor\PrefabManager.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
+    <ClInclude Include="Source\Graphics\AnimationController.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
-    <ClInclude Include="Source\Graphics\Joint.h" />
     <ClInclude Include="Source\Graphics\Lights.h" />
     <ClInclude Include="Source\Graphics\LightSystem.h" />
     <ClInclude Include="Source\Graphics\Mesh.h" />
@@ -295,6 +299,7 @@
     <ClInclude Include="Source\Mono\Binding\Components\ComponentLightBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentTransformBind.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentVariablesBind.h" />
     <ClInclude Include="Source\Mono\Binding\Systems\AudioBind.h" />
     <ClInclude Include="Source\Mono\Binding\CustomTypes\Vector3DBind.h" />
     <ClInclude Include="Source\Mono\Binding\Systems\CameraBind.h" />
@@ -365,10 +370,11 @@
     <ClCompile Include="Source\Editor\LevelEditor\WindowsDialogBox.cpp" />
     <ClCompile Include="Source\Editor\PrefabManager.cpp" />
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
+    <ClCompile Include="Source\Graphics\AnimationController.cpp" />
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
+    <ClCompile Include="Source\Graphics\ComponentAnimation.cpp" />
     <ClCompile Include="Source\Graphics\DebugManager.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsSystem.cpp" />
-    <ClCompile Include="Source\Graphics\Joint.cpp" />
     <ClCompile Include="Source\Graphics\LightSystem.cpp" />
     <ClCompile Include="Source\Graphics\Mesh.cpp" />
     <ClCompile Include="Source\Graphics\Model.cpp" />
@@ -406,6 +412,7 @@
     <ClCompile Include="Source\Mono\Binding\Components\ComponentLightBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentTransformBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentVariablesBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Systems\AudioBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\CustomTypes\Vector3DBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Systems\CameraBind.cpp" />

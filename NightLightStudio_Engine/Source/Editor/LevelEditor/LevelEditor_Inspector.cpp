@@ -211,7 +211,7 @@ void InspectorWindow::Start()
 void InspectorWindow::Run()
 {
 	//Check for valid Entity Id
-	if (LE_ECHELPER->GetSelectedEntityID() != -1)
+	if (LE_ECHELPER->GetSelectedEntityID() != -1 || LE_ECHELPER->GetPrefabInst().prefab_id != -1)
 	{
 		if (!ImGui::IsWindowAppearing() && !LE_ECHELPER->setFocus)
 		{
@@ -219,33 +219,38 @@ void InspectorWindow::Run()
 			LE_ECHELPER->setFocus = true;
 		}
 
+		NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = nullptr;
 		//Get entity
-		Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
+		//Entity ent;
+		int id = -1;
+		if (LE_ECHELPER->GetSelectedEntityID() != -1)
+		{
+			g_ecman = G_ECMANAGER;
+			id = LE_ECHELPER->GetSelectedEntityID();
+		}
+		else if (LE_ECHELPER->GetPrefabInst().prefab_id != -1)
+		{
+			g_ecman = G_ECMANAGER_PREFABS;
+			id = LE_ECHELPER->GetPrefabInst().prefab_id;
+		}
+		else
+		{
+			std::cout << "No set manager is allocated" << std::endl;
+		}
+		Entity 	ent = g_ecman->getEntity(id);
 		// Entity name
-		/*
-		ImGuiInputTextFlags itf = 0;
-		itf |= ImGuiInputTextFlags_EnterReturnsTrue;
-
-		char buf[256];
-		strcpy_s(buf, 256,
-			NS_SCENE::SYS_SCENE_MANAGER->EntityName[LE_ECHELPER->GetSelectedEntityID()].c_str()
-		);
-
-		if (ImGui::InputText("Name", buf, 256, itf))
-			NS_SCENE::SYS_SCENE_MANAGER->EntityName[LE_ECHELPER->GetSelectedEntityID()] = std::string(buf);
-		*/
-		_levelEditor->LE_AddInputText("Name##Entity", SYS_COMPONENT->EntityName[LE_ECHELPER->GetSelectedEntityID()], 256);
-
-		// Print out the ID of the entity (Debug purposes)
+		_levelEditor->LE_AddInputText("Name##Entity", g_ecman->EntityName[id], 256);
+		
 		ImGui::SameLine(0, 10);
 		ImGui::Text("ID : ");
 
 		ImGui::SameLine(0, 10);
-		ImGui::Text(std::to_string(LE_ECHELPER->GetSelectedEntityID()).c_str());
+		ImGui::Text(std::to_string(id).c_str());//std::to_string(LE_ECHELPER->GetSelectedEntityID()).c_str());
 
 		//Componenets layout
 		ComponentLayout(ent);
 	}
+	// Print out the ID of the entity (Debug purposes)
 }
 
 bool InspectorWindow::GetIfGizmoManipulate()
@@ -1090,7 +1095,7 @@ void InspectorWindow::VariableComp(Entity& ent)
 	if (!_notRemove)
 	{
 		//ent.RemoveComponent<ComponentLoadAudio>();
-		ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentLoadAudio>()->Write(), typeid(ComponentLoadAudio).hash_code() };
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentVariables>()->Write(), typeid(ComponentVariables).hash_code() };
 		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 		_notRemove = true;
 	}

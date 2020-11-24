@@ -48,12 +48,17 @@
             "ComponentVariables": {
                 "IntList": [
                     5,
-                    5
+                    0
                 ],
-                "StringList": [],
+                "StringList": [
+                    "lol",
+                    "wtf",
+                    "",
+                    ""
+                ],
                 "FloatList": [
                     4.0,
-                    4.0
+                    0.0
                 ]
             }
         },
@@ -78,10 +83,6 @@
             },
             "AudioManager": {
                 "ListOfSound": {
-                    "1": "Asset/Sounds/TestAudio.ogg",
-                    "2": "alslsl",
-                    "wtf": "asset/ggg",
-                    "0": "dasdas",
                     "1": "Asset/Sounds/TestAudio.ogg",
                     "2": "alslsl",
                     "wtf": "asset/ggg",

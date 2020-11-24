@@ -59,6 +59,19 @@ namespace NS_GRAPHICS
 			glm::vec3 _normals;
 			glm::ivec4 _boneID;
 			glm::vec4 _boneWeights;
+
+			void AddBoneData(int boneID, float boneWeight)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					if (_boneWeights[i] == 0.0f)
+					{
+						_boneID[i] = boneID;
+						_boneWeights[i] = boneWeight;
+						return;
+					}
+				}
+			}
 		};
 
 		//Vertex Data might not be needed

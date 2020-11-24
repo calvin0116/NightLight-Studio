@@ -91,7 +91,8 @@ public:
 	// Parametrized constructor 
 	ComponentGraphics(const int& meshID);
 
-	void AttachMesh(const int& meshID);
+	void AttachMesh(const int& meshID); // Help expose Alex
+	int GetCurrentMeshHandle(); // Help expose Alex
 
 	void SetRenderType(const RENDERTYPE& rendertype);
 

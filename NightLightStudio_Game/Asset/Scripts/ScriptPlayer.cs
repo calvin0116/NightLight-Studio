@@ -14,21 +14,25 @@ namespace Unicorn
     }
     // Used player components
     RigidBody playerRB;
+    Variables playerVar;
     // Other entity's components
 
-    // Player Stats
+    // Player Stats, default values
     public static float humnForce = 100000.0f;  // Move force while human
     public static float mothForce = 10000.0f;  // Move force while moth
-    public static float moveForce = humnForce; // Current force
     public static float maxEnergy = 15.0f;
+    public static float moveForce = humnForce; // Current force
     public static float curEnergy = maxEnergy;
     // Minimum Energy required to change to moth
     public static float EnergyTreshold = 0.0f;
     public static float EnergyDrain = 1.0f;
     public static float EnergyGain = 1.0f;
-    // Move dir
+    // Move dir for camera to player
     public Vector3 fwd;
     public Vector3 rht;
+    Vector3 moveDir = new Vector3(0.0f, 0.0f, 0.0f);
+    bool movedX = false;
+    bool movedY = false;
 
     // Player State
     public State CurrentState = State.Human;
@@ -38,10 +42,18 @@ namespace Unicorn
     public override void Init()
     {
       playerRB = GetRigidBody(id);
+      playerVar = GetVariables(id);
+      // Change default values from variables
+      humnForce = playerVar.getFloat(0);
+      mothForce = playerVar.getFloat(1);
+      maxEnergy = playerVar.getFloat(2);
+      curEnergy = maxEnergy;
+      moveForce = humnForce;
     }
 
     public override void LateInit()
     {
+      Console.WriteLine(playerVar.getFloat(0));
     }
 
     public override void Update()
@@ -90,18 +102,42 @@ namespace Unicorn
         rht = rht.normalized;
       }
 
-      // Forward
+      // Reset values
+      moveDir = new Vector3(0.0f, 0.0f, 0.0f);
+      movedX = false;
+      movedY = false;
       if (Input.GetKeyHold(VK.IKEY_W))
-      Force.Apply(id, fwd, moveForce);
+      {
+        moveDir += fwd;
+        movedY = !movedY;
+        //Force.Apply(id, fwd, moveForce);
+      }
       // Left
       if (Input.GetKeyHold(VK.IKEY_A))
-        Force.Apply(id, -rht, moveForce);
+      {
+        moveDir += -rht;
+        movedX = !movedX;
+        //Force.Apply(id, -rht, moveForce);
+      }
       // Backward
       if (Input.GetKeyHold(VK.IKEY_S))
-        Force.Apply(id, -fwd, moveForce);
+      {
+        moveDir += -fwd;
+        movedY = !movedY;
+        //Force.Apply(id, -fwd, moveForce);
+      }
       // Right
       if (Input.GetKeyHold(VK.IKEY_D))
-        Force.Apply(id, rht, moveForce);
+      {
+        moveDir += rht;
+        movedX = !movedX;
+        //Force.Apply(id, rht, moveForce);
+      }
+      if (movedX || movedY)
+      {
+        Console.WriteLine("Applying");
+        Force.Apply(id, moveDir.normalized, moveForce);
+      }
     }
 
     public void ManualStateControl()

@@ -21,17 +21,28 @@ void	ComponentLoadAudio::Read(Value& val)
       if (val["ListOfSound"].IsObject())
       {
           auto sound_array = val["ListOfSound"].GetObject();
+          bool empty_at_start = (_sounds.size() == 0);
+
+          int index = 0;
           for (Value::ConstMemberIterator itr = sound_array.MemberBegin(); itr != sound_array.MemberEnd(); ++itr)
           {
               data MyData;
               strcpy_s(MyData.name, 128, itr->name.GetString());
               strcpy_s(MyData.path, 512, itr->value.GetString());
-              _sounds.push_back(MyData);
+              if(empty_at_start)
+                _sounds.push_back(MyData);
+              else
+                 _sounds.at(index) = MyData;
+              ++index;
           }
       }
+      //Should be removed if tested removal without issue
       else if (val["ListOfSound"].IsArray())
       {
           auto sound_array = val["ListOfSound"].GetArray();
+          bool empty_at_start = (_sounds.size() == 0);
+
+
           for (int i = 0; i < sound_array.Size(); ++i)
           {
               fs::path cur_path_name = sound_array[i].GetString();
@@ -40,7 +51,10 @@ void	ComponentLoadAudio::Read(Value& val)
               std::string MyPath = cur_path_name.parent_path().string() + "/" + MyName + cur_path_name.extension().string();
               strcpy_s(MyData.name, 128, MyName.c_str());
               strcpy_s(MyData.path, 512, MyPath.c_str());
-              _sounds.push_back(MyData);
+              if (empty_at_start)
+                  _sounds.push_back(MyData);
+              else
+                  _sounds.at(i) = MyData;
           }
       }
   }

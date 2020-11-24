@@ -7,9 +7,6 @@
 #define new DEBUG_NEW
 #endif
 
-#define DRAW_WITH_LIGHT
-//#define DRAW_WITH_COMPONENTS
-
 namespace NS_GRAPHICS
 {
 	ModelManager::ModelManager()
@@ -49,66 +46,128 @@ namespace NS_GRAPHICS
 		{
 			// Make new copy of model
 			// Reason: Animation IS A FKER
-			Model* model = new Model();
-			size_t meshSize = check->second->_meshes.size();
-
-			//MAYBE REMOVED NOT THE BEST WAY TO DO THIS
-			for (size_t meshIndex = 0; meshIndex != meshSize; ++meshIndex)
+			if (check->second->_isAnimated)
 			{
-				Mesh* mesh = new Mesh();
+				Model* model = new Model();
+				size_t meshSize = check->second->_animatedMeshes.size();
+				model->_isAnimated = check->second->_isAnimated;
 
-				mesh->_vertexDatas = check->second->_meshes[meshIndex]->_vertexDatas;
-				mesh->_indices = check->second->_meshes[meshIndex]->_indices;
+				//MAYBE REMOVED NOT THE BEST WAY TO DO THIS
+				for (size_t meshIndex = 0; meshIndex != meshSize; ++meshIndex)
+				{
+					AnimatedMesh* mesh = new AnimatedMesh();
 
-				glGenVertexArrays(1, &mesh->VAO);
-				glGenBuffers(1, &mesh->VBO);
-				glGenBuffers(1, &mesh->EBO);
-				glGenBuffers(1, &mesh->ModelMatrixBO);
+					mesh->_vertexDatas = check->second->_animatedMeshes[meshIndex]->_vertexDatas;
+					mesh->_indices = check->second->_animatedMeshes[meshIndex]->_indices;
 
-				glBindVertexArray(mesh->VAO);
+					glGenVertexArrays(1, &mesh->VAO);
+					glGenBuffers(1, &mesh->VBO);
+					glGenBuffers(1, &mesh->EBO);
+					glGenBuffers(1, &mesh->ModelMatrixBO);
 
-				// vertex data attribute
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(NS_GRAPHICS::Mesh::VertexData) * mesh->_vertexDatas.size(), &mesh->_vertexDatas[0], GL_STATIC_DRAW);
-				// position
-				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), (void*)0);
-				glEnableVertexAttribArray(0);
-				// uv attribute
-				glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), (void*)sizeof(glm::vec3));
-				glEnableVertexAttribArray(1);
-				// normals attribute
-				glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), (void*)(sizeof(glm::vec3) + sizeof(glm::vec2)));
-				glEnableVertexAttribArray(2);
+					glBindVertexArray(mesh->VAO);
 
-				// Indices
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * mesh->_indices.size(), &mesh->_indices[0], GL_STATIC_DRAW);
+					// vertex data attribute
+					glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
+					glBufferData(GL_ARRAY_BUFFER, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData) * mesh->_vertexDatas.size(), &mesh->_vertexDatas[0], GL_STATIC_DRAW);
+					// position
+					glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData), (void*)0);
+					glEnableVertexAttribArray(0);
+					// uv attribute
+					glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData), (void*)sizeof(glm::vec3));
+					glEnableVertexAttribArray(1);
+					// normals attribute
+					glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData), (void*)(sizeof(glm::vec3) + sizeof(glm::vec2)));
+					glEnableVertexAttribArray(2);
 
-				// Model Matrix
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+					// Indices
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * mesh->_indices.size(), &mesh->_indices[0], GL_STATIC_DRAW);
 
-				glEnableVertexAttribArray(3);
-				glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
-				glEnableVertexAttribArray(4);
-				glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
-				glEnableVertexAttribArray(5);
-				glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
-				glEnableVertexAttribArray(6);
-				glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+					// Model Matrix
+					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+					glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
 
-				glVertexAttribDivisor(3, 1);
-				glVertexAttribDivisor(4, 1);
-				glVertexAttribDivisor(5, 1);
-				glVertexAttribDivisor(6, 1);
+					glEnableVertexAttribArray(3);
+					glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+					glEnableVertexAttribArray(4);
+					glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+					glEnableVertexAttribArray(5);
+					glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+					glEnableVertexAttribArray(6);
+					glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
 
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				glBindVertexArray(0);
+					glVertexAttribDivisor(3, 1);
+					glVertexAttribDivisor(4, 1);
+					glVertexAttribDivisor(5, 1);
+					glVertexAttribDivisor(6, 1);
 
-				model->_meshes.push_back(mesh);
+					glBindBuffer(GL_ARRAY_BUFFER, 0);
+					glBindVertexArray(0);
+
+					model->_animatedMeshes.push_back(mesh);
+				}
+
+				return AddModel(model);
 			}
-			
-			return AddModel(model);
+			else
+			{
+				size_t meshSize = check->second->_meshes.size();
+
+				//MAYBE REMOVED NOT THE BEST WAY TO DO THIS
+				for (size_t meshIndex = 0; meshIndex != meshSize; ++meshIndex)
+				{
+					if (check->second->_meshes[meshIndex]->VAO == 0)
+					{
+						glGenVertexArrays(1, &check->second->_meshes[meshIndex]->VAO);
+						glGenBuffers(1, &check->second->_meshes[meshIndex]->VBO);
+						glGenBuffers(1, &check->second->_meshes[meshIndex]->EBO);
+						glGenBuffers(1, &check->second->_meshes[meshIndex]->ModelMatrixBO);
+
+						glBindVertexArray(check->second->_meshes[meshIndex]->VAO);
+
+						// vertex data attribute
+						glBindBuffer(GL_ARRAY_BUFFER, check->second->_meshes[meshIndex]->VBO);
+						glBufferData(GL_ARRAY_BUFFER, sizeof(NS_GRAPHICS::Mesh::VertexData) * check->second->_meshes[meshIndex]->_vertexDatas.size(), &check->second->_meshes[meshIndex]->_vertexDatas[0], GL_STATIC_DRAW);
+						// position
+						glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), (void*)0);
+						glEnableVertexAttribArray(0);
+						// uv attribute
+						glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), (void*)sizeof(glm::vec3));
+						glEnableVertexAttribArray(1);
+						// normals attribute
+						glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), (void*)(sizeof(glm::vec3) + sizeof(glm::vec2)));
+						glEnableVertexAttribArray(2);
+
+						// Indices
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, check->second->_meshes[meshIndex]->EBO);
+						glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * check->second->_meshes[meshIndex]->_indices.size(), &check->second->_meshes[meshIndex]->_indices[0], GL_STATIC_DRAW);
+
+						// Model Matrix
+						glBindBuffer(GL_ARRAY_BUFFER, check->second->_meshes[meshIndex]->ModelMatrixBO);
+						glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+
+						glEnableVertexAttribArray(3);
+						glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+						glEnableVertexAttribArray(4);
+						glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+						glEnableVertexAttribArray(5);
+						glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+						glEnableVertexAttribArray(6);
+						glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+
+						glVertexAttribDivisor(3, 1);
+						glVertexAttribDivisor(4, 1);
+						glVertexAttribDivisor(5, 1);
+						glVertexAttribDivisor(6, 1);
+
+						glBindBuffer(GL_ARRAY_BUFFER, 0);
+						glBindVertexArray(0);
+					}
+				}
+
+				return AddModel(check->second);
+			}
 		}
 
 		// Invalid key given
@@ -158,29 +217,51 @@ namespace NS_GRAPHICS
 
 		for (auto& m : _models)
 		{
-			for (auto& mesh : m->_meshes)
-			{
-				glDeleteBuffers(1, &mesh->VBO);
-				glDeleteBuffers(1, &mesh->ModelMatrixBO);
-				glDeleteVertexArrays(1, &mesh->VAO);
+			if(m->_isAnimated)
+			{ 
+				for (auto& mesh : m->_animatedMeshes)
+				{
+					glDeleteBuffers(1, &mesh->VBO);
+					glDeleteBuffers(1, &mesh->ModelMatrixBO);
+					glDeleteBuffers(1, &mesh->EBO);
+					glDeleteVertexArrays(1, &mesh->VAO);
 
-				delete mesh;
+					delete mesh;
+				}
+
+				delete m;
 			}
-
-			delete m;
 		}
 
 		for (auto& n : _modelList)
 		{
-			for (auto& del : n.second->_meshes)
+			if (n.second->_isAnimated)
 			{
-				glDeleteBuffers(1, &del->VBO);
-				glDeleteBuffers(1, &del->ModelMatrixBO);
-				glDeleteVertexArrays(1, &del->VAO);
-				
-				//Same variable as mesh list mesh pointer therefore commented out
-				//Uncomment in future when the mesh pointer is pointing to valid thing
-				delete del;
+				for (auto& del : n.second->_animatedMeshes)
+				{
+					glDeleteBuffers(1, &del->VBO);
+					glDeleteBuffers(1, &del->ModelMatrixBO);
+					glDeleteBuffers(1, &del->EBO);
+					glDeleteVertexArrays(1, &del->VAO);
+
+					//Same variable as mesh list mesh pointer therefore commented out
+					//Uncomment in future when the mesh pointer is pointing to valid thing
+					delete del;
+				}
+			}
+			else
+			{
+				for (auto& del : n.second->_meshes)
+				{
+					glDeleteBuffers(1, &del->VBO);
+					glDeleteBuffers(1, &del->ModelMatrixBO);
+					glDeleteBuffers(1, &del->EBO);
+					glDeleteVertexArrays(1, &del->VAO);
+
+					//Same variable as mesh list mesh pointer therefore commented out
+					//Uncomment in future when the mesh pointer is pointing to valid thing
+					delete del;
+				}
 			}
 
 			delete n.second;

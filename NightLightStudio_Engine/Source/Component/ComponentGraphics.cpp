@@ -33,6 +33,11 @@ void ComponentGraphics::AttachMesh(const int& meshID)
 	_modelID = meshID;
 }
 
+int ComponentGraphics::GetCurrentMeshHandle()
+{
+	return _modelID;
+}
+
 void ComponentGraphics::SetRenderType(const RENDERTYPE& rendertype)
 {
 	_renderType = rendertype;

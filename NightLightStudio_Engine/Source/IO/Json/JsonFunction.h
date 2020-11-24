@@ -10,8 +10,9 @@ namespace NS_SERIALISER {
     //!! Type T Must have ISerialisable and a Component 
 
     //~~~! Helper function that is not declared in class due to Entity not declared in .h
-    inline void ComponentsCreation(Value& Comp_list, Entity& entity);
-	ENGINE_API inline void EntityListCreation(Value& Ent_list);
+    inline void ComponentsCreation(Value& Comp_list, Entity& entity, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER);
+	
+	ENGINE_API inline void EntityListCreation(Value& Ent_list, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER);
 
 
 	inline void ComponentsInit(Value& Comp_list, Entity& entity);

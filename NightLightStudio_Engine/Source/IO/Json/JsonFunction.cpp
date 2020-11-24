@@ -7,13 +7,13 @@ Brief Description :
 
 namespace NS_SERIALISER {
     template <typename T>
-    inline void CreateAndWriteComp(Value& Comp_list, Entity& entity, std::string& component_name)
+    inline void CreateAndWriteComp(Value& Comp_list, Entity& entity, std::string& component_name, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
     {
         //T comp;
         //static_cast<ISerializable*>(&comp)->Read(Comp_list[component_name.c_str()]);
         //G_ECMANAGER->AttachComponent<T>(entity, comp);
 
-        T* comp = G_ECMANAGER->AddComponent<T>(entity);
+        T* comp = g_ecman->AddComponent<T>(entity);
         static_cast<ISerializable*>(comp)->Read(Comp_list[component_name.c_str()]);
         
     }
@@ -30,7 +30,7 @@ namespace NS_SERIALISER {
 
     }
 
-    inline void ComponentsCreation(Value& Comp_list, Entity& entity)
+    inline void ComponentsCreation(Value& Comp_list, Entity& entity, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
     {
         for (auto itr = Comp_list.MemberBegin(); itr != Comp_list.MemberEnd(); ++itr)
         {
@@ -39,7 +39,7 @@ namespace NS_SERIALISER {
             //std::cout << "~~ Component: " << component_name << std::endl;
             if (component_name == "TransformComponent")
             {
-                CreateAndWriteComp<TransformComponent>(Comp_list, entity, component_name);
+                CreateAndWriteComp<TransformComponent>(Comp_list, entity, component_name, g_ecman);
                 /*
                 std::cout << "~~~~ Transform: " << std::endl << trans_com;
                 std::cout << "~~~~~~~~~~~~~~ " << std::endl;*/
@@ -51,56 +51,56 @@ namespace NS_SERIALISER {
                 //CreateAndWriteComp<ColliderComponent>(Comp_list, entity, component_name);
                 ColliderComponent comp(itr->value["colliderType"].GetString());
                 comp.Read(Comp_list[component_name.c_str()]);
-                G_ECMANAGER->AttachComponent<ColliderComponent>(entity, comp);
+                g_ecman->AttachComponent<ColliderComponent>(entity, comp);
             }
             else if (component_name == "RigidBody")
             {
-                CreateAndWriteComp<RigidBody>(Comp_list, entity, component_name);
+                CreateAndWriteComp<RigidBody>(Comp_list, entity, component_name, g_ecman);
             }
             else if (component_name == "AudioManager")
             {
-                CreateAndWriteComp<ComponentLoadAudio>(Comp_list, entity, component_name);
+                CreateAndWriteComp<ComponentLoadAudio>(Comp_list, entity, component_name, g_ecman);
             }
             else if (component_name == "GraphicsComponent")
             {
-                CreateAndWriteComp<GraphicsComponent>(Comp_list, entity, component_name);
+                CreateAndWriteComp<GraphicsComponent>(Comp_list, entity, component_name, g_ecman);
             }
             else if (component_name == "CScriptComponent")
             {
-                CreateAndWriteComp<CScriptComponent>(Comp_list, entity, component_name);
+                CreateAndWriteComp<CScriptComponent>(Comp_list, entity, component_name, g_ecman);
             }
             else if (component_name == "ScriptComponent")
             {
-                CreateAndWriteComp<ScriptComponent>(Comp_list, entity, component_name);
+                CreateAndWriteComp<ScriptComponent>(Comp_list, entity, component_name, g_ecman);
             }
             else if (component_name == "ScriptComponent")
             {
-                CreateAndWriteComp<ScriptComponent>(Comp_list, entity, component_name);
+                CreateAndWriteComp<ScriptComponent>(Comp_list, entity, component_name, g_ecman);
             }
             else if (component_name == "LightComponent")
             {
-                CreateAndWriteComp<ComponentLight>(Comp_list, entity, component_name);
+                CreateAndWriteComp<ComponentLight>(Comp_list, entity, component_name, g_ecman);
             }
             else if (component_name == "PlayerStatsComponent")
             {
-                CreateAndWriteComp<PlayerStatsComponent>(Comp_list, entity, component_name);
+                CreateAndWriteComp<PlayerStatsComponent>(Comp_list, entity, component_name, g_ecman);
             }
             else if (component_name == "CauldronStatsComponent")
             {
-                CreateAndWriteComp<CauldronStatsComponent>(Comp_list, entity, component_name);
+                CreateAndWriteComp<CauldronStatsComponent>(Comp_list, entity, component_name, g_ecman);
             }
             else if (component_name == "CanvasComponent")
             {
-                CreateAndWriteComp<ComponentCanvas>(Comp_list, entity, component_name);
+                CreateAndWriteComp<ComponentCanvas>(Comp_list, entity, component_name, g_ecman);
             }
             else if (component_name == "ComponentVariables")
             {
-                CreateAndWriteComp<VariablesComponent>(Comp_list, entity, component_name);
+                CreateAndWriteComp<VariablesComponent>(Comp_list, entity, component_name, g_ecman);
             }
         }
     }
 
-    inline void EntityListCreation(Value& Ent_list)
+    inline void EntityListCreation(Value& Ent_list, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
     {
         for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
         {

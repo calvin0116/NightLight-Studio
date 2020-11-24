@@ -58,7 +58,6 @@
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
     <ClCompile Include="Source\Graphics\DebugManager.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsSystem.cpp" />
-    <ClCompile Include="Source\Graphics\Joint.cpp" />
     <ClCompile Include="Source\Graphics\LightSystem.cpp" />
     <ClCompile Include="Source\Graphics\Mesh.cpp" />
     <ClCompile Include="Source\Graphics\Model.cpp" />
@@ -107,6 +106,9 @@
     <ClCompile Include="Source\Window\WndSystem.cpp" />
     <ClCompile Include="Source\Mono\Binding\Systems\InputBind.cpp" />
     <ClCompile Include="Source\Component\ComponentVariables.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentVariablesBind.cpp" />
+    <ClCompile Include="Source\Graphics\ComponentAnimation.cpp" />
+    <ClCompile Include="Source\Graphics\AnimationController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -177,7 +179,6 @@
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
-    <ClInclude Include="Source\Graphics\Joint.h" />
     <ClInclude Include="Source\Graphics\Lights.h" />
     <ClInclude Include="Source\Graphics\LightSystem.h" />
     <ClInclude Include="Source\Graphics\Mesh.h" />
@@ -240,6 +241,12 @@
     <ClInclude Include="Source\Window\WndUtils.h" />
     <ClInclude Include="Source\Mono\Binding\Systems\InputBind.h" />
     <ClInclude Include="Source\Component\ComponentVariables.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentVariablesBind.h" />
+    <ClInclude Include="Source\Ai\AiManager.h" />
+    <ClInclude Include="Source\Ai\WayPointManager.h" />
+    <ClInclude Include="Source\Component\ComponentNavigator.h" />
+    <ClInclude Include="ComponentAnimation.h" />
+    <ClInclude Include="Source\Graphics\AnimationController.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />

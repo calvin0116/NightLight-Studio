@@ -6,6 +6,8 @@
 #include "Components/ComponentRigidBodyBind.h"
 #include "Components/ComponentGraphicsBind.h"
 #include "Components/ComponentLightBind.h"
+// Temporary comp
+#include "Components/ComponentVariablesBind.h"
 
 // Custom types
 #include "CustomTypes/Vector3DBind.h"

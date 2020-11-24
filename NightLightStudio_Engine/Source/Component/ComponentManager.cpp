@@ -138,7 +138,7 @@ ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentS
 		++compSet->unknown_ent_id;
 	}
 	
-	SYS_COMPONENT->EntityName[objId + compSet->idIndexModifier] = name;
+	EntityName[objId + compSet->idIndexModifier] = name;
 
 	//EntityName[objId + compSet->idIndexModifier] = name;
 	//----------------------------------------//
@@ -940,7 +940,7 @@ ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentS
 		++itr;
 	}*/
 
-	for (auto& i : SYS_COMPONENT->EntityName)
+	for (auto& i : G_ECMANAGER->EntityName)
 	{
 		if (i.second == str)
 			return getEntity(i.first);

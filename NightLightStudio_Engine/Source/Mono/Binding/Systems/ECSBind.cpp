@@ -18,6 +18,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(GetRigidBody, "GetRigidBody", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetGraphics, "GetGraphics", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetLight, "GetLight", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetVariables, "GetVariables", "UniBehaviour");
   }
 
   int GameObjectFind(MonoString* _name)
@@ -137,6 +138,16 @@ namespace ECSBind
     Entity en = G_ECMANAGER->getEntity(id);
     LightComponent* lc = en.getComponent<LightComponent>();
     MonoWrapper::SetNativeHandle(monoObj, lc);
+
+    return monoObj;
+  }
+
+  MonoObject* GetVariables(int id)
+  {
+    MonoObject* monoObj = MonoWrapper::ConstructObject("Variables");
+    Entity en = G_ECMANAGER->getEntity(id);
+    VariablesComponent* var = en.getComponent<VariablesComponent>();
+    MonoWrapper::SetNativeHandle(monoObj, var);
 
     return monoObj;
   }

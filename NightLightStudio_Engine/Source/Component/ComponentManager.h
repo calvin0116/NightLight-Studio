@@ -220,8 +220,7 @@ public:
 	typedef LocalVector<int, MAX_CHILDREN> ChildContainerT;
 
 	ComponentMemoryManager cmm;
-	//Storing of entity name according to object id
-	std::map<int, std::string> EntityName;
+
 	//class ComponentSet; // fwd decl
 	class ComponentSetFactory; 
 	class ComponentSetManager; 
@@ -376,7 +375,8 @@ public:
 		{
 		}
 
-		
+		//Storing of entity name according to object id
+		std::map<int, std::string> EntityName;
 		// build a new entity
 		// returns entity id
 		// Added default naming as Entity_<id>
