@@ -33,10 +33,17 @@ struct Edges
 	std::shared_ptr<WayPoint> wp1, wp2;
 	std::map<CV, int> cost_var;				//map of variable that affect the cost
 	//float length;
-	//float cost;		//Depends on length only as of now
+	float total_cost;		//Depends on length only as of now
 
-	float GetCost() {};
-	float CalcCost() {};
+	float GetCost() { return total_cost; };
+	float CalcCost() 
+	{
+		total_cost = 0;
+		for (auto var : cost_var)
+		{
+			total_cost += var.second;
+		}
+	};
 };
 
 class WayPointManager
@@ -63,18 +70,19 @@ public:
 	void InsertWayPoint(NlMath::Vector3D position, NlMath::Vector3D radius)
 	{
 		WayPoint wp;
-		wp.position = position;
-		wp.radius = radius;
+		//wp.position = position;
+		//wp.radius = radius;
+		//wp.radius = radius;
 		InsertWayPoint(wp);
 	};
 	
 
 	//Void InsertObstacle(AABB aabb collider);
 
-	void RemoveWayPoint(int index);
+	void RemoveWayPoint(int index) {};
 	//Void RemoveObstacle(int index);
 
-	Void Update(); //Check for both edges and waypoint if they have been obstructed
+	void Update() {}; //Check for both edges and waypoint if they have been obstructed
 
-	std::vector<Vector3> AstarPathFinding();
+	std::vector<NlMath::Vector3D> AstarPathFinding();
 };
