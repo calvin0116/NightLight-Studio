@@ -140,9 +140,6 @@ void main(void)
         float HdotV = max(dot(H, V), 0.0f);
         float NdotH = max(dot(N, H), 0.0f);
 
-        //fragColor = vec4(NdotH,0.f,0.f, 1.f); // 1.f should be replaced with uniform later
-        //return;
-
         float D = DistributionGGX(NdotH, roughness);
         float G = GeometrySmith(NdotV, NdotL, roughness);
         vec3 F = FresnelSchlick(HdotV, F0); // kS
@@ -174,8 +171,10 @@ void main(void)
         vec3 L = normalize(pLights[j].position.xyz - fragPos); // light vector
         vec3 H = normalize(V + L); // Halfway-bisecting vector
         float distance = length(pLights[j].position.xyz - fragPos);
-        float attenuation = 1.f / (distance * distance); // inverse squared
-        vec3 radiance = (pLights[j].diffuse.xyz * (1.f/pLights[j].attenuation)) * attenuation; // diffuse used in place of color
+        //float attenuation = 1.f / (distance * distance); // inverse squared
+        float attenuation = smoothstep(100.f, 1.f, distance);
+
+        vec3 radiance = ((pLights[j].diffuse.xyz * (1.f/pLights[j].attenuation)) * attenuation); // diffuse used in place of color
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
