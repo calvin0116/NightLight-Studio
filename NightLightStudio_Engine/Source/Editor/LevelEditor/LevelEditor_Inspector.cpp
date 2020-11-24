@@ -1090,7 +1090,7 @@ void InspectorWindow::VariableComp(Entity& ent)
 	if (!_notRemove)
 	{
 		//ent.RemoveComponent<ComponentLoadAudio>();
-		ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentLoadAudio>()->Write(), typeid(ComponentLoadAudio).hash_code() };
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentVariables>()->Write(), typeid(ComponentVariables).hash_code() };
 		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 		_notRemove = true;
 	}

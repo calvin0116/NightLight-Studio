@@ -12,6 +12,8 @@ namespace MonoBind
     ComponentRigidBodyBind::BindComponentRigidBody();
     ComponentGraphicsBind::BindComponentGraphics();
     ComponentLightBind::BindComponentLight();
+    // Temporary
+    ComponentVariablesBind::BindComponentVariables();
   }
 
   // Custom types

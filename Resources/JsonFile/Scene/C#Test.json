@@ -4,8 +4,8 @@
             "TransformComponent": {
                 "EntityName": "Player",
                 "Position": [
-                    2161.015869140625,
-                    47.03723907470703,
+                    0.0,
+                    182.8325653076172,
                     0.0
                 ],
                 "Scale": [
@@ -43,7 +43,7 @@
                 "isStatic": false,
                 "isGravity": true,
                 "mass": 70.0,
-                "friction": 1.0,
+                "friction": 0.9900000095367432,
                 "Force": [
                     0.0,
                     0.0,
@@ -107,6 +107,15 @@
                 "Intensity": 1000.0,
                 "CutOff": 0.0,
                 "OuterCutOff": 100.0
+            },
+            "ComponentVariables": {
+                "IntList": [],
+                "StringList": [],
+                "FloatList": [
+                    70000.0,
+                    10000.0,
+                    15.0
+                ]
             }
         },
         "Floor": {
