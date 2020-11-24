@@ -107,6 +107,8 @@
     <ClCompile Include="Source\Mono\Binding\Systems\InputBind.cpp" />
     <ClCompile Include="Source\Component\ComponentVariables.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentVariablesBind.cpp" />
+    <ClCompile Include="Source\Graphics\ComponentAnimation.cpp" />
+    <ClCompile Include="Source\Graphics\AnimationController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -243,6 +245,8 @@
     <ClInclude Include="Source\Ai\AiManager.h" />
     <ClInclude Include="Source\Ai\WayPointManager.h" />
     <ClInclude Include="Source\Component\ComponentNavigator.h" />
+    <ClInclude Include="ComponentAnimation.h" />
+    <ClInclude Include="Source\Graphics\AnimationController.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />

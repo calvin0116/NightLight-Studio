@@ -175,6 +175,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ComponentAnimation.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="LocalString.h" />
@@ -243,6 +244,7 @@
     <ClInclude Include="Source\Editor\LevelEditor\WindowsDialogBox.h" />
     <ClInclude Include="Source\Editor\PrefabManager.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
+    <ClInclude Include="Source\Graphics\AnimationController.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
@@ -368,7 +370,9 @@
     <ClCompile Include="Source\Editor\LevelEditor\WindowsDialogBox.cpp" />
     <ClCompile Include="Source\Editor\PrefabManager.cpp" />
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
+    <ClCompile Include="Source\Graphics\AnimationController.cpp" />
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
+    <ClCompile Include="Source\Graphics\ComponentAnimation.cpp" />
     <ClCompile Include="Source\Graphics\DebugManager.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsSystem.cpp" />
     <ClCompile Include="Source\Graphics\LightSystem.cpp" />
