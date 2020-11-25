@@ -1,6 +1,4 @@
 #pragma once
-#include <vector>
-
 #include "../Core/MySystem.h"
 //#include "../IO/Json/Config.h"
 #include "../../framework.h"
@@ -10,7 +8,6 @@
 #include "../Component/ComponentRigidBody.h"
 #include "CollisionResolver.h"
 #include "../Component/ComponentManager.h"
-#include "CSVReader.h"
 
 //messaging for toggle play
 #include "../Messaging/SystemReceiver.h"
@@ -24,13 +21,9 @@ namespace NS_COLLISION
 	{
 		CollsionResolver colResolver;
 
-		//for reading data in collider table
-		std::vector<std::vector<std::string> > _colliderDataList;
-
-		//toggeling playable
-		bool _isPlaying;
 		friend Singleton<CollisionSystem>;
 
+		bool _isPlaying;
 		SystemMessaging::SystemReceiver receiver;
 	public:
 

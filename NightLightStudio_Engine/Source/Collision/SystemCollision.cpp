@@ -255,12 +255,6 @@ namespace NS_COLLISION
 
 	void CollisionSystem::GameInit()
 	{
-		// Creating an object of CSVReader
-		CSVReader reader("Asset/CollisionConfig.csv");
-
-		// Get the data from CSV File
-		_colliderDataList = reader.getData();
-
 		auto itr = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
 		for (; itr != itrEnd; ++itr)
@@ -270,14 +264,10 @@ namespace NS_COLLISION
 
 			UpdateCollisionBoxPos(comCol, comTrans);
 		}
-
-		
 	}
 
 	void CollisionSystem::FixedUpdate()
 	{
-
-
 
 		//draw debug mesh
 		if (doDrawLineMesh)
@@ -309,7 +299,7 @@ namespace NS_COLLISION
 
 		if (!_isPlaying)
 		{
-			return;
+			//return;
 		}
 		
 
@@ -355,30 +345,6 @@ namespace NS_COLLISION
 				ComponentTransform* comTrans1 = G_ECMANAGER->getComponent<ComponentTransform>(itr1);
 				ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
 
-				//////////////////////////////////collision table/////////////////////////////////
-
-				for (size_t i = 0; i < _colliderDataList.size(); i++)
-				{
-					for (size_t j = 0; j < _colliderDataList.size(); j++)
-					{
-						if (comTrans1->_entityName.c_str() == _colliderDataList[i][0] && comTrans2->_entityName.c_str() == _colliderDataList[0][j])
-						{
-							//convert string to number
-							int check = _colliderDataList[i][j].c_str()[0] - '0';
-							if (check == 0)
-							{
-								return;
-							}
-							
-						}
-
-					}
-				}
-
-
-
-
-				//////////////////////////////////////////////////////////////////////////////////
 				if (comTrans1 == nullptr || comTrans2 == nullptr) continue;
 				
 				//Get rigidBody for Collision Resolution
