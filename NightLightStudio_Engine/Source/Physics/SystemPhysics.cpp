@@ -33,10 +33,7 @@ namespace NS_PHYSICS
 
 	void PhysicsSystem::FixedUpdate()
 	{
-		if (!_isPlaying)
-		{
-			return;
-		}
+
 		//TA's example
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*struct ComponentView
@@ -73,7 +70,17 @@ namespace NS_PHYSICS
 			if (compR->isStatic)
 				continue;
 
+			if (!_isPlaying)
+			{
 
+				compR->angularForce = 0;
+				compR->angularAcceleration = 0;
+
+				compR->velocity = 0;
+				compR->acceleration = 0;
+				compR->force = 0;
+				continue;
+			}
 			////////////////////////////////////////
 			// TEST
 

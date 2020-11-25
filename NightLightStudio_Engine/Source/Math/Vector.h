@@ -35,6 +35,7 @@ namespace NlMath
 		Vector3D& operator -= (const Vector3D& rhs);
 		Vector3D& operator *= (float rhs);
 		Vector3D& operator /= (float rhs);
+		Vector3D& operator = (float rhs);
 		float& operator[](int i);
 
 		//comparison operator

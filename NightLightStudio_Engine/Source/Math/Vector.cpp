@@ -89,6 +89,14 @@ namespace NlMath
 		return *this;
 	}
 
+	Vector3D& Vector3D::operator=(float rhs)
+	{
+		x = rhs;
+		y = rhs;
+		z = rhs;
+		return *this;
+	}
+
 	float& Vector3D::operator[](int i)
 	{
 		return m[i];
