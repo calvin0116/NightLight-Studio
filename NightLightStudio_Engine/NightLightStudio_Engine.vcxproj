@@ -186,6 +186,7 @@
     <ClInclude Include="Source\Collision\CollisionMathLib.h" />
     <ClInclude Include="Source\Collision\CollisionResolver.h" />
     <ClInclude Include="Source\Collision\Contact.h" />
+    <ClInclude Include="Source\Collision\CSVReader.h" />
     <ClInclude Include="Source\Collision\SystemCollision.h" />
     <ClInclude Include="Source\Component\ComponentAudio.h" />
     <ClInclude Include="Source\Component\ComponentCamera.h" />
@@ -322,6 +323,7 @@
     <ClCompile Include="Source\Collision\CollisionMathLib.cpp" />
     <ClCompile Include="Source\Collision\CollisionResolver.cpp" />
     <ClCompile Include="Source\Collision\Contact.cpp" />
+    <ClCompile Include="Source\Collision\CSVReader.cpp" />
     <ClCompile Include="Source\Collision\SystemCollision.cpp" />
     <ClCompile Include="Source\Component\ComponentAudio.cpp" />
     <ClCompile Include="Source\Component\ComponentCamera.cpp" />

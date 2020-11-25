@@ -109,6 +109,7 @@
     <ClCompile Include="Source\Mono\Binding\Components\ComponentVariablesBind.cpp" />
     <ClCompile Include="Source\Graphics\ComponentAnimation.cpp" />
     <ClCompile Include="Source\Graphics\AnimationController.cpp" />
+    <ClCompile Include="Source\Collision\CSVReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -246,6 +247,7 @@
     <ClInclude Include="Source\Ai\WayPointManager.h" />
     <ClInclude Include="Source\Component\ComponentNavigator.h" />
     <ClInclude Include="Source\Graphics\AnimationController.h" />
+    <ClInclude Include="Source\Collision\CSVReader.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
