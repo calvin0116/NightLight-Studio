@@ -1058,6 +1058,19 @@ public:
 
 		std::vector<EntityHandle> getEntityTagContainer(std::string str);
 
+		template<typename T>
+		EntityHandle getEntity(T* component)
+		{
+			for (EntityHandle ent : getEntityContainer())
+			{
+				if (component == ent.getComponent<T>())
+				{
+					return ent;
+				}
+			}
+			return EntityHandle();
+		}
+
 
 	private:
 

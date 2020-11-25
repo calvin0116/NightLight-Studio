@@ -334,6 +334,34 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 
 
+	////////////
+	// TEST 
+	//Entity newEntity0 = G_ECMANAGER->BuildEntity();
+	//ComponentTransform* ct0 = newEntity0.AddComponent<ComponentTransform>();
+	//ct0->_entityName = "root0";
+
+	//Entity newEntity1 = G_ECMANAGER->BuildEntity();
+	//ComponentTransform* ct1 = newEntity1.AddComponent<ComponentTransform>();
+	//ct1->_entityName = "root1";
+
+	//Entity newEntity2 = G_ECMANAGER->BuildEntity();
+	//ComponentTransform* ct2 = newEntity2.AddComponent<ComponentTransform>();
+	//ct2->_entityName = "root2";
+
+	//Entity getEnt = G_ECMANAGER->getEntity(ct1);
+
+	//ComponentTransform* getCt = getEnt.getComponent<ComponentTransform>();
+
+	//if (getCt == ct1)
+	//{
+	//	std::cout << "yay" << std::endl;
+	//}
+	//else
+	//{
+	//	std::cout << "nay" << std::endl;
+	//}
+	// TEST  END
+	////////////
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// Systems OnFirst start
