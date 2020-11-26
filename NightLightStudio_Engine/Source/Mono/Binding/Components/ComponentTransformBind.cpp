@@ -6,6 +6,12 @@ namespace ComponentTransformBind
 {
   void BindComponentTransform()
   {
+
+    MonoWrapper::BindClassFunction(get_Tag_Internal, "get_Tag_Internal",
+      "Transform");
+    MonoWrapper::BindClassFunction(set_Tag_Internal, "set_Tag_Internal",
+      "Transform");
+
     MonoWrapper::BindClassFunction(get_Name_Internal, "get_Name_Internal",
       "Transform");
     MonoWrapper::BindClassFunction(set_Name_Internal, "set_Name_Internal",
@@ -26,6 +32,17 @@ namespace ComponentTransformBind
     MonoWrapper::BindClassFunction(set_Scale_Internal, "set_Scale_Internal",
       "Transform");
   }
+
+  int get_Tag_Internal(TransformComponent* trans)
+  {
+    return trans->_tag;
+  }
+
+  void set_Tag_Internal(TransformComponent* trans, int val)
+  {
+    trans->_tag = val;
+  }
+
   MonoString* get_Name_Internal(TransformComponent* trans)
   {
     return MonoWrapper::ToMonoString(trans->_entityName.toString());
