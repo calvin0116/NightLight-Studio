@@ -22,21 +22,17 @@ out vec3 fragPos;
 out vec3 normal;
 
 void main(void) {
-	//vec4 currPose = vec4(0);
-	//vec4 currNormal = vec4(0);
 
-	//for(int i = 0; i < 4; i++)
-	//{
-		//Position
-		//mat4 transforms = jointsMat[boneID[i]];
-		//vec4 posePos = transforms * vec4(pos, 1.0f)
-		//currPose += posePos;
+	mat4 boneTrans = mat4(0.0f);
+	for(int i = 0; i < 4; i++)
+	{
+		boneTrans += jointsMat[boneID[i]] * weights[i];
 		
 		//Normals
-	//}
-	
+	}
+	vec4 newPos = boneTrans * vec4(pos, 1.0f);
     fragPos = vec3(model * vec4(pos, 1.0f));
-    gl_Position = projection * view * model * vec4(pos,1.0f);
+    gl_Position = projection * view * model * newPos;
     normal = vec3(transpose(inverse(model)) * vec4(norm, 0.f));
     texCoords = uv;
 }
