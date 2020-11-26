@@ -15,6 +15,7 @@ public:
 	//char* name;
 
 	LocalString<256> _entityName;
+  int _tag;
 
 	//for collision check
 	NlMath::Vector3D _nextPos;
