@@ -49,15 +49,15 @@ namespace NS_GRAPHICS
 
         // Loss of light intensity over distance, the greater the distance, the lower the intensity
         // An attenuation value of 0.2 means that 80% of the light intensity has been lost, and only 20% of the intensity remains
-        float _attenuation; // 64 - 67
+        float _intensity; // 64 - 67
         float _dummyPadding0 = 0.f; // Alignment is rounded up to the base alignment of vec4
         float _dummyPadding1 = 0.f; // Alignment is rounded up to the base alignment of vec4
         float _dummyPadding2 = 0.f; // Alignment is rounded up to the base alignment of vec4
 
-        PointLight(const float& Attenuation = 2.f, const glm::vec4& Ambient = glm::vec4(1.f, 1.f, 1.f, 1.f),
+        PointLight(const float& Intensity = 2.f, const glm::vec4& Ambient = glm::vec4(1.f, 1.f, 1.f, 1.f),
                   const glm::vec4& Diffuse = glm::vec4(1.f, 1.f, 1.f, 1.f), const glm::vec4& Specular = glm::vec4(1.f, 1.f, 1.f, 1.f))
             : position{ 0.f,0.f,0.f, 1.f },
-            _attenuation{ Attenuation },
+            _intensity{ Intensity },
             _ambient{ Ambient },
             _diffuse{ Diffuse },
             _specular{ Specular }
@@ -85,17 +85,17 @@ namespace NS_GRAPHICS
 
         // Loss of light intensity over distance
         // An attenuation value of 0.2 means that 80% of the light intensity has been lost, and only 20% of the intensity remains
-        float _attenuation; // 88 - 91
+        float _intensity; // 88 - 91
         float _dummyPadding0 = 0.f; // Alignment is rounded up to the base alignment of vec4
 
 
-        SpotLight(const glm::vec4& Direction = glm::vec4(1.f, 0.f, 0.f, 0.f), const float& Attenuation = 2.f,
+        SpotLight(const glm::vec4& Direction = glm::vec4(1.f, 0.f, 0.f, 0.f), const float& Intensity = 2.f,
                   const float& CutOff = 10.f, const float& OuterCutOff = 15.f,
                   const glm::vec4& Ambient = glm::vec4(1.f, 1.f, 1.f, 1.f), const glm::vec4& Diffuse = glm::vec4(1.f, 1.f, 1.f, 1.f),
                   const glm::vec4& Specular = glm::vec4(1.f, 1.f, 1.f, 1.f))
             : position{ 0.f,0.f,0.f, 1.f },
             _direction{ Direction },
-            _attenuation{ Attenuation },
+            _intensity{ Intensity },
             _cutOff{ CutOff },
             _outerCutOff{ OuterCutOff },
             _ambient{ Ambient },

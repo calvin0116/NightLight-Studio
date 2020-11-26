@@ -6,6 +6,7 @@ in vec3 normal;
 
 out vec4 fragColor;
 
+// change to diffuse and direction only
 struct DirLight {
     vec4 direction;
 
@@ -14,6 +15,7 @@ struct DirLight {
     vec4 specular;
 };
 
+// change to position, diffuse, attenuation and radius
 struct PointLight {
     vec4 position;
 
@@ -21,9 +23,10 @@ struct PointLight {
     vec4 diffuse;
     vec4 specular;
 
-    float attenuation;
+    float intensity;
 };
 
+// change to position, direction, color, cutoff, outercutoff and attenuation
 struct SpotLight {
     vec4 position;
     vec4 direction;
@@ -34,7 +37,7 @@ struct SpotLight {
 
     float cutOff;
     float outerCutOff;
-    float attenuation;
+    float intensity;
 };
 
 // PBR Materials
@@ -171,10 +174,10 @@ void main(void)
         vec3 L = normalize(pLights[j].position.xyz - fragPos); // light vector
         vec3 H = normalize(V + L); // Halfway-bisecting vector
         float distance = length(pLights[j].position.xyz - fragPos);
-        //float attenuation = 1.f / (distance * distance); // inverse squared
-        float attenuation = smoothstep(100.f, 1.f, distance);
+        float attenuation = 1.f / (distance * distance); // inverse squared
+        //float attenuation = smoothstep(100.f, 0.f, distance); // where 100.f is the radius
 
-        vec3 radiance = ((pLights[j].diffuse.xyz * (1.f/pLights[j].attenuation)) * attenuation); // diffuse used in place of color
+        vec3 radiance = ((pLights[j].diffuse.rgb * pLights[j].intensity) * attenuation); // diffuse used in place of color
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
@@ -224,7 +227,7 @@ void main(void)
 
         float intensity = clamp((theta - sLights[k].outerCutOff) / epsilon, 0.f, 1.f);
 
-        vec3 radiance = (sLights[k].diffuse.xyz * (1.f/sLights[k].attenuation))
+        vec3 radiance = (sLights[k].diffuse.xyz * sLights[k].intensity)
                         * attenuation * intensity; // diffuse used in place of color
 
         // Cook-Torrance BRDF

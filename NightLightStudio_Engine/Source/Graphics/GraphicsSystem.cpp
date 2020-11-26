@@ -20,9 +20,9 @@
 #endif
 
 //#define DRAW_WITH_COMPONENTS
-#define DRAW_WITH_LIGHTS
+//#define DRAW_WITH_LIGHTS
 #define DRAW_DEBUG_GRID
-//#define PBR_DRAWING
+#define PBR_DRAWING
 
 namespace NS_GRAPHICS
 {
@@ -504,8 +504,6 @@ namespace NS_GRAPHICS
 				}
 				else
 				{
-					// Might be same program?
-
 					//shaderManager->StartProgram(3); // textured program
 					//glBindVertexArray(mesh->VAO);
 

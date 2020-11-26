@@ -4,68 +4,32 @@
 #include "ComponentManager.h"
 
 
+//ComponentLight::ComponentLight()
+//	: _isActive{ false },
+//	_lightID{ -1 }, _type{ NS_GRAPHICS::Lights::INVALID_TYPE },
+//	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _intensity{ 1.0f }, _cutOff{}, _outerCutOff{},
+//	_direction{ 1.f,0.f,0.f }
+//{
+//	strcpy_s(ser_name, "LightComponent");
+//}
+
 ComponentLight::ComponentLight()
 	: _isActive{ false },
 	_lightID{ -1 }, _type{ NS_GRAPHICS::Lights::INVALID_TYPE },
-	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _intensity{ 1.0f }, _cutOff{}, _outerCutOff{},
-	_direction{ 1.f,0.f,0.f }
+	_PBRdiffuse{ 1.f, 1.f, 1.f}, 
+	_intensity{ 1.0f },
+	_direction{ 1.f,0.f,0.f },
+	_radius{ 10.f },
+	_cutOff{}, _outerCutOff{}
+	
 {
 	strcpy_s(ser_name, "LightComponent");
-}
-
-ComponentLight::ComponentLight(const int& lightID, const NS_GRAPHICS::Lights& Type)
-	: _isActive{ false },
-	_lightID{ lightID }, _type{ Type },
-	_ambient{}, _diffuse{ 1.0f,1.0f,1.0f }, _specular{}, _intensity{ 1.0f }, _cutOff{}, _outerCutOff{},
-	_direction{ 1.f,0.f,0.f }
-{
-	strcpy_s(ser_name, "LightComponent");
-}
-
-void ComponentLight::AssignLight(const int& lightID, const NS_GRAPHICS::Lights& Type)
-{
-	_lightID = lightID;
-	_type = Type;
-
-	// Save active type, if valid light is provided
-	if (Type != NS_GRAPHICS::Lights::INVALID_TYPE)
-		_inactive_type = Type;
 }
 
 ComponentLight::~ComponentLight()
 {
+	// Nothing must be called here because no
 	//NS_GRAPHICS::LightSystem::GetInstance().RemoveLight(_lightID, _type);
-}
-
-void ComponentLight::SetActive(const bool& set)
-{
-	if (_type == NS_GRAPHICS::Lights::INVALID_TYPE)
-		return;
-
-	// No action required if set is same as prev
-	if (set == _isActive)
-		return;
-
-	if (set == true)
-	{
-		// Activate light (Add and assign light to component)
-		if (_lightID == -1)
-		{
-			ChangeLightType(_inactive_type);
-		}
-	}
-	else
-	{
-		// Deactivate light (Delete light from component)
-		if (_lightID != -1)
-		{
-			_inactive_type = _type;
-			ChangeLightType(NS_GRAPHICS::Lights::INVALID_TYPE);
-		}
-	}
-
-	// Set isActive variable to set
-	_isActive = set;
 }
 
 bool ComponentLight::GetActive() const
@@ -73,257 +37,118 @@ bool ComponentLight::GetActive() const
 	return _isActive;
 }
 
+NS_GRAPHICS::Lights ComponentLight::GetType() const
+{
+	return _type;
+}
+
 NS_GRAPHICS::Lights ComponentLight::GetInactiveType() const
 {
-	return _inactive_type;
+	return _inactiveType;
 }
 
-void ComponentLight::ChangeLightType(const NS_GRAPHICS::Lights& Type)
+int ComponentLight::GetLightID() const
 {
-	_type = Type;
-	NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(this, Type);
+	return _lightID;
 }
 
-glm::vec3 ComponentLight::GetAmbient() const
+glm::vec3 ComponentLight::GetColor()
 {
-	if(_lightID != -1)
-	{
-		switch (_type)
-		{
-		case NS_GRAPHICS::Lights::DIRECTIONAL:
-			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._ambient);
-			break;
-
-		case NS_GRAPHICS::Lights::POINT:
-			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._ambient);
-			break;
-
-		case NS_GRAPHICS::Lights::SPOT:
-			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._ambient);
-			break;
-		}
-	}
-	
-	return glm::vec3();
-}
-
-void ComponentLight::SetAmbient(const glm::vec3& ambient)
-{
-	_ambient = ambient;
-	if (_lightID != -1)
-	{
-		switch (_type)
-		{
-		case NS_GRAPHICS::Lights::DIRECTIONAL:
-			NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._ambient = glm::vec4(ambient, 1.f);
-			break;
-
-		case NS_GRAPHICS::Lights::POINT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._ambient = glm::vec4(ambient, 1.f);
-			break;
-
-		case NS_GRAPHICS::Lights::SPOT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._ambient = glm::vec4(ambient, 1.f);
-			break;
-		}
-	}
-}
-
-glm::vec3 ComponentLight::GetDiffuse() const
-{
-	if (_lightID != -1)
-	{
-		switch (_type)
-		{
-		case NS_GRAPHICS::Lights::DIRECTIONAL:
-			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._diffuse);
-			break;
-
-		case NS_GRAPHICS::Lights::POINT:
-			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._diffuse);
-			break;
-
-		case NS_GRAPHICS::Lights::SPOT:
-			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._diffuse);
-			break;
-		}
-	}
-
-	return glm::vec3();
-}
-
-void ComponentLight::SetDiffuse(const glm::vec3& diffuse)
-{
-	_diffuse = diffuse;
-	if (_lightID != -1)
-	{
-		switch (_type)
-		{
-		case NS_GRAPHICS::Lights::DIRECTIONAL:
-			NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._diffuse = glm::vec4(diffuse, 1.f);
-			break;
-
-		case NS_GRAPHICS::Lights::POINT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._diffuse = glm::vec4(diffuse, 1.f);
-			break;
-
-		case NS_GRAPHICS::Lights::SPOT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._diffuse = glm::vec4(diffuse, 1.f);
-			break;
-		}
-	}
-}
-
-glm::vec3 ComponentLight::GetSpecular() const
-{
-	if (_lightID != -1)
-	{
-		switch (_type)
-		{
-		case NS_GRAPHICS::Lights::DIRECTIONAL:
-			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._specular);
-			break;
-
-		case NS_GRAPHICS::Lights::POINT:
-			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._specular);
-			break;
-
-		case NS_GRAPHICS::Lights::SPOT:
-			return glm::vec3(NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._specular);
-			break;
-		}
-	}
-
-	return glm::vec3();
-}
-
-void ComponentLight::SetSpecular(const glm::vec3& specular)
-{
-	_specular = specular;
-	if (_lightID != -1)
-	{
-		switch (_type)
-		{
-		case NS_GRAPHICS::Lights::DIRECTIONAL:
-			NS_GRAPHICS::LightSystem::GetInstance().GetDirLight(_lightID)._specular = glm::vec4(specular, 1.f);
-			break;
-
-		case NS_GRAPHICS::Lights::POINT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._specular = glm::vec4(specular, 1.f);
-			break;
-
-		case NS_GRAPHICS::Lights::SPOT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._specular = glm::vec4(specular, 1.f);
-			break;
-		}
-	}
+	return _PBRdiffuse;
 }
 
 float ComponentLight::GetIntensity()
 {
 	// Recall that attenuation = 1.f / intensity
 	// thus intensity = 1.f / attenuation
-	if (_lightID != -1)
+	return _intensity;
+}
+
+float ComponentLight::GetRadius() const
+{
+	return _radius;
+}
+
+float ComponentLight::GetOuterCutOff() const
+{
+	return _outerCutOff;
+}
+
+float ComponentLight::GetCutOff() const
+{
+	return _cutOff;
+}
+
+void ComponentLight::SetLightID(const int& id)
+{
+	_lightID = id;
+}
+
+void ComponentLight::SetType(const NS_GRAPHICS::Lights& type)
+{
+	if (GetActive() == false)
 	{
-		switch (_type)
-		{
-		case NS_GRAPHICS::Lights::POINT:
-			return (1.f / NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._attenuation);
-			break;
-
-		case NS_GRAPHICS::Lights::SPOT:
-			return (1.f / NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._attenuation);
-			break;
-
-		default:
-			return 0.f;
-		}
+		_inactiveType = type;
+		return;
 	}
 
-	return 0.f;
+	if (_type != type)
+	{
+		// call light system to assign light to component
+		// this function will set the type for the component itself
+		NS_GRAPHICS::LightSystem::GetInstance().SetLight(type, this);
+
+		// After changing light type, store to inactive type variable
+		// This is used to aid active/inactive setter
+		_inactiveType = _type;
+	}
+}
+
+void ComponentLight::LS_SetType(const NS_GRAPHICS::Lights& type)
+{
+	_type = type;
+}
+
+void ComponentLight::SetColor(const glm::vec3& color)
+{
+	_PBRdiffuse = color;
+
+	// Do not need to update in uniform block here
+	// light system update will take care of that
 }
 
 void ComponentLight::SetIntensity(const float& intensity)
 {
 	_intensity = intensity;
-	// Calculate intensity to be 1.f / intensity
-	// E.g. intensity = 100.f, attenuation = 1.f / 100f = 0.01f
-	// E.g. intensity = 10.f, attenuation = 1.f / 10f = 0.1f
-	// lesser attenuation = greater range
-	float attenuation = 0.f;
-	if (intensity > 0.f)
-		attenuation = 1.f / intensity;
-
-	if (_lightID != -1)
-	{
-		switch (_type)
-		{
-		case NS_GRAPHICS::Lights::POINT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._attenuation = attenuation;
-			break;
-
-		case NS_GRAPHICS::Lights::SPOT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._attenuation = attenuation;
-			break;
-
-		default:
-			break;
-		}
-	}
 }
 
-float ComponentLight::GetAttenuation()
+void ComponentLight::SetActive(const bool& set)
 {
-	if (_lightID != -1)
-	{
-		switch (_type)
-		{
-		case NS_GRAPHICS::Lights::POINT:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._attenuation;
-			break;
-
-		case NS_GRAPHICS::Lights::SPOT:
-			return NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._attenuation;
-			break;
-
-		default:
-			return 0.f;
-		}
-	}
-
-	return 0.f;
+	NS_GRAPHICS::LightSystem::GetInstance().SetActive(this, set);
 }
 
-void ComponentLight::SetAttenuation(const float& attenuation)
+void ComponentLight::LS_SetActive(const bool& set)
 {
-	if (_lightID != -1)
-	{
-		switch (_type)
-		{
-		case NS_GRAPHICS::Lights::POINT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetPointLight(_lightID)._attenuation = attenuation;
-			break;
+	_isActive = set;
+}
 
-		case NS_GRAPHICS::Lights::SPOT:
-			NS_GRAPHICS::LightSystem::GetInstance().GetSpotLight(_lightID)._attenuation = attenuation;
-			break;
+void ComponentLight::SetRadius(const float& radius)
+{
+	_radius = radius;
+}
 
-		default:
-			break;
-		}
-	}
+void ComponentLight::SetOuterCutOff(const float& outercutoff)
+{
+	_outerCutOff = outercutoff;
+}
+
+void ComponentLight::SetCutOff(const float& cutoff)
+{
+	_cutOff = cutoff;
 }
 
 void ComponentLight::Read(Value& val)
 {
-	// Remove if any
-	NS_GRAPHICS::LightSystem::GetInstance().RemoveLight(_lightID, _type);
-
-	if (val.FindMember("isActive") == val.MemberEnd())
-		std::cout << "No active data has been found" << std::endl;
-	else
-		SetActive(val["isActive"].GetBool());
-
 	if (val.FindMember("LightType") == val.MemberEnd())
 		std::cout << "No active data has been found" << std::endl;
 	else
@@ -332,65 +157,73 @@ void ComponentLight::Read(Value& val)
 		if (lightName == "DIRECTIONAL")
 		{
 			//ChangeLightType(NS_GRAPHICS::Lights::DIRECTIONAL);
-			AssignLight(NS_GRAPHICS::LightSystem::GetInstance().AddDirLight(), NS_GRAPHICS::Lights::DIRECTIONAL);
+			//AssignLight(NS_GRAPHICS::LightSystem::GetInstance().AddDirLight(), NS_GRAPHICS::Lights::DIRECTIONAL);
+			SetType(NS_GRAPHICS::Lights::DIRECTIONAL);
 		}
 		else if (lightName == "POINT")
 		{
 			//ChangeLightType(NS_GRAPHICS::Lights::POINT);
-			AssignLight(NS_GRAPHICS::LightSystem::GetInstance().AddPointLight(), NS_GRAPHICS::Lights::POINT);
+			//AssignLight(NS_GRAPHICS::LightSystem::GetInstance().AddPointLight(), NS_GRAPHICS::Lights::POINT);
+			SetType(NS_GRAPHICS::Lights::POINT);
 		}
 		else if (lightName == "SPOT")
 		{
 			//ChangeLightType(NS_GRAPHICS::Lights::SPOT);
-			AssignLight(NS_GRAPHICS::LightSystem::GetInstance().AddSpotLight(), NS_GRAPHICS::Lights::SPOT);
+			//AssignLight(NS_GRAPHICS::LightSystem::GetInstance().AddSpotLight(), NS_GRAPHICS::Lights::SPOT);
+			SetType(NS_GRAPHICS::Lights::SPOT);
 		}
 	}
+
+	if (val.FindMember("isActive") == val.MemberEnd())
+		std::cout << "No active data has been found" << std::endl;
+	else
+		SetActive(val["isActive"].GetBool());
 
 	//Error checking for json data
 	if (val.FindMember("Diffuse") == val.MemberEnd())
 		std::cout << "No Diffuse data has been found" << std::endl;
 	else
 	{
-		auto pos = val["Diffuse"].GetArray();
+		auto diffuse = val["Diffuse"].GetArray();
 
-		_diffuse.x = pos[0].GetFloat();
-		_diffuse.y = pos[1].GetFloat();
-		_diffuse.z = pos[2].GetFloat();
-		SetDiffuse(_diffuse);
+		_PBRdiffuse.x = diffuse[0].GetFloat();
+		_PBRdiffuse.y = diffuse[1].GetFloat();
+		_PBRdiffuse.z = diffuse[2].GetFloat();
+		//SetDiffuse(_diffuse);
 	}
 
 
-	if (val.FindMember("Ambient") == val.MemberEnd())
-		std::cout << "No Ambient data has been found" << std::endl;
-	else
-	{
-		auto scale = val["Ambient"].GetArray();
+	//if (val.FindMember("Ambient") == val.MemberEnd())
+	//	std::cout << "No Ambient data has been found" << std::endl;
+	//else
+	//{
+	//	//auto scale = val["Ambient"].GetArray();
 
-		_ambient.x = scale[0].GetFloat();
-		_ambient.y = scale[1].GetFloat();
-		_ambient.z = scale[2].GetFloat();
-		SetAmbient(_ambient);
-	}
+	//	//_ambient.x = scale[0].GetFloat();
+	//	//_ambient.y = scale[1].GetFloat();
+	//	//_ambient.z = scale[2].GetFloat();
+	//	//SetAmbient(_ambient);
+	//}
 
-	if (val.FindMember("Specular") == val.MemberEnd())
-		std::cout << "No Specular data has been found" << std::endl;
-	else
-	{
-		auto rotate = val["Specular"].GetArray();
+	//if (val.FindMember("Specular") == val.MemberEnd())
+	//	std::cout << "No Specular data has been found" << std::endl;
+	//else
+	//{
+	//	//auto rotate = val["Specular"].GetArray();
 
-		_specular.x = rotate[0].GetFloat();
-		_specular.y = rotate[1].GetFloat();
-		_specular.z = rotate[2].GetFloat();
-		SetSpecular(_specular);
-	}
+	//	//_specular.x = rotate[0].GetFloat();
+	//	//_specular.y = rotate[1].GetFloat();
+	//	//_specular.z = rotate[2].GetFloat();
+	//	//SetSpecular(_specular);
+	//}
 
-	if (val.FindMember("Attenuation") == val.MemberEnd()) // Should be intensity
-		std::cout << "No Attenuation data has been found" << std::endl;
-	else
-	{
-		_intensity = val["Attenuation"].GetFloat(); // Should be intensity
-		SetAttenuation(1.0f / _intensity);
-	}
+	//if (val.FindMember("Attenuation") == val.MemberEnd()) // Should be intensity
+	//	std::cout << "No Attenuation data has been found" << std::endl;
+	//else
+	//{
+	//	_intensity = val["Attenuation"].GetFloat(); // Should be intensity
+	//	SetIntensity(_intensity);
+	//}
 
 	if (val.FindMember("Intensity") == val.MemberEnd()) // Should be intensity
 		std::cout << "No Intensity data has been found" << std::endl;
@@ -439,13 +272,13 @@ Value ComponentLight::Write()
 	NS_SERIALISER::ChangeData(&val, "isActive", _isActive);		//Bool
 
 	Value diffuse(rapidjson::kArrayType);
-	diffuse.PushBack(_diffuse.x, global_alloc);
-	diffuse.PushBack(_diffuse.y, global_alloc);
-	diffuse.PushBack(_diffuse.z, global_alloc);
+	diffuse.PushBack(_PBRdiffuse.x, global_alloc);
+	diffuse.PushBack(_PBRdiffuse.y, global_alloc);
+	diffuse.PushBack(_PBRdiffuse.z, global_alloc);
 
 	NS_SERIALISER::ChangeData(&val, "Diffuse", diffuse);
 
-	Value ambient(rapidjson::kArrayType);
+	/*Value ambient(rapidjson::kArrayType);
 	ambient.PushBack(_ambient.x, global_alloc);
 	ambient.PushBack(_ambient.y, global_alloc);
 	ambient.PushBack(_ambient.z, global_alloc);
@@ -457,7 +290,7 @@ Value ComponentLight::Write()
 	specular.PushBack(_specular.y, global_alloc);
 	specular.PushBack(_specular.z, global_alloc);
 
-	NS_SERIALISER::ChangeData(&val, "Specular", specular);
+	NS_SERIALISER::ChangeData(&val, "Specular", specular);*/
 
 	NS_SERIALISER::ChangeData(&val, "Intensity", _intensity); // Should be intensity
 	NS_SERIALISER::ChangeData(&val, "CutOff", _cutOff);

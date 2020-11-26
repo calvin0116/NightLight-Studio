@@ -106,7 +106,7 @@ namespace NS_GRAPHICS
 			StopProgram();
 		}
 
-		// Setup uniform values for PBR
+		// Setup uniform values for PBR texture shader
 		/*if (quantity >= 6)
 		{
 			StartProgram(5);
