@@ -15,6 +15,7 @@
 #include "ComponentScript.h"
 #include "ComponentLight.h"
 #include "ComponentCanvas.h"
+#include "ComponentNavigator.h"
 
 //Stats components
 #include "ComponentPlayerStats.h"
@@ -23,6 +24,7 @@
 
 // Temporary C++ script
 #include "ComponentCScript.h"
+
 
 //For json serialising
 #include "..\..\ISerializable.h"
