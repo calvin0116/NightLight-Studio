@@ -487,7 +487,6 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 		{
 			bool renderTextures = !(graphics_comp->_renderType == RENDERTYPE::SOLID);
 
-			//ImGui::Checkbox("Is Active", &light->_isActive);
 			ImGui::Checkbox("Render Textures", &renderTextures);
 
 			if (!renderTextures)
@@ -667,13 +666,17 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 
 			ImGui::Text("Materials");
 
-			ImGui::ColorEdit3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
+			/*ImGui::ColorEdit3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
 
 			ImGui::ColorEdit3("Ambient##Graphics", glm::value_ptr(graphics_comp->_materialData._ambient));
 
 			ImGui::ColorEdit3("Specular##Graphics", glm::value_ptr(graphics_comp->_materialData._specular));
 
-			ImGui::InputFloat("Shininess", &graphics_comp->_materialData._shininess);
+			ImGui::InputFloat("Shininess", &graphics_comp->_materialData._shininess);*/
+
+			ImGui::ColorEdit3("Color##Graphics", glm::value_ptr(graphics_comp->_pbrData._albedo));
+			ImGui::DragFloat("Metallic", &graphics_comp->_pbrData._metallic, 0.1f, 0.f, 1.f);
+			ImGui::DragFloat("Roughness", &graphics_comp->_pbrData._roughness, 0.1f, 0.f, 1.f);
 
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 		}

@@ -107,13 +107,15 @@ namespace NS_GRAPHICS
 		}
 
 		// Setup uniform values for PBR texture shader
-		/*if (quantity >= 6)
+		if (quantity >= 8)
 		{
-			StartProgram(5);
-			glUniform1f(glGetUniformLocation(currentProgramID, "Metallic"), 0.0f);
-			glUniform1f(glGetUniformLocation(currentProgramID, "Roughness"), 0.0f);
+			StartProgram(7);
+			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
+			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
+			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
+			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
 			StopProgram();
-		}*/
+		}
 	}
 
 	bool ShaderSystem::CompileLoadedShaders()
@@ -213,7 +215,7 @@ namespace NS_GRAPHICS
 		LoadShader(std::string("../Resources/Shaders/ui.vert"), std::string("../Resources/Shaders/ui.frag")); // 5
 		LoadShader(std::string("../Resources/Shaders/PBR.vert"), std::string("../Resources/Shaders/PBR.frag")); // 6
 		LoadShader(std::string("../Resources/Shaders/withlights_animated.vert"), std::string("../Resources/Shaders/withlights_animated.frag")); // 7
-		//LoadShader("","");
+		LoadShader(std::string("../Resources/Shaders/PBR_Textured.vert"), std::string("../Resources/Shaders/PBR_Textured.frag")); // 8
 		//LoadShader("","");
 		//LoadShader("","");
 
