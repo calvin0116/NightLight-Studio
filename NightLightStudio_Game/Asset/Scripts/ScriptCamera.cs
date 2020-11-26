@@ -13,16 +13,19 @@ namespace Unicorn
     Transform otherTrans;  // Prop's transform
     Variables camVar; // Camera variables comp to get offset
 
+    //Variables
     Vector3 oldTgtPos;
-
     // Camera values
     Vector3 dir = new Vector3(0.0f, 0.0f, 0.0f); // Direction to move camera
-    float Threshold = 50.0f; // Distance to move before camera follows player
+    float Threshold = 10.0f; // Distance to move before camera follows player
     float Time = 0.5f; // Time to move lerp camera
     float offX;
     float offY;
     float offZ;
     Vector3 camOffSet;
+
+    // Scripts
+    ScriptPlayer script_player;
 
     public override void Init()
     {
@@ -40,17 +43,25 @@ namespace Unicorn
       Camera.SetThirdPersonCamCanZoomAnot(false);
       // Init camera position
       oldTgtPos = playerTrans.getPosition() + camOffSet;
-      Camera.SetThirdPersonCamTarget(playerTrans.getPosition() + camOffSet);
+      Camera.SetThirdPersonCamTarget(playerTrans.getPosition() + getCamOffsetVec());
     }
 
     public override void LateInit()
     {
-
+      // Get script
+      script_player = GetScript(playerID);
     }
 
     public override void Update()
     {
-      Camera.SetThirdPersonCamTarget(Lerp(playerTrans.getPosition() + camOffSet));
+      Vector3 tgtPos = playerTrans.getPosition() + getCamOffsetVec();
+      //if (script_player.CurrentState == ScriptPlayer.State.Human)
+      //  tgtPos = playerTrans.getPosition() + getCamOffsetVec();
+      if (script_player.CurrentState == ScriptPlayer.State.Moth)
+        tgtPos = playerTrans.getPosition();
+      Camera.SetThirdPersonCamTarget(Lerp(tgtPos));
+      Camera.SetThirdPersonCamDistance(offZ);
+      //Camera.SetThirdPersonCamTarget(Lerp(playerTrans.getPosition() + camOffSet));
     }
 
     public override void FixedUpdate()
@@ -70,6 +81,16 @@ namespace Unicorn
       Camera.SetUseThirdPersonCam(false);
       Camera.SetThirdPersonCamCanRotateAnot(true);
       Camera.SetThirdPersonCamCanZoomAnot(true);
+    }
+
+    public Vector3 getCamOffsetVec()
+    {
+      Vector3 vecx, vecy;
+      vecx = Camera.GetRightVector() * camOffSet.x;
+      vecy = Camera.GetUpVector() * camOffSet.y;
+      //vecx = Camera.GetRightVector() * camOffSet.z; // z is distance
+      Vector3 vec = vecx + vecy;
+      return vec;
     }
 
     public Vector3 Lerp(Vector3 otherPos)

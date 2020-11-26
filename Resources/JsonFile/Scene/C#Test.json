@@ -80,7 +80,14 @@
                     1.0,
                     1.0
                 ],
-                "ShininessMat": 32.0
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             },
             "ScriptComponent": {
                 "isActive": true,
@@ -88,22 +95,11 @@
                 "ScriptName": "ScriptPlayer"
             },
             "LightComponent": {
-                "LightType": "SPOT",
                 "isActive": false,
                 "Diffuse": [
                     1.0,
                     1.0,
                     1.0
-                ],
-                "Ambient": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Specular": [
-                    0.0,
-                    0.0,
-                    0.0
                 ],
                 "Intensity": 1000.0,
                 "CutOff": 0.0,
@@ -115,7 +111,8 @@
                 "FloatList": [
                     70000.0,
                     10000.0,
-                    15.0
+                    15.0,
+                    1.0
                 ]
             }
         },
@@ -199,7 +196,14 @@
                     1.0,
                     1.0
                 ],
-                "ShininessMat": 32.0
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Doll": {
@@ -282,7 +286,14 @@
                     1.0,
                     1.0
                 ],
-                "ShininessMat": 32.0
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Camera": {
@@ -315,8 +326,8 @@
                 "StringList": [],
                 "FloatList": [
                     50.0,
-                    10.0,
-                    0.0
+                    50.0,
+                    400.0
                 ]
             }
         }
