@@ -247,6 +247,7 @@
     <ClInclude Include="Source\Graphics\AnimationController.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
+    <ClInclude Include="Source\Graphics\ComponentAnimation.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
     <ClInclude Include="Source\Graphics\Lights.h" />

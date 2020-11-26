@@ -20,9 +20,9 @@
 #endif
 
 //#define DRAW_WITH_COMPONENTS
-//#define DRAW_WITH_LIGHTS
+#define DRAW_WITH_LIGHTS
 #define DRAW_DEBUG_GRID
-#define PBR_DRAWING
+//#define PBR_DRAWING
 
 namespace NS_GRAPHICS
 {
@@ -55,7 +55,7 @@ namespace NS_GRAPHICS
 	{
 		cameraManager->Update();
 		//0.01f ms to s
-		_testTimeElapsed += DELTA_T->dt * DT_SCALE;
+		_testTimeElapsed += 0.1f;
 
 		if (cameraManager->CheckUpdate())
 		{
@@ -349,6 +349,8 @@ namespace NS_GRAPHICS
 
 			Model* model = modelManager->_models[graphicsComp->_modelID];
 
+			glm::mat4 identity(1.0);
+
 			// get transform component
 			ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
 
@@ -356,6 +358,7 @@ namespace NS_GRAPHICS
 			
 			if (model->_isAnimated)
 			{
+				model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
 				for (auto& mesh : model->_animatedMeshes)
 				{
 					if (graphicsComp->_renderType == RENDERTYPE::SOLID)
@@ -371,6 +374,8 @@ namespace NS_GRAPHICS
 
 						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
 
 						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
 						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
@@ -392,9 +397,9 @@ namespace NS_GRAPHICS
 
 						// Bind textures
 						// bind diffuse map
-						textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
+						//textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 						// bind specular map
-						textureManager->BindSpecularTexture(graphicsComp->_specularID);
+						//textureManager->BindSpecularTexture(graphicsComp->_specularID);
 
 						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
 						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
@@ -440,9 +445,9 @@ namespace NS_GRAPHICS
 
 						// Bind textures
 						// bind diffuse map
-						textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
+						//textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
 						// bind specular map
-						textureManager->BindSpecularTexture(graphicsComp->_specularID);
+						//textureManager->BindSpecularTexture(graphicsComp->_specularID);
 
 						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
 						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
