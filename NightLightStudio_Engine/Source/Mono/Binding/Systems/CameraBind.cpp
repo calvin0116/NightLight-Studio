@@ -6,6 +6,8 @@ namespace CameraBind
 {
   void BindCamera()
   {
+    MonoWrapper::BindClassFunction(csGetPosition, "GetPosition",
+      "Camera");
     MonoWrapper::BindClassFunction(csGetUpVector, "GetUpVector",
       "Camera");
     MonoWrapper::BindClassFunction(csGetRightVector, "GetRightVector",
@@ -45,6 +47,17 @@ namespace CameraBind
   }
 
   // Directional Vectors
+  // Position of camera
+  MonoObject* csGetPosition()
+  {
+    MonoObject* monoVec3 = MonoWrapper::ConstructObject("Vector3");
+    glm::vec3 vec3 = NS_GRAPHICS::CameraSystem::GetInstance().GetCurrentCameraPosition();
+    MonoWrapper::SetObjectFieldValue<float>(monoVec3, "X", vec3.x);
+    MonoWrapper::SetObjectFieldValue<float>(monoVec3, "Y", vec3.y);
+    MonoWrapper::SetObjectFieldValue<float>(monoVec3, "Z", vec3.z);
+    return monoVec3;
+  }
+
   // UP vector
   MonoObject* csGetUpVector()
   {

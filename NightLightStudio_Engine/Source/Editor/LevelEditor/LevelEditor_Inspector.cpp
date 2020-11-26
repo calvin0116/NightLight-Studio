@@ -296,8 +296,10 @@ void InspectorWindow::TransformComp(Entity& ent)
 	TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
 	if (trans_comp != NULL)
 	{
-		std::string enam = trans_comp->_entityName.toString();
 		ImGui::NewLine();
+    ImGui::InputInt("Tag", &(trans_comp->_tag));
+    ImGui::NewLine();
+    std::string enam = trans_comp->_entityName.toString();
 		_levelEditor->LE_AddInputText("Entity Name", enam, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 		[&enam, &trans_comp]()
 		{
@@ -305,6 +307,8 @@ void InspectorWindow::TransformComp(Entity& ent)
 		});
 
 		TransformGizmo(trans_comp);
+    //ImGui::NewLine();
+    //int tag = trans_comp->_tag;
 		/*
 		if (ImGui::CollapsingHeader("Transform"))
 		{

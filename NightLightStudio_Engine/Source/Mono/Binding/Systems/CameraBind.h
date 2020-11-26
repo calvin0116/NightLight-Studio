@@ -7,6 +7,7 @@ namespace CameraBind
   void BindCamera();
 
   // Directional Vectors
+  MonoObject* csGetPosition();
   // UP vector
   MonoObject* csGetUpVector();
   // RIGHT vector

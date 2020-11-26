@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 #include "../Core/MySystem.h"
 //#include "../IO/Json/Config.h"
 #include "../../framework.h"
@@ -8,6 +10,7 @@
 #include "../Component/ComponentRigidBody.h"
 #include "CollisionResolver.h"
 #include "../Component/ComponentManager.h"
+#include "CSVReader.h"
 
 //messaging for toggle play
 #include "../Messaging/SystemReceiver.h"
@@ -21,9 +24,13 @@ namespace NS_COLLISION
 	{
 		CollsionResolver colResolver;
 
+		//for reading data in collider table
+		std::vector<std::vector<std::string> > _colliderDataList;
+
+		//toggeling playable
+		bool _isPlaying;
 		friend Singleton<CollisionSystem>;
 
-		bool _isPlaying;
 		SystemMessaging::SystemReceiver receiver;
 	public:
 
@@ -48,11 +55,11 @@ namespace NS_COLLISION
 
 		ICollider* GetCollider(ComponentCollider* collider);
 
-		void UpdateCollisionBoxPos(ComponentCollider * comCol, ComponentTransform * comTrans);
+		void UpdateCollisionBoxPos(ComponentCollider* comCol, ComponentTransform* comTrans);
 		bool CollisionCuling(ComponentTransform* comTrans1, ComponentTransform* comTrans2);
 		bool CheckTrigger(ComponentCollider* Collider1, ComponentCollider* Collider2);
 		bool CheckCollision(
-			ComponentCollider* Collider1, ComponentCollider* Collider2, 
+			ComponentCollider* Collider1, ComponentCollider* Collider2,
 			ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2,
 			ComponentTransform* Transform1, ComponentTransform* Transform2,
 			Entity Entity1, Entity Entity2

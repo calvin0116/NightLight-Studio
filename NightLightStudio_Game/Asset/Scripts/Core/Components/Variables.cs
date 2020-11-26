@@ -15,29 +15,29 @@ namespace Unicorn
     //private Vector3 rotation = new Vector3();
     //private Vector3 scale = new Vector3();
 
-    public int getInt(int index)
+    public int GetInt(int index)
     {
       return get_Int_Internal(native_handle, index);
     }
-    public void setInt(int val, int index)
+    public void SetInt(int val, int index)
     {
       set_Int_Internal(native_handle, val, index);
     }
 
-    public string getString(int index)
+    public string GetString(int index)
     {
       return get_String_Internal(native_handle, index);
     }
-    public void setString(string val, int index)
+    public void SetString(string val, int index)
     {
       set_String_Internal(native_handle, val, index);
     }
 
-    public float getFloat(int index)
+    public float GetFloat(int index)
     {
       return get_Float_Internal(native_handle, index);
     }
-    public void setFloat(float val, int index)
+    public void SetFloat(float val, int index)
     {
       set_Float_Internal(native_handle, val, index);
     }

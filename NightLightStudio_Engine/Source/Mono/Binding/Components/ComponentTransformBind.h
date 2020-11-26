@@ -4,6 +4,9 @@
 
 namespace ComponentTransformBind
 {
+  int get_Tag_Internal(TransformComponent* trans);
+  void set_Tag_Internal(TransformComponent* trans, int val);
+
   MonoString* get_Name_Internal(TransformComponent* trans);
   void set_Name_Internal(TransformComponent* trans, MonoString* val);
 

@@ -8,27 +8,39 @@ namespace Unicorn
   {
     public string sPlayer = "Player";
     int playerID; // Player ID
-    // Trans to follow position
+    // Components
     Transform playerTrans; // Player's transform
     Transform otherTrans;  // Prop's transform
+    Variables camVar; // Camera variables comp to get offset
+
     Vector3 oldTgtPos;
 
-    // Direction to move camera
-    Vector3 dir = new Vector3(0.0f, 0.0f, 0.0f);
+    // Camera values
+    Vector3 dir = new Vector3(0.0f, 0.0f, 0.0f); // Direction to move camera
     float Threshold = 50.0f; // Distance to move before camera follows player
+    float Time = 0.5f; // Time to move lerp camera
+    float offX;
+    float offY;
+    float offZ;
+    Vector3 camOffSet;
 
     public override void Init()
     {
-      // Order matters!
+      // Order matters! Getting component
       playerID = GameObjectFind(sPlayer);
       playerTrans = GetTransform(playerID);
+      camVar = GetVariables(id);
+      offX = camVar.GetFloat(0);
+      offY = camVar.GetFloat(1);
+      offZ = camVar.GetFloat(2);
+      camOffSet = new Vector3(offX, offY, offZ);
 
       Camera.SetUseThirdPersonCam(true);
       Camera.SetThirdPersonCamCanRotateAnot(true);
       Camera.SetThirdPersonCamCanZoomAnot(false);
       // Init camera position
-      oldTgtPos = playerTrans.getPosition();
-      Camera.SetThirdPersonCamTarget(playerTrans.getPosition());
+      oldTgtPos = playerTrans.getPosition() + camOffSet;
+      Camera.SetThirdPersonCamTarget(playerTrans.getPosition() + camOffSet);
     }
 
     public override void LateInit()
@@ -38,9 +50,7 @@ namespace Unicorn
 
     public override void Update()
     {
-      SetDir(playerTrans.getPosition());
-      if(toLerp(Threshold))
-        Camera.SetThirdPersonCamTarget(Lerp());
+      Camera.SetThirdPersonCamTarget(Lerp(playerTrans.getPosition() + camOffSet));
     }
 
     public override void FixedUpdate()
@@ -62,23 +72,18 @@ namespace Unicorn
       Camera.SetThirdPersonCamCanZoomAnot(true);
     }
 
-    public void SetDir(Vector3 otherPos)
+    public Vector3 Lerp(Vector3 otherPos)
     {
       dir = otherPos - oldTgtPos;
-    }
-
-    public bool toLerp(float threshold)
-    {
-      if (dir.magnitude <= threshold)
-        return false;
-      return true;
-    }
-
-    public Vector3 Lerp()
-    {
-      Vector3 LerpPos = oldTgtPos + (dir * RealDT());
-      oldTgtPos = LerpPos;
-      return LerpPos;
+      float mag = dir.magnitude;
+      if (mag > Threshold)
+      {
+        float speed = mag / Time;
+        Vector3 LerpPos = oldTgtPos + (dir.normalized * (speed * RealDT()));
+        oldTgtPos = LerpPos;
+        return LerpPos;
+      }
+      return oldTgtPos;
     }
   }
 }

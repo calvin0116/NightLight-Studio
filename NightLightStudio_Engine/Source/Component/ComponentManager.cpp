@@ -1219,6 +1219,7 @@ void ComponentManager::ComponentCreation()
 		
 		comsetFac.AddComponentContainer<ComponentPlayerStats>();
 		comsetFac.AddComponentContainer<ComponentCauldronStats>();
+		comsetFac.AddComponentContainer<ComponentNavigator>();
 		// Temporary C++ Scripting component
 		comsetFac.AddComponentContainer<ComponentCScript>();
 		comsetFac.AddComponentContainer<ComponentVariables>();
