@@ -3,6 +3,7 @@
         "Player": {
             "TransformComponent": {
                 "EntityName": "Player",
+                "Tag": 0,
                 "Position": [
                     0.0,
                     182.8325653076172,
@@ -121,6 +122,7 @@
         "Floor": {
             "TransformComponent": {
                 "EntityName": "Floor",
+                "Tag": 0,
                 "Position": [
                     0.0,
                     -22.0,
@@ -203,6 +205,7 @@
         "Doll": {
             "TransformComponent": {
                 "EntityName": "Doll",
+                "Tag": 0,
                 "Position": [
                     -377.6206359863281,
                     54.89873504638672,
@@ -285,6 +288,7 @@
         "Camera": {
             "TransformComponent": {
                 "EntityName": "Camera",
+                "Tag": 0,
                 "Position": [
                     0.0,
                     0.0,
@@ -305,6 +309,15 @@
                 "isActive": true,
                 "isRunning": true,
                 "ScriptName": "ScriptCamera"
+            },
+            "ComponentVariables": {
+                "IntList": [],
+                "StringList": [],
+                "FloatList": [
+                    50.0,
+                    10.0,
+                    0.0
+                ]
             }
         }
     }

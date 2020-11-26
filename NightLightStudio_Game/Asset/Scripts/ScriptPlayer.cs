@@ -44,16 +44,15 @@ namespace Unicorn
       playerRB = GetRigidBody(id);
       playerVar = GetVariables(id);
       // Change default values from variables
-      humnForce = playerVar.getFloat(0);
-      mothForce = playerVar.getFloat(1);
-      maxEnergy = playerVar.getFloat(2);
+      humnForce = playerVar.GetFloat(0);
+      mothForce = playerVar.GetFloat(1);
+      maxEnergy = playerVar.GetFloat(2);
       curEnergy = maxEnergy;
       moveForce = humnForce;
     }
 
     public override void LateInit()
     {
-      Console.WriteLine(playerVar.getFloat(0));
     }
 
     public override void Update()
