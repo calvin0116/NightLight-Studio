@@ -20,9 +20,9 @@
 #endif
 
 //#define DRAW_WITH_COMPONENTS
-#define DRAW_WITH_LIGHTS
+//#define DRAW_WITH_LIGHTS
 #define DRAW_DEBUG_GRID
-//#define PBR_DRAWING
+#define PBR_DRAWING
 
 namespace NS_GRAPHICS
 {
