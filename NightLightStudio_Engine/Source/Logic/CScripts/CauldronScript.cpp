@@ -8,7 +8,7 @@
 
 void CauldronScript::Init()
 {
-  PlayerENT = G_ECMANAGER->getEntity("Player");
+  PlayerENT = G_ECMANAGER->getEntityUsingEntName("Player");
   PlayerCOL = PlayerENT.getComponent<ComponentCollider>();
   PlayerCSCRIPT = PlayerENT.getComponent<ComponentCScript>();
 }
