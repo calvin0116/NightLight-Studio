@@ -100,6 +100,15 @@ struct CollisionEvent
 		return false;
 	}
 
+	void operator!()
+	{
+		std::swap(collider1, collider2);
+		std::swap(entity1, entity2);
+		std::swap(inertia1, inertia2);
+		std::swap(rigid1, rigid2);
+		std::swap(transform1, transform2);
+	}
+
 };
 
 struct CollsionResolver
@@ -117,9 +126,15 @@ struct CollsionResolver
 
 private:
 	// helper functions
-	void resolveEventNormally/*like you know with the NORMAL*/(const CollisionEvent& _event);
+	void resolveEventNormally/*like you know with the NORMAL (lol)*/(CollisionEvent& _event);
 
-	void resolveAABB(const CollisionEvent& _event);
+	void resolveAABB(CollisionEvent& _event);
+
+	void resolveAABB_sphere(CollisionEvent& _event, bool flip = false);
+
+	void resolvesphere(CollisionEvent& _event);
+
+
 
 	//void AABBResolve/*like you know with the NORMAL*/(const CollisionEvent& _event);
 

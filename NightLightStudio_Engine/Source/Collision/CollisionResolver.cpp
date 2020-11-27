@@ -13,7 +13,7 @@
 #define PENETRATION_SLOP 0.05f;
 
 
-#define COLLIDING_FRAMES_TRASHOLD 6
+#define COLLIDING_FRAMES_TRASHOLD 2
 
 void CollisionResolver()
 {
@@ -84,6 +84,8 @@ void CollsionResolver::resolveCollision()
 {
 	for (CollisionEvent& colEvent : colEventList)
 	{
+		if (colEvent.doResolve == false) continue;
+
 
 		switch (colEvent.collisionType)
 		{
@@ -176,7 +178,8 @@ void CollsionResolver::resolveCollision()
 			}
 			case COLRESTYPE::AABB_SPHERE:
 			{
-				resolveEventNormally(colEvent);
+				//resolveEventNormally(colEvent);
+				resolveAABB_sphere(colEvent);
 				break;
 			}
 			case COLRESTYPE::AABB_CAPSULE:
@@ -186,12 +189,14 @@ void CollsionResolver::resolveCollision()
 			}
 			case COLRESTYPE::SPHERE_AABB:
 			{
-				resolveEventNormally(colEvent);
+				//resolveEventNormally(colEvent);
+				resolveAABB_sphere(colEvent, true);
 				break;
 			}
 			case COLRESTYPE::SPHERE_SPHERE:
 			{
-				resolveEventNormally(colEvent);
+				//resolveEventNormally(colEvent);
+				resolvesphere(colEvent);
 				break;
 			}
 			case COLRESTYPE::SPHERE_CAPSULE:
@@ -360,9 +365,12 @@ void CollsionResolver::clear()
   trigEventList.clear();
 }
 
-void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
+void CollsionResolver::resolveEventNormally(CollisionEvent& colEvent)
 {
 	if (colEvent.doResolve == false) return;
+
+	colEvent.collisionNormal = NlMath::Vector3DNormalize(colEvent.collisionNormal);
+
 
 	// ref: https://stackoverflow.com/questions/5060082/eliminating-a-direction-from-a-vector
 	// "Calculate the dot product of the geometry wall normal with the velocity vector of the object. 
@@ -479,7 +487,7 @@ void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 	}
 }
 
-void CollsionResolver::resolveAABB(const CollisionEvent& colEvent)
+void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 {
 	resolveEventNormally(colEvent);
 
@@ -594,6 +602,174 @@ void CollsionResolver::resolveAABB(const CollisionEvent& colEvent)
 	}
 
 
+
+}
+
+void CollsionResolver::resolveAABB_sphere(CollisionEvent& colEvent, bool flip)
+{
+
+	if (flip)
+	{
+		!colEvent;
+		resolveAABB_sphere(colEvent);
+	}
+
+	resolveEventNormally(colEvent);
+
+	switch (colEvent.colidingSide)
+	{
+	case SIDES::NO_COLLISION:
+	{
+		// no collision y u here
+		throw;
+		break;
+	}
+	case SIDES::FRONT:
+	{
+		float pen = (colEvent.transform2->_position.y - colEvent.collider2->collider.sphere.radius) - colEvent.collider1->collider.aabb.vecMax.z;
+
+		pen = pen * 0.5f;
+
+		if (!colEvent.rigid2->isStatic)
+		{
+			colEvent.transform2->_position.z += -pen - std::numeric_limits<float>::epsilon();
+		}
+
+		if (!colEvent.rigid1->isStatic)
+		{
+			colEvent.transform1->_position.z += pen + std::numeric_limits<float>::epsilon();
+		}
+		break;
+	}
+	case SIDES::BACK:
+	{
+		float pen = colEvent.collider1->collider.aabb.vecMin.z - (colEvent.transform2->_position.y + colEvent.collider2->collider.sphere.radius);
+
+		pen = pen * 0.5f;
+
+		if (!colEvent.rigid1->isStatic)
+		{
+			colEvent.transform1->_position.z += -pen - std::numeric_limits<float>::epsilon();
+		}
+
+		if (!colEvent.rigid2->isStatic)
+		{
+			colEvent.transform2->_position.z += pen + std::numeric_limits<float>::epsilon();
+		}
+
+		break;
+	}
+	case SIDES::TOP:
+	{
+		float pen = (colEvent.transform2->_position.y - colEvent.collider2->collider.sphere.radius) - colEvent.collider1->collider.aabb.vecMax.y;
+		if (!colEvent.rigid2->isStatic)
+		{
+			colEvent.transform2->_position.y += -pen;
+		}
+
+		if (!colEvent.rigid1->isStatic)
+		{
+			//colEvent.transform1->_position.y = colEvent.transform2->_position.y - pen;
+		}
+		break;
+	}
+	case SIDES::BOTTOM:
+	{
+		float pen = colEvent.collider1->collider.aabb.vecMin.y - (colEvent.transform2->_position.y + colEvent.collider2->collider.sphere.radius);
+		if (!colEvent.rigid1->isStatic)
+		{
+			colEvent.transform1->_position.y += -pen;
+		}
+
+		if (!colEvent.rigid2->isStatic)
+		{
+			//colEvent.transform2->_position.y = colEvent.transform1->_position.y - pen;
+		}
+		break;
+	}
+	case SIDES::RIGHT:
+	{
+		float pen = (colEvent.transform2->_position.y - colEvent.collider2->collider.sphere.radius) - colEvent.collider1->collider.aabb.vecMax.x;
+
+		pen = pen * 0.5f;
+
+		if (!colEvent.rigid2->isStatic)
+		{
+			colEvent.transform2->_position.x += -pen - std::numeric_limits<float>::epsilon();
+		}
+
+		if (!colEvent.rigid1->isStatic)
+		{
+			colEvent.transform1->_position.x += pen + std::numeric_limits<float>::epsilon();
+		}
+		break;
+	}
+	case SIDES::LEFT:
+	{
+		float pen = colEvent.collider1->collider.aabb.vecMin.x - (colEvent.transform2->_position.y + colEvent.collider2->collider.sphere.radius);
+
+		pen = pen * 0.5f;
+
+		if (!colEvent.rigid1->isStatic)
+		{
+			colEvent.transform1->_position.x += -pen - std::numeric_limits<float>::epsilon();
+		}
+
+		if (!colEvent.rigid2->isStatic)
+		{
+			colEvent.transform2->_position.x += pen + std::numeric_limits<float>::epsilon();
+		}
+		break;
+	}
+	default:
+		// nani
+		throw;
+	}
+
+}
+
+void CollsionResolver::resolvesphere(CollisionEvent& colEvent)
+{
+
+	resolveEventNormally(colEvent);
+
+
+	if (colEvent.transform2->_position.y > colEvent.transform1->_position.y)
+	{
+		float penY = (colEvent.transform2->_position.y - colEvent.collider2->collider.sphere.radius) -
+			(colEvent.transform1->_position.y + colEvent.collider1->collider.sphere.radius);
+
+		penY = penY * -1.0f;
+
+		if (penY > 0)
+		{
+			if (!colEvent.rigid2->isStatic)
+			{
+				colEvent.transform2->_position.y += (penY) + std::numeric_limits<float>::epsilon();
+			}
+		}
+		else
+		{
+			if (!colEvent.rigid1->isStatic)
+			{
+				colEvent.transform1->_position.y += (penY) + std::numeric_limits<float>::epsilon();
+			}
+		}
+
+	}
+
+
+	//float pen = (colEvent.transform2->_position.y - colEvent.collider2->collider.sphere.radius) - colEvent.collider1->collider.aabb.vecMax.y;
+	//if (!colEvent.rigid2->isStatic)
+	//{
+	//	colEvent.transform2->_position.y += -pen;
+	//}
+
+	//if (!colEvent.rigid1->isStatic)
+	//{
+	//	//colEvent.transform1->_position.y = colEvent.transform2->_position.y - pen;
+	//}
+	//break;
 
 }
 
