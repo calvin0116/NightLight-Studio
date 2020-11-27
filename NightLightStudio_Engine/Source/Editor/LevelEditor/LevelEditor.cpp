@@ -4,6 +4,7 @@
 #include "LevelEditor_PerfMetrics.h"
 #include "LevelEditor_Hierarchy.h"
 #include "LevelEditor_Inspector.h"
+#include "LevelEditor_CSVTag.h"
 #include "../imgui/imguizmo/ImGuizmo.h"
 
 #include "../../Input/SystemInput.h"
@@ -34,6 +35,7 @@ void LevelEditor::Init(HWND window)
     LE_CreateWindow<PerformanceMetrics>("Performance Metrics", false);
     LE_CreateWindow<HierarchyInspector>("Hierarchy", true);
     LE_CreateWindow<InspectorWindow>("Inspector", true);
+    LE_CreateWindow<LevelEditor_CSVTag>("CSVArr", false, ImGuiWindowFlags_HorizontalScrollbar);
 
     _window = window;
 
@@ -177,6 +179,11 @@ std::vector<float>* LevelEditor::LE_GetSystemsUsage()
 void LevelEditor::LE_ConsoleOut(const std::string& out)
 {
     LE_AccessWindowFunc("Console", &ConsoleLog::AddLog, out);
+}
+
+bool LevelEditor::GetIfRunning()
+{
+    return _runEngine;
 }
 
 void LevelEditor::LE_AddMenuWithItems(const std::string& name, const std::vector<std::string>& menuItems,
