@@ -44,7 +44,9 @@ namespace NS_SCENE
 		std::string scenes_path;
 
 		SystemMessaging::SystemReceiver r;
-		bool isPlay;
+		bool isPlaying;
+		bool ChangedSceneDuringPlay;
+		FILE_NAME savedScene;
 	protected:
 		SceneManager()
 			:scene_parser{ "SceneConfig" , json_path },
@@ -53,7 +55,9 @@ namespace NS_SCENE
 			to_change_scene{ SC_NOCHANGE },
 			scene_list{},
 			scenes_path{},
-			scene_index{0}
+			scene_index{0},
+			isPlaying{false},
+			ChangedSceneDuringPlay{true}
 		{}
 
 		~SceneManager();

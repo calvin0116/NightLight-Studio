@@ -1,78 +1,29 @@
 {
     "Objects": {
-        "Height_1_wall": {
+        "PlayerCamera": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "PlayerCamera",
                 "Tag": 0,
                 "Position": [
-                    -1.0,
-                    0.5,
-                    1.5
+                    220.5758514404297,
+                    143.6063232421875,
+                    -2985.442138671875
                 ],
                 "Scale": [
-                    2.0,
+                    1.0,
                     1.0,
                     1.0
                 ],
                 "Rotate": [
                     0.0,
-                    0.0,
+                    -0.0,
                     0.0
                 ]
             },
-            "GraphicsComponent": {
+            "CScriptComponent": {
                 "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Camera": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    1.0,
-                    2.0,
-                    3.0
-                ],
-                "Scale": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
+                "Name": "Camera",
+                "Tag": 1
             }
         },
         "Plane": {
@@ -91,7 +42,7 @@
                 ],
                 "Rotate": [
                     0.0,
-                    0.0,
+                    -0.0,
                     0.0
                 ]
             },
@@ -113,779 +64,64 @@
             },
             "AudioManager": {
                 "ListOfSound": {}
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "Hello"
             }
         },
-        "Height_3_Wall": {
+        "Player": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "Player",
                 "Tag": 0,
                 "Position": [
-                    -2.5,
-                    1.5,
-                    1.0
+                    -100.0,
+                    73.75,
+                    -100.0
                 ],
                 "Scale": [
-                    1.0,
-                    3.0,
-                    2.0
+                    50.0,
+                    150.0,
+                    50.0
                 ],
                 "Rotate": [
                     0.0,
-                    0.0,
+                    -0.0,
                     0.0
                 ]
             },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
                 ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Height_2_Wall_2": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
+                "Extend": [
                     0.5,
-                    1.5,
-                    1.5
-                ],
-                "Scale": [
-                    1.0,
-                    3.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Tree_H10_8": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    1.5,
-                    5.0,
-                    -13.5
-                ],
-                "Scale": [
-                    1.0,
-                    10.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Height_4_Wall": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
                     0.5,
-                    2.0,
-                    -1.0
-                ],
-                "Scale": [
-                    1.0,
-                    4.0,
-                    2.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Height_3_Wall_1": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    -4.0,
-                    1.5,
-                    -0.5
-                ],
-                "Scale": [
-                    2.0,
-                    3.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Tree_H10_2": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    1.5,
-                    5.0,
-                    1.5
-                ],
-                "Scale": [
-                    1.0,
-                    10.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Tree_H10_1": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    -3.5,
-                    5.0,
-                    1.5
-                ],
-                "Scale": [
-                    1.0,
-                    10.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Tree_H10_7": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    -3.5,
-                    5.0,
-                    -13.5
-                ],
-                "Scale": [
-                    1.0,
-                    10.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Tree_H10_3": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    -3.5,
-                    5.0,
-                    -3.5
-                ],
-                "Scale": [
-                    1.0,
-                    10.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Tree_H10_4": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    1.5,
-                    5.0,
-                    -3.5
-                ],
-                "Scale": [
-                    1.0,
-                    10.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Tree_H10_6": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    1.5,
-                    5.0,
-                    -8.5
-                ],
-                "Scale": [
-                    1.0,
-                    10.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Tree_H10_5": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    -3.5,
-                    5.0,
-                    -8.5
-                ],
-                "Scale": [
-                    1.0,
-                    10.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Height_4_Wall_1": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    1.5,
-                    2.0,
-                    -2.5
-                ],
-                "Scale": [
-                    1.0,
-                    4.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Height_4_Wall_2": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    -2.5,
-                    2.0,
-                    -1.0
-                ],
-                "Scale": [
-                    1.0,
-                    4.0,
-                    2.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Height_3_Wall_2": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    1.5,
-                    1.5,
                     0.5
                 ],
-                "Scale": [
-                    1.0,
-                    3.0,
-                    1.0
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": false,
+                "isGravity": true,
+                "mass": 20.0,
+                "friction": 1.0,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
                 ],
-                "Rotate": [
+                "Accelaration": [
                     0.0,
                     0.0,
                     0.0
@@ -923,347 +159,90 @@
                 ],
                 "MetallicMat": 1.0,
                 "RoughnessMat": 0.5
-            }
-        },
-        "Height_4_Wall_3": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    -5.5,
-                    2.0,
-                    -1.5
-                ],
-                "Scale": [
-                    1.0,
-                    4.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
             },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
+            "LightComponent": {
+                "isActive": false,
+                "Diffuse": [
                     1.0,
                     1.0,
                     1.0
                 ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Height_4_Wall_4": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    1.0,
-                    2.0,
-                    -4.5
-                ],
-                "Scale": [
-                    2.0,
-                    4.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
+                "Radius": 10.0,
+                "Intensity": 1.0,
+                "CutOff": 0.0,
+                "OuterCutOff": 0.0
             },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Height_4_Wall_5": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    -0.5,
-                    2.0,
-                    -5.5
-                ],
-                "Scale": [
-                    1.0,
-                    4.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Height_4_Wall_7": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    1.0,
-                    2.0,
-                    -6.5
-                ],
-                "Scale": [
-                    2.0,
-                    4.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Height_4_Wall_6": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    -5.0,
-                    2.0,
-                    -5.5
-                ],
-                "Scale": [
-                    2.0,
-                    4.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Height_4_Wall_8": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    1.5,
-                    2.0,
-                    -7.5
-                ],
-                "Scale": [
-                    1.0,
-                    4.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Height_4_Wall_9": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    1.5,
-                    2.0,
-                    -10.0
-                ],
-                "Scale": [
-                    1.0,
-                    4.0,
+            "PlayerStatsComponent": {
+                "player_move_mag": 30000.0,
+                "player_fly_mag": 40.0,
+                "player_max_energy": 15,
+                "player_possess_energy_drain": 1,
+                "player_moth_energy_drain": 1,
+                "camera_distance": 400.0,
+                "camera_offset": [
+                    -50.0,
+                    45.0,
                     2.0
                 ],
+                "player_max_speed": 250.0
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "Player",
+                "Tag": 0
+            }
+        },
+        "Delivery_Cart_Model_v3_19": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -525.0,
+                    0.0,
+                    -2931.25
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
                 "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    80.0,
+                    0.0
+                ],
+                "Extend": [
+                    25.0,
+                    25.0,
+                    80.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
                     0.0,
                     0.0,
                     0.0
@@ -1271,7 +250,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1303,21 +282,41 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_4_Wall_10": {
+        "Bollard_PH_0": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
+                    -50.0,
                     0.0,
-                    2.0,
-                    -9.5
+                    50.0
                 ],
                 "Scale": [
-                    2.0,
-                    4.0,
+                    1.0,
+                    1.0,
                     1.0
                 ],
                 "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    50.0,
+                    0.0
+                ],
+                "Extend": [
+                    25.0,
+                    50.0,
+                    25.0
+                ],
+                "Rotation": [
                     0.0,
                     0.0,
                     0.0
@@ -1325,7 +324,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\bollard_ph.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1357,21 +356,57 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_4_Wall_11": {
+        "Delivery_Cart_Model_v3_15": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -5.0,
-                    2.0,
-                    -9.5
+                    425.0,
+                    0.0,
+                    -2931.25
                 ],
                 "Scale": [
-                    2.0,
-                    4.0,
-                    1.0
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
                 ],
                 "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    1.0,
+                    80.0,
+                    0.0
+                ],
+                "Extend": [
+                    25.0,
+                    25.0,
+                    80.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
                     0.0,
                     0.0,
                     0.0
@@ -1379,7 +414,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1411,21 +446,57 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_4_Wall_12": {
+        "Building_Left_PH_0": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -5.5,
-                    2.0,
-                    -8.5
+                    -800.0,
+                    0.0,
+                    -2000.0
                 ],
                 "Scale": [
+                    0.9999921321868897,
                     1.0,
-                    4.0,
-                    1.0
+                    0.9999921321868897
                 ],
                 "Rotate": [
+                    -179.9984588623047,
+                    0.0001882585056591779,
+                    -179.99989318847657
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    -50.0,
+                    700.0,
+                    0.0
+                ],
+                "Extend": [
+                    350.0,
+                    700.0,
+                    1800.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
                     0.0,
                     0.0,
                     0.0
@@ -1433,7 +504,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\building_left_ph.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1465,21 +536,41 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_4_Wall_13": {
+        "Building_Right_PH_0": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    2.0,
-                    2.0,
-                    -11.5
+                    725.0,
+                    0.0,
+                    -1950.0
                 ],
                 "Scale": [
-                    2.0,
-                    4.0,
-                    1.0
+                    1.0013855695724488,
+                    1.0,
+                    1.0013855695724488
                 ],
                 "Rotate": [
+                    179.99989318847657,
+                    -0.0,
+                    -179.99989318847657
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    25.0,
+                    700.0,
+                    0.0
+                ],
+                "Extend": [
+                    350.0,
+                    700.0,
+                    1750.0
+                ],
+                "Rotation": [
                     0.0,
                     0.0,
                     0.0
@@ -1487,7 +578,109 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\building_right_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            },
+            "LightComponent": {
+                "isActive": false,
+                "Diffuse": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Radius": 10.0,
+                "Intensity": 1.0,
+                "CutOff": 0.0,
+                "OuterCutOff": 0.0
+            }
+        },
+        "Delivery_Cart_Model_v3_14": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -475.0,
+                    0.0,
+                    -2931.25
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    80.0,
+                    0.0
+                ],
+                "Extend": [
+                    25.0,
+                    25.0,
+                    80.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1519,21 +712,57 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_4_Wall_14": {
+        "Delivery_Cart_Model_v3_17": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    3.0,
-                    2.0,
-                    -12.5
+                    375.0,
+                    0.0,
+                    -2931.25
                 ],
                 "Scale": [
-                    2.0,
-                    4.0,
-                    1.0
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
                 ],
                 "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    80.0,
+                    0.0
+                ],
+                "Extend": [
+                    25.0,
+                    25.0,
+                    80.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
                     0.0,
                     0.0,
                     0.0
@@ -1541,7 +770,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1573,21 +802,57 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_4_Wall_15": {
+        "CordonTapeStart_0": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -5.0,
-                    2.0,
-                    -12.5
+                    -100.0,
+                    0.0,
+                    -487.5
                 ],
                 "Scale": [
-                    2.0,
-                    4.0,
+                    1.0,
+                    1.0,
                     1.0
                 ],
                 "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    50.0,
+                    0.0
+                ],
+                "Extend": [
+                    175.0,
+                    50.0,
+                    12.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
                     0.0,
                     0.0,
                     0.0
@@ -1595,7 +860,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\cordontapestart_ph.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1627,21 +892,57 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_4_Wall_16": {
+        "CordonTapeUrn_PH_0": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
+                    -50.0,
                     0.0,
-                    2.0,
-                    -13.5
+                    -1050.0
                 ],
                 "Scale": [
-                    2.0,
-                    4.0,
+                    1.0,
+                    1.0,
                     1.0
                 ],
                 "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    -137.5,
+                    50.0,
+                    0.0
+                ],
+                "Extend": [
+                    12.5,
+                    50.0,
+                    175.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
                     0.0,
                     0.0,
                     0.0
@@ -1649,7 +950,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\cordontapeurn_ph.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1681,29 +982,29 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_4_Wall_17": {
+        "Delivery_Cart_Model_v3_18": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    1.0,
-                    2.0,
-                    -14.5
+                    225.0,
+                    0.0,
+                    -2931.25
                 ],
                 "Scale": [
-                    2.0,
-                    4.0,
-                    1.0
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
                 ],
                 "Rotate": [
-                    0.0,
-                    0.0,
+                    89.99994659423828,
+                    -0.0,
                     0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1735,29 +1036,29 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_4_Wall_18": {
+        "OldStreetLamp_PH_0": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    1.5,
-                    2.0,
-                    -15.5
+                    -221.25,
+                    0.0,
+                    -912.5
                 ],
                 "Scale": [
                     1.0,
-                    4.0,
+                    1.0,
                     1.0
                 ],
                 "Rotate": [
                     0.0,
-                    0.0,
+                    -0.0,
                     0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\oldstreetlamp_ph.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1789,29 +1090,29 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_4_Wall_19": {
+        "Delivery_Cart_Model_v3_16": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -4.5,
-                    2.0,
-                    -15.0
+                    -425.0,
+                    0.0,
+                    -2931.25
                 ],
                 "Scale": [
-                    1.0,
-                    4.0,
-                    2.0
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
                 ],
                 "Rotate": [
-                    0.0,
-                    0.0,
+                    89.99994659423828,
+                    -0.0,
                     0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1843,29 +1144,29 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_2_Wall_3": {
+        "StatueLandMark_PH_0": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -1.5,
-                    1.0,
-                    -13.5
+                    -50.0,
+                    0.0,
+                    -4400.0
                 ],
                 "Scale": [
                     1.0,
-                    2.0,
+                    1.0,
                     1.0
                 ],
                 "Rotate": [
                     0.0,
-                    0.0,
+                    -0.0,
                     0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\statuelandmark_ph.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1897,29 +1198,29 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_2_Wall_4": {
+        "StreetDecoOnLamp1_PH_0": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -2.5,
-                    1.0,
-                    -14.5
+                    -351.25,
+                    0.0,
+                    -1187.5
                 ],
                 "Scale": [
                     1.0,
-                    2.0,
+                    1.0,
                     1.0
                 ],
                 "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
+                    -179.99989318847657,
+                    -0.000005008955668017734,
+                    -179.99989318847657
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\streetdecoonlamp1_ph.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -1951,29 +1252,29 @@
                 "RoughnessMat": 0.5
             }
         },
-        "Height_4_Wall_15_copy": {
+        "StreetDecoOnLamp2_PH_0": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -6.5,
-                    2.0,
-                    -7.0
+                    245.0,
+                    0.0,
+                    -887.5
                 ],
                 "Scale": [
                     1.0,
-                    4.0,
-                    12.0
+                    1.0,
+                    1.0
                 ],
                 "Rotate": [
-                    0.0,
-                    0.0,
-                    0.0
+                    -179.99989318847657,
+                    -0.000005008955668017734,
+                    -179.99989318847657
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\streetdecoonlamp2_ph.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -2003,6 +1304,3783 @@
                 ],
                 "MetallicMat": 1.0,
                 "RoughnessMat": 0.5
+            }
+        },
+        "StreetFoilage1_PH_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -550.0,
+                    0.0,
+                    -1050.0
+                ],
+                "Scale": [
+                    0.9999951124191284,
+                    1.0,
+                    0.9999951124191284
+                ],
+                "Rotate": [
+                    -179.9984588623047,
+                    0.00015604167128913105,
+                    -179.99989318847657
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\streetfoilage1_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "StreetFoilage2_PH_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -50.0,
+                    0.0,
+                    -1900.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\streetfoilage2_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "StreetFoilage3_Ph_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -48.75,
+                    0.0,
+                    -2550.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\streetfoilage3_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -343.75,
+                    0.0,
+                    -550.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "TallTree_PH_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    600.0,
+                    0.0,
+                    50.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\talltree_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "TrashBinLarge_PH_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    437.5,
+                    0.0,
+                    -100.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    -179.99974060058595,
+                    0.019971899688243867,
+                    179.99989318847657
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\trashbinlarge_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "TrashBinSmall_PH_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -500.0,
+                    0.0,
+                    -1000.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\trashbinsmall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Bollard_PH_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    50.0,
+                    0.0,
+                    50.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\bollard_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Bollard_PH_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    150.0,
+                    0.0,
+                    50.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\bollard_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Bollard_PH_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    250.0,
+                    0.0,
+                    50.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\bollard_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Bollard_PH_4": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    350.0,
+                    0.0,
+                    50.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\bollard_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Bollard_PH_5": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    450.0,
+                    0.0,
+                    50.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\bollard_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -525.0,
+                    0.0,
+                    -425.0
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Bollard_PH_7": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -150.0,
+                    0.0,
+                    50.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\bollard_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Bollard_PH_8": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -250.0,
+                    0.0,
+                    50.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\bollard_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Bollard_PH_9": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -350.0,
+                    0.0,
+                    50.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\bollard_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Bollard_PH_10": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -450.0,
+                    0.0,
+                    50.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\bollard_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Bollard_PH_11": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -550.0,
+                    0.0,
+                    50.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\bollard_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Bollard_PH_12": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -650.0,
+                    0.0,
+                    50.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\bollard_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "TallTree_PH_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    600.0,
+                    0.0,
+                    -100.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\talltree_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -525.0,
+                    0.0,
+                    -481.25
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -487.5,
+                    0.0,
+                    -543.75
+                ],
+                "Scale": [
+                    0.9999921321868897,
+                    1.0,
+                    0.9999921321868897
+                ],
+                "Rotate": [
+                    -179.9984588623047,
+                    0.00031569882412441075,
+                    -179.99989318847657
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    143.75,
+                    0.0,
+                    -543.75
+                ],
+                "Scale": [
+                    0.9999921321868897,
+                    1.0,
+                    0.9999921321868897
+                ],
+                "Rotate": [
+                    179.99989318847657,
+                    0.00031569882412441075,
+                    -179.99989318847657
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    287.5,
+                    0.0,
+                    -550.0
+                ],
+                "Scale": [
+                    0.9999920129776001,
+                    0.9999999403953552,
+                    0.9999920129776001
+                ],
+                "Rotate": [
+                    0.0001042740695993416,
+                    -0.000005008955668017734,
+                    0.00010427392408018932
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -256.25,
+                    0.0,
+                    -531.25
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    56.25,
+                    0.0,
+                    -531.25
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_4": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    375.0,
+                    0.0,
+                    -475.0
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_4": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    168.75,
+                    0.0,
+                    -800.0
+                ],
+                "Scale": [
+                    0.9999829530715942,
+                    0.9999998211860657,
+                    0.9999829530715942
+                ],
+                "Rotate": [
+                    179.9996337890625,
+                    -0.00020064004638697952,
+                    179.99949645996095
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "DirectionalLight": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -31.25,
+                    -62.5,
+                    200.0
+                ],
+                "Scale": [
+                    0.9998502135276794,
+                    1.0014235973358155,
+                    0.9998704195022583
+                ],
+                "Rotate": [
+                    -38.2095832824707,
+                    -22.096723556518556,
+                    -119.44454193115235
+                ]
+            },
+            "LightComponent": {
+                "LightType": "DIRECTIONAL",
+                "isActive": true,
+                "Diffuse": [
+                    0.3059999942779541,
+                    0.41999998688697817,
+                    0.5099999904632568
+                ],
+                "Radius": 10.0,
+                "Intensity": 0.0,
+                "CutOff": 0.0,
+                "OuterCutOff": 0.0
+            }
+        },
+        "Street_Stall_PH_5": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    325.0,
+                    0.0,
+                    -800.0
+                ],
+                "Scale": [
+                    0.9999920129776001,
+                    0.9999999403953552,
+                    0.9999920129776001
+                ],
+                "Rotate": [
+                    0.0001042740695993416,
+                    -0.000005008955668017734,
+                    0.00010427392408018932
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_5": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    68.75,
+                    0.0,
+                    -837.5
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_6": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    125.0,
+                    0.0,
+                    -931.25
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Store_Cart_Model_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -350.0,
+                    0.0,
+                    -1075.0
+                ],
+                "Scale": [
+                    0.9992287755012512,
+                    0.9999830722808838,
+                    0.9999962449073792
+                ],
+                "Rotate": [
+                    90.0,
+                    89.99994659423828,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\store_cart_model.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_7": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -375.0,
+                    0.0,
+                    -968.75
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_8": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -275.0,
+                    0.0,
+                    -1100.0
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_9": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -225.0,
+                    0.0,
+                    -1250.0
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_10": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -275.0,
+                    0.0,
+                    -1250.0
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_6": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -200.0,
+                    0.0,
+                    -1350.0
+                ],
+                "Scale": [
+                    0.999991774559021,
+                    0.9999998807907105,
+                    0.999991774559021
+                ],
+                "Rotate": [
+                    -179.9996337890625,
+                    89.99994659423828,
+                    -179.9996337890625
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_7": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    93.75,
+                    0.0,
+                    -1350.0
+                ],
+                "Scale": [
+                    0.999991774559021,
+                    0.9999998807907105,
+                    0.999991774559021
+                ],
+                "Rotate": [
+                    -179.9996337890625,
+                    89.99994659423828,
+                    -179.9996337890625
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "TrashBinSmall_PH_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    368.75,
+                    0.0,
+                    -1275.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\trashbinsmall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "OldStreetLamp_PH_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    397.5,
+                    0.0,
+                    -1350.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\oldstreetlamp_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_8": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    125.0,
+                    0.0,
+                    -1643.75
+                ],
+                "Scale": [
+                    0.9999829530715942,
+                    0.9999998211860657,
+                    0.9999829530715942
+                ],
+                "Rotate": [
+                    179.9996337890625,
+                    -0.00020064004638697952,
+                    179.99949645996095
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_9": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    275.0,
+                    0.0,
+                    -1650.0
+                ],
+                "Scale": [
+                    0.9999920129776001,
+                    0.9999999403953552,
+                    0.9999920129776001
+                ],
+                "Rotate": [
+                    0.0001042740695993416,
+                    -0.000005008955668017734,
+                    0.00010427392408018932
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_11": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    50.0,
+                    0.0,
+                    -1568.75
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_12": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    331.25,
+                    0.0,
+                    -1575.0
+                ],
+                "Scale": [
+                    0.9993008375167847,
+                    0.9999463558197022,
+                    0.9999886155128479
+                ],
+                "Rotate": [
+                    90.0,
+                    89.99954986572266,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_13": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    393.75,
+                    0.0,
+                    -1575.0
+                ],
+                "Scale": [
+                    0.9990249872207642,
+                    0.9999463558197022,
+                    0.9999886155128479
+                ],
+                "Rotate": [
+                    90.0,
+                    89.99954986572266,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_10": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    150.0,
+                    0.0,
+                    -2050.0
+                ],
+                "Scale": [
+                    0.999991774559021,
+                    0.9999998807907105,
+                    0.999991774559021
+                ],
+                "Rotate": [
+                    -179.9996337890625,
+                    89.99994659423828,
+                    -179.9996337890625
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "TrashBinSmall_PH_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    100.0,
+                    0.0,
+                    -2150.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\trashbinsmall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "OldStreetLamp_PH_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    53.75,
+                    0.0,
+                    -2150.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\oldstreetlamp_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "OldStreetLamp_PH_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -152.5,
+                    0.0,
+                    -2150.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\oldstreetlamp_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "OldStreetLamp_PH_4": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    397.5,
+                    0.0,
+                    -2050.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\oldstreetlamp_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "OldStreetLamp_PH_5": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -152.5,
+                    0.0,
+                    -2700.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\oldstreetlamp_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "OldStreetLamp_PH_6": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    53.75,
+                    0.0,
+                    -2700.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\oldstreetlamp_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "TrashBinSmall_PH_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    100.0,
+                    0.0,
+                    -2700.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\trashbinsmall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_11": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    131.25,
+                    0.0,
+                    -2993.75
+                ],
+                "Scale": [
+                    0.9999829530715942,
+                    0.9999998211860657,
+                    0.9999829530715942
+                ],
+                "Rotate": [
+                    179.9996337890625,
+                    -0.00020064004638697952,
+                    179.99949645996095
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_12": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    300.0,
+                    0.0,
+                    -3000.0
+                ],
+                "Scale": [
+                    0.9999920129776001,
+                    0.9999999403953552,
+                    0.9999920129776001
+                ],
+                "Rotate": [
+                    0.0001042740695993416,
+                    -0.000005008955668017734,
+                    0.00010427392408018932
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_13": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -393.75,
+                    0.0,
+                    -2993.75
+                ],
+                "Scale": [
+                    0.9999829530715942,
+                    0.9999998211860657,
+                    0.9999829530715942
+                ],
+                "Rotate": [
+                    179.9996337890625,
+                    -0.00020064004638697952,
+                    179.99949645996095
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_14": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -231.25,
+                    0.0,
+                    -3000.0
+                ],
+                "Scale": [
+                    0.9999920129776001,
+                    0.9999999403953552,
+                    0.9999920129776001
+                ],
+                "Rotate": [
+                    0.0001042740695993416,
+                    -0.000005008955668017734,
+                    0.00010427392408018932
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_20": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -300.0,
+                    0.0,
+                    -2931.25
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "CordonTapeUrn_PH_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -50.0,
+                    0.0,
+                    -3650.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\cordontapeurn_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_15": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -275.0,
+                    0.0,
+                    -3806.25
+                ],
+                "Scale": [
+                    0.9999920129776001,
+                    0.9999999403953552,
+                    0.9999920129776001
+                ],
+                "Rotate": [
+                    0.0001042740695993416,
+                    -0.000005008955668017734,
+                    0.00010427392408018932
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_16": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -431.25,
+                    0.0,
+                    -3800.0
+                ],
+                "Scale": [
+                    0.9999829530715942,
+                    0.9999998211860657,
+                    0.9999829530715942
+                ],
+                "Rotate": [
+                    179.9996337890625,
+                    -0.00020064004638697952,
+                    179.99949645996095
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Street_Stall_PH_17": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    350.0,
+                    0.0,
+                    -3806.25
+                ],
+                "Scale": [
+                    0.9999914169311523,
+                    0.9999997615814209,
+                    0.9999914169311523
+                ],
+                "Rotate": [
+                    -179.99891662597657,
+                    89.99994659423828,
+                    -179.999755859375
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\placeholdermodel_test\\street_stall_ph.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_21": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    375.0,
+                    0.0,
+                    -3706.25
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Delivery_Cart_Model_v3_22": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    325.0,
+                    0.0,
+                    -3900.0
+                ],
+                "Scale": [
+                    0.9999999403953552,
+                    0.9999998211860657,
+                    0.9999998211860657
+                ],
+                "Rotate": [
+                    89.99994659423828,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\asset\\3d model\\delivery_cart_model_v3.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Ground": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    0.0,
+                    -6.25,
+                    0.0
+                ],
+                "Scale": [
+                    99999.9921875,
+                    10.0,
+                    99999.9453125
+                ],
+                "Rotate": [
+                    -179.99989318847657,
+                    -22.866945266723634,
+                    -179.99989318847657
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "\\box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "PlayerCamera": {
+            "TransformComponent": {
+                "EntityName": "PlayerCamera",
+                "Tag": 0,
+                "Position": [
+                    220.5758514404297,
+                    143.6063232421875,
+                    -2985.442138671875
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "CScriptComponent": {
+                "isActive": true,
+                "Name": "Camera",
+                "Tag": 1
+            }
+        },
+        "CordonUrn_Collider_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -50.0,
+                    0.0,
+                    -1050.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    137.5,
+                    50.0,
+                    0.0
+                ],
+                "Extend": [
+                    12.5,
+                    50.0,
+                    175.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "CordonUrn_Collider_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -50.0,
+                    0.0,
+                    -1050.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    50.0,
+                    162.5
+                ],
+                "Extend": [
+                    150.0,
+                    50.0,
+                    12.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "CordonUrn_Collider_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -50.0,
+                    0.0,
+                    -1050.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    50.0,
+                    -162.5
+                ],
+                "Extend": [
+                    150.0,
+                    50.0,
+                    12.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
             }
         }
     }

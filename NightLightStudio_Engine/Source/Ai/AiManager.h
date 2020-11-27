@@ -63,6 +63,11 @@ namespace NS_AI
 			}
 		}
 
+		void Exit()
+		{
+			DestroyInstance();
+		}
+
 		void WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)
 		{
 			if (wp_man.GetWayPointNumber())	//If there is way point
