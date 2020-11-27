@@ -37,6 +37,8 @@ public:
 		CleanCurPath();
 		for (LocalString<125> & wp_str : way_point_list)
 		{
+			if (wp_str.empty())
+				continue;
 			Entity ent = G_ECMANAGER->getEntityUsingEntName(wp_str);
 			cur_path.push_back(ent.getComponent<TransformComponent>());
 		}
