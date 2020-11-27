@@ -6,40 +6,33 @@ in vec3 normal;
 
 out vec4 fragColor;
 
-// change to diffuse and direction only
 struct DirLight {
     vec4 direction;
-
-    vec4 ambient;
+    
     vec4 diffuse;
-    vec4 specular;
-};
-
-// change to position, diffuse, attenuation and radius
-struct PointLight {
-    vec4 position;
-
-    vec4 ambient;
-    vec4 diffuse;
-    vec4 specular;
 
     float intensity;
 };
 
-// change to position, direction, color, cutoff, outercutoff and attenuation
+struct PointLight {
+    vec4 position;
+
+    vec4 diffuse;
+
+    float radius;
+    float intensity;
+};
+
 struct SpotLight {
     vec4 position;
     vec4 direction;
 
-    vec4 ambient;
     vec4 diffuse;
-    vec4 specular;
 
     float cutOff;
     float outerCutOff;
     float intensity;
 };
-
 // PBR Materials
 uniform sampler2D AlbedoTex;
 uniform sampler2D MetallicTex;
@@ -57,12 +50,12 @@ const float PI = 3.14159265359f;
 
 layout (std140) uniform LightCalcBlock
 {
-    DirLight dLights[MAX_LIGHTS];
+    DirLight dLight[1];
     PointLight pLights[MAX_LIGHTS];
     SpotLight sLights[MAX_LIGHTS];
 
     // Number of lights currently in scene
-    int dLights_Num;
+    int dLight_Num;
     int pLights_Num;
     int sLights_Num;
 
@@ -132,12 +125,12 @@ void main(void)
     // Calculate lights here
     // Calculation for all directional lights
     // light vector is handled differently
-    for(int i = 0; i < dLights_Num; i++)
+    for(int i = 0; i < dLight_Num; i++)
     {
         // calculate per-light radiance
-        vec3 L = normalize(-dLights[i].direction.xyz); // light vector
+        vec3 L = normalize(-dLight[i].direction.xyz); // light vector
         vec3 H = normalize(V + L); // Halfway-bisecting vector
-        vec3 radiance = dLights[i].diffuse.xyz;
+        vec3 radiance = dLight[i].diffuse.xyz * dLight[i].intensity;
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
@@ -177,8 +170,8 @@ void main(void)
         vec3 L = normalize(pLights[j].position.xyz - fragPos); // light vector
         vec3 H = normalize(V + L); // Halfway-bisecting vector
         float distance = length(pLights[j].position.xyz - fragPos);
-        float attenuation = 1.f / (distance * distance); // inverse squared
-        //float attenuation = smoothstep(100.f, 0.f, distance); // where 100.f is the radius
+        //float attenuation = 1.f / (distance * distance); // inverse squared
+        float attenuation = smoothstep(pLights[j].radius, 0.f, distance); // where 100.f is the radius
 
         vec3 radiance = ((pLights[j].diffuse.rgb * pLights[j].intensity) * attenuation); // diffuse used in place of color
 
