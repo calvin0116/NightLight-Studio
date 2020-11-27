@@ -14,13 +14,17 @@ void DeltaTime::start()
 	currentNumberOfSteps = 0;
 
 	dt = (float)clock() - t_start; // dt = fixed_dt
-	t_start = clock();
+	//t_start = clock();
 
 	while (dt < fixed_dt)
 	{
 		dt = (float)clock() - t_start;
 	}
 	// fps is limited in system gfx
+
+	//dt = (float)clock() - t_start; // dt = fixed_dt
+	t_start = clock();
+
 
 	//accumulatedTime += dt;
 
