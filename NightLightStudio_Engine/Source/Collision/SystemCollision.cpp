@@ -20,7 +20,7 @@
 #define MESH_MIN_LOD -20
 
 //#define ENT_TEST 1
-#define ENT_TEST 0
+#define ENT_TEST 1
 
 
 ////#define USEVEL 0
@@ -79,7 +79,8 @@ namespace NS_COLLISION
 				boxTestTransform._position = glm::vec3(0.0f, 300.0f, 0.0f);
 				boxTestTransform._scale = glm::vec3(50.0f, 50.0f, 50.0f);
 				boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
-				ComponentCollider boxTestCollider(COLLIDERS::AABB);
+				//ComponentCollider boxTestCollider(COLLIDERS::AABB);
+				ComponentCollider boxTestCollider(COLLIDERS::SPHERE);
 				boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
 				ComponentRigidBody boxTestrbody;
 				boxTestrbody.isStatic = false;
@@ -182,7 +183,8 @@ namespace NS_COLLISION
 		boxTestTransform._position = glm::vec3(0.0f, 300.0f, 0.0f);
 		boxTestTransform._scale = glm::vec3(80.0f, 80.0f, 80.0f);
 		boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
-		ComponentCollider boxTestCollider(COLLIDERS::AABB);
+		//ComponentCollider boxTestCollider(COLLIDERS::AABB);
+		ComponentCollider boxTestCollider(COLLIDERS::SPHERE);
 		boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
 		ComponentRigidBody boxTestrbody;
 		boxTestrbody.isStatic = false;
@@ -316,7 +318,7 @@ namespace NS_COLLISION
 
 
 		// clear collision events
-		colResolver.clear();
+		//colResolver.clear();
 
 		auto itr1 = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd1 = G_ECMANAGER->end<ComponentCollider>();
