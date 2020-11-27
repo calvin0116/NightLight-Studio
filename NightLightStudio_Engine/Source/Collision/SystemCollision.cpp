@@ -20,7 +20,7 @@
 #define MESH_MIN_LOD -20
 
 //#define ENT_TEST 1
-#define ENT_TEST 1
+#define ENT_TEST 0
 
 
 ////#define USEVEL 0
