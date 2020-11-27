@@ -10,11 +10,6 @@ namespace Unicorn
     // Native handle for this component
     private IntPtr native_handle = IntPtr.Zero;
 
-    //// Vector3 custom types
-    //private Vector3 Center = new Vector3();
-    //private Vector3 Extend = new Vector3();
-    //private Vector3 Rotation = new Vector3();
-
     public bool isCollidable
     {
     get { return get_isCollidable_Internal(this.native_handle); }
