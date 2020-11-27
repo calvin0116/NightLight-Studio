@@ -9,9 +9,6 @@
 #include "../glm/gtc/matrix_transform.hpp" // glm::perspective
 #include "../glm/gtc/type_ptr.hpp"         // Cast to type pointer for communication with gpu
 
-// Comment away for whichever is required
-// Only either one should be running at a time
-
 #include <fstream> //Temporary
 
 #ifdef _DEBUG
@@ -114,84 +111,6 @@ namespace NS_GRAPHICS
 
 		uiManager->Init();
 		
-		//////////////////////////////////////////////////////
-		///// Commented to test level editor drag and drop
-		//
-		//modelLoader->LoadModel("rotatedCube.fbx");
-
-		////Draw Cylinder FBX file 
-		//modelLoader->LoadModel("cylinder.fbx");
-		//
-		////Draw sphere FBX file 
-		//modelLoader->LoadModel("sphere.fbx");
-
-		//modelLoader->LoadModel("incense_pot_Model.fbx");
-
-		//textureManager->GetTexture("Test.jpg");
-		//
-
-		//std::cout << "light block size: " <<  sizeof(LightBlock) << std::endl;
-
-		//////////////////////////////////////
-		/// TEST DRAW LOADED MODELS
-		//////////////////////////////////////
-		/*Entity testdrawSphere = G_ECMANAGER->BuildEntity();
-		ComponentTransform testtransformsphere;
-		testtransformsphere._position = { 2.f, 0.f,0.f };
-		testtransformsphere._scale = {10.f,10.f,10.f};
-		testdrawSphere.AttachComponent<ComponentTransform>(testtransformsphere);
-
-		CreateSphere(testdrawSphere, glm::vec3(0.f,1.f,1.f));*/
-
-		/*Entity testlight = G_ECMANAGER->BuildEntity();
-		ComponentTransform testtransformlight;
-		testtransformlight._rotation = {15.f, 15.f,15.f};
-		
-		testlight.AttachComponent<ComponentTransform>(testtransformlight);
-		lightManager->AttachLightComponent(testlight);*/
-
-		//modelLoader->LoadModel(".\\incense_pot_model_custom.obj", "pot");
-
-		//Entity testDrawIncense = G_ECMANAGER->BuildEntity();
-		//ComponentTransform testtransformIncense;
-		//testtransformIncense._position = { 10.f, 0.f,0.f };
-		//testDrawIncense.AttachComponent<ComponentTransform>(testtransformIncense);
-		//testDrawIncense.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddModel("pot")));
-
-		//Entity testDrawIncense2 = G_ECMANAGER->BuildEntity();
-		//ComponentTransform testtransformIncense2;
-		//testtransformIncense2._position = { 3.f, 0.f,0.f };
-		//testDrawIncense2.AttachComponent<ComponentTransform>(testtransformIncense2);
-		//testDrawIncense2.AttachComponent<ComponentGraphics>(ComponentGraphics(meshManager->AddMesh("pot2")));
-
-		//Entity testDrawIncense3 = G_ECMANAGER->BuildEntity();
-		//ComponentTransform testtransformIncense3;
-		//testtransformIncense3._position = { 3.f, 0.f,0.f };
-		//testDrawIncense3.AttachComponent<ComponentTransform>(testtransformIncense3);
-		//testDrawIncense3.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddMesh("pot3")));
-
-		//Entity testDrawIncense4 = G_ECMANAGER->BuildEntity();
-		//ComponentTransform testtransformIncense4;
-		//testtransformIncense4._position = { 3.f, 0.f,0.f };
-		//testDrawIncense4.AttachComponent<ComponentTransform>(testtransformIncense4);
-		//testDrawIncense4.AttachComponent<ComponentGraphics>(ComponentGraphics(modelManager->AddMesh("pot4")));
-
-		/*Entity testdrawCube = G_ECMANAGER->BuildEntity();
-		ComponentTransform testtransformcube;
-		testtransformcube._position = { 10.f, 0.f,0.f };
-		testtransformcube._scale = { 10.f, 10.f,10.f };
-		testdrawCube.AttachComponent<ComponentTransform>(testtransformcube);
-
-		CreateCube(testdrawCube, glm::vec3(0.f, 1.f, 1.f));
-
-		Entity testdrawCylinder = G_ECMANAGER->BuildEntity();
-		ComponentTransform testtransformcylinder;
-		testtransformcylinder._position = { -2.f, 0.f,0.f };
-		testtransformcylinder._rotation = { 0.f, 0.f,0.f };
-		testdrawCylinder.AttachComponent<ComponentTransform>(testtransformcylinder);
-
-		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));*/
-
 		shaderManager->StartProgram(ShaderSystem::PBR);
 
 		GLint blockSize;
@@ -202,44 +121,10 @@ namespace NS_GRAPHICS
 		std::cout << "Light Uniform Block Size: " << blockSize << std::endl;
 		std::cout << "Light Uniform Block Size(CPU): " << sizeof(LightBlock) << std::endl;
 		std::cout << "Directional Light Size(CPU): " << sizeof(DirLight) << std::endl;
-		std::cout << "Spot Light Size(CPU): " << sizeof(SpotLight) << std::endl;
 		std::cout << "Point Light Size(CPU): " << sizeof(PointLight) << std::endl;
+		std::cout << "Spot Light Size(CPU): " << sizeof(SpotLight) << std::endl;
 
 		shaderManager->StopProgram();
-
-		//std::ofstream logFile;
-		//logFile.open("custom.txt");
-
-		//modelLoader->LoadModel("incense_pot_Model.fbx", "incense_pot_model");
-
-		//int lineCount = 0;
-		//int MeshSize = modelManager->_modelList["incense_pot_model"]->_meshes.size();
-		//for (int i=0; i < MeshSize; ++i)
-		//{
-		//	int verticeSize = modelManager->_modelList["incense_pot_model"]->_meshes[i]->_vertices.size();
-		//	for (int x = 0; x < verticeSize; ++x)
-		//	{
-		//		logFile << "Vertex: X: " << modelManager->_modelList["incense_pot_model"]->_meshes[i]->_vertices[x].x << " Y: " <<
-		//			modelManager->_modelList["incense_pot_model"]->_meshes[i]->_vertices[x].y << " Z: " <<
-		//			modelManager->_modelList["incense_pot_model"]->_meshes[i]->_vertices[x].z << "\n";
-
-		//		lineCount++;
-		//	}
-
-		//	logFile << std::endl;
-		//}
-
-		//logFile << lineCount << std::endl;
-
-		//logFile.close();
-
-		////TEST VECTOR MAX SIZE
-		//std::cout << "TEST MAX SIZE: " << vectTest.max_size() << std::endl;
-
-		////////////////////////
-		/// Text Texture Loader
-		////////////////////////
-		//textureLoader->LoadTexture("Test.jpg");
 
 		// Set default values for projection matrix
 		SetProjectionMatrix();
@@ -260,7 +145,6 @@ namespace NS_GRAPHICS
 		glDepthFunc(GL_LESS);
 
 		SetLineThickness();
-
 
 		//Set Grid Last Settings
 		//If not is not available
