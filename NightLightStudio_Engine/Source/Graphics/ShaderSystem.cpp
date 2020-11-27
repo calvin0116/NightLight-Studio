@@ -208,14 +208,14 @@ namespace NS_GRAPHICS
 		// Load all available shaders
 
 		// Shader path example: ../Resources/Shaders/default.vertxs
-		LoadShader(std::string("../Resources/Shaders/default.vert"),std::string("../Resources/Shaders/uniformsolid.frag")); // 1
-		LoadShader(std::string("../Resources/Shaders/withlights.vert"),std::string("../Resources/Shaders/withlights.frag")); // 2
-		LoadShader(std::string("../Resources/Shaders/grid.vert"),std::string("../Resources/Shaders/grid.frag")); // 3
-		LoadShader(std::string("../Resources/Shaders/withlights_textured.vert"), std::string("../Resources/Shaders/withlights_textured.frag")); // 4
-		LoadShader(std::string("../Resources/Shaders/ui.vert"), std::string("../Resources/Shaders/ui.frag")); // 5
-		LoadShader(std::string("../Resources/Shaders/PBR.vert"), std::string("../Resources/Shaders/PBR.frag")); // 6
-		LoadShader(std::string("../Resources/Shaders/withlights_animated.vert"), std::string("../Resources/Shaders/withlights_animated.frag")); // 7
-		LoadShader(std::string("../Resources/Shaders/PBR_Textured.vert"), std::string("../Resources/Shaders/PBR_Textured.frag")); // 8
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/default.vert"),std::string("../NightLightStudio_Game/Shaders/uniformsolid.frag")); // 1
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/withlights.vert"),std::string("../NightLightStudio_Game/Shaders/withlights.frag")); // 2
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/grid.vert"),std::string("../NightLightStudio_Game/Shaders/grid.frag")); // 3
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/withlights_textured.vert"), std::string("../NightLightStudio_Game/Shaders/withlights_textured.frag")); // 4
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui.vert"), std::string("../NightLightStudio_Game/Shaders/ui.frag")); // 5
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR.vert"), std::string("../NightLightStudio_Game/Shaders/PBR.frag")); // 6
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/withlights_animated.vert"), std::string("../NightLightStudio_Game/Shaders/withlights_animated.frag")); // 7
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured.frag")); // 8
 		//LoadShader("","");
 		//LoadShader("","");
 
