@@ -1093,6 +1093,11 @@ void InspectorWindow::VariableComp(Entity& ent)
 				float fl = 0.0f;
 				comp_var->float_list.push_back(fl);
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove Float"))
+			{
+				comp_var->float_list.pop_back();
+			}
 
 			int float_index = 1;
 			for (float& f : comp_var->float_list) //[path, name]
@@ -1107,6 +1112,11 @@ void InspectorWindow::VariableComp(Entity& ent)
 			{
 				int interger = 0;
 				comp_var->int_list.push_back(interger);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove Interger"))
+			{
+				comp_var->int_list.pop_back();
 			}
 			int int_index = 1;
 
@@ -1124,6 +1134,12 @@ void InspectorWindow::VariableComp(Entity& ent)
 				LocalString ls;
 				comp_var->string_list.push_back(ls);
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove String"))
+			{
+				comp_var->string_list.pop_back();
+			}
+
 			int str_index = 1;
 
 			for (LocalString<125>& str : comp_var->string_list) //[path, name]
@@ -1169,7 +1185,7 @@ void InspectorWindow::NavComp(Entity& ent)
 			ImGui::SameLine();
 			if (ImGui::Button("Remove WayPoint"))
 			{
-				//nav_comp->way_point_list.po;
+				nav_comp->way_point_list.pop_back();
 			}
 
 			int str_index = 1;
