@@ -7,7 +7,7 @@
 typedef class ComponentNavigator : public ISerializable //: public IComponent
 {
 	LocalVector<WayPoint*> way_point_list;
-	LocalVector<Edges*> edge_list;
+	//LocalVector<Edges*> edge_list;
 
 	LocalVector<WayPoint*> cur_path;		//Decided by Astar
 	int cur_wp_index;						//Curent targetted waypoint
@@ -18,9 +18,6 @@ public:
 		strcpy_s(ser_name, "NavigatorComponent");
 	}
 
-	virtual void	Read(Value&) { };
-	virtual Value	Write() { return Value(rapidjson::kObjectType); };
-	virtual Value& Write(Value& val) { return val; };	virtual ISerializable* Clone() { return new ISerializable(); }
 
 	void CleanCurPath()
 	{
@@ -31,7 +28,16 @@ public:
 	void SetCurrentPath(LocalVector<WayPoint*> wp_list)
 	{
 		CleanCurPath();
+		way_point_list = wp_list;
 	}
 
-
+	virtual void	Read(Value& val) { };
+	virtual Value	Write() { return Value(rapidjson::kObjectType); };
+	virtual Value& Write(Value& val) { return val; };	
+	
+	virtual ComponentNavigator* Clone() {
+		ComponentNavigator* newcomp = new ComponentNavigator();
+		*newcomp = *this;
+		return newcomp;
+	}
 } NavigatorComponent;

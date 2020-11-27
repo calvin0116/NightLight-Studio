@@ -52,6 +52,7 @@ namespace NlMath
 		operator glm::vec4() const;
 
 		float length();
+		float sqrtlength();
 		void set(float _x, float _y, float _z);
 		Vector3D abs() const;
 	} Vector3D, Vec3, Point3D, Pt3;

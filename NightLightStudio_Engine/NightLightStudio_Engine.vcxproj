@@ -201,6 +201,7 @@
     <ClInclude Include="Source\Component\ComponentManagerTypedefs.h" />
     <ClInclude Include="Source\Component\ComponentMemoryManager.h" />
     <ClInclude Include="Source\Component\ComponentNavigator.h" />
+    <ClInclude Include="Source\Component\ComponentPath.h" />
     <ClInclude Include="Source\Component\ComponentPlayerStats.h" />
     <ClInclude Include="Source\Component\ComponentRigidBody.h" />
     <ClInclude Include="Source\Component\Components.h" />
@@ -247,6 +248,7 @@
     <ClInclude Include="Source\Graphics\AnimationController.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
+    <ClInclude Include="Source\Graphics\ComponentAnimation.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
     <ClInclude Include="Source\Graphics\Lights.h" />
