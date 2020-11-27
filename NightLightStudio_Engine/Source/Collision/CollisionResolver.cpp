@@ -745,14 +745,14 @@ void CollsionResolver::resolvesphere(CollisionEvent& colEvent)
 		{
 			if (!colEvent.rigid2->isStatic)
 			{
-				colEvent.transform2->_position.y += (penY) + std::numeric_limits<float>::epsilon();
+				colEvent.transform2->_position.y += (penY);
 			}
 		}
 		else
 		{
 			if (!colEvent.rigid1->isStatic)
 			{
-				colEvent.transform1->_position.y += (penY) + std::numeric_limits<float>::epsilon();
+				colEvent.transform1->_position.y += abs(penY);
 			}
 		}
 
