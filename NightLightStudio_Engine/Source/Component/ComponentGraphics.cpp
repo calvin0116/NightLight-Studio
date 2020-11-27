@@ -285,9 +285,9 @@ inline void ComponentGraphics::Read(Value& val)
 	{
 		auto pos = val["DiffuseMat"].GetArray();
 
-		_materialData._diffuse.x = pos[0].GetFloat();
-		_materialData._diffuse.y = pos[1].GetFloat();
-		_materialData._diffuse.z = pos[2].GetFloat();
+		_pbrData._albedo.x = pos[0].GetFloat();
+		_pbrData._albedo.y = pos[1].GetFloat();
+		_pbrData._albedo.z = pos[2].GetFloat();
 	}
 
 	if (val.FindMember("AmbientMat") == val.MemberEnd())

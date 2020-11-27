@@ -46,6 +46,9 @@ uniform sampler2D MetallicTex;
 uniform sampler2D RoughnessTex;
 uniform sampler2D AOTex; // Might need extra uniform to determine if AO is available
 
+uniform float RoughnessControl;
+uniform float MetallicControl;
+
 // Current maximum permitted lights per type
 #define MAX_LIGHTS 30
 
@@ -72,7 +75,7 @@ float DistributionGGX(float NdotH, float roughness)
     float aSqred = a * a;
     float denom = (NdotH * NdotH) * (aSqred - 1.0f) + 1.0f;
     denom = PI * denom * denom;
-    return aSqred / max(denom, 0.0000001f); // MUST avoid division by 0
+    return aSqred / max(denom, 0.000001f); // MUST avoid division by 0
 }
 
 vec3 FresnelSchlick(float cosTheta, vec3 F0)
@@ -99,7 +102,10 @@ void main(void)
     // In case of textures, calculate properties for each point
     vec3 albedo = texture(AlbedoTex, texCoords).rgb;
     float metallic = texture(MetallicTex, texCoords).r;
-    float roughness = texture(RoughnessTex, texCoords).r;
+    float roughness = max(texture(RoughnessTex, texCoords).r, 0.001f);
+
+    roughness *= max(RoughnessControl, 0.00001f);
+    metallic *= max(MetallicControl, 0.00001f);
     //float ao = texture(AOTex, texCoords).r;
     float ao = 1.f;
 
@@ -135,8 +141,8 @@ void main(void)
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
-        float NdotV = max(dot(N, V), 0.0000001f); 
-        float NdotL = max(dot(N, L), 0.0000001f);
+        float NdotV = max(dot(N, V), 0.0001f); 
+        float NdotL = max(dot(N, L), 0.0001f);
         float HdotV = max(dot(H, V), 0.0f);
         float NdotH = max(dot(N, H), 0.0f);
 
@@ -178,8 +184,8 @@ void main(void)
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
-        float NdotV = max(dot(N, V), 0.0000001f); 
-        float NdotL = max(dot(N, L), 0.0000001f);
+        float NdotV = max(dot(N, V), 0.0001f); 
+        float NdotL = max(dot(N, L), 0.0001f);
         float HdotV = max(dot(H, V), 0.0f);
         float NdotH = max(dot(N, H), 0.0f);
 
@@ -229,8 +235,8 @@ void main(void)
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
-        float NdotV = max(dot(N, V), 0.0000001f); 
-        float NdotL = max(dot(N, L), 0.0000001f);
+        float NdotV = max(dot(N, V), 0.0001f); 
+        float NdotL = max(dot(N, L), 0.0001f);
         float HdotV = max(dot(H, V), 0.0f);
         float NdotH = max(dot(N, H), 0.0f);
 

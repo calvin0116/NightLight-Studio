@@ -127,6 +127,11 @@ namespace NlMath
 		return Vector3DLength(*this);
 	}
 
+	float Vector3D::sqrtlength()
+	{
+		return Vector3DSquareLength(*this);
+	}
+
 	void Vector3D::set(float _x, float _y, float _z)
 	{
 		x = _x;

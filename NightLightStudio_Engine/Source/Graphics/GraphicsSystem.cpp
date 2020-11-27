@@ -20,9 +20,9 @@
 #endif
 
 //#define DRAW_WITH_COMPONENTS
-#define DRAW_WITH_LIGHTS
+//#define DRAW_WITH_LIGHTS
 #define DRAW_DEBUG_GRID
-//#define PBR_DRAWING
+#define PBR_DRAWING
 
 namespace NS_GRAPHICS
 {
@@ -512,6 +512,11 @@ namespace NS_GRAPHICS
 			else // textured program
 			{
 				shaderManager->StartProgram(7); // textured program
+
+
+				// Roughness Control
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "RoughnessControl"), graphicsComp->_pbrData._roughness);
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "MetallicControl"), graphicsComp->_pbrData._metallic);
 
 				// Bind textures
 				// bind diffuse map
