@@ -751,8 +751,23 @@ void InspectorWindow::LightComp(Entity& ent)
 
 			if (ImGui::Combo("Light Type", &LIGHT, lights, IM_ARRAYSIZE(lights)))
 			{
-				//NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(light, (NS_GRAPHICS::Lights)LIGHT);
-				light->SetType((NS_GRAPHICS::Lights)LIGHT);
+				// Checks if set was successful
+				if (!light->SetType((NS_GRAPHICS::Lights)LIGHT))
+				{
+					// Send error prompt if failed
+					ImGui::OpenPopup("There can only be one sun and so many stars uwu");
+				}
+			}
+
+			if (ImGui::BeginPopupModal("There can only be one sun and so many stars uwu"))
+			{
+				ImGui::Text("You dun goofed A.K.A there are already enough lights of that type in the scene.");
+				if (ImGui::Button("OK", ImVec2(240, 0))) 
+				{ 
+					ImGui::CloseCurrentPopup(); 
+				}
+				ImGui::SetItemDefaultFocus();
+				ImGui::EndPopup();
 			}
 
 			glm::vec3 lightColor = light->GetColor();
@@ -761,18 +776,8 @@ void InspectorWindow::LightComp(Entity& ent)
 			{
 				light->SetColor(lightColor);
 			}
-			
-			/*if (ImGui::ColorEdit3("Ambient", glm::value_ptr(light->_ambient)))
-			{
-				light->SetAmbient(light->_ambient);
-			}
 
-			if (ImGui::ColorEdit3("Specular", glm::value_ptr(light->_specular)))
-			{
-				light->SetSpecular(light->_specular);
-			}*/
-
-			if ((NS_GRAPHICS::Lights)LIGHT != NS_GRAPHICS::Lights::DIRECTIONAL)
+			if ((NS_GRAPHICS::Lights)LIGHT != NS_GRAPHICS::Lights::INVALID_TYPE)
 			{
 				float intensity = light->GetIntensity();
 				if (ImGui::DragFloat("Intensity", &intensity))
@@ -780,6 +785,18 @@ void InspectorWindow::LightComp(Entity& ent)
 					if (intensity < 0.f)
 						intensity = 0.f;
 					light->SetIntensity(intensity);
+				}
+			}
+			
+			
+			if ((NS_GRAPHICS::Lights)LIGHT == NS_GRAPHICS::Lights::POINT)
+			{
+				float radius = light->GetRadius();
+				if (ImGui::DragFloat("Radius", &radius))
+				{
+					if (radius < 0.0001f)
+						radius = 0.01f;
+					light->SetRadius(radius);
 				}
 			}
 
