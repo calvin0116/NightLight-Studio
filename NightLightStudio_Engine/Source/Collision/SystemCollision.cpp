@@ -311,6 +311,11 @@ namespace NS_COLLISION
 
 		if (!_isPlaying)
 		{
+			// Creating an object of CSVReader
+			CSVReader reader("Asset/CollisionConfig.csv");
+
+			// Get the data from CSV File
+			_colliderDataList = reader.getData();
 			return;
 		}
 
@@ -359,24 +364,11 @@ namespace NS_COLLISION
 
 				//////////////////////////////////collision table/////////////////////////////////
 
-				for (size_t i = 0; i < _colliderDataList.size(); i++)
+				int check = _colliderDataList[comCol1->colliderTag][comCol2->colliderTag].c_str()[0] - '0';
+				if (check == 0)
 				{
-					for (size_t j = 0; j < _colliderDataList.size(); j++)
-					{
-						if (comCol1->colliderTag == (_colliderDataList[i][0].c_str()[0] - '0') && comCol2->colliderTag == (_colliderDataList[0][j].c_str()[0] - '0'))
-						{
-							//convert string to number
-							int check = _colliderDataList[i][j].c_str()[0] - '0';
-							if (check == 0)
-							{
-								return;
-							}
-
-						}
-
-					}
+					continue;
 				}
-
 
 
 

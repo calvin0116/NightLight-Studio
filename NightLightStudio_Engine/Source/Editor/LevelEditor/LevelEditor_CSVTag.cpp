@@ -146,6 +146,7 @@ void LevelEditor_CSVTag::Run()
 				else
 					ImGui::Dummy(ImVec2(19,19));
 				_csvArr[i][j] = std::string(std::to_string(val));
+				_csvArr[j][i] = _csvArr[i][j];
 			}
 		}
 		++j;
