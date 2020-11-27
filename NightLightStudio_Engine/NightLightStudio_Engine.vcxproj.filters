@@ -110,6 +110,7 @@
     <ClCompile Include="Source\Graphics\ComponentAnimation.cpp" />
     <ClCompile Include="Source\Graphics\AnimationController.cpp" />
     <ClCompile Include="Source\Collision\CSVReader.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -250,6 +251,7 @@
     <ClInclude Include="Source\Collision\CSVReader.h" />
     <ClInclude Include="Source\Component\ComponentPath.h" />
     <ClInclude Include="Source\Graphics\ComponentAnimation.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
