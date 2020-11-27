@@ -5,7 +5,7 @@
 #include "../Input/SystemInput.h" // For testing
 #include "CScripts/AllScripts.h"
 
-#define C_ENV
+//#define C_ENV
 #define CS_ENV
 
 namespace NS_LOGIC
