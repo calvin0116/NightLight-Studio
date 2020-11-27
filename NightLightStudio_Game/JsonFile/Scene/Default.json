@@ -2,6 +2,8 @@
     "Objects": {
         "Height_1_wall": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -1.0,
                     0.5,
@@ -11,16 +13,51 @@
                     2.0,
                     1.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Camera": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.0,
                     2.0,
@@ -30,11 +67,18 @@
                     1.0,
                     1.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             }
         },
         "Plane": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     5.0,
                     2.0,
@@ -44,10 +88,18 @@
                     100.0,
                     100.0,
                     100.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "RigidBody": {
                 "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
                 "Force": [
                     0.0,
                     0.0,
@@ -59,10 +111,14 @@
                     0.0
                 ]
             },
-            "AudioManager": {}
+            "AudioManager": {
+                "ListOfSound": {}
+            }
         },
         "Height_3_Wall": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -2.5,
                     1.5,
@@ -72,16 +128,51 @@
                     1.0,
                     3.0,
                     2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_2_Wall_2": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     0.5,
                     1.5,
@@ -91,16 +182,51 @@
                     1.0,
                     3.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Tree_H10_8": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.5,
                     5.0,
@@ -110,16 +236,51 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     0.5,
                     2.0,
@@ -129,16 +290,51 @@
                     1.0,
                     4.0,
                     2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_3_Wall_1": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -4.0,
                     1.5,
@@ -148,16 +344,51 @@
                     2.0,
                     3.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Tree_H10_2": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.5,
                     5.0,
@@ -167,16 +398,51 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Tree_H10_1": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -3.5,
                     5.0,
@@ -186,16 +452,51 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Tree_H10_7": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -3.5,
                     5.0,
@@ -205,16 +506,51 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Tree_H10_3": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -3.5,
                     5.0,
@@ -224,16 +560,51 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Tree_H10_4": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.5,
                     5.0,
@@ -243,16 +614,51 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Tree_H10_6": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.5,
                     5.0,
@@ -262,16 +668,51 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Tree_H10_5": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -3.5,
                     5.0,
@@ -281,16 +722,51 @@
                     1.0,
                     10.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_1": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.5,
                     2.0,
@@ -300,16 +776,51 @@
                     1.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_2": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -2.5,
                     2.0,
@@ -319,16 +830,51 @@
                     1.0,
                     4.0,
                     2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_3_Wall_2": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.5,
                     1.5,
@@ -338,16 +884,51 @@
                     1.0,
                     3.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_3": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -5.5,
                     2.0,
@@ -357,16 +938,51 @@
                     1.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_4": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.0,
                     2.0,
@@ -376,16 +992,51 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_5": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -0.5,
                     2.0,
@@ -395,16 +1046,51 @@
                     1.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_7": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.0,
                     2.0,
@@ -414,16 +1100,51 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_6": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -5.0,
                     2.0,
@@ -433,16 +1154,51 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_8": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.5,
                     2.0,
@@ -452,16 +1208,51 @@
                     1.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_9": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.5,
                     2.0,
@@ -471,16 +1262,51 @@
                     1.0,
                     4.0,
                     2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_10": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     0.0,
                     2.0,
@@ -490,16 +1316,51 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_11": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -5.0,
                     2.0,
@@ -509,16 +1370,51 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_12": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -5.5,
                     2.0,
@@ -528,16 +1424,51 @@
                     1.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_13": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     2.0,
                     2.0,
@@ -547,16 +1478,51 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_14": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     3.0,
                     2.0,
@@ -566,16 +1532,51 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_15": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -5.0,
                     2.0,
@@ -585,16 +1586,51 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_16": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     0.0,
                     2.0,
@@ -604,16 +1640,51 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_17": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.0,
                     2.0,
@@ -623,16 +1694,51 @@
                     2.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_18": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     1.5,
                     2.0,
@@ -642,16 +1748,51 @@
                     1.0,
                     4.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_19": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -4.5,
                     2.0,
@@ -661,16 +1802,51 @@
                     1.0,
                     4.0,
                     2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_2_Wall_3": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -1.5,
                     1.0,
@@ -680,16 +1856,51 @@
                     1.0,
                     2.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_2_Wall_4": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -2.5,
                     1.0,
@@ -699,16 +1910,51 @@
                     1.0,
                     2.0,
                     1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
         "Height_4_Wall_15_copy": {
             "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
                 "Position": [
                     -6.5,
                     2.0,
@@ -718,12 +1964,45 @@
                     1.0,
                     4.0,
                     12.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Texture file": "",
-                "Model file": "box.fbx"
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         }
     }

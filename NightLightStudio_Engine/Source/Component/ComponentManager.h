@@ -918,7 +918,7 @@ public:
 
 		public:
 
-			int getId();
+			int getId() const;
 
 			int getGeneration();
 

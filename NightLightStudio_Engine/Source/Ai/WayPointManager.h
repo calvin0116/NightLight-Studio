@@ -246,7 +246,10 @@ public:
 		
 	};
 
-
-
+	//=============================Getter/Setter=====================================//
+	int GetWayPointNumber()
+	{
+		return waypoint_list.size();
+	}
 
 };

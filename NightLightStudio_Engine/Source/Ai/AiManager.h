@@ -16,7 +16,16 @@ class AiManager : public MySystem
 public:
 	void WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos ,NlMath::Vec3 target_position)
 	{
-		nav_comp->SetCurrentPath(wp_man.AstarPathFinding(my_pos, target_position));
+		if (wp_man.GetWayPointNumber())	//If there is way point
+		{
+			nav_comp->SetCurrentPath(wp_man.AstarPathFinding(my_pos, target_position));
+		}
+		else
+		{
+			LocalVector<WayPoint*> temp_wp_list;
+			wp_man.InsertWayPoint(my_pos, (my_pos - target_position).re)
+			//nav_comp->SetCurrentPath
+		}
 	}
 
 	void WalkTowards(int ent_id, NlMath::Vec3 target_position)
