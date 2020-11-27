@@ -508,6 +508,11 @@ namespace NS_GRAPHICS
 			{
 				shaderManager->StartProgram(7); // textured program
 
+
+				// Roughness Control
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "RoughnessControl"), graphicsComp->_pbrData._roughness);
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "MetallicControl"), graphicsComp->_pbrData._metallic);
+
 				// Bind textures
 				// bind diffuse map
 				textureManager->BindAlbedoTexture(graphicsComp->_albedoID);

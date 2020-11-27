@@ -46,6 +46,9 @@ uniform sampler2D MetallicTex;
 uniform sampler2D RoughnessTex;
 uniform sampler2D AOTex; // Might need extra uniform to determine if AO is available
 
+uniform float RoughnessControl;
+uniform float MetallicControl;
+
 // Current maximum permitted lights per type
 #define MAX_LIGHTS 30
 
@@ -100,6 +103,9 @@ void main(void)
     vec3 albedo = texture(AlbedoTex, texCoords).rgb;
     float metallic = texture(MetallicTex, texCoords).r;
     float roughness = texture(RoughnessTex, texCoords).r;
+
+    roughness *= RoughnessControl;
+    metallic *= MetallicControl;
     //float ao = texture(AOTex, texCoords).r;
     float ao = 1.f;
 
