@@ -13,7 +13,7 @@
 #define PENETRATION_SLOP 0.05f;
 
 
-#define COLLIDING_FRAMES_TRASHOLD 2
+#define COLLIDING_FRAMES_TRASHOLD 5
 
 void CollisionResolver()
 {
@@ -275,14 +275,14 @@ void CollsionResolver::resolveCollision()
 /////////////////////////////dun touch///////////////////////////////
 	}
 
-	for (CollisionEvent& colEvent : colEventList)
-	{
-		//colEvent.entity1;
-		//colEvent.entity2;
+	//for (CollisionEvent& colEvent : colEventList)
+	//{
+	//	//colEvent.entity1;
+	//	//colEvent.entity2;
 
-		// pass to syslogic
-		NS_LOGIC::SYS_LOGIC->OnCollisionEnter(colEvent.entity1, colEvent.entity2);
-	}
+	//	// pass to syslogic
+	//	NS_LOGIC::SYS_LOGIC->OnCollisionEnter(colEvent.entity1, colEvent.entity2);
+	//}
 
 
 	{

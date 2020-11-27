@@ -44,62 +44,13 @@ typedef class ComponentLight : public ISerializable //: public IComponent
 	//////////////////////////////////
 
 public:
-	// Temporarily make them public for easy access
-
-	//Variables For Lighting
-	//Standard variable
-	//glm::vec3 _ambient;  
-	//glm::vec3 _diffuse;  
-	//glm::vec3 _specular; 
-
-	
-
 	//////////////////////////////////
 
 	// Default constructor
 	ComponentLight();
 
-	// Parametrized constructor 
-	//ComponentLight(const int& lightID, const NS_GRAPHICS::Lights& Type);
-
-	// Assume create light function is called separately by light system
-	//void AssignLight(const int& lightID, const NS_GRAPHICS::Lights& Type);
-
-	// Destructor, destroy all OpenGL objects via graphics system
+	// Destructor
 	~ComponentLight();
-
-	/////////// GETTERS/SETTERS ////////////
-
-	// Must use this function for setting active/inactive for light
-	//void SetActive(const bool& set);            // Expose
-
-	//
-
-	//void ChangeLightType(const NS_GRAPHICS::Lights& Type);  // Expose
-
-	//// Applicable for all lights
-	//glm::vec3 GetAmbient() const;               // Expose
-	//// Applicable for all lights
-	//void SetAmbient(const glm::vec3& ambient);  // Expose
-
-	//// Applicable for all lights
-	//glm::vec3 GetDiffuse() const;               // Expose
-	//// Applicable for all lights
-	//void SetDiffuse(const glm::vec3& diffuse);  // Expose
-
-	//// Applicable for all lights
-	//glm::vec3 GetSpecular() const;              // Expose
-	//// Applicable for all lights
-	//void SetSpecular(const glm::vec3& specular); // Expose
-
-	//// Applicable for spot and spot light
-	//// Calculates intensity based on current attenuation
-	////float GetIntensity();                         // Expose
-	//// Calculates attenuation based on provided intensity
-	//void SetIntensity(const float& intensity);     // Expose
-
-	//TO DO
-	// Set setters and getters for spotlight
 
 	///////////////////////////////
 	/////NEW INTERFACE FOR LIGHTS
@@ -136,7 +87,7 @@ public:
 	// Setters
 	void SetLightID(const int& id); // DO NOT EXPOSE
 
-	void SetType(const NS_GRAPHICS::Lights& type); // Expose
+	bool SetType(const NS_GRAPHICS::Lights& type); // Expose
 
 	// Note: FOR LIGHT SYSTEM USAGE ONLY
 	void LS_SetType(const NS_GRAPHICS::Lights& type); // DO NOT EXPOSE

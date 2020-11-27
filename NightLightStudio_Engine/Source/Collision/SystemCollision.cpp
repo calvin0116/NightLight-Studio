@@ -282,7 +282,7 @@ namespace NS_COLLISION
 
 
 		//draw debug mesh
-		if (doDrawLineMesh)
+		if (true) // lmao was this prev -> if (doDrawLineMesh) <- caused a bug xD
 		{
 			auto itr = G_ECMANAGER->begin<ComponentCollider>();
 			auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
@@ -363,7 +363,7 @@ namespace NS_COLLISION
 				{
 					for (size_t j = 0; j < _colliderDataList.size(); j++)
 					{
-						if (comTrans1->_entityName.c_str() == _colliderDataList[i][0] && comTrans2->_entityName.c_str() == _colliderDataList[0][j])
+						if (comCol1->colliderTag == (_colliderDataList[i][0].c_str()[0] - '0') && comCol2->colliderTag == (_colliderDataList[0][j].c_str()[0] - '0'))
 						{
 							//convert string to number
 							int check = _colliderDataList[i][j].c_str()[0] - '0';
@@ -392,9 +392,8 @@ namespace NS_COLLISION
 				if (!comRigid1->isActive || !comRigid2->isActive) continue;
 
 				if (comRigid1->isStatic && comRigid2->isStatic) continue;
-				//UpdateCollisionBoxPos(comCol1, comTrans1);
-
-
+				UpdateCollisionBoxPos(comCol1, comTrans1);
+				UpdateCollisionBoxPos(comCol2, comTrans2);
 
 
 				if (comCol1->isCollidable == false || comCol2->isCollidable == false)
