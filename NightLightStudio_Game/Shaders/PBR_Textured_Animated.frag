@@ -6,28 +6,34 @@ in vec3 normal;
 
 out vec4 fragColor;
 
+// change to diffuse and direction only
 struct DirLight {
     vec4 direction;
-    
-    vec4 diffuse;
 
-    float intensity;
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
 };
 
+// change to position, diffuse, attenuation and radius
 struct PointLight {
     vec4 position;
 
+    vec4 ambient;
     vec4 diffuse;
+    vec4 specular;
 
-    float radius;
     float intensity;
 };
 
+// change to position, direction, color, cutoff, outercutoff and attenuation
 struct SpotLight {
     vec4 position;
     vec4 direction;
 
+    vec4 ambient;
     vec4 diffuse;
+    vec4 specular;
 
     float cutOff;
     float outerCutOff;
@@ -35,9 +41,13 @@ struct SpotLight {
 };
 
 // PBR Materials
-uniform vec3 Albedo;
-uniform float Metallic;
-uniform float Roughness;
+uniform sampler2D AlbedoTex;
+uniform sampler2D MetallicTex;
+uniform sampler2D RoughnessTex;
+uniform sampler2D AOTex; // Might need extra uniform to determine if AO is available
+
+uniform float RoughnessControl;
+uniform float MetallicControl;
 
 // Current maximum permitted lights per type
 #define MAX_LIGHTS 30
@@ -47,12 +57,12 @@ const float PI = 3.14159265359f;
 
 layout (std140) uniform LightCalcBlock
 {
-    DirLight dLight[1];
+    DirLight dLights[MAX_LIGHTS];
     PointLight pLights[MAX_LIGHTS];
     SpotLight sLights[MAX_LIGHTS];
 
     // Number of lights currently in scene
-    int dLight_Num;
+    int dLights_Num;
     int pLights_Num;
     int sLights_Num;
 
@@ -89,16 +99,15 @@ float GeometrySmith(float NdotV, float NdotL, float roughness)
 
 void main(void)
 {
-    vec3 albedo = Albedo;
-    float metallic = Metallic;
-    float roughness = max(Roughness, 0.01f);
-    float ao = 1.f;
-
     // In case of textures, calculate properties for each point
-    //vec3 albedo = texture(albedoTex, texCoords).rgb;
-    //float metallic = texture(metallicTex, texCoords).r;
-    //float roughness = texture(roughnessTex, texCoords).r;
-    //float ao = texture(aoTex, texCoords).r;
+    vec3 albedo = texture(AlbedoTex, texCoords).rgb;
+    float metallic = texture(MetallicTex, texCoords).r;
+    float roughness = max(texture(RoughnessTex, texCoords).r, 0.001f);
+
+    roughness *= max(RoughnessControl, 0.00001f);
+    metallic *= max(MetallicControl, 0.00001f);
+    //float ao = texture(AOTex, texCoords).r;
+    float ao = 1.f;
 
     // properties
     vec3 N = normalize(normal); // required normal vector
@@ -123,17 +132,17 @@ void main(void)
     // Calculate lights here
     // Calculation for all directional lights
     // light vector is handled differently
-    for(int i = 0; i < dLight_Num; i++)
+    for(int i = 0; i < dLights_Num; i++)
     {
         // calculate per-light radiance
-        vec3 L = normalize(-dLight[i].direction.xyz); // light vector
+        vec3 L = normalize(-dLights[i].direction.xyz); // light vector
         vec3 H = normalize(V + L); // Halfway-bisecting vector
-        vec3 radiance = dLight[i].diffuse.xyz * dLight[i].intensity;
+        vec3 radiance = dLights[i].diffuse.xyz;
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
-        float NdotV = max(dot(N, V), 0.00001f); 
-        float NdotL = max(dot(N, L), 0.00001f);
+        float NdotV = max(dot(N, V), 0.0001f); 
+        float NdotL = max(dot(N, L), 0.0001f);
         float HdotV = max(dot(H, V), 0.0f);
         float NdotH = max(dot(N, H), 0.0f);
 
@@ -168,15 +177,15 @@ void main(void)
         vec3 L = normalize(pLights[j].position.xyz - fragPos); // light vector
         vec3 H = normalize(V + L); // Halfway-bisecting vector
         float distance = length(pLights[j].position.xyz - fragPos);
-        //float attenuation = 1.f / (distance * distance); // inverse squared
-        float attenuation = smoothstep(pLights[j].radius, 0.f, distance); // where 100.f is the radius
+        float attenuation = 1.f / (distance * distance); // inverse squared
+        //float attenuation = smoothstep(100.f, 0.f, distance); // where 100.f is the radius
 
         vec3 radiance = ((pLights[j].diffuse.rgb * pLights[j].intensity) * attenuation); // diffuse used in place of color
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
-        float NdotV = max(dot(N, V), 0.00001f); 
-        float NdotL = max(dot(N, L), 0.00001f);
+        float NdotV = max(dot(N, V), 0.0001f); 
+        float NdotL = max(dot(N, L), 0.0001f);
         float HdotV = max(dot(H, V), 0.0f);
         float NdotH = max(dot(N, H), 0.0f);
 
@@ -226,8 +235,8 @@ void main(void)
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
-        float NdotV = max(dot(N, V), 0.00001f); 
-        float NdotL = max(dot(N, L), 0.00001f);
+        float NdotV = max(dot(N, V), 0.0001f); 
+        float NdotL = max(dot(N, L), 0.0001f);
         float HdotV = max(dot(H, V), 0.0f);
         float NdotH = max(dot(N, H), 0.0f);
 

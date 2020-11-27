@@ -36,6 +36,9 @@ namespace Unicorn
     // Delta time in seconds
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static float RealDT();
+    // Change scene
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void SetNextScene(string scene);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static dynamic GetScript(int id);

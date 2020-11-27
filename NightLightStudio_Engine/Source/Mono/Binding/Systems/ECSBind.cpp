@@ -4,6 +4,8 @@
 #include "../../../Component/Components.h" 
 // Delta time
 #include "../../../Core/DeltaTime.h"
+// Scene change
+#include "../../../Core/SceneManager.h"
 
 namespace ECSBind
 {
@@ -12,6 +14,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(GameObjectFind, "GameObjectFind", "UniBehaviour");
     MonoWrapper::BindClassFunction(dt, "DT", "UniBehaviour");
     MonoWrapper::BindClassFunction(realDt, "RealDT", "UniBehaviour");
+    MonoWrapper::BindClassFunction(SetNextScene, "SetNextScene", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetScript, "GetScript", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetCollider, "GetCollider", "UniBehaviour");
@@ -36,6 +39,11 @@ namespace ECSBind
   float realDt()
   {
     return DELTA_T->dt / CLOCKS_PER_SEC;
+  }
+
+  void SetNextScene(MonoString* scene_name)
+  {
+    NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(MonoWrapper::ToString(scene_name));
   }
 
   MonoObject* GetScript(int id)

@@ -19,21 +19,27 @@ namespace Unicorn
 
     // Player Stats, default values
     public static float humnForce = 100000.0f;  // Move force while human
-    public static float mothForce = 10000.0f;  // Move force while moth
+    public static float mothSpeed = 10000.0f;  // Move force while moth
     public static float maxEnergy = 15.0f;
     public static float transformTime = 1.0f; // time to change state
+    public static float maxHumnSpd = 500.0f;
+    //public static float maxMothSpd = 100.0f;
     public static float moveForce = humnForce; // Current force
     public static float curEnergy = maxEnergy;
     // Minimum Energy required to change to moth
     public static float EnergyTreshold = 0.0f;
     public static float EnergyDrain = 1.0f;
     public static float EnergyGain = 1.0f;
+    // spawn point
+    public static Vector3 spawnPoint;
     // Move dir for camera to player
     public Vector3 fwd;
     public Vector3 rht;
     Vector3 moveDir = new Vector3(0.0f, 0.0f, 0.0f);
-    bool movedX = false;
-    bool movedY = false;
+    bool movedW = false;
+    bool movedA = false;
+    bool movedS = false;
+    bool movedD = false;
     // Player State
     public State CurrentState = State.Human;
     private State NextState = State.Human;
@@ -45,11 +51,12 @@ namespace Unicorn
     {
       playerRB = GetRigidBody(id);
       playerVar = GetVariables(id);
-      // Change default values from variables
-      humnForce     = playerVar.GetFloat(0);
-      mothForce     = playerVar.GetFloat(1);
-      maxEnergy     = playerVar.GetFloat(2);
+      // Get default values from variables
+      humnForce = playerVar.GetFloat(0);
+      mothSpeed = playerVar.GetFloat(1);
+      maxEnergy = playerVar.GetFloat(2);
       transformTime = playerVar.GetFloat(3);
+      maxHumnSpd = playerVar.GetFloat(4);
       curEnergy = maxEnergy;
       moveForce = humnForce;
     }
@@ -68,6 +75,8 @@ namespace Unicorn
       {
         Console.WriteLine(curEnergy);
       }
+      //Console.WriteLine(GetTransform(IDisposab);
+
     }
     public override void FixedUpdate()
     {
@@ -102,43 +111,88 @@ namespace Unicorn
         rht.y = 0.0f;
         fwd = fwd.normalized;
         rht = rht.normalized;
-      }
 
-      // Reset values
-      moveDir = new Vector3(0.0f, 0.0f, 0.0f);
-      movedX = false;
-      movedY = false;
-      if (Input.GetKeyHold(VK.IKEY_W))
-      {
-        moveDir += fwd;
-        movedY = !movedY;
-        //Force.Apply(id, fwd, moveForce);
+        // Reset values
+        moveDir = new Vector3(0.0f, 0.0f, 0.0f);
+        movedW = false;
+        movedA = false;
+        movedS = false;
+        movedD = false;
+
+        if (Input.GetKeyHold(VK.IKEY_W))
+        {
+          moveDir += fwd;
+          movedW = true;
+          //Force.Apply(id, fwd, moveForce);
+        }
+        else if (Input.GetKeyUp(VK.IKEY_W))
+        {
+          movedW = false;
+        }
+        // Left
+        if (Input.GetKeyHold(VK.IKEY_A))
+        {
+          moveDir += -rht;
+          movedA = true;
+          //Force.Apply(id, -rht, moveForce);
+        }
+        else if (Input.GetKeyUp(VK.IKEY_A))
+        {
+          movedA = false;
+        }
+        // Backward
+        if (Input.GetKeyHold(VK.IKEY_S))
+        {
+          moveDir += -fwd;
+          movedS = true;
+          //Force.Apply(id, -fwd, moveForce);
+        }
+        else if (Input.GetKeyUp(VK.IKEY_S))
+        {
+          movedS = false;
+        }
+        // Right
+        if (Input.GetKeyHold(VK.IKEY_D))
+        {
+          moveDir += rht;
+          movedD = true;
+          //Force.Apply(id, rht, moveForce);
+        }
+        else if (Input.GetKeyUp(VK.IKEY_D))
+        {
+          movedD = false;
+        }
+        if (movedW || movedA || movedS || movedD)
+        {
+          //Console.WriteLine("Applying");
+
+          //Vector3 noYVel = new Vector3(playerRB.GetVel().x, 0.0f, playerRB.GetVel().z);
+          if (playerRB.GetVel().sqrMagnitude >= maxHumnSpd)
+          {
+            playerRB.SetForce(new Vector3(0.0f, playerRB.GetForce().y, 0.0f));
+            playerRB.SetAccel(new Vector3(0.0f, playerRB.GetAccel().y, 0.0f));
+            playerRB.SetVel(moveDir.normalized * maxHumnSpd);
+            //playerRB.SetVel(new Vector3(0.0f, 0.0f, 0.0f));
+          }
+          else
+          {
+            Force.Apply(id, moveDir.normalized, moveForce);
+          }
+        }
+        else
+        {
+          //Console.WriteLine("Check");
+          //Vector3 zeroVec = new Vector3(0.0f, 0.0f, 0.0f);
+          playerRB.SetForce(new Vector3(0.0f, playerRB.GetForce().y, 0.0f));
+          playerRB.SetAccel(new Vector3(0.0f, playerRB.GetAccel().y, 0.0f));
+          playerRB.SetVel(new Vector3(0.0f, playerRB.GetVel().y, 0.0f));
+        }
       }
-      // Left
-      if (Input.GetKeyHold(VK.IKEY_A))
+      else if (CurrentState == State.Moth)
       {
-        moveDir += -rht;
-        movedX = !movedX;
-        //Force.Apply(id, -rht, moveForce);
-      }
-      // Backward
-      if (Input.GetKeyHold(VK.IKEY_S))
-      {
-        moveDir += -fwd;
-        movedY = !movedY;
-        //Force.Apply(id, -fwd, moveForce);
-      }
-      // Right
-      if (Input.GetKeyHold(VK.IKEY_D))
-      {
-        moveDir += rht;
-        movedX = !movedX;
-        //Force.Apply(id, rht, moveForce);
-      }
-      if (movedX || movedY)
-      {
-        Console.WriteLine("Applying");
-        Force.Apply(id, moveDir.normalized, moveForce);
+        playerRB.SetForce(new Vector3(0.0f, 0.0f, 0.0f));
+        playerRB.SetVel(fwd * mothSpeed);
+        playerRB.SetAccel(new Vector3(0.0f, 0.0f, 0.0f));
       }
     }
 
@@ -151,10 +205,12 @@ namespace Unicorn
         {
           case State.Human:
             // Only can change to moth if enough energy
-            if(curEnergy >= EnergyTreshold)
+            if (curEnergy >= EnergyTreshold)
               NextState = State.Moth;
             break;
           case State.Moth:
+            
+
             NextState = State.Human;
             break;
           case State.Possessed:
@@ -166,12 +222,12 @@ namespace Unicorn
 
     public void AutoStateControl()
     {
-      if(CurrentState != State.Human)
+      if (CurrentState != State.Human)
       {
         // Reduce energy when not in human state
         curEnergy -= EnergyDrain * RealDT();
         // Change back to human if current energy is not enough
-        if(curEnergy <= 0.0f)
+        if (curEnergy <= 0.0f)
         {
           curEnergy = 0.0f;
           NextState = State.Human;
@@ -189,7 +245,12 @@ namespace Unicorn
 
     public void CheckChangeState()
     {
-      if (NextState != CurrentState)
+      if(NextState == State.Possessed && NextState != CurrentState)
+      {
+        CurrentState = NextState;
+        // Logic for possessed state
+      }
+      else if (NextState != CurrentState)
       {
         if (accumulatedDt >= transformTime)
         {
@@ -203,10 +264,8 @@ namespace Unicorn
               playerRB.isGravity = true;
               break;
             case State.Moth:
-              moveForce = mothForce;
+              //moveForce = mothForce;
               playerRB.isGravity = false;
-              break;
-            case State.Possessed:
               break;
           }
         }
