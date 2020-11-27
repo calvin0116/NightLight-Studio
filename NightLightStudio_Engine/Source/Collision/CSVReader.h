@@ -14,5 +14,6 @@ public:
 	{ }
 	// Function to fetch data from a CSV File
 	std::vector<std::vector<std::string> > getData();
+	void writeData(std::vector<std::vector<std::string>> data);
 	void split(std::vector<std::string>& vec, std::string line, char delimitor);
 };
