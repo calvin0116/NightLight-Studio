@@ -88,6 +88,23 @@ public:
 		++currentSize;
 	}
 
+	T back()
+	{
+		if (currentSize == 0) return 0;
+
+		return data[currentSize - 1];
+	}
+
+	void pop_back()
+	{
+		if (currentSize <= 0) return;
+
+		data[currentSize - 1].~T();
+
+		currentSize--;
+
+	}
+
 	size_t size()
 	{
 		return currentSize;

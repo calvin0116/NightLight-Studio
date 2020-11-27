@@ -363,6 +363,44 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	// TEST  END
 	////////////
 
+
+	//// TEST LV
+	//LocalVector<int> tlv;
+	//for (int i = 0; i < 10; ++i)
+	//	tlv.push_back(i);
+
+	//for (int& lvint : tlv)
+	//{
+	//	std::cout << lvint << std::endl;
+	//}
+	//std::cout << std::endl;
+
+	//tlv.pop_back();
+
+
+	//for (int& lvint : tlv)
+	//{
+	//	std::cout << lvint << std::endl;
+	//}
+	//std::cout << std::endl;
+
+	//tlv.pop_back();
+	//tlv.pop_back();
+	//tlv.pop_back();
+
+	//for (int& lvint : tlv)
+	//{
+	//	std::cout << lvint << std::endl;
+	//}
+	//std::cout << std::endl;
+
+	//std::cout << tlv.back() << std::endl;
+
+	//tlv.pop_back();
+	//tlv.pop_back();
+
+	//// END TEST
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// Systems OnFirst start
 	for (auto my_sys : Systems)

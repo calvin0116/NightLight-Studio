@@ -282,7 +282,7 @@ namespace NS_COLLISION
 
 
 		//draw debug mesh
-		if (doDrawLineMesh)
+		if (true) // lmao was this prev -> if (doDrawLineMesh) <- caused a bug xD
 		{
 			auto itr = G_ECMANAGER->begin<ComponentCollider>();
 			auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
