@@ -71,7 +71,7 @@ float DistributionGGX(float NdotH, float roughness)
     float aSqred = a * a;
     float denom = (NdotH * NdotH) * (aSqred - 1.0f) + 1.0f;
     denom = PI * denom * denom;
-    return aSqred / max(denom, 0.0000001f); // MUST avoid division by 0
+    return aSqred / max(denom, 0.000001f); // MUST avoid division by 0
 }
 
 vec3 FresnelSchlick(float cosTheta, vec3 F0)
@@ -97,7 +97,7 @@ void main(void)
 {
     vec3 albedo = Albedo;
     float metallic = Metallic;
-    float roughness = Roughness;
+    float roughness = max(Roughness, 0.01f);
     float ao = 1.f;
 
     // In case of textures, calculate properties for each point
@@ -138,8 +138,8 @@ void main(void)
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
-        float NdotV = max(dot(N, V), 0.0000001f); 
-        float NdotL = max(dot(N, L), 0.0000001f);
+        float NdotV = max(dot(N, V), 0.00001f); 
+        float NdotL = max(dot(N, L), 0.00001f);
         float HdotV = max(dot(H, V), 0.0f);
         float NdotH = max(dot(N, H), 0.0f);
 
@@ -181,8 +181,8 @@ void main(void)
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
-        float NdotV = max(dot(N, V), 0.0000001f); 
-        float NdotL = max(dot(N, L), 0.0000001f);
+        float NdotV = max(dot(N, V), 0.00001f); 
+        float NdotL = max(dot(N, L), 0.00001f);
         float HdotV = max(dot(H, V), 0.0f);
         float NdotH = max(dot(N, H), 0.0f);
 
@@ -232,8 +232,8 @@ void main(void)
 
         // Cook-Torrance BRDF
         // epsilon to avoid division by zero
-        float NdotV = max(dot(N, V), 0.0000001f); 
-        float NdotL = max(dot(N, L), 0.0000001f);
+        float NdotV = max(dot(N, V), 0.00001f); 
+        float NdotL = max(dot(N, L), 0.00001f);
         float HdotV = max(dot(H, V), 0.0f);
         float NdotH = max(dot(N, H), 0.0f);
 
