@@ -46,5 +46,8 @@ void SystemEditor::LE_ConsoleOut(const std::string& out)
 
 void ED_OUT(const std::string& out)
 {
+#ifdef _EDITOR
 	SYS_EDITOR->LE_ConsoleOut(out);
+#endif
 }
+

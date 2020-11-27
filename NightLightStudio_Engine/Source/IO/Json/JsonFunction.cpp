@@ -97,6 +97,10 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<VariablesComponent>(Comp_list, entity, component_name, g_ecman);
             }
+            else if (component_name == "NavigatorComponent")
+            {
+                CreateAndWriteComp<NavigatorComponent>(Comp_list, entity, component_name, g_ecman);
+            }
         }
     }
 
@@ -191,6 +195,10 @@ namespace NS_SERIALISER {
             else if (component_name == "ComponentVariables")
             {
                 ReadComp<VariablesComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "NavigatorComponent")
+            {
+                ReadComp<NavigatorComponent>(Comp_list, entity, component_name);
             }
         }
     }
