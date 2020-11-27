@@ -29,6 +29,7 @@ namespace NS_COLLISION
 
 		//toggeling playable
 		bool _isPlaying;
+
 		friend Singleton<CollisionSystem>;
 
 		SystemMessaging::SystemReceiver receiver;
