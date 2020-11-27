@@ -174,7 +174,8 @@ void NS_GRAPHICS::UISystem::RenderUI()
 		itr++;
 	}
 
-	//_shaderSystem->StartProgram(ShaderSystem::ShaderType::UI); // textured program
+	//_shaderSystem->
+	(ShaderSystem::ShaderType::UI); // textured program
 
 	//glBindVertexArray(_vao);
 
