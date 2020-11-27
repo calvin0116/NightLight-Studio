@@ -30,6 +30,8 @@ namespace Unicorn
     public static float EnergyTreshold = 0.0f;
     public static float EnergyDrain = 1.0f;
     public static float EnergyGain = 1.0f;
+    // spawn point
+    public static Vector3 spawnPoint;
     // Move dir for camera to player
     public Vector3 fwd;
     public Vector3 rht;
@@ -207,6 +209,8 @@ namespace Unicorn
               NextState = State.Moth;
             break;
           case State.Moth:
+            
+
             NextState = State.Human;
             break;
           case State.Possessed:
@@ -241,7 +245,12 @@ namespace Unicorn
 
     public void CheckChangeState()
     {
-      if (NextState != CurrentState)
+      if(NextState == State.Possessed && NextState != CurrentState)
+      {
+        CurrentState = NextState;
+        // Logic for possessed state
+      }
+      else if (NextState != CurrentState)
       {
         if (accumulatedDt >= transformTime)
         {
@@ -257,8 +266,6 @@ namespace Unicorn
             case State.Moth:
               //moveForce = mothForce;
               playerRB.isGravity = false;
-              break;
-            case State.Possessed:
               break;
           }
         }
