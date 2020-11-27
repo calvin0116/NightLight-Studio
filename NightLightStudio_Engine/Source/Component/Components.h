@@ -21,6 +21,7 @@
 #include "ComponentPlayerStats.h"
 #include "ComponentCauldronStats.h"
 #include "ComponentVariables.h"
+#include "ComponentNavigator.h"
 
 // Temporary C++ script
 #include "ComponentCScript.h"
