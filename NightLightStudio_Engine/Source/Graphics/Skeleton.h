@@ -10,7 +10,7 @@ namespace NS_GRAPHICS
 	struct Joint
 	{
 		unsigned _index;
-		glm::mat4 _transform;
+		glm::mat4 _transform = glm::mat4(1.0f);
 		std::vector<Joint> _childrenJoints;
 
 		Joint() = default;

@@ -21,6 +21,7 @@ namespace Unicorn
     public static float humnForce = 100000.0f;  // Move force while human
     public static float mothForce = 10000.0f;  // Move force while moth
     public static float maxEnergy = 15.0f;
+    public static float transformTime = 1.0f; // time to change state
     public static float moveForce = humnForce; // Current force
     public static float curEnergy = maxEnergy;
     // Minimum Energy required to change to moth
@@ -33,20 +34,22 @@ namespace Unicorn
     Vector3 moveDir = new Vector3(0.0f, 0.0f, 0.0f);
     bool movedX = false;
     bool movedY = false;
-
     // Player State
     public State CurrentState = State.Human;
     private State NextState = State.Human;
     //Vector3 inVec;
+    // accumulated dt
+    private float accumulatedDt = 0.0f;
 
     public override void Init()
     {
       playerRB = GetRigidBody(id);
       playerVar = GetVariables(id);
       // Change default values from variables
-      humnForce = playerVar.GetFloat(0);
-      mothForce = playerVar.GetFloat(1);
-      maxEnergy = playerVar.GetFloat(2);
+      humnForce     = playerVar.GetFloat(0);
+      mothForce     = playerVar.GetFloat(1);
+      maxEnergy     = playerVar.GetFloat(2);
+      transformTime = playerVar.GetFloat(3);
       curEnergy = maxEnergy;
       moveForce = humnForce;
     }
@@ -188,21 +191,27 @@ namespace Unicorn
     {
       if (NextState != CurrentState)
       {
-        CurrentState = NextState;
-        Console.WriteLine(CurrentState);
-        switch (CurrentState)
+        if (accumulatedDt >= transformTime)
         {
-          case State.Human:
-            moveForce = humnForce;
-            playerRB.isGravity = true;
-            break;
-          case State.Moth:
-            moveForce = mothForce;
-            playerRB.isGravity = false;
-            break;
-          case State.Possessed:
-            break;
+          accumulatedDt = 0.0f;
+          CurrentState = NextState;
+          Console.WriteLine(CurrentState);
+          switch (CurrentState)
+          {
+            case State.Human:
+              moveForce = humnForce;
+              playerRB.isGravity = true;
+              break;
+            case State.Moth:
+              moveForce = mothForce;
+              playerRB.isGravity = false;
+              break;
+            case State.Possessed:
+              break;
+          }
         }
+        else
+          accumulatedDt += RealDT();
       }
     }
 

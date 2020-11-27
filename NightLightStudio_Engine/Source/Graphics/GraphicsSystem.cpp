@@ -55,7 +55,7 @@ namespace NS_GRAPHICS
 	{
 		cameraManager->Update();
 		//0.01f ms to s
-		_testTimeElapsed += DELTA_T->dt * DT_SCALE;
+		_testTimeElapsed += 0.1f;
 
 		if (cameraManager->CheckUpdate())
 		{
@@ -349,6 +349,8 @@ namespace NS_GRAPHICS
 
 			Model* model = modelManager->_models[graphicsComp->_modelID];
 
+			glm::mat4 identity(1.0);
+
 			// get transform component
 			ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
 
@@ -356,6 +358,7 @@ namespace NS_GRAPHICS
 			
 			if (model->_isAnimated)
 			{
+				model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
 				for (auto& mesh : model->_animatedMeshes)
 				{
 					if (graphicsComp->_renderType == RENDERTYPE::SOLID)
@@ -371,6 +374,8 @@ namespace NS_GRAPHICS
 
 						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
 
 						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
 						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
@@ -392,9 +397,9 @@ namespace NS_GRAPHICS
 
 						// Bind textures
 						// bind diffuse map
-						textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
+						//textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 						// bind specular map
-						textureManager->BindSpecularTexture(graphicsComp->_specularID);
+						//textureManager->BindSpecularTexture(graphicsComp->_specularID);
 
 						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
 						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
@@ -440,9 +445,9 @@ namespace NS_GRAPHICS
 
 						// Bind textures
 						// bind diffuse map
-						textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
+						//textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
 						// bind specular map
-						textureManager->BindSpecularTexture(graphicsComp->_specularID);
+						//textureManager->BindSpecularTexture(graphicsComp->_specularID);
 
 						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
 						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
@@ -484,49 +489,54 @@ namespace NS_GRAPHICS
 
 			glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
 
-			for (auto& mesh : model->_meshes)
+			if (graphicsComp->_renderType == RENDERTYPE::SOLID)
 			{
-				if (graphicsComp->_renderType == RENDERTYPE::SOLID)
-				{
-					shaderManager->StartProgram(5); // solid program
-					glBindVertexArray(mesh->VAO);
+				shaderManager->StartProgram(5); // solid program
 
-					// Update model and uniform for material
-					glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Albedo"), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
-					glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Roughness"), graphicsComp->_pbrData._roughness);
-					glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Metallic"), graphicsComp->_pbrData._metallic);
+				// Update model and uniform for material
+				glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Albedo"), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Roughness"), graphicsComp->_pbrData._roughness);
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Metallic"), graphicsComp->_pbrData._metallic);
+
+				for (auto& mesh : model->_meshes)
+				{
+					glBindVertexArray(mesh->VAO);
+					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+					glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+				}
+
+				shaderManager->StopProgram();
+			}
+			else // textured program
+			{
+				shaderManager->StartProgram(7); // textured program
+
+				// Bind textures
+				// bind diffuse map
+				textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+
+				// bind metallic map
+				textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+
+				// bind roughness map
+				textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+
+				// bind ao map
+				textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+
+				for (auto& mesh : model->_meshes)
+				{
+					glBindVertexArray(mesh->VAO);
 
 					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
 					glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
-					shaderManager->StopProgram();
 				}
-				else
-				{
-					// Might be same program?
 
-					//shaderManager->StartProgram(3); // textured program
-					//glBindVertexArray(mesh->VAO);
-
-					//// Update model and uniform for material
-					//glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
-					//glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
-					//glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
-					//glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
-
-					//glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-					//glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-					//// Bind textures
-					//// bind diffuse map
-					//textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
-					//// bind specular map
-					//textureManager->BindSpecularTexture(graphicsComp->_specularID);
-
-					//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
-					//shaderManager->StopProgram();
-				}
+				shaderManager->StopProgram();
 			}
 			itr++;
 		}

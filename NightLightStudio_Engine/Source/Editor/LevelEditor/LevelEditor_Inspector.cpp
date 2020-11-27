@@ -141,8 +141,10 @@ void InspectorWindow::Start()
 		else if (t == typeid(LightComponent).hash_code())
 		{
 			entComp.Copy(entComp._ent.getComponent<LightComponent>()->Write());
-			NS_GRAPHICS::LightSystem::GetInstance().DetachLightComponent(entComp._ent);
-			//entComp._ent.RemoveComponent<LightComponent>();
+			//NS_GRAPHICS::LightSystem::GetInstance().DetachLightComponent(entComp._ent);
+			// Remove light from scene
+			entComp._ent.getComponent<LightComponent>()->SetType(NS_GRAPHICS::Lights::INVALID_TYPE);
+			entComp._ent.RemoveComponent<LightComponent>();
 		}
 
 		else if (t == typeid(ScriptComponent).hash_code())
@@ -485,7 +487,6 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 		{
 			bool renderTextures = !(graphics_comp->_renderType == RENDERTYPE::SOLID);
 
-			//ImGui::Checkbox("Is Active", &light->_isActive);
 			ImGui::Checkbox("Render Textures", &renderTextures);
 
 			if (!renderTextures)
@@ -665,13 +666,17 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 
 			ImGui::Text("Materials");
 
-			ImGui::ColorEdit3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
+			/*ImGui::ColorEdit3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
 
 			ImGui::ColorEdit3("Ambient##Graphics", glm::value_ptr(graphics_comp->_materialData._ambient));
 
 			ImGui::ColorEdit3("Specular##Graphics", glm::value_ptr(graphics_comp->_materialData._specular));
 
-			ImGui::InputFloat("Shininess", &graphics_comp->_materialData._shininess);
+			ImGui::InputFloat("Shininess", &graphics_comp->_materialData._shininess);*/
+
+			ImGui::ColorEdit3("Color##Graphics", glm::value_ptr(graphics_comp->_pbrData._albedo));
+			ImGui::DragFloat("Metallic", &graphics_comp->_pbrData._metallic, 0.1f, 0.f, 1.f);
+			ImGui::DragFloat("Roughness", &graphics_comp->_pbrData._roughness, 0.1f, 0.f, 1.f);
 
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 		}
@@ -738,18 +743,26 @@ void InspectorWindow::LightComp(Entity& ent)
 			light->SetActive(active_state);
 
 			const char* lights[] = { "Directional", "Point", "Spot", "None" };
-			LIGHT = (int) light->_type;
+
+			if (light->GetActive() == false)
+				LIGHT = (int)light->GetInactiveType();
+			else
+				LIGHT = (int) light->GetType();
+
 			if (ImGui::Combo("Light Type", &LIGHT, lights, IM_ARRAYSIZE(lights)))
 			{
-				NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(light, (NS_GRAPHICS::Lights)LIGHT);
+				//NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(light, (NS_GRAPHICS::Lights)LIGHT);
+				light->SetType((NS_GRAPHICS::Lights)LIGHT);
 			}
 
-			if (ImGui::ColorEdit3("Diffuse", glm::value_ptr(light->_diffuse)))
+			glm::vec3 lightColor = light->GetColor();
+
+			if (ImGui::ColorEdit3("Diffuse", glm::value_ptr(lightColor)))
 			{
-				light->SetDiffuse(light->_diffuse);
+				light->SetColor(lightColor);
 			}
 			
-			if (ImGui::ColorEdit3("Ambient", glm::value_ptr(light->_ambient)))
+			/*if (ImGui::ColorEdit3("Ambient", glm::value_ptr(light->_ambient)))
 			{
 				light->SetAmbient(light->_ambient);
 			}
@@ -757,25 +770,29 @@ void InspectorWindow::LightComp(Entity& ent)
 			if (ImGui::ColorEdit3("Specular", glm::value_ptr(light->_specular)))
 			{
 				light->SetSpecular(light->_specular);
-			}
+			}*/
 
-			if (light->_type != NS_GRAPHICS::Lights::DIRECTIONAL)
+			if ((NS_GRAPHICS::Lights)LIGHT != NS_GRAPHICS::Lights::DIRECTIONAL)
 			{
-				// This is fucked
-				float intensity = light->_intensity;
+				float intensity = light->GetIntensity();
 				if (ImGui::DragFloat("Intensity", &intensity))
 				{
 					if (intensity < 0.f)
 						intensity = 0.f;
-					light->SetAttenuation(1.f / intensity);
-					light->_intensity = intensity;
+					light->SetIntensity(intensity);
 				}
 			}
 
-			if (light->_type == NS_GRAPHICS::Lights::SPOT)
+			if ((NS_GRAPHICS::Lights)LIGHT == NS_GRAPHICS::Lights::SPOT)
 			{
-				ImGui::InputFloat("Cut off", &light->_cutOff);
-				ImGui::InputFloat("Outer cut off", &light->_outerCutOff);
+				float cutoff = light->GetCutOff();
+				float outercutoff = light->GetOuterCutOff();
+
+				if(ImGui::InputFloat("Cut off", &cutoff))
+					light->SetCutOff(cutoff);
+
+				if(ImGui::InputFloat("Outer cut off", &outercutoff))
+					light->SetOuterCutOff(outercutoff);
 			}
 		}
 

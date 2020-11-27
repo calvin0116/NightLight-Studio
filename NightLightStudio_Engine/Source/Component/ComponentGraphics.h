@@ -28,8 +28,8 @@ struct PBRMaterialData
 	float _roughness;
 
 	PBRMaterialData()
-		: _albedo{ 0.0f,1.0f,0.0f },
-		_metallic{ 0.0f },
+		: _albedo{ 1.0f, 1.0f, 1.0f },
+		_metallic{ 1.0f },
 		_roughness{ 0.5f }{}
 };
 
