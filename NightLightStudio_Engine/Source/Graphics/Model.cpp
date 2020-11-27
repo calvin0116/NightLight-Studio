@@ -8,12 +8,13 @@ NS_GRAPHICS::Model::Model()
 void NS_GRAPHICS::Model::GetPose(const std::string& animName, BoneData& bone, float dt, glm::mat4& parentTransform, glm::mat4& globalInverseTransform)
 {
 	glm::mat4 globalTransform = glm::mat4(1.0f);
+	glm::mat4 localTransform = glm::mat4(1.0f);
 	if (_animations.find(animName) != _animations.end())
 	{
 		if (_animations[animName]->_frames.find(bone._boneName) != _animations[animName]->_frames.end())
 		{
 			Animation::KeyFrames& currKey = _animations[animName]->_frames[bone._boneName];
-			dt = fmod(dt, 5);
+			dt = fmod(dt, _animations[animName]->_time);
 
 			unsigned index = 0;
 			float timeScale = 0.0f;
@@ -50,12 +51,18 @@ void NS_GRAPHICS::Model::GetPose(const std::string& animName, BoneData& bone, fl
 
 			glm::mat4 rotationMat = glm::toMat4(newRotation);
 
-			glm::mat4 localTransform = positionMat * rotationMat * scaleMat;
+			localTransform = positionMat * rotationMat * scaleMat;
 			globalTransform = parentTransform * localTransform;
 
 			_poseTransform[bone._boneID] = globalInverseTransform * globalTransform * bone._boneTransformOffset;
 		}
 	}
+	else
+	{
+		globalTransform = parentTransform * localTransform;
+	}
+
+
 
 	//update values for children bones
 	for (BoneData& child : bone._childrenBones)

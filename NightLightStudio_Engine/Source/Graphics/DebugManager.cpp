@@ -31,7 +31,7 @@ namespace NS_GRAPHICS
 		glEnableVertexAttribArray(0);
 
 		// Set uniforms
-		ShaderSystem::GetInstance().StartProgram(2);
+		ShaderSystem::GetInstance().StartProgram(ShaderSystem::GRID);
 
 		_grid._rgba_location = glGetUniformLocation(ShaderSystem::GetInstance().GetCurrentProgramHandle(), "rgba");
 		glUniform4fv(_grid._rgba_location, 1, &_grid._rgba[0]);
@@ -53,7 +53,7 @@ namespace NS_GRAPHICS
 
 	void DebugManager::SetGridColor(const glm::vec4& RGBA)
 	{
-		ShaderSystem::GetInstance().StartProgram(2);
+		ShaderSystem::GetInstance().StartProgram(ShaderSystem::GRID);
 		_grid._rgba = RGBA;
 		glUniform4fv(_grid._rgba_location, 1, &_grid._rgba[0]);
 		ShaderSystem::GetInstance().StopProgram();
@@ -137,7 +137,7 @@ namespace NS_GRAPHICS
 			glEnableVertexAttribArray(0);
 		}
 
-		ShaderSystem::GetInstance().StartProgram(2);
+		ShaderSystem::GetInstance().StartProgram(ShaderSystem::GRID);
 
 		glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(_grid._gridPoints.size()));
 
