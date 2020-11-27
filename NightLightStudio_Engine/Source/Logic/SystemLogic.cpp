@@ -124,7 +124,11 @@ namespace NS_LOGIC
     baseUpdate =          MonoWrapper::GetObjectMethod("Update", "UniBehaviour");
     baseExit =            MonoWrapper::GetObjectMethod("Exit", "UniBehaviour");
     baseCollisionEnter =  MonoWrapper::GetObjectMethod("OnCollisionEnter", "UniBehaviour");
-    baseTriggerEnter =    MonoWrapper::GetObjectMethod("OnTriggerEnter", "UniBehaviour");
+    baseCollisionStay = MonoWrapper::GetObjectMethod("OnCollisionStay", "UniBehaviour");
+    baseCollisionExit = MonoWrapper::GetObjectMethod("OnCollisionExit", "UniBehaviour");
+    baseTriggerEnter = MonoWrapper::GetObjectMethod("OnTriggerEnter", "UniBehaviour");
+    baseTriggerStay = MonoWrapper::GetObjectMethod("OnTriggerStay", "UniBehaviour");
+    baseTriggerExit = MonoWrapper::GetObjectMethod("OnTriggerExit", "UniBehaviour");
 
     // C# scripts init
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
@@ -306,12 +310,46 @@ namespace NS_LOGIC
   {
     if (!_isPlaying)
       return;
+#ifdef CS_ENV
+    // C# script
+    ComponentScript* cs1 = _obj1.getComponent<ComponentScript>();
+    ComponentScript* cs2 = _obj2.getComponent<ComponentScript>();
+    if (cs1)
+    {
+      MonoMethod* MyCollisionStay = MonoWrapper::GetDerivedMethod(cs1->_MonoData._pInstance, baseCollisionStay);
+      int cs2id = _obj2.getId();
+      MonoWrapper::InvokeMethodParams(MyCollisionStay, cs1->_MonoData._pInstance, cs2id);
+    }
+    if (cs2)
+    {
+      MonoMethod* MyCollisionStay = MonoWrapper::GetDerivedMethod(cs2->_MonoData._pInstance, baseCollisionStay);
+      int cs1id = _obj1.getId();
+      MonoWrapper::InvokeMethodParams(MyCollisionStay, cs2->_MonoData._pInstance, cs1id);
+    }
+#endif
   }
 
   void SystemLogic::OnCollisionExit(Entity _obj1, Entity _obj2)
   {
     if (!_isPlaying)
-      return;
+      return; 
+#ifdef CS_ENV
+      // C# script
+      ComponentScript* cs1 = _obj1.getComponent<ComponentScript>();
+    ComponentScript* cs2 = _obj2.getComponent<ComponentScript>();
+    if (cs1)
+    {
+      MonoMethod* MyCollisionExit = MonoWrapper::GetDerivedMethod(cs1->_MonoData._pInstance, baseCollisionExit);
+      int cs2id = _obj2.getId();
+      MonoWrapper::InvokeMethodParams(MyCollisionExit, cs1->_MonoData._pInstance, cs2id);
+    }
+    if (cs2)
+    {
+      MonoMethod* MyCollisionExit = MonoWrapper::GetDerivedMethod(cs2->_MonoData._pInstance, baseCollisionExit);
+      int cs1id = _obj1.getId();
+      MonoWrapper::InvokeMethodParams(MyCollisionExit, cs2->_MonoData._pInstance, cs1id);
+    }
+#endif
   }
 
   void SystemLogic::OnTriggerEnter(Entity _obj1, Entity _obj2)
@@ -351,12 +389,46 @@ namespace NS_LOGIC
   {
     if (!_isPlaying)
       return;
+#ifdef CS_ENV
+    // C# script
+    ComponentScript* cs1 = _obj1.getComponent<ComponentScript>();
+    ComponentScript* cs2 = _obj2.getComponent<ComponentScript>();
+    if (cs1)
+    {
+      MonoMethod* MyTriggerStay = MonoWrapper::GetDerivedMethod(cs1->_MonoData._pInstance, baseTriggerStay);
+      int cs2id = _obj2.getId();
+      MonoWrapper::InvokeMethodParams(MyTriggerStay, cs1->_MonoData._pInstance, cs2id);
+    }
+    if (cs2)
+    {
+      MonoMethod* MyTriggerStay = MonoWrapper::GetDerivedMethod(cs2->_MonoData._pInstance, baseTriggerStay);
+      int cs1id = _obj1.getId();
+      MonoWrapper::InvokeMethodParams(MyTriggerStay, cs2->_MonoData._pInstance, cs1id);
+    }
+#endif
   }
 
   void SystemLogic::OnTriggerExit(Entity _obj1, Entity _obj2)
   {
     if (!_isPlaying)
       return;
+#ifdef CS_ENV
+    // C# script
+    ComponentScript* cs1 = _obj1.getComponent<ComponentScript>();
+    ComponentScript* cs2 = _obj2.getComponent<ComponentScript>();
+    if (cs1)
+    {
+      MonoMethod* MyTriggerExit = MonoWrapper::GetDerivedMethod(cs1->_MonoData._pInstance, baseTriggerExit);
+      int cs2id = _obj2.getId();
+      MonoWrapper::InvokeMethodParams(MyTriggerExit, cs1->_MonoData._pInstance, cs2id);
+    }
+    if (cs2)
+    {
+      MonoMethod* MyTriggerExit = MonoWrapper::GetDerivedMethod(cs2->_MonoData._pInstance, baseTriggerExit);
+      int cs1id = _obj1.getId();
+      MonoWrapper::InvokeMethodParams(MyTriggerExit, cs2->_MonoData._pInstance, cs1id);
+    }
+#endif
   }
 
   void SystemLogic::HandleMsg(MessageScriptRequest& msg)

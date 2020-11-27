@@ -107,6 +107,11 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<VariablesComponent>();
 			entComp._ent.getComponent<VariablesComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(NavComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<NavComponent>();
+			entComp._ent.getComponent<NavComponent>()->Read(*entComp._rjDoc);
+		}
 
 		return comp;
 	};
@@ -178,6 +183,11 @@ void InspectorWindow::Start()
 		{
 			entComp.Copy(entComp._ent.getComponent<VariablesComponent>()->Write());
 			entComp._ent.RemoveComponent<VariablesComponent>();
+		}
+		else if (t == typeid(NavComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<NavComponent>()->Write());
+			entComp._ent.RemoveComponent<NavComponent>();
 		}
 
 
@@ -287,6 +297,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
   CauldronStatsComp(ent);
 
   VariableComp(ent);
+
+  NavComp(ent);
 
 	AddSelectedComps(ent);
 }
@@ -1141,6 +1153,52 @@ void InspectorWindow::VariableComp(Entity& ent)
 	ImGui::Separator();
 }
 
+void InspectorWindow::NavComp(Entity& ent)
+{
+	NavComponent* nav_comp = ent.getComponent<NavComponent>();
+	if (nav_comp != nullptr)
+	{
+
+		if (ImGui::CollapsingHeader("Navigator", &_notRemove))
+		{
+			if (ImGui::Button("Add WayPoint"))
+			{
+				LocalString ls;
+				nav_comp->way_point_list.push_back(ls);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove WayPoint"))
+			{
+				//nav_comp->way_point_list.po;
+			}
+
+			int str_index = 1;
+
+			for (LocalString<125> & str : nav_comp->way_point_list) //[path, name]
+			{
+				std::string p = "Waypoint_" + std::to_string(str_index);
+
+				std::string s_name = str;
+				_levelEditor->LE_AddInputText(p, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
+					[&str, &s_name]()
+					{
+						str = s_name.c_str();
+					});
+				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
+					[this, &str](Entity* entptr)
+					{
+						str = G_ECMANAGER->EntityName[entptr->getId()];
+
+					});
+				
+				str_index++;
+
+
+			}
+		}
+	}
+}
+
 void InspectorWindow::AddSelectedComps(Entity& ent)
 {
 	_levelEditor->LE_AddCombo("##AddComponentsCombo", _itemType,
@@ -1156,7 +1214,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  Canvas",
 			"  PlayerStats",
 			"  CauldronStats",
-			"  VariablesComp"
+			"  VariablesComp",
+			"  NavComp",
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -1284,6 +1343,15 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			if (!ent.getComponent<ComponentVariables>())
 			{
 				ENTITY_COMP_DOC comp{ ent, ComponentVariables().Write(), typeid(ComponentVariables).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		case 12: // ComponentVariable
+		{
+			if (!ent.getComponent<NavComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, NavComponent().Write(), typeid(NavComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;

@@ -86,6 +86,8 @@ private:
   void PlayerStatsComp(Entity& ent);
   void CauldronStatsComp(Entity& ent);
 	  void VariableComp(Entity& ent);
+	  void NavComp(Entity& ent);
+
 
 	void AddSelectedComps(Entity& ent);
 

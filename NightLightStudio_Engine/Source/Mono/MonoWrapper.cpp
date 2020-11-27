@@ -76,6 +76,7 @@ namespace MonoWrapper
   bool CompileScripts()
   {
     ED_OUT("Compiling...\n");
+
     bool bSucceeded = true;
     static const std::string compileCommand =
       std::string(MONO_COMPILER_PATH) + std::string(" -recurse:") + std::string(SCRIPTS_PATH) +
@@ -90,6 +91,7 @@ namespace MonoWrapper
     if (compileOutput != NULL)
     {
       ED_OUT("Compilation output: ");
+
       while (fgets(buffer, static_cast<int>(sizeof(buffer)), compileOutput) != nullptr)
       {
         ED_OUT(std::string(buffer));
