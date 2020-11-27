@@ -817,7 +817,7 @@ char* ComponentManager::ComponentSetManager::EntityHandle::getObj()
 	// number of containers is proportional to number of types of components
 }
 
-int ComponentManager::ComponentSetManager::EntityHandle::getId()
+int ComponentManager::ComponentSetManager::EntityHandle::getId() const
 {
 	return objId;
 }

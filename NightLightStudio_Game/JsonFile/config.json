@@ -1,0 +1,21 @@
+{
+    "window": {
+        "fullscreen": false,
+        "width": 1280,
+        "height": 768
+    },
+    "settings": {
+        "startscene": "Intro",
+        "master_volume": 37.5,
+        "start_in_level_editor": false,
+        "positionSensitivity": 250.0,
+        "rotationSensitivity": 200.0,
+        "zoomSensitivity": 20.0,
+        "gridSize": 10000.0,
+        "cellSize": 100.0,
+        "gridColourRed": 0.0,
+        "gridColourGreen": 0.2681025564670563,
+        "gridColourBlue": 0.7009804248809815,
+        "gridColourAlpha": 0.9411764740943909
+    }
+}
