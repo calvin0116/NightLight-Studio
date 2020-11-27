@@ -45,9 +45,9 @@ namespace NS_COLLISION
 
 		///////////////////////////////////////////////////////////////////////////////////////////////
 		//// TestMesh Key Input
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_TEP", SystemInput_ns::IKEY_INSERT, "INSERT", SystemInput_ns::OnHold, [this]()
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("DebugDraw", SystemInput_ns::IKEY_INSERT, "INS", SystemInput_ns::OnPress, [this]()
 			{
-				
+				doDrawLineMesh = !doDrawLineMesh;
 			});
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_INC", SystemInput_ns::IKEY_PGUP, "PGUP", SystemInput_ns::OnHold, [this]()
 			{
@@ -346,7 +346,7 @@ namespace NS_COLLISION
 
 				//update flags
 				comCol1->prevCollisionFlag = comCol1->collisionFlag;
-				comCol2->prevCollisionFlag = comCol2->collisionFlag; 
+				comCol2->prevCollisionFlag = comCol2->collisionFlag;
 
 				comCol1->prevTriggerFlag = comCol1->triggerFlag;
 				comCol2->prevTriggerFlag = comCol2->triggerFlag;
@@ -361,7 +361,7 @@ namespace NS_COLLISION
 				{
 					for (size_t j = 0; j < _colliderDataList.size(); j++)
 					{
-						if (comCol1->colliderTag == (_colliderDataList[i][0].c_str()[0] - '0') && comCol2->colliderTag == (_colliderDataList[0][j].c_str()[0] - '0'))
+						if (comTrans1->_entityName.c_str() == _colliderDataList[i][0] && comTrans2->_entityName.c_str() == _colliderDataList[0][j])
 						{
 							//convert string to number
 							int check = _colliderDataList[i][j].c_str()[0] - '0';
@@ -390,9 +390,7 @@ namespace NS_COLLISION
 				if (!comRigid1->isActive || !comRigid2->isActive) continue;
 
 				if (comRigid1->isStatic && comRigid2->isStatic) continue;
-				
-				
-				UpdateCollisionBoxPos(comCol1, comTrans1);
+				//UpdateCollisionBoxPos(comCol1, comTrans1);
 
 
 
