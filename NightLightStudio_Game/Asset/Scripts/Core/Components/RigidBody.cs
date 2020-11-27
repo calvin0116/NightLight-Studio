@@ -10,11 +10,6 @@ namespace Unicorn
     // Native handle for this component
     private IntPtr native_handle = IntPtr.Zero;
 
-    //// Vector3 custom types
-    //private Vector3 position = new Vector3();
-    //private Vector3 rotation = new Vector3();
-    //private Vector3 scale = new Vector3();
-
     public bool isActive
     {
     get { return get_isActive_Internal(this.native_handle); }
@@ -45,12 +40,62 @@ namespace Unicorn
       set { set_Friction_Internal(this.native_handle, value); }
     }
 
+    public Vector3 GetForce()
+    {
+      return get_Force_Internal(native_handle);
+    }
+
+    public void SetForce(Vector3 force)
+    {
+      set_Force_Internal(native_handle, force);
+    }
+
+    public Vector3 GetAccel()
+    {
+      return get_Accel_Internal(native_handle);
+    }
+
+    public void SetAccel(Vector3 accel)
+    {
+      set_Accel_Internal(native_handle, accel);
+    }
+    public Vector3 GetVel()
+    {
+      return get_Vel_Internal(native_handle);
+    }
+
+    public void SetVel(Vector3 vel)
+    {
+      set_Vel_Internal(native_handle, vel);
+    }
+
     // Getter/Setter for isActive
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool get_isActive_Internal(IntPtr native_handle);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void set_isActive_Internal(IntPtr native_handle, bool val);
+
+    // Getter/Setter for force
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 get_Force_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_Force_Internal(IntPtr native_handle, Vector3 val);
+
+    // Getter/Setter for acceleration
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 get_Accel_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_Accel_Internal(IntPtr native_handle, Vector3 val);
+
+    // Getter/Setter for Velocity
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 get_Vel_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_Vel_Internal(IntPtr native_handle, Vector3 val);
 
     // Getter/Setter for isStatic
     [MethodImpl(MethodImplOptions.InternalCall)]

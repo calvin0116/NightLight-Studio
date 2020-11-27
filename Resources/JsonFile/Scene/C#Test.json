@@ -58,7 +58,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "box.fbx",
+                "Model": "",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -67,8 +67,8 @@
                 "Specular": "",
                 "DiffuseMat": [
                     1.0,
-                    0.0,
-                    0.0
+                    1.0,
+                    1.0
                 ],
                 "AmbientMat": [
                     1.0,
@@ -183,8 +183,8 @@
                 "Specular": "",
                 "DiffuseMat": [
                     1.0,
-                    0.9999899864196777,
-                    0.9999899864196777
+                    1.0,
+                    1.0
                 ],
                 "AmbientMat": [
                     1.0,
