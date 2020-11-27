@@ -19,8 +19,6 @@
 #define new DEBUG_NEW
 #endif
 
-//#define DRAW_WITH_COMPONENTS
-//#define DRAW_WITH_LIGHTS
 #define DRAW_DEBUG_GRID
 #define PBR_DRAWING
 
@@ -194,7 +192,7 @@ namespace NS_GRAPHICS
 
 		CreateCylinder(testdrawCylinder, glm::vec3(0.f, 1.f, 1.f));*/
 
-		shaderManager->StartProgram(1);
+		shaderManager->StartProgram(ShaderSystem::PBR);
 
 		GLint blockSize;
 
@@ -293,174 +291,6 @@ namespace NS_GRAPHICS
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-#ifdef DRAW_WITH_COMPONENTS
-		shaderManager->StartProgram(0);
-
-		auto itr = G_ECMANAGER->begin<ComponentGraphics>();
-		auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
-		while (itr != itrEnd)
-		{
-			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
-
-			Mesh* mesh = modelManager->meshes[graphicsComp->MeshID];
-
-			// get transform component
-			ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
-
-			glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
-
-			glBindVertexArray(mesh->VAO);
-
-			// We will only substitute Color and ModelMatrix Data
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->CBO);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec3) * mesh->_rgb.size(), &mesh->_rgb[0]);
-
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-			glDrawElements(GL_TRIANGLES, (unsigned)mesh->_indices.size(), GL_UNSIGNED_SHORT, 0);
-
-			itr++;
-		}
-
-		shaderManager->StopProgram();
-#endif
-
-#ifdef DRAW_WITH_LIGHTS
-		
-
-		auto itr = G_ECMANAGER->begin<ComponentGraphics>();
-		auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
-		while (itr != itrEnd)
-		{
-			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
-
-			if (graphicsComp->_modelID < 0)
-			{
-				++itr;
-				continue;
-			}
-
-			if (!graphicsComp->_isActive)
-			{
-				++itr;
-				continue;
-			}
-
-			Model* model = modelManager->_models[graphicsComp->_modelID];
-
-			glm::mat4 identity(1.0);
-
-			// get transform component
-			ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
-
-			glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
-			
-			if (model->_isAnimated)
-			{
-				model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
-				for (auto& mesh : model->_animatedMeshes)
-				{
-					if (graphicsComp->_renderType == RENDERTYPE::SOLID)
-					{
-						shaderManager->StartProgram(6); // solid program
-						glBindVertexArray(mesh->VAO);
-
-						// Update model and uniform for material
-						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
-						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
-						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
-						glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
-
-						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-						glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-
-						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
-						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
-						shaderManager->StopProgram();
-					}
-					else
-					{
-						shaderManager->StartProgram(3); // textured program
-						glBindVertexArray(mesh->VAO);
-
-						// Update model and uniform for material
-						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
-						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
-						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
-						glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
-
-						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-						// Bind textures
-						// bind diffuse map
-						//textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
-						// bind specular map
-						//textureManager->BindSpecularTexture(graphicsComp->_specularID);
-
-						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
-						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
-						shaderManager->StopProgram();
-					}
-				}
-			}
-			else
-			{
-				for (auto& mesh : model->_meshes)
-				{
-					if (graphicsComp->_renderType == RENDERTYPE::SOLID)
-					{
-						shaderManager->StartProgram(1); // solid program
-						glBindVertexArray(mesh->VAO);
-
-						// Update model and uniform for material
-						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
-						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
-						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
-						glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
-
-						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
-						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
-						shaderManager->StopProgram();
-					}
-					else
-					{
-						shaderManager->StartProgram(3); // textured program
-						glBindVertexArray(mesh->VAO);
-
-						// Update model and uniform for material
-						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ambient"), 1, &graphicsComp->_materialData._ambient[0]); // ambient
-						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "diffuse"), 1, &graphicsComp->_materialData._diffuse[0]); // diffuse
-						glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "specular"), 1, &graphicsComp->_materialData._specular[0]); // specular
-						glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "shininess"), graphicsComp->_materialData._shininess);
-
-						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-						// Bind textures
-						// bind diffuse map
-						//textureManager->BindDiffuseTexture(graphicsComp->_albedoID);
-						// bind specular map
-						//textureManager->BindSpecularTexture(graphicsComp->_specularID);
-
-						//glDrawArrays(GL_TRIANGLES, 0, (unsigned)mesh->_vertexDatas.size());
-						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
-						shaderManager->StopProgram();
-					}
-				}
-			}
-			itr++;
-		}
-
-		
-#endif
-
 #ifdef PBR_DRAWING
 		// Perform PBR update here
 		// One for solids, one for textured
@@ -491,27 +321,49 @@ namespace NS_GRAPHICS
 
 			if (graphicsComp->_renderType == RENDERTYPE::SOLID)
 			{
-				shaderManager->StartProgram(5); // solid program
+				if (model->_isAnimated)
+				{
+					shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
+				}
+				else
+				{
+					shaderManager->StartProgram(ShaderSystem::PBR); // solid program
+				}
 
 				// Update model and uniform for material
 				glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Albedo"), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
 				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Roughness"), graphicsComp->_pbrData._roughness);
 				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Metallic"), graphicsComp->_pbrData._metallic);
 
-				for (auto& mesh : model->_meshes)
+				if (model->_isAnimated)
 				{
-					glBindVertexArray(mesh->VAO);
-					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+					glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+					for (auto& mesh : model->_animatedMeshes)
+					{
+						glBindVertexArray(mesh->VAO);
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-					glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+					}
+				}
+				else
+				{
+					for (auto& mesh : model->_meshes)
+					{
+						glBindVertexArray(mesh->VAO);
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+					}
 				}
 
 				shaderManager->StopProgram();
 			}
 			else // textured program
 			{
-				shaderManager->StartProgram(7); // textured program
+				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
 
 
 				// Roughness Control
@@ -581,7 +433,7 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::SetUIMatrix(const int& width, const int& height, const float& near_plane, const float& far_plane)
 	{
-		shaderManager->StartProgram(4);
+		shaderManager->StartProgram(ShaderSystem::UI);
 
 		//Scales with screen or not?
 		//float ratioWidth = (float)width / NS_WINDOW::SYS_WINDOW->GetAppWidth();
@@ -605,7 +457,8 @@ namespace NS_GRAPHICS
 		// Update light components in light block(CPU)
 
 		// Shader program must be started to fill in uniform data
-		//shaderManager->StartProgram(1);
+		//shaderManager->
+		(1);
 
 		lightManager->Update();
 
@@ -654,7 +507,7 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& rgb)
 	{
-		shaderManager->StartProgram(0);
+		shaderManager->StartProgram(ShaderSystem::DEFAULT);
 
 		GLuint VAO = NULL;
 		GLuint VBO = NULL;
@@ -744,18 +597,6 @@ namespace NS_GRAPHICS
 #endif
 			return;
 		}
-		
-		// Get pointer to current mesh
-		//Model* model = modelManager->_models[graphicsComp->_modelID];
-
-		//// Replace all rgb for every vertex in mesh
-		//for (auto& mesh : model->_meshes)
-		//{
-		//	for (auto& i : mesh->_rgb)
-		//	{
-		//		i = rgb;
-		//	}
-		//}
 
 		// Set diffuse and ambient to selected rgb
 		graphicsComp->_materialData._ambient = rgb;

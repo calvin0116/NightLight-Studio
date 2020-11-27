@@ -96,20 +96,17 @@ namespace NS_GRAPHICS
 
 		glBindBufferRange(GL_UNIFORM_BUFFER, 1, lights_uniformBlockLocation, 0, s_lights_buffer_size);
 
-		// Setup uniform texture locations for textured shaders
-		// For now, assume 4th shader is textured shader
-		if (quantity >= 4)
-		{
-			StartProgram(3);
-			glUniform1i(glGetUniformLocation(currentProgramID, "diffuse_texture"), 0); // Diffuse
-			glUniform1i(glGetUniformLocation(currentProgramID, "specular_texture"), 1); // Specular
-			StopProgram();
-		}
-
 		// Setup uniform values for PBR texture shader
-		if (quantity >= 8)
+		if (quantity >= ShaderSystem::PBR_TEXTURED)
 		{
-			StartProgram(7);
+			StartProgram(ShaderSystem::PBR_TEXTURED);
+			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
+			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
+			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
+			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
+			StopProgram();
+
+			StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
 			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
 			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
 			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
@@ -208,15 +205,15 @@ namespace NS_GRAPHICS
 		// Load all available shaders
 
 		// Shader path example: ../Resources/Shaders/default.vertxs
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/default.vert"),std::string("../NightLightStudio_Game/Shaders/uniformsolid.frag")); // 1
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/withlights.vert"),std::string("../NightLightStudio_Game/Shaders/withlights.frag")); // 2
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/grid.vert"),std::string("../NightLightStudio_Game/Shaders/grid.frag")); // 3
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/withlights_textured.vert"), std::string("../NightLightStudio_Game/Shaders/withlights_textured.frag")); // 4
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui.vert"), std::string("../NightLightStudio_Game/Shaders/ui.frag")); // 5
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR.vert"), std::string("../NightLightStudio_Game/Shaders/PBR.frag")); // 6
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/withlights_animated.vert"), std::string("../NightLightStudio_Game/Shaders/withlights_animated.frag")); // 7
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured.frag")); // 8
-		//LoadShader("","");
+
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/default.vert"),std::string("../NightLightStudio_Game/Shaders/uniformsolid.frag")); //DEFAULT
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/grid.vert"),std::string("../NightLightStudio_Game/Shaders/grid.frag")); //GRID
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR.vert"), std::string("../NightLightStudio_Game/Shaders/PBR.frag")); //PBR
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Animated.frag")); //PBR_ANIMATED
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured.frag")); //PBR_TEXTURED
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated.frag")); //PBR_TEXTURED_ANIMATED
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui.vert"), std::string("../NightLightStudio_Game/Shaders/ui.frag")); //UI
+		//LoadShader("../NightLightStudio_Game/Shaders/","../NightLightStudio_Game/Shaders/");
 		//LoadShader("","");
 
 		if(CompileLoadedShaders())

@@ -350,6 +350,13 @@ namespace NS_GRAPHICS
 
 				newAnim->_frames[currAnim->mChannels[x]->mNodeName.C_Str()] = currFrame;
 			}
+
+			/*	float maxTime = newAnim->_frames[newAnim->_animName]._posTime[newAnim->_frames[newAnim->_animName]._posTime.size() - 1];
+			if (newAnim->_time < newAnim->_frames[newAnim->_animName]._posTime[newAnim->_frames[newAnim->_animName]._posTime.size() - 1])
+			{
+				newAnim->_time = newAnim->_frames[newAnim->_animName]._posTime[newAnim->_frames[newAnim->_animName]._posTime.size() - 1];
+			}*/
+
 			model->_animations[newAnim->_animName] = newAnim;
 		}
 	}
