@@ -248,6 +248,7 @@
     <ClInclude Include="Source\Component\ComponentNavigator.h" />
     <ClInclude Include="Source\Graphics\AnimationController.h" />
     <ClInclude Include="Source\Collision\CSVReader.h" />
+    <ClInclude Include="Source\Component\ComponentPath.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
