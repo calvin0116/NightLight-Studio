@@ -13,15 +13,32 @@ struct TriggerEvent
 	Entity entity1;
 	Entity entity2;
 
+	int collidingFrames;
+
 	TriggerEvent() :
 		entity1(nullptr, -1),
-		entity2(nullptr, -1)
+		entity2(nullptr, -1),
+		collidingFrames(0)
 	{
 	}
 	TriggerEvent(const Entity& object1, const Entity& object2) :
 		entity1(object1),
-		entity2(object2)
+		entity2(object2),
+		collidingFrames(0)
 	{
+	}
+
+	bool operator==(const TriggerEvent& rhs)
+	{
+		if (entity1.getId() == rhs.entity1.getId() && entity2.getId() == rhs.entity2.getId())
+		{
+			return true;
+		}
+		if (entity1.getId() == rhs.entity2.getId() && entity2.getId() == rhs.entity1.getId())
+		{
+			return true;
+		}
+		return false;
 	}
 };
 
@@ -53,6 +70,9 @@ struct CollisionEvent
 	Entity entity1;
 	Entity entity2;
 
+	int collidingFrames;
+	bool doResolve;
+
 	CollisionEvent() : 
 		entity1(nullptr, -1),
 		entity2(nullptr, -1),
@@ -61,8 +81,23 @@ struct CollisionEvent
 		transform1(nullptr),
 		transform2(nullptr),
 		collider1(nullptr),
-		collider2(nullptr)
+		collider2(nullptr),
+		collidingFrames(0),
+		doResolve(true)
 	{
+	}
+
+	bool operator==(const CollisionEvent& rhs)
+	{
+		if (entity1.getId() == rhs.entity1.getId() && entity2.getId() == rhs.entity2.getId())
+		{
+			return true;
+		}
+		if (entity1.getId() == rhs.entity2.getId() && entity2.getId() == rhs.entity1.getId())
+		{
+			return true;
+		}
+		return false;
 	}
 
 };
@@ -72,8 +107,8 @@ struct CollsionResolver
 	std::list<CollisionEvent> colEventList;
 	std::list<TriggerEvent> trigEventList;
 
-	void addCollisionEvent(const CollisionEvent& newEvent);
-	void addTriggerEvent(const TriggerEvent& newEvent);
+	void addCollisionEvent(CollisionEvent& newEvent);
+	void addTriggerEvent(TriggerEvent& newEvent);
 	void addTriggerEvent(const Entity& object1, const Entity& object2);
 
 	void resolveCollision();

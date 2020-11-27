@@ -20,7 +20,7 @@
 #define MESH_MIN_LOD -20
 
 //#define ENT_TEST 1
-#define ENT_TEST 0
+#define ENT_TEST 1
 
 
 ////#define USEVEL 0
@@ -316,7 +316,7 @@ namespace NS_COLLISION
 
 
 		// clear collision events
-		colResolver.clear();
+		//colResolver.clear();
 
 		auto itr1 = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd1 = G_ECMANAGER->end<ComponentCollider>();

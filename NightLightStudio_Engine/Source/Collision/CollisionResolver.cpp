@@ -12,18 +12,65 @@
 #define BAUMGARTE 0.2f;
 #define PENETRATION_SLOP 0.05f;
 
+
+#define COLLIDING_FRAMES_TRASHOLD 6
+
 void CollisionResolver()
 {
 
 }
 
-void CollsionResolver::addCollisionEvent(const CollisionEvent& newEvent)
+void CollsionResolver::addCollisionEvent(CollisionEvent& newEvent)
 {
+	auto itr = colEventList.begin();
+	auto itrEnd = colEventList.end();
+	while (itr != itrEnd)
+	{
+		//CollisionEvent* evt = &*itr;
+
+		if (*itr == newEvent)
+		{
+			//(*itr).collidingFrames = 0;
+			//(*itr).doResolve = true;
+
+			colEventList.erase(itr);
+			newEvent.collidingFrames = 1;
+			colEventList.push_back(newEvent);
+
+			return;
+		}
+
+
+		++itr;
+	}
+
 	colEventList.push_back(newEvent);
 }
 
-void CollsionResolver::addTriggerEvent(const TriggerEvent& newEvent)
+void CollsionResolver::addTriggerEvent(TriggerEvent& newEvent)
 {
+	auto itr = trigEventList.begin();
+	auto itrEnd = trigEventList.end();
+	while (itr != itrEnd)
+	{
+		//CollisionEvent* evt = &*itr;
+
+		if (*itr == newEvent)
+		{
+			//(*itr).collidingFrames = 0;
+			//(*itr).doResolve = true;
+
+			trigEventList.erase(itr);
+			newEvent.collidingFrames = 1;
+			trigEventList.push_back(newEvent);
+
+			return;
+		}
+
+
+		++itr;
+	}
+
 	trigEventList.push_back(newEvent);
 }
 
@@ -233,37 +280,75 @@ void CollsionResolver::resolveCollision()
 	}
 
 
-	//auto itr = colEventList.begin();
-	//auto itrEnd = colEventList.end();
+	{
+		auto itr = colEventList.begin();
+		auto itrEnd = colEventList.end();
 
-	//while (itr != itrEnd)
-	//{
-	//	//colEvent.entity1;
-	//	//colEvent.entity2;
+		while (itr != itrEnd)
+		{
+			//colEvent.entity1;
+			//colEvent.entity2;
 
-	//	// pass to syslogic
+			// pass to syslogic
 
-	//	CollisionEvent& colEvent = *itr;
+			CollisionEvent& colEvent = *itr;
 
-	//	if (colEvent.collidingFrames == 0)
-	//	{
-	//		NS_LOGIC::SYS_LOGIC->OnCollisionEnter(colEvent.entity1, colEvent.entity2);
-	//	}
+			if (colEvent.collidingFrames == 0)
+			{
+				NS_LOGIC::SYS_LOGIC->OnCollisionEnter(colEvent.entity1, colEvent.entity2);
+				colEvent.doResolve = false;
+				++colEvent.collidingFrames;
+				++itr;
+			}
+			else if (colEvent.collidingFrames < COLLIDING_FRAMES_TRASHOLD)
+			{
+				NS_LOGIC::SYS_LOGIC->OnCollisionStay(colEvent.entity1, colEvent.entity2);
+				++colEvent.collidingFrames;
+				++itr;
+			}
+			else
+			{
+				NS_LOGIC::SYS_LOGIC->OnCollisionExit(colEvent.entity1, colEvent.entity2);
+				itr = colEventList.erase(itr); //  ++itr;
+				itrEnd = colEventList.end();
+			}
+		}
+	}
 
-	//	else if (colEvent.collidingFrames < COLLIDING_FRAMES_TRASHOLD)
-	//	{
-	//		NS_LOGIC::SYS_LOGIC->OnCollisionStay(colEvent.entity1, colEvent.entity2);
-	//		++colEvent.collidingFrames;
-	//	}
-	//	else
-	//	{
-	//		NS_LOGIC::SYS_LOGIC->OnCollisionExit(colEvent.entity1, colEvent.entity2);
-	//		colEventList.erase(itr); //
-	//	}
-	//	++itr;
-	//}
+	{
+		auto itr = trigEventList.begin();
+		auto itrEnd = trigEventList.end();
 
+		while (itr != itrEnd)
+		{
+			//colEvent.entity1;
+			//colEvent.entity2;
 
+			// pass to syslogic
+
+			TriggerEvent& trigEvent = *itr;
+
+			if (trigEvent.collidingFrames == 0)
+			{
+				NS_LOGIC::SYS_LOGIC->OnTriggerEnter(trigEvent.entity1, trigEvent.entity2);
+				//trigEvent.doResolve = false;
+				++trigEvent.collidingFrames;
+				++itr;
+			}
+			else if (trigEvent.collidingFrames < COLLIDING_FRAMES_TRASHOLD)
+			{
+				NS_LOGIC::SYS_LOGIC->OnTriggerStay(trigEvent.entity1, trigEvent.entity2);
+				++trigEvent.collidingFrames;
+				++itr;
+			}
+			else
+			{
+				NS_LOGIC::SYS_LOGIC->OnTriggerExit(trigEvent.entity1, trigEvent.entity2);
+				itr = trigEventList.erase(itr); //  ++itr;
+				itrEnd = trigEventList.end();
+			}
+		}
+	}
 	// clear event list
 	// collision events should be cleared before collision detection
 	//colEventList.clear();
@@ -277,6 +362,8 @@ void CollsionResolver::clear()
 
 void CollsionResolver::resolveEventNormally(const CollisionEvent& colEvent)
 {
+	if (colEvent.doResolve == false) return;
+
 	// ref: https://stackoverflow.com/questions/5060082/eliminating-a-direction-from-a-vector
 	// "Calculate the dot product of the geometry wall normal with the velocity vector of the object. 
 	//    The result equals the velocity component in the direction of the wall normal. Subtract the wall 
