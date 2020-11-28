@@ -585,6 +585,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						normal = data;
 						graphics_comp->AddNormalTexture(normal);
 					}
@@ -606,6 +610,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						metallic = data;
 						graphics_comp->AddMetallicTexture(metallic);
 					}
@@ -627,6 +635,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						roughness = data;
 						graphics_comp->AddRoughnessTexture(roughness);
 					}
@@ -648,6 +660,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						ao = data;
 						graphics_comp->AddAOTexture(ao);
 					}
@@ -669,6 +685,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						specular = data;
 						graphics_comp->AddSpecularTexture(specular);
 					}
