@@ -6,13 +6,18 @@ namespace Unicorn
 {
   public class Hello : UniBehaviour
   {
+    Navigator nav;
     
     public override void Init()
     {
+      nav = GetNavigator(id);
     }
 
     public override void LateInit()
     {
+      Console.WriteLine(nav.speed);
+      Console.WriteLine(nav.isFollowing);
+      Console.WriteLine(nav.isPaused);
     }
 
     public override void Update()

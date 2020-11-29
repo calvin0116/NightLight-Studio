@@ -58,7 +58,7 @@ void ComponentGraphics::AddAlbedoTexture(std::string filename)
 	if (!filename.empty() && _albedoFileName.toString() != filename)
 	{
 		_albedoFileName = filename;
-		_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_albedoFileName.toString());
+		_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_albedoFileName.toString(), true);
 	}
 
 	if (_albedoID > 0 || _normalID > 0 || _metallicID > 0 || _roughnessID > 0 || _aoID > 0 || _specularID > 0)

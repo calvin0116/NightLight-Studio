@@ -60,7 +60,7 @@ namespace NS_GRAPHICS
 		bool LoadDDSImage(const std::string& file);
 		DDSImageData* LoadDDSImageData(const std::string& file);
 		bool LoadHDR(const std::string& file);
-		bool LoadOtherImage(const std::string& file, const std::string& newFile);
+		bool LoadOtherImage(const std::string& file, const std::string& newFile, bool sRGB = false);
 
 	public:
 		// Unique Singleton instance
@@ -70,6 +70,6 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
-		unsigned LoadTexture(const std::string& file);
+		unsigned LoadTexture(const std::string& file, bool sRGB = false);
 	};
 }
