@@ -247,33 +247,55 @@ namespace NS_WINDOW
 		PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = nullptr;
 		wglCreateContextAttribsARB = reinterpret_cast<PFNWGLCREATECONTEXTATTRIBSARBPROC>(wglGetProcAddress("wglCreateContextAttribsARB"));
 
+		PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = nullptr;
+		wglChoosePixelFormatARB = reinterpret_cast<PFNWGLCHOOSEPIXELFORMATARBPROC>(wglGetProcAddress("wglChoosePixelFormatARB"));
+
 		// Now make the actual Modern OpenGL device and render contexts and window
-		//m_hDevContext = GetDC(m_hAppWnd); // Dummy window must already be created
-
-		//static int pixelAttribs[] =
+		//const int pixelAttribs[] =
 		//{
-		/*	WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
-			WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
-			WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
-			WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
-			WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
-			WGL_COLOR_BITS_ARB, 32,
-			WGL_ALPHA_BITS_ARB, 8,
-			WGL_DEPTH_BITS_ARB, 24,
-			WGL_STENCIL_BITS_ARB, GL_TRUE,
-			WGL_SAMPLE_BUFFERS_ARB, GL_TRUE,
-			WGL_SAMPLES_ARB, 4,
-			0
-		};*/
+		//	WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
+		//	WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
+		//	WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
+		//	WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
+		//	WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
+		//	WGL_COLOR_BITS_ARB, 32,
+		//	WGL_ALPHA_BITS_ARB, 8,
+		//	WGL_DEPTH_BITS_ARB, 32,
+		//	WGL_STENCIL_BITS_ARB, 8,
+		//	WGL_SAMPLE_BUFFERS_ARB, 1, // Must be 1
+		//	WGL_SAMPLES_ARB, 4,
+		//	0
+		//};
 
-		//int format;
+		//static PIXELFORMATDESCRIPTOR    dummyPFD = {
+		//	sizeof(PIXELFORMATDESCRIPTOR),  // Size of this structure
+		//	1,                              // Version of this structure
+		//	PFD_DRAW_TO_WINDOW |            // Draw to Window (not to bitmap)
+		//	PFD_SUPPORT_OPENGL |            // Support OpenGL calls in window
+		//	PFD_DOUBLEBUFFER |              // Double buffered mode
+		//	PFD_STEREO_DONTCARE |
+		//	0,
+		//	PFD_TYPE_RGBA,                  // RGBA Color mode
+		//	32,								// Want the display bit depth
+		//	0,0,0,0,0,0,                    // Not used to select mode
+		//	0,0,                            // Not used to select mode
+		//	0,0,0,0,0,                      // Not used to select mode
+		//	32,								// Size of depth buffer
+		//	8,								// bit stencil
+		//	0,                              // Not used to select mode
+		//	PFD_MAIN_PLANE,                 // Draw in main plane
+		//	0,                              // Not used to select mode
+		//	0,0,0
+		//};
+
+		//int pformat;
 		//UINT numFormats;
 
-		/*wglChoosePixelFormatARB(hDevContext, pixelAttribs, NULL, 1, &format, &numFormats);
+		//wglChoosePixelFormatARB(hDevContext, pixelAttribs, NULL, 1, &pformat, &numFormats);
 
-		DescribePixelFormat(hDevContext, format, sizeof(pfd), &pfd);
-		if (!SetPixelFormat(hDevContext, format, &pfd))
-			return OutErrorMsg("Failed to set Pixel Format(PFD)");*/
+		//DescribePixelFormat(hDevContext, pformat, sizeof(dummyPFD), &dummyPFD);
+		//if (!SetPixelFormat(hDevContext, pformat, &dummyPFD))
+		//	return OutErrorMsg("Failed to set Pixel Format(PFD)");
 
 		// Set attributes for new OpenGL rendering context (Version 3.3)
 		static int contextAttribs[] =
