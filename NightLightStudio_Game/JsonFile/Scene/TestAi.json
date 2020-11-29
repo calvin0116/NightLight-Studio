@@ -20,6 +20,22 @@
                     0.0
                 ]
             },
+            "RigidBody": {
+                "isStatic": false,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
             "GraphicsComponent": {
                 "isActive": true,
                 "Model": "asset\\3d model\\test_cube.fbx",
@@ -56,9 +72,11 @@
             "NavigatorComponent": {
                 "way_point_list": [
                     "Waypoint",
-                    "WayPoint_2"
+                    "WayPoint_2",
+                    "WayPoint_3",
+                    "WayPoint_4"
                 ],
-                "speed": 1.0
+                "speed": 0.4009999930858612
             }
         },
         "Plane": {
@@ -120,7 +138,7 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    41.38745880126953,
+                    60.43544006347656,
                     6.644987106323242,
                     0.0
                 ],
@@ -174,9 +192,117 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -39.783119201660159,
+                    -56.99589538574219,
                     6.644987106323242,
                     0.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\3d model\\test_cube.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "MetallicMat": 0.0,
+                "RoughnessMat": 0.0
+            }
+        },
+        "WayPoint_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    0.0015583038330078126,
+                    6.644987106323242,
+                    86.48776245117188
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\3d model\\test_cube.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "MetallicMat": 0.0,
+                "RoughnessMat": 0.0
+            }
+        },
+        "WayPoint_4": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    62.6693115234375,
+                    6.644987106323242,
+                    86.48776245117188
                 ],
                 "Scale": [
                     1.0,

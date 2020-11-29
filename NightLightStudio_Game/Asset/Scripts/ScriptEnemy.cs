@@ -15,7 +15,7 @@ namespace Unicorn
     // Used player components
     RigidBody enemyRB;
     Variables enemyVar;
-    Variables enemyTrans;
+    //Variables enemyTrans;
     //Navigator enemyNavigator; <- Get Navigator
     // Other entity's components
 
@@ -48,13 +48,13 @@ namespace Unicorn
 
     public override void Init()
     {
-      enemyRB = GetRigidBody(id);
-      enemyVar = GetVariables(id);
+      //enemyRB = GetRigidBody(id);
+      //enemyVar = GetVariables(id);
     //enemyNavigator = GetNavigator(id);
     // Get default values from variables
-    enemyForce = playerVar.GetFloat(0);
-    maxEnemySpd = playerVar.GetFloat(1);
-      moveForce = humnForce;
+    //enemyForce = playerVar.GetFloat(0);
+    //maxEnemySpd = playerVar.GetFloat(1);
+      //moveForce = humnForce;
     }
 
     public override void LateInit()
@@ -64,14 +64,6 @@ namespace Unicorn
     public override void Update()
     {
       Move();
-      ManualStateControl();
-      AutoStateControl();
-      CheckChangeState();
-      if (Input.GetKeyPress(VK.IMOUSE_LBUTTON))
-      {
-        Console.WriteLine(curEnergy);
-      }
-      //Console.WriteLine(GetTransform(IDisposab);
 
     }
     public override void FixedUpdate()
@@ -146,7 +138,15 @@ namespace Unicorn
         {
                 //Any unique movement behaviour can be stated here
         }
-        //=================//
-    }
+            //=================//
+
+            //Key for debug
+            if (Input.GetKeyDown(VK.IKEY_R))
+            {
+                if (isPatroling)
+                    startsPaused = true;
+                else
+                    startsPatroling = true;
+            }
   }
 }
