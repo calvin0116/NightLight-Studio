@@ -107,11 +107,12 @@
     <ClCompile Include="Source\Mono\Binding\Systems\InputBind.cpp" />
     <ClCompile Include="Source\Component\ComponentVariables.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentVariablesBind.cpp" />
-    <ClCompile Include="Source\Graphics\ComponentAnimation.cpp" />
     <ClCompile Include="Source\Graphics\AnimationController.cpp" />
     <ClCompile Include="Source\Collision\CSVReader.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.cpp" />
     <ClCompile Include="Source\Ai\AiManager.cpp" />
+    <ClCompile Include="Source\Graphics\AnimationSystem.cpp" />
+    <ClCompile Include="Source\Component\ComponentAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -251,8 +252,9 @@
     <ClInclude Include="Source\Graphics\AnimationController.h" />
     <ClInclude Include="Source\Collision\CSVReader.h" />
     <ClInclude Include="Source\Component\ComponentPath.h" />
-    <ClInclude Include="Source\Graphics\ComponentAnimation.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h" />
+    <ClInclude Include="Source\Graphics\AnimationSystem.h" />
+    <ClInclude Include="Source\Component\ComponentAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />

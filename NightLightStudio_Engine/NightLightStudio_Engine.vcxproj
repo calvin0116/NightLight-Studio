@@ -247,9 +247,10 @@
     <ClInclude Include="Source\Editor\PrefabManager.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
     <ClInclude Include="Source\Graphics\AnimationController.h" />
+    <ClInclude Include="Source\Graphics\AnimationSystem.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
-    <ClInclude Include="Source\Graphics\ComponentAnimation.h" />
+    <ClInclude Include="Source\Component\ComponentAnimation.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
     <ClInclude Include="Source\Graphics\Lights.h" />
@@ -378,7 +379,7 @@
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
     <ClCompile Include="Source\Graphics\AnimationController.cpp" />
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
-    <ClCompile Include="Source\Graphics\ComponentAnimation.cpp" />
+    <ClCompile Include="Source\Component\ComponentAnimation.cpp" />
     <ClCompile Include="Source\Graphics\DebugManager.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsSystem.cpp" />
     <ClCompile Include="Source\Graphics\LightSystem.cpp" />
@@ -388,6 +389,7 @@
     <ClCompile Include="Source\Graphics\ModelManager.cpp" />
     <ClCompile Include="Source\Graphics\ShaderSystem.cpp" />
     <ClCompile Include="Source\Graphics\Skeleton.cpp" />
+    <ClCompile Include="Source\Graphics\AnimationSystem.cpp" />
     <ClCompile Include="Source\Graphics\UISystem.cpp" />
     <ClCompile Include="Source\Graphics\TextureLoader.cpp" />
     <ClCompile Include="Source\Graphics\TextureManager.cpp" />
