@@ -162,7 +162,7 @@ namespace NS_SERIALISER {
             }
             else if (component_name == "GraphicsComponent")
             {
-                ReadComp<GraphicsComponent>(Comp_list, entity, component_name);
+                //ReadComp<GraphicsComponent>(Comp_list, entity, component_name);
             }
             else if (component_name == "CScriptComponent")
             {

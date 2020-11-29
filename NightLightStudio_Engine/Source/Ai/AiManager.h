@@ -9,59 +9,21 @@ namespace NS_AI
 	{
 		WayPointManager wp_man;
 		SystemMessaging::SystemReceiver r;
-
 	protected:
 		friend Singleton<AiManager>;
 
-		AiManager() {}
+		AiManager()
+		{}
 		~AiManager() {}
 
 	public:
 
-		void HandleMsg(MessageTogglePlay& mst)
-		{
-			if (mst.GetID() == "BeforePlay")
-			{
-				// Game started playing
-				//TempSave();
-				GameInit();
-			}
-		}
-
-		void Init()
-		{
-			r.AttachHandler("BeforePlay", &AiManager::HandleMsg, this);
-			//r.AttachHandler("AfterPlay", &SceneManager::HandleMsg, this);
-		}
-
-		void GameInit()
-		{
-			auto itr = G_ECMANAGER->begin<NavigatorComponent>();
-			auto itrEnd = G_ECMANAGER->end<NavigatorComponent>();
-
-			while (itr != itrEnd)
-			{
-				NavigatorComponent* navComp = reinterpret_cast<NavigatorComponent*>(*itr);
-				navComp->InitPath();
-				++itr;
-			}
-
-		}
+		void HandleMsg(MessageTogglePlay& mst);
+		void Init();
+		void GameInit();
 
 
-		void Update()
-		{
-			auto itr = G_ECMANAGER->begin<NavigatorComponent>();
-			auto itrEnd = G_ECMANAGER->end<NavigatorComponent>();
-
-			while (itr != itrEnd)
-			{
-				TransformComponent* trans = G_ECMANAGER->getComponent<TransformComponent>(itr);
-				//if(trans->_position - (*itr)
-
-				++itr;
-			}
-		}
+		void Update();
 
 		void Exit()
 		{
@@ -101,6 +63,53 @@ namespace NS_AI
 		{
 			wp_man.InsertWayPoint(position, radius, _ent_id, _edges_list);
 		}
+
+		//Select closest way point to move to
+		void FindClosestWP(NavigatorComponent* nav_comp, TransformComponent* trans_comp)
+		{
+			std::pair<int, float> closest_wp{ -1, std::numeric_limits<float>::max() };
+			
+			int i = 0;
+			for (; i < nav_comp->cur_path.size(); ++i)
+			{
+				auto wp = nav_comp->cur_path.at(i);
+
+				float dist = (wp->_position - trans_comp->_position).length();
+				if (dist < closest_wp.second)
+				{
+					closest_wp.first = i;
+					closest_wp.second = dist;
+				}
+			}
+
+			nav_comp->cur_wp_index = i;	//wp index to go to will be the closest one
+		}
+
+
+		//=============Getter / Setter=================//
+		void SetSpeed(float spd, NavigatorComponent* nav_comp)
+		{
+			nav_comp->speed = spd;
+		}
+
+		void SetIsFollowing(bool fol, NavigatorComponent* nav_comp)
+		{
+			//if (fol && !nav_comp->isFollowing) //if going from false to true
+				//FindClosestWP(nav_comp, )
+
+			nav_comp->isFollowing = fol;
+		}
+
+		bool GetIsPaused(NavigatorComponent* nav_comp)
+		{
+			return nav_comp->isPaused;
+		}
+
+		void SetIsPaused(bool pau, NavigatorComponent* nav_comp)
+		{
+			nav_comp->isPaused = pau;
+		}
+
 
 	};
 

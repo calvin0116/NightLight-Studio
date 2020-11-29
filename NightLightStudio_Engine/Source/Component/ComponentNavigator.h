@@ -11,16 +11,21 @@ typedef class ComponentNavigator : public ISerializable //: public IComponent
 	//LocalVector<NS_AI::Edges*> edge_list;
 	//LocalVector<WayPoint*> cur_path;		//Decided by Astar
 
-						//Curent targetted waypoint
-	int isFollowing;
-
-
+	//Curent targetted waypoint
 public:
+	bool isFollowing;
+	bool isPaused;
+	bool traverseFront = true;
+
+	float speed = 1.f;
+
 	LocalVector<LocalString<125>> way_point_list;	//Standard way point using entity to plot
 	LocalVector<TransformComponent*> cur_path;
 	int cur_wp_index;
 	ComponentNavigator()
-		:cur_wp_index{ 0 }
+		:isFollowing{ true }
+		,isPaused{false}
+		,cur_wp_index{ 0 }
 	{
 		strcpy_s(ser_name, "NavigatorComponent");
 	}
@@ -31,6 +36,8 @@ public:
 		cur_path.clear();
 		cur_wp_index = 0;
 	}
+
+
 
 	void InitPath()
 	{
@@ -55,6 +62,10 @@ public:
 	{
 		return cur_path.at(cur_wp_index);
 	}
+	int WPSize()
+	{
+		return way_point_list.size();
+	}
 
 	virtual void	Read(Value& val) 
 	{
@@ -72,6 +83,11 @@ public:
 				for (int i = 0; i < string_list_val.Size(); ++i)
 					way_point_list.at(i) = LocalString(string_list_val[i].GetString());
 			}
+
+			if (itr->name == "speed")
+			{
+				speed = itr->value.GetFloat();
+			}
 		}
 	};
 	virtual Value	Write() { 
@@ -81,6 +97,8 @@ public:
 		for (LocalString<125>& s : way_point_list)
 			string_list_val.PushBack(rapidjson::StringRef(s.c_str()), global_alloc);
 		NS_SERIALISER::ChangeData(&val, "way_point_list", string_list_val);
+
+		NS_SERIALISER::ChangeData(&val, "speed", speed);
 		return val;
 	};
 	virtual Value& Write(Value& val) { return val; };	
@@ -90,4 +108,25 @@ public:
 		*newcomp = *this;
 		return newcomp;
 	}
+	//================ Getter / Setter ========================//
+	void SetNextWp()
+	{
+		if (traverseFront)
+			if (cur_wp_index < cur_path.size() - 1)
+				++cur_wp_index;
+			else {
+				traverseFront = false;
+				--cur_wp_index;
+			}
+		else
+			if (cur_wp_index > 0)
+				--cur_wp_index;
+			else
+			{
+				traverseFront = true;
+				++cur_wp_index;
+			}
+	}
+
+
 } NavigatorComponent, NavComponent;

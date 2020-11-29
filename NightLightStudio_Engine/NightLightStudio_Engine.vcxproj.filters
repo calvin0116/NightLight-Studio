@@ -111,6 +111,7 @@
     <ClCompile Include="Source\Graphics\AnimationController.cpp" />
     <ClCompile Include="Source\Collision\CSVReader.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.cpp" />
+    <ClCompile Include="Source\Ai\AiManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />

@@ -26,12 +26,13 @@ enum class S_PRIORITY
 
 class MySystem : public ISystem
 {
-//protected:
+protected:
 	//int id;
 	//S_PRIORITY priority;	//Not used
-
+	bool isActive;
 public:
 	MySystem()
+		:isActive{true}
 		//: id{ -1 }
 		//, priority{ S_PRIORITY::SP_NOT_INITIALISED }
 	{};

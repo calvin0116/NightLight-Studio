@@ -1174,9 +1174,10 @@ void InspectorWindow::NavComp(Entity& ent)
 	NavComponent* nav_comp = ent.getComponent<NavComponent>();
 	if (nav_comp != nullptr)
 	{
-
 		if (ImGui::CollapsingHeader("Navigator", &_notRemove))
 		{
+			_levelEditor->LE_AddInputFloatProperty("speed", nav_comp->speed, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
+
 			if (ImGui::Button("Add WayPoint"))
 			{
 				LocalString ls;
@@ -1212,6 +1213,14 @@ void InspectorWindow::NavComp(Entity& ent)
 
 			}
 		}
+	}
+
+	if (!_notRemove)
+	{
+		//ent.RemoveComponent<ComponentLoadAudio>();
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<NavComponent>()->Write(), typeid(NavComponent).hash_code() };
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+		_notRemove = true;
 	}
 }
 

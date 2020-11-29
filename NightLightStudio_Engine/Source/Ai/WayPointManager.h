@@ -195,7 +195,7 @@ namespace NS_AI
 			int ent_id = -1)
 		{
 			//1. Find collided waypoint for start and end
-			WayPoint* start_wp, * end_wp;
+			WayPoint* start_wp = nullptr, * end_wp = nullptr;
 			LocalVector<WayPoint*> return_wp;
 
 			if (ent_id == -1)

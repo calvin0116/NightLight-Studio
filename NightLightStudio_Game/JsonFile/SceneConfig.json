@@ -1,6 +1,6 @@
 {
 	"SceneFolder" : "Scene",
-	"StartUpScene" : "Default",
+	"StartUpScene" : "TestAi",
 	"ListOfSceneToLoad" : 
 	[]
 }
