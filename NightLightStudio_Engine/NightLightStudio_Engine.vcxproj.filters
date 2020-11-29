@@ -114,6 +114,7 @@
     <ClCompile Include="Source\Graphics\AnimationSystem.cpp" />
     <ClCompile Include="Source\Component\ComponentAnimation.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentNavigatorBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentAnimationBind.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -257,6 +258,7 @@
     <ClInclude Include="Source\Graphics\AnimationSystem.h" />
     <ClInclude Include="Source\Component\ComponentAnimation.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentNavigatorBind.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentAnimationBind.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />

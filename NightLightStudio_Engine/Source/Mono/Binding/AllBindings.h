@@ -7,6 +7,7 @@
 #include "Components/ComponentGraphicsBind.h"
 #include "Components/ComponentLightBind.h"
 #include "Components/ComponentNavigatorBind.h"
+#include "Components/ComponentAnimationBind.h"
 // Temporary comp
 #include "Components/ComponentVariablesBind.h"
 

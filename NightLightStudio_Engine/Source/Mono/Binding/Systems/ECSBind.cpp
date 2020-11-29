@@ -22,6 +22,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(GetGraphics, "GetGraphics", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetLight, "GetLight", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetNavigator, "GetNavigator", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetAnimation, "GetAnimation", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetVariables, "GetVariables", "UniBehaviour");
   }
 
@@ -138,6 +139,16 @@ namespace ECSBind
     Entity en = G_ECMANAGER->getEntity(id);
     NavigatorComponent* nav = en.getComponent<NavigatorComponent>();
     MonoWrapper::SetNativeHandle(monoObj, nav);
+
+    return monoObj;
+  }
+
+  MonoObject* GetAnimation(int id)
+  {
+    MonoObject* monoObj = MonoWrapper::ConstructObject("Animation");
+    Entity en = G_ECMANAGER->getEntity(id);
+    AnimationComponent* anim = en.getComponent<AnimationComponent>();
+    MonoWrapper::SetNativeHandle(monoObj, anim);
 
     return monoObj;
   }
