@@ -87,6 +87,7 @@ namespace NS_AI
 
 
 		//=============Getter / Setter=================//
+		/*
 		void SetSpeed(float spd, NavigatorComponent* nav_comp)
 		{
 			nav_comp->speed = spd;
@@ -108,7 +109,7 @@ namespace NS_AI
 		void SetIsPaused(bool pau, NavigatorComponent* nav_comp)
 		{
 			nav_comp->isPaused = pau;
-		}
+		}*/
 
 
 	};

@@ -65,7 +65,7 @@ inline void NS_AI::AiManager::Update()
 		if (mag_dir.length() < 5.0f)	//Check if Ai reached the way point
 			navComp->SetNextWp();		//Set next way point to be the target for navigation
 
-		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);
+		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//???
 		++itr;
 	}
 }

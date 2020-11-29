@@ -128,5 +128,27 @@ public:
 			}
 	}
 
+	void SetSpeed(float spd)
+	{
+		speed = spd;
+	}
+
+	void SetIsFollowing(bool fol)
+	{
+		//if (fol && !nav_comp->isFollowing) //if going from false to true
+			//FindClosestWP(nav_comp, )
+
+		isFollowing = fol;
+	}
+
+	bool GetIsPaused()
+	{
+		return isPaused;
+	}
+
+	void SetIsPaused(bool pau)
+	{
+		isPaused = pau;
+	}
 
 } NavigatorComponent, NavComponent;
