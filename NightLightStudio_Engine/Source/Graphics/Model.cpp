@@ -7,62 +7,59 @@ NS_GRAPHICS::Model::Model()
 
 void NS_GRAPHICS::Model::GetPose(const std::string& animName, BoneData& bone, float dt, glm::mat4& parentTransform, glm::mat4& globalInverseTransform)
 {
+	// ASSUMES IF IS BAKED AND ALL BONES AND FRAME EXISTS
 	glm::mat4 globalTransform = glm::mat4(1.0f);
-	glm::mat4 localTransform = glm::mat4(1.0f);
-	if (_animations.find(animName) != _animations.end())
-	{
-		if (_animations[animName]->_frames.find(bone._boneName) != _animations[animName]->_frames.end())
-		{
-			Animation::KeyFrames& currKey = _animations[animName]->_frames[bone._boneName];
-			dt = fmod(dt, _animations[animName]->_time);
+	glm::mat4 localTransform(1.0f);
+	//glm::mat4 localTransform = bone._boneTransform;
 
-			unsigned index = 0;
-			float timeScale = 0.0f;
-			InterpTime(index, timeScale, dt, _animations[animName]->_frames[bone._boneName]._posTime);
+	Animation::KeyFrames& currKey = _animations[animName]->_frames[bone._boneName];
+	dt = fmod(dt, _animations[animName]->_time);
 
-			glm::vec3 startPos = _animations[animName]->_frames[bone._boneName]._position[index - 1];
-			glm::vec3 endPos = _animations[animName]->_frames[bone._boneName]._position[index];
+	unsigned index = 0;
+	float timeScale = 0.0f;
 
-			glm::vec3 newPosition = glm::mix(startPos, endPos, timeScale);
+	glm::vec3 newPosition;
 
-			index = 0;
-			timeScale = 0.0f;
-			InterpTime(index, timeScale, dt, _animations[animName]->_frames[bone._boneName]._rotateTime);
+	InterpTime(index, timeScale, dt, _animations[animName]->_frames[bone._boneName]._posTime);
+	glm::vec3 startPos = _animations[animName]->_frames[bone._boneName]._position[index - 1];
+	glm::vec3 endPos = _animations[animName]->_frames[bone._boneName]._position[index];
 
-			glm::quat startRot = _animations[animName]->_frames[bone._boneName]._rotation[index - 1];
-			glm::quat endRot = _animations[animName]->_frames[bone._boneName]._rotation[index];
+	newPosition = glm::mix(startPos, endPos, timeScale);
 
-			glm::quat newRotation = glm::slerp(startRot, endRot, timeScale);
+	index = 0;
+	timeScale = 0.0f;
 
-			index = 0;
-			timeScale = 0.0f;
-			InterpTime(index, timeScale, dt, _animations[animName]->_frames[bone._boneName]._scaleTime);
+	glm::quat newRotation;
 
-			glm::vec3 startScale = _animations[animName]->_frames[bone._boneName]._scale[index - 1];
-			glm::vec3 endScale = _animations[animName]->_frames[bone._boneName]._scale[index];
+	InterpTime(index, timeScale, dt, _animations[animName]->_frames[bone._boneName]._rotateTime);
+	glm::quat startRot = _animations[animName]->_frames[bone._boneName]._rotation[index - 1];
+	glm::quat endRot = _animations[animName]->_frames[bone._boneName]._rotation[index];
 
-			glm::vec3 newScale = glm::mix(startScale, endScale, timeScale);
+	newRotation = glm::slerp(startRot, endRot, timeScale);
 
-			glm::mat4 positionMat = glm::mat4(1.0);
-			glm::mat4 scaleMat = glm::mat4(1.0);
+	index = 0;
+	timeScale = 0.0f;
 
-			positionMat = glm::translate(positionMat, newPosition);
-			scaleMat = glm::scale(scaleMat, newScale);
+	glm::vec3 newScale;
 
-			glm::mat4 rotationMat = glm::toMat4(newRotation);
+	InterpTime(index, timeScale, dt, _animations[animName]->_frames[bone._boneName]._scaleTime);
+	glm::vec3 startScale = _animations[animName]->_frames[bone._boneName]._scale[index - 1];
+	glm::vec3 endScale = _animations[animName]->_frames[bone._boneName]._scale[index];
 
-			localTransform = positionMat * rotationMat * scaleMat;
-			globalTransform = parentTransform * localTransform;
+	newScale = glm::mix(startScale, endScale, timeScale);
 
-			_poseTransform[bone._boneID] = globalInverseTransform * globalTransform * bone._boneTransformOffset;
-		}
-	}
-	else
-	{
-		globalTransform = parentTransform * localTransform;
-	}
+	glm::mat4 positionMat = glm::mat4(1.0);
+	glm::mat4 scaleMat = glm::mat4(1.0);
 
+	positionMat = glm::translate(positionMat, newPosition);
+	scaleMat = glm::scale(scaleMat, newScale);
 
+	glm::mat4 rotationMat = glm::toMat4(newRotation);
+
+	localTransform = positionMat * rotationMat * scaleMat;
+
+	globalTransform = parentTransform * localTransform;
+	_poseTransform[bone._boneID] = globalInverseTransform * globalTransform * bone._boneTransformOffset;
 
 	//update values for children bones
 	for (BoneData& child : bone._childrenBones)
@@ -75,7 +72,7 @@ void NS_GRAPHICS::Model::InterpTime(unsigned& index, float& time, float& dt, std
 {
 	//Assumes dt will always be within the duration of animation
 	unsigned currIndex = 0;
-	while (times[currIndex] < dt)
+	while (times[currIndex] <= dt)
 	{
 		++currIndex;
 	}

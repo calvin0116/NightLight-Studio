@@ -112,9 +112,9 @@ public:
 
 		config_d.levelEditorMode = config_val["start_in_level_editor"].GetBool();
 		if (config_d.levelEditorMode)
-			config_d.isPlaying = true;
-		else
 			config_d.isPlaying = false;
+		else
+			config_d.isPlaying = true;
 	}
 
 

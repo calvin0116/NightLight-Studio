@@ -203,6 +203,11 @@ inline void ComponentGraphics::Read(Value& val)
 			//model->_fileName = s_LocalPathName + name + s_ModelFileType;
 			*/
 			_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
+
+			//if (NS_GRAPHICS::ModelManager::GetInstance()._models[_modelID]->_isAnimated)
+			//{
+			//	//Attach animation component
+			//}
 		}
 	}
 

@@ -177,6 +177,7 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="ISerializable.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h" />
     <ClInclude Include="LocalString.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Source\Ai\AiManager.h" />
@@ -246,9 +247,10 @@
     <ClInclude Include="Source\Editor\PrefabManager.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
     <ClInclude Include="Source\Graphics\AnimationController.h" />
+    <ClInclude Include="Source\Graphics\AnimationSystem.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
-    <ClInclude Include="Source\Graphics\ComponentAnimation.h" />
+    <ClInclude Include="Source\Component\ComponentAnimation.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
     <ClInclude Include="Source\Graphics\Lights.h" />
@@ -299,6 +301,7 @@
     <ClInclude Include="Source\Mono\Binding\Components\ComponentColliderBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentGraphicsBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentLightBind.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentNavigatorBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentTransformBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentVariablesBind.h" />
@@ -315,6 +318,8 @@
     <ClInclude Include="Source\Window\WndUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Ai\AiManager.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -375,7 +380,7 @@
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
     <ClCompile Include="Source\Graphics\AnimationController.cpp" />
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
-    <ClCompile Include="Source\Graphics\ComponentAnimation.cpp" />
+    <ClCompile Include="Source\Component\ComponentAnimation.cpp" />
     <ClCompile Include="Source\Graphics\DebugManager.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsSystem.cpp" />
     <ClCompile Include="Source\Graphics\LightSystem.cpp" />
@@ -385,6 +390,7 @@
     <ClCompile Include="Source\Graphics\ModelManager.cpp" />
     <ClCompile Include="Source\Graphics\ShaderSystem.cpp" />
     <ClCompile Include="Source\Graphics\Skeleton.cpp" />
+    <ClCompile Include="Source\Graphics\AnimationSystem.cpp" />
     <ClCompile Include="Source\Graphics\UISystem.cpp" />
     <ClCompile Include="Source\Graphics\TextureLoader.cpp" />
     <ClCompile Include="Source\Graphics\TextureManager.cpp" />
@@ -413,6 +419,7 @@
     <ClCompile Include="Source\Mono\Binding\Components\ComponentColliderBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentGraphicsBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentLightBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentNavigatorBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentTransformBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentVariablesBind.cpp" />

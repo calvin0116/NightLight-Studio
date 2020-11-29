@@ -26,11 +26,9 @@ void main(void) {
 	for(int i = 0; i < 4; i++)
 	{
 		boneTrans += jointsMat[boneID[i]] * weights[i];
-		
-		//Normals
 	}
 	vec4 newPos = boneTrans * vec4(pos, 1.0f);
-    fragPos = vec3(model * boneTrans * newPos);
+    fragPos = vec3(model * newPos);
     gl_Position = projection * view * model * newPos;
     normal = vec3(transpose(inverse(model * boneTrans)) * vec4(norm, 0.f));
     texCoords = uv;

@@ -84,6 +84,14 @@ namespace Unicorn
 
     public override void OnCollisionEnter(int other)
     {
+      //Transform tag
+      // tag 1 = Possessable
+      // 
+      Transform otherTransform = GetTransform(other);
+      if (otherTransform.Tag == 1)
+      {
+        
+      }
     }
 
     public override void OnTriggerEnter(int other)

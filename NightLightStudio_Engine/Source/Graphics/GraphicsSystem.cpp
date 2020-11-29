@@ -50,7 +50,9 @@ namespace NS_GRAPHICS
 	{
 		cameraManager->Update();
 		//0.01f ms to s
-		_testTimeElapsed += 0.1f;
+		//_testTimeElapsed += DELTA_T->real_dt * DT_SCALE;
+
+		//std::cout << "Time Passed : " << _testTimeElapsed << std::endl;
 
 		if (cameraManager->CheckUpdate())
 		{
@@ -60,6 +62,9 @@ namespace NS_GRAPHICS
 
 		// Update lights
 		UpdateLights();
+
+		// Update Animation
+		//UpdateAnimations();
 
 		Render();
 
@@ -208,6 +213,8 @@ namespace NS_GRAPHICS
 				if (model->_isAnimated)
 				{
 					shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
+					//glm::mat4 identity(1.0f);
+					//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
 				}
 				else
 				{
@@ -247,8 +254,17 @@ namespace NS_GRAPHICS
 			}
 			else // textured program
 			{
-				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
-
+				if (model->_isAnimated)
+				{
+					shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
+					//glm::mat4 identity(1.0f);
+					//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
+				}
+				else
+				{
+					shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
+				}
+				
 
 				// Roughness Control
 				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "RoughnessControl"), graphicsComp->_pbrData._roughness);
@@ -267,14 +283,30 @@ namespace NS_GRAPHICS
 				// bind ao map
 				textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
 
-				for (auto& mesh : model->_meshes)
+				if (model->_isAnimated)
 				{
-					glBindVertexArray(mesh->VAO);
+					glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+					for (auto& mesh : model->_animatedMeshes)
+					{
+						glBindVertexArray(mesh->VAO);
 
-					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-					glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+					}
+				}
+				else
+				{
+					for (auto& mesh : model->_meshes)
+					{
+						glBindVertexArray(mesh->VAO);
+
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+					}
 				}
 
 				shaderManager->StopProgram();

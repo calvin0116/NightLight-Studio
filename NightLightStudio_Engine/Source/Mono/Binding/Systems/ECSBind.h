@@ -17,7 +17,8 @@ namespace ECSBind
   MonoObject* GetRigidBody(int id);
   MonoObject* GetGraphics(int id);
   MonoObject* GetLight(int id);
-  MonoObject* GetVariables(int id);
+  MonoObject* GetNavigator(int id);
+  MonoObject* GetVariables(int id); // Use this for now until reflection is out
 
   void BindECS();    
 }

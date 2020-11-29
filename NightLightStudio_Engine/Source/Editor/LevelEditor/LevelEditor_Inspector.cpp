@@ -107,6 +107,11 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<VariablesComponent>();
 			entComp._ent.getComponent<VariablesComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(NavComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<NavComponent>();
+			entComp._ent.getComponent<NavComponent>()->Read(*entComp._rjDoc);
+		}
 
 		return comp;
 	};
@@ -178,6 +183,11 @@ void InspectorWindow::Start()
 		{
 			entComp.Copy(entComp._ent.getComponent<VariablesComponent>()->Write());
 			entComp._ent.RemoveComponent<VariablesComponent>();
+		}
+		else if (t == typeid(NavComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<NavComponent>()->Write());
+			entComp._ent.RemoveComponent<NavComponent>();
 		}
 
 
@@ -287,6 +297,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
   CauldronStatsComp(ent);
 
   VariableComp(ent);
+
+  NavComp(ent);
 
 	AddSelectedComps(ent);
 }
@@ -573,6 +585,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						normal = data;
 						graphics_comp->AddNormalTexture(normal);
 					}
@@ -594,6 +610,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						metallic = data;
 						graphics_comp->AddMetallicTexture(metallic);
 					}
@@ -615,6 +635,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						roughness = data;
 						graphics_comp->AddRoughnessTexture(roughness);
 					}
@@ -636,6 +660,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						ao = data;
 						graphics_comp->AddAOTexture(ao);
 					}
@@ -657,6 +685,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						specular = data;
 						graphics_comp->AddSpecularTexture(specular);
 					}
@@ -1081,6 +1113,11 @@ void InspectorWindow::VariableComp(Entity& ent)
 				float fl = 0.0f;
 				comp_var->float_list.push_back(fl);
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove Float"))
+			{
+				comp_var->float_list.pop_back();
+			}
 
 			int float_index = 1;
 			for (float& f : comp_var->float_list) //[path, name]
@@ -1095,6 +1132,11 @@ void InspectorWindow::VariableComp(Entity& ent)
 			{
 				int interger = 0;
 				comp_var->int_list.push_back(interger);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove Interger"))
+			{
+				comp_var->int_list.pop_back();
 			}
 			int int_index = 1;
 
@@ -1112,6 +1154,12 @@ void InspectorWindow::VariableComp(Entity& ent)
 				LocalString ls;
 				comp_var->string_list.push_back(ls);
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove String"))
+			{
+				comp_var->string_list.pop_back();
+			}
+
 			int str_index = 1;
 
 			for (LocalString<125>& str : comp_var->string_list) //[path, name]
@@ -1141,6 +1189,61 @@ void InspectorWindow::VariableComp(Entity& ent)
 	ImGui::Separator();
 }
 
+void InspectorWindow::NavComp(Entity& ent)
+{
+	NavComponent* nav_comp = ent.getComponent<NavComponent>();
+	if (nav_comp != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Navigator", &_notRemove))
+		{
+			_levelEditor->LE_AddInputFloatProperty("speed", nav_comp->speed, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
+
+			if (ImGui::Button("Add WayPoint"))
+			{
+				LocalString ls;
+				nav_comp->way_point_list.push_back(ls);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove WayPoint"))
+			{
+				nav_comp->way_point_list.pop_back();
+			}
+
+			int str_index = 1;
+
+			for (LocalString<125> & str : nav_comp->way_point_list) //[path, name]
+			{
+				std::string p = "Waypoint_" + std::to_string(str_index);
+
+				std::string s_name = str;
+				_levelEditor->LE_AddInputText(p, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
+					[&str, &s_name]()
+					{
+						str = s_name.c_str();
+					});
+				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
+					[this, &str](Entity* entptr)
+					{
+						str = G_ECMANAGER->EntityName[entptr->getId()];
+
+					});
+				
+				str_index++;
+
+
+			}
+		}
+	}
+
+	if (!_notRemove)
+	{
+		//ent.RemoveComponent<ComponentLoadAudio>();
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<NavComponent>()->Write(), typeid(NavComponent).hash_code() };
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+		_notRemove = true;
+	}
+}
+
 void InspectorWindow::AddSelectedComps(Entity& ent)
 {
 	_levelEditor->LE_AddCombo("##AddComponentsCombo", _itemType,
@@ -1156,7 +1259,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  Canvas",
 			"  PlayerStats",
 			"  CauldronStats",
-			"  VariablesComp"
+			"  VariablesComp",
+			"  NavComp",
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -1284,6 +1388,15 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			if (!ent.getComponent<ComponentVariables>())
 			{
 				ENTITY_COMP_DOC comp{ ent, ComponentVariables().Write(), typeid(ComponentVariables).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		case 12: // ComponentVariable
+		{
+			if (!ent.getComponent<NavComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, NavComponent().Write(), typeid(NavComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;

@@ -47,7 +47,9 @@ void LE_Picking::LE_PickingRun()
                 aabb = ent.getComponent<ComponentCollider>()->collider.aabb;
             }
             else
+            {
                 aabb.posUpdate(ent.getComponent<ComponentTransform>());
+            }
 
             if (NlMath::RayToAABB(aabb, startRay, endRay))
             {

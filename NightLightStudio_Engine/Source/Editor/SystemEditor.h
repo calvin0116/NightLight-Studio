@@ -38,8 +38,6 @@ public:
 //== Good to have for every system so that you dont need to always get instance
 static SystemEditor* SYS_EDITOR = SystemEditor::GetInstance();
 
-void ED_OUT(const std::string& out);
-
 #endif
-
+void ED_OUT(const std::string& out);
 #endif

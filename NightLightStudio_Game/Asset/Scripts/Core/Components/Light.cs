@@ -65,7 +65,7 @@ namespace Unicorn
 
     public void SetDiffuse(Vector3 val)
     {
-      Console.WriteLine("Set diffuse!");
+      //Console.WriteLine("Set diffuse!");
       set_Diffuse_Internal(native_handle, val);
     }
 

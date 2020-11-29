@@ -14,23 +14,26 @@ enum class S_PRIORITY
 	SP_SCENEMANAGER,
 	SP_WINDOW,
 	SP_INPUT,
+	SP_ANIMATION,
 	SP_GRAPHICS,
 	SP_COLLISION,
 	SP_PHYSICS,
 	SP_AUDIO,
 	SP_COMPONENT,
 	SP_EDITOR,
-	SP_LOGIC
+	SP_LOGIC,
+	SP_AI
 };
 
 class MySystem : public ISystem
 {
-//protected:
+protected:
 	//int id;
 	//S_PRIORITY priority;	//Not used
-
+	bool isActive;
 public:
 	MySystem()
+		:isActive{true}
 		//: id{ -1 }
 		//, priority{ S_PRIORITY::SP_NOT_INITIALISED }
 	{};

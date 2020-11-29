@@ -175,11 +175,16 @@ namespace NS_SCENE
 		{
 			// Game started playing
 			TempSave();
+			isPlaying = true;
+			ChangedSceneDuringPlay = false;
+			savedScene = current_scene;
 		}
 		else if (mst.GetID() == "AfterPlay")
 		{
 			// Game exit
 			TempLoad();
+			isPlaying = false;
+			ChangedSceneDuringPlay = false;
 		}
 
 	}
@@ -187,6 +192,7 @@ namespace NS_SCENE
 	void SceneManager::TempSave()
 	{
 		std::cout << "Tempsaving" << std::endl;
+
 
 		std::string output_filename = "Scene/Output"; //<- For testing
 		NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath() );
@@ -249,13 +255,7 @@ namespace NS_SCENE
 	void SceneManager::TempLoad()
 	{
 		std::cout << "Temploading" << std::endl;
-		/*
-		//Delete all entity
-		for (Entity ent : G_ECMANAGER->getEntityContainer())
-		{
-			G_ECMANAGER->FreeEntity(ent.getId());
-		}*/
-
+		
 		//Reloading all entity
 		std::string output_filename = "Scene/Output"; //<- For testing
 		NS_SERIALISER::Parser scene = NS_SERIALISER::Parser(output_filename, scene_parser.GetPath());
@@ -271,20 +271,49 @@ namespace NS_SCENE
 		}
 
 		scene.Load();
-		//~~!Create object using data
-		std::cout << "===============================================" << std::endl;
-		std::cout << "Loading Scene: " << output_filename << std::endl;
-		if (scene.CheckForMember("Objects"))
+
+
+		if (!ChangedSceneDuringPlay)
 		{
-			std::cout << "Initialising Objects....." << std::endl;
-			NS_SERIALISER::EntityListInit(scene["Objects"]);
+			//~~!Create object using data
+			std::cout << "===============================================" << std::endl;
+			std::cout << "Loading Scene: " << output_filename << std::endl;
+			if (scene.CheckForMember("Objects"))
+			{
+				std::cout << "Initialising Objects....." << std::endl;
+				NS_SERIALISER::EntityListInit(scene["Objects"]);
+			}
+			else
+			{
+				std::cout << "Failed to find object to initailise....." << std::endl;
+			}
+			std::cout << "===============================================" << std::endl;
 		}
 		else
 		{
-			std::cout << "Failed to find object to initailise....." << std::endl;
-		}
-		std::cout << "===============================================" << std::endl;
+			SetNextScene(savedScene);
+			/*
+			//Delete all entity
+			for (Entity ent : G_ECMANAGER->getEntityContainer())
+			{
+				G_ECMANAGER->FreeEntity(ent.getId());
+			}
+			SetNextScene(current_scene);
 
+			std::cout << "===============================================" << std::endl;
+			std::cout << "Loading Scene: " << current_scene << std::endl;
+			if (scene.CheckForMember("Objects"))
+			{
+				std::cout << "Initialising Objects....." << std::endl;
+				NS_SERIALISER::EntityListCreation(scene["Objects"]);
+			}
+			else
+			{
+				std::cout << "Failed to find object to initailise....." << std::endl;
+			}
+			std::cout << "===============================================" << std::endl;
+			*/
+		}
 	}
 
 	void SceneManager::LoadScene(std::string scene_name)
@@ -415,7 +444,8 @@ namespace NS_SCENE
 
 	void SceneManager::SetNextScene(std::string scene_name)
 	{
-		
+		//For play button
+
 		fs::path scene_path = scene_name;
 		bool found = false;
 		for (auto& scene_pair : scene_list)
@@ -439,6 +469,10 @@ namespace NS_SCENE
 		else if (next_scene == current_scene)
 			to_change_scene = SC_RESTART;
 		else
+		{
 			to_change_scene = SC_CHANGE;
+			if (isPlaying)
+				ChangedSceneDuringPlay = true;
+		}
 	}
 }
