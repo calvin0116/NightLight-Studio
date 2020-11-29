@@ -341,6 +341,19 @@ void LevelEditor::LE_MainMenuBar()
                     data = meshName;
                 }*/
                 NS_GRAPHICS::SYS_GRAPHICS->AttachModel(ent, data);
+
+                ComponentGraphics* graphics_comp = ent.getComponent<GraphicsComponent>();
+                if (NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_isAnimated)
+                {
+                    ent.AttachComponent<ComponentAnimation>();
+                    ComponentAnimation* anim = ent.getComponent<ComponentAnimation>();
+                    anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
+                    AnimationController* animCtrl = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID];
+                    for (auto& anims : NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_animations)
+                    {
+                        animCtrl->_allAnims.insert(anims.first);
+                    }
+                }
             }
 
             if (LE_GetFileType(data) == "json")
