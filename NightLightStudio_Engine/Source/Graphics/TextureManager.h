@@ -28,7 +28,7 @@ namespace NS_GRAPHICS
 		// Adds loaded texture into master list, requires name as key and context
 		// E.g.
 		void AddTexture(unsigned texture, const std::string& texturekey);
-		int GetTexture(const std::string& texturekey);
+		int GetTexture(const std::string& texturekey, bool sRGB = false);
 
 		void Free();
 

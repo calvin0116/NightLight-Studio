@@ -200,7 +200,7 @@ namespace NS_GRAPHICS
 		return false;
 	}
 
-	bool TextureLoader::LoadOtherImage(const std::string& file, const std::string& newFile)
+	bool TextureLoader::LoadOtherImage(const std::string& file, const std::string& newFile, bool sRGB)
 	{
 		(void)newFile;
 		std::cout << "Loading Other Images " << file << std::endl;
@@ -222,12 +222,20 @@ namespace NS_GRAPHICS
 		//If textureData is valid and channel is 4 use RGBA, else use RGB
 		if (textureData && channel == 4)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
+			if(sRGB)
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_ALPHA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
+			else
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
+			
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 		else if (textureData && channel == 3)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
+			if (sRGB)
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
+			else
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
+
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 		else
@@ -247,7 +255,7 @@ namespace NS_GRAPHICS
 		return true;
 	}
 
-	unsigned TextureLoader::LoadTexture(const std::string & file)
+	unsigned TextureLoader::LoadTexture(const std::string & file, bool sRGB)
 	{
 		if (file.empty())
 		{
@@ -293,7 +301,7 @@ namespace NS_GRAPHICS
 			//newName = s_LocalTexturePathName + name + s_DDSFileFormat;
 			//finalFileName = newName;
 
-			result = LoadOtherImage(file, file);
+			result = LoadOtherImage(file, file, sRGB);
 		}
 
 		if(!result)

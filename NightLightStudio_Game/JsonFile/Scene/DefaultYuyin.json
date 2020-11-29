@@ -1,18 +1,18 @@
 {
     "Objects": {
-        "player": {
+        "BOX": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -1.5245685577392579,
-                    240.79103088378907,
-                    1.5
+                    0.0,
+                    0.0,
+                    0.0
                 ],
                 "Scale": [
-                    50.0,
-                    50.0,
-                    50.0
+                    1.0,
+                    1.0,
+                    1.0
                 ],
                 "Rotate": [
                     0.0,
@@ -20,56 +20,53 @@
                     0.0
                 ]
             },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
-                    0.0,
-                    0.0,
-                    0.0
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\3d model\\test_cube.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
                 ],
-                "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
                 ],
-                "Rotation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "RigidBody": {
-                "isStatic": false,
-                "isGravity": true,
-                "mass": 0.0,
-                "friction": 0.009999999776482582,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
                 ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         },
-        "plane": {
+        "LIGHT_0": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -12.633973121643067,
-                    17.279720306396486,
-                    2.2317142486572267
+                    8.207931518554688,
+                    7.418453216552734,
+                    5.685413360595703
                 ],
                 "Scale": [
-                    1000.0,
-                    200.0,
-                    1000.0
+                    1.0,
+                    1.0,
+                    1.0
                 ],
                 "Rotate": [
                     0.0,
@@ -77,41 +74,52 @@
                     0.0
                 ]
             },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
+            "LightComponent": {
+                "LightType": "POINT",
+                "isActive": true,
+                "Diffuse": [
+                    1.0,
+                    0.09803920984268189,
+                    0.09803920984268189
+                ],
+                "Radius": 17.0,
+                "Intensity": 31.0,
+                "CutOff": 0.0,
+                "OuterCutOff": 0.0
+            }
+        },
+        "TEST_DIR_LIGHT": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
                     0.0,
                     0.0,
                     0.0
                 ],
-                "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
                 ],
-                "Rotation": [
+                "Rotate": [
                     0.0,
-                    0.0,
+                    -0.0,
                     0.0
                 ]
             },
-            "RigidBody": {
-                "isStatic": true,
-                "isGravity": false,
-                "mass": 0.0,
-                "friction": 0.009999999776482582,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
+            "LightComponent": {
+                "LightType": "DIRECTIONAL",
+                "isActive": true,
+                "Diffuse": [
+                    1.0,
+                    1.0,
+                    1.0
                 ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
+                "Radius": 10.0,
+                "Intensity": 1.0,
+                "CutOff": 0.0,
+                "OuterCutOff": 0.0
             }
         }
     }

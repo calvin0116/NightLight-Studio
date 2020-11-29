@@ -18,12 +18,12 @@ namespace NS_GRAPHICS
 		_textureList.insert({ texturekey, texture });
 	}
 
-	int TextureManager::GetTexture(const std::string& texturekey)
+	int TextureManager::GetTexture(const std::string& texturekey, bool sRGB)
 	{
 		if (_textureList.find(texturekey) == _textureList.end())
 		{
 			//This means if loading fails
-			if (TextureLoader::GetInstance().LoadTexture(texturekey) == 0)
+			if (TextureLoader::GetInstance().LoadTexture(texturekey, sRGB) == 0)
 			{
 				return 0;
 			}
