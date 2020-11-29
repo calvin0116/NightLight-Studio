@@ -31,6 +31,7 @@ namespace NS_GRAPHICS
 		cameraManager{ nullptr },
 		textureManager{ nullptr },
 		uiManager{ nullptr },
+		animManager{ nullptr },
 		_hasInit{ false },
 		_debugDrawing{ false },
 		_uiDrawing{ false },
@@ -64,7 +65,7 @@ namespace NS_GRAPHICS
 		UpdateLights();
 
 		// Update Animation
-		//UpdateAnimations();
+		animManager->Update();
 
 		Render();
 
@@ -79,6 +80,7 @@ namespace NS_GRAPHICS
 		// Includes VAO, VBO, EBO, ModelMatrixBO
 		modelManager->Free();
 		textureManager->Free();
+		animManager->Free();
 	}
 
 	void GraphicsSystem::Init()
@@ -100,6 +102,7 @@ namespace NS_GRAPHICS
 		cameraManager = &CameraSystem::GetInstance();
 		textureManager = &TextureManager::GetInstance();
 		uiManager = &UISystem::GetInstance();
+		animManager = &AnimationSystem::GetInstance();
 
 		//modelLoader->Init();
 		
@@ -140,6 +143,7 @@ namespace NS_GRAPHICS
 		// Enable depth buffering
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
+		glEnable(GL_MULTISAMPLE);
 		//glEnable(GL_CULL_FACE);
 		//glCullFace(GL_BACK);
 
@@ -189,6 +193,10 @@ namespace NS_GRAPHICS
 		{
 			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
 
+			Entity entity = G_ECMANAGER->getEntity(itr);
+			
+			ComponentAnimation* animComp = entity.getComponent<ComponentAnimation>();
+
 			if (graphicsComp->_modelID < 0)
 			{
 				++itr;
@@ -208,13 +216,25 @@ namespace NS_GRAPHICS
 
 			glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
 
+			if (animComp)
+			{
+				if (animComp->_isActive)
+				{
+					glm::mat4 identity(1.0f);
+					float dt = animManager->_animControllers[animComp->_controllerID]->_dt;
+					std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
+					if (!currAnimation.empty())
+					{
+						model->GetPose(currAnimation, model->_rootBone, dt, identity, model->_globalInverseTransform);
+					}
+				}
+			}
+
 			if (graphicsComp->_renderType == RENDERTYPE::SOLID)
 			{
 				if (model->_isAnimated)
 				{
 					shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
-					//glm::mat4 identity(1.0f);
-					//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
 				}
 				else
 				{

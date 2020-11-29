@@ -112,6 +112,11 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<NavComponent>();
 			entComp._ent.getComponent<NavComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(AnimationComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<AnimationComponent>();
+			entComp._ent.getComponent<AnimationComponent>()->Read(*entComp._rjDoc);
+		}
 
 		return comp;
 	};
@@ -188,6 +193,11 @@ void InspectorWindow::Start()
 		{
 			entComp.Copy(entComp._ent.getComponent<NavComponent>()->Write());
 			entComp._ent.RemoveComponent<NavComponent>();
+		}
+		else if (t == typeid(AnimationComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<AnimationComponent>()->Write());
+			entComp._ent.RemoveComponent<AnimationComponent>();
 		}
 
 
@@ -289,6 +299,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	ScriptComp(ent);
 
 	CanvasComp(ent);
+
+	AnimationComp(ent);
 
   CScriptComp(ent);
 
@@ -517,13 +529,25 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 			std::string specular = graphics_comp->_specularFileName.toString();
 
 			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-				[&graphics_comp, &mod]()
+				[&graphics_comp, &mod, &ent]()
 				{
 					graphics_comp->AddModel(mod);
+
+					if (NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_isAnimated)
+					{
+						ent.AttachComponent<ComponentAnimation>();
+						ComponentAnimation* anim = ent.getComponent<ComponentAnimation>();
+						anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
+						AnimationController* animCtrl = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID];
+						for (auto& anims : NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_animations)
+						{
+							animCtrl->_allAnims.insert(anims.first);
+						}
+					}
 				});
 			// Drag and Drop from Asset Inspector onto Model File Name
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
-				[this, &mod, &graphics_comp](std::string* str)
+				[this, &mod, &graphics_comp, &ent](std::string* str)
 				{
 					std::string data = *str;
 					std::transform(data.begin(), data.end(), data.begin(),
@@ -540,6 +564,18 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 						}
 						mod = data;
 						graphics_comp->AddModel(mod);
+
+						if (NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_isAnimated)
+						{
+							ent.AttachComponent<ComponentAnimation>();
+							ComponentAnimation* anim = ent.getComponent<ComponentAnimation>();
+							anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
+							AnimationController* animCtrl =  NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID];
+							for (auto& anims : NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_animations)
+							{
+								animCtrl->_allAnims.insert(anims.first);
+							}
+						}
 					}
 				});
 
@@ -977,9 +1013,58 @@ void InspectorWindow::CanvasComp(Entity& ent)
 		if (!_notRemove)
 		{
 			//ent.RemoveComponent<GraphicsComponent>();
-			ENTITY_COMP_DOC comp{ ent, ent.getComponent<GraphicsComponent>()->Write(), typeid(GraphicsComponent).hash_code() };
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<CanvasComponent>()->Write(), typeid(CanvasComponent).hash_code() };
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
+		}
+
+		ImGui::Separator();
+	}
+}
+
+void InspectorWindow::AnimationComp(Entity& ent)
+{
+	AnimationComponent* anim = ent.getComponent<AnimationComponent>();
+	if (anim != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Animation component", &_notRemove))
+		{
+			ImGui::Checkbox("IsActive##Animation", &anim->_isActive);
+
+			static int selected = -1;
+			static std::string currString = "";
+
+			int n = 0;
+			auto it = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
+			while ( it != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
+			{
+				if (ImGui::Selectable(it->c_str(), selected == n))
+				{
+					selected = n;
+					currString = it->c_str();
+				}
+				++n;
+				++it;
+			}
+
+			if (ImGui::Button("Preview Animation"))
+			{
+				anim->PlayAnimation(currString);
+			}
+
+			if (ImGui::Button("Pause Animation"))
+			{
+				anim->PauseAnimation();
+			}
+
+			if (ImGui::Button("Stop Animation"))
+			{
+				anim->StopAnimation();
+			}
+
+			ImGui::SameLine();
+
+			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 		}
 
 		ImGui::Separator();

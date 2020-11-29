@@ -11,7 +11,6 @@
 #include "..\Core\SceneManager.h"
 #include "..\Collision\SystemCollision.h"
 #include "../Ai/AiManager.h"
-#include "../Graphics/AnimationSystem.h"
 
 /*
 extern SystemGraphics G_GRAPHICS;

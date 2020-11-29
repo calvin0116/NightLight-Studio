@@ -93,6 +93,10 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<ComponentCanvas>(Comp_list, entity, component_name, g_ecman);
             }
+            else if (component_name == "AnimationComponent")
+            {
+                CreateAndWriteComp<AnimationComponent>(Comp_list, entity, component_name, g_ecman);
+            }
             else if (component_name == "ComponentVariables")
             {
                 CreateAndWriteComp<VariablesComponent>(Comp_list, entity, component_name, g_ecman);
@@ -191,6 +195,10 @@ namespace NS_SERIALISER {
             else if (component_name == "CanvasComponent")
             {
                 ReadComp<ComponentCanvas>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "AnimationComponent")
+            {
+                ReadComp<ComponentAnimation>(Comp_list, entity, component_name);
             }
             else if (component_name == "ComponentVariables")
             {

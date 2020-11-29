@@ -298,6 +298,7 @@
     <ClInclude Include="Source\Messaging\SystemReceiver.h" />
     <ClInclude Include="Source\Mono\Binding\AllBindings.h" />
     <ClInclude Include="Source\Mono\Binding\Binder.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentAnimationBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentColliderBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentGraphicsBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentLightBind.h" />
@@ -416,6 +417,7 @@
     <ClCompile Include="Source\Messaging\SystemBroadcaster.cpp" />
     <ClCompile Include="Source\Messaging\SystemReceiver.cpp" />
     <ClCompile Include="Source\Mono\Binding\Binder.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentAnimationBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentColliderBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentGraphicsBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentLightBind.cpp" />

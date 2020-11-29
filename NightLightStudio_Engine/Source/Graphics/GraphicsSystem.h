@@ -14,6 +14,7 @@
 #include "CameraSystem.h"
 #include "TextureManager.h"
 #include "UISystem.h"
+#include "AnimationSystem.h"
 
 #include "../glm/glm.hpp"   // glm::mat4
 
@@ -142,6 +143,7 @@ namespace NS_GRAPHICS
         CameraSystem* cameraManager;
         TextureManager* textureManager;
         UISystem* uiManager;
+        AnimationSystem* animManager;
 
         //1 HDR PER SCENE
         unsigned _hdrID;
