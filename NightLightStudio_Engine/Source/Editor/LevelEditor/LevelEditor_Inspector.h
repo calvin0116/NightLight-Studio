@@ -82,6 +82,7 @@ private:
 	void LightComp(Entity& ent);
 	void ScriptComp(Entity& ent);
 	void CanvasComp(Entity& ent);
+	void AnimationComp(Entity& ent);
   void CScriptComp(Entity& ent);
   void PlayerStatsComp(Entity& ent);
   void CauldronStatsComp(Entity& ent);
