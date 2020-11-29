@@ -21,6 +21,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(GetRigidBody, "GetRigidBody", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetGraphics, "GetGraphics", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetLight, "GetLight", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetNavigator, "GetNavigator", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetVariables, "GetVariables", "UniBehaviour");
   }
 
@@ -96,25 +97,6 @@ namespace ECSBind
     ColliderComponent* col = en.getComponent<ColliderComponent>();
     MonoWrapper::SetNativeHandle(monoObj, col);
 
-    ////if (trans == nullptr)
-    ////  static_assert("get_Transform_handle nullptr");
-
-    //MonoObject* monoVec3;
-    //// Construct and set position(Vec3) native handle and values
-    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
-    //MonoWrapper::SetNativeHandle(monoVec3, &(col->center));
-    //MonoWrapper::SetObjectFieldValue(monoObj, "Center", monoVec3);
-    //
-    //// Construct and set rotation(Vec3) native handle and values
-    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
-    //MonoWrapper::SetNativeHandle(monoVec3, &(col->extend));
-    //MonoWrapper::SetObjectFieldValue(monoObj, "Extend", monoVec3);
-
-    //// Construct and set rotation(Vec3) native handle and values
-    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
-    //MonoWrapper::SetNativeHandle(monoVec3, &(col->rotation));
-    //MonoWrapper::SetObjectFieldValue(monoObj, "Rotation", monoVec3);
-
     return monoObj;
   }
 
@@ -146,6 +128,16 @@ namespace ECSBind
     Entity en = G_ECMANAGER->getEntity(id);
     LightComponent* lc = en.getComponent<LightComponent>();
     MonoWrapper::SetNativeHandle(monoObj, lc);
+
+    return monoObj;
+  }
+
+  MonoObject* GetNavigator(int id)
+  {
+    MonoObject* monoObj = MonoWrapper::ConstructObject("Navigator");
+    Entity en = G_ECMANAGER->getEntity(id);
+    NavigatorComponent* nav = en.getComponent<NavigatorComponent>();
+    MonoWrapper::SetNativeHandle(monoObj, nav);
 
     return monoObj;
   }

@@ -58,6 +58,8 @@ namespace Unicorn
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Light GetLight(int id);
 
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Navigator GetNavigator(int id);
     // Temporary till reflection comes out
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Variables GetVariables(int id);

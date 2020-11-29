@@ -6,6 +6,7 @@
 #include "Components/ComponentRigidBodyBind.h"
 #include "Components/ComponentGraphicsBind.h"
 #include "Components/ComponentLightBind.h"
+#include "Components/ComponentNavigatorBind.h"
 // Temporary comp
 #include "Components/ComponentVariablesBind.h"
 
