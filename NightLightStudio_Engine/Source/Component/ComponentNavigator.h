@@ -5,6 +5,15 @@
 #include "../Ai/WayPointManager.h"
 #include "../Messaging/Messages/MessageTogglePlay.h"
 #include "../Messaging/SystemReceiver.h"
+
+#include <time.h>
+
+enum WP_NAV_TYPE {
+	WN_TOANDFRO = 0,
+	WN_CIRCULAR,
+	WN_RANDOM
+};
+
 typedef class ComponentNavigator : public ISerializable //: public IComponent
 {
 	//LocalVector<NS_AI::WayPoint*> way_point_list;
@@ -12,10 +21,14 @@ typedef class ComponentNavigator : public ISerializable //: public IComponent
 	//LocalVector<WayPoint*> cur_path;		//Decided by Astar
 
 	//Curent targetted waypoint
+
+	//Toggle traversing nodes
+	bool traverseFront = true;
 public:
 	bool isFollowing;
 	bool isPaused;
-	bool traverseFront = true;
+	bool stopAtEachWayPoint;
+	WP_NAV_TYPE wp_nav_type;
 
 	float speed = 1.f;
 
@@ -26,6 +39,7 @@ public:
 		:isFollowing{ true }
 		,isPaused{false}
 		,cur_wp_index{ 0 }
+		, wp_nav_type{ WN_TOANDFRO }
 	{
 		strcpy_s(ser_name, "NavigatorComponent");
 	}
@@ -111,12 +125,26 @@ public:
 	//================ Getter / Setter ========================//
 	void SetNextWp()
 	{
+		if (wp_nav_type == WN_RANDOM)
+		{
+			srand(time(NULL));
+			cur_wp_index = rand() % cur_path.size();
+			return;
+		}
+
 		if (traverseFront)
 			if (cur_wp_index < cur_path.size() - 1)
 				++cur_wp_index;
 			else {
-				traverseFront = false;
-				--cur_wp_index;
+				if (wp_nav_type == WN_TOANDFRO)
+				{
+					traverseFront = false;
+					--cur_wp_index;
+				}
+				else if (wp_nav_type == WN_CIRCULAR)
+				{
+					cur_wp_index = 0;
+				}
 			}
 		else
 			if (cur_wp_index > 0)
