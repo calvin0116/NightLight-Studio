@@ -46,6 +46,8 @@ namespace NS_GRAPHICS
 
 		LightBlock* lightblock;
 
+		float _gamma = 2.2f;
+
 	public:
 		// Unique Singleton instance
 		static LightSystem& GetInstance()
@@ -69,8 +71,6 @@ namespace NS_GRAPHICS
 
 		void SetAllLights(const bool& setter);
 
-		// NEW INTERFACE FOR LIGHTS
-
 		// Return true if light is proper set, else return false
 		bool SetLight(const Lights& type, ComponentLight* const& comp);
 
@@ -92,5 +92,9 @@ namespace NS_GRAPHICS
 
 		// Remove light helper
 		void RemoveLightHelper(const Lights& type, const int& id);
+
+		void SetGamma(const float& gamma = 2.2f);
+
+		float GetGamma() const;
 	};
 }

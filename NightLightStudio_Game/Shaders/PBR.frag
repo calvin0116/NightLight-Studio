@@ -39,6 +39,8 @@ uniform vec3 Albedo;
 uniform float Metallic;
 uniform float Roughness;
 
+uniform float Gamma;
+
 // Current maximum permitted lights per type
 #define MAX_LIGHTS 30
 
@@ -266,7 +268,7 @@ void main(void)
     // Gamma correction
     // 2.2f is a default gamma value that is the average gamma for most displays
     // Might replace with uniform gamma value
-    resultColor = pow(resultColor, vec3(1.0f/2.2f));
+    resultColor = pow(resultColor, vec3(1.0f/Gamma));
 
     fragColor = vec4(resultColor, 1.f); // 1.f should be replaced with uniform later
 

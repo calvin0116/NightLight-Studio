@@ -46,6 +46,8 @@ uniform sampler2D MetallicTex;
 uniform sampler2D RoughnessTex;
 uniform sampler2D AOTex; // Might need extra uniform to determine if AO is available
 
+uniform float Gamma;
+
 uniform float RoughnessControl;
 uniform float MetallicControl;
 
@@ -275,7 +277,7 @@ void main(void)
     // Gamma correction
     // 2.2f is a default gamma value that is the average gamma for most displays
     // Might replace with uniform gamma value
-    resultColor = pow(resultColor, vec3(1.0f/2.2f));
+    resultColor = pow(resultColor, vec3(1.0f/Gamma));
 
     fragColor = vec4(resultColor, 1.f); // 1.f should be replaced with uniform later
 
