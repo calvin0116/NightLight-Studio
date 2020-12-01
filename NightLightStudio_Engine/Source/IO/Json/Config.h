@@ -52,6 +52,8 @@ struct ConfigData
 	bool sceneRunning;
 	bool levelEditorMode;
 	bool isPlaying;
+
+	float gamma;
 };
 
 class Config : public MySystem ,public Singleton<Config> {
@@ -115,6 +117,9 @@ public:
 			config_d.isPlaying = false;
 		else
 			config_d.isPlaying = true;
+
+		if (config_val.FindMember("Gamma") != config_val.MemberEnd())
+			config_d.gamma = config_val["Gamma"].GetFloat();
 	}
 
 
@@ -153,6 +158,7 @@ public:
 
 
 		config_val["start_in_level_editor"].SetBool(config_d.levelEditorMode);
+		config_val["Gamma"].SetFloat(config_d.gamma);
 
 		parser.Save();
 	};

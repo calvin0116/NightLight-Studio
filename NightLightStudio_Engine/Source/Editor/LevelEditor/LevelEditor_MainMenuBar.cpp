@@ -261,8 +261,8 @@ void LevelEditor::LE_MainMenuBar()
         if (ImGui::BeginMenu("Gamma Settings##GAMMA"))
         {
             // Do your stuff here
-            float gam = 0;
-            if (ImGui::SliderFloat("Gamma", &gam, 0, 100))
+            //float gamma = 0; //Shifted to config.h
+            if (ImGui::SliderFloat("Gamma", &CONFIG_DATA->GetConfigData().gamma, 0, 100))
             {
 
             }
