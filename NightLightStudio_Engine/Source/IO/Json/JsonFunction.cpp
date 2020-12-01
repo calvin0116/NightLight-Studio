@@ -73,10 +73,10 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<ScriptComponent>(Comp_list, entity, component_name, g_ecman);
             }
-            else if (component_name == "ScriptComponent")
+            /*else if (component_name == "ScriptComponent")
             {
                 CreateAndWriteComp<ScriptComponent>(Comp_list, entity, component_name, g_ecman);
-            }
+            }*/
             else if (component_name == "LightComponent")
             {
                 CreateAndWriteComp<ComponentLight>(Comp_list, entity, component_name, g_ecman);

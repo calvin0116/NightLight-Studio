@@ -1281,7 +1281,13 @@ void InspectorWindow::NavComp(Entity& ent)
 	{
 		if (ImGui::CollapsingHeader("Navigator", &_notRemove))
 		{
-			_levelEditor->LE_AddInputFloatProperty("speed", nav_comp->speed, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
+			_levelEditor->LE_AddSliderFloatProperty("speed", nav_comp->speed, 0.0f, 1000.f, ImGuiInputTextFlags_EnterReturnsTrue);
+			_levelEditor->LE_AddCombo("Way Point Nav Type", (int&)nav_comp->wp_nav_type,
+				{
+					"To and fro",
+					"circular",
+					"random"
+				});
 
 			if (ImGui::Button("Add WayPoint"))
 			{
