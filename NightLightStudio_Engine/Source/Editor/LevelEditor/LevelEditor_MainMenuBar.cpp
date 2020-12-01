@@ -260,11 +260,15 @@ void LevelEditor::LE_MainMenuBar()
 
         if (ImGui::BeginMenu("Gamma Settings##GAMMA"))
         {
+            float gamma = NS_GRAPHICS::LightSystem::GetInstance().GetGamma();
+
             // Do your stuff here
             //float gamma = 0; //Shifted to config.h
-            if (ImGui::SliderFloat("Gamma", &CONFIG_DATA->GetConfigData().gamma, 0, 100))
+            ImGui::SetNextItemWidth(150);
+            if (ImGui::SliderFloat("Gamma", &gamma, 1.f, 10.f))
             {
-
+                NS_GRAPHICS::LightSystem::GetInstance().SetGamma(gamma);
+                CONFIG_DATA->GetConfigData().gamma = gamma;
             }
 
 
