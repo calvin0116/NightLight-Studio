@@ -93,6 +93,8 @@ void LevelEditor::Init(HWND window)
     for (auto& i : _editorWind)
         if (i._ptr)
             i._ptr->Start();
+
+    LE_ConfigLoad();
 }
 
 bool LevelEditor::Update(float)
@@ -144,6 +146,8 @@ void LevelEditor::Exit()
     for (auto& i : _editorWind)
         if (i._ptr)
             i._ptr->End();
+
+    LE_ConfigSave();
 
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();

@@ -20,6 +20,11 @@
 
 static bool winFocus = false;
 
+void LevelEditor::LE_ConfigLoad()
+{
+
+}
+
 void LevelEditor::LE_MainMenuBar()
 {
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
@@ -251,6 +256,22 @@ void LevelEditor::LE_MainMenuBar()
             ImGui::EndMenu();
         }
 
+        ImGui::Separator();
+
+        if (ImGui::BeginMenu("Gamma Settings##GAMMA"))
+        {
+            // Do your stuff here
+            float gam = 0;
+            if (ImGui::SliderFloat("Gamma", &gam, 0, 100))
+            {
+
+            }
+
+
+            // Do not remove this
+            ImGui::EndMenu();
+        }
+
         ImGui::EndMenuBar();
     }
 
@@ -368,4 +389,9 @@ void LevelEditor::LE_MainMenuBar()
     }
 
     ImGui::End();
+}
+
+void LevelEditor::LE_ConfigSave()
+{
+
 }
