@@ -84,6 +84,13 @@
                 "stopAtEachWayPoint": true,
                 "endTime": 2.0,
                 "speed": 0.4009999930858612
+            },
+            "ComponentVariables": {
+                "IntList": [],
+                "StringList": [],
+                "FloatList": [
+                    2.0
+                ]
             }
         },
         "Plane": {

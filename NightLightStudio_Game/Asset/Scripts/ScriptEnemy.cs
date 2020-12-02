@@ -8,7 +8,7 @@ namespace Unicorn
   {
     // Used player components
     RigidBody enemyRB;
-    //Variables enemyVar;
+    Variables enemyVar;
     Navigator enemyNavigator; //<- Get Navigator
     // Other entity's components
 
@@ -39,10 +39,9 @@ namespace Unicorn
     {
       enemyRB = GetRigidBody(id);
       enemyNavigator = GetNavigator(id);
+      enemyVar = GetVariables(id);
       // Get default values from variables
-      //enemyForce = playerVar.GetFloat(0);
-      //maxEnemySpd = playerVar.GetFloat(1);
-      //moveForce = humnForce;
+      maxEnemySpd = enemyVar.GetFloat(0);
     }
 
     public override void LateInit()
@@ -79,6 +78,7 @@ namespace Unicorn
     {
     }
 
+    //If need a ai state like behaviour, just rough idea only
     public void Decision()
     {
       //======Init phase====//
@@ -148,6 +148,7 @@ namespace Unicorn
     {
 
       //Key for debug
+      //Pause and unpause movement
       if (Input.GetKeyPress(VK.IKEY_M))
       {
         enemyNavigator.isPaused = !enemyNavigator.isPaused;
@@ -157,17 +158,21 @@ namespace Unicorn
         else
           startPatroling = true;
         */
-        Console.WriteLine("Is paused: %i" , enemyNavigator.isPaused);
       }
       //Speed up
       if (Input.GetKeyPress(VK.IKEY_K))
       {
-        enemyNavigator.speed += 1.0f;
+        if (enemyNavigator.speed < maxEnemySpd)
+        {
+          Console.WriteLine("Increasing....");
+          enemyNavigator.speed += 0.5f;
+        }
       }
-      //Speed up
+      //Slow down
       if (Input.GetKeyPress(VK.IKEY_L))
       {
-        enemyNavigator.speed += 1.0f;
+        if (enemyNavigator.speed > 1.0f)
+          enemyNavigator.speed -= 0.5f;
       }
     }
   }
