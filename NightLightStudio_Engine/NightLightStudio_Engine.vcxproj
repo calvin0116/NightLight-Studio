@@ -178,7 +178,6 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h" />
-    <ClInclude Include="LocalString.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Source\Ai\AiManager.h" />
     <ClInclude Include="Source\Ai\WayPointManager.h" />
