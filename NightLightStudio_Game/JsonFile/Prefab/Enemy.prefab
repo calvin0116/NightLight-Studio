@@ -1,0 +1,94 @@
+{
+    "Name": "Enemy",
+    "TransformComponent": {
+        "EntityName": "",
+        "Tag": 0,
+        "Position": [
+            0.0,
+            6.644987106323242,
+            0.0
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Rotate": [
+            0.0,
+            -0.0,
+            0.0
+        ]
+    },
+    "RigidBody": {
+        "isStatic": false,
+        "isGravity": false,
+        "mass": 0.0,
+        "friction": 0.009999999776482582,
+        "Force": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Accelaration": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "GraphicsComponent": {
+        "isActive": true,
+        "Model": "asset\\3d model\\test_cube.fbx",
+        "Albedo": "",
+        "Normal": "",
+        "Metallic": "",
+        "Roughness": "",
+        "AmbientOcclusion": "",
+        "Specular": "",
+        "DiffuseMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "AmbientMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "SpecularMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "ShininessMat": 32.0,
+        "AlbedoMat": [
+            1.0,
+            0.0,
+            0.0
+        ],
+        "MetallicMat": 0.0,
+        "RoughnessMat": 0.0
+    },
+    "ScriptComponent": {
+        "isActive": true,
+        "isRunning": true,
+        "ScriptName": "ScriptEnemy"
+    },
+    "NavigatorComponent": {
+        "way_point_list": [
+            "Waypoint",
+            "WayPoint_2",
+            "WayPoint_3",
+            "WayPoint_4"
+        ],
+        "stopAtEachWayPoint": true,
+        "endTime": 2.0,
+        "speed": 0.4009999930858612
+    },
+    "ComponentVariables": {
+        "IntList": [],
+        "StringList": [],
+        "FloatList": [
+            2.0
+        ]
+    }
+}
