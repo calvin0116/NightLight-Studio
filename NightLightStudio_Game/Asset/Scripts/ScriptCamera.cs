@@ -5,75 +5,75 @@ using System.Collections.Specialized;
 namespace Unicorn
 {
 
-    public class Lerper
+  public class Lerper
+  {
+    float _old;
+    float _threshold;
+    float _time;
+
+    public Lerper(float __old, float __threshold, float __time)
     {
-        float _old;
-        float _threshold;
-        float _time;
-
-        public Lerper(float __old, float __threshold, float __time)
-        {
-            _old = __old;
-            _threshold = __threshold;
-            _time = __time;
-        }
-
-        public float Lerp(float other, float dt)
-        {
-            float dir = other - _old;
-
-            //Console.WriteLine("dir" + dir);
-
-            if (Math.Abs(dir) > _threshold)
-            {
-                float speed = dir / _time;
-
-                //Console.WriteLine("spd" + speed);
-
-                _old = _old + speed * dt;
-
-                //if (dir > 0) // im a goddamn idiot
-                //{
-                //    _old = _old + speed * dt;
-                //}
-                //else
-                //{
-                //    _old = _old - speed * dt;
-                //}
-
-            }
-
-            //Console.WriteLine("old" + _old);
-            return _old;
-        }
-
-        public float old
-        {
-            get
-            {
-                return _old;
-            }
-            set
-            {
-                _old = value;
-            }
-        }
-
-        public float threshold
-        {
-            get
-            {
-                return _threshold;
-            }
-            set
-            {
-                _threshold = value;
-            }
-        }
+      _old = __old;
+      _threshold = __threshold;
+      _time = __time;
     }
 
+    public float Lerp(float other, float dt)
+    {
+      float dir = other - _old;
 
-    public class ScriptCamera : UniBehaviour
+      //Console.WriteLine("dir" + dir);
+
+      if (Math.Abs(dir) > _threshold)
+      {
+        float speed = dir / _time;
+
+        //Console.WriteLine("spd" + speed);
+
+        _old = _old + speed * dt;
+
+        //if (dir > 0) // im a goddamn idiot
+        //{
+        //    _old = _old + speed * dt;
+        //}
+        //else
+        //{
+        //    _old = _old - speed * dt;
+        //}
+
+      }
+
+      //Console.WriteLine("old" + _old);
+      return _old;
+    }
+
+    public float old
+    {
+      get
+      {
+        return _old;
+      }
+      set
+      {
+        _old = value;
+      }
+    }
+
+    public float threshold
+    {
+      get
+      {
+        return _threshold;
+      }
+      set
+      {
+        _threshold = value;
+      }
+    }
+  }
+
+
+  public class ScriptCamera : UniBehaviour
   {
     public string sPlayer = "Player";
     int playerID; // Player ID
@@ -84,7 +84,7 @@ namespace Unicorn
     Variables camVar; // Camera variables comp to get offset
 
     //Variables
-    Vector3 oldTgtPos;
+    public Vector3 oldTgtPos;
     // Camera values
     Vector3 dir = new Vector3(0.0f, 0.0f, 0.0f); // Direction to move camera
     float Threshold = 10.0f; // Distance to move before camera follows player
@@ -93,7 +93,7 @@ namespace Unicorn
     float offX;
     float offY;
     float offZ;
-        
+
     float offZ_current;
 
     bool isCollide = false;
@@ -124,7 +124,7 @@ namespace Unicorn
       oldTgtPos = playerTrans.getPosition() + camOffSet;
       Camera.SetThirdPersonCamTarget(playerTrans.getPosition() + getCamOffsetVec());
 
-        offZ_lerp.old = offZ;
+      offZ_lerp.old = offZ;
     }
 
     public override void LateInit()
@@ -136,8 +136,8 @@ namespace Unicorn
     public override void Update()
     {
 
-            Vector3 camPos = Camera.GetPosition();
-            camTrans.setPosition(camPos);
+      Vector3 camPos = Camera.GetPosition();
+      camTrans.setPosition(camPos);
 
       Vector3 tgtPos = Lerp(playerTrans.getPosition()) + getCamOffsetVec();
       //if (script_player.CurrentState == ScriptPlayer.State.Human)
@@ -146,23 +146,23 @@ namespace Unicorn
         tgtPos = playerTrans.getPosition();
       Camera.SetThirdPersonCamTarget(tgtPos);
 
-            
+
       //Console.WriteLine(offZ_current);
 
-      
-        if(isCollide)
-        {
-            offZ_current = offZ_lerp.Lerp(0.0f, RealDT());
 
-        }
-        else
-        {
-            offZ_current = offZ_lerp.Lerp(offZ, RealDT());
+      if (isCollide)
+      {
+        offZ_current = offZ_lerp.Lerp(0.0f, RealDT());
 
-        }
+      }
+      else
+      {
+        offZ_current = offZ_lerp.Lerp(offZ, RealDT());
 
-        
-                Console.WriteLine("offZ_current" + offZ_current);
+      }
+
+
+      Console.WriteLine("offZ_current" + offZ_current);
 
       Camera.SetThirdPersonCamDistance(offZ_current);
 
@@ -182,13 +182,13 @@ namespace Unicorn
     public override void OnCollisionStay(int other)
     {
       Console.WriteLine("OnCollisionStay");
-            isCollide = true;
+      isCollide = true;
     }
-        
+
     public override void OnCollisionExit(int other)
     {
       Console.WriteLine("OnCollisionExit");
-            isCollide = false;
+      isCollide = false;
     }
 
     public override void OnTriggerEnter(int other)
@@ -214,13 +214,13 @@ namespace Unicorn
 
     public Vector3 Lerp(Vector3 otherPos)
     {
-        
+
       dir = otherPos - oldTgtPos;
 
       if (Math.Abs(dir.x) > Threshold)
       {
         float speed = dir.x / Time.x;
-        oldTgtPos.x = oldTgtPos.x +  (speed * RealDT());
+        oldTgtPos.x = oldTgtPos.x + (speed * RealDT());
       }
       if (Math.Abs(dir.y) > Threshold)
       {
