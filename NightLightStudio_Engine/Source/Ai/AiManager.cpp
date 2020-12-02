@@ -25,6 +25,8 @@ inline void NS_AI::AiManager::Init()
 
 	if (CONFIG_DATA->GetConfigData().levelEditorMode)
 		isActive = false;
+
+	timeLastRound = timeThisRound = std::chrono::system_clock::now();
 }
 
 inline void NS_AI::AiManager::GameInit()
@@ -46,6 +48,13 @@ inline void NS_AI::AiManager::Update()
 	if (!isActive)
 		return;
 
+
+	//currentNumberOfSteps = 0;
+
+	std::swap(timeLastRound, timeThisRound);
+	stepTime = timeThisRound = std::chrono::system_clock::now();
+	float dt = (float)(timeThisRound - timeLastRound).count() / 10000000.0f;
+
 	auto itr = G_ECMANAGER->begin<NavigatorComponent>();
 	auto itrEnd = G_ECMANAGER->end<NavigatorComponent>();
 
@@ -61,15 +70,19 @@ inline void NS_AI::AiManager::Update()
 			continue;
 		}
 
-		if (navComp->isPaused && navComp->curTime >= 0.0f)
+		if (navComp->isPaused) //&& navComp->curTime >= 0.0f)
 		{
-			//navComp->curTime += (DELTA_T->real_dt)*0.001;
-			std::cout << navComp->curTime  << std::endl;
+			++itr;
+			if (navComp->curTime >= 0.0f)
+				navComp->curTime += dt;//(DELTA_T->real_dt)*0.001;
+			//else
+				//std::cout << "isPaused" << std::endl;
+			//std::cout << navComp->curTime  << std::endl;
 			if (navComp->curTime > navComp->endTime)
 			{
 				navComp->isPaused = false;
 				//navComp->curTime = -1.f;
-				
+				navComp->curTime = -1.0f;
 			}
 			continue;
 		}
@@ -78,7 +91,7 @@ inline void NS_AI::AiManager::Update()
 		mag_dir.y = 0.0f;	//Ignore y axis
 		//5.0f = hardcoded radius to check
 		//std::cout << mag_dir.length() << std::endl;
-		if (mag_dir.length() < 25.0f)	//Check if Ai reached the way point
+		if (mag_dir.length() < 20.0f)	//Check if Ai reached the way point
 		{
 			navComp->SetNextWp();		//Set next way point to be the target for navigation
 			std::cout << "Going to next wp" << std::endl;

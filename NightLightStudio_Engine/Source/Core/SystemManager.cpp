@@ -401,6 +401,41 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 	//// END TEST
 
+	////
+	//Entity newEntity0 = G_ECMANAGER->BuildEntity();
+	//newEntity0.AddComponent<ComponentGraphics>();
+	//newEntity0.AddComponent<ComponentTransform>();
+
+	//auto itr = G_ECMANAGER->begin<ComponentGraphics>();
+	//auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
+	//for (; itr != itrEnd; ++itr)
+	//{
+	//	{
+	//		// get components from iterator
+	//		ComponentGraphics* compGfx = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
+	//		ComponentTransform* compTx = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+	//	}
+
+	//	{
+	//		// get entity from iterator, then get components from entity
+	//		Entity entity = G_ECMANAGER->getEntity(itr);
+	//		ComponentGraphics* compGfx = entity.getComponent<ComponentGraphics>();
+	//		ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
+	//	}
+
+	//	{
+	//		// get entity from component, then get components from entity
+	//		ComponentGraphics* compGfx = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
+	//		Entity entity = G_ECMANAGER->getEntity(compGfx);
+	//		ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
+	//	}
+
+	//}
+	////
+
+
+
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// Systems OnFirst start
 	for (auto my_sys : Systems)

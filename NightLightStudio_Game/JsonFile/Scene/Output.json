@@ -69,6 +69,11 @@
                 "MetallicMat": 0.0,
                 "RoughnessMat": 0.0
             },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "ScriptEnemy"
+            },
             "NavigatorComponent": {
                 "way_point_list": [
                     "Waypoint",
@@ -76,7 +81,16 @@
                     "WayPoint_3",
                     "WayPoint_4"
                 ],
+                "stopAtEachWayPoint": true,
+                "endTime": 2.0,
                 "speed": 0.4009999930858612
+            },
+            "ComponentVariables": {
+                "IntList": [],
+                "StringList": [],
+                "FloatList": [
+                    2.0
+                ]
             }
         },
         "Plane": {

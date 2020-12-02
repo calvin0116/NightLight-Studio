@@ -15,6 +15,8 @@ namespace Unicorn
     // Used player components
     RigidBody playerRB;
     Variables playerVar;
+    Graphics playerCharModel;
+    Transform playerPos;
     // Other entity's components
 
     // Player Stats, default values
@@ -30,8 +32,10 @@ namespace Unicorn
     public static float EnergyTreshold = 0.0f;
     public static float EnergyDrain = 1.0f;
     public static float EnergyGain = 1.0f;
+    bool canMove;
+
     // spawn point
-    public static Vector3 spawnPoint;
+    public Vector3 spawnPoint;
     // Move dir for camera to player
     public Vector3 fwd;
     public Vector3 rht;
@@ -42,23 +46,36 @@ namespace Unicorn
     bool movedD = false;
     // Player State
     public State CurrentState = State.Human;
-    private State NextState = State.Human;
+    public State NextState = State.Human;
     //Vector3 inVec;
     // accumulated dt
     private float accumulatedDt = 0.0f;
 
+    //Variables
+    string humanModePath;
+    string mothModePath;
+
     public override void Init()
     {
       playerRB = GetRigidBody(id);
+      playerCharModel = GetGraphics(id);
       playerVar = GetVariables(id);
-      // Get default values from variables
+      playerPos = GetTransform(id);
+
+
+      // Get default values from variables (5Floats) (2 Strings)
       humnForce = playerVar.GetFloat(0);
       mothSpeed = playerVar.GetFloat(1);
       maxEnergy = playerVar.GetFloat(2);
       transformTime = playerVar.GetFloat(3);
       maxHumnSpd = playerVar.GetFloat(4);
+
+      humanModePath = playerVar.GetString(0);
+      mothModePath = playerVar.GetString(1);
+
       curEnergy = maxEnergy;
       moveForce = humnForce;
+      canMove = true;
     }
 
     public override void LateInit()
@@ -67,10 +84,15 @@ namespace Unicorn
 
     public override void Update()
     {
-      Move();
+      if (canMove == true)
+      {
+        Move();
+      }
+
       ManualStateControl();
       AutoStateControl();
       CheckChangeState();
+
       if (Input.GetKeyPress(VK.IMOUSE_LBUTTON))
       {
         Console.WriteLine(curEnergy);
@@ -88,9 +110,12 @@ namespace Unicorn
       // tag 1 = Possessable
       // 
       Transform otherTransform = GetTransform(other);
+
       if (otherTransform.Tag == 1)
       {
-        
+        // CurrentState = State.Possessed;
+
+        //canMove = false;
       }
     }
 
@@ -108,9 +133,13 @@ namespace Unicorn
       // Cant move while possessed, just return
       if (CurrentState == State.Possessed)
         return;
+
+
       // Get dir vectors, assume state is moth
       fwd = ForwardVector();
       rht = Camera.GetRightVector();
+
+
       // If state is human
       if (CurrentState == State.Human)
       {
@@ -185,6 +214,7 @@ namespace Unicorn
           else
           {
             Force.Apply(id, moveDir.normalized, moveForce);
+            ///Force.Apply(id, new Vector3(0.0f,0.0f,0.0f), moveForce);
           }
         }
         else
@@ -196,6 +226,7 @@ namespace Unicorn
           playerRB.SetVel(new Vector3(0.0f, playerRB.GetVel().y, 0.0f));
         }
       }
+
       else if (CurrentState == State.Moth)
       {
         playerRB.SetForce(new Vector3(0.0f, 0.0f, 0.0f));
@@ -215,14 +246,23 @@ namespace Unicorn
             // Only can change to moth if enough energy
             if (curEnergy >= EnergyTreshold)
               NextState = State.Moth;
+
+
+
+            Transform p_Target = GetTransform(id);
+            spawnPoint = p_Target.getPosition();
+
             break;
           case State.Moth:
-            
-
             NextState = State.Human;
             break;
+
           case State.Possessed:
             NextState = State.Human;
+
+            Transform p_Target2 = GetTransform(id);
+            //p_Target2.setPosition(spawnPoint);
+
             break;
         }
       }
@@ -253,13 +293,17 @@ namespace Unicorn
 
     public void CheckChangeState()
     {
-      if(NextState == State.Possessed && NextState != CurrentState)
+      if (NextState == State.Possessed && NextState != CurrentState)
       {
         CurrentState = NextState;
         // Logic for possessed state
+
+        playerCharModel.AddModel(humanModePath);
+        canMove = false;
       }
       else if (NextState != CurrentState)
       {
+
         if (accumulatedDt >= transformTime)
         {
           accumulatedDt = 0.0f;
@@ -269,16 +313,40 @@ namespace Unicorn
           {
             case State.Human:
               moveForce = humnForce;
+              playerCharModel.AddModel(humanModePath);
               playerRB.isGravity = true;
+              canMove = true;
               break;
             case State.Moth:
               //moveForce = mothForce;
+              playerCharModel.AddModel(mothModePath);
+
               playerRB.isGravity = false;
+
+              //Set to Moth spawn Eyelevel//// not working
+              playerPos = GetTransform(id);
+              Vector3 playerPosVect = playerPos.getPosition();
+
+              //Vector3 eyelevel =  new Vector3(0.0f, 10.0f, 0.0f);
+              // playerPos.setPosition(eyelevel);
+              playerPos.setPosition(new Vector3(playerPosVect.x+1000.0f, playerPosVect.y + 1000.0f, playerPosVect.z));
+              canMove = true;
+
               break;
+
+            case State.Possessed:
+              break;
+
           }
+
+
         }
         else
+        {
+          canMove = false;
           accumulatedDt += RealDT();
+        }
+
       }
     }
 
