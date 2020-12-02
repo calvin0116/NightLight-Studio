@@ -149,6 +149,11 @@ namespace Unicorn
       get
       {
         float mag = magnitude;
+        if(mag == 0)
+        {
+          return new Vector3(0.0f, 0.0f, 0.0f);
+        }
+
         Vector3 result = new Vector3();
         result = this;
         return result / mag;

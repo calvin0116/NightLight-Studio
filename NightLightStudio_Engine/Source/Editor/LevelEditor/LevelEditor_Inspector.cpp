@@ -1031,25 +1031,20 @@ void InspectorWindow::AnimationComp(Entity& ent)
 		{
 			ImGui::Checkbox("IsActive##Animation", &anim->_isActive);
 
-			static int selected = -1;
-			static std::string currString = "";
-
-			int n = 0;
 			auto it = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
 			while ( it != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
 			{
-				if (ImGui::Selectable(it->c_str(), selected == n))
+				bool currAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim == *it;
+				if (ImGui::Selectable(it->c_str(), &currAnim))
 				{
-					selected = n;
-					currString = it->c_str();
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim = it->c_str();
 				}
-				++n;
 				++it;
 			}
 
 			if (ImGui::Button("Preview Animation"))
 			{
-				anim->PlayAnimation(currString);
+				anim->PlayAnimation(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim);
 			}
 
 			if (ImGui::Button("Pause Animation"))
