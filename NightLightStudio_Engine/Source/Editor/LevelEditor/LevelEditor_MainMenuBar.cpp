@@ -368,15 +368,18 @@ void LevelEditor::LE_MainMenuBar()
                 NS_GRAPHICS::SYS_GRAPHICS->AttachModel(ent, data);
 
                 ComponentGraphics* graphics_comp = ent.getComponent<GraphicsComponent>();
-                if (NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_isAnimated)
+                if (graphics_comp->_modelID >= 0)
                 {
-                    ent.AttachComponent<ComponentAnimation>();
-                    ComponentAnimation* anim = ent.getComponent<ComponentAnimation>();
-                    anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
-                    AnimationController* animCtrl = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID];
-                    for (auto& anims : NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_animations)
+                    if (NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_isAnimated)
                     {
-                        animCtrl->_allAnims.insert(anims.first);
+                        ent.AttachComponent<ComponentAnimation>();
+                        ComponentAnimation* anim = ent.getComponent<ComponentAnimation>();
+                        anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
+                        AnimationController* animCtrl = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID];
+                        for (auto& anims : NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_animations)
+                        {
+                            animCtrl->_allAnims.insert(anims.first);
+                        }
                     }
                 }
             }
