@@ -1038,6 +1038,7 @@ void InspectorWindow::AnimationComp(Entity& ent)
 				if (ImGui::Selectable(it->c_str(), &currAnim))
 				{
 					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim = it->c_str();
+					anim->StopAnimation();
 				}
 				++it;
 			}
