@@ -18,12 +18,12 @@ namespace NS_GRAPHICS
 		_textureList.insert({ texturekey, texture });
 	}
 
-	int TextureManager::GetTexture(const std::string& texturekey)
+	int TextureManager::GetTexture(const std::string& texturekey, bool sRGB)
 	{
 		if (_textureList.find(texturekey) == _textureList.end())
 		{
 			//This means if loading fails
-			if (TextureLoader::GetInstance().LoadTexture(texturekey) == 0)
+			if (TextureLoader::GetInstance().LoadTexture(texturekey, sRGB) == 0)
 			{
 				return 0;
 			}
@@ -45,15 +45,39 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	void TextureManager::BindDiffuseTexture(const unsigned& id)
+	void TextureManager::BindAlbedoTexture(const unsigned& id)
 	{
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, id);
 	}
 
-	void TextureManager::BindSpecularTexture(const unsigned& id)
+	void TextureManager::BindMetallicTexture(const unsigned& id)
 	{
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, id);
 	}
+
+	void TextureManager::BindRoughnessTexture(const unsigned& id)
+	{
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, id);
+	}
+
+	void TextureManager::BindAmbientOcclusionTexture(const unsigned& id)
+	{
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, id);
+	}
+
+	/*void TextureManager::BindDiffuseTexture(const unsigned& id)
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, id);
+	}*/
+
+	/*void TextureManager::BindSpecularTexture(const unsigned& id)
+	{
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, id);
+	}*/
 }

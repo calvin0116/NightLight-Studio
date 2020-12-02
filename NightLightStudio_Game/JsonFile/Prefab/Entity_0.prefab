@@ -2,6 +2,7 @@
     "Name": "Entity_0",
     "TransformComponent": {
         "EntityName": "",
+        "Tag": 0,
         "Position": [
             0.0,
             170.08993530273438,
@@ -25,6 +26,30 @@
         "Normal": "",
         "Metallic": "",
         "Roughness": "",
-        "AmbientOcclusion": ""
+        "AmbientOcclusion": "",
+        "Specular": "",
+        "DiffuseMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "AmbientMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "SpecularMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "ShininessMat": 32.0,
+        "AlbedoMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "MetallicMat": 1.0,
+        "RoughnessMat": 0.5
     }
 }

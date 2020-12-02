@@ -15,14 +15,18 @@
 #include "ComponentScript.h"
 #include "ComponentLight.h"
 #include "ComponentCanvas.h"
+#include "ComponentNavigator.h"
+#include "ComponentAnimation.h"
 
 //Stats components
 #include "ComponentPlayerStats.h"
 #include "ComponentCauldronStats.h"
 #include "ComponentVariables.h"
+#include "ComponentNavigator.h"
 
 // Temporary C++ script
 #include "ComponentCScript.h"
+
 
 //For json serialising
 #include "..\..\ISerializable.h"

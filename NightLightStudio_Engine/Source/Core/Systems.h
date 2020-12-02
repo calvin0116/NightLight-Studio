@@ -10,6 +10,7 @@
 #include "..\\Editor\SystemEditor.h"
 #include "..\Core\SceneManager.h"
 #include "..\Collision\SystemCollision.h"
+#include "../Ai/AiManager.h"
 
 /*
 extern SystemGraphics G_GRAPHICS;

@@ -14,93 +14,76 @@ namespace NS_GRAPHICS
     };
 
     // Note, padding is required to fit GLSL alignment
-    // 64
+    // 48
     struct DirLight {
-        glm::vec4 _direction;
-        
-        glm::vec4 _ambient;
+        glm::vec4 _direction; // 0 - 15
+        glm::vec4 _diffuse;   // 16 - 31
 
-        glm::vec4 _diffuse;
+        float _intensity;     // 32 - 35
 
-        glm::vec4 _specular;
+        float _dummyPadding0 = 0.f; // Alignment is rounded up to the base alignment of vec4 36 - 39
+        float _dummyPadding1 = 0.f; // Alignment is rounded up to the base alignment of vec4 40 - 43
+        float _dummyPadding2 = 0.f; // Alignment is rounded up to the base alignment of vec4 44 - 47
 
-        DirLight(const glm::vec4& Direction = glm::vec4(1.f,0.f,0.f, 0.f), const glm::vec4& Ambient = glm::vec4(0.2f, 0.2f, 0.2f, 1.f),
-                 const glm::vec4& Diffuse = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f), const glm::vec4& Specular = glm::vec4(1.f, 1.f, 1.f, 1.f))
+        DirLight(const glm::vec4& Direction = glm::vec4(1.f,0.f,0.f, 0.f), const glm::vec4& Diffuse = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
+                 const float& Intensity = 100.f)
             : _direction{ Direction },
-            _ambient{ Ambient },
             _diffuse{ Diffuse },
-            _specular{ Specular }
+            _intensity{ Intensity }
         {}
 
         ~DirLight() {}
     };
 
     // Note, padding is required to fit GLSL alignment
-    // 80
-    // next PointLight object will start from base alignment of 80
+    // 48
+    // next PointLight object will start from base alignment of 48
     struct PointLight {
         glm::vec4 position; // 0 - 15
 
-        glm::vec4 _ambient; // 16 - 31
+        glm::vec4 _diffuse; // 16 - 31
 
-        glm::vec4 _diffuse; // 32 - 47
+        float _radius;      // 32 - 35
+        float _intensity;   // 36 - 39
 
-        glm::vec4 _specular; // 48 - 63
+        float _dummyPadding0 = 0.f; // Alignment is rounded up to the base alignment of vec4 40 - 43
+        float _dummyPadding1 = 0.f; // Alignment is rounded up to the base alignment of vec4 44 - 47
 
-        // Loss of light intensity over distance, the greater the distance, the lower the intensity
-        // An attenuation value of 0.2 means that 80% of the light intensity has been lost, and only 20% of the intensity remains
-        float _attenuation; // 64 - 67
-        float _dummyPadding0 = 0.f; // Alignment is rounded up to the base alignment of vec4
-        float _dummyPadding1 = 0.f; // Alignment is rounded up to the base alignment of vec4
-        float _dummyPadding2 = 0.f; // Alignment is rounded up to the base alignment of vec4
-
-        PointLight(const float& Attenuation = 2.f, const glm::vec4& Ambient = glm::vec4(1.f, 1.f, 1.f, 1.f),
-                  const glm::vec4& Diffuse = glm::vec4(1.f, 1.f, 1.f, 1.f), const glm::vec4& Specular = glm::vec4(1.f, 1.f, 1.f, 1.f))
+        PointLight(const glm::vec4& Diffuse = glm::vec4(1.f, 1.f, 1.f, 1.f), const float& Intensity = 100.f, const float& Radius = 10.f)
             : position{ 0.f,0.f,0.f, 1.f },
-            _attenuation{ Attenuation },
-            _ambient{ Ambient },
             _diffuse{ Diffuse },
-            _specular{ Specular }
+            _radius{ Radius },
+            _intensity{ Intensity }
         {}
 
         ~PointLight() {}
     };
 
     // Note, padding is required to fit GLSL alignment
-    // 96
+    // 64
+    // next PointLight object will start from base alignment of 64
     struct SpotLight {
         glm::vec4 position; // 0 - 15
-
         glm::vec4 _direction; // 16 - 31
 
-        glm::vec4 _ambient; // 32 - 47
+        glm::vec4 _diffuse; // 32 - 47
 
-        glm::vec4 _diffuse; // 48 - 63
+        float _cutOff; // 48 - 51
 
-        glm::vec4 _specular; // 64 - 79
+        float _outerCutOff; // 52 - 55
 
-        float _cutOff; // 80 - 83
+        float _intensity; // 56 - 59
 
-        float _outerCutOff; // 84 - 87
+        float _dummyPadding0 = 0.f; // Alignment is rounded up to the base alignment of vec4 60 - 64
 
-        // Loss of light intensity over distance
-        // An attenuation value of 0.2 means that 80% of the light intensity has been lost, and only 20% of the intensity remains
-        float _attenuation; // 88 - 91
-        float _dummyPadding0 = 0.f; // Alignment is rounded up to the base alignment of vec4
-
-
-        SpotLight(const glm::vec4& Direction = glm::vec4(1.f, 0.f, 0.f, 0.f), const float& Attenuation = 2.f,
-                  const float& CutOff = 10.f, const float& OuterCutOff = 15.f,
-                  const glm::vec4& Ambient = glm::vec4(1.f, 1.f, 1.f, 1.f), const glm::vec4& Diffuse = glm::vec4(1.f, 1.f, 1.f, 1.f),
-                  const glm::vec4& Specular = glm::vec4(1.f, 1.f, 1.f, 1.f))
+        SpotLight(const glm::vec4& Direction = glm::vec4(1.f, 0.f, 0.f, 0.f), const glm::vec4& Diffuse = glm::vec4(1.f, 1.f, 1.f, 1.f),
+                  const float& Intensity = 2.f, const float& CutOff = 10.f, const float& OuterCutOff = 15.f)
             : position{ 0.f,0.f,0.f, 1.f },
             _direction{ Direction },
-            _attenuation{ Attenuation },
-            _cutOff{ CutOff },
-            _outerCutOff{ OuterCutOff },
-            _ambient{ Ambient },
             _diffuse{ Diffuse },
-            _specular{ Specular }
+            _intensity{ Intensity },
+            _cutOff{ CutOff },
+            _outerCutOff{ OuterCutOff }
         {}
 
         ~SpotLight() {}

@@ -28,7 +28,7 @@ namespace NS_GRAPHICS
 		// Adds loaded texture into master list, requires name as key and context
 		// E.g.
 		void AddTexture(unsigned texture, const std::string& texturekey);
-		int GetTexture(const std::string& texturekey);
+		int GetTexture(const std::string& texturekey, bool sRGB = false);
 
 		void Free();
 
@@ -37,8 +37,19 @@ namespace NS_GRAPHICS
 		void DumpTextureData();
 
 		// Bind textures to uniform in shader
-		void BindDiffuseTexture(const unsigned& id);
+		//void BindDiffuseTexture(const unsigned& id);
 
-		void BindSpecularTexture(const unsigned& id);
+		//void BindSpecularTexture(const unsigned& id);
+
+
+		// PBR Materials functions
+
+		void BindAlbedoTexture(const unsigned& id);
+
+		void BindMetallicTexture(const unsigned& id);
+
+		void BindRoughnessTexture(const unsigned& id);
+
+		void BindAmbientOcclusionTexture(const unsigned& id);
 	};
 }

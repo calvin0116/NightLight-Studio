@@ -164,7 +164,7 @@ void NS_GRAPHICS::UISystem::RenderUI()
 
 			// Bind textures
 			// bind diffuse map
-			_textureManager->BindDiffuseTexture(canvas->_uiElements.at(i)._imageID);
+			_textureManager->BindAlbedoTexture(canvas->_uiElements.at(i)._imageID);
 
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -174,7 +174,8 @@ void NS_GRAPHICS::UISystem::RenderUI()
 		itr++;
 	}
 
-	//_shaderSystem->StartProgram(ShaderSystem::ShaderType::UI); // textured program
+	//_shaderSystem->
+	(ShaderSystem::ShaderType::UI); // textured program
 
 	//glBindVertexArray(_vao);
 

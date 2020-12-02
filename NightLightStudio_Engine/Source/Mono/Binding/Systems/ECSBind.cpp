@@ -4,6 +4,8 @@
 #include "../../../Component/Components.h" 
 // Delta time
 #include "../../../Core/DeltaTime.h"
+// Scene change
+#include "../../../Core/SceneManager.h"
 
 namespace ECSBind
 {
@@ -12,12 +14,15 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(GameObjectFind, "GameObjectFind", "UniBehaviour");
     MonoWrapper::BindClassFunction(dt, "DT", "UniBehaviour");
     MonoWrapper::BindClassFunction(realDt, "RealDT", "UniBehaviour");
+    MonoWrapper::BindClassFunction(SetNextScene, "SetNextScene", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetScript, "GetScript", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetCollider, "GetCollider", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetRigidBody, "GetRigidBody", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetGraphics, "GetGraphics", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetLight, "GetLight", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetNavigator, "GetNavigator", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetAnimation, "GetAnimation", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetVariables, "GetVariables", "UniBehaviour");
   }
 
@@ -36,6 +41,11 @@ namespace ECSBind
   float realDt()
   {
     return DELTA_T->dt / CLOCKS_PER_SEC;
+  }
+
+  void SetNextScene(MonoString* scene_name)
+  {
+    NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(MonoWrapper::ToString(scene_name));
   }
 
   MonoObject* GetScript(int id)
@@ -88,25 +98,6 @@ namespace ECSBind
     ColliderComponent* col = en.getComponent<ColliderComponent>();
     MonoWrapper::SetNativeHandle(monoObj, col);
 
-    ////if (trans == nullptr)
-    ////  static_assert("get_Transform_handle nullptr");
-
-    //MonoObject* monoVec3;
-    //// Construct and set position(Vec3) native handle and values
-    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
-    //MonoWrapper::SetNativeHandle(monoVec3, &(col->center));
-    //MonoWrapper::SetObjectFieldValue(monoObj, "Center", monoVec3);
-    //
-    //// Construct and set rotation(Vec3) native handle and values
-    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
-    //MonoWrapper::SetNativeHandle(monoVec3, &(col->extend));
-    //MonoWrapper::SetObjectFieldValue(monoObj, "Extend", monoVec3);
-
-    //// Construct and set rotation(Vec3) native handle and values
-    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
-    //MonoWrapper::SetNativeHandle(monoVec3, &(col->rotation));
-    //MonoWrapper::SetObjectFieldValue(monoObj, "Rotation", monoVec3);
-
     return monoObj;
   }
 
@@ -138,6 +129,26 @@ namespace ECSBind
     Entity en = G_ECMANAGER->getEntity(id);
     LightComponent* lc = en.getComponent<LightComponent>();
     MonoWrapper::SetNativeHandle(monoObj, lc);
+
+    return monoObj;
+  }
+
+  MonoObject* GetNavigator(int id)
+  {
+    MonoObject* monoObj = MonoWrapper::ConstructObject("Navigator");
+    Entity en = G_ECMANAGER->getEntity(id);
+    NavigatorComponent* nav = en.getComponent<NavigatorComponent>();
+    MonoWrapper::SetNativeHandle(monoObj, nav);
+
+    return monoObj;
+  }
+
+  MonoObject* GetAnimation(int id)
+  {
+    MonoObject* monoObj = MonoWrapper::ConstructObject("Animation");
+    Entity en = G_ECMANAGER->getEntity(id);
+    AnimationComponent* anim = en.getComponent<AnimationComponent>();
+    MonoWrapper::SetNativeHandle(monoObj, anim);
 
     return monoObj;
   }

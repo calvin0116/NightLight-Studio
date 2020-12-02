@@ -8,15 +8,15 @@ typedef struct ComponentRigidBody : public ISerializable //: public IComponent
 	bool isActive;      // Expose
 
 	//sum of all forces acting on the object
-	NlMath::Vector3D force;
+	NlMath::Vector3D force;         // Expose
 	//sum of all angular forces acting on the object
 	NlMath::Vector3D angularForce;
 	//acceleration of the object
-	NlMath::Vector3D acceleration;
+	NlMath::Vector3D acceleration;  // Expose
 	//angular acceleration of the object
 	NlMath::Vector3D angularAcceleration;
 	//velocity of the object
-	NlMath::Vector3D velocity;
+	NlMath::Vector3D velocity;      // Expose
 	//angular velocity of the object
 	NlMath::Vector3D angularVelocity;
 	//inertia 

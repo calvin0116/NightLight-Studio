@@ -11,24 +11,24 @@ namespace NS_GRAPHICS
 {
 	static const size_t s_MaxLights = 30;
 
+	// 3440
 	struct LightBlock
 	{
-		// 7200 total
-		DirLight _dLights[s_MaxLights];		// 1920
-		PointLight _pLights[s_MaxLights];   // 2400
-		SpotLight _sLights[s_MaxLights];	// 2880
-		// 0 - 7199
+		// 3408 total
+		DirLight _dLight[1];				// 0 - 47
+		PointLight _pLights[s_MaxLights];   // 48 - 1487
+		SpotLight _sLights[s_MaxLights];	// 1488 - 3407
+		// 0 - 3407
 
 		// Number of lights currently in scene
-		int _dLights_Num; // 7200 - 7203
-		int _pLights_Num; // 7204 - 7207
-		int _sLights_Num; // 7208 - 7211
-		// 7216
-		float _dummyPadding1 = 0.f;
+		int _dLights_Num; // 3408 - 3411
+		int _pLights_Num; // 3412 - 3415
+		int _sLights_Num; // 3416 - 3419
+		// 3420
+
+		float _dummyPadding1 = 0.f; // 3420 - 3423
 		// Compiler will align view pos to 7216
-		glm::vec4 _viewPos; // 7216 - 7231
-		// Extra 4 bytes of padding?
-		float _dummyPadding0 = 0.f;
+		glm::vec4 _viewPos; // 3424 - 3439
 
 		LightBlock()
 			: _dLights_Num{ NULL },
@@ -46,12 +46,7 @@ namespace NS_GRAPHICS
 
 		LightBlock* lightblock;
 
-		// Light block trackers
-		// Used to check for available/allocated lights for light components
-		// All set to false upon initialization
-		std::array<bool, s_MaxLights> dLights_tracker{};
-		std::array<bool, s_MaxLights> pLights_tracker{};
-		std::array<bool, s_MaxLights> sLights_tracker{};
+		float _gamma = 2.2f;
 
 	public:
 		// Unique Singleton instance
@@ -65,63 +60,41 @@ namespace NS_GRAPHICS
 
 		void Update();
 
-		/* TO DO*/
-		// Position should be set in transform component
-		// Update uniforms for lights based on existing data
 		// Get lightblock from lightsystem
 		LightBlock*& GetLightBlock();
 
-		// Adds Directional Light to scene, returns the id token for currently added light
-		int AddDirLight(const glm::vec3& direction = glm::vec3(1.f, 0.f, 0.f), const glm::vec3& ambient = glm::vec3(0.2f, 0.2f, 0.2f),
-			const glm::vec3& diffuse = glm::vec3(0.5f, 0.5f, 0.5f), const glm::vec3& specular = glm::vec3(1.f, 1.f, 1.f));
-
-		// Adds Point Light to scene, returns the id token for currently added light
-		int AddPointLight(const float& intensity = 0.2f, const glm::vec3& ambient = glm::vec3(1.f, 1.f, 1.f),
-			const glm::vec3& diffuse = glm::vec3(1.f, 1.f, 1.f), const glm::vec3& specular = glm::vec3(1.f, 1.f, 1.f));
-
-		// Adds Spot Light to scene, returns the id token for currently added light
-		int AddSpotLight(const glm::vec3& direction = glm::vec3(1.f, 0.f, 0.f), const float& cutoff = 1.f, const float& outercutoff = 100.f,
-			const float& intensity = 100.f, const glm::vec3& ambient = glm::vec3(1.f, 1.f, 1.f),
-			const glm::vec3& diffuse = glm::vec3(1.f, 1.f, 1.f), const glm::vec3& specular = glm::vec3(1.f, 1.f, 1.f));
-
-		// Creates and attaches light component to entity
-		// Existing light attached to entity will be deleted
-		void AttachLightComponent(Entity& entity, Lights lightType = Lights::DIRECTIONAL);
-
-		// Detaches and deletes light component attached to entity if it exists
-		void DetachLightComponent(Entity& entity);
-
-		// Just in case component is destroyed before detach light component is called
-		void RemoveLight(const int& id, Lights lightType);
-
 		void SortLights(const Lights& lightType, const int& deletedIndex);
-		
-		// TO DO: All getters and setters should be done in system
-		void ChangeLightType(ComponentLight* light, Lights lightType);
 
 		void SetAllDirectionalLights(const bool& setter);
 
 		void SetAllPointLights(const bool& setter);
 
 		void SetAllLights(const bool& setter);
-		
-		DirLight& GetDirLight(const int& id);
-		SpotLight& GetSpotLight(const int& id);
-		PointLight& GetPointLight(const int& id);
 
-		// NEW INTERFACE FOR LIGHTS
+		// Return true if light is proper set, else return false
+		bool SetLight(const Lights& type, ComponentLight* const& comp);
+
 		// Sets directional light to provided component
-		void SetDirectionalLight(ComponentLight*& comp);
+		void SetDirectionalLight(ComponentLight* const& comp);
 
 		// Sets point light to provided component
-		void SetPointLight(ComponentLight*& comp);
+		void SetPointLight(ComponentLight* const& comp);
 
 		// Sets spot light to provided component
-		void SetSpotLight(ComponentLight*& comp);
+		void SetSpotLight(ComponentLight* const& comp);
 
 		// Removes tracker from light component / deletes light
-		void RemoveLight(ComponentLight*& comp);
+		void RemoveLight(ComponentLight* const& comp);
 
-		void SetActive(ComponentLight*& comp);
+		// Sets active for component, requires special functionality due to uniform block
+		// uses inactive type to store active state properties
+		void SetActive(ComponentLight* const& comp, const bool& set);
+
+		// Remove light helper
+		void RemoveLightHelper(const Lights& type, const int& id);
+
+		void SetGamma(const float& gamma = 2.2f);
+
+		float GetGamma() const;
 	};
 }

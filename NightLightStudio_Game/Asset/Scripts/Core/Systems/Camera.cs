@@ -9,6 +9,9 @@ namespace Unicorn
   public static class Camera
   {
     [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 GetPosition();
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Vector3 GetUpVector();
 
     [MethodImpl(MethodImplOptions.InternalCall)]

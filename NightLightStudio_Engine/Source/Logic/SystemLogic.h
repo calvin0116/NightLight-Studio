@@ -28,6 +28,10 @@ namespace NS_LOGIC
     MonoMethod* baseExit;
     MonoMethod* baseCollisionEnter;
     MonoMethod* baseTriggerEnter;
+    MonoMethod* baseCollisionStay;
+    MonoMethod* baseTriggerStay;
+    MonoMethod* baseCollisionExit;
+    MonoMethod* baseTriggerExit;
     
     // For receiving event/message
     SystemMessaging::SystemReceiver r;

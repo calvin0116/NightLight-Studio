@@ -25,7 +25,7 @@ namespace Prefab_Function {
 		{
 			Entity prefab_ent = g_ecman->BuildEntity(prefab_val["Name"].GetString());
 
-			NS_SERIALISER::ComponentsCreation(prefab_val, prefab_ent, G_ECMANAGER_PREFABS);
+			NS_SERIALISER::ComponentsCreation(prefab_val, prefab_ent, g_ecman);
 			return prefab_ent.getId();
 		}
 		else

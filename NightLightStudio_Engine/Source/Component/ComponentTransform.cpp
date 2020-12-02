@@ -6,7 +6,7 @@
 //#include "../IO/Json/Parser.h"
 
 
-ComponentTransform::ComponentTransform() :
+ComponentTransform::ComponentTransform() : _tag(0),
 	_nextPos(0), _position{ 0.0f, 0.0f, 0.0f },
 	_rotation{ 0.0f, 0.0f, 0.0f }, _scale{ 1.0f, 1.0f, 1.0f }
 {
@@ -37,6 +37,11 @@ void ComponentTransform::Read(Value& val)
 		std::cout << "No EntityName data has been found" << std::endl;
 	else
 		_entityName = val["EntityName"].GetString();
+
+	if (val.FindMember("Tag") == val.MemberEnd())
+		std::cout << "No Tag data has been found" << std::endl;
+	else
+		_tag = val["Tag"].GetInt();
 
 	//Error checking for json data
 	if (val.FindMember("Position") == val.MemberEnd())
@@ -79,6 +84,7 @@ Value ComponentTransform::Write()
 	Value val(rapidjson::kObjectType);
 
 	NS_SERIALISER::ChangeData(&val, "EntityName", rapidjson::StringRef(_entityName.c_str())); // Entity Name
+  NS_SERIALISER::ChangeData(&val, "Tag", _tag);
 
 	Value position(rapidjson::kArrayType);
 	position.PushBack(_position.x, global_alloc);
@@ -108,6 +114,7 @@ Value& ComponentTransform::Write(Value& val)
 {
 
 	NS_SERIALISER::ChangeData(&val, "EntityName", rapidjson::StringRef(_entityName.c_str())); // Entity Name
+  NS_SERIALISER::ChangeData(&val, "Tag", _tag);
 
 	// TODO: insert return statement here
 	Value position(rapidjson::kArrayType);

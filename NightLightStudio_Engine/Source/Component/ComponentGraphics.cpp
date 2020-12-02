@@ -58,7 +58,7 @@ void ComponentGraphics::AddAlbedoTexture(std::string filename)
 	if (!filename.empty() && _albedoFileName.toString() != filename)
 	{
 		_albedoFileName = filename;
-		_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_albedoFileName.toString());
+		_albedoID = NS_GRAPHICS::TextureManager::GetInstance().GetTexture(_albedoFileName.toString(), true);
 	}
 
 	if (_albedoID > 0 || _normalID > 0 || _metallicID > 0 || _roughnessID > 0 || _aoID > 0 || _specularID > 0)
@@ -203,6 +203,11 @@ inline void ComponentGraphics::Read(Value& val)
 			//model->_fileName = s_LocalPathName + name + s_ModelFileType;
 			*/
 			_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
+
+			//if (NS_GRAPHICS::ModelManager::GetInstance()._models[_modelID]->_isAnimated)
+			//{
+			//	//Attach animation component
+			//}
 		}
 	}
 
@@ -285,9 +290,9 @@ inline void ComponentGraphics::Read(Value& val)
 	{
 		auto pos = val["DiffuseMat"].GetArray();
 
-		_materialData._diffuse.x = pos[0].GetFloat();
-		_materialData._diffuse.y = pos[1].GetFloat();
-		_materialData._diffuse.z = pos[2].GetFloat();
+		_pbrData._albedo.x = pos[0].GetFloat();
+		_pbrData._albedo.y = pos[1].GetFloat();
+		_pbrData._albedo.z = pos[2].GetFloat();
 	}
 
 	if (val.FindMember("AmbientMat") == val.MemberEnd())
@@ -317,6 +322,32 @@ inline void ComponentGraphics::Read(Value& val)
 	else
 	{
 		_materialData._shininess = val["ShininessMat"].GetFloat();
+	}
+	
+	// PBR data
+	if (val.FindMember("AlbedoMat") == val.MemberEnd())
+		std::cout << "No AlbedoMat data has been found" << std::endl;
+	else
+	{
+		auto albedo = val["AlbedoMat"].GetArray();
+
+		_pbrData._albedo.x = albedo[0].GetFloat();
+		_pbrData._albedo.y = albedo[1].GetFloat();
+		_pbrData._albedo.z = albedo[2].GetFloat();
+	}
+
+	if (val.FindMember("MetallicMat") == val.MemberEnd())
+		std::cout << "No MetallicMat data has been found" << std::endl;
+	else
+	{
+		_pbrData._metallic = val["MetallicMat"].GetFloat();
+	}
+
+	if (val.FindMember("RoughnessMat") == val.MemberEnd())
+		std::cout << "No RoughnessMat data has been found" << std::endl;
+	else
+	{
+		_pbrData._roughness = val["RoughnessMat"].GetFloat();
 	}
 }
 
@@ -355,6 +386,18 @@ inline Value ComponentGraphics::Write()
 	NS_SERIALISER::ChangeData(&val, "SpecularMat", specular);
 
 	NS_SERIALISER::ChangeData(&val, "ShininessMat", _materialData._shininess);
+
+	// PBR data
+	Value albedo(rapidjson::kArrayType);
+	albedo.PushBack(_pbrData._albedo.x, global_alloc);
+	albedo.PushBack(_pbrData._albedo.y, global_alloc);
+	albedo.PushBack(_pbrData._albedo.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "AlbedoMat", albedo);
+
+	NS_SERIALISER::ChangeData(&val, "MetallicMat", _pbrData._metallic);
+
+	NS_SERIALISER::ChangeData(&val, "RoughnessMat", _pbrData._roughness);
 
 	return val;
 }

@@ -4,91 +4,111 @@
 
 typedef class ComponentLight : public ISerializable //: public IComponent
 {
-	// Inactive/Active data
-	// Used to store initial light type for activation and deactivation
-	NS_GRAPHICS::Lights _inactive_type = NS_GRAPHICS::Lights::INVALID_TYPE;
+	//////////////////////////////////
+	///// Updated variables for PBR
+	//////////////////////////////////
 
-public:
-	// Temporarily make them public for easy access
-
-	bool _isActive; // Temporarily set to true at beginning 
+	// Temporarily set to true at beginning
+	// MUST NOT BE ACCESSED DIRECTLY
+	bool _isActive;
 
 	// value is -1 if no light is assigned
+	// used to point to designated light in uniform block
 	int _lightID;
 
 	// Type of light: POINT/DIRECTIONAL/SPOT
 	NS_GRAPHICS::Lights _type;
 
-	//Variables For Lighting
-	//Standard variable
-	glm::vec3 _ambient;  
-	glm::vec3 _diffuse;  
-	glm::vec3 _specular; 
+	// Color of light
+	glm::vec3 _PBRdiffuse;
+
+	// For point and spot
+	float _intensity; // Expose
 
 	// For spot and directional
 	// used as reference only
 	// Note that direction is set based on transform component's rotation
 	glm::vec3 _direction;
 
-	// For point and spot
-	// Also known as intensity
-	float _intensity; // Expose
+	// for point light
+	float _radius;
 
 	// For spot
 	float _cutOff;        // Expose
 	float _outerCutOff;   // Expose
 
+	// Inactive/Active data
+	// Used to store initial light type for activation and deactivation
+	NS_GRAPHICS::Lights _inactiveType = NS_GRAPHICS::Lights::INVALID_TYPE;
+
+	//////////////////////////////////
+
+public:
+	//////////////////////////////////
+
 	// Default constructor
 	ComponentLight();
 
-	// Parametrized constructor 
-	ComponentLight(const int& lightID, const NS_GRAPHICS::Lights& Type);
-
-	// Assume create light function is called separately by light system
-	void AssignLight(const int& lightID, const NS_GRAPHICS::Lights& Type);
-
-	// Destructor, destroy all OpenGL objects via graphics system
+	// Destructor
 	~ComponentLight();
 
-	/////////// GETTERS/SETTERS ////////////
+	///////////////////////////////
+	/////NEW INTERFACE FOR LIGHTS
+	///////////////////////////////
 
-	// Must use this function for setting active/inactive for light
-	void SetActive(const bool& set);            // Expose
+	// Getters
+	bool GetActive() const; // Expose for all lights
 
-	bool GetActive() const;                     // Expose
+	NS_GRAPHICS::Lights GetType() const; // Expose
 
 	NS_GRAPHICS::Lights GetInactiveType() const;
 
-	void ChangeLightType(const NS_GRAPHICS::Lights& Type);  // Expose
+	int GetLightID() const;
 
-	// Applicable for all lights
-	glm::vec3 GetAmbient() const;               // Expose
-	// Applicable for all lights
-	void SetAmbient(const glm::vec3& ambient);  // Expose
+	glm::vec3 GetColor(); // Expose for all lights
 
-	// Applicable for all lights
-	glm::vec3 GetDiffuse() const;               // Expose
-	// Applicable for all lights
-	void SetDiffuse(const glm::vec3& diffuse);  // Expose
+	float GetIntensity(); // Expose for all lights
 
-	// Applicable for all lights
-	glm::vec3 GetSpecular() const;              // Expose
-	// Applicable for all lights
-	void SetSpecular(const glm::vec3& specular); // Expose
+	// Direction vector here is transformed vector after model transform
+	// Does not require setter, a constant vector (1.f,0.f,0.f) is transformed
+	//glm::vec3 GetDirectionVector() const; // Expose, but do not allow alteration
 
-	// Applicable for spot and spot light
-	// Calculates intensity based on current attenuation
-	float GetIntensity();                         // Expose
-	// Calculates attenuation based on provided intensity
-	void SetIntensity(const float& intensity);     // Expose
+	// Radius of point light
+	float GetRadius() const; // Expose
 
-	// Alternate way to set attenuation/intensity
-	float GetAttenuation();                         // Expose
-	void SetAttenuation(const float& attenuation);  // Expose
+	// Angle which represents the radius of the outer spotlight radius of light
+	// Used for gradual falloff
+	float GetOuterCutOff() const; // Expose
 
+	// This is the angle which specifies the spotlight radius of light
+	// https://learnopengl.com/Lighting/Light-casters
+	float GetCutOff() const; // Expose
 
-	//TO DO
-	// Set setters and getters for spotlight
+	// Setters
+	void SetLightID(const int& id); // DO NOT EXPOSE
+
+	bool SetType(const NS_GRAPHICS::Lights& type); // Expose
+
+	// Note: FOR LIGHT SYSTEM USAGE ONLY
+	void LS_SetType(const NS_GRAPHICS::Lights& type); // DO NOT EXPOSE
+
+	void SetColor(const glm::vec3& color); // Expose
+
+	void SetIntensity(const float& intensity); // expose
+
+	void SetActive(const bool& set); // expose
+
+	// Note: FOR LIGHT SYSTEM USAGE ONLY
+	void LS_SetActive(const bool& set); // DO NOT EXPOSE
+
+	void SetRadius(const float& radius); // Expose
+
+	void SetOuterCutOff(const float& outercutoff); // Expose
+
+	void SetCutOff(const float& cutoff); // Expose
+
+	///////////////////////////////
+
 
 	////////////////////////////////////////
 

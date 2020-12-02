@@ -1,0 +1,55 @@
+{
+    "Name": "Default_Name",
+    "TransformComponent": {
+        "EntityName": "",
+        "Tag": 0,
+        "Position": [
+            -3.5,
+            5.0,
+            -8.5
+        ],
+        "Scale": [
+            1.0,
+            10.0,
+            1.0
+        ],
+        "Rotate": [
+            0.0,
+            -0.0,
+            0.0
+        ]
+    },
+    "GraphicsComponent": {
+        "isActive": true,
+        "Model": "",
+        "Albedo": "",
+        "Normal": "",
+        "Metallic": "",
+        "Roughness": "",
+        "AmbientOcclusion": "",
+        "Specular": "",
+        "DiffuseMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "AmbientMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "SpecularMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "ShininessMat": 32.0,
+        "AlbedoMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "MetallicMat": 1.0,
+        "RoughnessMat": 0.5
+    }
+}

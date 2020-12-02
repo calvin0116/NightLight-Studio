@@ -73,10 +73,10 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<ScriptComponent>(Comp_list, entity, component_name, g_ecman);
             }
-            else if (component_name == "ScriptComponent")
+            /*else if (component_name == "ScriptComponent")
             {
                 CreateAndWriteComp<ScriptComponent>(Comp_list, entity, component_name, g_ecman);
-            }
+            }*/
             else if (component_name == "LightComponent")
             {
                 CreateAndWriteComp<ComponentLight>(Comp_list, entity, component_name, g_ecman);
@@ -93,9 +93,17 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<ComponentCanvas>(Comp_list, entity, component_name, g_ecman);
             }
+            else if (component_name == "AnimationComponent")
+            {
+                CreateAndWriteComp<AnimationComponent>(Comp_list, entity, component_name, g_ecman);
+            }
             else if (component_name == "ComponentVariables")
             {
                 CreateAndWriteComp<VariablesComponent>(Comp_list, entity, component_name, g_ecman);
+            }
+            else if (component_name == "NavigatorComponent")
+            {
+                CreateAndWriteComp<NavigatorComponent>(Comp_list, entity, component_name, g_ecman);
             }
         }
     }
@@ -158,7 +166,7 @@ namespace NS_SERIALISER {
             }
             else if (component_name == "GraphicsComponent")
             {
-                ReadComp<GraphicsComponent>(Comp_list, entity, component_name);
+                //ReadComp<GraphicsComponent>(Comp_list, entity, component_name);
             }
             else if (component_name == "CScriptComponent")
             {
@@ -188,9 +196,17 @@ namespace NS_SERIALISER {
             {
                 ReadComp<ComponentCanvas>(Comp_list, entity, component_name);
             }
+            else if (component_name == "AnimationComponent")
+            {
+                ReadComp<ComponentAnimation>(Comp_list, entity, component_name);
+            }
             else if (component_name == "ComponentVariables")
             {
                 ReadComp<VariablesComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "NavigatorComponent")
+            {
+                ReadComp<NavigatorComponent>(Comp_list, entity, component_name);
             }
         }
     }

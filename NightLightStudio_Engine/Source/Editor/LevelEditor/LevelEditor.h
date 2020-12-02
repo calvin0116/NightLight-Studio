@@ -87,8 +87,12 @@ class LevelEditor
 
 	LE_Picking _lePicking;
 
+	std::string _configFilePath = "/Assets/editorConfig.json";
+
 	void LE_RunWindows();
+	void LE_ConfigLoad();
 	void LE_MainMenuBar();
+	void LE_ConfigSave();
 public:
 	LevelEditor();
 	~LevelEditor();
@@ -140,6 +144,8 @@ public:
 	std::vector<float>* LE_GetSystemsUsage();
 
 	void LE_ConsoleOut(const std::string& out);
+
+	bool GetIfRunning();
 
 	/**********************************************************************/
 

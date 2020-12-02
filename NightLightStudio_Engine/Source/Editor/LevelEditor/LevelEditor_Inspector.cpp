@@ -107,6 +107,16 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<VariablesComponent>();
 			entComp._ent.getComponent<VariablesComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(NavComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<NavComponent>();
+			entComp._ent.getComponent<NavComponent>()->Read(*entComp._rjDoc);
+		}
+		else if (t == typeid(AnimationComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<AnimationComponent>();
+			entComp._ent.getComponent<AnimationComponent>()->Read(*entComp._rjDoc);
+		}
 
 		return comp;
 	};
@@ -141,8 +151,10 @@ void InspectorWindow::Start()
 		else if (t == typeid(LightComponent).hash_code())
 		{
 			entComp.Copy(entComp._ent.getComponent<LightComponent>()->Write());
-			NS_GRAPHICS::LightSystem::GetInstance().DetachLightComponent(entComp._ent);
-			//entComp._ent.RemoveComponent<LightComponent>();
+			//NS_GRAPHICS::LightSystem::GetInstance().DetachLightComponent(entComp._ent);
+			// Remove light from scene
+			entComp._ent.getComponent<LightComponent>()->SetType(NS_GRAPHICS::Lights::INVALID_TYPE);
+			entComp._ent.RemoveComponent<LightComponent>();
 		}
 
 		else if (t == typeid(ScriptComponent).hash_code())
@@ -176,6 +188,16 @@ void InspectorWindow::Start()
 		{
 			entComp.Copy(entComp._ent.getComponent<VariablesComponent>()->Write());
 			entComp._ent.RemoveComponent<VariablesComponent>();
+		}
+		else if (t == typeid(NavComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<NavComponent>()->Write());
+			entComp._ent.RemoveComponent<NavComponent>();
+		}
+		else if (t == typeid(AnimationComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<AnimationComponent>()->Write());
+			entComp._ent.RemoveComponent<AnimationComponent>();
 		}
 
 
@@ -278,6 +300,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 
 	CanvasComp(ent);
 
+	AnimationComp(ent);
+
   CScriptComp(ent);
 
   PlayerStatsComp(ent);
@@ -285,6 +309,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
   CauldronStatsComp(ent);
 
   VariableComp(ent);
+
+  NavComp(ent);
 
 	AddSelectedComps(ent);
 }
@@ -294,8 +320,10 @@ void InspectorWindow::TransformComp(Entity& ent)
 	TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
 	if (trans_comp != NULL)
 	{
-		std::string enam = trans_comp->_entityName.toString();
 		ImGui::NewLine();
+    ImGui::InputInt("Tag", &(trans_comp->_tag));
+    ImGui::NewLine();
+    std::string enam = trans_comp->_entityName.toString();
 		_levelEditor->LE_AddInputText("Entity Name", enam, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 		[&enam, &trans_comp]()
 		{
@@ -303,6 +331,8 @@ void InspectorWindow::TransformComp(Entity& ent)
 		});
 
 		TransformGizmo(trans_comp);
+    //ImGui::NewLine();
+    //int tag = trans_comp->_tag;
 		/*
 		if (ImGui::CollapsingHeader("Transform"))
 		{
@@ -481,7 +511,6 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 		{
 			bool renderTextures = !(graphics_comp->_renderType == RENDERTYPE::SOLID);
 
-			//ImGui::Checkbox("Is Active", &light->_isActive);
 			ImGui::Checkbox("Render Textures", &renderTextures);
 
 			if (!renderTextures)
@@ -500,13 +529,25 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 			std::string specular = graphics_comp->_specularFileName.toString();
 
 			_levelEditor->LE_AddInputText("Model file", mod, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-				[&graphics_comp, &mod]()
+				[&graphics_comp, &mod, &ent]()
 				{
 					graphics_comp->AddModel(mod);
+
+					if (NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_isAnimated)
+					{
+						ent.AttachComponent<ComponentAnimation>();
+						ComponentAnimation* anim = ent.getComponent<ComponentAnimation>();
+						anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
+						AnimationController* animCtrl = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID];
+						for (auto& anims : NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_animations)
+						{
+							animCtrl->_allAnims.insert(anims.first);
+						}
+					}
 				});
 			// Drag and Drop from Asset Inspector onto Model File Name
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
-				[this, &mod, &graphics_comp](std::string* str)
+				[this, &mod, &graphics_comp, &ent](std::string* str)
 				{
 					std::string data = *str;
 					std::transform(data.begin(), data.end(), data.begin(),
@@ -523,6 +564,18 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 						}
 						mod = data;
 						graphics_comp->AddModel(mod);
+
+						if (NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_isAnimated)
+						{
+							ent.AttachComponent<ComponentAnimation>();
+							ComponentAnimation* anim = ent.getComponent<ComponentAnimation>();
+							anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
+							AnimationController* animCtrl =  NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID];
+							for (auto& anims : NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_animations)
+							{
+								animCtrl->_allAnims.insert(anims.first);
+							}
+						}
 					}
 				});
 
@@ -568,6 +621,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						normal = data;
 						graphics_comp->AddNormalTexture(normal);
 					}
@@ -589,6 +646,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						metallic = data;
 						graphics_comp->AddMetallicTexture(metallic);
 					}
@@ -610,6 +671,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						roughness = data;
 						graphics_comp->AddRoughnessTexture(roughness);
 					}
@@ -631,6 +696,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						ao = data;
 						graphics_comp->AddAOTexture(ao);
 					}
@@ -652,6 +721,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					std::string fileType = LE_GetFileType(data);
 					if (fileType == "png" || fileType == "tga" || fileType == "dds")
 					{
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
 						specular = data;
 						graphics_comp->AddSpecularTexture(specular);
 					}
@@ -661,13 +734,17 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 
 			ImGui::Text("Materials");
 
-			ImGui::ColorEdit3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
+			/*ImGui::ColorEdit3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
 
 			ImGui::ColorEdit3("Ambient##Graphics", glm::value_ptr(graphics_comp->_materialData._ambient));
 
 			ImGui::ColorEdit3("Specular##Graphics", glm::value_ptr(graphics_comp->_materialData._specular));
 
-			ImGui::InputFloat("Shininess", &graphics_comp->_materialData._shininess);
+			ImGui::InputFloat("Shininess", &graphics_comp->_materialData._shininess);*/
+
+			ImGui::ColorEdit3("Color##Graphics", glm::value_ptr(graphics_comp->_pbrData._albedo));
+			ImGui::DragFloat("Metallic", &graphics_comp->_pbrData._metallic, 0.1f, 0.f, 1.f);
+			ImGui::DragFloat("Roughness", &graphics_comp->_pbrData._roughness, 0.1f, 0.f, 1.f);
 
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 		}
@@ -734,44 +811,73 @@ void InspectorWindow::LightComp(Entity& ent)
 			light->SetActive(active_state);
 
 			const char* lights[] = { "Directional", "Point", "Spot", "None" };
-			LIGHT = (int) light->_type;
+
+			if (light->GetActive() == false)
+				LIGHT = (int)light->GetInactiveType();
+			else
+				LIGHT = (int) light->GetType();
+
 			if (ImGui::Combo("Light Type", &LIGHT, lights, IM_ARRAYSIZE(lights)))
 			{
-				NS_GRAPHICS::LightSystem::GetInstance().ChangeLightType(light, (NS_GRAPHICS::Lights)LIGHT);
+				// Checks if set was successful
+				if (!light->SetType((NS_GRAPHICS::Lights)LIGHT))
+				{
+					// Send error prompt if failed
+					ImGui::OpenPopup("There can only be one sun and so many stars uwu");
+				}
 			}
 
-			if (ImGui::ColorEdit3("Diffuse", glm::value_ptr(light->_diffuse)))
+			if (ImGui::BeginPopupModal("There can only be one sun and so many stars uwu"))
 			{
-				light->SetDiffuse(light->_diffuse);
-			}
-			
-			if (ImGui::ColorEdit3("Ambient", glm::value_ptr(light->_ambient)))
-			{
-				light->SetAmbient(light->_ambient);
-			}
-
-			if (ImGui::ColorEdit3("Specular", glm::value_ptr(light->_specular)))
-			{
-				light->SetSpecular(light->_specular);
+				ImGui::Text("You dun goofed A.K.A there are already enough lights of that type in the scene.");
+				if (ImGui::Button("OK", ImVec2(240, 0))) 
+				{ 
+					ImGui::CloseCurrentPopup(); 
+				}
+				ImGui::SetItemDefaultFocus();
+				ImGui::EndPopup();
 			}
 
-			if (light->_type != NS_GRAPHICS::Lights::DIRECTIONAL)
+			glm::vec3 lightColor = light->GetColor();
+
+			if (ImGui::ColorEdit3("Diffuse", glm::value_ptr(lightColor)))
 			{
-				// This is fucked
-				float intensity = light->_intensity;
+				light->SetColor(lightColor);
+			}
+
+			if ((NS_GRAPHICS::Lights)LIGHT != NS_GRAPHICS::Lights::INVALID_TYPE)
+			{
+				float intensity = light->GetIntensity();
 				if (ImGui::DragFloat("Intensity", &intensity))
 				{
 					if (intensity < 0.f)
 						intensity = 0.f;
-					light->SetAttenuation(1.f / intensity);
-					light->_intensity = intensity;
+					light->SetIntensity(intensity);
+				}
+			}
+			
+			
+			if ((NS_GRAPHICS::Lights)LIGHT == NS_GRAPHICS::Lights::POINT)
+			{
+				float radius = light->GetRadius();
+				if (ImGui::DragFloat("Radius", &radius))
+				{
+					if (radius < 0.0001f)
+						radius = 0.01f;
+					light->SetRadius(radius);
 				}
 			}
 
-			if (light->_type == NS_GRAPHICS::Lights::SPOT)
+			if ((NS_GRAPHICS::Lights)LIGHT == NS_GRAPHICS::Lights::SPOT)
 			{
-				ImGui::InputFloat("Cut off", &light->_cutOff);
-				ImGui::InputFloat("Outer cut off", &light->_outerCutOff);
+				float cutoff = light->GetCutOff();
+				float outercutoff = light->GetOuterCutOff();
+
+				if(ImGui::InputFloat("Cut off", &cutoff))
+					light->SetCutOff(cutoff);
+
+				if(ImGui::InputFloat("Outer cut off", &outercutoff))
+					light->SetOuterCutOff(outercutoff);
 			}
 		}
 
@@ -907,9 +1013,53 @@ void InspectorWindow::CanvasComp(Entity& ent)
 		if (!_notRemove)
 		{
 			//ent.RemoveComponent<GraphicsComponent>();
-			ENTITY_COMP_DOC comp{ ent, ent.getComponent<GraphicsComponent>()->Write(), typeid(GraphicsComponent).hash_code() };
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<CanvasComponent>()->Write(), typeid(CanvasComponent).hash_code() };
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
+		}
+
+		ImGui::Separator();
+	}
+}
+
+void InspectorWindow::AnimationComp(Entity& ent)
+{
+	AnimationComponent* anim = ent.getComponent<AnimationComponent>();
+	if (anim != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Animation component", &_notRemove))
+		{
+			ImGui::Checkbox("IsActive##Animation", &anim->_isActive);
+
+			auto it = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
+			while ( it != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
+			{
+				bool currAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim == *it;
+				if (ImGui::Selectable(it->c_str(), &currAnim))
+				{
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim = it->c_str();
+				}
+				++it;
+			}
+
+			if (ImGui::Button("Preview Animation"))
+			{
+				anim->PlayAnimation(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim);
+			}
+
+			if (ImGui::Button("Pause Animation"))
+			{
+				anim->PauseAnimation();
+			}
+
+			if (ImGui::Button("Stop Animation"))
+			{
+				anim->StopAnimation();
+			}
+
+			ImGui::SameLine();
+
+			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 		}
 
 		ImGui::Separator();
@@ -1043,6 +1193,11 @@ void InspectorWindow::VariableComp(Entity& ent)
 				float fl = 0.0f;
 				comp_var->float_list.push_back(fl);
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove Float"))
+			{
+				comp_var->float_list.pop_back();
+			}
 
 			int float_index = 1;
 			for (float& f : comp_var->float_list) //[path, name]
@@ -1057,6 +1212,11 @@ void InspectorWindow::VariableComp(Entity& ent)
 			{
 				int interger = 0;
 				comp_var->int_list.push_back(interger);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove Interger"))
+			{
+				comp_var->int_list.pop_back();
 			}
 			int int_index = 1;
 
@@ -1074,6 +1234,12 @@ void InspectorWindow::VariableComp(Entity& ent)
 				LocalString ls;
 				comp_var->string_list.push_back(ls);
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove String"))
+			{
+				comp_var->string_list.pop_back();
+			}
+
 			int str_index = 1;
 
 			for (LocalString<125>& str : comp_var->string_list) //[path, name]
@@ -1103,6 +1269,71 @@ void InspectorWindow::VariableComp(Entity& ent)
 	ImGui::Separator();
 }
 
+void InspectorWindow::NavComp(Entity& ent)
+{
+	NavComponent* nav_comp = ent.getComponent<NavComponent>();
+	if (nav_comp != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Navigator", &_notRemove))
+		{
+			_levelEditor->LE_AddSliderFloatProperty("speed", nav_comp->speed, 0.0f, 1000.f, ImGuiInputTextFlags_EnterReturnsTrue);
+			_levelEditor->LE_AddCombo("Way Point Nav Type", (int&)nav_comp->wp_nav_type,
+				{
+					"To and fro",
+					"circular",
+					"random"
+				});
+
+			_levelEditor->LE_AddCheckbox("Stop at each waypoint", &nav_comp->stopAtEachWayPoint);
+			if(nav_comp->stopAtEachWayPoint)
+				_levelEditor->LE_AddSliderFloatProperty("End time", nav_comp->endTime, 0.0f, 10.f, ImGuiInputTextFlags_EnterReturnsTrue);
+
+			if (ImGui::Button("Add WayPoint"))
+			{
+				LocalString ls;
+				nav_comp->way_point_list.push_back(ls);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove WayPoint"))
+			{
+				nav_comp->way_point_list.pop_back();
+			}
+
+			int str_index = 1;
+
+			for (LocalString<125> & str : nav_comp->way_point_list) //[path, name]
+			{
+				std::string p = "Waypoint_" + std::to_string(str_index);
+
+				std::string s_name = str;
+				_levelEditor->LE_AddInputText(p, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
+					[&str, &s_name]()
+					{
+						str = s_name.c_str();
+					});
+				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
+					[this, &str](Entity* entptr)
+					{
+						str = G_ECMANAGER->EntityName[entptr->getId()];
+
+					});
+				
+				str_index++;
+
+
+			}
+		}
+	}
+
+	if (!_notRemove)
+	{
+		//ent.RemoveComponent<ComponentLoadAudio>();
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<NavComponent>()->Write(), typeid(NavComponent).hash_code() };
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+		_notRemove = true;
+	}
+}
+
 void InspectorWindow::AddSelectedComps(Entity& ent)
 {
 	_levelEditor->LE_AddCombo("##AddComponentsCombo", _itemType,
@@ -1118,7 +1349,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  Canvas",
 			"  PlayerStats",
 			"  CauldronStats",
-			"  VariablesComp"
+			"  VariablesComp",
+			"  NavComp",
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -1246,6 +1478,15 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			if (!ent.getComponent<ComponentVariables>())
 			{
 				ENTITY_COMP_DOC comp{ ent, ComponentVariables().Write(), typeid(ComponentVariables).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		case 12: // ComponentVariable
+		{
+			if (!ent.getComponent<NavComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, NavComponent().Write(), typeid(NavComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;

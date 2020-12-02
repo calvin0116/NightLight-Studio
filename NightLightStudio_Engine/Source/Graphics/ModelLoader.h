@@ -19,23 +19,27 @@ namespace NS_GRAPHICS
 		ModelLoader();
 		~ModelLoader();
 
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// Default functions to get vertex data from assimp
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		void ProcessNode(aiNode* node, const aiScene* scene, Model*& model);
 		Mesh* ProcessMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model);
 		AnimatedMesh* ProcessAnimatedMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model);
 
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// Needed for animations
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		void ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, AnimatedMesh* animatedMesh);
+		bool CreateSkeletal(BoneData& bone, aiNode* node, const aiScene* scene, Model*& model);
 		void ProcessAnimation(aiNode* node, const aiScene* scene, Model*& model);
+		void FillNode(Node& ourNode, aiNode* node, const aiScene* scene, Model*& model);
 
-		void AiToGLM(const aiMatrix4x4& ai, glm::mat4& glm);
-
-		void CalcInterpolatedScaling(glm::vec3& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-		void CalcInterpolatedRotation(glm::quat& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-		void CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-		unsigned FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
-		unsigned FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
-		unsigned FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
-		const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
-		void ReadNodeHeirarchy(const aiScene* scene, float AnimationTime, const aiNode* pNode, const glm::mat4x4& ParentTransform, Model* model);
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// Helper Functions for conversion
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		void AssimpToGLM(const aiMatrix4x4& ai, glm::mat4& glm);
+		void AssimpToGLM(const aiVector3D& ai, glm::vec3& glm);
+		void AssimpToGLM(const aiQuaternion& ai, glm::quat& glm);
 
 	public:
 		// Unique Singleton instance

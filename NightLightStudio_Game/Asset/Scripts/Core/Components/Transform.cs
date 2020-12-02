@@ -14,6 +14,11 @@ namespace Unicorn
     //private Vector3 position = new Vector3();
     //private Vector3 rotation = new Vector3();
     //private Vector3 scale = new Vector3();
+    public int Tag
+    {
+    get { return get_Tag_Internal(native_handle); }
+    set { set_Tag_Internal(native_handle, value); }
+    }
 
     public string Name
     {
@@ -50,6 +55,13 @@ namespace Unicorn
     {
       set_Scale_Internal(this.native_handle, vec);
     }
+
+    // Getter/Setter for tag
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static int get_Tag_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_Tag_Internal(IntPtr native_handle, int val);
 
     // Getter/Setter for name
     [MethodImpl(MethodImplOptions.InternalCall)]

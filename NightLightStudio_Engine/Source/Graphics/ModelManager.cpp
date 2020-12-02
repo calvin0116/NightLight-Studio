@@ -42,7 +42,7 @@ namespace NS_GRAPHICS
 	{
 		auto check = _modelList.find(modelkey);
 
-		std::cout << "Size of animated mesh size : " << sizeof(AnimatedMesh::VertexData) << std::endl;;
+		//std::cout << "Size of animated mesh size : " << sizeof(AnimatedMesh::VertexData) << std::endl;;
 
 		if (check != _modelList.end())
 		{
@@ -53,6 +53,10 @@ namespace NS_GRAPHICS
 				Model* model = new Model();
 				size_t meshSize = check->second->_animatedMeshes.size();
 				model->_isAnimated = check->second->_isAnimated;
+				model->_boneMapping = check->second->_boneMapping;
+				model->_rootBone = check->second->_rootBone;
+				model->_rootNode = check->second->_rootNode;
+				//model->_globalInverseTransform = check->second->_globalInverseTransform;
 
 				//MAYBE REMOVED NOT THE BEST WAY TO DO THIS
 				for (size_t meshIndex = 0; meshIndex != meshSize; ++meshIndex)
@@ -96,20 +100,6 @@ namespace NS_GRAPHICS
 					glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 					glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
 
-					//glEnableVertexAttribArray(3);
-					//glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
-					//glEnableVertexAttribArray(4);
-					//glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
-					//glEnableVertexAttribArray(5);
-					//glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
-					//glEnableVertexAttribArray(6);
-					//glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
-
-					//glVertexAttribDivisor(3, 1);
-					//glVertexAttribDivisor(4, 1);
-					//glVertexAttribDivisor(5, 1);
-					//glVertexAttribDivisor(6, 1);
-
 					glEnableVertexAttribArray(5);
 					glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
 					glEnableVertexAttribArray(6);
@@ -128,6 +118,16 @@ namespace NS_GRAPHICS
 					glBindVertexArray(0);
 
 					model->_animatedMeshes.push_back(mesh);
+				}
+
+				for (auto& anim: check->second->_animations)
+				{
+					Animation* newAnim = new Animation();
+					newAnim->_animName = anim.second->_animName;
+					newAnim->_frames = anim.second->_frames;
+					newAnim->_time = anim.second->_time;
+
+					model->_animations.insert(std::make_pair(newAnim->_animName, newAnim));
 				}
 
 				return AddModel(model);
@@ -251,6 +251,11 @@ namespace NS_GRAPHICS
 					delete mesh;
 				}
 
+				for (auto& anim : m->_animations)
+				{
+					delete anim.second;
+				}
+
 				delete m;
 			}
 		}
@@ -269,6 +274,10 @@ namespace NS_GRAPHICS
 					//Same variable as mesh list mesh pointer therefore commented out
 					//Uncomment in future when the mesh pointer is pointing to valid thing
 					delete del;
+				}
+				for (auto& anim : n.second->_animations)
+				{
+					delete anim.second;
 				}
 			}
 			else

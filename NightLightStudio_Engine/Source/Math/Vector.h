@@ -19,9 +19,9 @@ namespace NlMath
 		{
 			float x, y, z;
 		};
-	
+
 		float m[3];
-	
+
 		// Constructors
 		Vector3D();
 		Vector3D(float set);
@@ -35,6 +35,7 @@ namespace NlMath
 		Vector3D& operator -= (const Vector3D& rhs);
 		Vector3D& operator *= (float rhs);
 		Vector3D& operator /= (float rhs);
+		Vector3D& operator = (float rhs);
 		float& operator[](int i);
 
 		//comparison operator
@@ -49,30 +50,31 @@ namespace NlMath
 		operator glm::vec2() const;
 		operator glm::vec3() const;
 		operator glm::vec4() const;
-		
+
 		float length();
+		float sqrtlength();
 		void set(float _x, float _y, float _z);
 		Vector3D abs() const;
 	} Vector3D, Vec3, Point3D, Pt3;
-	
-	
-	#ifdef _MSC_VER
+
+
+#ifdef _MSC_VER
 	// Supress warning: nonstandard extension used : nameless struct/union
-	#pragma warning( default : 4201 )
-	#endif
-	
-	// Binary operators
+#pragma warning( default : 4201 )
+#endif
+
+// Binary operators
 	Vector3D operator + (const Vector3D& lhs, const Vector3D& rhs);
 	Vector3D operator - (const Vector3D& lhs, const Vector3D& rhs);
 	Vector3D operator * (const Vector3D& lhs, float rhs);
 	Vector3D operator * (float lhs, const Vector3D& rhs);
 	float operator * (const Vector3D& lhs, const Vector3D& rhs);
 	Vector3D operator / (const Vector3D& lhs, float rhs);
-	
+
 
 	/**************************************************************************/
 	/*!
-		In this function, the return value is the mid point of 
+		In this function, the return value is the mid point of
 		point pVec0 and point pVec1
 	 */
 	 /**************************************************************************/
@@ -84,21 +86,21 @@ namespace NlMath
 	 */
 	 /**************************************************************************/
 	Vector3D	Vector3DNormalize(const Vector3D& pVec0);
-	
+
 	/**************************************************************************/
 	/*!
 		This function returns the length of the vector pVec0
 	 */
 	 /**************************************************************************/
 	float	Vector3DLength(const Vector3D& pVec0);
-	
+
 	/**************************************************************************/
 	/*!
 		This function returns the square of pVec0's length. Avoid the square root
 	 */
 	 /**************************************************************************/
 	float	Vector3DSquareLength(const Vector3D& pVec0);
-	
+
 	/**************************************************************************/
 	/*!
 		In this function, pVec0 and pVec1 are considered as 2D points.
@@ -106,7 +108,7 @@ namespace NlMath
 	 */
 	 /**************************************************************************/
 	float	Vector3DDistance(const Vector3D& pVec0, const Vector3D& pVec1);
-	
+
 	/**************************************************************************/
 	/*!
 		In this function, pVec0 and pVec1 are considered as 2D points.
@@ -115,14 +117,14 @@ namespace NlMath
 	 */
 	 /**************************************************************************/
 	float	Vector3DSquareDistance(const Vector3D& pVec0, const Vector3D& pVec1);
-	
+
 	/**************************************************************************/
 	/*!
 		This function returns the dot product between pVec0 and pVec1
 	 */
 	 /**************************************************************************/
 	float	Vector3DDotProduct(const Vector3D& pVec0, const Vector3D& pVec1);
-	
+
 	/**************************************************************************/
 	/*!
 		This function returns the cross product magnitude
@@ -140,5 +142,4 @@ namespace NlMath
 
 
 }
-	
-	
+

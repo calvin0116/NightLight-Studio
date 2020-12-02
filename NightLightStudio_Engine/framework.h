@@ -22,7 +22,7 @@ using std::cout;
 using std::endl;
 
 //Json file path
-const std::string json_path = "../Resources/JsonFile/";
+const std::string json_path = "../NightLightStudio_Game/JsonFile";
 const std::string prefab_path = "../NightLightStudio_Game/JsonFile";
 //#ifdef ENGINE_EXPORTS
 //#define ENGINE_API __declspec(dllexport)

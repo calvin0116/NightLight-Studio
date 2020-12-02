@@ -58,7 +58,7 @@ void Player::Init()
 	comTrans = MyID.getComponent<TransformComponent>();
 	//set this as a point lightSys, scale to 0.001
 	comLight = MyID.getComponent<LightComponent>();
-	comLight->ChangeLightType(NS_GRAPHICS::Lights::POINT);
+	comLight->SetType(NS_GRAPHICS::Lights::POINT);
 	comLight->SetIntensity(1000);
 	comLight->SetActive(false);
 	 lightSys = &NS_GRAPHICS::LightSystem::GetInstance();
@@ -92,7 +92,7 @@ void Player::Init()
 	timer = 0;
 
 	colorChange = 255 / PLAYER_MAX_ENERGY;
-	currentAmbient = comLight->GetAmbient().z;
+	currentAmbient = comLight->GetColor().z; // Changed ambient to color - YY
 
 	//initially the player is a human with human controls
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Walk1", WALKFRONT, "WalkFront", SystemInput_ns::OnHold, [this]()
@@ -225,7 +225,7 @@ void Player::Update()
 			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
 			_playerEnergy += realDt * PLAYER_ENERGY_REGEN;
 			currentAmbient += realDt * colorChange;
-			comLight->SetAmbient(glm::vec3(255,currentAmbient, currentAmbient));
+			comLight->SetColor(glm::vec3(255,currentAmbient, currentAmbient)); // Changed to set color instead of set ambient - YY
 		}
 		
 
@@ -258,7 +258,7 @@ void Player::Update()
 		float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
 		_playerEnergy -= realDt * PLAYER_MOTH_ENERGY_DRAIN;
 		currentAmbient -= realDt * colorChange;
-		comLight->SetAmbient(glm::vec3(255, currentAmbient, currentAmbient));
+		comLight->SetColor(glm::vec3(255, currentAmbient, currentAmbient)); // Changed set ambient to set color - YY
 		if (_playerEnergy <= 0)
 		{
 			changeState(PLAYERSTATE::HUMAN);

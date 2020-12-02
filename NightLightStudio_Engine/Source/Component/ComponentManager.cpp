@@ -817,7 +817,7 @@ char* ComponentManager::ComponentSetManager::EntityHandle::getObj()
 	// number of containers is proportional to number of types of components
 }
 
-int ComponentManager::ComponentSetManager::EntityHandle::getId()
+int ComponentManager::ComponentSetManager::EntityHandle::getId() const
 {
 	return objId;
 }
@@ -1215,10 +1215,12 @@ void ComponentManager::ComponentCreation()
 		//comsetFac.AddComponentContainer<ComponentCamera>();
 		comsetFac.AddComponentContainer<ComponentLight>();
 		comsetFac.AddComponentContainer<ComponentCanvas>();
+		comsetFac.AddComponentContainer<ComponentAnimation>();
 
 		
 		comsetFac.AddComponentContainer<ComponentPlayerStats>();
 		comsetFac.AddComponentContainer<ComponentCauldronStats>();
+		comsetFac.AddComponentContainer<ComponentNavigator>();
 		// Temporary C++ Scripting component
 		comsetFac.AddComponentContainer<ComponentCScript>();
 		comsetFac.AddComponentContainer<ComponentVariables>();

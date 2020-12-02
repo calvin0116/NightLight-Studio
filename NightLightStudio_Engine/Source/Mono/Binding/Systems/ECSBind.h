@@ -8,6 +8,8 @@ namespace ECSBind
   // Delta Time
   float dt();
   float realDt();
+  // Scene change
+  void SetNextScene(MonoString* scene_name);
   // Get components from object ID
   MonoObject* GetScript(int id);
   MonoObject* GetTransform(int id);
@@ -15,7 +17,9 @@ namespace ECSBind
   MonoObject* GetRigidBody(int id);
   MonoObject* GetGraphics(int id);
   MonoObject* GetLight(int id);
-  MonoObject* GetVariables(int id);
+  MonoObject* GetNavigator(int id);
+  MonoObject* GetAnimation(int id);
+  MonoObject* GetVariables(int id); // Use this for now until reflection is out
 
   void BindECS();    
 }

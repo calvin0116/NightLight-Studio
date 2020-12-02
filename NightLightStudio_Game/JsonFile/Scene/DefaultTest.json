@@ -1,31 +1,87 @@
 {
-	"Objects" :{
-		"Camera" :{
-			"TransformComponent":{
-				"Position" : [1.0,2.0,3.0],
-				"Scale" : [1.0, 1.0, 1.0],
-				"Rotate" : [0.0, 0.0, 0.0]
-			},
-			"CameraComponent":{
-				
-			}
-		},
-		"Plane" : {
-			"TransformComponent":{
-				"Position" : [5.0,2.0,1.0],
-				"Scale" : [10.0, 1.0, 10.0]
-			},
-			"ColliderComponent":{
-				"colliderType" : "AABB"
-			},
-			"RigidBody" : {
-			
-			},
-		  "AudioManager":{
-			"ListOfSound": [ 
-			  "Asset/Sounds/TestAudio.ogg"
-			  ]
-		  }
-		}
-	}
+    "Objects": {
+        "Camera": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    1.0,
+                    2.0,
+                    3.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "Plane": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    5.0,
+                    2.0,
+                    1.0
+                ],
+                "Scale": [
+                    10.0,
+                    1.0,
+                    10.0
+                ],
+                "Rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "AudioManager": {
+                "ListOfSound": {
+                    "TestAudio": "Asset/Sounds/TestAudio.ogg"
+                }
+            }
+        }
+    }
 }

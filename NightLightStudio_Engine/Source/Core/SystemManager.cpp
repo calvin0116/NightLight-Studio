@@ -29,8 +29,8 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	Systems[S_PRIORITY::SP_PHYSICS] = NS_PHYSICS::SYS_PHYSICS;
 	Systems[S_PRIORITY::SP_COMPONENT] = SYS_COMPONENT;
 	Systems[S_PRIORITY::SP_COLLISION] = NS_COLLISION::SYS_COLLISION;
-  Systems[S_PRIORITY::SP_LOGIC] = NS_LOGIC::SYS_LOGIC;
-	
+	Systems[S_PRIORITY::SP_LOGIC] = NS_LOGIC::SYS_LOGIC;
+	Systems[S_PRIORITY::SP_AI] = NS_AI::SYS_AI;
 	
 #ifdef _EDITOR
 	Systems[S_PRIORITY::SP_EDITOR] = SYS_EDITOR;
@@ -363,36 +363,74 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	// TEST  END
 	////////////
 
+
+	//// TEST LV
+	//LocalVector<int> tlv;
+	//for (int i = 0; i < 10; ++i)
+	//	tlv.push_back(i);
+
+	//for (int& lvint : tlv)
+	//{
+	//	std::cout << lvint << std::endl;
+	//}
+	//std::cout << std::endl;
+
+	//tlv.pop_back();
+
+
+	//for (int& lvint : tlv)
+	//{
+	//	std::cout << lvint << std::endl;
+	//}
+	//std::cout << std::endl;
+
+	//tlv.pop_back();
+	//tlv.pop_back();
+	//tlv.pop_back();
+
+	//for (int& lvint : tlv)
+	//{
+	//	std::cout << lvint << std::endl;
+	//}
+	//std::cout << std::endl;
+
+	//std::cout << tlv.back() << std::endl;
+
+	//tlv.pop_back();
+	//tlv.pop_back();
+
+	//// END TEST
+
 	////
-	Entity newEntity0 = G_ECMANAGER->BuildEntity();
-	newEntity0.AddComponent<ComponentGraphics>();
-	newEntity0.AddComponent<ComponentTransform>();
+	//Entity newEntity0 = G_ECMANAGER->BuildEntity();
+	//newEntity0.AddComponent<ComponentGraphics>();
+	//newEntity0.AddComponent<ComponentTransform>();
 
-	auto itr = G_ECMANAGER->begin<ComponentGraphics>();
-	auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
-	for (; itr != itrEnd; ++itr)
-	{
-		{
-			// get components from iterator
-			ComponentGraphics* compGfx = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
-			ComponentTransform* compTx = G_ECMANAGER->getComponent<ComponentTransform>(itr);
-		}
+	//auto itr = G_ECMANAGER->begin<ComponentGraphics>();
+	//auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
+	//for (; itr != itrEnd; ++itr)
+	//{
+	//	{
+	//		// get components from iterator
+	//		ComponentGraphics* compGfx = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
+	//		ComponentTransform* compTx = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+	//	}
 
-		{
-			// get entity from iterator, then get components from entity
-			Entity entity = G_ECMANAGER->getEntity(itr);
-			ComponentGraphics* compGfx = entity.getComponent<ComponentGraphics>();
-			ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
-		}
+	//	{
+	//		// get entity from iterator, then get components from entity
+	//		Entity entity = G_ECMANAGER->getEntity(itr);
+	//		ComponentGraphics* compGfx = entity.getComponent<ComponentGraphics>();
+	//		ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
+	//	}
 
-		{
-			// get entity from component, then get components from entity
-			ComponentGraphics* compGfx = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
-			Entity entity = G_ECMANAGER->getEntity(compGfx);
-			ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
-		}
+	//	{
+	//		// get entity from component, then get components from entity
+	//		ComponentGraphics* compGfx = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
+	//		Entity entity = G_ECMANAGER->getEntity(compGfx);
+	//		ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
+	//	}
 
-	}
+	//}
 	////
 
 

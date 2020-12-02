@@ -20,6 +20,11 @@
 
 static bool winFocus = false;
 
+void LevelEditor::LE_ConfigLoad()
+{
+
+}
+
 void LevelEditor::LE_MainMenuBar()
 {
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
@@ -251,6 +256,26 @@ void LevelEditor::LE_MainMenuBar()
             ImGui::EndMenu();
         }
 
+        ImGui::Separator();
+
+        if (ImGui::BeginMenu("Gamma Settings##GAMMA"))
+        {
+            float gamma = NS_GRAPHICS::LightSystem::GetInstance().GetGamma();
+
+            // Do your stuff here
+            //float gamma = 0; //Shifted to config.h
+            ImGui::SetNextItemWidth(150);
+            if (ImGui::SliderFloat("Gamma", &gamma, 1.f, 10.f))
+            {
+                NS_GRAPHICS::LightSystem::GetInstance().SetGamma(gamma);
+                CONFIG_DATA->GetConfigData().gamma = gamma;
+            }
+
+
+            // Do not remove this
+            ImGui::EndMenu();
+        }
+
         ImGui::EndMenuBar();
     }
 
@@ -341,6 +366,22 @@ void LevelEditor::LE_MainMenuBar()
                     data = meshName;
                 }*/
                 NS_GRAPHICS::SYS_GRAPHICS->AttachModel(ent, data);
+
+                ComponentGraphics* graphics_comp = ent.getComponent<GraphicsComponent>();
+                if (graphics_comp->_modelID >= 0)
+                {
+                    if (NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_isAnimated)
+                    {
+                        ent.AttachComponent<ComponentAnimation>();
+                        ComponentAnimation* anim = ent.getComponent<ComponentAnimation>();
+                        anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
+                        AnimationController* animCtrl = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID];
+                        for (auto& anims : NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_animations)
+                        {
+                            animCtrl->_allAnims.insert(anims.first);
+                        }
+                    }
+                }
             }
 
             if (LE_GetFileType(data) == "json")
@@ -355,4 +396,9 @@ void LevelEditor::LE_MainMenuBar()
     }
 
     ImGui::End();
+}
+
+void LevelEditor::LE_ConfigSave()
+{
+
 }

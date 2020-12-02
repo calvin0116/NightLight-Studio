@@ -12,6 +12,8 @@ namespace MonoBind
     ComponentRigidBodyBind::BindComponentRigidBody();
     ComponentGraphicsBind::BindComponentGraphics();
     ComponentLightBind::BindComponentLight();
+    ComponentNavigatorBind::BindComponentNavigator();
+    ComponentAnimationBind::BindComponentAnimation();
     // Temporary
     ComponentVariablesBind::BindComponentVariables();
   }

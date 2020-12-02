@@ -89,6 +89,14 @@ namespace NlMath
 		return *this;
 	}
 
+	Vector3D& Vector3D::operator=(float rhs)
+	{
+		x = rhs;
+		y = rhs;
+		z = rhs;
+		return *this;
+	}
+
 	float& Vector3D::operator[](int i)
 	{
 		return m[i];
@@ -117,6 +125,11 @@ namespace NlMath
 	float Vector3D::length()
 	{
 		return Vector3DLength(*this);
+	}
+
+	float Vector3D::sqrtlength()
+	{
+		return Vector3DSquareLength(*this);
 	}
 
 	void Vector3D::set(float _x, float _y, float _z)
@@ -192,7 +205,7 @@ namespace NlMath
 	/**************************************************************************/
 	Vector3D operator*(const Vector3D& lhs, float rhs)
 	{
-		return Vector3D(lhs.x * rhs, lhs.y * rhs , lhs.z * rhs);
+		return Vector3D(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
 	}
 
 	Vector3D operator*(float lhs, const Vector3D& rhs)
@@ -308,8 +321,8 @@ namespace NlMath
 	Vector3D Vector3DCrossProduct(const Vector3D& pVec0, const Vector3D& pVec1)
 	{
 		return Vector3D(
-			pVec0.y * pVec1.z - pVec0.z * pVec1.y, 
-			pVec0.z * pVec1.x - pVec0.x * pVec1.z, 
+			pVec0.y * pVec1.z - pVec0.z * pVec1.y,
+			pVec0.z * pVec1.x - pVec0.x * pVec1.z,
 			pVec0.x * pVec1.y - pVec0.y * pVec1.x);
 	}
 

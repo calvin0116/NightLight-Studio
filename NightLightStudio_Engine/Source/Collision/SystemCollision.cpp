@@ -19,7 +19,7 @@
 #define MESH_MAX_LOD 18
 #define MESH_MIN_LOD -20
 
-//#define ENT_TEST 1
+//#define ENT_TEST 1 / 0 <-- !!!
 #define ENT_TEST 0
 
 
@@ -49,7 +49,7 @@ namespace NS_COLLISION
 			{
 				doDrawLineMesh = !doDrawLineMesh;
 			});
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_INC", SystemInput_ns::IKEY_PGUP, "PGUP", SystemInput_ns::OnHold, [this]() 
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_INC", SystemInput_ns::IKEY_PGUP, "PGUP", SystemInput_ns::OnHold, [this]()
 			{
 				MeshLod++;
 				if (MeshLod > MESH_MAX_LOD) MeshLod = MESH_MAX_LOD;
@@ -63,7 +63,7 @@ namespace NS_COLLISION
 			{
 				MeshLod = 0;
 			});
-		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_TOG", SystemInput_ns::IKEY_HOME, "HOME", SystemInput_ns::OnPress, [this]() 
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COLMESHLOD_TOG", SystemInput_ns::IKEY_HOME, "HOME", SystemInput_ns::OnPress, [this]()
 			{
 				doDrawLineMesh = !doDrawLineMesh;
 			});
@@ -73,13 +73,14 @@ namespace NS_COLLISION
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("LALALA", SystemInput_ns::IKEY_M, "M", SystemInput_ns::OnPress, [this]()
 			{
 
-				Entity boxTest = G_ECMANAGER->BuildEntity(std::string("newBox").append(std::to_string(test_count))); 
+				Entity boxTest = G_ECMANAGER->BuildEntity(std::string("newBox").append(std::to_string(test_count)));
 				++test_count;
 				ComponentTransform boxTestTransform;
 				boxTestTransform._position = glm::vec3(0.0f, 300.0f, 0.0f);
 				boxTestTransform._scale = glm::vec3(50.0f, 50.0f, 50.0f);
 				boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
-				ComponentCollider boxTestCollider(COLLIDERS::AABB);
+				//ComponentCollider boxTestCollider(COLLIDERS::AABB);
+				ComponentCollider boxTestCollider(COLLIDERS::SPHERE);
 				boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
 				ComponentRigidBody boxTestrbody;
 				boxTestrbody.isStatic = false;
@@ -131,8 +132,8 @@ namespace NS_COLLISION
 		//cube2Test.AttachComponent<ComponentTransform>(Transform2);
 		//cube2Test.AttachComponent<ComponentRigidBody>(Rigid2);
 		//
-		
-		
+
+
 		//NS_GRAPHICS::SYS_GRAPHICS->CreateCube(cube2Test, glm::vec3(1.0f, 0.0f, 1.f));
 
 		//ComponentCollider AABB1(COLLIDERS::AABB);
@@ -182,7 +183,8 @@ namespace NS_COLLISION
 		boxTestTransform._position = glm::vec3(0.0f, 300.0f, 0.0f);
 		boxTestTransform._scale = glm::vec3(80.0f, 80.0f, 80.0f);
 		boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
-		ComponentCollider boxTestCollider(COLLIDERS::AABB);
+		//ComponentCollider boxTestCollider(COLLIDERS::AABB);
+		ComponentCollider boxTestCollider(COLLIDERS::SPHERE);
 		boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
 		ComponentRigidBody boxTestrbody;
 		boxTestrbody.isStatic = false;
@@ -203,44 +205,44 @@ namespace NS_COLLISION
 
 			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
 
-			#define TEST_FORCE_MAGNITUDE 1000.0f
+#define TEST_FORCE_MAGNITUDE 1000.0f
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_RIGHT", SystemInput_ns::IKEY_D, "D", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.x += 1 * DELTA_T->dt / CLOCKS_PER_SEC;
-				if(compRtest0->isActive)
+				if (compRtest0->isActive)
 					NS_PHYSICS::USE_THE_FORCE.addForce(entityTest0, NlMath::Vector3D(1.0f, 0.0f, 0.0f), TEST_FORCE_MAGNITUDE);
-			});
+				});
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_LEFT", SystemInput_ns::IKEY_A, "A", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.x += -1 * DELTA_T->dt / CLOCKS_PER_SEC;
 				if (compRtest0->isActive)
 					NS_PHYSICS::USE_THE_FORCE.addForce(entityTest0, NlMath::Vector3D(-1.0f, 0.0f, 0.0f), TEST_FORCE_MAGNITUDE);
-			});
+				});
 
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_DOWN", SystemInput_ns::IKEY_S, "S", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.y += -1 * DELTA_T->dt / CLOCKS_PER_SEC;
 				if (compRtest0->isActive)
 					NS_PHYSICS::USE_THE_FORCE.addForce(entityTest0, NlMath::Vector3D(0.0f, -1.0f, 0.0f), TEST_FORCE_MAGNITUDE);
-			});
+				});
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_UP", SystemInput_ns::IKEY_W, "W", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.y += 1 * DELTA_T->dt / CLOCKS_PER_SEC;
 				if (compRtest0->isActive)
 					NS_PHYSICS::USE_THE_FORCE.addForce(entityTest0, NlMath::Vector3D(0.0f, 1.0f, 0.0f), TEST_FORCE_MAGNITUDE);
-			});
+				});
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_FRONT", SystemInput_ns::IKEY_Q, "Q", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.z += 1 * DELTA_T->dt / CLOCKS_PER_SEC;
 				if (compRtest0->isActive)
 					NS_PHYSICS::USE_THE_FORCE.addForce(entityTest0, NlMath::Vector3D(0.0f, 0.0f, 1.0f), TEST_FORCE_MAGNITUDE);
-			});
+				});
 
 			SYS_INPUT->GetSystemKeyPress().CreateNewEvent("OBJECT_MOVE_BACK", SystemInput_ns::IKEY_E, "E", SystemInput_ns::OnHold, [this]() {
 				//compT->_position.z += -1 * DELTA_T->dt / CLOCKS_PER_SEC;
 				if (compRtest0->isActive)
 					NS_PHYSICS::USE_THE_FORCE.addForce(entityTest0, NlMath::Vector3D(0.0f, 0.0f, -1.0f), TEST_FORCE_MAGNITUDE);
-			});
+				});
 
 		} // ctrl
 
@@ -255,6 +257,12 @@ namespace NS_COLLISION
 
 	void CollisionSystem::GameInit()
 	{
+		// Creating an object of CSVReader
+		CSVReader reader("Asset/CollisionConfig.csv");
+
+		// Get the data from CSV File
+		_colliderDataList = reader.getData();
+
 		auto itr = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
 		for (; itr != itrEnd; ++itr)
@@ -264,13 +272,17 @@ namespace NS_COLLISION
 
 			UpdateCollisionBoxPos(comCol, comTrans);
 		}
+
+
 	}
 
 	void CollisionSystem::FixedUpdate()
 	{
 
+
+
 		//draw debug mesh
-		if (doDrawLineMesh)
+		if (true) // lmao was this prev -> if (doDrawLineMesh) <- caused a bug xD
 		{
 			auto itr = G_ECMANAGER->begin<ComponentCollider>();
 			auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
@@ -299,14 +311,19 @@ namespace NS_COLLISION
 
 		if (!_isPlaying)
 		{
-			//return;
-		}
-		
+			// Creating an object of CSVReader
+			CSVReader reader("Asset/CollisionConfig.csv");
 
-		
+			// Get the data from CSV File
+			_colliderDataList = reader.getData();
+			return;
+		}
+
+
+
 
 		// clear collision events
-		colResolver.clear();
+		//colResolver.clear();
 
 		auto itr1 = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd1 = G_ECMANAGER->end<ComponentCollider>();
@@ -316,7 +333,7 @@ namespace NS_COLLISION
 
 		for (; itr1 != itrEnd1; ++itr1)
 		{
-			for (itr2 = itr1 ; itr2 != itrEnd2; ++itr2)
+			for (itr2 = itr1; itr2 != itrEnd2; ++itr2)
 			{
 				if (itr1 == itr2)
 				{
@@ -329,7 +346,7 @@ namespace NS_COLLISION
 				{
 					continue;
 				}
-				
+
 				//Get colliders
 				ComponentCollider* comCol1 = G_ECMANAGER->getComponent<ComponentCollider>(itr1);
 				ComponentCollider* comCol2 = G_ECMANAGER->getComponent<ComponentCollider>(itr2);
@@ -345,8 +362,19 @@ namespace NS_COLLISION
 				ComponentTransform* comTrans1 = G_ECMANAGER->getComponent<ComponentTransform>(itr1);
 				ComponentTransform* comTrans2 = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
 
+				//////////////////////////////////collision table/////////////////////////////////
+
+				int check = _colliderDataList[comCol1->colliderTag][comCol2->colliderTag].c_str()[0] - '0';
+				if (check == 0)
+				{
+					continue;
+				}
+
+
+
+				//////////////////////////////////////////////////////////////////////////////////
 				if (comTrans1 == nullptr || comTrans2 == nullptr) continue;
-				
+
 				//Get rigidBody for Collision Resolution
 				ComponentRigidBody* comRigid1 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr1);
 				ComponentRigidBody* comRigid2 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr2);
@@ -356,9 +384,8 @@ namespace NS_COLLISION
 				if (!comRigid1->isActive || !comRigid2->isActive) continue;
 
 				if (comRigid1->isStatic && comRigid2->isStatic) continue;
-				//UpdateCollisionBoxPos(comCol1, comTrans1);
-				
-
+				UpdateCollisionBoxPos(comCol1, comTrans1);
+				UpdateCollisionBoxPos(comCol2, comTrans2);
 
 
 				if (comCol1->isCollidable == false || comCol2->isCollidable == false)
@@ -509,8 +536,8 @@ namespace NS_COLLISION
 	{
 		//optimization, dont check collision if too far away
 		NlMath::Vec3 distance = comTrans1->_position - comTrans2->_position;
-		float sqrScale = glm::dot(comTrans1->_scale , comTrans1->_scale) + glm::dot(comTrans2->_scale , comTrans2->_scale);
-		float sqrDistance = distance * distance ;
+		float sqrScale = glm::dot(comTrans1->_scale, comTrans1->_scale) + glm::dot(comTrans2->_scale, comTrans2->_scale);
+		float sqrDistance = distance * distance;
 		//1.5 bias
 		sqrScale *= 1.5;
 		return sqrDistance > sqrScale;
@@ -527,7 +554,7 @@ namespace NS_COLLISION
 			{
 				AABBCollider* a = &(Collider1->collider.aabb);
 				AABBCollider* b = &(Collider2->collider.aabb);
-				return NlMath::AABBtoAABB(*a,*b);
+				return NlMath::AABBtoAABB(*a, *b);
 			}
 			else if (Collider2->GetColliderT() == COLLIDERS::OBB)
 			{
@@ -541,7 +568,7 @@ namespace NS_COLLISION
 				if (NlMath::AABBToCapsule(*a, *b, useless) != SIDES::NO_COLLISION)
 				{
 					return true;
-				} 
+				}
 				return false;
 			}
 			else if (Collider2->GetColliderT() == COLLIDERS::SPHERE)
@@ -602,7 +629,7 @@ namespace NS_COLLISION
 	}
 
 	bool CollisionSystem::CheckCollision(
-		ComponentCollider* Collider1, ComponentCollider* Collider2, 
+		ComponentCollider* Collider1, ComponentCollider* Collider2,
 		ComponentRigidBody* Rigid1, ComponentRigidBody* Rigid2,
 		ComponentTransform* Transform1, ComponentTransform* Transform2,
 		Entity Entity1, Entity Entity2)
@@ -614,8 +641,8 @@ namespace NS_COLLISION
 			{
 				///////////////////////////////////////////////////////////////////////////////////
 				//// AABB to AABB
-				AABBCollider * a = &(Collider1->collider.aabb);
-				AABBCollider * b = &(Collider2->collider.aabb);
+				AABBCollider* a = &(Collider1->collider.aabb);
+				AABBCollider* b = &(Collider2->collider.aabb);
 
 				CollisionEvent newEvent;
 				newEvent.colidingSide = NlMath::AABB_AABBCollision(*a, *b);
@@ -1015,12 +1042,12 @@ namespace NS_COLLISION
 				Manifold tmp;
 
 				//return NlMath::OBBToOBB(*a, *b);
-				bool check =  NlMath::OBB_OBBCollision(*a, *b, tmp);
+				bool check = NlMath::OBB_OBBCollision(*a, *b, tmp);
 
 				//// debug lines?
 				//NlMath::Vector3D start = a->center;
 				//NlMath::Vector3D end = normal  + start;
-		
+
 				if (doDrawLineMesh)
 				{
 					for (Contact& contact : tmp.contacts)
@@ -1155,7 +1182,7 @@ namespace NS_COLLISION
 			NS_COLDEBUGTEST::Mesh mesh3;
 			mesh2 = NS_COLDEBUGTEST::CreateSphere(std::max(8 + meshlod, 1), std::max(8 + meshlod, 1));
 			mesh3 = NS_COLDEBUGTEST::CreateSphere(std::max(8 + meshlod, 1), std::max(8 + meshlod, 1));
-			
+
 			glm::vec3 capSphereScale(
 				comCol->collider.capsule.colliderScale.x,
 				comCol->collider.capsule.colliderScale.x,
@@ -1164,15 +1191,15 @@ namespace NS_COLLISION
 
 
 			NS_COLDEBUGTEST::TransformMesh(
-				mesh2, 
-				comCol->collider.capsule.tip, 
+				mesh2,
+				comCol->collider.capsule.tip,
 				//glm::vec3(0.0f, 0.0f, 0.0f),
 				comTrans->_rotation,
 				capSphereScale
 			);
 			NS_COLDEBUGTEST::TransformMesh(
-				mesh3, 
-				comCol->collider.capsule.base, 
+				mesh3,
+				comCol->collider.capsule.base,
 				//glm::vec3(0.0f, 0.0f, 0.0f), 
 				comTrans->_rotation,
 				capSphereScale
@@ -1183,12 +1210,12 @@ namespace NS_COLLISION
 			NS_COLDEBUGTEST::DrawMesh(mesh3, color, lod);
 
 		}
-			break;
+		break;
 		case COLLIDERS::OBB:
 			mesh = NS_COLDEBUGTEST::CreateCube(std::max(1 + meshlod, 1), std::max(1 + meshlod, 1));
 			break;
 		}
-		
+
 		NS_COLDEBUGTEST::TransformMesh(mesh, comCol->center + comTrans->_position, comTrans->_rotation, colscale);
 
 

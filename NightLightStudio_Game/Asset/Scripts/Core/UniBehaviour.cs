@@ -36,6 +36,9 @@ namespace Unicorn
     // Delta time in seconds
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static float RealDT();
+    // Change scene
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void SetNextScene(string scene);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static dynamic GetScript(int id);
@@ -55,6 +58,11 @@ namespace Unicorn
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Light GetLight(int id);
 
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Navigator GetNavigator(int id);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Animation GetAnimation(int id);
     // Temporary till reflection comes out
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Variables GetVariables(int id);

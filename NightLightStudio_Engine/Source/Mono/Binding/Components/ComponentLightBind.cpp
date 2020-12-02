@@ -52,12 +52,13 @@ namespace ComponentLightBind
 
   bool get_isActive_Internal(ComponentLight* trans)
   {
-    return trans->_isActive;
+    return trans->GetActive();
   }
 
   void set_isActive_Internal(ComponentLight* trans, bool val)
   {
-    trans->_isActive = val;
+    //trans->_isActive = val;
+    trans->SetActive(val);
   }
 
   float get_Intensity_Internal(ComponentLight* trans)
@@ -72,37 +73,41 @@ namespace ComponentLightBind
 
   float get_Attenuation_Internal(ComponentLight* trans)
   {
-    return trans->GetAttenuation();
+      // Note that this has been changed to intensity only
+    return trans->GetIntensity();
   }
 
   void set_Attenuation_Internal(ComponentLight* trans, float val)
-  {
-    trans->SetAttenuation(val);
+  {// Note that this has been changed to intensity only
+    trans->SetIntensity(val);
   }
 
   float get_inCutOff_Internal(ComponentLight* trans)
   {
-    return trans->_cutOff;
+    return trans->GetCutOff();
   }
   void set_inCutOff_Internal(ComponentLight* trans, float val)
   {
-    trans->_cutOff = val;
+    //trans->_cutOff = val;
+    trans->SetCutOff(val);
   }
 
   float get_outCutOff_Internal(ComponentLight* trans)
   {
-    return trans->_outerCutOff;
+    return trans->GetOuterCutOff();
   }
 
   void set_outCutOff_Internal(ComponentLight* trans, float val)
   {
-    trans->_outerCutOff = val;
+    //trans->_outerCutOff = val;
+    trans->SetOuterCutOff(val);
   }
 
   MonoObject* get_Ambient_Internal(ComponentLight* trans)
   {
+      // Changed to just color
     MonoObject* monoVec = MonoWrapper::ConstructObject("Vector3");
-    glm::vec3 vec = trans->GetAmbient();
+    glm::vec3 vec = trans->GetColor();
     MonoWrapper::SetObjectFieldValue(monoVec, "X", vec.x);
     MonoWrapper::SetObjectFieldValue(monoVec, "Y", vec.y);
     MonoWrapper::SetObjectFieldValue(monoVec, "Z", vec.z);
@@ -111,17 +116,18 @@ namespace ComponentLightBind
 
   void set_Ambient_Internal(ComponentLight* trans, MonoObject* val)
   {
+      // Changed to just color
     glm::vec3 vec;
     vec.x = MonoWrapper::GetObjectFieldValue<float>(val, "X");
     vec.y = MonoWrapper::GetObjectFieldValue<float>(val, "Y");
     vec.z = MonoWrapper::GetObjectFieldValue<float>(val, "Z");
-    trans->SetAmbient(vec);
+    trans->SetColor(vec);
   }
 
   MonoObject* get_Diffuse_Internal(ComponentLight* trans)
   {
     MonoObject* monoVec = MonoWrapper::ConstructObject("Vector3");
-    glm::vec3 vec = trans->GetDiffuse();
+    glm::vec3 vec = trans->GetColor();
     MonoWrapper::SetObjectFieldValue(monoVec, "X", vec.x);
     MonoWrapper::SetObjectFieldValue(monoVec, "Y", vec.y);
     MonoWrapper::SetObjectFieldValue(monoVec, "Z", vec.z);
@@ -134,13 +140,13 @@ namespace ComponentLightBind
     vec.x = MonoWrapper::GetObjectFieldValue<float>(val, "X");
     vec.y = MonoWrapper::GetObjectFieldValue<float>(val, "Y");
     vec.z = MonoWrapper::GetObjectFieldValue<float>(val, "Z");
-    trans->SetDiffuse(vec);
+    trans->SetColor(vec);
   }
 
   MonoObject* get_Specular_Internal(ComponentLight* trans)
   {
     MonoObject* monoVec = MonoWrapper::ConstructObject("Vector3");
-    glm::vec3 vec = trans->GetSpecular();
+    glm::vec3 vec = trans->GetColor();
     MonoWrapper::SetObjectFieldValue(monoVec, "X", vec.x);
     MonoWrapper::SetObjectFieldValue(monoVec, "Y", vec.y);
     MonoWrapper::SetObjectFieldValue(monoVec, "Z", vec.z);
@@ -153,11 +159,12 @@ namespace ComponentLightBind
     vec.x = MonoWrapper::GetObjectFieldValue<float>(val, "X");
     vec.y = MonoWrapper::GetObjectFieldValue<float>(val, "Y");
     vec.z = MonoWrapper::GetObjectFieldValue<float>(val, "Z");
-    trans->SetSpecular(vec);
+    trans->SetColor(vec);
   }
 
   void ChangeLightType_Internal(ComponentLight* trans, NS_GRAPHICS::Lights val)
   {
-    trans->ChangeLightType(val);
+    //trans->ChangeLightType(val);
+    trans->SetType(val);
   }
 }
