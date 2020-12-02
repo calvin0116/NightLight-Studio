@@ -1,6 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Source Files">
+    </Filter>
+    <Filter Include="Source Files\AI">
+    </Filter>
+    <Filter Include="Source Files\Audio">
+    </Filter>
+    <Filter Include="Source Files\Collision">
+    </Filter>
+    <Filter Include="Source Files\Component">
+    </Filter>
+    <Filter Include="Source Files\Core">
+    </Filter>
+    <Filter Include="Source Files\Editor">
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+    </Filter>
+    <Filter Include="Source Files\Input">
+    </Filter>
+    <Filter Include="Source Files\IO">
+    </Filter>
+    <Filter Include="Source Files\Logic">
+    </Filter>
+    <Filter Include="Source Files\Math">
+    </Filter>
+    <Filter Include="Source Files\Messaging">
+    </Filter>
+    <Filter Include="Source Files\Mono">
+    </Filter>
+    <Filter Include="Source Files\Physics">
+    </Filter>
+    <Filter Include="Source Files\Transform">
+    </Filter>
+    <Filter Include="Source Files\Window">
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
     <Natvis Include="..\Include\glm\glm.natvis" />
   </ItemGroup>
   <ItemGroup>
@@ -110,11 +146,13 @@
     <ClCompile Include="Source\Graphics\AnimationController.cpp" />
     <ClCompile Include="Source\Collision\CSVReader.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.cpp" />
-    <ClCompile Include="Source\Ai\AiManager.cpp" />
     <ClCompile Include="Source\Graphics\AnimationSystem.cpp" />
     <ClCompile Include="Source\Component\ComponentAnimation.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentNavigatorBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentAnimationBind.cpp" />
+    <ClCompile Include="Source\Ai\AiManager.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -248,7 +286,6 @@
     <ClInclude Include="Source\Mono\Binding\Systems\InputBind.h" />
     <ClInclude Include="Source\Component\ComponentVariables.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentVariablesBind.h" />
-    <ClInclude Include="Source\Ai\AiManager.h" />
     <ClInclude Include="Source\Ai\WayPointManager.h" />
     <ClInclude Include="Source\Component\ComponentNavigator.h" />
     <ClInclude Include="Source\Graphics\AnimationController.h" />
@@ -259,6 +296,9 @@
     <ClInclude Include="Source\Component\ComponentAnimation.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentNavigatorBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentAnimationBind.h" />
+    <ClInclude Include="Source\Ai\AiManager.h">
+      <Filter>Source Files\AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
