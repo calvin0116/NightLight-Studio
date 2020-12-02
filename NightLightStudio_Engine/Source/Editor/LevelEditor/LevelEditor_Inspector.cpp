@@ -1289,6 +1289,10 @@ void InspectorWindow::NavComp(Entity& ent)
 					"random"
 				});
 
+			_levelEditor->LE_AddCheckbox("Stop at each waypoint", &nav_comp->stopAtEachWayPoint);
+			if(nav_comp->stopAtEachWayPoint)
+				_levelEditor->LE_AddSliderFloatProperty("End time", nav_comp->endTime, 0.0f, 10.f, ImGuiInputTextFlags_EnterReturnsTrue);
+
 			if (ImGui::Button("Add WayPoint"))
 			{
 				LocalString ls;

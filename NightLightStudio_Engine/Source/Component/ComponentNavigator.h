@@ -6,6 +6,7 @@
 #include "../Messaging/Messages/MessageTogglePlay.h"
 #include "../Messaging/SystemReceiver.h"
 
+#include "../Core/DeltaTime.h"
 #include <time.h>
 
 enum WP_NAV_TYPE {
@@ -22,6 +23,9 @@ typedef class ComponentNavigator : public ISerializable //: public IComponent
 
 	//Curent targetted waypoint
 
+	//float startTime = 0.0f;
+
+
 	//Toggle traversing nodes
 	bool traverseFront = true;
 public:
@@ -31,6 +35,8 @@ public:
 	WP_NAV_TYPE wp_nav_type;
 
 	float speed = 1.f;
+	time_t curTime;
+	float endTime = 0.0f;
 
 	LocalVector<LocalString<125>> way_point_list;	//Standard way point using entity to plot
 	LocalVector<TransformComponent*> cur_path;
@@ -39,7 +45,9 @@ public:
 		:isFollowing{ true }
 		,isPaused{false}
 		,cur_wp_index{ 0 }
+		, stopAtEachWayPoint{false}
 		, wp_nav_type{ WN_TOANDFRO }
+		, curTime{}
 	{
 		strcpy_s(ser_name, "NavigatorComponent");
 	}
@@ -102,6 +110,16 @@ public:
 			{
 				speed = itr->value.GetFloat();
 			}
+			if (itr->name == "stopAtEachWayPoint")
+			{
+				stopAtEachWayPoint = itr->value.GetBool();
+			}			
+			if (itr->name == "endTime")
+			{
+				endTime = itr->value.GetFloat();
+			}
+
+
 		}
 	};
 	virtual Value	Write() { 
@@ -111,6 +129,8 @@ public:
 		for (LocalString<125>& s : way_point_list)
 			string_list_val.PushBack(rapidjson::StringRef(s.c_str()), global_alloc);
 		NS_SERIALISER::ChangeData(&val, "way_point_list", string_list_val);
+		NS_SERIALISER::ChangeData(&val, "stopAtEachWayPoint", stopAtEachWayPoint);
+		NS_SERIALISER::ChangeData(&val, "endTime", endTime);
 
 		NS_SERIALISER::ChangeData(&val, "speed", speed);
 		return val;
@@ -125,6 +145,12 @@ public:
 	//================ Getter / Setter ========================//
 	void SetNextWp()
 	{
+		if (stopAtEachWayPoint)
+		{
+			isPaused = true;
+			//curTime = 0.0f;
+			time(&curTime);
+		}
 		if (wp_nav_type == WN_RANDOM)
 		{
 			srand(time(NULL));
