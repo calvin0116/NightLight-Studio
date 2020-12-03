@@ -127,8 +127,8 @@ namespace Unicorn
       Camera.SetThirdPersonCamCanZoomAnot(false);
       // Init camera position, start off at player pos
       tgtID = playerID;
-      oldTgtPos = GetTgtFromID(tgtID) /*+ camOffSet*/;
-      Camera.SetThirdPersonCamTarget(GetTgtFromID(tgtID) /*+ getCamOffsetVec()*/);
+      oldTgtPos = GetTgtFromID(tgtID) + camOffSet;
+      Camera.SetThirdPersonCamTarget(GetTgtFromID(tgtID) + getCamOffsetVec());
       offZ_lerp.old = offZ;
 
       // Set tgt id
@@ -145,7 +145,7 @@ namespace Unicorn
     {
       Vector3 camPos = Camera.GetPosition();
       camTrans.SetPosition(camPos);
-      Vector3 tgtPos = Lerp(GetTgtFromID(tgtID)) /*+ getCamOffsetVec()*/;
+      Vector3 tgtPos = Lerp(GetTgtFromID(tgtID)) + getCamOffsetVec();
       oldTgtPos = tgtPos;
       //if (script_player.CurrentState == ScriptPlayer.State.Human)
       //  tgtPos = playerTrans.GetPosition() + getCamOffsetVec();
@@ -153,6 +153,8 @@ namespace Unicorn
       //  tgtPos = GetTgtFromID(playerID);
       Camera.SetThirdPersonCamTarget(tgtPos);
       //Console.WriteLine(offZ_current);
+
+      
 
       if (isCollide)
       {
