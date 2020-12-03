@@ -41,6 +41,22 @@ namespace NS_GRAPHICS
 		void AssimpToGLM(const aiVector3D& ai, glm::vec3& glm);
 		void AssimpToGLM(const aiQuaternion& ai, glm::quat& glm);
 
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// Loading & Saving Helper Functions
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		bool LoadFBX(Model*& model);
+		bool LoadCustomMesh(Model*& model);
+		bool SaveCustomMesh(Model*& model);
+
+		void SaveMeshVertex(std::ofstream& file, Mesh*& mesh);
+		void SaveAnimatedMeshVertex(std::ofstream& file, Mesh*& mesh);
+
+		void LoadMeshVertex(std::ifstream& file, Mesh*& mesh);
+		void LoadAnimatedMeshVertex(std::ifstream& file, Mesh*& mesh);
+
+		//Just for debugging
+		void DebugToFile(const std::string& fileName);
+
 	public:
 		// Unique Singleton instance
 		static ModelLoader& GetInstance()
@@ -49,12 +65,9 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
-		//void LoadFBX(const std::string& fileName, Mesh& mesh);
-		bool LoadFBX(Model*& model);
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// Main function that is called to load model
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		void LoadModel(const std::string& fileName);
-		bool LoadCustomMesh(Model*& model);
-		bool SaveCustomMesh(Model*& model);
-
-		void DebugToFile(const std::string& fileName);
 	};
 }

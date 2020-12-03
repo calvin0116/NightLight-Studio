@@ -193,9 +193,6 @@ namespace NS_GRAPHICS
 	void CameraSystem::Update()
 	{
 
-		// update thrid person camera
-		if(useThridPersonCam)
-			UpdateThirdPersonCamera();
 
 
 		// Call to activate all keys
@@ -212,6 +209,11 @@ namespace NS_GRAPHICS
 
 		// update the view vector
 		UpdateViewVector();
+
+
+		// update thrid person camera
+		if (useThridPersonCam)
+			UpdateThirdPersonCamera();
 	}
 
 	bool CameraSystem::CheckUpdate()
@@ -293,6 +295,16 @@ namespace NS_GRAPHICS
 			//Mouse relative velocity
 			glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
 
+			// this can limit motion - me was testing
+			//if (mousePos.x >  0.05f)
+			//	mousePos.x =  0.05f;
+			//if (mousePos.y >  0.05f)
+			//	mousePos.y =  0.05f;
+			//if (mousePos.x < -0.05f)
+			//	mousePos.x = -0.05f;
+			//if (mousePos.y < -0.05f)
+			//	mousePos.y = -0.05f;
+
 			// Rotation for left and right
 			_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
 
@@ -306,6 +318,9 @@ namespace NS_GRAPHICS
 				offsetted = NS_GRAPHICS::MIN_PITCH;
 
 			_camera.SetCameraPitch(offsetted);
+
+			//std::cout << _camera.GetYaw() << ", " << _camera.GetPitch() << std::endl;
+			//std::cout << mousePos.x << ", " << mousePos.y << std::endl;
 		}
 		else
 		{

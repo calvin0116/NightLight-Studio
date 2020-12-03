@@ -27,7 +27,23 @@ namespace NS_GRAPHICS
 			bool _render_grid = true;
 		};
 
+		struct DebugLines
+		{
+			// Note that number of lines allowed is s_MaxBufferSize / 2
+			static const unsigned s_MaxBufferSize = 1000000;
+
+			GLuint _VAO = NULL;
+			GLuint _VBO = NULL;
+			GLuint _CBO = NULL;
+
+			// Debug draw lines
+			std::vector<glm::vec3> _pos; // Actual line position
+			std::vector<glm::vec3> _color; // Line color
+		};
+
+		// Editor Grid
 		DebugGrid _grid;
+		DebugLines _lines;
 
 	public:
 		// Unique Singleton instance
@@ -39,6 +55,11 @@ namespace NS_GRAPHICS
 
 		// Set all uniform locations and pushes buffer into shader
 		void Init();
+
+
+		/////////////////////////////////////
+		/// GRID FUNCTIONS
+		/////////////////////////////////////
 
 		// Sets size of grid
 		void SetGridLength(const float& length);
@@ -60,6 +81,19 @@ namespace NS_GRAPHICS
 		const glm::vec4& GetGridRGBA() const;
 
 		void CalculateGrid();
+
+		/////////////////////////////////////
+
+		/////////////////////////////////////
+		/// DEBUG LINE FUNCTIONS
+		/////////////////////////////////////
+
+		// Adds line to draw for next frame
+		void AddLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& rgb);
+
+		void FlushLineData();
+
+		/////////////////////////////////////
 
 		void Render();
 	};

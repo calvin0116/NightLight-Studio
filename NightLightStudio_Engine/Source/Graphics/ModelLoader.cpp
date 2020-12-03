@@ -31,9 +31,9 @@ namespace NS_GRAPHICS
 		std::vector<float> weights;
 		counts.resize(mesh->mNumVertices);
 		weights.resize(mesh->mNumVertices);
-		for (int i = 0; i < mesh->mNumBones; i++) {
+		for (unsigned i = 0; i < mesh->mNumBones; i++) {
 			const aiBone* bone = mesh->mBones[i];
-			for (int j = 0; j < bone->mNumWeights; j++) {
+			for (unsigned j = 0; j < bone->mNumWeights; j++) {
 				const aiVertexWeight* weight = &bone->mWeights[j];
 				counts[weight->mVertexId]++;
 				weights[weight->mVertexId] += weight->mWeight;
@@ -41,7 +41,7 @@ namespace NS_GRAPHICS
 		}
 		int max = 0;
 		int index = 0;
-		for (int i = 0; i < mesh->mNumVertices; i++) {
+		for (unsigned i = 0; i < mesh->mNumVertices; i++) {
 			if (max < counts[i])
 			{
 				max = counts[i];
@@ -81,6 +81,8 @@ namespace NS_GRAPHICS
 	//Debug Function
 	void SeeAllAnimation(aiNode* node, const aiScene* scene)
 	{
+		UNREFERENCED_PARAMETER(node);
+
 		for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 		{
 			std::cout << "Animation " << i << ": " << scene->mAnimations[i]->mName.C_Str() << std::endl;
@@ -133,6 +135,10 @@ namespace NS_GRAPHICS
 
 	Mesh* ModelLoader::ProcessMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model)
 	{
+		UNREFERENCED_PARAMETER(model);
+		UNREFERENCED_PARAMETER(node);
+		UNREFERENCED_PARAMETER(scene);
+
 		Mesh* newMesh = new Mesh();
 		newMesh->_nodeName = mesh->mName.C_Str();
 		newMesh->_vertexDatas.reserve((size_t)mesh->mNumVertices);
@@ -229,6 +235,9 @@ namespace NS_GRAPHICS
 
 	void ModelLoader::ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, AnimatedMesh* animatedMesh)
 	{
+		UNREFERENCED_PARAMETER(scene);
+		UNREFERENCED_PARAMETER(node);
+
 		for (size_t i = 0; i < mesh->mNumBones; i++) 
 		{
 			unsigned boneID = 0;
@@ -267,8 +276,9 @@ namespace NS_GRAPHICS
 			bone._boneName = node->mName.C_Str();
 			bone._boneID = model->_boneMapping[bone._boneName].first;
 			bone._boneTransformOffset = model->_boneMapping[bone._boneName].second;
+			AssimpToGLM(node->mTransformation, bone._boneTransform);
 
-			for (int i = 0; i < node->mNumChildren; i++) 
+			for (unsigned i = 0; i < node->mNumChildren; i++) 
 			{
 				BoneData childBone;
 				if (CreateSkeletal(childBone, node->mChildren[i], scene, model))
@@ -281,7 +291,7 @@ namespace NS_GRAPHICS
 		else 
 		{
 			//Find other bone in children
-			for (int i = 0; i < node->mNumChildren; i++) 
+			for (unsigned i = 0; i < node->mNumChildren; i++) 
 			{
 				if (CreateSkeletal(bone ,node->mChildren[i], scene, model))
 				{
@@ -295,13 +305,15 @@ namespace NS_GRAPHICS
 
 	void ModelLoader::ProcessAnimation(aiNode* node, const aiScene* scene, Model*& model)
 	{
+		UNREFERENCED_PARAMETER(node);
+
 		for (unsigned int i = 0; i < scene->mNumAnimations; ++i)
 		{
 			Animation* newAnim = new Animation();
 			aiAnimation* currAnim = scene->mAnimations[i];
 			newAnim->_animName = scene->mAnimations[i]->mName.C_Str();
 
-			float tickPerSec = 0.0f;
+			double tickPerSec = 0.0f;
 
 			if (currAnim->mTicksPerSecond != 0.0f)
 			{
@@ -312,12 +324,14 @@ namespace NS_GRAPHICS
 				tickPerSec = 1.0f;
 			}
 
+			//double smallestPossibleTime = 1000000;
 			newAnim->_time = currAnim->mDuration / tickPerSec;
 
 			for (unsigned int x = 0; x < currAnim->mNumChannels; ++x)
 			{
 				Animation::KeyFrames currFrame;
 
+				currFrame._position.reserve(currAnim->mChannels[x]->mNumPositionKeys);
 				for (unsigned int y = 0; y < currAnim->mChannels[x]->mNumPositionKeys; ++y)
 				{
 					currFrame._posTime.push_back(currAnim->mChannels[x]->mPositionKeys[y].mTime / tickPerSec);
@@ -326,6 +340,9 @@ namespace NS_GRAPHICS
 					currFrame._position.push_back(pos);
 				}
 
+				//smallestPossibleTime = std::min(currFrame._posTime[currFrame._posTime.size()-1], newAnim->_time);
+
+				currFrame._rotation.reserve(currAnim->mChannels[x]->mNumRotationKeys);
 				for (unsigned int y = 0; y < currAnim->mChannels[x]->mNumRotationKeys; ++y)
 				{
 					currFrame._rotateTime.push_back(currAnim->mChannels[x]->mRotationKeys[y].mTime / tickPerSec);
@@ -334,6 +351,7 @@ namespace NS_GRAPHICS
 					currFrame._rotation.push_back(rotate);
 				}
 
+				currFrame._scale.reserve(currAnim->mChannels[x]->mNumScalingKeys);
 				for (unsigned int y = 0; y < currAnim->mChannels[x]->mNumScalingKeys; ++y)
 				{
 					currFrame._scaleTime.push_back(currAnim->mChannels[x]->mScalingKeys[y].mTime / tickPerSec);
@@ -538,7 +556,9 @@ namespace NS_GRAPHICS
 		while (std::getline(meshFile, input))
 		{
 			std::cout << "Reading Variables" << std::endl;
-			if (input.find("BEGIN") != std::string::npos)
+
+			//Reads vertex data
+			if (input.find("VERTEX") != std::string::npos)
 			{
 				std::string vertexCount = input.substr(input.find(" ") + 1);
 				Mesh* newMesh = new Mesh();
@@ -549,8 +569,6 @@ namespace NS_GRAPHICS
 				newMesh->_nodeName = input;
 
 				Mesh::VertexData vertex;
-
-				int index = 0;
 
 				while (std::getline(meshFile, input, ' '))
 				{
@@ -591,13 +609,13 @@ namespace NS_GRAPHICS
 						vertex._normals.z = std::stof(normalZ);
 
 						//newMesh->_indices.push_back((unsigned short)index);
-						index++;
+						//index++;
 						newMesh->_vertexDatas.push_back(vertex);
 
-						if (index >= std::stoi(vertexCount))
-						{
-							break;
-						}
+						//if (index >= std::stoi(vertexCount))
+						//{
+						//	break;
+						//}
 					}
 				}
 
@@ -615,38 +633,68 @@ namespace NS_GRAPHICS
 		std::ofstream meshFile;
 		meshFile.open(model->_fileName.c_str());
 
-		auto meshIterator = model->_meshes.begin();
-		auto meshIteratorEnd = model->_meshes.end();
-
-		while (meshIterator != meshIteratorEnd)
+		if (model->_isAnimated)
 		{
-			meshFile << "BEGIN " << (*meshIterator)->_vertexDatas.size() << "\n";
-			meshFile << (*meshIterator)->_nodeName << "\n";
+			auto meshIterator = model->_animatedMeshes.begin();
+			auto meshIteratorEnd = model->_animatedMeshes.end();
 
-			size_t vertexCount = (*meshIterator)->_vertexDatas.size();
-			for (size_t i = 0; i < vertexCount; ++i)
+			while (meshIterator != meshIteratorEnd)
 			{
-				meshFile << "v: " << (*meshIterator)->_vertexDatas[i]._position.x << "," 
-								  << (*meshIterator)->_vertexDatas[i]._position.y << ","
-								  << (*meshIterator)->_vertexDatas[i]._position.z
-								  << "\n";
-
-				meshFile << "uv: " << (*meshIterator)->_vertexDatas[i]._uv.x << "," 
-								   << (*meshIterator)->_vertexDatas[i]._uv.x
-								   << "\n";
-
-				meshFile << "n: " << (*meshIterator)->_vertexDatas[i]._normals.x << ","
-								  << (*meshIterator)->_vertexDatas[i]._normals.y << ","
-								  << (*meshIterator)->_vertexDatas[i]._normals.z
-								  << "\n";
+				++meshIterator;
 			}
-			meshFile << "END\n";
-			++meshIterator;
 		}
+		else
+		{
+			auto meshIterator = model->_meshes.begin();
+			auto meshIteratorEnd = model->_meshes.end();
 
+			while (meshIterator != meshIteratorEnd)
+			{
+				SaveMeshVertex(meshFile, *meshIterator);
+				meshFile << "END\n";
+				++meshIterator;
+			}
+		}
 
 		meshFile.close();
 		return true;
+	}
+	void ModelLoader::SaveMeshVertex(std::ofstream& file, Mesh*& mesh)
+	{
+		file << "VERTEX " << mesh->_vertexDatas.size() << "\n";
+		file << mesh->_nodeName << "\n";
+
+		size_t vertexCount = mesh->_vertexDatas.size();
+		for (size_t i = 0; i < vertexCount; ++i)
+		{
+			file << "v: " << mesh->_vertexDatas[i]._position.x << ","
+				<< mesh->_vertexDatas[i]._position.y << ","
+				<< mesh->_vertexDatas[i]._position.z
+				<< "\n";
+
+			file << "uv: " << mesh->_vertexDatas[i]._uv.x << ","
+				<< mesh->_vertexDatas[i]._uv.x
+				<< "\n";
+
+			file << "n: " << mesh->_vertexDatas[i]._normals.x << ","
+				<< mesh->_vertexDatas[i]._normals.y << ","
+				<< mesh->_vertexDatas[i]._normals.z
+				<< "\n";
+		}
+
+		file << mesh->_indices.size() << " index ";
+		int nextLineCount = 0;
+		for (auto& indices : mesh->_indices)
+		{
+			file << indices << ",";
+			nextLineCount++;
+
+			if (nextLineCount == 6)
+			{
+				file << "\n";
+				nextLineCount = 0;
+			}
+		}
 	}
 	void ModelLoader::DebugToFile(const std::string& fileName)
 	{

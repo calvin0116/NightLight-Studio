@@ -27,27 +27,27 @@ namespace Unicorn
       return get_Center_Internal(this.native_handle);
     }
 
-    public void setCenter(Vector3 vec)
+    public void SetCenter(Vector3 vec)
     {
       set_Center_Internal(this.native_handle, vec);
     }
 
-    public Vector3 getExtend()
+    public Vector3 GetExtend()
     {
       return get_Extend_Internal(this.native_handle);
     }
 
-    public void setExtend(Vector3 vec)
+    public void SetExtend(Vector3 vec)
     {
       set_Extend_Internal(this.native_handle, vec);
     }
 
-    public Vector3 getRotation()
+    public Vector3 GetRotation()
     {
       return get_Rotation_Internal(this.native_handle);
     }
 
-    public void setRotation(Vector3 vec)
+    public void SetRotation(Vector3 vec)
     {
       set_Rotation_Internal(this.native_handle, vec);
     }

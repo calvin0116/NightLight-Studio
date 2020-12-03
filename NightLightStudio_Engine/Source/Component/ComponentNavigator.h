@@ -35,7 +35,7 @@ public:
 	WP_NAV_TYPE wp_nav_type;
 
 	float speed = 1.f;
-	time_t curTime;
+	float curTime;
 	float endTime = 0.0f;
 
 	LocalVector<LocalString<125>> way_point_list;	//Standard way point using entity to plot
@@ -47,7 +47,7 @@ public:
 		,cur_wp_index{ 0 }
 		, stopAtEachWayPoint{false}
 		, wp_nav_type{ WN_TOANDFRO }
-		, curTime{}
+		, curTime{-1.f}
 	{
 		strcpy_s(ser_name, "NavigatorComponent");
 	}
@@ -148,8 +148,7 @@ public:
 		if (stopAtEachWayPoint)
 		{
 			isPaused = true;
-			//curTime = 0.0f;
-			time(&curTime);
+			curTime = 0.0f;
 		}
 		if (wp_nav_type == WN_RANDOM)
 		{

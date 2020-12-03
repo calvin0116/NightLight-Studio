@@ -21,7 +21,7 @@ namespace NS_GRAPHICS
 	void LightSystem::Init()
 	{
 		// Set a default gamma value
-		SetGamma();
+		SetGamma(1.8f);
 	}
 
 	void LightSystem::Update()
@@ -209,6 +209,8 @@ namespace NS_GRAPHICS
 			return true;
 			break;
 		}
+
+		return false;
 	}
 
 	void LightSystem::SetDirectionalLight(ComponentLight* const& comp)

@@ -221,7 +221,7 @@ namespace NS_GRAPHICS
 				if (animComp->_isActive)
 				{
 					glm::mat4 identity(1.0f);
-					float dt = animManager->_animControllers[animComp->_controllerID]->_dt;
+					float dt = static_cast<float>(animManager->_animControllers[animComp->_controllerID]->_dt);
 					std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
 					if (!currAnimation.empty())
 					{
@@ -255,7 +255,7 @@ namespace NS_GRAPHICS
 						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
 					}
 				}
 				else
@@ -266,7 +266,7 @@ namespace NS_GRAPHICS
 						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
 					}
 				}
 
@@ -303,6 +303,9 @@ namespace NS_GRAPHICS
 				// bind ao map
 				textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
 
+				// bind normal map
+				textureManager->BindNormalTexture(graphicsComp->_normalID);
+
 				if (model->_isAnimated)
 				{
 					glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
@@ -313,7 +316,7 @@ namespace NS_GRAPHICS
 						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
 					}
 				}
 				else
@@ -325,7 +328,7 @@ namespace NS_GRAPHICS
 						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
 						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-						glDrawElements(GL_TRIANGLES, mesh->_indices.size(), GL_UNSIGNED_INT, 0);
+						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
 					}
 				}
 
@@ -336,9 +339,7 @@ namespace NS_GRAPHICS
 #endif
 
 #ifdef DRAW_DEBUG_GRID
-		SetLineThickness(0.2f);
 		debugManager->Render();
-		SetLineThickness();
 #endif
 	}
 
@@ -443,83 +444,7 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& rgb)
 	{
-		shaderManager->StartProgram(ShaderSystem::DEFAULT);
-
-		GLuint VAO = NULL;
-		GLuint VBO = NULL;
-		GLuint CBO = NULL;
-		GLuint UVBO = NULL;
-		GLuint ModelMatrixBO = NULL;
-
-		std::vector<glm::vec3> _vertices;
-		std::vector<glm::vec2> _uv;
-		std::vector<glm::vec3> _rgb;
-
-		_vertices.push_back(start);
-		_vertices.push_back(end);
-
-		_uv.emplace_back(1.f, 0.f);
-		_uv.emplace_back(1.f, 0.f);
-
-		_rgb.push_back(rgb);
-		_rgb.push_back(rgb);
-
-		glm::mat4 modelmatrix(1.f);
-
-		glGenVertexArrays(1, &VAO);
-		glGenBuffers(1, &VBO);
-		glGenBuffers(1, &CBO);
-		glGenBuffers(1, &UVBO);
-		glGenBuffers(1, &ModelMatrixBO);
-
-		glBindVertexArray(VAO);
-
-		// pos attribute
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * _vertices.size(), &_vertices[0], GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
-		glEnableVertexAttribArray(0);
-
-
-		// uv attribute
-		glBindBuffer(GL_ARRAY_BUFFER, UVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * _uv.size(), &_uv[0], GL_STATIC_DRAW);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
-		glEnableVertexAttribArray(1);
-
-		// color attribute
-		glBindBuffer(GL_ARRAY_BUFFER, CBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * _rgb.size(), &_rgb[0], GL_STATIC_DRAW);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
-		glEnableVertexAttribArray(2);
-
-		// Model Matrix
-		glBindBuffer(GL_ARRAY_BUFFER, ModelMatrixBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), &modelmatrix, GL_DYNAMIC_DRAW);
-
-		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
-		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
-		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
-		glEnableVertexAttribArray(6);
-		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
-
-		glVertexAttribDivisor(3, 1);
-		glVertexAttribDivisor(4, 1);
-		glVertexAttribDivisor(5, 1);
-		glVertexAttribDivisor(6, 1);
-
-		glDrawArrays(GL_LINES, 0, 2);
-
-		glDeleteBuffers(1, &ModelMatrixBO);
-		glDeleteBuffers(1, &UVBO);
-		glDeleteBuffers(1, &CBO);
-		glDeleteBuffers(1, &VBO);
-		glDeleteVertexArrays(1, &VAO);
-
-		shaderManager->StopProgram();
+		debugManager->AddLine(start, end, rgb);
 	}
 
 	void GraphicsSystem::SetMeshColor(Entity& entity, const glm::vec3& rgb)

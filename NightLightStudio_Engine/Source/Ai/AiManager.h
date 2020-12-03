@@ -2,6 +2,7 @@
 #include "WayPointManager.h"
 #include "../Component/ComponentNavigator.h"
 #include "../Component/ComponentPath.h"
+#include <chrono>
 
 namespace NS_AI
 {
@@ -9,6 +10,11 @@ namespace NS_AI
 	{
 		WayPointManager wp_man;
 		SystemMessaging::SystemReceiver r;
+
+		//for dt
+		std::chrono::system_clock::time_point timeThisRound;
+		std::chrono::system_clock::time_point timeLastRound;
+		std::chrono::system_clock::time_point stepTime;
 	protected:
 		friend Singleton<AiManager>;
 

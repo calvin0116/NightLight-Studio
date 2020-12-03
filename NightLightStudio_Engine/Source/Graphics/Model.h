@@ -20,6 +20,7 @@ namespace NS_GRAPHICS
 		unsigned _boneID;
 		std::string _boneName;
 		glm::mat4 _boneTransformOffset = glm::mat4(1.0f);
+		glm::mat4 _boneTransform = glm::mat4(1.0f);
 
 		std::vector<BoneData> _childrenBones;
 	};
@@ -28,9 +29,9 @@ namespace NS_GRAPHICS
 	{
 		struct KeyFrames
 		{
-			std::vector<float> _posTime;
-			std::vector<float> _rotateTime;
-			std::vector<float> _scaleTime;
+			std::vector<double> _posTime;
+			std::vector<double> _rotateTime;
+			std::vector<double> _scaleTime;
 
 			std::vector <glm::vec3> _position;
 			std::vector <glm::quat> _rotation;
@@ -41,7 +42,7 @@ namespace NS_GRAPHICS
 		};
 
 		std::string _animName;
-		float _time = 0.0f;
+		double _time = 0.0f;
 		std::unordered_map<std::string, KeyFrames> _frames;
 	};
 
@@ -85,7 +86,7 @@ namespace NS_GRAPHICS
 		~Model() = default;
 
 		//Calculation for animation
-		void GetPose(const std::string& animName, BoneData& bone, float dt, glm::mat4& parentTransform, glm::mat4& globalInverseTransform);
-		void InterpTime(unsigned& index, float& time, float& dt, std::vector<float>& times);
+		void GetPose(const std::string& animName, BoneData& bone, double dt, glm::mat4& parentTransform, glm::mat4& globalInverseTransform);
+		void InterpTime(unsigned& index, float& time, double& dt, std::vector<double>& times);
 	};
 }

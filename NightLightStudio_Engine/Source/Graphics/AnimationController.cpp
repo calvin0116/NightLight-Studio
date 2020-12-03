@@ -13,7 +13,7 @@ void AnimationController::Update(float dt)
 		{
 			if (_loop)
 			{
-				_dt -= _endAnimTime;
+				_dt = 0.0;
 			}
 			else
 			{
@@ -30,7 +30,7 @@ void AnimationController::PlayAnimation(std::string newAnim, ComponentAnimation*
 		if (_allAnims.find(newAnim) != _allAnims.end())
 		{
 			_currAnim = newAnim;
-			_dt = 0;
+			_dt = 0.0;
 			_play = true;
 			_loop = loop;
 

@@ -21,7 +21,7 @@
                 ]
             },
             "GraphicsComponent": {
-                "isActive": true,
+                "isActive": false,
                 "Model": "asset\\3d model\\test_cube.fbx",
                 "Albedo": "",
                 "Normal": "",
@@ -59,9 +59,9 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    8.207931518554688,
-                    7.418453216552734,
-                    5.685413360595703
+                    76.44738006591797,
+                    33.776702880859378,
+                    40.923988342285159
                 ],
                 "Scale": [
                     1.0,
@@ -76,14 +76,14 @@
             },
             "LightComponent": {
                 "LightType": "POINT",
-                "isActive": true,
+                "isActive": false,
                 "Diffuse": [
-                    1.0,
-                    0.09803920984268189,
-                    0.09803920984268189
+                    0.08333331346511841,
+                    0.08333273231983185,
+                    0.08333247900009155
                 ],
-                "Radius": 17.0,
-                "Intensity": 31.0,
+                "Radius": 159.0,
+                "Intensity": 126.0,
                 "CutOff": 0.0,
                 "OuterCutOff": 0.0
             }
@@ -112,14 +112,156 @@
                 "LightType": "DIRECTIONAL",
                 "isActive": true,
                 "Diffuse": [
+                    0.003921568859368563,
+                    0.003921568859368563,
+                    0.003921568859368563
+                ],
+                "Radius": 10.0,
+                "Intensity": 0.10000000149011612,
+                "CutOff": 0.0,
+                "OuterCutOff": 0.0
+            }
+        },
+        "INCENSE_POT": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -37.941253662109378,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    0.99972003698349,
+                    0.9997238516807556,
+                    0.9998288154602051
+                ],
+                "Rotate": [
+                    90.15167236328125,
+                    -89.16398620605469,
+                    179.9466094970703
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\3d model\\incense_pot_model.fbx",
+                "Albedo": "asset\\texture\\incense_pot_atlas_uv.tga",
+                "Normal": "",
+                "Metallic": "asset\\texture\\incense_pot_metallic_uv.tga",
+                "Roughness": "asset\\texture\\incense_pot_roughness_uv.tga",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
                     1.0,
                     1.0,
                     1.0
                 ],
-                "Radius": 10.0,
-                "Intensity": 1.0,
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 1.0
+            }
+        },
+        "FRONT_POINT_LIGHT": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -10.163768768310547,
+                    35.675411224365237,
+                    41.56647491455078
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "LightComponent": {
+                "LightType": "POINT",
+                "isActive": false,
+                "Diffuse": [
+                    0.8186274766921997,
+                    0.8186230659484863,
+                    0.8186192512512207
+                ],
+                "Radius": 633.0,
+                "Intensity": 7.0,
                 "CutOff": 0.0,
                 "OuterCutOff": 0.0
+            }
+        },
+        "INCENSE_POT_ATLAS": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    24.92548942565918,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    0.9999938607215881,
+                    0.9999938011169434,
+                    1.0
+                ],
+                "Rotate": [
+                    -89.96144104003906,
+                    -89.95938873291016,
+                    -0.019273661077022554
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\3d model\\incense_pot_model.fbx",
+                "Albedo": "asset\\texture\\incense_pot_atlas_uv.tga",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
             }
         }
     }

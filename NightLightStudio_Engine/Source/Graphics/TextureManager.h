@@ -36,12 +36,6 @@ namespace NS_GRAPHICS
 		// This should be called upon graphics system shutdown
 		void DumpTextureData();
 
-		// Bind textures to uniform in shader
-		//void BindDiffuseTexture(const unsigned& id);
-
-		//void BindSpecularTexture(const unsigned& id);
-
-
 		// PBR Materials functions
 
 		void BindAlbedoTexture(const unsigned& id);
@@ -51,5 +45,7 @@ namespace NS_GRAPHICS
 		void BindRoughnessTexture(const unsigned& id);
 
 		void BindAmbientOcclusionTexture(const unsigned& id);
+
+		void BindNormalTexture(const unsigned& id);
 	};
 }
