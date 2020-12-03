@@ -8,20 +8,20 @@ namespace Unicorn
   public class WindBehaviour : UniBehaviour
   {
     // Variables
-    public bool activate = false;
-    public int player_ID;
-    public int cam_ID;
-    public int p_CamPos;
-    public int p_SpawnPos;
-    bool isActive;
+    bool activate = false;
+    public float dirX;
+    public float dirY;
+    public float dirZ;
+    public Vector3 dir;
+
+
 
     //Required Components
     Variables ObjVariables;
     // Rigidbody
 
     //Variable Component Values
-    public static string possessionCamPos;
-    public static string possessionSpawnPos;
+    public static float windStrength;
 
     // Getting Script
     ScriptPlayer script_Player;
@@ -29,78 +29,53 @@ namespace Unicorn
 
     public override void Init()
     {
-      player_ID = GameObjectFind("Player");
-      cam_ID = GameObjectFind("PlayerCamera");
+    
 
       ObjVariables = GetVariables(id);
-      isActive = true;
-
-      possessionCamPos = ObjVariables.GetString(0);
-      possessionSpawnPos = ObjVariables.GetString(1);
-
-      p_CamPos = GameObjectFind(possessionCamPos);
-      p_SpawnPos = GameObjectFind(possessionSpawnPos);
+      windStrength = ObjVariables.GetFloat(0);
+      dirX = ObjVariables.GetFloat(1);
+      dirY = ObjVariables.GetFloat(2);
+      dirZ = ObjVariables.GetFloat(3);
+      dir = new Vector3(dirX, dirY, dirZ);
     }
 
     public override void LateInit()
     {
-      script_Player = GetScript(player_ID);
+ 
       //script_Cam = GetScript(cam_ID);
     }
 
     public override void Update()
     {
-      if (activate == true)
-      {
-        // Set Player State to possessionstate
-        ObjFunction();
-      }
+      
     }
     public override void FixedUpdate()
     {
 
     }
-
-    public override void OnCollisionEnter(int other)
+    
+    public void Activate()
     {
-      if (isActive == true)
-      {
-        if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
-        {
-
-          // Set player script nextspawn position == possessionSpawnPos
-          script_Player.NextState = ScriptPlayer.State.Possessed;
-
-          Transform p_AfterSpawn = GetTransform(p_SpawnPos);
-          Vector3 p_AfterSpawnPos = p_AfterSpawn.getPosition();
-          script_Player.spawnPoint = p_AfterSpawnPos;
-          // Set Camera script  position == possessionSpawnPos
-
-          //Transform p_Target = GetTransform(p_CamPos);
-          //Vector3 p_TargetPos = p_Target.getPosition();
-          script_Player.camScript.tgtID = p_CamPos; // Go and expose other tgt in scriptcamera.
-
-          // Activate energy consumption delay 
-          //activate = true;
-          //script_Player.CurrentState = ScriptPlayer.State.Possessed;
-        }
-      }
-      if (isActive == false)
-      {
-        activate = false;
-      }
+      activate = true;
+      Console.WriteLine("ActivateWind Power");
     }
+
     public void Deactivate()
     {
-      isActive = !isActive;
+      activate = false;
     }
-    public void ObjFunction()
-    {
-      //script_Player.CurrentState == ScriptPlayer.State.Possessed;      
-    }
+   
 
     public override void OnTriggerEnter(int other)
     {
+     
+      //Tailsmen Object tag = 2 
+      if(GetTransform(other).tag == 2 && activate==true)
+      {
+
+         Force.Apply(other,dir , windStrength);
+
+      }
 
     }
 
