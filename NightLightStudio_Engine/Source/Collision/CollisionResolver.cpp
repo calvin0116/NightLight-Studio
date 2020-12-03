@@ -2,7 +2,7 @@
 #include "CollisionResolver.h"
 #include "..\Physics\SystemPhysics.h"
 #include <limits>
-
+#include "CollisionMathLib.h"
 #include "..\Logic\SystemLogic.h"
 
 #include "..\Graphics\CameraSystem.h"
@@ -245,12 +245,12 @@ void CollsionResolver::resolveCollision()
 
 	// SYS LOGIC TODO!!!
 
-	for (TriggerEvent& trigEvent : trigEventList)
-	{
-		///////////////////////////////
+	//for (TriggerEvent& trigEvent : trigEventList)
+	//{
+	//	///////////////////////////////
 
-		// pass to syslogic
-		NS_LOGIC::SYS_LOGIC->OnTriggerEnter(trigEvent.entity1, trigEvent.entity2);
+	//	// pass to syslogic
+	//	NS_LOGIC::SYS_LOGIC->OnTriggerEnter(trigEvent.entity1, trigEvent.entity2);
 
 
 
@@ -273,7 +273,7 @@ void CollsionResolver::resolveCollision()
 		//	//NS_LOGIC::SYS_LOGIC->OnTriggerexit(colEvent.entity1, colEvent.entity2);
 		//}
 /////////////////////////////dun touch///////////////////////////////
-	}
+	//}
 
 	//for (CollisionEvent& colEvent : colEventList)
 	//{
@@ -489,6 +489,13 @@ void CollsionResolver::resolveEventNormally(CollisionEvent& colEvent)
 
 void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 {
+  AABBCollider tmp1 = colEvent.collider1->collider.aabb;
+  AABBCollider tmp2 = colEvent.collider2->collider.aabb;
+  bool check = NlMath::AABBtoAABB(tmp1,tmp2);
+  if (check==false)
+  {
+    return;
+  }
 	resolveEventNormally(colEvent);
 
 	switch (colEvent.colidingSide)
