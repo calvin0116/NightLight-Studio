@@ -91,9 +91,9 @@ namespace Unicorn
     //public Vector3 camTgt;
     // Camera values
     Vector3 dir = new Vector3(0.0f, 0.0f, 0.0f); // Direction to move camera
-    float Threshold = 10.0f; // Distance to move before camera follows player
+    float Threshold = 0.1f; // Distance to move before camera follows player
     //float Time = 0.5f; // Time to move lerp camera
-    Vector3 Time = new Vector3(0.03f, 0.03f, 0.5f);
+    Vector3 Time = new Vector3(0.03f, 0.03f, 0.03f);
     float offX;
     float offY;
     float offZ;
