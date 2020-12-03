@@ -31,9 +31,9 @@ namespace NS_GRAPHICS
 		std::vector<float> weights;
 		counts.resize(mesh->mNumVertices);
 		weights.resize(mesh->mNumVertices);
-		for (int i = 0; i < mesh->mNumBones; i++) {
+		for (unsigned i = 0; i < mesh->mNumBones; i++) {
 			const aiBone* bone = mesh->mBones[i];
-			for (int j = 0; j < bone->mNumWeights; j++) {
+			for (unsigned j = 0; j < bone->mNumWeights; j++) {
 				const aiVertexWeight* weight = &bone->mWeights[j];
 				counts[weight->mVertexId]++;
 				weights[weight->mVertexId] += weight->mWeight;
@@ -41,7 +41,7 @@ namespace NS_GRAPHICS
 		}
 		int max = 0;
 		int index = 0;
-		for (int i = 0; i < mesh->mNumVertices; i++) {
+		for (unsigned i = 0; i < mesh->mNumVertices; i++) {
 			if (max < counts[i])
 			{
 				max = counts[i];
@@ -81,6 +81,8 @@ namespace NS_GRAPHICS
 	//Debug Function
 	void SeeAllAnimation(aiNode* node, const aiScene* scene)
 	{
+		UNREFERENCED_PARAMETER(node);
+
 		for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 		{
 			std::cout << "Animation " << i << ": " << scene->mAnimations[i]->mName.C_Str() << std::endl;
@@ -133,6 +135,10 @@ namespace NS_GRAPHICS
 
 	Mesh* ModelLoader::ProcessMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model)
 	{
+		UNREFERENCED_PARAMETER(model);
+		UNREFERENCED_PARAMETER(node);
+		UNREFERENCED_PARAMETER(scene);
+
 		Mesh* newMesh = new Mesh();
 		newMesh->_nodeName = mesh->mName.C_Str();
 		newMesh->_vertexDatas.reserve((size_t)mesh->mNumVertices);
@@ -229,6 +235,9 @@ namespace NS_GRAPHICS
 
 	void ModelLoader::ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, AnimatedMesh* animatedMesh)
 	{
+		UNREFERENCED_PARAMETER(scene);
+		UNREFERENCED_PARAMETER(node);
+
 		for (size_t i = 0; i < mesh->mNumBones; i++) 
 		{
 			unsigned boneID = 0;
@@ -269,7 +278,7 @@ namespace NS_GRAPHICS
 			bone._boneTransformOffset = model->_boneMapping[bone._boneName].second;
 			AssimpToGLM(node->mTransformation, bone._boneTransform);
 
-			for (int i = 0; i < node->mNumChildren; i++) 
+			for (unsigned i = 0; i < node->mNumChildren; i++) 
 			{
 				BoneData childBone;
 				if (CreateSkeletal(childBone, node->mChildren[i], scene, model))
@@ -282,7 +291,7 @@ namespace NS_GRAPHICS
 		else 
 		{
 			//Find other bone in children
-			for (int i = 0; i < node->mNumChildren; i++) 
+			for (unsigned i = 0; i < node->mNumChildren; i++) 
 			{
 				if (CreateSkeletal(bone ,node->mChildren[i], scene, model))
 				{
@@ -296,6 +305,8 @@ namespace NS_GRAPHICS
 
 	void ModelLoader::ProcessAnimation(aiNode* node, const aiScene* scene, Model*& model)
 	{
+		UNREFERENCED_PARAMETER(node);
+
 		for (unsigned int i = 0; i < scene->mNumAnimations; ++i)
 		{
 			Animation* newAnim = new Animation();
@@ -313,7 +324,7 @@ namespace NS_GRAPHICS
 				tickPerSec = 1.0f;
 			}
 
-			double smallestPossibleTime = 1000000;
+			//double smallestPossibleTime = 1000000;
 			newAnim->_time = currAnim->mDuration / tickPerSec;
 
 			for (unsigned int x = 0; x < currAnim->mNumChannels; ++x)

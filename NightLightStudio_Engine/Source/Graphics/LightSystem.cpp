@@ -209,6 +209,8 @@ namespace NS_GRAPHICS
 			return true;
 			break;
 		}
+
+		return false;
 	}
 
 	void LightSystem::SetDirectionalLight(ComponentLight* const& comp)
