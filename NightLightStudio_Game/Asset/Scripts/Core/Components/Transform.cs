@@ -14,44 +14,44 @@ namespace Unicorn
     //private Vector3 position = new Vector3();
     //private Vector3 rotation = new Vector3();
     //private Vector3 scale = new Vector3();
-    public int Tag
+    public int tag
     {
     get { return get_Tag_Internal(native_handle); }
     set { set_Tag_Internal(native_handle, value); }
     }
 
-    public string Name
+    public string name
     {
     get { return get_Name_Internal(this.native_handle); }
     set { set_Name_Internal(this.native_handle, value); }
     }
 
-    public Vector3 getPosition()
+    public Vector3 GetPosition()
     {
       return get_Position_Internal(this.native_handle);
     }
 
-    public void setPosition(Vector3 vec)
+    public void SetPosition(Vector3 vec)
     {
       set_Position_Internal(this.native_handle, vec);
     }
 
-    public Vector3 getRotation()
+    public Vector3 GetRotation()
     {
       return get_Rotation_Internal(this.native_handle);
     }
 
-    public void setRotation(Vector3 vec)
+    public void SetRotation(Vector3 vec)
     {
       set_Rotation_Internal(this.native_handle, vec);
     }
 
-    public Vector3 getScale()
+    public Vector3 GetScale()
     {
       return get_Scale_Internal(this.native_handle);
     }
 
-    public void setScale(Vector3 vec)
+    public void SetScale(Vector3 vec)
     {
       set_Scale_Internal(this.native_handle, vec);
     }

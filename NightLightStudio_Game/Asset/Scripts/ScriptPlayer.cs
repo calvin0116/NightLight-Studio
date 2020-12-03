@@ -118,7 +118,7 @@ namespace Unicorn
       // 
       Transform otherTransform = GetTransform(other);
 
-      if (otherTransform.Tag == 1)
+      if (otherTransform.tag == 1)
       {
         // Always use next state to change state.
         // CurrentState = State.Possessed;
@@ -256,7 +256,7 @@ namespace Unicorn
               NextState = State.Moth;
             // Shouldn't have logic here. This function is for setting next state only.
             //Transform p_Target = GetTransform(id);
-            //spawnPoint = p_Target.getPosition();
+            //spawnPoint = p_Target.GetPosition();
             break;
           case State.Moth:
             NextState = State.Human;
@@ -265,7 +265,7 @@ namespace Unicorn
             NextState = State.Human;
             // Same thing, no logic here.
             //Transform p_Target2 = GetTransform(id);
-            //p_Target2.setPosition(spawnPoint);
+            //p_Target2.SetPosition(spawnPoint);
             break;
         }
       }
@@ -325,15 +325,15 @@ namespace Unicorn
               //moveForce = mothForce;
               //Set to Moth spawn Eyelevel//// not working
               playerPos = GetTransform(id);
-              Vector3 playerPosVect = playerPos.getPosition(); // Set eye level of player
+              Vector3 playerPosVect = playerPos.GetPosition(); // Set eye level of player
               //Vector3 eyelevel =  new Vector3(0.0f, 10.0f, 0.0f);
-              // playerPos.setPosition(eyelevel);
+              // playerPos.SetPosition(eyelevel);
               Console.WriteLine("PlayerPos be4");
               Console.WriteLine(playerPosVect.x);
               Console.WriteLine(playerPosVect.y);
               Console.WriteLine(playerPosVect.z);
               Console.WriteLine("---------");
-              playerPos.setPosition(new Vector3(playerPosVect.x, playerPosVect.y + 1000.0f, playerPosVect.z));
+              playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 1000.0f, playerPosVect.z));
               Console.WriteLine("PlayerPos aft");
               Console.WriteLine(playerPosVect.x);
               Console.WriteLine(playerPosVect.y);

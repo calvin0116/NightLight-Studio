@@ -72,7 +72,7 @@ namespace Unicorn
           script_Player.NextState = ScriptPlayer.State.Possessed;
 
           Transform p_AfterSpawn = GetTransform(p_SpawnPos);
-          Vector3 p_AfterSpawnPos = p_AfterSpawn.getPosition();
+          Vector3 p_AfterSpawnPos = p_AfterSpawn.GetPosition();
           script_Player.spawnPoint = p_AfterSpawnPos;
           // Set Camera script  position == possessionSpawnPos
 
