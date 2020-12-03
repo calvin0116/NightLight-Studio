@@ -45,7 +45,7 @@ namespace Unicorn
     bool movedS = false;
     bool movedD = false;
     // Player State
-    public State CurrentState = State.Human;
+    public State CurrentState { get; private set; }
     public State NextState = State.Human;
     //Vector3 inVec;
     // accumulated dt
@@ -57,6 +57,9 @@ namespace Unicorn
 
     public override void Init()
     {
+      CurrentState = State.Human;
+      NextState = State.Human;
+
       playerRB = GetRigidBody(id);
       playerCharModel = GetGraphics(id);
       playerVar = GetVariables(id);
@@ -113,6 +116,7 @@ namespace Unicorn
 
       if (otherTransform.Tag == 1)
       {
+        // Always use next state to change state.
         // CurrentState = State.Possessed;
 
         //canMove = false;
@@ -246,23 +250,18 @@ namespace Unicorn
             // Only can change to moth if enough energy
             if (curEnergy >= EnergyTreshold)
               NextState = State.Moth;
-
-
-
+            // Shouldn't have logic here. This function is for setting next state only.
             Transform p_Target = GetTransform(id);
             spawnPoint = p_Target.getPosition();
-
             break;
           case State.Moth:
             NextState = State.Human;
             break;
-
           case State.Possessed:
             NextState = State.Human;
-
+            // Same thing, no logic here.
             Transform p_Target2 = GetTransform(id);
             //p_Target2.setPosition(spawnPoint);
-
             break;
         }
       }
@@ -320,18 +319,14 @@ namespace Unicorn
             case State.Moth:
               //moveForce = mothForce;
               playerCharModel.AddModel(mothModePath);
-
               playerRB.isGravity = false;
-
               //Set to Moth spawn Eyelevel//// not working
               playerPos = GetTransform(id);
               Vector3 playerPosVect = playerPos.getPosition();
-
               //Vector3 eyelevel =  new Vector3(0.0f, 10.0f, 0.0f);
               // playerPos.setPosition(eyelevel);
-              playerPos.setPosition(new Vector3(playerPosVect.x+1000.0f, playerPosVect.y + 1000.0f, playerPosVect.z));
+              // playerPos.setPosition(new Vector3(playerPosVect.x + 1000.0f, playerPosVect.y + 1000.0f, playerPosVect.z));
               canMove = true;
-
               break;
 
             case State.Possessed:

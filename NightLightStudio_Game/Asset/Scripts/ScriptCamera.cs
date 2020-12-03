@@ -79,12 +79,12 @@ namespace Unicorn
     int playerID; // Player ID
     // Components
     Transform playerTrans; // Player's transform
-    Transform otherTrans;  // Prop's transform
+    //Transform otherTrans;  // Prop's transform
     Transform camTrans; // Camera's transform
     Variables camVar; // Camera variables comp to get offset
 
     //Variables
-    public Vector3 oldTgtPos;
+    public Vector3 oldTgtPos { get; private set; }
     // Camera values
     Vector3 dir = new Vector3(0.0f, 0.0f, 0.0f); // Direction to move camera
     float Threshold = 10.0f; // Distance to move before camera follows player
