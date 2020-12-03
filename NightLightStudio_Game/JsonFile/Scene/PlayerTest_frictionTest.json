@@ -153,7 +153,7 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "Asset\\3D model\\New_Moth_B4.FBX",
+                "Model": "Asset\\3D model\\New_Character_Model_B4.FBX",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
