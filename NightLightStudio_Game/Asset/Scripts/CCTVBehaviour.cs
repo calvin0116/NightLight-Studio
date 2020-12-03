@@ -78,7 +78,7 @@ namespace Unicorn
 
           //Transform p_Target = GetTransform(p_CamPos);
           //Vector3 p_TargetPos = p_Target.getPosition();
-          script_Player.camScript.tgtID = id; // Go and expose other tgt in scriptcamera.
+          script_Player.camScript.tgtID = p_CamPos; // Go and expose other tgt in scriptcamera.
 
           // Activate energy consumption delay 
           //activate = true;

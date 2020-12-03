@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 
 namespace Unicorn
 {
-  public class FanBehaviour : UniBehaviour
+  public class WindBehaviour : UniBehaviour
   {
     // Variables
     public bool activate = false;
@@ -22,7 +22,6 @@ namespace Unicorn
     //Variable Component Values
     public static string possessionCamPos;
     public static string possessionSpawnPos;
-    public static string wind;
 
     // Getting Script
     ScriptPlayer script_Player;
@@ -38,7 +37,6 @@ namespace Unicorn
 
       possessionCamPos = ObjVariables.GetString(0);
       possessionSpawnPos = ObjVariables.GetString(1);
-      
 
       p_CamPos = GameObjectFind(possessionCamPos);
       p_SpawnPos = GameObjectFind(possessionSpawnPos);
