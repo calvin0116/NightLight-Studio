@@ -38,6 +38,7 @@ uniform sampler2D AlbedoTex;
 uniform sampler2D MetallicTex;
 uniform sampler2D RoughnessTex;
 uniform sampler2D AOTex; // Might need extra uniform to determine if AO is available
+uniform sampler2D NormalTex;
 
 uniform float Gamma;
 
@@ -98,6 +99,7 @@ void main(void)
     vec3 albedo = texture(AlbedoTex, texCoords).rgb;
     float metallic = texture(MetallicTex, texCoords).r;
     float roughness = max(texture(RoughnessTex, texCoords).r, 0.001f);
+    //vec3 normal = texture(NormalTex, texCoords).rgb; // for normal map
 
     roughness *= max(RoughnessControl, 0.00001f);
     metallic *= max(MetallicControl, 0.00001f);
@@ -105,6 +107,7 @@ void main(void)
     float ao = 1.f;
 
     // properties
+    //vec3 N = normalize(normal * 2.f * 1.f); // Convert normal to tangent space
     vec3 N = normalize(normal); // required normal vector
     vec3 V = normalize(viewPos.xyz - fragPos); // required view vector
 

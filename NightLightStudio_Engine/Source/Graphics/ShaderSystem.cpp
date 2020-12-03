@@ -104,6 +104,7 @@ namespace NS_GRAPHICS
 			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
 			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
 			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
+			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
 			StopProgram();
 
 			StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
@@ -111,6 +112,7 @@ namespace NS_GRAPHICS
 			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
 			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
 			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
+			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
 			StopProgram();
 		}
 	}

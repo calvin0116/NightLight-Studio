@@ -303,6 +303,9 @@ namespace NS_GRAPHICS
 				// bind ao map
 				textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
 
+				// bind normal map
+				textureManager->BindNormalTexture(graphicsComp->_normalID);
+
 				if (model->_isAnimated)
 				{
 					glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
