@@ -6,8 +6,6 @@ namespace Unicorn
 {
   public class FanBehaviour : UniBehaviour
   {
-
-
     // Variables
     public bool activate;
     public int player_ID;
@@ -36,14 +34,11 @@ namespace Unicorn
 
       possessionCamPos = ObjVariables.GetString(0);
       possessionSpawnPos = ObjVariables.GetString(1);
-
-
     }
 
     public override void LateInit()
     {
       script_Player = GetScript(player_ID);
-
     }
 
     public override void Update()
@@ -54,9 +49,6 @@ namespace Unicorn
         // Set Player State to possessionstate
         ObjFunction();
       }
-
-
-
     }
     public override void FixedUpdate()
     {
@@ -73,8 +65,6 @@ namespace Unicorn
           // Set player script nextspawn position == possessionSpawnPos
           // Set Camera script  position == possessionSpawnPos
           // Activate energy consumption delay 
-
-
         }
       }
 

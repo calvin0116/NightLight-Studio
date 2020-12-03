@@ -143,10 +143,10 @@ namespace Unicorn
     public override void Update()
     {
       Vector3 camPos = Camera.GetPosition();
-      camTrans.setPosition(camPos);
+      camTrans.SetPosition(camPos);
       Vector3 tgtPos = Lerp(GetTgtFromID(tgtID)) + getCamOffsetVec();
       //if (script_player.CurrentState == ScriptPlayer.State.Human)
-      //  tgtPos = playerTrans.getPosition() + getCamOffsetVec();
+      //  tgtPos = playerTrans.GetPosition() + getCamOffsetVec();
       //if (script_player.CurrentState == ScriptPlayer.State.Moth)
       //  tgtPos = GetTgtFromID(playerID);
       Camera.SetThirdPersonCamTarget(tgtPos);
@@ -162,7 +162,7 @@ namespace Unicorn
       }
       //Console.WriteLine("offZ_current" + offZ_current);
       Camera.SetThirdPersonCamDistance(offZ_current);
-      //Camera.SetThirdPersonCamTarget(Lerp(playerTrans.getPosition() + camOffSet));
+      //Camera.SetThirdPersonCamTarget(Lerp(playerTrans.GetPosition() + camOffSet));
     }
 
     public override void FixedUpdate()
@@ -244,7 +244,7 @@ namespace Unicorn
     public Vector3 GetTgtFromID(int id)
     {
       Transform trans = GetTransform(id);
-      return trans.getPosition();
+      return trans.GetPosition();
     }
   }
 }

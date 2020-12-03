@@ -72,12 +72,12 @@ namespace Unicorn
           script_Player.NextState = ScriptPlayer.State.Possessed;
 
           Transform p_AfterSpawn = GetTransform(p_SpawnPos);
-          Vector3 p_AfterSpawnPos = p_AfterSpawn.getPosition();
+          Vector3 p_AfterSpawnPos = p_AfterSpawn.GetPosition();
           script_Player.spawnPoint = p_AfterSpawnPos;
           // Set Camera script  position == possessionSpawnPos
 
           //Transform p_Target = GetTransform(p_CamPos);
-          //Vector3 p_TargetPos = p_Target.getPosition();
+          //Vector3 p_TargetPos = p_Target.GetPosition();
           script_Player.camScript.tgtID = id; // Go and expose other tgt in scriptcamera.
 
           // Activate energy consumption delay 
