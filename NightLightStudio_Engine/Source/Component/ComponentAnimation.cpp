@@ -39,6 +39,11 @@ void ComponentAnimation::StopAnimation()
 	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_dt = 0.0f;
 }
 
+bool ComponentAnimation::IsFinished()
+{
+	return !NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play;
+}
+
 //read and write function for initialization from saved files
 
 inline void ComponentAnimation::Read(Value& val)

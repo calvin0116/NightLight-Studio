@@ -20,6 +20,7 @@ public:
 	void PauseAnimation();
 	void ResumeAnimation();
 	void StopAnimation();
+	bool IsFinished();
 
 	//read and write function for initialization from saved files
 	void	Read(Value&);
