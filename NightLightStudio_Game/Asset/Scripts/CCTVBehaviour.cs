@@ -25,7 +25,7 @@ namespace Unicorn
 
     // Getting Script
     ScriptPlayer script_Player;
-    ScriptCamera script_Cam;
+    //ScriptCamera script_Cam;
 
     public override void Init()
     {
@@ -45,7 +45,7 @@ namespace Unicorn
     public override void LateInit()
     {
       script_Player = GetScript(player_ID);
-      script_Cam = GetScript(cam_ID);
+      //script_Cam = GetScript(cam_ID);
     }
 
     public override void Update()
@@ -74,21 +74,17 @@ namespace Unicorn
           Transform p_AfterSpawn = GetTransform(p_SpawnPos);
           Vector3 p_AfterSpawnPos = p_AfterSpawn.getPosition();
           script_Player.spawnPoint = p_AfterSpawnPos;
-
-
           // Set Camera script  position == possessionSpawnPos
 
           //Transform p_Target = GetTransform(p_CamPos);
           //Vector3 p_TargetPos = p_Target.getPosition();
-          //script_Cam.oldTgtPos = p_TargetPos; // Go and expose other tgt in scriptcamera.
+          script_Player.camScript.tgtID = id; // Go and expose other tgt in scriptcamera.
 
           // Activate energy consumption delay 
           //activate = true;
           //script_Player.CurrentState = ScriptPlayer.State.Possessed;
-
         }
       }
-
       if (isActive == false)
       {
         activate = false;

@@ -12,12 +12,14 @@ namespace Unicorn
       Moth,
       Possessed
     }
+
     // Used player components
     RigidBody playerRB;
     Variables playerVar;
     Graphics playerCharModel;
     Transform playerPos;
     // Other entity's components
+    public ScriptCamera camScript; // To set camera tgt back to player after becoming human.
 
     // Player Stats, default values
     public static float humnForce = 100000.0f;  // Move force while human
@@ -65,6 +67,8 @@ namespace Unicorn
       playerVar = GetVariables(id);
       playerPos = GetTransform(id);
 
+      // Get scripts
+      camScript = GetScript(GameObjectFind("PlayerCamera"));
 
       // Get default values from variables (5Floats) (2 Strings)
       humnForce = playerVar.GetFloat(0);
@@ -251,8 +255,8 @@ namespace Unicorn
             if (curEnergy >= EnergyTreshold)
               NextState = State.Moth;
             // Shouldn't have logic here. This function is for setting next state only.
-            Transform p_Target = GetTransform(id);
-            spawnPoint = p_Target.getPosition();
+            //Transform p_Target = GetTransform(id);
+            //spawnPoint = p_Target.getPosition();
             break;
           case State.Moth:
             NextState = State.Human;
@@ -260,7 +264,7 @@ namespace Unicorn
           case State.Possessed:
             NextState = State.Human;
             // Same thing, no logic here.
-            Transform p_Target2 = GetTransform(id);
+            //Transform p_Target2 = GetTransform(id);
             //p_Target2.setPosition(spawnPoint);
             break;
         }
@@ -292,56 +296,60 @@ namespace Unicorn
 
     public void CheckChangeState()
     {
-      if (NextState == State.Possessed && NextState != CurrentState)
+      // If next state not equal to current state
+      if (NextState != CurrentState)
       {
-        CurrentState = NextState;
-        // Logic for possessed state
-
-        playerCharModel.AddModel(humanModePath);
-        canMove = false;
-      }
-      else if (NextState != CurrentState)
-      {
-
-        if (accumulatedDt >= transformTime)
+        // Changing to possessed state. It's here because going possessed state has no delay.
+        if (NextState == State.Possessed)
+        {
+          // Logic for possessed state
+          CurrentState = NextState;
+          playerCharModel.AddModel(humanModePath);
+          canMove = false;
+        }
+        else if (accumulatedDt >= transformTime)
         {
           accumulatedDt = 0.0f;
           CurrentState = NextState;
-          Console.WriteLine(CurrentState);
+          //Console.WriteLine(CurrentState);
           switch (CurrentState)
           {
             case State.Human:
               moveForce = humnForce;
               playerCharModel.AddModel(humanModePath);
+              camScript.tgtID = id;
               playerRB.isGravity = true;
               canMove = true;
               break;
             case State.Moth:
               //moveForce = mothForce;
-              playerCharModel.AddModel(mothModePath);
-              playerRB.isGravity = false;
               //Set to Moth spawn Eyelevel//// not working
               playerPos = GetTransform(id);
-              Vector3 playerPosVect = playerPos.getPosition();
+              Vector3 playerPosVect = playerPos.getPosition(); // Set eye level of player
               //Vector3 eyelevel =  new Vector3(0.0f, 10.0f, 0.0f);
               // playerPos.setPosition(eyelevel);
-              // playerPos.setPosition(new Vector3(playerPosVect.x + 1000.0f, playerPosVect.y + 1000.0f, playerPosVect.z));
+              Console.WriteLine("PlayerPos be4");
+              Console.WriteLine(playerPosVect.x);
+              Console.WriteLine(playerPosVect.y);
+              Console.WriteLine(playerPosVect.z);
+              Console.WriteLine("---------");
+              playerPos.setPosition(new Vector3(playerPosVect.x, playerPosVect.y + 1000.0f, playerPosVect.z));
+              Console.WriteLine("PlayerPos aft");
+              Console.WriteLine(playerPosVect.x);
+              Console.WriteLine(playerPosVect.y);
+              Console.WriteLine(playerPosVect.z);
+              Console.WriteLine("---------");
               canMove = true;
+              playerCharModel.AddModel(mothModePath);
+              playerRB.isGravity = false;
               break;
-
-            case State.Possessed:
-              break;
-
           }
-
-
         }
         else
         {
           canMove = false;
           accumulatedDt += RealDT();
         }
-
       }
     }
 

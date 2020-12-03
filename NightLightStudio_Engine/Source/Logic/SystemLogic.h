@@ -25,6 +25,7 @@ namespace NS_LOGIC
     MonoMethod* baseInit;
     MonoMethod* baseLateInit;
     MonoMethod* baseUpdate;
+    MonoMethod* baseFixedUpdate;
     MonoMethod* baseExit;
     MonoMethod* baseCollisionEnter;
     MonoMethod* baseTriggerEnter;
