@@ -1,24 +1,65 @@
 {
     "Objects": {
-        "Camera": {
+        "Entity_0": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    1.0,
-                    2.0,
-                    3.0
+                    0.0,
+                    140.63565063476563,
+                    0.0
                 ],
                 "Scale": [
-                    1.0,
-                    1.0,
-                    1.0
+                    100.0,
+                    100.0,
+                    100.0
                 ],
                 "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
                     0.0,
                     0.0,
                     0.0
                 ]
+            },
+            "RigidBody": {
+                "isStatic": false,
+                "isGravity": true,
+                "mass": 10.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "Hello"
             }
         },
         "Plane": {
@@ -31,13 +72,13 @@
                     1.0
                 ],
                 "Scale": [
-                    10.0,
-                    1.0,
-                    10.0
+                    1000.0,
+                    100.0,
+                    1000.0
                 ],
                 "Rotate": [
                     0.0,
-                    0.0,
+                    -0.0,
                     0.0
                 ]
             },

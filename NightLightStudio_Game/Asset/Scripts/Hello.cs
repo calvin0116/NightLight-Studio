@@ -6,24 +6,26 @@ namespace Unicorn
 {
   public class Hello : UniBehaviour
   {
-    Navigator nav;
-    
+    Transform trans;
+
     public override void Init()
     {
-      nav = GetNavigator(id);
+      trans = GetTransform(id);
     }
 
     public override void LateInit()
     {
-      Console.WriteLine(nav.speed);
-      Console.WriteLine(nav.isFollowing);
-      Console.WriteLine(nav.isPaused);
     }
 
     public override void Update()
     {
+
     }
-    public override void FixedUpdate() { }
+    public override void FixedUpdate()
+    {
+      if(Input.GetKeyPress(VK.IKEY_SPACE))
+        trans.SetPosition(new Vector3(0.0f, trans.GetPosition().y + 1000.0f, 0.0f));
+    }
 
     public override void OnCollisionEnter(int other) { Console.WriteLine("Collision Enter!"); }
     public override void OnCollisionStay(int other) { Console.WriteLine("Collision Stay!"); }
