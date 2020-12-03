@@ -64,7 +64,7 @@ namespace Unicorn
       // tag 1 = Possessable
       // 
       Transform otherTransform = GetTransform(other);
-      if (otherTransform.Tag == 1)
+      if (otherTransform.tag == 1)
       {
 
       }

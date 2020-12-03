@@ -122,6 +122,7 @@ namespace NS_LOGIC
     baseInit =            MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
     baseLateInit =        MonoWrapper::GetObjectMethod("LateInit", "UniBehaviour");
     baseUpdate =          MonoWrapper::GetObjectMethod("Update", "UniBehaviour");
+    baseFixedUpdate =     MonoWrapper::GetObjectMethod("FixedUpdate", "UniBehaviour");
     baseExit =            MonoWrapper::GetObjectMethod("Exit", "UniBehaviour");
     baseCollisionEnter =  MonoWrapper::GetObjectMethod("OnCollisionEnter", "UniBehaviour");
     baseCollisionStay = MonoWrapper::GetObjectMethod("OnCollisionStay", "UniBehaviour");
@@ -213,6 +214,19 @@ namespace NS_LOGIC
   {
     if (!_isPlaying)
       return;
+#ifdef CS_ENV
+    // C# Scripts Update
+    auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    auto itrE = G_ECMANAGER->end<ComponentScript>();
+    for (; itrS != itrE; ++itrS)
+    {
+      ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+      if (MyScript == nullptr || !MyScript->_isActive)
+        continue;
+      MonoMethod* MyFixedUpdate = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseFixedUpdate);
+      MonoWrapper::InvokeMethod(MyFixedUpdate, MyScript->_MonoData._pInstance);
+    }
+#endif
   }
 
   void SystemLogic::GameGameExit()

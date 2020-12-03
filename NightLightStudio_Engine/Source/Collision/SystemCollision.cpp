@@ -319,9 +319,6 @@ namespace NS_COLLISION
 			return;
 		}
 
-
-
-
 		// clear collision events
 		//colResolver.clear();
 
@@ -388,6 +385,7 @@ namespace NS_COLLISION
 				UpdateCollisionBoxPos(comCol2, comTrans2);
 
 
+
 				if (comCol1->isCollidable == false || comCol2->isCollidable == false)
 				{
 					/////////////////////////check for collision trigger
@@ -451,9 +449,9 @@ namespace NS_COLLISION
 				/////////////////////////////////////////////////////////////////////////////////////////
 			}
 		}
+    //resolve collision here
+    colResolver.resolveCollision();
 
-		//resolve collision here
-		colResolver.resolveCollision();
 	}
 	void CollisionSystem::GameExit()
 	{

@@ -12,12 +12,14 @@ namespace Unicorn
       Moth,
       Possessed
     }
+
     // Used player components
     RigidBody playerRB;
     Variables playerVar;
     Graphics playerCharModel;
     Transform playerPos;
     // Other entity's components
+    public ScriptCamera camScript; // To set camera tgt back to player after becoming human.
 
     // Player Stats, default values
     public static float humnForce = 100000.0f;  // Move force while human
@@ -45,7 +47,7 @@ namespace Unicorn
     bool movedS = false;
     bool movedD = false;
     // Player State
-    public State CurrentState = State.Human;
+    public State CurrentState { get; private set; }
     public State NextState = State.Human;
     //Vector3 inVec;
     // accumulated dt
@@ -57,11 +59,16 @@ namespace Unicorn
 
     public override void Init()
     {
+      CurrentState = State.Human;
+      NextState = State.Human;
+
       playerRB = GetRigidBody(id);
       playerCharModel = GetGraphics(id);
       playerVar = GetVariables(id);
       playerPos = GetTransform(id);
 
+      // Get scripts
+      camScript = GetScript(GameObjectFind("PlayerCamera"));
 
       // Get default values from variables (5Floats) (2 Strings)
       humnForce = playerVar.GetFloat(0);
@@ -111,8 +118,9 @@ namespace Unicorn
       // 
       Transform otherTransform = GetTransform(other);
 
-      if (otherTransform.Tag == 1)
+      if (otherTransform.tag == 1)
       {
+        // Always use next state to change state.
         // CurrentState = State.Possessed;
 
         //canMove = false;
@@ -246,23 +254,18 @@ namespace Unicorn
             // Only can change to moth if enough energy
             if (curEnergy >= EnergyTreshold)
               NextState = State.Moth;
-
-
-
-            Transform p_Target = GetTransform(id);
-            spawnPoint = p_Target.getPosition();
-
+            // Shouldn't have logic here. This function is for setting next state only.
+            //Transform p_Target = GetTransform(id);
+            //spawnPoint = p_Target.GetPosition();
             break;
           case State.Moth:
             NextState = State.Human;
             break;
-
           case State.Possessed:
             NextState = State.Human;
-
-            Transform p_Target2 = GetTransform(id);
-            //p_Target2.setPosition(spawnPoint);
-
+            // Same thing, no logic here.
+            //Transform p_Target2 = GetTransform(id);
+            //p_Target2.SetPosition(spawnPoint);
             break;
         }
       }
@@ -293,60 +296,60 @@ namespace Unicorn
 
     public void CheckChangeState()
     {
-      if (NextState == State.Possessed && NextState != CurrentState)
+      // If next state not equal to current state
+      if (NextState != CurrentState)
       {
-        CurrentState = NextState;
-        // Logic for possessed state
-
-        playerCharModel.AddModel(humanModePath);
-        canMove = false;
-      }
-      else if (NextState != CurrentState)
-      {
-
-        if (accumulatedDt >= transformTime)
+        // Changing to possessed state. It's here because going possessed state has no delay.
+        if (NextState == State.Possessed)
+        {
+          // Logic for possessed state
+          CurrentState = NextState;
+          playerCharModel.AddModel(humanModePath);
+          canMove = false;
+        }
+        else if (accumulatedDt >= transformTime)
         {
           accumulatedDt = 0.0f;
           CurrentState = NextState;
-          Console.WriteLine(CurrentState);
+          //Console.WriteLine(CurrentState);
           switch (CurrentState)
           {
             case State.Human:
               moveForce = humnForce;
               playerCharModel.AddModel(humanModePath);
+              camScript.tgtID = id;
               playerRB.isGravity = true;
               canMove = true;
               break;
             case State.Moth:
               //moveForce = mothForce;
-              playerCharModel.AddModel(mothModePath);
-
-              playerRB.isGravity = false;
-
               //Set to Moth spawn Eyelevel//// not working
               playerPos = GetTransform(id);
-              Vector3 playerPosVect = playerPos.getPosition();
-
+              Vector3 playerPosVect = playerPos.GetPosition(); // Set eye level of player
               //Vector3 eyelevel =  new Vector3(0.0f, 10.0f, 0.0f);
-              // playerPos.setPosition(eyelevel);
-              playerPos.setPosition(new Vector3(playerPosVect.x+1000.0f, playerPosVect.y + 1000.0f, playerPosVect.z));
+              // playerPos.SetPosition(eyelevel);
+              Console.WriteLine("PlayerPos be4");
+              Console.WriteLine(playerPosVect.x);
+              Console.WriteLine(playerPosVect.y);
+              Console.WriteLine(playerPosVect.z);
+              Console.WriteLine("---------");
+              playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 1000.0f, playerPosVect.z));
+              Console.WriteLine("PlayerPos aft");
+              Console.WriteLine(playerPosVect.x);
+              Console.WriteLine(playerPosVect.y);
+              Console.WriteLine(playerPosVect.z);
+              Console.WriteLine("---------");
               canMove = true;
-
+              playerCharModel.AddModel(mothModePath);
+              playerRB.isGravity = false;
               break;
-
-            case State.Possessed:
-              break;
-
           }
-
-
         }
         else
         {
           canMove = false;
           accumulatedDt += RealDT();
         }
-
       }
     }
 

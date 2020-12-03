@@ -75,25 +75,29 @@ namespace Unicorn
 
   public class ScriptCamera : UniBehaviour
   {
+    // Use this to change camera's tgt
+    public int tgtID;
+
     public string sPlayer = "Player";
     int playerID; // Player ID
     // Components
-    Transform playerTrans; // Player's transform
-    Transform otherTrans;  // Prop's transform
+    //Transform playerTrans; // Player's transform
+    //Transform otherTrans;  // Prop's transform
     Transform camTrans; // Camera's transform
     Variables camVar; // Camera variables comp to get offset
 
     //Variables
-    public Vector3 oldTgtPos;
+    public Vector3 oldTgtPos { get; private set; }
+    //public Vector3 camTgt;
     // Camera values
     Vector3 dir = new Vector3(0.0f, 0.0f, 0.0f); // Direction to move camera
-    float Threshold = 10.0f; // Distance to move before camera follows player
+    float Threshold = 0.1f; // Distance to move before camera follows player
     //float Time = 0.5f; // Time to move lerp camera
-    Vector3 Time = new Vector3(0.03f, 0.03f, 0.5f);
+    Vector3 Time = new Vector3(0.03f, 0.03f, 0.03f);
     float offX;
     float offY;
     float offZ;
-
+    float offZ_min;
     float offZ_current;
 
     bool isCollide = false;
@@ -109,22 +113,26 @@ namespace Unicorn
     {
       // Order matters! Getting component
       playerID = GameObjectFind(sPlayer);
-      playerTrans = GetTransform(playerID);
+      //playerTrans = GetTransform(playerID);
       camTrans = GetTransform(id);
       camVar = GetVariables(id);
       offX = camVar.GetFloat(0);
       offY = camVar.GetFloat(1);
       offZ = camVar.GetFloat(2);
+      offZ_min = camVar.GetFloat(3);
       camOffSet = new Vector3(offX, offY, offZ);
 
       Camera.SetUseThirdPersonCam(true);
       Camera.SetThirdPersonCamCanRotateAnot(true);
       Camera.SetThirdPersonCamCanZoomAnot(false);
-      // Init camera position
-      oldTgtPos = playerTrans.getPosition() + camOffSet;
-      Camera.SetThirdPersonCamTarget(playerTrans.getPosition() + getCamOffsetVec());
-
+      // Init camera position, start off at player pos
+      tgtID = playerID;
+      oldTgtPos = GetTgtFromID(tgtID) /*+ camOffSet*/;
+      Camera.SetThirdPersonCamTarget(GetTgtFromID(tgtID) /*+ getCamOffsetVec()*/);
       offZ_lerp.old = offZ;
+
+      // Set tgt id
+      tgtID = playerID;
     }
 
     public override void LateInit()
@@ -135,39 +143,28 @@ namespace Unicorn
 
     public override void Update()
     {
-
       Vector3 camPos = Camera.GetPosition();
-      camTrans.setPosition(camPos);
-
-      Vector3 tgtPos = Lerp(playerTrans.getPosition()) + getCamOffsetVec();
+      camTrans.SetPosition(camPos);
+      Vector3 tgtPos = Lerp(GetTgtFromID(tgtID)) /*+ getCamOffsetVec()*/;
+      oldTgtPos = tgtPos;
       //if (script_player.CurrentState == ScriptPlayer.State.Human)
-      //  tgtPos = playerTrans.getPosition() + getCamOffsetVec();
-      if (script_player.CurrentState == ScriptPlayer.State.Moth)
-        tgtPos = playerTrans.getPosition();
+      //  tgtPos = playerTrans.GetPosition() + getCamOffsetVec();
+      //if (script_player.CurrentState == ScriptPlayer.State.Moth)
+      //  tgtPos = GetTgtFromID(playerID);
       Camera.SetThirdPersonCamTarget(tgtPos);
-
-
       //Console.WriteLine(offZ_current);
-
 
       if (isCollide)
       {
-        offZ_current = offZ_lerp.Lerp(0.0f, RealDT());
-
+        offZ_current = offZ_lerp.Lerp(offZ_min, RealDT());
       }
       else
       {
         offZ_current = offZ_lerp.Lerp(offZ, RealDT());
-
       }
-
-
-      Console.WriteLine("offZ_current" + offZ_current);
-
+      //Console.WriteLine("offZ_current" + offZ_current);
       Camera.SetThirdPersonCamDistance(offZ_current);
-
-
-      //Camera.SetThirdPersonCamTarget(Lerp(playerTrans.getPosition() + camOffSet));
+      //Camera.SetThirdPersonCamTarget(Lerp(playerTrans.GetPosition() + camOffSet));
     }
 
     public override void FixedUpdate()
@@ -176,26 +173,42 @@ namespace Unicorn
 
     public override void OnCollisionEnter(int other)
     {
-      Console.WriteLine("OnCollisionEnter");
+      //Console.WriteLine("OnCollisionEnter");
     }
 
     public override void OnCollisionStay(int other)
     {
-      Console.WriteLine("OnCollisionStay");
-      isCollide = true;
+      //Console.WriteLine("OnCollisionStay");
+      //isCollide = true;
     }
 
     public override void OnCollisionExit(int other)
     {
-      Console.WriteLine("OnCollisionExit");
-      isCollide = false;
+      //Console.WriteLine("OnCollisionExit");
+      //isCollide = false;
     }
 
     public override void OnTriggerEnter(int other)
     {
     }
 
-    public override void Exit()
+    public override void OnTriggerStay(int other)
+    {
+        if(other != playerID)
+        {
+            isCollide = true;
+        }
+    }
+
+    public override void OnTriggerExit(int other)
+    {
+        if (other != playerID)
+        {
+            isCollide = false;
+        }
+    }
+
+        public override void Exit()
     {
       Camera.SetUseThirdPersonCam(false);
       Camera.SetThirdPersonCamCanRotateAnot(true);
@@ -212,10 +225,10 @@ namespace Unicorn
       return vec;
     }
 
-    public Vector3 Lerp(Vector3 otherPos)
+    public Vector3 Lerp(Vector3 other)
     {
 
-      dir = otherPos - oldTgtPos;
+      dir = other - oldTgtPos;
 
       if (Math.Abs(dir.x) > Threshold)
       {
@@ -244,6 +257,12 @@ namespace Unicorn
       //  return LerpPos;
       //}
       //return oldTgtPos;
+    }
+
+    public Vector3 GetTgtFromID(int id)
+    {
+      Transform trans = GetTransform(id);
+      return trans.GetPosition();
     }
   }
 }

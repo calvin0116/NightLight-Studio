@@ -211,7 +211,11 @@ Value ComponentLight::Write()
 {
 	Value val(rapidjson::kObjectType);
 
-	switch (_type)
+	NS_GRAPHICS::Lights lighttype = NS_GRAPHICS::Lights::INVALID_TYPE;
+
+	lighttype = (_isActive == false ? _inactiveType : _type);
+
+	switch (lighttype)
 	{
 	case NS_GRAPHICS::Lights::DIRECTIONAL:
 		NS_SERIALISER::ChangeData(&val, "LightType", rapidjson::StringRef("DIRECTIONAL"));		//custom enum
