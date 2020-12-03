@@ -229,6 +229,9 @@ namespace NS_GRAPHICS
 
 	void ModelLoader::ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, AnimatedMesh* animatedMesh)
 	{
+		UNREFERENCED_PARAMETER(scene);
+		UNREFERENCED_PARAMETER(node);
+
 		for (size_t i = 0; i < mesh->mNumBones; i++) 
 		{
 			unsigned boneID = 0;

@@ -75,6 +75,7 @@
                 ]
             },
             "LightComponent": {
+                "LightType": "POINT",
                 "isActive": false,
                 "Diffuse": [
                     0.08333331346511841,
@@ -196,6 +197,7 @@
                 ]
             },
             "LightComponent": {
+                "LightType": "POINT",
                 "isActive": false,
                 "Diffuse": [
                     0.8186274766921997,
