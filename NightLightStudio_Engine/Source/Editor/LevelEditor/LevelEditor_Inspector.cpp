@@ -1064,12 +1064,23 @@ void InspectorWindow::AnimationComp(Entity& ent)
 
 			if (ImGui::Button("Preview Animation"))
 			{
-				anim->PlayAnimation(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim);
+				anim->PlayAnimation(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim,
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_loop);
 			}
 
-			if (ImGui::Button("Pause Animation"))
+			if (NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play)
 			{
-				anim->PauseAnimation();
+				if (ImGui::Button("Pause Animation"))
+				{
+					anim->PauseAnimation();
+				}
+			}
+			else
+			{
+				if (ImGui::Button("Resume Animation"))
+				{
+					anim->ResumeAnimation();
+				}
 			}
 
 			if (ImGui::Button("Stop Animation"))
@@ -1077,9 +1088,7 @@ void InspectorWindow::AnimationComp(Entity& ent)
 				anim->StopAnimation();
 			}
 
-			ImGui::SameLine();
-
-			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			ImGui::Checkbox("Loop", &NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_loop);
 		}
 
 		ImGui::Separator();
