@@ -14,6 +14,7 @@ namespace MonoBind
     ComponentLightBind::BindComponentLight();
     ComponentNavigatorBind::BindComponentNavigator();
     ComponentAnimationBind::BindComponentAnimation();
+    ComponentCanvasBind::BindComponentCanvas();
     // Temporary
     ComponentVariablesBind::BindComponentVariables();
   }
@@ -22,6 +23,7 @@ namespace MonoBind
   void BindCustomTypes()
   {
     Vector3DBind::BindVector3D();
+    UIElementBind::BindUIElement();
   }
 
   // Systems

@@ -66,6 +66,9 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Animation GetAnimation(int id);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Canvas GetCanvas(int id);
     // Temporary till reflection comes out
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Variables GetVariables(int id);

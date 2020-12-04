@@ -35,7 +35,8 @@ namespace NS_LOGIC
         //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
         if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_END))
         {
-          MonoWrapper::ReloadScripts();
+          if(!_isPlaying)
+            MonoWrapper::ReloadScripts();
         }
       });
 

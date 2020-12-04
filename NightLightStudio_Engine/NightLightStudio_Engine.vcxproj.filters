@@ -364,6 +364,8 @@
       <Filter>Source Files\Mono\Binding\Systems</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentCanvasBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\CustomTypes\UIElementBind.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -745,6 +747,8 @@
       <Filter>Source Files\Mono\Binding\Systems</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentCScript.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentCanvasBind.h" />
+    <ClInclude Include="Source\Mono\Binding\CustomTypes\UIElementBind.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />

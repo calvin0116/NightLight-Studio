@@ -29,7 +29,8 @@ struct UI_Element
 	void AddTexture(std::string filename);
 
 	//Expose this
-	bool OnClick();
+	//bool OnClick();
+	bool OnClick() const;
 
 	bool operator<(const UI_Element& rhs);
 };
@@ -58,7 +59,7 @@ public:
 
 	//To Expose
 	UI_Element& FindUI(size_t index);
-	UI_Element& FindUIByName(LocalString<256> name);
+	UI_Element& FindUIByName(std::string name);
 
 	//read and write function for initialization from saved files
 	void	Read(Value&);

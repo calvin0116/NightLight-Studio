@@ -8,11 +8,13 @@
 #include "Components/ComponentLightBind.h"
 #include "Components/ComponentNavigatorBind.h"
 #include "Components/ComponentAnimationBind.h"
+#include "Components/ComponentCanvasBind.h"
 // Temporary comp
 #include "Components/ComponentVariablesBind.h"
 
 // Custom types
 #include "CustomTypes/Vector3DBind.h"
+#include "CustomTypes/UIElementBind.h"
 
 // Systems
 #include "Systems/AudioBind.h"
