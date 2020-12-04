@@ -13,7 +13,6 @@ struct AnimationController
 	std::set<std::string> _allAnims;
 
 	double _startFrameTime;
-	double _endFrameTime;
 
 	bool _play;
 	bool _loop;
