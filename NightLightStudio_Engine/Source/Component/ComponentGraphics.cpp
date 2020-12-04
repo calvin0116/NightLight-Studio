@@ -28,12 +28,12 @@ ComponentGraphics::ComponentGraphics(const int& meshID)
 	strcpy_s(ser_name, "GraphicsComponent");
 }
 
-void ComponentGraphics::AttachMesh(const int& meshID)
+void ComponentGraphics::SetModelID(const int& modelID)
 {
-	_modelID = meshID;
+	_modelID = modelID;
 }
 
-int ComponentGraphics::GetCurrentMeshHandle()
+int ComponentGraphics::GetModelID()
 {
 	return _modelID;
 }
@@ -51,6 +51,23 @@ void ComponentGraphics::AddModel(std::string filename)
 		NS_GRAPHICS::GraphicsSystem::GetInstance()->LoadModel(_modelFileName.toString());
 		_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
 	}
+
+	//if (NS_GRAPHICS::ModelManager::GetInstance()._models[_modelID]->_isAnimated)
+	//{
+	//	//Attach animation component
+	//	Entity* ent = &G_ECMANAGER->getEntity(this);
+	//	ComponentAnimation* anim = ent->getComponent<ComponentAnimation>();
+	//	if (anim)
+	//	{
+	//		//Existing anim component
+	//	}
+	//	else
+	//	{
+	//		ent->AttachComponent<ComponentAnimation>();
+	//		anim = ent->getComponent<ComponentAnimation>();
+	//		anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
+	//	}
+	//}
 }
 
 void ComponentGraphics::AddAlbedoTexture(std::string filename)
@@ -199,20 +216,10 @@ inline void ComponentGraphics::Read(Value& val)
 			}
 
 			//Trim the extension to get the file name
-			name.erase(name.rfind("."));dsadsa
+			name.erase(name.rfind("."));
 			//model->_fileName = s_LocalPathName + name + s_ModelFileType;
 			*/
 			_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
-
-			if (NS_GRAPHICS::ModelManager::GetInstance()._models[_modelID]->_isAnimated)
-			{
-				//Attach animation component
-				Entity* ent = &G_ECMANAGER->getEntity(this);
-				if (ent->getComponent<ComponentAnimation>())
-				{
-					//There is animation
-				}
-			}
 		}
 	}
 

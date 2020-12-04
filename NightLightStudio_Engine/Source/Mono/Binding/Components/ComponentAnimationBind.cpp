@@ -40,6 +40,8 @@ namespace ComponentAnimationBind
 
   bool IsFinished_Internal(ComponentAnimation* anim)
   {
-    return anim->IsFinished();
+      //commented just to not commit compile error alex remove after binding
+    //return anim->IsFinished();
+      return false;
   }
 }

@@ -10,6 +10,7 @@
 #include "../glm/gtc/type_ptr.hpp"         // Cast to type pointer for communication with gpu
 
 #include <fstream> //Temporary
+#include "../Input/SystemInput.h"
 
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -229,18 +230,32 @@ namespace NS_GRAPHICS
 					glm::mat4 identity(1.0f);
 					double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
 					std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
-					if (!currAnimation.empty() && animManager->_animControllers[animComp->_controllerID]->_play)
+					if (!currAnimation.empty())
 					{
 						model->GetPose(currAnimation, model->_rootBone, dt, identity, model->_globalInverseTransform);
-					}
-
-					//Updates the pose 1 more time after the animation stop
-					else if (!currAnimation.empty() && animManager->_animControllers[animComp->_controllerID]->_isPlaying)
-					{
-						model->GetPose(currAnimation, model->_rootBone, dt, identity, model->_globalInverseTransform);
-						animManager->_animControllers[animComp->_controllerID]->_isPlaying = false;
 					}
 				}
+				// Test Codes
+				//if (entity.getComponent<ComponentTransform>()->_entityName.toString() == "Player")
+				//{
+				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_K))
+				//	{
+				//		graphicsComp->AddModel("boxtest.fbx");
+				//	}
+				//}
+
+				//if (entity.getComponent<ComponentTransform>()->_entityName.toString() == "Player")
+				//{
+				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_K))
+				//	{
+				//		animComp->PlayAnimation("Walk1");
+				//	}
+
+				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_L))
+				//	{
+				//		animComp->PlayAnimation("Switch1");
+				//	}
+				//}
 			}
 
 			if (graphicsComp->_renderType == RENDERTYPE::SOLID)

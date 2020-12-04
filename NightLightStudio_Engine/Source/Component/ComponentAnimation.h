@@ -16,11 +16,11 @@ public:
 	~ComponentAnimation();
 
 	//C# Expose Functions
-	void PlayAnimation(std::string newAnim, bool loop = true, double startFrame = -1.0, double endFrame = -1.0);
+	void PlayAnimation(const std::string& newAnim, bool loop = true, double startFrame = -1.0, double endFrame = -1.0);
 	void PauseAnimation();
 	void ResumeAnimation();
 	void StopAnimation();
-	bool IsFinished();
+	bool IsFinished(const std::string& anim);
 
 	//read and write function for initialization from saved files
 	void	Read(Value&);

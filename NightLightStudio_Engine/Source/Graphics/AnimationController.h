@@ -16,11 +16,10 @@ struct AnimationController
 
 	bool _play;
 	bool _loop;
-	bool _isPlaying;
 
 	double _dt;
 	double _endAnimTime;
 
 	void Update(float dt);
-	void PlayAnimation(std::string newAnim, ComponentAnimation* currComp, bool loop = true, double startFrame = -1.0, double endFrame = -1.0);
+	void PlayAnimation(const std::string& newAnim, ComponentAnimation* currComp, bool loop = true, double startFrame = -1.0, double endFrame = -1.0);
 };
