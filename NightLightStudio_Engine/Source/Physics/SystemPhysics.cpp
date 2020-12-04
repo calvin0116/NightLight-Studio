@@ -87,7 +87,8 @@ namespace NS_PHYSICS
 
 				ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
 
-				compT->_position = compT->_phyposition;
+				//compT->_position = compT->_phyposition;
+				compT->_phyposition = compT->_position;
 
 
 				compR->angularForce = 0;
