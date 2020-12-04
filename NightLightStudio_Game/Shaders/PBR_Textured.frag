@@ -33,6 +33,7 @@ struct SpotLight {
     float outerCutOff;
     float intensity;
 };
+
 // PBR Materials
 uniform sampler2D AlbedoTex;
 uniform sampler2D MetallicTex;
@@ -46,7 +47,7 @@ uniform float RoughnessControl;
 uniform float MetallicControl;
 
 // Current maximum permitted lights per type
-#define MAX_LIGHTS 30
+#define MAX_LIGHTS 512
 
 // defined PI
 const float PI = 3.14159265359f;

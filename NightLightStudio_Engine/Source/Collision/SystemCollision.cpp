@@ -322,10 +322,10 @@ namespace NS_COLLISION
 		// clear collision events
 		//colResolver.clear();
 
-		auto itr1 = G_ECMANAGER->begin<ComponentCollider>();
-		auto itrEnd1 = G_ECMANAGER->end<ComponentCollider>();
+		auto itr1 = G_ECMANAGER->begin<ComponentRigidBody>();
+		auto itrEnd1 = G_ECMANAGER->end<ComponentRigidBody>();
 
-		auto itr2 = G_ECMANAGER->begin<ComponentCollider>();
+		auto itr2 = G_ECMANAGER->begin<ComponentRigidBody>();
 		auto itrEnd2 = itrEnd1;
 
 		for (; itr1 != itrEnd1; ++itr1)
@@ -336,6 +336,16 @@ namespace NS_COLLISION
 				{
 					continue;
 				}
+				//Get rigidBody for Collision Resolution
+				ComponentRigidBody* comRigid1 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr1);
+				ComponentRigidBody* comRigid2 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr2);
+
+				if (comRigid1 == nullptr || comRigid2 == nullptr) continue;
+
+				if (!comRigid1->isActive || !comRigid2->isActive) continue;
+
+				if (comRigid1->isStatic && comRigid2->isStatic) continue;
+
 				//potential issue if both component belong to the same entity, need a detection here for same entity id
 				Entity Ent1 = G_ECMANAGER->getEntity(itr1);
 				Entity Ent2 = G_ECMANAGER->getEntity(itr2);
@@ -347,6 +357,8 @@ namespace NS_COLLISION
 				//Get colliders
 				ComponentCollider* comCol1 = G_ECMANAGER->getComponent<ComponentCollider>(itr1);
 				ComponentCollider* comCol2 = G_ECMANAGER->getComponent<ComponentCollider>(itr2);
+
+				if (comCol1 == nullptr || comCol2 == nullptr) continue;
 
 				//update flags
 				comCol1->prevCollisionFlag = comCol1->collisionFlag;
@@ -372,15 +384,7 @@ namespace NS_COLLISION
 				//////////////////////////////////////////////////////////////////////////////////
 				if (comTrans1 == nullptr || comTrans2 == nullptr) continue;
 
-				//Get rigidBody for Collision Resolution
-				ComponentRigidBody* comRigid1 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr1);
-				ComponentRigidBody* comRigid2 = G_ECMANAGER->getComponent<ComponentRigidBody>(itr2);
 
-				if (comRigid1 == nullptr || comRigid2 == nullptr) continue;
-
-				if (!comRigid1->isActive || !comRigid2->isActive) continue;
-
-				if (comRigid1->isStatic && comRigid2->isStatic) continue;
 				UpdateCollisionBoxPos(comCol1, comTrans1);
 				UpdateCollisionBoxPos(comCol2, comTrans2);
 
