@@ -111,7 +111,7 @@ inline void ComponentCamera::Read(Value& val)
 		std::cout << "No depth data has been found" << std::endl;
 	else
 	{
-		_h = val["Depth"].GetInt();
+		_depth = val["Depth"].GetInt();
 	}
 }
 
