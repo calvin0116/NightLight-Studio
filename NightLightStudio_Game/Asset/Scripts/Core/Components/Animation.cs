@@ -10,33 +10,33 @@ namespace Unicorn
     // Native handle for this component
     private IntPtr native_handle = IntPtr.Zero;
 
-    void Play(string name, bool loop = true)
+    public void Play(string name, bool loop = true, double startFrame = -1.0, double endFrame = 1.0)
     {
-      PlayAnimation_Internal(native_handle, name, loop);
+      PlayAnimation_Internal(native_handle, name, loop, startFrame, endFrame);
     }
 
-    void Pause()
+    public void Pause()
     {
       PauseAnimation_Internal(native_handle);
     }
 
-    void Resume()
+    public void Resume()
     {
       ResumeAnimation_Internal(native_handle);
     }
 
-    void Stop()
+    public void Stop()
     {
       StopAnimation_Internal(native_handle);
     }
 
-    bool IsFinished()
+    public bool IsFinished(string name)
     {
-      return IsFinished_Internal(native_handle);
+      return IsFinished_Internal(native_handle, name);
     }
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static void PlayAnimation_Internal(IntPtr native_handle, string name, bool loop);
+    public extern static void PlayAnimation_Internal(IntPtr native_handle, string name, bool loop, double startFrame, double endFrame);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void PauseAnimation_Internal(IntPtr native_handle);
@@ -48,7 +48,7 @@ namespace Unicorn
     public extern static void StopAnimation_Internal(IntPtr native_handle);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static bool IsFinished_Internal(IntPtr native_handle);
+    public extern static bool IsFinished_Internal(IntPtr native_handle, string name);
   }
 }
 

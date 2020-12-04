@@ -1,11 +1,14 @@
 #include "ECSBind.h"
-#include "../../MonoWrapper.h"
+// mono wrapper functions
+#include "../../MonoWrapper.h" 
 // Get components etc
 #include "../../../Component/Components.h" 
 // Delta time
 #include "../../../Core/DeltaTime.h"
 // Scene change
 #include "../../../Core/SceneManager.h"
+ // For editor console cout
+#include "../../../Editor/SystemEditor.h"
 
 namespace ECSBind
 {
@@ -15,6 +18,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(dt, "DT", "UniBehaviour");
     MonoWrapper::BindClassFunction(realDt, "RealDT", "UniBehaviour");
     MonoWrapper::BindClassFunction(SetNextScene, "SetNextScene", "UniBehaviour");
+    MonoWrapper::BindClassFunction(Print, "Print", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetScript, "GetScript", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetCollider, "GetCollider", "UniBehaviour");
@@ -23,6 +27,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(GetLight, "GetLight", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetNavigator, "GetNavigator", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetAnimation, "GetAnimation", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetCanvas, "GetCanvas", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetVariables, "GetVariables", "UniBehaviour");
   }
 
@@ -46,6 +51,11 @@ namespace ECSBind
   void SetNextScene(MonoString* scene_name)
   {
     NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(MonoWrapper::ToString(scene_name));
+  }
+
+  void Print(MonoString* text)
+  {
+    ED_OUT(MonoWrapper::ToString(text));
   }
 
   MonoObject* GetScript(int id)
@@ -149,6 +159,16 @@ namespace ECSBind
     Entity en = G_ECMANAGER->getEntity(id);
     AnimationComponent* anim = en.getComponent<AnimationComponent>();
     MonoWrapper::SetNativeHandle(monoObj, anim);
+
+    return monoObj;
+  }
+
+  MonoObject* GetCanvas(int id)
+  {
+    MonoObject* monoObj = MonoWrapper::ConstructObject("Canvas");
+    Entity en = G_ECMANAGER->getEntity(id);
+    CanvasComponent* cnvs = en.getComponent<CanvasComponent>();
+    MonoWrapper::SetNativeHandle(monoObj, cnvs);
 
     return monoObj;
   }

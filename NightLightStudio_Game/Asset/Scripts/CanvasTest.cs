@@ -4,49 +4,38 @@ using System.Collections.Specialized;
 
 namespace Unicorn
 {
-  public class AudioTest : UniBehaviour
+  public class CanvasTest : UniBehaviour
   {
-    Transform trans;
-    RigidBody rb;
-    int leftBGM = -1;
-    int rightBGM = -1;
+
+    Canvas cnvs;
+    UIElement ui1;
 
     public override void Init()
     {
-      trans = GetTransform(id);
-      rb = GetRigidBody(id);
+      cnvs = GetCanvas(id);
+      Print(id.ToString());
+      ui1 = cnvs.FindUI("Cart");
+      if (ui1.native_handle == IntPtr.Zero)
+        Print("Null ptr!");
+      else
+        Print("Value received: " + ui1.native_handle.ToString());
     }
 
     public override void LateInit()
     {
-      Print("My ID: " + id.ToString());
     }
 
     public override void Update()
     {
-
+      if (ui1.OnClick())
+      {
+        Print("Click Blue!");
+      }
+      if (Input.GetKeyPress(VK.IKEY_SPACE))
+        Print("Derp");
     }
     public override void FixedUpdate()
     {
-      if (Input.GetKeyPress(VK.IKEY_Q))
-        Audio.Play3DOnce("0", GameObjectFind("Left"));
-      if (Input.GetKeyPress(VK.IKEY_E))
-        Audio.Play3DOnce("0", GameObjectFind("Right"));
-      if (Input.GetKeyPress(VK.IKEY_Z))
-        leftBGM = Audio.Play3DLoop("0", GameObjectFind("Left"));
-      if (Input.GetKeyPress(VK.IKEY_C))
-        rightBGM = Audio.Play3DLoop("0", GameObjectFind("Right"));
-      if (Input.GetKeyPress(VK.IKEY_X))
-      {
-        Audio.Stop(leftBGM);
-        Audio.Stop(rightBGM);
-      }
-      Vector3 vel = new Vector3(0.0f, rb.GetVel().y, 0.0f);
-      if (Input.GetKeyHold(VK.IKEY_A))
-        vel.x = -100.0f;
-      else if (Input.GetKeyHold(VK.IKEY_D))
-        vel.x = +100.0f;
-      rb.SetVel(vel);
     }
 
     public override void OnCollisionEnter(int other) { /*Console.WriteLine("Collision Enter!");*/ }

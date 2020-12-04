@@ -39,6 +39,9 @@ namespace Unicorn
     // Change scene
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void SetNextScene(string scene);
+    // Print in editor's console.
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void Print(string value);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static dynamic GetScript(int id);
@@ -63,6 +66,9 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Animation GetAnimation(int id);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Canvas GetCanvas(int id);
     // Temporary till reflection comes out
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Variables GetVariables(int id);

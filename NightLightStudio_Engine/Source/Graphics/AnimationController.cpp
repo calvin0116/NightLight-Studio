@@ -30,7 +30,7 @@ void AnimationController::Update(float dt)
 	}
 }
 
-void AnimationController::PlayAnimation(std::string newAnim, ComponentAnimation* currComp, bool loop, double startFrame, double endFrame)
+void AnimationController::PlayAnimation(const std::string& newAnim, ComponentAnimation* currComp, bool loop, double startFrame, double endFrame)
 {
 	if (_currAnim != newAnim || _play == false)
 	{
@@ -39,7 +39,6 @@ void AnimationController::PlayAnimation(std::string newAnim, ComponentAnimation*
 			_currAnim = newAnim;
 			_dt = 0.0;
 			_play = true;
-			_isPlaying = true;
 			_loop = loop;
 			_startFrameTime = startFrame;
 

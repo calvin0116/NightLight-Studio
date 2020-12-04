@@ -18,9 +18,9 @@ namespace ComponentAnimationBind
       "Animation");
   }
 
-  void PlayAnimation_Internal(ComponentAnimation* anim, MonoString* name, bool loop)
+  void PlayAnimation_Internal(ComponentAnimation* anim, MonoString* name, bool loop, double startFrame, double endFrame)
   {
-    anim->PlayAnimation(MonoWrapper::ToString(name), loop);
+    anim->PlayAnimation(MonoWrapper::ToString(name), loop, startFrame, endFrame);
   }
 
   void PauseAnimation_Internal(ComponentAnimation* anim)
@@ -38,8 +38,8 @@ namespace ComponentAnimationBind
     anim->StopAnimation();
   }
 
-  bool IsFinished_Internal(ComponentAnimation* anim)
+  bool IsFinished_Internal(ComponentAnimation* anim, MonoString* name)
   {
-    return anim->IsFinished();
+    return anim->IsFinished(MonoWrapper::ToString(name));
   }
 }
