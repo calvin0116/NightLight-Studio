@@ -12,7 +12,7 @@ void NS_GRAPHICS::Model::GetPose(const std::string& animName, BoneData& bone, do
 	glm::mat4 localTransform(1.0f);
 	//glm::mat4 localTransform = bone._boneTransform;
 
-	Animation::KeyFrames& currKey = _animations[animName]->_frames[bone._boneName];
+	//Animation::KeyFrames& currKey = _animations[animName]->_frames[bone._boneName];
 	dt = fmod(dt, _animations[animName]->_time);
 
 	unsigned index = 0;
@@ -121,7 +121,7 @@ void NS_GRAPHICS::Model::InterpTime(unsigned& index, float& time, double& dt, st
 	if (dt >= times[times.size() - 1])
 	{
 		time = 1.0f;
-		index = times.size() - 1;
+		index = (unsigned)times.size() - 1;
 		return;
 	}
 	while (times[currIndex] <= dt)
@@ -130,10 +130,10 @@ void NS_GRAPHICS::Model::InterpTime(unsigned& index, float& time, double& dt, st
 	}
 
 	//Get the time of the next frame and the current frame
-	float startTime = times[currIndex - 1];
-	float endTime = times[currIndex];
+	double startTime = times[currIndex - 1];
+	double endTime = times[currIndex];
 
 	//Get the scale value of the time between 0.0f to 1.0f between start and end
-	time = ((float)dt - startTime) / (endTime - startTime);
+	time = (float)((dt - startTime) / (endTime - startTime));
 	index = currIndex;
 }

@@ -226,7 +226,7 @@ namespace NS_GRAPHICS
 			}
 
 			//Explicitly zero out all
-			vertexData._boneID = glm::ivec4(0.0f);
+			vertexData._boneID = glm::ivec4(0);
 			vertexData._boneWeights = glm::vec4(0.0f);
 
 			newAnimatedMesh->_vertexDatas.push_back(vertexData);

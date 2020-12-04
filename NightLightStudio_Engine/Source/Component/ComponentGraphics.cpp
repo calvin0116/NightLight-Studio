@@ -204,10 +204,15 @@ inline void ComponentGraphics::Read(Value& val)
 			*/
 			_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
 
-			//if (NS_GRAPHICS::ModelManager::GetInstance()._models[_modelID]->_isAnimated)
-			//{
-			//	//Attach animation component
-			//}
+			if (NS_GRAPHICS::ModelManager::GetInstance()._models[_modelID]->_isAnimated)
+			{
+				//Attach animation component
+				Entity* ent = &G_ECMANAGER->getEntity(this);
+				if (ent->getComponent<ComponentAnimation>())
+				{
+					//There is animation
+				}
+			}
 		}
 	}
 

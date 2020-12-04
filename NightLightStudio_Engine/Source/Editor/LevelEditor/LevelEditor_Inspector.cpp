@@ -964,6 +964,7 @@ void InspectorWindow::CanvasComp(Entity& ent)
 			size_t uiCount = canvas->_uiElements.size();
 			for (size_t i = 0; i < uiCount; ++i)
 			{
+				ImGui::Checkbox("IsActive##UI", &canvas->_uiElements.at(i)._isActive);
 				if (ImGui::Button(std::string("X##").append(std::to_string(i)).c_str()))
 				{
 					canvas->RemoveUI(i);
