@@ -90,10 +90,11 @@ namespace NS_SCENE
 
 		//================Scene Function====================//
 		SCENE_CHANGE CheckChangeScene();	//For checking if there is a need for change of scene
-		void LoadScene(std::string scene_name);
+		std::string LoadScene(std::string scene_name);
 		//Save current scene
 		void SaveScene(std::string path = "");
 
+		//void NewScene(std::string scene_name = "Default_Scene");
 		//============== Helper function =====================//
 		bool CheckIfSceneExist(std::string& scene_name);
 

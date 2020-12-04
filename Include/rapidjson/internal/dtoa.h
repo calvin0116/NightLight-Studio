@@ -15,7 +15,7 @@
 // This is a C++ header-only implementation of Grisu2 algorithm from the publication:
 // Loitsch, Florian. "Printing floating-point numbers quickly and accurately with
 // integers." ACM Sigplan Notices 45.6 (2010): 233-243.
-
+#pragma warning( push )
 #ifndef RAPIDJSON_DTOA_
 #define RAPIDJSON_DTOA_
 
@@ -243,3 +243,4 @@ RAPIDJSON_DIAG_POP
 RAPIDJSON_NAMESPACE_END
 
 #endif // RAPIDJSON_DTOA_
+#pragma warning( pop )

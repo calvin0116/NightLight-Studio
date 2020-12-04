@@ -1,6 +1,6 @@
 /// @ref core
 /// @file glm/detail/type_quat.hpp
-
+#pragma warning( push )
 #pragma once
 
 // Dependency:
@@ -184,3 +184,4 @@ namespace glm
 #ifndef GLM_EXTERNAL_TEMPLATE
 #include "type_quat.inl"
 #endif//GLM_EXTERNAL_TEMPLATE
+#pragma warning( pop )

@@ -54,7 +54,7 @@ public:
 	}
 
 	// move op
-	void operator=(const LocalString&& rhs)
+	void operator=(const LocalString&& rhs) noexcept
 	{
 		copyFromLocalString(rhs);
 	}

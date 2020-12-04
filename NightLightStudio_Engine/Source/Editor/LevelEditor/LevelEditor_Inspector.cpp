@@ -1069,6 +1069,7 @@ void InspectorWindow::AnimationComp(Entity& ent)
 
 void InspectorWindow::CScriptComp(Entity& ent)
 {
+	ent;
   //CScriptComponent* cScript_comp = ent.getComponent<CScriptComponent>();
   //if (cScript_comp != nullptr)
   //{
