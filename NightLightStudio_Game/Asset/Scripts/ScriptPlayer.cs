@@ -333,7 +333,7 @@ namespace Unicorn
               Console.WriteLine(playerPosVect.y);
               Console.WriteLine(playerPosVect.z);
               Console.WriteLine("---------");
-              playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 1000.0f, playerPosVect.z));
+              playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 50.0f, playerPosVect.z));
               Console.WriteLine("PlayerPos aft");
               Console.WriteLine(playerPosVect.x);
               Console.WriteLine(playerPosVect.y);
