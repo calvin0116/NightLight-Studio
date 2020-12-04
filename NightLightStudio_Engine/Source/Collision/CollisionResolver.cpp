@@ -398,7 +398,7 @@ void CollsionResolver::resolveEventNormally(CollisionEvent& colEvent)
 
 		float dot1f = colEvent.collisionNormal * entity1Force;
 		NlMath::Vector3D normalForce = colEvent.collisionNormal * dot1f;
-		normalForce = normalForce * -1;
+		normalForce = normalForce * -1.01;
 		
 		// normal reaction force
 		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity1, normalForce, 1.0f);
@@ -450,7 +450,7 @@ void CollsionResolver::resolveEventNormally(CollisionEvent& colEvent)
 
 		float dot2f = oppNorm * entity2Force;
 		NlMath::Vector3D normalForce = oppNorm * dot2f;
-		normalForce = normalForce * -1;
+		normalForce = normalForce * -1.001;
 
 		// normal reaction force
 		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity2, normalForce, 1.0f);
@@ -510,7 +510,10 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 	{
 		float pen = colEvent.collider2->collider.aabb.vecMin.z - colEvent.collider1->collider.aabb.vecMax.z;
 
-		pen = pen * 0.5f;
+		if (!colEvent.rigid2->isStatic && !colEvent.rigid1->isStatic)
+		{
+			pen = pen * 0.5f;
+		}
 
 		if (!colEvent.rigid2->isStatic)
 		{
@@ -527,7 +530,11 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 	{
 		float pen = colEvent.collider1->collider.aabb.vecMin.z - colEvent.collider2->collider.aabb.vecMax.z;
 
-		pen = pen * 0.5f;
+		if (!colEvent.rigid2->isStatic && !colEvent.rigid1->isStatic)
+		{
+			pen = pen * 0.5f;
+		}
+
 
 		if (!colEvent.rigid1->isStatic)
 		{
@@ -573,7 +580,11 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 	{
 		float pen = colEvent.collider2->collider.aabb.vecMin.x - colEvent.collider1->collider.aabb.vecMax.x;
 
-		pen = pen * 0.5f;
+		if (!colEvent.rigid2->isStatic && !colEvent.rigid1->isStatic)
+		{
+			pen = pen * 0.5f;
+		}
+
 
 		if (!colEvent.rigid2->isStatic)
 		{
@@ -590,7 +601,11 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 	{
 		float pen = colEvent.collider1->collider.aabb.vecMin.x - colEvent.collider2->collider.aabb.vecMax.x;
 
-		pen = pen * 0.5f;
+		if (!colEvent.rigid2->isStatic && !colEvent.rigid1->isStatic)
+		{
+			pen = pen * 0.5f;
+		}
+
 
 		if (!colEvent.rigid1->isStatic)
 		{
