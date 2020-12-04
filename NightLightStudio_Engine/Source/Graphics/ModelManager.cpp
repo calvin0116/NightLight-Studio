@@ -165,6 +165,7 @@ namespace NS_GRAPHICS
 						// position
 						glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), 
 							(void*)0); // 0
+						glEnableVertexAttribArray(0);
 						// uv attribute
 						glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), 
 							(void*)sizeof(glm::vec3)); // pos
