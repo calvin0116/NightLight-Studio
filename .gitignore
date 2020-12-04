@@ -375,6 +375,7 @@ healthchecksdb
 *.tlog
 *.idb
 *.lastbuildstate
+*.json
 Bin-Int/*
 NightLight_Studio/*
 NightLightStudio_Engine/dep/Mono/*
@@ -388,4 +389,5 @@ NightLightStudio_Game/imgui.ini
 /NightLightStudio_Game/sphere.txt
 /NightLightStudio_Game/pot.txt
 /NightLightStudio_Game/box.txt
-NightLightStudio_Game/TheGame.dll
+/NightLightStudio_Game/TheGame.dll
+/NightLightStudio_Game/JsonFile/Scene/ArtGym.json

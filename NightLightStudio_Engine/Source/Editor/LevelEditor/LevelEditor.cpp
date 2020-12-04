@@ -133,6 +133,10 @@ bool LevelEditor::Update(float)
 
         _lePicking.LE_PickingRun();
     }
+    else
+    {
+        LE_RunWindows();
+    }
 
     // Rendering
     ImGui::Render();

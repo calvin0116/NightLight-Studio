@@ -24,6 +24,9 @@ public:
 	glm::vec3 _rotation; // Euler angles x, y, z
 	glm::vec3 _scale;
 
+
+	glm::vec3 _phyposition;
+
 	ComponentTransform();
 	~ComponentTransform();
 

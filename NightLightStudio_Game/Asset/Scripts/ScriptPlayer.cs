@@ -95,6 +95,13 @@ namespace Unicorn
       {
         Move();
       }
+      else
+      {
+
+        //playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 50.0f, playerPosVect.z));
+        playerRB.SetAccel(new Vector3(0.0f, 0.0f, 0.0f));
+        playerRB.SetVel(new Vector3(0.0f, 0.0f, 0.0f));
+      }
 
       ManualStateControl();
       AutoStateControl();

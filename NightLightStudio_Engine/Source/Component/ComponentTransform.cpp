@@ -8,7 +8,8 @@
 
 ComponentTransform::ComponentTransform() : _tag(0),
 	_nextPos(0), _position{ 0.0f, 0.0f, 0.0f },
-	_rotation{ 0.0f, 0.0f, 0.0f }, _scale{ 1.0f, 1.0f, 1.0f }
+	_rotation{ 0.0f, 0.0f, 0.0f }, _scale{ 1.0f, 1.0f, 1.0f },
+	_phyposition{0.0f, 0.0f, 0.0f}
 {
 	strcpy_s(ser_name, "TransformComponent");
 }
@@ -54,7 +55,7 @@ void ComponentTransform::Read(Value& val)
 		_position.y = pos[1].GetFloat();
 		_position.z = pos[2].GetFloat();
 	}
-
+	_phyposition = _position;
 
 	if (val.FindMember("Scale") == val.MemberEnd())
 		std::cout << "No Scale data has been found" << std::endl;

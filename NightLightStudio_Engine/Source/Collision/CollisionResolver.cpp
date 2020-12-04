@@ -398,7 +398,7 @@ void CollsionResolver::resolveEventNormally(CollisionEvent& colEvent)
 
 		float dot1f = colEvent.collisionNormal * entity1Force;
 		NlMath::Vector3D normalForce = colEvent.collisionNormal * dot1f;
-		normalForce = normalForce * -1.01;
+		normalForce = normalForce * -1.0f;
 		
 		// normal reaction force
 		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity1, normalForce, 1.0f);
@@ -450,7 +450,7 @@ void CollsionResolver::resolveEventNormally(CollisionEvent& colEvent)
 
 		float dot2f = oppNorm * entity2Force;
 		NlMath::Vector3D normalForce = oppNorm * dot2f;
-		normalForce = normalForce * -1.001;
+		normalForce = normalForce * -1.0f;
 
 		// normal reaction force
 		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity2, normalForce, 1.0f);
@@ -517,12 +517,12 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.transform2->_position.z += -pen - std::numeric_limits<float>::epsilon();
+			colEvent.transform2->_phyposition.z += -pen - std::numeric_limits<float>::epsilon();
 		}
 
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.transform1->_position.z += pen + std::numeric_limits<float>::epsilon();
+			colEvent.transform1->_phyposition.z += pen + std::numeric_limits<float>::epsilon();
 		}
 		break;
 	}
@@ -538,12 +538,12 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.transform1->_position.z += -pen - std::numeric_limits<float>::epsilon();
+			colEvent.transform1->_phyposition.z += -pen - std::numeric_limits<float>::epsilon();
 		}
 
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.transform2->_position.z += pen + std::numeric_limits<float>::epsilon();
+			colEvent.transform2->_phyposition.z += pen + std::numeric_limits<float>::epsilon();
 		}
 
 		break;
@@ -553,7 +553,7 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 		float pen = colEvent.collider2->collider.aabb.vecMin.y - colEvent.collider1->collider.aabb.vecMax.y;
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.transform2->_position.y += -pen;
+			colEvent.transform2->_phyposition.y += -pen;
 		}
 
 		if (!colEvent.rigid1->isStatic)
@@ -567,7 +567,7 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 		float pen = colEvent.collider1->collider.aabb.vecMin.y - colEvent.collider2->collider.aabb.vecMax.y;
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.transform1->_position.y += -pen;
+			colEvent.transform1->_phyposition.y += -pen;
 		}
 
 		if (!colEvent.rigid2->isStatic)
@@ -588,12 +588,12 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.transform2->_position.x += -pen - std::numeric_limits<float>::epsilon();
+			colEvent.transform2->_phyposition.x += -pen - std::numeric_limits<float>::epsilon();
 		}
 
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.transform1->_position.x += pen + std::numeric_limits<float>::epsilon();
+			colEvent.transform1->_phyposition.x += pen + std::numeric_limits<float>::epsilon();
 		}
 		break;
 	}
@@ -609,12 +609,12 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.transform1->_position.x += -pen - std::numeric_limits<float>::epsilon();
+			colEvent.transform1->_phyposition.x += -pen - std::numeric_limits<float>::epsilon();
 		}
 
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.transform2->_position.x += pen + std::numeric_limits<float>::epsilon();
+			colEvent.transform2->_phyposition.x += pen + std::numeric_limits<float>::epsilon();
 		}
 		break;
 	}
@@ -648,45 +648,45 @@ void CollsionResolver::resolveAABB_sphere(CollisionEvent& colEvent, bool flip)
 	}
 	case SIDES::FRONT:
 	{
-		float pen = (colEvent.transform2->_position.y - colEvent.collider2->collider.sphere.radius) - colEvent.collider1->collider.aabb.vecMax.z;
+		float pen = (colEvent.transform2->_phyposition.y - colEvent.collider2->collider.sphere.radius) - colEvent.collider1->collider.aabb.vecMax.z;
 
 		pen = pen * 0.5f;
 
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.transform2->_position.z += -pen - std::numeric_limits<float>::epsilon();
+			colEvent.transform2->_phyposition.z += -pen - std::numeric_limits<float>::epsilon();
 		}
 
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.transform1->_position.z += pen + std::numeric_limits<float>::epsilon();
+			colEvent.transform1->_phyposition.z += pen + std::numeric_limits<float>::epsilon();
 		}
 		break;
 	}
 	case SIDES::BACK:
 	{
-		float pen = colEvent.collider1->collider.aabb.vecMin.z - (colEvent.transform2->_position.y + colEvent.collider2->collider.sphere.radius);
+		float pen = colEvent.collider1->collider.aabb.vecMin.z - (colEvent.transform2->_phyposition.y + colEvent.collider2->collider.sphere.radius);
 
 		pen = pen * 0.5f;
 
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.transform1->_position.z += -pen - std::numeric_limits<float>::epsilon();
+			colEvent.transform1->_phyposition.z += -pen - std::numeric_limits<float>::epsilon();
 		}
 
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.transform2->_position.z += pen + std::numeric_limits<float>::epsilon();
+			colEvent.transform2->_phyposition.z += pen + std::numeric_limits<float>::epsilon();
 		}
 
 		break;
 	}
 	case SIDES::TOP:
 	{
-		float pen = (colEvent.transform2->_position.y - colEvent.collider2->collider.sphere.radius) - colEvent.collider1->collider.aabb.vecMax.y;
+		float pen = (colEvent.transform2->_phyposition.y - colEvent.collider2->collider.sphere.radius) - colEvent.collider1->collider.aabb.vecMax.y;
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.transform2->_position.y += -pen;
+			colEvent.transform2->_phyposition.y += -pen;
 		}
 
 		if (!colEvent.rigid1->isStatic)
@@ -697,10 +697,10 @@ void CollsionResolver::resolveAABB_sphere(CollisionEvent& colEvent, bool flip)
 	}
 	case SIDES::BOTTOM:
 	{
-		float pen = colEvent.collider1->collider.aabb.vecMin.y - (colEvent.transform2->_position.y + colEvent.collider2->collider.sphere.radius);
+		float pen = colEvent.collider1->collider.aabb.vecMin.y - (colEvent.transform2->_phyposition.y + colEvent.collider2->collider.sphere.radius);
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.transform1->_position.y += -pen;
+			colEvent.transform1->_phyposition.y += -pen;
 		}
 
 		if (!colEvent.rigid2->isStatic)
@@ -711,35 +711,35 @@ void CollsionResolver::resolveAABB_sphere(CollisionEvent& colEvent, bool flip)
 	}
 	case SIDES::RIGHT:
 	{
-		float pen = (colEvent.transform2->_position.y - colEvent.collider2->collider.sphere.radius) - colEvent.collider1->collider.aabb.vecMax.x;
+		float pen = (colEvent.transform2->_phyposition.y - colEvent.collider2->collider.sphere.radius) - colEvent.collider1->collider.aabb.vecMax.x;
 
 		pen = pen * 0.5f;
 
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.transform2->_position.x += -pen - std::numeric_limits<float>::epsilon();
+			colEvent.transform2->_phyposition.x += -pen - std::numeric_limits<float>::epsilon();
 		}
 
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.transform1->_position.x += pen + std::numeric_limits<float>::epsilon();
+			colEvent.transform1->_phyposition.x += pen + std::numeric_limits<float>::epsilon();
 		}
 		break;
 	}
 	case SIDES::LEFT:
 	{
-		float pen = colEvent.collider1->collider.aabb.vecMin.x - (colEvent.transform2->_position.y + colEvent.collider2->collider.sphere.radius);
+		float pen = colEvent.collider1->collider.aabb.vecMin.x - (colEvent.transform2->_phyposition.y + colEvent.collider2->collider.sphere.radius);
 
 		pen = pen * 0.5f;
 
 		if (!colEvent.rigid1->isStatic)
 		{
-			colEvent.transform1->_position.x += -pen - std::numeric_limits<float>::epsilon();
+			colEvent.transform1->_phyposition.x += -pen - std::numeric_limits<float>::epsilon();
 		}
 
 		if (!colEvent.rigid2->isStatic)
 		{
-			colEvent.transform2->_position.x += pen + std::numeric_limits<float>::epsilon();
+			colEvent.transform2->_phyposition.x += pen + std::numeric_limits<float>::epsilon();
 		}
 		break;
 	}
@@ -756,10 +756,10 @@ void CollsionResolver::resolvesphere(CollisionEvent& colEvent)
 	resolveEventNormally(colEvent);
 
 
-	if (colEvent.transform2->_position.y > colEvent.transform1->_position.y)
+	if (colEvent.transform2->_phyposition.y > colEvent.transform1->_phyposition.y)
 	{
-		float penY = (colEvent.transform2->_position.y - colEvent.collider2->collider.sphere.radius) -
-			(colEvent.transform1->_position.y + colEvent.collider1->collider.sphere.radius);
+		float penY = (colEvent.transform2->_phyposition.y - colEvent.collider2->collider.sphere.radius) -
+			(colEvent.transform1->_phyposition.y + colEvent.collider1->collider.sphere.radius);
 
 		penY = penY * -1.0f;
 
@@ -767,14 +767,14 @@ void CollsionResolver::resolvesphere(CollisionEvent& colEvent)
 		{
 			if (!colEvent.rigid2->isStatic)
 			{
-				colEvent.transform2->_position.y += (penY);
+				colEvent.transform2->_phyposition.y += (penY);
 			}
 		}
 		else
 		{
 			if (!colEvent.rigid1->isStatic)
 			{
-				colEvent.transform1->_position.y += abs(penY);
+				colEvent.transform1->_phyposition.y += abs(penY);
 			}
 		}
 
@@ -860,8 +860,8 @@ void CollsionResolver::preSolveOBB(CollisionEvent& colEvent)
 		{
 
 			// Vector from Center.Of.Mass to contact position
-			NlMath::Vec3 ra = contact.position - colEvent.transform1->_position;
-			NlMath::Vec3 rb = contact.position - colEvent.transform2->_position;
+			NlMath::Vec3 ra = contact.position - colEvent.transform1->_phyposition;
+			NlMath::Vec3 rb = contact.position - colEvent.transform2->_phyposition;
 
 			// Precalculate JM^-1JT for contact and friction constraints
 			NlMath::Vec3 raCn = NlMath::Vector3DCrossProduct(ra, colEvent.manifold.normal);
@@ -931,8 +931,8 @@ void CollsionResolver::solveOBB(CollisionEvent& colEvent)
 	for (Contact& contact : colEvent.manifold.contacts)
 	{
 		// Vector from Center.Of.Mass to contact position
-		NlMath::Vec3 ra = contact.position - colEvent.transform1->_position;
-		NlMath::Vec3 rb = contact.position - colEvent.transform2->_position;
+		NlMath::Vec3 ra = contact.position - colEvent.transform1->_phyposition;
+		NlMath::Vec3 rb = contact.position - colEvent.transform2->_phyposition;
 		// relative velocity at contact
 		NlMath::Vec3 relativeVelocity = velocityB + NlMath::Vector3DCrossProduct(angularVelocityB, rb)
 			- velocityA - NlMath::Vector3DCrossProduct(angularVelocityA, ra);

@@ -375,7 +375,7 @@ SphereCollider& SphereCollider::operator=(const SphereCollider& rhs)
 
 void SphereCollider::posUpdate(ComponentTransform* transform)
 {
-	center = transform->_position + colliderPosition.x;
+	center = transform->_phyposition + colliderPosition.x;
 	radius = transform->_scale.x * colliderScale.x;
 }
 
@@ -416,8 +416,8 @@ void AABBCollider::posUpdate(ComponentTransform* transform)
 		transform->_scale.z * colliderScale.z
 	);
 
-	vecMax = transform->_position + colscale + colliderPosition;
-	vecMin= transform->_position - colscale + colliderPosition;
+	vecMax = transform->_phyposition + colscale + colliderPosition;
+	vecMin= transform->_phyposition - colscale + colliderPosition;
 
 	//vecMax = transform->_position + transform->_scale;
 	//vecMin= transform->_position - transform->_scale;
@@ -464,7 +464,7 @@ void OBBCollider::posUpdate(ComponentTransform* transform)
 		transform->_scale.z * colliderScale.z
 	);
 
-	center = transform->_position + colliderPosition;
+	center = transform->_phyposition + colliderPosition;
 	extend = colscale;
 	glm::quat Quaternion(glm::radians(transform->_rotation));
 	glm::mat4 Rotate = glm::mat4_cast(Quaternion);
@@ -559,7 +559,7 @@ void CapsuleCollider::posUpdate(ComponentTransform* transform)
 	rotation = glm::radians(transform->_rotation);
 
 	// get transform mtx // use mat3 ??
-	glm::mat4 translate = glm::translate(glm::mat4(1.f), transform->_position);
+	glm::mat4 translate = glm::translate(glm::mat4(1.f), transform->_phyposition);
 
 	glm::quat quaternion(glm::radians(transform->_rotation));
 	glm::mat4 rotate = glm::mat4_cast(quaternion);

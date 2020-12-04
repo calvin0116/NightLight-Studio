@@ -7,7 +7,7 @@
 
 //#define USEVEL 0
 //#define USEVEL 1
-#define EPSILON 0.1f
+#define EPSILON 0.01f
 
 namespace NS_PHYSICS
 {
@@ -29,6 +29,18 @@ namespace NS_PHYSICS
 	void PhysicsSystem::Init()
 	{
 		receiver.AttachHandler("TogglePlay", &PhysicsSystem::HandleTogglePlay, this);
+
+		auto itr = G_ECMANAGER->begin<ComponentTransform>();
+		auto itrEnd = G_ECMANAGER->end<ComponentTransform>();
+
+		for (; itr != itrEnd; ++itr)
+		{
+			ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+
+			compT->_phyposition = compT->_position;
+
+		}
+
 	}
 
 	void PhysicsSystem::FixedUpdate()
@@ -73,6 +85,11 @@ namespace NS_PHYSICS
 			if (!_isPlaying)
 			{
 
+				ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+
+				compT->_position = compT->_phyposition;
+
+
 				compR->angularForce = 0;
 				compR->angularAcceleration = 0;
 
@@ -109,8 +126,8 @@ namespace NS_PHYSICS
 			if (compT != ent.getComponent<ComponentTransform>())
 				throw;
 
-			//set previous position
-			compR->prevPos = compT->_position;
+			////set previous position
+			//compR->prevPos = compT->_position;
 
 			//deltatime, convert to second
 			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
@@ -192,19 +209,19 @@ namespace NS_PHYSICS
 			//}
 
 
-			// smoothing
-			if (abs(changeInDisplacement.x) < EPSILON)
-			{
-				changeInDisplacement.x = 0;
-			}
-			if (abs(changeInDisplacement.y) < EPSILON)
-			{
-				changeInDisplacement.y = 0;
-			}
-			if (abs(changeInDisplacement.z) < EPSILON)
-			{
-				changeInDisplacement.z = 0;
-			}
+			//// smoothing
+			//if (abs(changeInDisplacement.x) < EPSILON)
+			//{
+			//	changeInDisplacement.x = 0;
+			//}
+			//if (abs(changeInDisplacement.y) < EPSILON)
+			//{
+			//	changeInDisplacement.y = 0;
+			//}
+			//if (abs(changeInDisplacement.z) < EPSILON)
+			//{
+			//	changeInDisplacement.z = 0;
+			//}
 			if (abs(compR->velocity.x) < EPSILON)
 			{
 				compR->velocity.x = 0;
@@ -219,24 +236,67 @@ namespace NS_PHYSICS
 			}
 			if (abs(compR->acceleration.x) < EPSILON)
 			{
-				compR->velocity.x = 0;
+				compR->acceleration.x = 0;
 			}
 			if (abs(compR->acceleration.y) < EPSILON)
 			{
-				compR->velocity.y = 0;
+				compR->acceleration.y = 0;
 			}
 			if (abs(compR->acceleration.z) < EPSILON)
 			{
-				compR->velocity.z = 0;
+				compR->acceleration.z = 0;
 			}
 
 
-			compT->_position += changeInDisplacement;
+
+			//set previous position
+			compR->prevprevprevPos = compR->prevprevPos;
+			compR->prevprevPos = compR->prevPos;
+			compR->prevPos = compT->_phyposition;
+
+			compT->_phyposition += changeInDisplacement;
 
 			//predict the next position for collision check // is this being used?
-			compT->_nextPos = compT->_position + (glm::vec3)compR->velocity * realDt;
+			compT->_nextPos = compT->_phyposition + (glm::vec3)compR->velocity * realDt;
 
 			//NLMath::Vector3d nextPosition =compT->_position = (glm::vec3)compR->velocity * realDt; // keep in rigid body
+
+			if ((compT->_phyposition.x == compR->prevprevPos.x) && (compR->prevPos.x == compR->prevprevprevPos.x))
+			{
+				// jitter
+				//compT->_position = compT->_phyposition;
+			}
+			else
+			{
+				// no jitter
+				compT->_position.x = compT->_phyposition.x;
+			}
+
+			if ((compT->_phyposition.y == compR->prevprevPos.y) && (compR->prevPos.y == compR->prevprevprevPos.y))
+			{
+				// jitter
+				//compT->_position = compT->_phyposition;
+			}
+			else
+			{
+				// no jitter
+				compT->_position.y = compT->_phyposition.y;
+			}
+
+			if ((compT->_phyposition.z == compR->prevprevPos.z) && (compR->prevPos.z == compR->prevprevprevPos.z))
+			{
+				// jitter
+				//compT->_position = compT->_phyposition;
+			}
+			else
+			{
+				// no jitter
+				compT->_position.z = compT->_phyposition.z;
+			}
+
+
+
+
 
 
 

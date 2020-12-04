@@ -22,6 +22,10 @@ typedef struct ComponentRigidBody : public ISerializable //: public IComponent
 	//inertia 
 	NlMath::Matrix4x4 inertia;
 	//previous position
+	NlMath::Vector3D prevprevprevPos;
+	//previous position
+	NlMath::Vector3D prevprevPos;
+	//previous position
 	NlMath::Vector3D prevPos;
 	//previous position
 	NlMath::Vector3D nextPos;
@@ -38,6 +42,11 @@ typedef struct ComponentRigidBody : public ISerializable //: public IComponent
 
 	// handle to the force handled by force manager
 	int forceHandle;
+
+	// sleep physics
+	//bool isSleepX;
+	//bool isSleepY;
+	//bool isSleepZ;
 
 	ComponentRigidBody();
 	~ComponentRigidBody();
