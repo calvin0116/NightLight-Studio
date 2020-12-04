@@ -177,6 +177,7 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="ISerializable.h" />
+    <ClInclude Include="Source\Component\ComponentCScript.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Source\Ai\AiManager.h" />
@@ -193,7 +194,6 @@
     <ClInclude Include="Source\Component\ComponentCanvas.h" />
     <ClInclude Include="Source\Component\ComponentCauldronStats.h" />
     <ClInclude Include="Source\Component\ComponentCollider.h" />
-    <ClInclude Include="Source\Component\ComponentCScript.h" />
     <ClInclude Include="Source\Component\ComponentGraphics.h" />
     <ClInclude Include="Source\Component\ComponentLight.h" />
     <ClInclude Include="Source\Component\ComponentLoadAudio.h" />
@@ -273,18 +273,6 @@
     <ClInclude Include="Source\IO\Json\Parser.h" />
     <ClInclude Include="Source\IO\Json\Parser.hpp" />
     <ClInclude Include="Source\IO\SystemIO.h" />
-    <ClInclude Include="Source\Logic\CameraScript.h" />
-    <ClInclude Include="Source\Logic\CScripts\AllScripts.h" />
-    <ClInclude Include="Source\Logic\CScripts\APIScript.h" />
-    <ClInclude Include="Source\Logic\CScripts\CauldronScript.h" />
-    <ClInclude Include="Source\Logic\CScripts\FanBlowScript.h" />
-    <ClInclude Include="Source\Logic\CScripts\FanScript.h" />
-    <ClInclude Include="Source\Logic\CScripts\IScript.h" />
-    <ClInclude Include="Source\Logic\CScripts\PossessScript.h" />
-    <ClInclude Include="Source\Logic\CScripts\TestScript.h" />
-    <ClInclude Include="Source\Logic\CScripts\TestScript2.h" />
-    <ClInclude Include="Source\Logic\Player.h" />
-    <ClInclude Include="Source\Logic\SpawnPoint.h" />
     <ClInclude Include="Source\Logic\SystemLogic.h" />
     <ClInclude Include="Source\Math\Matrix3x3.h" />
     <ClInclude Include="Source\Math\Matrix4x4.h" />
@@ -319,6 +307,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Ai\AiManager.cpp" />
+    <ClCompile Include="Source\Component\ComponentCScript.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -337,7 +326,6 @@
     <ClCompile Include="Source\Component\ComponentCanvas.cpp" />
     <ClCompile Include="Source\Component\ComponentCauldronStats.cpp" />
     <ClCompile Include="Source\Component\ComponentCollider.cpp" />
-    <ClCompile Include="Source\Component\ComponentCScript.cpp" />
     <ClCompile Include="Source\Component\ComponentGraphics.cpp" />
     <ClCompile Include="Source\Component\ComponentLight.cpp" />
     <ClCompile Include="Source\Component\ComponentLoadAudio.cpp" />
@@ -401,14 +389,6 @@
     <ClCompile Include="Source\IO\Json\JsonFunction.cpp" />
     <ClCompile Include="Source\IO\Json\Parser.cpp" />
     <ClCompile Include="Source\IO\SystemIO.cpp" />
-    <ClCompile Include="Source\Logic\CameraScript.cpp" />
-    <ClCompile Include="Source\Logic\CScripts\AllScripts.cpp" />
-    <ClCompile Include="Source\Logic\CScripts\CauldronScript.cpp" />
-    <ClCompile Include="Source\Logic\CScripts\FanBlowScript.cpp" />
-    <ClCompile Include="Source\Logic\CScripts\FanScript.cpp" />
-    <ClCompile Include="Source\Logic\CScripts\PossessScript.cpp" />
-    <ClCompile Include="Source\Logic\Player.cpp" />
-    <ClCompile Include="Source\Logic\SpawnPoint.cpp" />
     <ClCompile Include="Source\Logic\SystemLogic.cpp" />
     <ClCompile Include="Source\Math\Matrix3x3.cpp" />
     <ClCompile Include="Source\Math\Matrix4x4.cpp" />

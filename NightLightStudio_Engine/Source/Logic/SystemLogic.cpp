@@ -3,7 +3,7 @@
 #include "..\Mono\Binding\Binder.h" // Bind C++ to C# functions
 
 #include "../Input/SystemInput.h" // For testing
-#include "CScripts/AllScripts.h"
+//#include "CScripts/AllScripts.h"
 
 //#define C_ENV
 #define CS_ENV

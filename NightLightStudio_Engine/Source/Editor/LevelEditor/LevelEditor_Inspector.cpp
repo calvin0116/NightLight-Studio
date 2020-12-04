@@ -1069,47 +1069,47 @@ void InspectorWindow::AnimationComp(Entity& ent)
 
 void InspectorWindow::CScriptComp(Entity& ent)
 {
-  CScriptComponent* cScript_comp = ent.getComponent<CScriptComponent>();
-  if (cScript_comp != nullptr)
-  {
-    if (ImGui::CollapsingHeader("CScript component", &_notRemove))
-    {
-      ImGui::Checkbox("IsActive##CScript", &cScript_comp->_isActive);
-      ImGui::InputInt("Tag", &cScript_comp->_iTag);
-      std::string tex = cScript_comp->_sName.toString();
-      std::string old = tex;
-      _levelEditor->LE_AddInputText("Script Name", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-        [&tex, &cScript_comp]()
-        {
-          cScript_comp->_sName = tex;
-        });
-      // Changes occured
-      if (tex != old)
-      {
-        if (cScript_comp->_pScript) // Already has a script
-        {
-          delete cScript_comp->_pScript;
-          cScript_comp->_pScript = nullptr;
-        }
-        cScript_comp->_pScript = AllScripts::MyConstruct(tex);
-        if (cScript_comp->_pScript)
-        {
-          std::cout << "Constructed Script" << std::endl;
-          cScript_comp->_pScript->SetEntity(ent);
-        }
-      }
-    }
+  //CScriptComponent* cScript_comp = ent.getComponent<CScriptComponent>();
+  //if (cScript_comp != nullptr)
+  //{
+  //  if (ImGui::CollapsingHeader("CScript component", &_notRemove))
+  //  {
+  //    ImGui::Checkbox("IsActive##CScript", &cScript_comp->_isActive);
+  //    ImGui::InputInt("Tag", &cScript_comp->_iTag);
+  //    std::string tex = cScript_comp->_sName.toString();
+  //    std::string old = tex;
+  //    _levelEditor->LE_AddInputText("Script Name", tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+  //      [&tex, &cScript_comp]()
+  //      {
+  //        cScript_comp->_sName = tex;
+  //      });
+  //    // Changes occured
+  //    if (tex != old)
+  //    {
+  //      if (cScript_comp->_pScript) // Already has a script
+  //      {
+  //        delete cScript_comp->_pScript;
+  //        cScript_comp->_pScript = nullptr;
+  //      }
+  //      cScript_comp->_pScript = AllScripts::MyConstruct(tex);
+  //      if (cScript_comp->_pScript)
+  //      {
+  //        std::cout << "Constructed Script" << std::endl;
+  //        cScript_comp->_pScript->SetEntity(ent);
+  //      }
+  //    }
+  //  }
 
-    if (!_notRemove)
-    {
-      //ent.RemoveComponent<GraphicsComponent>();
-      ENTITY_COMP_DOC comp{ ent, ent.getComponent<CScriptComponent>()->Write(), typeid(CScriptComponent).hash_code() };
-      _levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
-      _notRemove = true;
-    }
+  //  if (!_notRemove)
+  //  {
+  //    //ent.RemoveComponent<GraphicsComponent>();
+  //    ENTITY_COMP_DOC comp{ ent, ent.getComponent<CScriptComponent>()->Write(), typeid(CScriptComponent).hash_code() };
+  //    _levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+  //    _notRemove = true;
+  //  }
 
-    ImGui::Separator();
-  }
+  //  ImGui::Separator();
+  //}
 }
 
 void InspectorWindow::PlayerStatsComp(Entity& ent)

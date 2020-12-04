@@ -105,9 +105,6 @@
     <ClCompile Include="Source\Mono\Binding\Components\ComponentColliderBind.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\ComponentCScript.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\ComponentGraphics.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
@@ -252,15 +249,6 @@
     <ClCompile Include="Source\Math\Vector.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Logic\CameraScript.cpp">
-      <Filter>Source Files\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Logic\Player.cpp">
-      <Filter>Source Files\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Logic\SpawnPoint.cpp">
-      <Filter>Source Files\Logic</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Logic\SystemLogic.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
@@ -354,21 +342,6 @@
     <ClCompile Include="Source\IO\Json\Parser.cpp">
       <Filter>Source Files\IO\Json</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Logic\CScripts\AllScripts.cpp">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Logic\CScripts\CauldronScript.cpp">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Logic\CScripts\FanBlowScript.cpp">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Logic\CScripts\FanScript.cpp">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Logic\CScripts\PossessScript.cpp">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Mono\Binding\Binder.cpp">
       <Filter>Source Files\Mono\Binding</Filter>
     </ClCompile>
@@ -390,6 +363,7 @@
     <ClCompile Include="Source\Mono\Binding\Systems\InputBind.cpp">
       <Filter>Source Files\Mono\Binding\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\ComponentCScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -444,9 +418,6 @@
       <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Mono\Binding\Components\ComponentColliderBind.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ComponentCScript.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentGraphics.h">
@@ -635,15 +606,6 @@
     <ClInclude Include="Source\Math\Vector.h">
       <Filter>Source Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Logic\CameraScript.h">
-      <Filter>Source Files\Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Logic\Player.h">
-      <Filter>Source Files\Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Logic\SpawnPoint.h">
-      <Filter>Source Files\Logic</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Logic\SystemLogic.h">
       <Filter>Source Files\Logic</Filter>
     </ClInclude>
@@ -749,33 +711,6 @@
     <ClInclude Include="Source\IO\Json\Parser.hpp">
       <Filter>Source Files\IO\Json</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Logic\CScripts\AllScripts.h">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Logic\CScripts\APIScript.h">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Logic\CScripts\CauldronScript.h">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Logic\CScripts\FanBlowScript.h">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Logic\CScripts\FanScript.h">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Logic\CScripts\IScript.h">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Logic\CScripts\PossessScript.h">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Logic\CScripts\TestScript.h">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Logic\CScripts\TestScript2.h">
-      <Filter>Source Files\Logic\CScripts</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Messaging\Messages\MessageApplicationExit.h">
       <Filter>Source Files\Messaging\Messages</Filter>
     </ClInclude>
@@ -809,6 +744,7 @@
     <ClInclude Include="Source\Mono\Binding\Systems\InputBind.h">
       <Filter>Source Files\Mono\Binding\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\ComponentCScript.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
