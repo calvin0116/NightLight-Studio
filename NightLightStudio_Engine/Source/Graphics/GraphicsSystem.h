@@ -69,6 +69,8 @@ namespace NS_GRAPHICS
 
         void Exit() override;
 
+        void GameExit() override;
+
         void Render();
 
         void ToggleDebugDraw(const bool& set);

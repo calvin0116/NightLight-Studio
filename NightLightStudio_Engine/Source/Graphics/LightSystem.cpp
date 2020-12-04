@@ -347,6 +347,14 @@ namespace NS_GRAPHICS
 			}
 		}
 	}
+
+	void LightSystem::RemoveAllLights()
+	{
+		lightblock->_dLights_Num = 0;
+		lightblock->_pLights_Num = 0;
+		lightblock->_sLights_Num = 0;
+	}
+
 	void LightSystem::SetGamma(const float& gamma)
 	{
 		_gamma = gamma;

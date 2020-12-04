@@ -90,6 +90,9 @@ namespace NS_GRAPHICS
 		// Remove light helper
 		void RemoveLightHelper(const Lights& type, const int& id);
 
+		// Remove all lights from scene (Used upon scene exit)
+		void RemoveAllLights();
+
 		void SetGamma(const float& gamma = 2.2f);
 
 		float GetGamma() const;
