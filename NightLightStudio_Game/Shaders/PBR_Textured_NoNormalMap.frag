@@ -2,8 +2,7 @@
 
 in vec2 texCoords;
 in vec3 fragPos;
-in vec3 fragNormal;
-in mat3 TBN;
+in vec3 normal;
 
 out vec4 fragColor;
 
@@ -98,15 +97,11 @@ float GeometrySmith(float NdotV, float NdotL, float roughness)
 
 void main(void)
 {
-    // Change the following to TBN space: lightPos, viewPos, fragPos
-    vec3 _fragPos = TBN * fragPos;
-    vec3 _viewPos = TBN * viewPos.xyz;
-
     // In case of textures, calculate properties for each point
     vec3 albedo = texture(AlbedoTex, texCoords).rgb;
     float metallic = texture(MetallicTex, texCoords).r;
     float roughness = max(texture(RoughnessTex, texCoords).r, 0.001f);
-    vec3 normal = texture(NormalTex, texCoords).rgb; // for normal map
+    //vec3 normal = texture(NormalTex, texCoords).rgb; // for normal map
 
     roughness *= max(RoughnessControl, 0.00001f);
     metallic *= max(MetallicControl, 0.00001f);
@@ -114,9 +109,9 @@ void main(void)
     float ao = 1.f;
 
     // properties
-    vec3 N = normalize(normal * 2.f - 1.f); // Convert normal to tangent space
-    //vec3 N = normalize(fragNormal); // required normal vector
-    vec3 V = normalize(_viewPos - _fragPos); // required view vector
+    //vec3 N = normalize(normal * 2.f * 1.f); // Convert normal to tangent space
+    vec3 N = normalize(normal); // required normal vector
+    vec3 V = normalize(viewPos.xyz - fragPos); // required view vector
 
     // required Base reflectivity
     vec3 F0 = vec3(0.04f);
@@ -139,9 +134,8 @@ void main(void)
     // light vector is handled differently
     for(int i = 0; i < dLight_Num; i++)
     {
-        // Convert light direction/position to tangent space
         // calculate per-light radiance
-        vec3 L = normalize(-(TBN * dLight[i].direction.xyz)); // light vector
+        vec3 L = normalize(-dLight[i].direction.xyz); // light vector
         vec3 H = normalize(V + L); // Halfway-bisecting vector
         vec3 radiance = dLight[i].diffuse.xyz * dLight[i].intensity;
 
@@ -179,11 +173,10 @@ void main(void)
     // Should be quite easy due to sample code
     for(int j = 0; j < pLights_Num; j++)
     {
-        // Convert light direction/position to tangent space
         // calculate per-light radiance
-        vec3 L = normalize((TBN * pLights[j].position.xyz) - _fragPos); // light vector
+        vec3 L = normalize(pLights[j].position.xyz - fragPos); // light vector
         vec3 H = normalize(V + L); // Halfway-bisecting vector
-        float distance = length((TBN * pLights[j].position.xyz) - _fragPos);
+        float distance = length(pLights[j].position.xyz - fragPos);
         //float attenuation = 1.f / (distance * distance); // inverse squared
         float attenuation = smoothstep(pLights[j].radius, 0.f, distance); // where 100.f is the radius
 
@@ -226,17 +219,13 @@ void main(void)
     // Similar to point light calculation
     for(int k = 0; k < sLights_Num; k++)
     {
-        // Calculate light position/direction to tangent space
-        vec3 l_position = TBN * sLights[k].position.xyz;
-        vec3 l_direction = TBN * sLights[k].direction.xyz;
-
         // calculate per-light radiance
-        vec3 L = normalize(l_position - _fragPos); // light vector
+        vec3 L = normalize(sLights[k].position.xyz - fragPos); // light vector
         vec3 H = normalize(V + L); // Halfway-bisecting vector
-        float distance = length(l_position - _fragPos);
+        float distance = length(sLights[k].position.xyz - fragPos);
         float attenuation = 1.f / (distance * distance); // inverse squared
 
-        float theta = dot(L, normalize(-l_direction)); 
+        float theta = dot(L, normalize(-sLights[k].direction.xyz)); 
         float epsilon = sLights[k].cutOff - sLights[k].outerCutOff;
 
         float intensity = clamp((theta - sLights[k].outerCutOff) / epsilon, 0.f, 1.f);

@@ -7,7 +7,7 @@ namespace NS_GRAPHICS
 {
 	class ShaderSystem
 	{
-		static const unsigned s_max_shaders = 4;
+		static const unsigned s_max_shaders = 16;
 		static const unsigned s_view_projection_buffer_size = 128; // Inclusive of padding
 		static const unsigned s_lights_buffer_size = sizeof(LightBlock); // Inclusive of padding
 
@@ -60,8 +60,10 @@ namespace NS_GRAPHICS
 			PBR_TEXTURED,
 			PBR_TEXTURED_ANIMATED,
 			UI,
+			PBR_TEXTURED_NONORMALMAP,
+			PBR_TEXTURED_ANIMATED_NONORMALMAP,
 			PARTICLE,
-			TOTAL_SHADER
+			TOTAL_SHADER,
 		};
 
 		// Unique Singleton instance

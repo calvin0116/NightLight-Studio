@@ -146,7 +146,7 @@
                 "isActive": true,
                 "Model": "asset\\3d model\\incense_pot_model.fbx",
                 "Albedo": "asset\\textures\\incense pot\\incense_pot_atlas_uv.tga",
-                "Normal": "",
+                "Normal": "asset\\textures\\incense pot\\incense_pot_normals_uv.tga",
                 "Metallic": "asset\\textures\\incense pot\\incense_pot_metallic_uv.tga",
                 "Roughness": "asset\\textures\\incense pot\\incense_pot_roughness_uv.tga",
                 "AmbientOcclusion": "",
@@ -181,9 +181,9 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    43.27693557739258,
-                    86.17816162109375,
-                    41.56647491455078
+                    -3.934589385986328,
+                    76.99131774902344,
+                    68.0346908569336
                 ],
                 "Scale": [
                     1.0,

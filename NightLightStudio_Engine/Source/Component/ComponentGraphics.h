@@ -41,6 +41,8 @@ enum class RENDERTYPE
 
 typedef class ComponentGraphics : public ISerializable//: public IComponent
 {
+	float _alpha = 1.f;
+
 public:
 	// Temporarily make them public for easy access
 	RENDERTYPE _renderType = RENDERTYPE::SOLID;
@@ -104,6 +106,8 @@ public:
 	void AddAOTexture(std::string filename);          // Expose
 	void AddSpecularTexture(std::string filename);    // Expose
 
+	void SetAlpha(const float& alpha);
+	float GetAlpha() const;
 
 	// Destructor, destroy all OpenGL objects via graphics system
 	~ComponentGraphics();

@@ -38,6 +38,7 @@ struct SpotLight {
 uniform vec3 Albedo;
 uniform float Metallic;
 uniform float Roughness;
+uniform float Alpha;
 
 uniform float Gamma;
 
@@ -270,7 +271,7 @@ void main(void)
     // Might replace with uniform gamma value
     resultColor = pow(resultColor, vec3(1.0f/Gamma));
 
-    fragColor = vec4(resultColor, 1.f); // 1.f should be replaced with uniform later
+    fragColor = vec4(resultColor, Alpha);
 
     // End of PBR calculation
 }

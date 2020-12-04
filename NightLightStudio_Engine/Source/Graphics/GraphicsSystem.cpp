@@ -143,7 +143,7 @@ namespace NS_GRAPHICS
 		// Enable depth buffering
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
-		glEnable(GL_MULTISAMPLE);
+		//glEnable(GL_MULTISAMPLE);
 		//glEnable(GL_CULL_FACE);
 		//glCullFace(GL_BACK);
 
@@ -189,6 +189,10 @@ namespace NS_GRAPHICS
 		// Clears to gray bg
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+#ifdef DRAW_DEBUG_GRID
+		debugManager->Render(); // Render opaque objects first
+#endif
 
 #ifdef PBR_DRAWING
 		// Perform PBR update here
@@ -254,6 +258,9 @@ namespace NS_GRAPHICS
 					shaderManager->StartProgram(ShaderSystem::PBR); // solid program
 				}
 
+				// Update alpha
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Alpha"), graphicsComp->GetAlpha());
+
 				// Update model and uniform for material
 				glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Albedo"), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
 				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Roughness"), graphicsComp->_pbrData._roughness);
@@ -289,15 +296,24 @@ namespace NS_GRAPHICS
 			{
 				if (model->_isAnimated)
 				{
-					shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
+					// If normal map does not exist
+					if(!graphicsComp->_normalID)
+						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
+					else
+						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
 					//glm::mat4 identity(1.0f);
 					//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
 				}
 				else
 				{
-					shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
+					if(!graphicsComp->_normalID)
+						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
+					else
+						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
 				}
 				
+				// Update alpha
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Alpha"), graphicsComp->GetAlpha());
 
 				// Roughness Control
 				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "RoughnessControl"), graphicsComp->_pbrData._roughness);
@@ -349,10 +365,6 @@ namespace NS_GRAPHICS
 			}
 			itr++;
 		}
-#endif
-
-#ifdef DRAW_DEBUG_GRID
-		debugManager->Render();
 #endif
 	}
 

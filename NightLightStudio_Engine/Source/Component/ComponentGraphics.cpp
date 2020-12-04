@@ -161,6 +161,16 @@ void ComponentGraphics::AddSpecularTexture(std::string filename)
 	}
 }
 
+void ComponentGraphics::SetAlpha(const float& alpha)
+{
+	_alpha = alpha;
+}
+
+float ComponentGraphics::GetAlpha() const
+{
+	return _alpha;
+}
+
 ComponentGraphics::~ComponentGraphics()
 {
 }
@@ -354,6 +364,13 @@ inline void ComponentGraphics::Read(Value& val)
 	{
 		_pbrData._roughness = val["RoughnessMat"].GetFloat();
 	}
+
+	if (val.FindMember("Alpha") == val.MemberEnd())
+		std::cout << "No Alpha data has been found" << std::endl;
+	else
+	{
+		_alpha = val["Alpha"].GetFloat();
+	}
 }
 
 inline Value ComponentGraphics::Write() 
@@ -403,6 +420,8 @@ inline Value ComponentGraphics::Write()
 	NS_SERIALISER::ChangeData(&val, "MetallicMat", _pbrData._metallic);
 
 	NS_SERIALISER::ChangeData(&val, "RoughnessMat", _pbrData._roughness);
+
+	NS_SERIALISER::ChangeData(&val, "Alpha", _alpha);
 
 	return val;
 }

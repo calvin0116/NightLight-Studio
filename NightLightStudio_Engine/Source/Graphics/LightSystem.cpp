@@ -374,6 +374,11 @@ namespace NS_GRAPHICS
 		shaderSystem->StartProgram(ShaderSystem::PBR_TEXTURED);
 		glUniform1f(glGetUniformLocation(shaderSystem->GetCurrentProgramHandle(), "Gamma"), _gamma);
 		
+		shaderSystem->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
+		glUniform1f(glGetUniformLocation(shaderSystem->GetCurrentProgramHandle(), "Gamma"), _gamma);
+
+		shaderSystem->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
+		glUniform1f(glGetUniformLocation(shaderSystem->GetCurrentProgramHandle(), "Gamma"), _gamma);
 
 		shaderSystem->StopProgram();
 	}

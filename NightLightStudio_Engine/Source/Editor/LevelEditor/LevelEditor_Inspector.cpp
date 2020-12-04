@@ -765,6 +765,10 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 			ImGui::DragFloat("Metallic", &graphics_comp->_pbrData._metallic, 0.1f, 0.f, 1.f);
 			ImGui::DragFloat("Roughness", &graphics_comp->_pbrData._roughness, 0.1f, 0.f, 1.f);
 
+			float alpha = graphics_comp->GetAlpha();
+			if (ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.f, 1.f))
+				graphics_comp->SetAlpha(alpha);
+
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 		}
 
