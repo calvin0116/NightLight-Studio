@@ -1,11 +1,10 @@
 #include "SystemAudio.h"
-
 #include "../Component/Components.h" // G_ECMANAGER
-//#include "../Component/ComponentAudio.h" // Audio Component Data
-
-#include "../Input/SystemInput.h" // For testing
 
 const float SystemAudio::s_UNITS_PER_METER = 100.0f;
+const int listenerTag = 1000;
+const float minDist = 0.5f;
+const float maxDist = 5.0f;
 bool SystemAudio::_isPlaying = false;
 
 void SystemAudio::LoadSound(const std::string& _soundPath, const std::string& _name)
@@ -99,8 +98,10 @@ int SystemAudio::Play3DLoop(const std::string& _name, const int _id)
         _system->playSound(it->second, _bgm, true, _channels + retVal);
         _channels[retVal]->setMode(FMOD_LOOP_NORMAL);
         _channels[retVal]->setMode(FMOD_3D);
+        _channels[retVal]->setMode(FMOD_3D_LINEARROLLOFF);
          glm::vec3 _pos = G_ECMANAGER->getEntity(_id).getComponent<TransformComponent>()->_position;
         //m_Channels[retVal]->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 100.0f * m_fUnitsPerMeter);
+         _channels[retVal]->set3DMinMaxDistance(minDist * s_UNITS_PER_METER, maxDist * s_UNITS_PER_METER);
         _fmodPos = { _pos.x, _pos.y, _pos.z };
         //FMOD_VECTOR fmodVel = { 100.0f, 0.0f, 0.0f };
         _channels[retVal]->set3DAttributes(&_fmodPos, nullptr);
@@ -130,12 +131,14 @@ void SystemAudio::Play3DOnce(const std::string& name, const int _id)
         _system->playSound(it->second, _sfx, true, _channels + retVal);
         _channels[retVal]->setMode(FMOD_LOOP_OFF);
         _channels[retVal]->setMode(FMOD_3D);
+        _channels[retVal]->setMode(FMOD_3D_LINEARROLLOFF);
         glm::vec3 _pos = G_ECMANAGER->getEntity(_id).getComponent<TransformComponent>()->_position;
         _fmodPos = { _pos.x, _pos.y, _pos.z };
         _channels[retVal]->set3DAttributes(&_fmodPos, nullptr);
         _channels[retVal]->setPaused(false);
         _objIDs[retVal] = _id;
         //ErrorCheck(temp->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 5.0f * m_fUnitsPerMeter));
+        _channels[retVal]->set3DMinMaxDistance(minDist * s_UNITS_PER_METER, maxDist * s_UNITS_PER_METER);
         //FMOD_VECTOR fmodPos = { _pos.x, _pos.y, _pos.z };
     /*    _channels[retVal]->set3DAttributes(&fmodPos, nullptr);
         _channels[retVal]->setPaused(false);*/
@@ -162,10 +165,12 @@ void SystemAudio::Play3DOnce(const std::string& name, float x, float y, float z)
         _system->playSound(it->second, _sfx, true, _channels + retVal);
         _channels[retVal]->setMode(FMOD_LOOP_OFF);
         _channels[retVal]->setMode(FMOD_3D);
+        _channels[retVal]->setMode(FMOD_3D_LINEARROLLOFF);
         _fmodPos = { x, y, z };
         _channels[retVal]->set3DAttributes(&_fmodPos, nullptr);
         _channels[retVal]->setPaused(false);
         //ErrorCheck(temp->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 5.0f * m_fUnitsPerMeter));
+        _channels[retVal]->set3DMinMaxDistance(minDist * s_UNITS_PER_METER, maxDist * s_UNITS_PER_METER);
         //FMOD_VECTOR fmodPos = { _pos.x, _pos.y, _pos.z };
     /*    _channels[retVal]->set3DAttributes(&fmodPos, nullptr);
         _channels[retVal]->setPaused(false);*/
@@ -193,43 +198,11 @@ void SystemAudio::Load()
   _master->addGroup(_sfx);
   // Set 3D settings
   _system->set3DSettings(1.0f, s_UNITS_PER_METER, 1.0f);
+  //_system->set3DRolloffCallback();
 }
 
 void SystemAudio::Init()
 {
-  //// Numpad 0 = Normal both speakers
-  //SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TestAudio", SystemInput_ns::IKEY_ALT, "AudioTest", SystemInput_ns::OnHold, [this]()
-  //  {
-  //    if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_0))
-  //    {
-  //      PlayOnce("TestAudio");
-  //    }
-  //  });
-  //// Numpad 1 = 3D BGM on left side
-  //SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Test1Audio", SystemInput_ns::IKEY_ALT, "Audio1Test", SystemInput_ns::OnHold, [this]()
-  //  {
-  //    if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_1))
-  //    {
-  //      Play3DOnce("TestAudio", -1.0f, 0.0f, 0.0f);
-  //    }
-  //  });
-  //// Numpad 2 = 3D BGM on right side
-  //SYS_INPUT->GetSystemKeyPress().CreateNewEvent("Test2Audio", SystemInput_ns::IKEY_ALT, "Audio2Test", SystemInput_ns::OnHold, [this]()
-  //  {
-  //    if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_2))
-  //    {
-  //      Play3DOnce("TestAudio", 1.0f, 0.0f, 0.0f);
-  //    }
-  //  });
-
-  //SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TestAmbient", SystemInput_ns::IKEY_ALT, "Ambient", SystemInput_ns::OnHold, [this]()
-  //  {
-  //    if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_3))
-  //    {
-  //      PlayBGM("StreetAmbienceHaunting");
-  //    }
-  //  });
-
   // Register receiver to message
   r.AttachHandler("TogglePlay", &SystemAudio::HandleTogglePlay, this);
 }
@@ -289,6 +262,19 @@ void SystemAudio::MyGameInit()
       }
     }
   }
+
+  // get listener
+  auto itr2 = G_ECMANAGER->begin<ComponentTransform>();
+  auto itrEnd2 = G_ECMANAGER->end<ComponentTransform>();
+  for (; itr2 != itrEnd2; ++itr2)
+  {
+    ComponentTransform* trans = G_ECMANAGER->getComponent<ComponentTransform>(itr2);
+    if (trans->_tag == listenerTag)
+    {
+      //std::cout << "Found! " << std::endl;
+      _listenerVecPos = &trans->_position;
+    }
+  }
 }
 
 void SystemAudio::Update()
@@ -300,6 +286,19 @@ void SystemAudio::Update()
   }
   // position update here
   _system->update();
+  if (_listenerVecPos)
+  {
+    _listenerPos.x = _listenerVecPos->x;
+    _listenerPos.y = _listenerVecPos->y;
+    _listenerPos._z = _listenerVecPos->z;
+    //std::cout
+    //  << " x:" << _listenerPos.x
+    //  << " y:" << _listenerPos.y
+    //  << " z:" << _listenerPos._z << std::endl;
+  }
+  /** IMPORTANT UNFINISHED CODE **/
+  // Set player's forward and up vector here WHEN AVAILABLE
+  _system->set3DListenerAttributes(0, &_listenerPos, nullptr, nullptr, nullptr);
   // Update 3D positions
   for (int i = 0; i < s_MAX_CHANNELS; ++i)
   {
