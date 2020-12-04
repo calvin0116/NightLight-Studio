@@ -22,6 +22,8 @@ namespace NS_GRAPHICS
 			glm::vec3 _position;
 			glm::vec2 _uv;
 			glm::vec3 _normals;
+			glm::vec3 _tangent;
+			glm::vec3 _biTangent;
 		};
 
 		//Vertex Data might not be needed
@@ -57,6 +59,8 @@ namespace NS_GRAPHICS
 			glm::vec3 _position;
 			glm::vec2 _uv;
 			glm::vec3 _normals;
+			glm::vec3 _tangent;
+			glm::vec3 _biTangent;
 			glm::ivec4 _boneID;
 			glm::vec4 _boneWeights;
 
