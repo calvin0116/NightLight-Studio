@@ -19,6 +19,7 @@ namespace Unicorn
 
     public override void LateInit()
     {
+      Print("My ID: " + id.ToString());
     }
 
     public override void Update()

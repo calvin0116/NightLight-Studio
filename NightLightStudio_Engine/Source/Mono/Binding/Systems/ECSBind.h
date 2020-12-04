@@ -10,6 +10,8 @@ namespace ECSBind
   float realDt();
   // Scene change
   void SetNextScene(MonoString* scene_name);
+  // Print in console
+  void Print(MonoString* text);
   // Get components from object ID
   MonoObject* GetScript(int id);
   MonoObject* GetTransform(int id);

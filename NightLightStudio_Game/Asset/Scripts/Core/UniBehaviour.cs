@@ -39,6 +39,9 @@ namespace Unicorn
     // Change scene
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void SetNextScene(string scene);
+    // Print in editor's console.
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void Print(string value);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static dynamic GetScript(int id);
