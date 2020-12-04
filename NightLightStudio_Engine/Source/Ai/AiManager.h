@@ -40,7 +40,7 @@ namespace NS_AI
 		{
 			if (wp_man.GetWayPointNumber())	//If there is way point
 			{
-				nav_comp->SetCurrentPath(wp_man.AstarPathFinding(my_pos, target_position));
+				//nav_comp->SetCurrentPath(wp_man.AstarPathFinding(my_pos, target_position));
 			}
 			else
 			{

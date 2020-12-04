@@ -18,10 +18,10 @@ inline void ComponentVariables::Read(Value& val)
 		{
 			auto int_list_val = itr->value.GetArray();
 			if(int_list.size() == 0)
-				for (int i = 0; i < int_list_val.Size(); ++i)
+				for (unsigned i = 0; i < int_list_val.Size(); ++i)
 					int_list.push_back(int_list_val[i].GetInt());
 			else
-				for (int i = 0; i < int_list_val.Size(); ++i)
+				for (unsigned i = 0; i < int_list_val.Size(); ++i)
 					int_list.at(i) = int_list_val[i].GetInt();
 		}
 		else if(itr->name == "FloatList")
@@ -29,10 +29,10 @@ inline void ComponentVariables::Read(Value& val)
 			auto float_list_val = itr->value.GetArray();
 			
 			if (float_list.size() == 0)
-				for (int i = 0; i < float_list_val.Size(); ++i)
+				for (unsigned i = 0; i < float_list_val.Size(); ++i)
 					float_list.push_back(float_list_val[i].GetFloat());
 			else
-				for (int i = 0; i < float_list_val.Size(); ++i)
+				for (unsigned i = 0; i < float_list_val.Size(); ++i)
 					float_list.at(i) = float_list_val[i].GetFloat();
 		}
 		else if (itr->name == "StringList")
@@ -40,10 +40,10 @@ inline void ComponentVariables::Read(Value& val)
 			auto string_list_val = itr->value.GetArray();
 			
 			if (string_list.size() == 0)
-				for (int i = 0; i < string_list_val.Size(); ++i)
+				for (unsigned i = 0; i < string_list_val.Size(); ++i)
 					string_list.push_back(LocalString(string_list_val[i].GetString()) );		
 			else
-				for (int i = 0; i < string_list_val.Size(); ++i)
+				for (unsigned i = 0; i < string_list_val.Size(); ++i)
 					string_list.at(i) = LocalString(string_list_val[i].GetString());
 		}
 	}
