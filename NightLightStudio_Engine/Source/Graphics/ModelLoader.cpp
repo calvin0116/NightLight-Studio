@@ -167,10 +167,9 @@ namespace NS_GRAPHICS
 
 			if (mesh->HasTangentsAndBitangents())
 			{
+				//If it has tangents
 				vertexData._tangent.x = mesh->mTangents[i].x;
 				vertexData._tangent.y = mesh->mTangents[i].y;
-				vertexData._biTangent.x = mesh->mBitangents[i].x;
-				vertexData._biTangent.y = mesh->mBitangents[i].y;
 			}
 
 			newMesh->_vertexDatas.push_back(vertexData);
@@ -221,11 +220,9 @@ namespace NS_GRAPHICS
 
 			if (mesh->HasTangentsAndBitangents())
 			{
-				//If it has tangent, it has bitangent
+				//If it has tangent
 				vertexData._tangent.x = mesh->mTangents[i].x;
 				vertexData._tangent.y = mesh->mTangents[i].y;
-				vertexData._biTangent.x = mesh->mBitangents[i].x;
-				vertexData._biTangent.y = mesh->mBitangents[i].y;
 			}
 
 			//Explicitly zero out all
@@ -341,7 +338,6 @@ namespace NS_GRAPHICS
 				tickPerSec = 1.0f;
 			}
 
-			//double smallestPossibleTime = 1000000;
 			newAnim->_time = currAnim->mDuration / tickPerSec;
 
 			for (unsigned int x = 0; x < currAnim->mNumChannels; ++x)
@@ -356,8 +352,6 @@ namespace NS_GRAPHICS
 					AssimpToGLM(currAnim->mChannels[x]->mPositionKeys[y].mValue, pos);
 					currFrame._position.push_back(pos);
 				}
-
-				//smallestPossibleTime = std::min(currFrame._posTime[currFrame._posTime.size()-1], newAnim->_time);
 
 				currFrame._rotation.reserve(currAnim->mChannels[x]->mNumRotationKeys);
 				for (unsigned int y = 0; y < currAnim->mChannels[x]->mNumRotationKeys; ++y)
