@@ -63,9 +63,13 @@ void LevelEditor::LE_MainMenuBar()
     if (ImGui::BeginMenuBar())
     {
         LE_AddMenuWithItems("File", 
-            { "Open" , "Save", "Save As"},
-            { "" , "Ctrl-S", "" },
+            { "New" , "Open" , "Save", "Save As"},
+            { "" , "" , "Ctrl-S", "" },
             {
+                [this]()
+                {
+                    NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(NS_SCENE::SYS_SCENE_MANAGER->LoadScene("DefaultScene"));
+                },
                 // Opens a Window Dialog Box for Opening a .json file
                 [this]() 
                 {
@@ -141,7 +145,7 @@ void LevelEditor::LE_MainMenuBar()
         LE_AddMenuWithItems("Windows", editorNames, {}, funcs);
         //LE_AddMenuOnly("Windows", [&](){ LE_AddMenuWithItems("SecondWindows", editorNames, {}, funcs);});
 
-        LE_AddMenuWithItems("Current Scene: ~" + NS_SCENE::SYS_SCENE_MANAGER->GetCurrentScene() + "~ Press 'Ctrl+1' to go next scene");
+        LE_AddText("Current Scene: ~" + NS_SCENE::SYS_SCENE_MANAGER->GetCurrentScene() + "~ 'Ctrl+1' for next scene");
 
         ImVec2 size = viewport->GetWorkSize();
         ImGui::SetCursorPosX(size.x / 2.0f);

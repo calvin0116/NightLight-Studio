@@ -17,9 +17,9 @@ ComponentAnimation::~ComponentAnimation()
 	strcpy_s(ser_name, "AnimationComponent");
 }
 
-void ComponentAnimation::PlayAnimation(std::string newAnim, bool loop)
+void ComponentAnimation::PlayAnimation(std::string newAnim, bool loop, double startFrame, double endFrame)
 {
-	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->PlayAnimation(newAnim, this, loop);
+	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->PlayAnimation(newAnim, this, loop, startFrame, endFrame);
 }
 
 void ComponentAnimation::PauseAnimation()
@@ -41,7 +41,8 @@ void ComponentAnimation::StopAnimation()
 
 bool ComponentAnimation::IsFinished()
 {
-	return !NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play;
+	return !NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play &&
+		!NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_isPlaying;
 }
 
 //read and write function for initialization from saved files

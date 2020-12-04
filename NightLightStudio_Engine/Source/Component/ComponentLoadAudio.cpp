@@ -43,7 +43,7 @@ void	ComponentLoadAudio::Read(Value& val)
           bool empty_at_start = (_sounds.size() == 0);
 
 
-          for (int i = 0; i < sound_array.Size(); ++i)
+          for (int i = 0; i < (int)sound_array.Size(); ++i)
           {
               fs::path cur_path_name = sound_array[i].GetString();
               data MyData;

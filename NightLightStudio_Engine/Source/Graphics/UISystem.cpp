@@ -145,6 +145,10 @@ void NS_GRAPHICS::UISystem::RenderUI()
 		size_t uiAmount = canvas->_uiElements.size();
 		for (size_t i = 0; i < uiAmount; ++i)
 		{
+			if (!canvas->_uiElements.at(i)._isActive)
+			{
+				continue;
+			}
 			if (!canvas->_uiElements.at(i)._imageID)
 			{
 				continue;

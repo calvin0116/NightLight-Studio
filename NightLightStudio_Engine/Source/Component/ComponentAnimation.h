@@ -16,7 +16,7 @@ public:
 	~ComponentAnimation();
 
 	//C# Expose Functions
-	void PlayAnimation(std::string newAnim, bool loop = true);
+	void PlayAnimation(std::string newAnim, bool loop = true, double startFrame = -1.0, double endFrame = -1.0);
 	void PauseAnimation();
 	void ResumeAnimation();
 	void StopAnimation();

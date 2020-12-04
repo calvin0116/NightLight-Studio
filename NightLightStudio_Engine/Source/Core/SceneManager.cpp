@@ -4,6 +4,7 @@
 #include "../Component/Components.h"
 
 #include "../Input/SystemInput.h"
+//#include "../IO/Json/Config.h"
 #include <filesystem>
 #include <typeinfo>
 
@@ -316,18 +317,45 @@ namespace NS_SCENE
 		}
 	}
 
-	void SceneManager::LoadScene(std::string scene_name)
+	std::string SceneManager::LoadScene(std::string scene_name)
 	{
-#ifdef _DEBUG 
-		if (!CheckIfSceneExist(scene_name))
+		bool newscene = false;
+//#ifdef _DEBUG 
+		if (scene_name == "DefaultScene" || !CheckIfSceneExist(scene_name) )
 		{
-			std::cout << "Scene does not exist" << std::endl;
-			return;
+			if (scene_name == "DefaultScene")
+			{
+				while (1)
+				{
+					if (scene_list.find(scene_name) == scene_list.end())
+						break;
+					else
+						scene_name += "(copy)";
+				}
+
+				std::string real_file_path = json_path + scene_parser["SceneFolder"].GetString();
+				std::ofstream MyFile(real_file_path +  scene_name + ".json");
+
+				MyFile << "{\n}";
+
+				scene_list[scene_name] = new NS_SERIALISER::Parser(scene_name, real_file_path);
+				newscene = false;
+				
+			}
+			else
+			{
+				std::cout << "Scene does not exist" << std::endl;
+			}
 		}
-#endif
+//#endif
 
 		NS_SERIALISER::Parser* scene = scene_list[scene_name];
 		scene->Load();
+
+		//if (newscene)
+			//scene->CleanDoc();
+
+		return scene_name;
 	}
 
 	void SceneManager::SaveScene(std::string path)
@@ -438,7 +466,7 @@ namespace NS_SCENE
 				break;
 			}
 		}
-		return exist;
+		return true;
 	}
 
 

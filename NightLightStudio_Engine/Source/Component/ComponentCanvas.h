@@ -20,11 +20,16 @@ struct UI_Element
 	glm::vec2 _size;
 	glm::vec4 _colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
+	bool _isActive = true;
+
 	LocalString<256> _fileName;
 	unsigned _imageID;
 
 	glm::mat4 GetModelMatrix();
 	void AddTexture(std::string filename);
+
+	//Expose this
+	bool OnClick();
 
 	bool operator<(const UI_Element& rhs);
 };
@@ -50,6 +55,10 @@ public:
 	void AddUI();
 	void RemoveUI(size_t index);
 	void Sort();
+
+	//To Expose
+	UI_Element& FindUI(size_t index);
+	UI_Element& FindUIByName(LocalString<256> name);
 
 	//read and write function for initialization from saved files
 	void	Read(Value&);

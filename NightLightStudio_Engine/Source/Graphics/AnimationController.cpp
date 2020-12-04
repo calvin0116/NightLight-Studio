@@ -9,11 +9,18 @@ void AnimationController::Update(float dt)
 	{
 		_dt += dt;
 
-		if (_dt >= _endAnimTime)
+		if (_dt >= _endAnimTime || (_dt >= _endFrameTime && _endFrameTime >= 0.0))
 		{
 			if (_loop)
 			{
-				_dt = 0.0;
+				if (_startFrameTime >= 0)
+				{
+					_dt = _startFrameTime;
+				}
+				else
+				{
+					_dt = 0.0;
+				}
 			}
 			else
 			{
@@ -23,7 +30,7 @@ void AnimationController::Update(float dt)
 	}
 }
 
-void AnimationController::PlayAnimation(std::string newAnim, ComponentAnimation* currComp, bool loop)
+void AnimationController::PlayAnimation(std::string newAnim, ComponentAnimation* currComp, bool loop, double startFrame, double endFrame)
 {
 	if (_currAnim != newAnim || _play == false)
 	{
@@ -32,7 +39,10 @@ void AnimationController::PlayAnimation(std::string newAnim, ComponentAnimation*
 			_currAnim = newAnim;
 			_dt = 0.0;
 			_play = true;
+			_isPlaying = true;
 			_loop = loop;
+			_startFrameTime = startFrame;
+			_endFrameTime = endFrame;
 
 			Entity entity = G_ECMANAGER->getEntity(currComp);
 			ComponentGraphics* compGraphic = entity.getComponent<ComponentGraphics>();

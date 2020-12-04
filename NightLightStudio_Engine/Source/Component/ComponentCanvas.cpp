@@ -2,6 +2,7 @@
 #include "../../glm/gtc/matrix_transform.hpp"
 #include "../../glm/gtc/quaternion.hpp"
 #include "../Graphics/UISystem.h"
+#include "../Input/SystemInput.h"
 
 ComponentCanvas::ComponentCanvas() : _isActive{ true }
 {
@@ -27,6 +28,27 @@ void ComponentCanvas::RemoveUI(size_t index)
 void ComponentCanvas::Sort()
 {
 	_uiElements.sort();
+}
+
+UI_Element& ComponentCanvas::FindUI(size_t index)
+{
+	return _uiElements.at(index);
+}
+
+UI_Element& ComponentCanvas::FindUIByName(LocalString<256> name)
+{
+	auto it = _uiElements.begin();
+	auto end = _uiElements.end();
+
+	while (it != end)
+	{
+		if ((*it)._uiName.toString() == name.toString())
+		{
+			return *it;
+		}
+		++it;
+	}
+	return *(_uiElements.begin());
 }
 
 void ComponentCanvas::Read(Value& val)
@@ -158,6 +180,22 @@ void UI_Element::AddTexture(std::string filename)
 	{
 		_imageID = NS_GRAPHICS::UISystem::GetInstance().LoadTexture(filename);
 	}
+}
+
+bool UI_Element::OnClick()
+{
+	glm::vec2 mouse = SYS_INPUT->GetSystemMousePos().GetMousePos();
+	mouse.x = mouse.x - SYS_INPUT->GetSystemMousePos().GetClientRectSize().x * 0.5f;
+	mouse.y = mouse.y - SYS_INPUT->GetSystemMousePos().GetClientRectSize().y * 0.5f;
+
+	glm::vec2 min = glm::vec2{ _position.x - (_size.x * 0.5f), _position.y - (_size.y * 0.5f)};
+	glm::vec2 max = glm::vec2{ _position.x + (_size.x * 0.5f), _position.y + (_size.y * 0.5f)};
+
+	if (min.x < mouse.x && max.x > mouse.x && min.y < mouse.y && max.y > mouse.y)
+	{
+		return true;
+	}
+	return false;
 }
 
 bool UI_Element::operator<(const UI_Element& rhs)

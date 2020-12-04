@@ -38,6 +38,7 @@ namespace NS_AI
 
 		void WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)
 		{
+			nav_comp;
 			if (wp_man.GetWayPointNumber())	//If there is way point
 			{
 				//nav_comp->SetCurrentPath(wp_man.AstarPathFinding(my_pos, target_position));
@@ -73,14 +74,14 @@ namespace NS_AI
 		//Select closest way point to move to
 		void FindClosestWP(NavigatorComponent* nav_comp, TransformComponent* trans_comp)
 		{
-			std::pair<int, float> closest_wp{ -1, std::numeric_limits<float>::max() };
+			std::pair<int, float> closest_wp = std::make_pair<int, float>(-1, std::numeric_limits<float>::max());
 			
 			int i = 0;
 			for (; i < nav_comp->cur_path.size(); ++i)
 			{
 				auto wp = nav_comp->cur_path.at(i);
 
-				float dist = (float)(wp->_position - trans_comp->_position).length();
+				float dist = static_cast<float>((wp->_position - trans_comp->_position).length());
 				if (dist < closest_wp.second)
 				{
 					closest_wp.first = i;
