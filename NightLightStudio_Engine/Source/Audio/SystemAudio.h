@@ -27,6 +27,7 @@ class SystemAudio : public MySystem, public  Singleton<SystemAudio>
   // to store sound handles
   MyAudioMap          _sounds;
   // to store listener position, default at 0,0,0
+  glm::vec3*          _listenerVecPos;
   FMOD_VECTOR         _listenerPos;
   // to convert positions
   FMOD_VECTOR         _fmodPos;
@@ -72,7 +73,7 @@ public: // Suppose to be private and use messaging, but since SystemAudio is sin
   inline void PauseAll(bool _pause) { _master->setPaused(_pause); }
 public:
   // ctor
-  SystemAudio() : _listenerPos({ 0.0f, 0.0f, 0.0f }), _fmodPos({ 0.0f, 0.0f, 0.0f }), _system(nullptr), _master(nullptr), _bgm(nullptr), _sfx(nullptr) {}
+  SystemAudio() : _listenerVecPos(nullptr), _listenerPos({ 0.0f, 0.0f, 0.0f }), _fmodPos({ 0.0f, 0.0f, 0.0f }), _system(nullptr), _master(nullptr), _bgm(nullptr), _sfx(nullptr) {}
   // no copy ctor
   SystemAudio(const SystemAudio&) = delete;
   // no copy assign

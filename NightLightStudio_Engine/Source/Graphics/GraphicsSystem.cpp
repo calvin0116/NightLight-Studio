@@ -177,6 +177,12 @@ namespace NS_GRAPHICS
 		DestroyInstance();
 	}
 
+	void GraphicsSystem::GameExit()
+	{
+		// Call for lights clear
+		lightManager->RemoveAllLights();
+	}
+
 	void GraphicsSystem::Render()
 	{
 		// testing basic gl functionality
@@ -221,11 +227,18 @@ namespace NS_GRAPHICS
 				if (animComp->_isActive)
 				{
 					glm::mat4 identity(1.0f);
-					float dt = static_cast<float>(animManager->_animControllers[animComp->_controllerID]->_dt);
+					double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
 					std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
-					if (!currAnimation.empty())
+					if (!currAnimation.empty() && animManager->_animControllers[animComp->_controllerID]->_play)
 					{
 						model->GetPose(currAnimation, model->_rootBone, dt, identity, model->_globalInverseTransform);
+					}
+
+					//Updates the pose 1 more time after the animation stop
+					else if (!currAnimation.empty() && animManager->_animControllers[animComp->_controllerID]->_isPlaying)
+					{
+						model->GetPose(currAnimation, model->_rootBone, dt, identity, model->_globalInverseTransform);
+						animManager->_animControllers[animComp->_controllerID]->_isPlaying = false;
 					}
 				}
 			}

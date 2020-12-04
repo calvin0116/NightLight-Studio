@@ -14,6 +14,7 @@ struct AnimationController
 
 	bool _play;
 	bool _loop;
+	bool _isPlaying;
 
 	double _dt;
 	double _endAnimTime;

@@ -473,6 +473,7 @@ void InspectorWindow::AudioComp(Entity& ent)
 				//ImGui::InputText(n.c_str(), data.name, 256);
 
 				std::string s_name = data.name;
+				ImGui::SetNextItemWidth(50);
 				_levelEditor->LE_AddInputText(n, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
 					[&data, &s_name]()
 					{
@@ -481,10 +482,28 @@ void InspectorWindow::AudioComp(Entity& ent)
 
 				ImGui::SameLine(0, 10);
 				std::string s_path = data.path;
+
 				_levelEditor->LE_AddInputText(p, s_path, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 					[&data, &s_path]()
 					{
 						strcpy_s(data.path, s_path.c_str());
+					});
+
+				_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+					[this, &data](std::string* str)
+					{
+						std::string newData = *str;
+						newData.erase(newData.begin());
+						std::transform(newData.begin(), newData.end(), newData.begin(),
+							[](unsigned char c)
+							{ return (char)std::tolower(c); });
+
+						std::string fileType = LE_GetFileType(newData);
+						if (fileType == "ogg")
+						{
+							memset(data.path, 0, 512);
+							strcpy_s(data.path, newData.c_str());
+						}
 					});
 
 			}
@@ -1045,12 +1064,23 @@ void InspectorWindow::AnimationComp(Entity& ent)
 
 			if (ImGui::Button("Preview Animation"))
 			{
-				anim->PlayAnimation(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim);
+				anim->PlayAnimation(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim,
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_loop);
 			}
 
-			if (ImGui::Button("Pause Animation"))
+			if (NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play)
 			{
-				anim->PauseAnimation();
+				if (ImGui::Button("Pause Animation"))
+				{
+					anim->PauseAnimation();
+				}
+			}
+			else
+			{
+				if (ImGui::Button("Resume Animation"))
+				{
+					anim->ResumeAnimation();
+				}
 			}
 
 			if (ImGui::Button("Stop Animation"))
@@ -1058,9 +1088,7 @@ void InspectorWindow::AnimationComp(Entity& ent)
 				anim->StopAnimation();
 			}
 
-			ImGui::SameLine();
-
-			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+			ImGui::Checkbox("Loop", &NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_loop);
 		}
 
 		ImGui::Separator();

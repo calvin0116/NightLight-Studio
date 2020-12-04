@@ -4,13 +4,17 @@ using System.Collections.Specialized;
 
 namespace Unicorn
 {
-  public class Hello : UniBehaviour
+  public class AudioTest : UniBehaviour
   {
     Transform trans;
+    RigidBody rb;
+    int leftBGM = -1;
+    int rightBGM = -1;
 
     public override void Init()
     {
       trans = GetTransform(id);
+      rb = GetRigidBody(id);
     }
 
     public override void LateInit()
@@ -23,8 +27,25 @@ namespace Unicorn
     }
     public override void FixedUpdate()
     {
-      if(Input.GetKeyPress(VK.IKEY_SPACE))
-        trans.SetPosition(new Vector3(0.0f, trans.GetPosition().y + 1000.0f, 0.0f));
+      if (Input.GetKeyPress(VK.IKEY_Q))
+        Audio.Play3DOnce("0", GameObjectFind("Left"));
+      if (Input.GetKeyPress(VK.IKEY_E))
+        Audio.Play3DOnce("0", GameObjectFind("Right"));
+      if (Input.GetKeyPress(VK.IKEY_Z))
+        leftBGM = Audio.Play3DLoop("0", GameObjectFind("Left"));
+      if (Input.GetKeyPress(VK.IKEY_C))
+        rightBGM = Audio.Play3DLoop("0", GameObjectFind("Right"));
+      if (Input.GetKeyPress(VK.IKEY_X))
+      {
+        Audio.Stop(leftBGM);
+        Audio.Stop(rightBGM);
+      }
+      Vector3 vel = new Vector3(0.0f, rb.GetVel().y, 0.0f);
+      if (Input.GetKeyHold(VK.IKEY_A))
+        vel.x = -100.0f;
+      else if (Input.GetKeyHold(VK.IKEY_D))
+        vel.x = +100.0f;
+      rb.SetVel(vel);
     }
 
     public override void OnCollisionEnter(int other) { /*Console.WriteLine("Collision Enter!");*/ }

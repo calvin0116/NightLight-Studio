@@ -32,6 +32,7 @@ void AnimationController::PlayAnimation(std::string newAnim, ComponentAnimation*
 			_currAnim = newAnim;
 			_dt = 0.0;
 			_play = true;
+			_isPlaying = true;
 			_loop = loop;
 
 			Entity entity = G_ECMANAGER->getEntity(currComp);
