@@ -9,7 +9,7 @@ void AnimationController::Update(float dt)
 	{
 		_dt += dt;
 
-		if (_dt >= _endAnimTime || _dt >= _endFrameTime)
+		if (_dt >= _endAnimTime || (_dt >= _endFrameTime && _endFrameTime >= 0.0))
 		{
 			if (_loop)
 			{
