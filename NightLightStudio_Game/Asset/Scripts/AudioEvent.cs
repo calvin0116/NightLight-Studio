@@ -9,6 +9,7 @@ namespace Unicorn
   {
     // Variables
     int aMID;
+    bool isPlaying;
 
     //Required Components
     Variables ObjVariables;
@@ -21,7 +22,7 @@ namespace Unicorn
 
     // Getting Script
 
-   
+
     AudioManager script_AM;
 
     public override void Init()
@@ -30,7 +31,7 @@ namespace Unicorn
 
       ObjVariables = GetVariables(id);
 
-      audioIndex = ObjVariables.GetInt(0); 
+      audioIndex = ObjVariables.GetInt(0);
 
 
 
@@ -39,30 +40,35 @@ namespace Unicorn
 
     public override void LateInit()
     {
- 
+
       script_AM = GetScript(aMID);
     }
 
     public override void Update()
     {
-      
+
     }
     public override void FixedUpdate()
     {
 
     }
 
-   
+
 
 
 
     public override void OnTriggerEnter(int other)
     {
-      
+
       if (GetTransform(other).tag == 0)
       {
         Console.WriteLine("playing1");
-        script_AM.PlayAudio(audioIndex);
+        if (isPlaying == false)
+        {
+          script_AM.PlayAudio(audioIndex);
+          isPlaying = true;
+        }
+
       }
 
     }
