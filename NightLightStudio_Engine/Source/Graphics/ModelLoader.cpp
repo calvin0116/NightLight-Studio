@@ -165,6 +165,14 @@ namespace NS_GRAPHICS
 				vertexData._uv.y = mesh->mTextureCoords[0][i].y;
 			}
 
+			if (mesh->HasTangentsAndBitangents())
+			{
+				vertexData._tangent.x = mesh->mTangents[i].x;
+				vertexData._tangent.y = mesh->mTangents[i].y;
+				vertexData._biTangent.x = mesh->mBitangents[i].x;
+				vertexData._biTangent.y = mesh->mBitangents[i].y;
+			}
+
 			newMesh->_vertexDatas.push_back(vertexData);
 		}
 
@@ -209,6 +217,15 @@ namespace NS_GRAPHICS
 				//Takes the first set of uv datas
 				vertexData._uv.x = mesh->mTextureCoords[0][i].x;
 				vertexData._uv.y = mesh->mTextureCoords[0][i].y;
+			}
+
+			if (mesh->HasTangentsAndBitangents())
+			{
+				//If it has tangent, it has bitangent
+				vertexData._tangent.x = mesh->mTangents[i].x;
+				vertexData._tangent.y = mesh->mTangents[i].y;
+				vertexData._biTangent.x = mesh->mBitangents[i].x;
+				vertexData._biTangent.y = mesh->mBitangents[i].y;
 			}
 
 			//Explicitly zero out all
@@ -425,7 +442,8 @@ namespace NS_GRAPHICS
 		const aiScene* scene = import.ReadFile(model->_fileName, aiProcess_Triangulate | 
 																 aiProcess_FlipUVs | 
 																 aiProcess_JoinIdenticalVertices |
-																 aiProcess_LimitBoneWeights );
+																 aiProcess_LimitBoneWeights |
+																 aiProcess_CalcTangentSpace);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
