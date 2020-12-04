@@ -1040,12 +1040,12 @@
             },
             "AudioManager": {
                 "ListOfSound": {
-                    "0": "asset/Sound/EntertheRealm.ogg",
-                    "1": "Asset/Sound/Caution.ogg",
-                    "2": "Asset/Sound/Danger1.ogg",
-                    "3": "Asset/Sound/Danger2.ogg",
-                    "4": "Asset/Sound/Danger3.ogg",
-                    "5": "asset/Sound/Safeplace.ogg"
+                    "0": "asset/Sounds/EntertheRealm.ogg",
+                    "1": "Asset/Sounds/Caution.ogg",
+                    "2": "Asset/Sounds/Danger1.ogg",
+                    "3": "Asset/Sounds/Danger2.ogg",
+                    "4": "Asset/Sounds/Danger3.ogg",
+                    "5": "asset/Sounds/Safeplace.ogg"
                 }
             },
             "ScriptComponent": {
