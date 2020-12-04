@@ -177,6 +177,12 @@ namespace NS_GRAPHICS
 		DestroyInstance();
 	}
 
+	void GraphicsSystem::GameExit()
+	{
+		// Call for lights clear
+		lightManager->RemoveAllLights();
+	}
+
 	void GraphicsSystem::Render()
 	{
 		// testing basic gl functionality

@@ -120,8 +120,8 @@
             },
             "AudioManager": {
                 "ListOfSound": {
-                    "0": "Asset/Sounds/TestAudio.ogg",
-                    "1": "Asset/Sounds/Danger2.ogg"
+                    "0": "asset\\sounds\\testaudio.ogg",
+                    "1": "asset\\sounds\\danger2.ogg"
                 }
             }
         },
