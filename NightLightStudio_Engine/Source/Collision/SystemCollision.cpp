@@ -583,45 +583,51 @@ namespace NS_COLLISION
 		}
 		/// ////////////////////////////////////////////////////////////////////////////////////////////
 		/// </AABB Check Trigger>
+		/// 
 
-		if (Collider1->GetColliderT() == COLLIDERS::OBB)
-		{
-			if (Collider2->GetColliderT() == COLLIDERS::AABB)
-			{
-				OBBCollider* a = &(Collider1->collider.obb);
-				AABBCollider* b = &(Collider2->collider.aabb);
-				return false;
-			}
-			else if (Collider2->GetColliderT() == COLLIDERS::OBB)
-			{
-				OBBCollider* a = &(Collider1->collider.obb);
-				OBBCollider* b = &(Collider2->collider.obb);
+		/// <OBB Check Trigger>
+		/// ////////////////////////////////////////////////////////////////////////////////////////////
 
-				return NlMath::OBBToOBB(*a, *b);
-			}
-			else if (Collider2->GetColliderT() == COLLIDERS::CAPSULE)
-			{
-				OBBCollider* a = &(Collider1->collider.obb);
-				CapsuleCollider* b = &(Collider2->collider.capsule);
-				NlMath::Vec3 useless;
-				//if (NlMath::AABBToCapsule(*a, *b, useless) != SIDES::NO_COLLISION)
-				//{
-				//	return true;
-				//}
-				return false;
-			}
-			else if (Collider2->GetColliderT() == COLLIDERS::SPHERE)
-			{
-				OBBCollider* a = &(Collider1->collider.obb);
-				SphereCollider* b = &(Collider2->collider.sphere);
-				NlMath::Vec3 useless;
-				//if (NlMath::AABB_SphereCollision(*a, *b, useless) != SIDES::NO_COLLISION)
-				//{
-				//	return true;
-				//}
-				return false;
-			}
-		}
+		//if (Collider1->GetColliderT() == COLLIDERS::OBB)
+		//{
+		//	if (Collider2->GetColliderT() == COLLIDERS::AABB)
+		//	{
+		//		OBBCollider* a = &(Collider1->collider.obb);
+		//		AABBCollider* b = &(Collider2->collider.aabb);
+		//		return false;
+		//	}
+		//	else if (Collider2->GetColliderT() == COLLIDERS::OBB)
+		//	{
+		//		OBBCollider* a = &(Collider1->collider.obb);
+		//		OBBCollider* b = &(Collider2->collider.obb);
+
+		//		return NlMath::OBBToOBB(*a, *b);
+		//	}
+		//	else if (Collider2->GetColliderT() == COLLIDERS::CAPSULE)
+		//	{
+		//		OBBCollider* a = &(Collider1->collider.obb);
+		//		CapsuleCollider* b = &(Collider2->collider.capsule);
+		//		NlMath::Vec3 useless;
+		//		//if (NlMath::AABBToCapsule(*a, *b, useless) != SIDES::NO_COLLISION)
+		//		//{
+		//		//	return true;
+		//		//}
+		//		return false;
+		//	}
+		//	else if (Collider2->GetColliderT() == COLLIDERS::SPHERE)
+		//	{
+		//		OBBCollider* a = &(Collider1->collider.obb);
+		//		SphereCollider* b = &(Collider2->collider.sphere);
+		//		NlMath::Vec3 useless;
+		//		//if (NlMath::AABB_SphereCollision(*a, *b, useless) != SIDES::NO_COLLISION)
+		//		//{
+		//		//	return true;
+		//		//}
+		//		return false;
+		//	}
+		//}
+		/// </OBB Check Trigger>
+		/// ////////////////////////////////////////////////////////////////////////////////////////////
 
 		return false;
 	}

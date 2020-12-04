@@ -39,7 +39,8 @@ namespace NS_AI
 
 
 		WayPoint()
-			:isActive{ true }
+			:ent_id{-1}
+			, isActive{ true }
 			, sphere_col
 		{
 			NlMath::Vector3D{0.0f,0.0f,0.0f},
