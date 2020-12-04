@@ -224,7 +224,7 @@ namespace NS_GRAPHICS
 
 			if (animComp)
 			{
-				if (animComp->_isActive)
+				if (animComp->_isActive && model->_isAnimated)
 				{
 					glm::mat4 identity(1.0f);
 					double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
