@@ -537,7 +537,7 @@ namespace NS_COLLISION
 	bool CollisionSystem::CollisionCuling(ComponentTransform* comTrans1, ComponentTransform* comTrans2)
 	{
 		//optimization, dont check collision if too far away
-		NlMath::Vec3 distance = comTrans1->_position - comTrans2->_position;
+		NlMath::Vec3 distance = comTrans1->_phyposition - comTrans2->_phyposition;
 		float sqrScale = glm::dot(comTrans1->_scale, comTrans1->_scale) + glm::dot(comTrans2->_scale, comTrans2->_scale);
 		float sqrDistance = distance * distance;
 		//1.5 bias
@@ -1317,7 +1317,7 @@ namespace NS_COLLISION
 			break;
 		}
 
-		NS_COLDEBUGTEST::TransformMesh(mesh, comCol->center + comTrans->_position, comTrans->_rotation, colscale);
+		NS_COLDEBUGTEST::TransformMesh(mesh, comCol->center + comTrans->_phyposition, comTrans->_rotation, colscale);
 
 
 		NS_COLDEBUGTEST::DrawMesh(mesh, color, lod);

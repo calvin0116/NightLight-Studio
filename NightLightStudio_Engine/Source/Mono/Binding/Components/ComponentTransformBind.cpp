@@ -57,7 +57,7 @@ namespace ComponentTransformBind
   MonoObject* get_Position_Internal(TransformComponent* trans)
   {
     MonoObject* monoVec = MonoWrapper::ConstructObject("Vector3");
-    glm::vec3& vec = trans->_position;
+    glm::vec3& vec = trans->_phyposition;
     MonoWrapper::SetObjectFieldValue(monoVec, "X", vec.x);
     MonoWrapper::SetObjectFieldValue(monoVec, "Y", vec.y);
     MonoWrapper::SetObjectFieldValue(monoVec, "Z", vec.z);
@@ -66,10 +66,11 @@ namespace ComponentTransformBind
 
   void set_Position_Internal(TransformComponent* trans, MonoObject* val)
   {
-    glm::vec3& vec = trans->_position;
+    glm::vec3& vec = trans->_phyposition;
     vec.x = MonoWrapper::GetObjectFieldValue<float>(val, "X");
     vec.y = MonoWrapper::GetObjectFieldValue<float>(val, "Y");
     vec.z = MonoWrapper::GetObjectFieldValue<float>(val, "Z");
+    trans->_position = trans->_phyposition;
   }
 
   MonoObject* get_Rotation_Internal(TransformComponent* trans)
