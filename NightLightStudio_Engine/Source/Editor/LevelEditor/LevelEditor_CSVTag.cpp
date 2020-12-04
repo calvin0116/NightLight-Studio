@@ -19,12 +19,12 @@ void LevelEditor_CSVTag::AddRowCol()
 		{
 			for (int j = 1; j < _csvArr[i].size(); ++j)
 			{
-				_csvArr[i][j] = j;
+				_csvArr[i][j] = std::to_string(j);
 			}
 		}
 		else
 		{
-			_csvArr[i][0] = i;
+			_csvArr[i][0] = std::to_string(i);
 		}
 	}
 
@@ -42,12 +42,12 @@ void LevelEditor_CSVTag::ClearRowCol()
 		{
 			for (int j = 1; j < _csvArr[i].size(); ++j)
 			{
-				_csvArr[i][j] = j;
+				_csvArr[i][j] = std::to_string(j);
 			}
 		}
 		else
 		{
-			_csvArr[i][0] = i;
+			_csvArr[i][0] = std::to_string(i);
 		}
 	}
 }
@@ -64,7 +64,7 @@ LevelEditor_CSVTag::~LevelEditor_CSVTag()
 void LevelEditor_CSVTag::Start()
 {
 	_csvArr = _fileReader.getData();
-	_rowColNum = _csvArr.size();
+	_rowColNum = (int)_csvArr.size();
 
 	if (!_rowColNum)
 	{
@@ -86,7 +86,7 @@ void LevelEditor_CSVTag::Start()
 
 void LevelEditor_CSVTag::Init()
 {
-	ImGui::SetNextWindowContentSize(ImVec2(_rowColNum * 30, 0));
+	ImGui::SetNextWindowContentSize(ImVec2(_rowColNum * 30.0f, 0));
 }
 
 void LevelEditor_CSVTag::Run()

@@ -81,7 +81,7 @@ public:
 	//====================================//
 
 	//	Helper
-	void InsertEntityForSelection(int id, bool selected = false)
+	void InsertEntityForSelection(int id, bool)
 	{
 		selected_ents[id] = false;
 	}
