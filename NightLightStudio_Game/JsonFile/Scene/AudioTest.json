@@ -1,0 +1,309 @@
+{
+    "Objects": {
+        "Player": {
+            "TransformComponent": {
+                "EntityName": "Player",
+                "Tag": 1000,
+                "Position": [
+                    -22.905826568603517,
+                    251.99090576171876,
+                    0.0
+                ],
+                "Scale": [
+                    100.0,
+                    100.0,
+                    100.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": false,
+                "isGravity": true,
+                "mass": 100.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "AudioTest"
+            }
+        },
+        "Plane": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    5.0,
+                    2.0,
+                    1.0
+                ],
+                "Scale": [
+                    1000.0,
+                    100.0,
+                    1000.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "AudioManager": {
+                "ListOfSound": {
+                    "0": "asset\\sounds\\testaudio.ogg",
+                    "1": "asset\\sounds\\danger2.ogg"
+                }
+            }
+        },
+        "Left": {
+            "TransformComponent": {
+                "EntityName": "Left",
+                "Tag": 0,
+                "Position": [
+                    -346.412841796875,
+                    96.90228271484375,
+                    0.0
+                ],
+                "Scale": [
+                    50.0,
+                    50.0,
+                    50.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": false,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        },
+        "Right": {
+            "TransformComponent": {
+                "EntityName": "Right",
+                "Tag": 0,
+                "Position": [
+                    404.3729248046875,
+                    80.22899627685547,
+                    0.0
+                ],
+                "Scale": [
+                    50.0,
+                    50.0,
+                    50.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": false,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5
+            }
+        }
+    }
+}
