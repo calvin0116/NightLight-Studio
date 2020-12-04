@@ -13,7 +13,6 @@ struct AnimationController
 	std::set<std::string> _allAnims;
 
 	double _startFrameTime;
-	double _endFrameTime;
 
 	bool _play;
 	bool _loop;
@@ -23,5 +22,5 @@ struct AnimationController
 	double _endAnimTime;
 
 	void Update(float dt);
-	void PlayAnimation(std::string newAnim, ComponentAnimation* currComp, bool loop = true, double startFrame = -1, double endFrame = -1);
+	void PlayAnimation(std::string newAnim, ComponentAnimation* currComp, bool loop = true, double startFrame = -1.0, double endFrame = -1.0);
 };

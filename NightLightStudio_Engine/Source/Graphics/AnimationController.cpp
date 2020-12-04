@@ -9,7 +9,7 @@ void AnimationController::Update(float dt)
 	{
 		_dt += dt;
 
-		if (_dt >= _endAnimTime || (_dt >= _endFrameTime && _endFrameTime >= 0.0))
+		if (_dt >= _endAnimTime)
 		{
 			if (_loop)
 			{
@@ -42,14 +42,20 @@ void AnimationController::PlayAnimation(std::string newAnim, ComponentAnimation*
 			_isPlaying = true;
 			_loop = loop;
 			_startFrameTime = startFrame;
-			_endFrameTime = endFrame;
 
 			Entity entity = G_ECMANAGER->getEntity(currComp);
 			ComponentGraphics* compGraphic = entity.getComponent<ComponentGraphics>();
 
 			if (compGraphic)
 			{
-				_endAnimTime = NS_GRAPHICS::ModelManager::GetInstance()._models[compGraphic->_modelID]->_animations[newAnim]->_time;
+				if (endFrame >= 0.0)
+				{
+					_endAnimTime = endFrame;
+				}
+				else
+				{
+					_endAnimTime = NS_GRAPHICS::ModelManager::GetInstance()._models[compGraphic->_modelID]->_animations[newAnim]->_time;
+				}
 			}
 		}
 	}
