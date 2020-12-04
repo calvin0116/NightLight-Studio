@@ -14,7 +14,7 @@ namespace Unicorn
     {
       cnvs = GetCanvas(id);
       Print(id.ToString());
-      ui1 = cnvs.FindUIByName("Cart");
+      ui1 = cnvs.FindUI("Cart");
       if (ui1.native_handle == IntPtr.Zero)
         Print("Null ptr!");
       else

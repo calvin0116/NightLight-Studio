@@ -15,7 +15,7 @@ namespace Unicorn
       return FindUI_Internal(this.native_handle, index);
     }
 
-    public UIElement FindUIByName(string name)
+    public UIElement FindUI(string name)
     {
       return FindUIByName_Internal(this.native_handle, name);
     }
