@@ -77,7 +77,7 @@ void CollsionResolver::addTriggerEvent(TriggerEvent& newEvent)
 void CollsionResolver::addTriggerEvent(const Entity& object1, const Entity& object2)
 {
 	TriggerEvent newEvent(object1, object2);
-	trigEventList.push_back(newEvent);
+	addTriggerEvent(newEvent);
 }
 
 void CollsionResolver::resolveCollision()
