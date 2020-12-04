@@ -9,26 +9,23 @@
 
 namespace NS_GRAPHICS
 {
-	static const size_t s_MaxLights = 30;
+	static const size_t s_MaxLights = 512;
 
-	// 3440
+	// 57424
 	struct LightBlock
 	{
-		// 3408 total
-		DirLight _dLight[1];				// 0 - 47
-		PointLight _pLights[s_MaxLights];   // 48 - 1487
-		SpotLight _sLights[s_MaxLights];	// 1488 - 3407
-		// 0 - 3407
+		DirLight _dLight[1];
+		PointLight _pLights[s_MaxLights];
+		SpotLight _sLights[s_MaxLights];
 
 		// Number of lights currently in scene
-		int _dLights_Num; // 3408 - 3411
-		int _pLights_Num; // 3412 - 3415
-		int _sLights_Num; // 3416 - 3419
-		// 3420
+		int _dLights_Num;
+		int _pLights_Num;
+		int _sLights_Num;
 
-		float _dummyPadding1 = 0.f; // 3420 - 3423
-		// Compiler will align view pos to 7216
-		glm::vec4 _viewPos; // 3424 - 3439
+		float _dummyPadding1 = 0.f;
+
+		glm::vec4 _viewPos;
 
 		LightBlock()
 			: _dLights_Num{ NULL },
@@ -92,6 +89,9 @@ namespace NS_GRAPHICS
 
 		// Remove light helper
 		void RemoveLightHelper(const Lights& type, const int& id);
+
+		// Remove all lights from scene (Used upon scene exit)
+		void RemoveAllLights();
 
 		void SetGamma(const float& gamma = 2.2f);
 

@@ -77,7 +77,7 @@ void CollsionResolver::addTriggerEvent(TriggerEvent& newEvent)
 void CollsionResolver::addTriggerEvent(const Entity& object1, const Entity& object2)
 {
 	TriggerEvent newEvent(object1, object2);
-	trigEventList.push_back(newEvent);
+	addTriggerEvent(newEvent);
 }
 
 void CollsionResolver::resolveCollision()
@@ -511,7 +511,10 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 	{
 		float pen = colEvent.collider2->collider.aabb.vecMin.z - colEvent.collider1->collider.aabb.vecMax.z;
 
-		pen = pen * 0.5f;
+		if (!colEvent.rigid2->isStatic && !colEvent.rigid1->isStatic)
+		{
+			pen = pen * 0.5f;
+		}
 
 		if (!colEvent.rigid2->isStatic)
 		{
@@ -528,7 +531,11 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 	{
 		float pen = colEvent.collider1->collider.aabb.vecMin.z - colEvent.collider2->collider.aabb.vecMax.z;
 
-		pen = pen * 0.5f;
+		if (!colEvent.rigid2->isStatic && !colEvent.rigid1->isStatic)
+		{
+			pen = pen * 0.5f;
+		}
+
 
 		if (!colEvent.rigid1->isStatic)
 		{
@@ -574,7 +581,11 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 	{
 		float pen = colEvent.collider2->collider.aabb.vecMin.x - colEvent.collider1->collider.aabb.vecMax.x;
 
-		pen = pen * 0.5f;
+		if (!colEvent.rigid2->isStatic && !colEvent.rigid1->isStatic)
+		{
+			pen = pen * 0.5f;
+		}
+
 
 		if (!colEvent.rigid2->isStatic)
 		{
@@ -591,7 +602,11 @@ void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 	{
 		float pen = colEvent.collider1->collider.aabb.vecMin.x - colEvent.collider2->collider.aabb.vecMax.x;
 
-		pen = pen * 0.5f;
+		if (!colEvent.rigid2->isStatic && !colEvent.rigid1->isStatic)
+		{
+			pen = pen * 0.5f;
+		}
+
 
 		if (!colEvent.rigid1->isStatic)
 		{

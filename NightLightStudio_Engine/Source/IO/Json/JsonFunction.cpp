@@ -113,7 +113,7 @@ namespace NS_SERIALISER {
         for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
         {
             std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
-            Entity ent_handle = G_ECMANAGER->BuildEntity(itr->name.GetString());		//Build entity
+            Entity ent_handle = g_ecman->BuildEntity(itr->name.GetString());		//Build entity
 
             Value& Component_list = Ent_list[itr->name.GetString()];					//Get component list
 

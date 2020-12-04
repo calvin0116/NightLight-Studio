@@ -165,6 +165,13 @@ namespace NS_GRAPHICS
 				vertexData._uv.y = mesh->mTextureCoords[0][i].y;
 			}
 
+			if (mesh->HasTangentsAndBitangents())
+			{
+				//If it has tangents
+				vertexData._tangent.x = mesh->mTangents[i].x;
+				vertexData._tangent.y = mesh->mTangents[i].y;
+			}
+
 			newMesh->_vertexDatas.push_back(vertexData);
 		}
 
@@ -209,6 +216,13 @@ namespace NS_GRAPHICS
 				//Takes the first set of uv datas
 				vertexData._uv.x = mesh->mTextureCoords[0][i].x;
 				vertexData._uv.y = mesh->mTextureCoords[0][i].y;
+			}
+
+			if (mesh->HasTangentsAndBitangents())
+			{
+				//If it has tangent
+				vertexData._tangent.x = mesh->mTangents[i].x;
+				vertexData._tangent.y = mesh->mTangents[i].y;
 			}
 
 			//Explicitly zero out all
@@ -324,7 +338,6 @@ namespace NS_GRAPHICS
 				tickPerSec = 1.0f;
 			}
 
-			//double smallestPossibleTime = 1000000;
 			newAnim->_time = currAnim->mDuration / tickPerSec;
 
 			for (unsigned int x = 0; x < currAnim->mNumChannels; ++x)
@@ -339,8 +352,6 @@ namespace NS_GRAPHICS
 					AssimpToGLM(currAnim->mChannels[x]->mPositionKeys[y].mValue, pos);
 					currFrame._position.push_back(pos);
 				}
-
-				//smallestPossibleTime = std::min(currFrame._posTime[currFrame._posTime.size()-1], newAnim->_time);
 
 				currFrame._rotation.reserve(currAnim->mChannels[x]->mNumRotationKeys);
 				for (unsigned int y = 0; y < currAnim->mChannels[x]->mNumRotationKeys; ++y)
@@ -425,7 +436,8 @@ namespace NS_GRAPHICS
 		const aiScene* scene = import.ReadFile(model->_fileName, aiProcess_Triangulate | 
 																 aiProcess_FlipUVs | 
 																 aiProcess_JoinIdenticalVertices |
-																 aiProcess_LimitBoneWeights );
+																 aiProcess_LimitBoneWeights |
+																 aiProcess_CalcTangentSpace);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{

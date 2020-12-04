@@ -31,15 +31,16 @@ namespace NS_AI
 
 		//float cost;  //<-self inserted cost	
 		//->std::map<CV, int> cost_var;			//map of variable that affect the cost
-		std::pair<CV, int> distance_var;		//Heuristic distance away from the end point
-		std::pair<CV, int> self_define_var;
+		std::pair<CV, float> distance_var;		//Heuristic distance away from the end point
+		std::pair<CV, float> self_define_var;
 
 		//std::vector<std::shared_ptr<Edges>> connected_edges;	
 		LocalVector<Edges*> connected_edges;		//Keep track of connecting edges
 
 
 		WayPoint()
-			:isActive{ true }
+			:ent_id{-1}
+			, isActive{ true }
 			, sphere_col
 		{
 			NlMath::Vector3D{0.0f,0.0f,0.0f},
@@ -69,8 +70,8 @@ namespace NS_AI
 		bool isActive; 							//True for usual, false for when obstacle is obstructing
 		WayPoint* wp1, * wp2;
 		//std::map<CV, int> cost_var;				//map of variable that affect the cost
-		std::pair<CV, int> distance_var;
-		std::pair<CV, int> self_define_var;
+		std::pair<CV, float> distance_var;
+		std::pair<CV, float> self_define_var;
 		//float length;
 		float total_cost;		//Depends on length only as of now
 
@@ -117,7 +118,7 @@ namespace NS_AI
 					//Waypoint update
 					cur_wp.connected_edges.push_back(&new_edge);
 					inserted_wp.connected_edges.push_back(&new_edge);
-					//edges_list.push_back(new_edge);
+					_edges_list->push_back(&new_edge);
 				}
 			}
 			return inserted_wp;
@@ -131,7 +132,7 @@ namespace NS_AI
 			wp.ent_id = _ent_id;
 			//wp.radius = radius;
 
-			return InsertWayPoint(wp);
+			return InsertWayPoint(wp, _edges_list);
 		};
 
 		//Costing for single edge
@@ -163,7 +164,7 @@ namespace NS_AI
 		};
 		//Void InsertObstacle(AABB aabb collider);
 
-		void RemoveWayPoint(int index) {};
+		//void RemoveWayPoint(int index) {};
 		//Void RemoveObstacle(int index);
 
 		void Update() {}; //Check for both edges and waypoint if they have been obstructed
@@ -184,11 +185,12 @@ namespace NS_AI
 
 		//Take in the path and edges to traverse
 		//Return if path has reached the end and the resulting path and its value
+		/*
 		std::pair<bool, std::pair<int, std::vector<WayPoint*>> > CheckPath(std::pair<int, std::vector<WayPoint*>> cur_path, Edges* connected_edges)
 		{
 
 
-		}
+		}*/
 
 		LocalVector<WayPoint*> AstarPathFinding(NlMath::Vector3D start_point,
 			NlMath::Vector3D end_point,
@@ -236,10 +238,10 @@ namespace NS_AI
 			while (true)
 			{
 				//Go to the nodes connectted to the edges
-				for (Edges* edge : wp_list.second.back()->connected_edges)
+				//for (Edges* edge : wp_list.second.back()->connected_edges)
 				{
 					//A method that take in 
-					std::pair<bool, std::pair<int, std::vector<WayPoint*>>> result = CheckPath(wp_list, edge);
+					//std::pair<bool, std::pair<int, std::vector<WayPoint*>>> result = CheckPath(wp_list, edge);
 				}
 
 			}
@@ -251,7 +253,7 @@ namespace NS_AI
 		//=============================Getter/Setter=====================================//
 		int GetWayPointNumber()
 		{
-			return waypoint_list.size();
+			return (int)waypoint_list.size();
 		}
 
 	};

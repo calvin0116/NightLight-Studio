@@ -75,7 +75,7 @@
         "Plane": {
             "TransformComponent": {
                 "EntityName": "",
-                "Tag": 0,
+                "Tag": 11,
                 "Position": [
                     5.0,
                     5.705291748046875,
@@ -127,9 +127,6 @@
                     0.0,
                     0.0
                 ]
-            },
-            "AudioManager": {
-                "ListOfSound": {}
             }
         },
         "Player": {
@@ -143,7 +140,7 @@
                 ],
                 "Scale": [
                     1.0,
-                    3.0,
+                    1.0,
                     1.0
                 ],
                 "Rotate": [
@@ -950,6 +947,111 @@
                 ],
                 "MetallicMat": 1.0,
                 "RoughnessMat": 0.5
+            }
+        },
+        "AudioEvent": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 4,
+                "Position": [
+                    -150.41705322265626,
+                    124.95538330078125,
+                    361.0724792480469
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": false,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    50.0,
+                    50.0,
+                    50.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "AudioEvent"
+            },
+            "ComponentVariables": {
+                "IntList": [
+                    6
+                ],
+                "StringList": [],
+                "FloatList": []
+            }
+        },
+        "AudioManager": {
+            "TransformComponent": {
+                "EntityName": "AudioManager",
+                "Tag": 0,
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "AudioManager": {
+                "ListOfSound": {
+                    "0": "asset/Sounds/EntertheRealm.ogg",
+                    "1": "Asset/Sounds/Caution.ogg",
+                    "2": "Asset/Sounds/Danger1.ogg",
+                    "3": "Asset/Sounds/Danger2.ogg",
+                    "4": "Asset/Sounds/Danger3.ogg",
+                    "5": "asset/Sounds/Safeplace.ogg"
+                }
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "AudioManager"
             }
         }
     }

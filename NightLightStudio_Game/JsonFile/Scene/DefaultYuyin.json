@@ -112,12 +112,12 @@
                 "LightType": "DIRECTIONAL",
                 "isActive": true,
                 "Diffuse": [
-                    0.003921568859368563,
-                    0.003921568859368563,
-                    0.003921568859368563
+                    0.08823531866073609,
+                    0.07050174474716187,
+                    0.07050174474716187
                 ],
                 "Radius": 10.0,
-                "Intensity": 0.10000000149011612,
+                "Intensity": 122.0999984741211,
                 "CutOff": 0.0,
                 "OuterCutOff": 0.0
             }
@@ -132,23 +132,23 @@
                     0.0
                 ],
                 "Scale": [
-                    0.99972003698349,
-                    0.9997238516807556,
-                    0.9998288154602051
+                    0.9997175931930542,
+                    0.9997257590293884,
+                    0.9998224377632141
                 ],
                 "Rotate": [
-                    90.15167236328125,
-                    -89.16398620605469,
-                    179.9466094970703
+                    0.0,
+                    -89.10699462890625,
+                    0.0
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
                 "Model": "asset\\3d model\\incense_pot_model.fbx",
-                "Albedo": "asset\\texture\\incense_pot_atlas_uv.tga",
+                "Albedo": "asset\\textures\\incense pot\\incense_pot_atlas_uv.tga",
                 "Normal": "",
-                "Metallic": "asset\\texture\\incense_pot_metallic_uv.tga",
-                "Roughness": "asset\\texture\\incense_pot_roughness_uv.tga",
+                "Metallic": "asset\\textures\\incense pot\\incense_pot_metallic_uv.tga",
+                "Roughness": "asset\\textures\\incense pot\\incense_pot_roughness_uv.tga",
                 "AmbientOcclusion": "",
                 "Specular": "",
                 "DiffuseMat": [
@@ -181,8 +181,8 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -10.163768768310547,
-                    35.675411224365237,
+                    43.27693557739258,
+                    86.17816162109375,
                     41.56647491455078
                 ],
                 "Scale": [
@@ -198,7 +198,7 @@
             },
             "LightComponent": {
                 "LightType": "POINT",
-                "isActive": false,
+                "isActive": true,
                 "Diffuse": [
                     0.8186274766921997,
                     0.8186230659484863,
@@ -215,25 +215,25 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    24.92548942565918,
+                    76.5124282836914,
                     0.0,
                     0.0
                 ],
                 "Scale": [
-                    0.9999938607215881,
-                    0.9999938011169434,
+                    1.0,
+                    0.9999931454658508,
                     1.0
                 ],
                 "Rotate": [
-                    -89.96144104003906,
-                    -89.95938873291016,
-                    -0.019273661077022554
+                    -0.002462817821651697,
+                    86.82392883300781,
+                    -0.0026094226632267238
                 ]
             },
             "GraphicsComponent": {
                 "isActive": true,
                 "Model": "asset\\3d model\\incense_pot_model.fbx",
-                "Albedo": "asset\\texture\\incense_pot_atlas_uv.tga",
+                "Albedo": "asset\\textures\\incense pot\\incense_pot_atlas_uv.tga",
                 "Normal": "",
                 "Metallic": "",
                 "Roughness": "",

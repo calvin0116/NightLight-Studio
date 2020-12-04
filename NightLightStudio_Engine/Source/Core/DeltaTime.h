@@ -16,7 +16,7 @@ class DeltaTime : public Singleton<DeltaTime>
 public:
 	float fixed_dt = FPS_60;
 	float _prevdt = 0.0f;
-	float real_dt;
+	float real_dt = 0.0f;
 
 	float accumulatedTime = 0.0f;
 	clock_t t_start = 0;

@@ -74,11 +74,12 @@ public:
 	}
 
 	//=============== Getter / Setter =================//
+	/*
 	void SetCurrentPath(LocalVector<NS_AI::WayPoint*> wp_list)
 	{
 		CleanCurPath();
 		//way_point_list = wp_list;
-	}
+	}*/
 
 	TransformComponent* GetCurWp()
 	{
@@ -86,7 +87,7 @@ public:
 	}
 	int WPSize()
 	{
-		return way_point_list.size();
+		return (int)way_point_list.size();
 	}
 
 	virtual void	Read(Value& val) 
@@ -99,10 +100,10 @@ public:
 			auto string_list_val = itr->value.GetArray();
 
 			if (way_point_list.size() == 0)
-				for (int i = 0; i < string_list_val.Size(); ++i)
+				for (unsigned i = 0; i < string_list_val.Size(); ++i)
 					way_point_list.push_back(LocalString(string_list_val[i].GetString()));
 			else
-				for (int i = 0; i < string_list_val.Size(); ++i)
+				for (unsigned i = 0; i < string_list_val.Size(); ++i)
 					way_point_list.at(i) = LocalString(string_list_val[i].GetString());
 			}
 
@@ -152,7 +153,7 @@ public:
 		}
 		if (wp_nav_type == WN_RANDOM)
 		{
-			srand(time(NULL));
+			srand((unsigned int)time(NULL));
 			cur_wp_index = rand() % cur_path.size();
 			return;
 		}
