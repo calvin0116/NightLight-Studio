@@ -584,6 +584,87 @@ namespace NS_COLLISION
 		/// ////////////////////////////////////////////////////////////////////////////////////////////
 		/// </AABB Check Trigger>
 
+		/// <Sphere Check Trigger>
+		/// ////////////////////////////////////////////////////////////////////////////////////////////
+		if (Collider1->GetColliderT() == COLLIDERS::SPHERE)
+		{
+			if (Collider2->GetColliderT() == COLLIDERS::AABB)
+			{
+				SphereCollider* a = &(Collider1->collider.sphere);
+				AABBCollider* b = &(Collider2->collider.aabb);
+				NlMath::Vec3 useless;
+				if (NlMath::AABB_SphereCollision(*b, *a, useless) != SIDES::NO_COLLISION)
+				{
+					return true;
+				}
+				return false;
+			}
+			else if (Collider2->GetColliderT() == COLLIDERS::OBB)
+			{
+				return false;
+			}
+			else if (Collider2->GetColliderT() == COLLIDERS::CAPSULE)
+			{
+				SphereCollider* a = &(Collider1->collider.sphere);
+				CapsuleCollider* b = &(Collider2->collider.capsule);
+				NlMath::Vec3 useless;
+				return NlMath::CapsuleToSphere(*b, *a, useless);
+			}
+			else if (Collider2->GetColliderT() == COLLIDERS::SPHERE)
+			{
+				SphereCollider* a = &(Collider1->collider.sphere);
+				SphereCollider* b = &(Collider2->collider.sphere);
+				NlMath::Vec3 useless;
+				NlMath::Vector3D distance = NlMath::Sphere_SphereCollision(*a, *b);
+
+				if (distance.x == 0.0f && distance.y == 0.0f && distance.z == 0.0f)
+				{
+					return false; // no collision return false
+				}
+				return true;
+			}
+		}
+		/// ////////////////////////////////////////////////////////////////////////////////////////////
+		/// </Sphere Check Trigger>
+
+		/// <Capsule Check Trigger>
+		/// ////////////////////////////////////////////////////////////////////////////////////////////
+
+		if (Collider1->GetColliderT() == COLLIDERS::CAPSULE)
+		{
+			if (Collider2->GetColliderT() == COLLIDERS::AABB)
+			{
+				CapsuleCollider* a = &(Collider1->collider.capsule);
+				AABBCollider* b = &(Collider2->collider.aabb);
+				NlMath::Vec3 useless;
+				if (NlMath::AABBToCapsule(*b, *a, useless) != SIDES::NO_COLLISION)
+				{
+					return true;
+				}
+				return false;
+			}
+			else if (Collider2->GetColliderT() == COLLIDERS::OBB)
+			{
+				return false;
+			}
+			else if (Collider2->GetColliderT() == COLLIDERS::CAPSULE)
+			{
+				CapsuleCollider* a = &(Collider1->collider.capsule);
+				CapsuleCollider* b = &(Collider2->collider.capsule);
+				NlMath::Vec3 useless;
+				return NlMath::CapsuleToCapsule(*a, *b, useless);
+			}
+			else if (Collider2->GetColliderT() == COLLIDERS::SPHERE)
+			{
+				CapsuleCollider* a = &(Collider1->collider.capsule);
+				SphereCollider* b = &(Collider2->collider.sphere);
+				NlMath::Vec3 useless;
+				return NlMath::CapsuleToSphere(*a, *b, useless);
+			}
+		}
+		/// ////////////////////////////////////////////////////////////////////////////////////////////
+		/// </Capsule Check Trigger>
+
 		if (Collider1->GetColliderT() == COLLIDERS::OBB)
 		{
 			if (Collider2->GetColliderT() == COLLIDERS::AABB)

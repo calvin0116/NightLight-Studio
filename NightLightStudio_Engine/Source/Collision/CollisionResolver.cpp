@@ -308,6 +308,7 @@ void CollsionResolver::resolveCollision()
 			else if (colEvent.collidingFrames < COLLIDING_FRAMES_TRASHOLD)
 			{
 				NS_LOGIC::SYS_LOGIC->OnCollisionStay(colEvent.entity1, colEvent.entity2);
+				colEvent.doResolve = false;
 				++colEvent.collidingFrames;
 				++itr;
 			}
@@ -398,7 +399,7 @@ void CollsionResolver::resolveEventNormally(CollisionEvent& colEvent)
 
 		float dot1f = colEvent.collisionNormal * entity1Force;
 		NlMath::Vector3D normalForce = colEvent.collisionNormal * dot1f;
-		normalForce = normalForce * -1;
+		normalForce = normalForce * -1.0001;
 		
 		// normal reaction force
 		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity1, normalForce, 1.0f);
@@ -450,7 +451,7 @@ void CollsionResolver::resolveEventNormally(CollisionEvent& colEvent)
 
 		float dot2f = oppNorm * entity2Force;
 		NlMath::Vector3D normalForce = oppNorm * dot2f;
-		normalForce = normalForce * -1;
+		normalForce = normalForce * -1.0001;
 
 		// normal reaction force
 		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity2, normalForce, 1.0f);
@@ -489,13 +490,13 @@ void CollsionResolver::resolveEventNormally(CollisionEvent& colEvent)
 
 void CollsionResolver::resolveAABB(CollisionEvent& colEvent)
 {
-  AABBCollider tmp1 = colEvent.collider1->collider.aabb;
-  AABBCollider tmp2 = colEvent.collider2->collider.aabb;
-  bool check = NlMath::AABBtoAABB(tmp1,tmp2);
-  if (check==false)
-  {
-    return;
-  }
+  //AABBCollider tmp1 = colEvent.collider1->collider.aabb;
+  //AABBCollider tmp2 = colEvent.collider2->collider.aabb;
+  //bool check = NlMath::AABBtoAABB(tmp1,tmp2);
+  //if (check==false)
+  //{
+  //  return;
+  //}
 	resolveEventNormally(colEvent);
 
 	switch (colEvent.colidingSide)

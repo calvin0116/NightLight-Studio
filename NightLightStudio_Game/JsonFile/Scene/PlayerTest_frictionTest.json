@@ -10,9 +10,9 @@
                     147.50015258789063
                 ],
                 "Scale": [
-                    100.0,
-                    100.0,
-                    100.0
+                    10.0,
+                    10.0,
+                    10.0
                 ],
                 "Rotate": [
                     0.0,
@@ -21,7 +21,7 @@
                 ]
             },
             "ColliderComponent": {
-                "colliderType": "AABB",
+                "colliderType": "CAPSULE",
                 "tag": 1,
                 "isCollidable": false,
                 "Center": [
@@ -65,10 +65,10 @@
                 "IntList": [],
                 "StringList": [],
                 "FloatList": [
-                    20.0,
-                    20.0,
-                    400.0,
-                    100.0
+                    50.0,
+                    60.0,
+                    200.0,
+                    50.0
                 ]
             }
         },

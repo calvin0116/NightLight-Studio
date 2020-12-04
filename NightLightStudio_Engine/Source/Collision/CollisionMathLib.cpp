@@ -569,6 +569,11 @@ namespace NlMath
 			}
 		}
 
+        // ray-box intersection
+
+
+
+
 		// test aabb to spehere using sphere on closest point on capsule linesegment
 
 		SphereCollider closestsphere;
