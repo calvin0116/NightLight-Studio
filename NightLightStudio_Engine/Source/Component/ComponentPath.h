@@ -16,7 +16,7 @@ public:
 
 	virtual void	Read(Value& val) 
 	{
-		
+		val;
 	};
 	virtual Value	Write() { 
 		Value val(rapidjson::kObjectType);

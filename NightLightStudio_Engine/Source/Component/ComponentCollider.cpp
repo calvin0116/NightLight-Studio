@@ -503,6 +503,7 @@ PlaneCollider& PlaneCollider::operator=(const PlaneCollider& rhs)
 
 void PlaneCollider::posUpdate(ComponentTransform* transform)
 {
+	transform;
 }
 
 //// Plane END

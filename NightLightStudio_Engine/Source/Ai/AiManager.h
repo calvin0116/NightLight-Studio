@@ -45,7 +45,7 @@ namespace NS_AI
 			else
 			{
 				LocalVector<WayPoint*> temp_wp_list;
-				//wp_man.InsertWayPoint(my_pos, (my_pos - target_position).re)
+				wp_man.InsertWayPoint(my_pos, (my_pos - target_position).length());
 				//nav_comp->SetCurrentPath
 			}
 		}
@@ -80,7 +80,7 @@ namespace NS_AI
 			{
 				auto wp = nav_comp->cur_path.at(i);
 
-				float dist = (wp->_position - trans_comp->_position).length();
+				float dist = (float)(wp->_position - trans_comp->_position).length();
 				if (dist < closest_wp.second)
 				{
 					closest_wp.first = i;
