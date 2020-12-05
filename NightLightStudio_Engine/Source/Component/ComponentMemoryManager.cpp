@@ -169,6 +169,19 @@ ComponentMemoryManager::MemConIterator ComponentMemoryManager::MemConIterator::o
 	return newItr;
 }
 
+ComponentMemoryManager::MemConIterator& ComponentMemoryManager::MemConIterator::operator--()
+{
+	prevOccupied();
+	return *this;
+}
+
+ComponentMemoryManager::MemConIterator ComponentMemoryManager::MemConIterator::operator--(int)
+{
+	MemConIterator newItr = *this;
+	prevOccupied();
+	return newItr;
+}
+
 int ComponentMemoryManager::MemConIterator::getCurrentIndex()
 {
 	return currentIndex;
@@ -233,6 +246,52 @@ void ComponentMemoryManager::MemConIterator::nextOccupied()
 	while (isClear)
 	{
 		isClear = !next();
+	}
+}
+
+bool ComponentMemoryManager::MemConIterator::prev()
+{
+	if ((currentIndex - 1) < 0)
+	{
+		// reached the front of the container
+		// currentObjIndex = 0; // first element? or -1?
+
+		// might have bug
+
+		return checkUnClear(); // stop and return // at container freont
+
+		//return true; // return found element to end loop
+	}
+
+	--currentIndex;
+	--currentElementIndex;
+
+	if ((currentElementIndex - 1) < 0)
+	{
+		// itr to prev block
+		--currentBlockIndex;
+		currentBlock = (*currentContainer)[currentBlockIndex];
+		currentElement = currentBlock + meta->settings.blockSize - 1;
+		currentElementIndex = meta->settings.blockSize - 1;
+	}
+	else
+	{
+		currentElement -= meta->settings.elementSize;
+	}
+
+	bool notclear = checkUnClear();
+	if (notclear)
+		--currentObjIndex;
+
+	return notclear;
+}
+
+void ComponentMemoryManager::MemConIterator::prevOccupied()
+{
+	bool isClear = !prev();
+	while (isClear)
+	{
+		isClear = !prev();
 	}
 }
 

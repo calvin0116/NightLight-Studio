@@ -406,32 +406,58 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	//newEntity0.AddComponent<ComponentGraphics>();
 	//newEntity0.AddComponent<ComponentTransform>();
 
+	//for (int i = 0; i < 1000; ++i)
+	//{
+	//	newEntity0 = G_ECMANAGER->BuildEntity();
+	//	newEntity0.AddComponent<ComponentGraphics>();
+	//	newEntity0.AddComponent<ComponentTransform>();
+	//}
+
+	//int count = 0;
+
 	//auto itr = G_ECMANAGER->begin<ComponentGraphics>();
 	//auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
-	//for (; itr != itrEnd; ++itr)
+	//for (; itr != itrEnd; ++itr, ++count)
 	//{
-	//	{
-	//		// get components from iterator
-	//		ComponentGraphics* compGfx = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
-	//		ComponentTransform* compTx = G_ECMANAGER->getComponent<ComponentTransform>(itr);
-	//	}
+	//	//{
+	//	//	// get components from iterator
+	//	//	ComponentGraphics* compGfx = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
+	//	//	ComponentTransform* compTx = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+	//	//}
 
 	//	{
+
+	//		if (count == 164)
+	//		{
+	//			int i = 1;
+	//		}
+
 	//		// get entity from iterator, then get components from entity
 	//		Entity entity = G_ECMANAGER->getEntity(itr);
 	//		ComponentGraphics* compGfx = entity.getComponent<ComponentGraphics>();
 	//		ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
+
+	//		if (count == 164)
+	//		{
+	//			--itr;
+	//			Entity entity = G_ECMANAGER->getEntity(itr);
+	//			ComponentGraphics* compGfx = entity.getComponent<ComponentGraphics>();
+	//			ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
+	//		}
 	//	}
 
-	//	{
-	//		// get entity from component, then get components from entity
-	//		ComponentGraphics* compGfx = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
-	//		Entity entity = G_ECMANAGER->getEntity(compGfx);
-	//		ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
-	//	}
+	//	//{
+	//	//	// get entity from component, then get components from entity
+	//	//	ComponentGraphics* compGfx = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
+	//	//	Entity entity = G_ECMANAGER->getEntity(compGfx);
+	//	//	ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
+	//	//}
 
 	//}
 	////
+
+
+
 
 
 
