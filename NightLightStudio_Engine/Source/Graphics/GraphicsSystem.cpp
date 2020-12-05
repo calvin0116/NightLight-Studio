@@ -190,7 +190,7 @@ namespace NS_GRAPHICS
 	{
 		// testing basic gl functionality
 		// Clears to gray bg
-		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+		glClearColor(0.03f, 0.086f, 0.102f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 #ifdef DRAW_DEBUG_GRID
