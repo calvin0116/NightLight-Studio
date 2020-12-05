@@ -401,16 +401,24 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 	//// END TEST
 
-	////
+	////////
 	//Entity newEntity0 = G_ECMANAGER->BuildEntity();
 	//newEntity0.AddComponent<ComponentGraphics>();
 	//newEntity0.AddComponent<ComponentTransform>();
+	//ComponentGraphics* compGfx = newEntity0.getComponent<ComponentGraphics>();
+	//ComponentTransform* compTx = newEntity0.getComponent<ComponentTransform>();
+	//compTx->_position.x = 0.0f;
+	//compGfx->_modelID = 0;
 
-	//for (int i = 0; i < 1000; ++i)
+	//for (int i = 1; i < 1000; ++i)
 	//{
 	//	newEntity0 = G_ECMANAGER->BuildEntity();
 	//	newEntity0.AddComponent<ComponentGraphics>();
 	//	newEntity0.AddComponent<ComponentTransform>();
+	//	ComponentGraphics* compGfx = newEntity0.getComponent<ComponentGraphics>();
+	//	ComponentTransform* compTx = newEntity0.getComponent<ComponentTransform>();
+	//	compTx->_position.x = 0.0f + i;
+	//	compGfx->_modelID = i;
 	//}
 
 	//int count = 0;
@@ -427,34 +435,55 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 
 	//	{
 
-	//		if (count == 164)
+	//		if (count == 328)
 	//		{
-	//			int i = 1;
+	//			int k = 1;
 	//		}
 
-	//		// get entity from iterator, then get components from entity
-	//		Entity entity = G_ECMANAGER->getEntity(itr);
-	//		ComponentGraphics* compGfx = entity.getComponent<ComponentGraphics>();
-	//		ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
+	//		{
+	//			// get entity from iterator, then get components from entity
+	//			Entity entity = G_ECMANAGER->getEntity(itr);
+	//			ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
+	//			ComponentGraphics* compGfx = entity.getComponent<ComponentGraphics>();
+	//			int k = 1;
+	//		}
 
-	//		if (count == 164)
+	//		if (count == 328)
 	//		{
 	//			--itr;
 	//			Entity entity = G_ECMANAGER->getEntity(itr);
-	//			ComponentGraphics* compGfx = entity.getComponent<ComponentGraphics>();
 	//			ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
+	//			ComponentGraphics* compGfx = entity.getComponent<ComponentGraphics>();
+	//			int k = 1;
 	//		}
 	//	}
 
-	//	//{
-	//	//	// get entity from component, then get components from entity
-	//	//	ComponentGraphics* compGfx = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
-	//	//	Entity entity = G_ECMANAGER->getEntity(compGfx);
-	//	//	ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
-	//	//}
+	//	{
+	//		// get entity from component, then get components from entity
+	//		ComponentTransform* compTx = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+	//		Entity entity = G_ECMANAGER->getEntity(compTx);
+	//		ComponentGraphics* compGfx = entity.getComponent<ComponentGraphics>();
+	//		int k = 1;
+	//	}
+
+	//	{
+	//		// test
+	//		// get entity from component, then get components from entity
+	//		ComponentGraphics* compGfx = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
+	//		Entity entity = G_ECMANAGER->getEntity(compGfx);
+	//		ComponentTransform* compTx = entity.getComponent<ComponentTransform>();
+	//		int k = 1;
+	//	}
 
 	//}
-	////
+
+	//newEntity0 = G_ECMANAGER->BuildEntity();
+	//newEntity0.AddComponent<ComponentGraphics>();
+	//newEntity0.AddComponent<ComponentTransform>();
+	//ComponentGraphics* g = newEntity0.getComponent<ComponentGraphics>();
+	//ComponentTransform* t = newEntity0.getComponent<ComponentTransform>();
+
+	////////
 
 
 

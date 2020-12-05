@@ -266,12 +266,12 @@ bool ComponentMemoryManager::MemConIterator::prev()
 	--currentIndex;
 	--currentElementIndex;
 
-	if ((currentElementIndex - 1) < 0)
+	if ((currentElementIndex) < 0)
 	{
 		// itr to prev block
 		--currentBlockIndex;
 		currentBlock = (*currentContainer)[currentBlockIndex];
-		currentElement = currentBlock + meta->settings.blockSize - 1;
+		currentElement = currentBlock + ( (size_t) ((size_t)meta->settings.blockSize - 1) * meta->settings.elementSize);
 		currentElementIndex = meta->settings.blockSize - 1;
 	}
 	else
