@@ -10,7 +10,7 @@ namespace Unicorn
     // Native handle for this component
     private IntPtr native_handle = IntPtr.Zero;
 
-    public void Play(string name, bool loop = true, double startFrame = -1.0, double endFrame = 1.0)
+    public void Play(string name, bool loop = true, double startFrame = -1.0, double endFrame = -1.0)
     {
       PlayAnimation_Internal(native_handle, name, loop, startFrame, endFrame);
     }
