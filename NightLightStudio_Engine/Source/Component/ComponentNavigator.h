@@ -37,6 +37,7 @@ public:
 	float speed = 1.f;
 	float curTime;
 	float endTime = 0.0f;
+	float rad_for_detect = 25.0f;		//Default radius detection
 
 	LocalVector<LocalString<125>> way_point_list;	//Standard way point using entity to plot
 	LocalVector<TransformComponent*> cur_path;
@@ -60,7 +61,7 @@ public:
 	}
 
 
-
+	//Converts list of entity name to real entity for way point traversing
 	void InitPath()
 	{
 		CleanCurPath();
@@ -119,7 +120,10 @@ public:
 			{
 				endTime = itr->value.GetFloat();
 			}
-
+			if (itr->name == "radius_for_detection")
+			{
+				rad_for_detect = itr->value.GetFloat();
+			}
 
 		}
 	};
@@ -132,6 +136,7 @@ public:
 		NS_SERIALISER::ChangeData(&val, "way_point_list", string_list_val);
 		NS_SERIALISER::ChangeData(&val, "stopAtEachWayPoint", stopAtEachWayPoint);
 		NS_SERIALISER::ChangeData(&val, "endTime", endTime);
+		NS_SERIALISER::ChangeData(&val, "radius_for_detection", rad_for_detect);
 
 		NS_SERIALISER::ChangeData(&val, "speed", speed);
 		return val;
@@ -144,6 +149,8 @@ public:
 		return newcomp;
 	}
 	//================ Getter / Setter ========================//
+
+	//Function to set next way point to go to
 	void SetNextWp()
 	{
 		if (stopAtEachWayPoint)
