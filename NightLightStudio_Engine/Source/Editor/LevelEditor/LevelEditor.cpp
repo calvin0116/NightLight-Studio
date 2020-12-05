@@ -135,7 +135,7 @@ bool LevelEditor::Update(float)
     }
     else
     {
-        LE_RunWindows();
+        //LE_RunWindows();
     }
 
     // Rendering
