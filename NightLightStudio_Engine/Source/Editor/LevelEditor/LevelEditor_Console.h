@@ -26,11 +26,17 @@ class ConsoleLog : public LE_WinBase_Derived<ConsoleLog>
 
 	const size_t _maxCommands = 100;
 
+	bool _saveOnExit;
+	bool _saveOnLog;
+
 	// TO REMOVE
 	int _somevalue = 0;
 
+	void SaveToFile(std::string filePath);
+
 public:
 	ConsoleLog() : _inputBuffer{}, _inputItems{}, _inputHistory{}, _historyPos{ -1 }, _commands{}, _inputCommands{}, _scrollToBottom{ false }
+		, _saveOnExit{ true }, _saveOnLog{ true }
 	{}
 	~ConsoleLog() {}
 
@@ -41,6 +47,8 @@ public:
 	void Run() override;
 
 	void Exit() override {}
+
+	void End() override;
 
 	void AddLog(const std::string item);
 

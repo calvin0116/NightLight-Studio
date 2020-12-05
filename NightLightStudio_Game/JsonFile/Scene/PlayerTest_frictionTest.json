@@ -23,7 +23,7 @@
             "ColliderComponent": {
                 "colliderType": "CAPSULE",
                 "tag": 1,
-                "isCollidable": false,
+                "isCollidable": true,
                 "Center": [
                     0.0,
                     0.0,
@@ -216,7 +216,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             },
             "ScriptComponent": {
                 "isActive": true,
@@ -695,7 +696,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             },
             "ScriptComponent": {
                 "isActive": true,
@@ -841,7 +843,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             },
             "ScriptComponent": {
                 "isActive": true,
@@ -946,7 +949,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "AudioEvent": {

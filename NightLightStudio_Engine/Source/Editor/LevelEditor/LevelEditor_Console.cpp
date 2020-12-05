@@ -3,6 +3,21 @@
 
 #include <iostream>
 
+void ConsoleLog::SaveToFile(std::string filePath)
+{
+	if (_inputItems.empty())
+		return;
+	// Create an output filestream object
+	std::ofstream myFile(filePath);
+	if (myFile.is_open())
+	{
+		for (const std::string& str : _inputItems)
+			myFile << str << "\n";
+	}
+	// Close the file
+	myFile.close();
+}
+
 void ConsoleLog::Start()
 {
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("EDITOR_UNDO_REDO", SystemInput_ns::IKEY_CTRL, "CTRL_Z_Y", SystemInput_ns::OnHold,
@@ -90,6 +105,10 @@ void ConsoleLog::Run()
 	_levelEditor->LE_AddButton("Debug Log", [this]() { AddLog("Test Debug Log"); });
 	ImGui::SameLine();
 	_levelEditor->LE_AddButton("Clear Log", [this]() { ClearLog(); });
+	ImGui::SameLine();
+	_levelEditor->LE_AddCheckbox("Save On Log", &_saveOnLog);
+	ImGui::SameLine();
+	_levelEditor->LE_AddCheckbox("Save On Exit", &_saveOnExit);
 
 	_levelEditor->LE_AddChildWindow("ConsoleLog", ImVec2(0, -(ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing())),
 		[this]()
@@ -150,6 +169,14 @@ void ConsoleLog::Run()
 
 }
 
+void ConsoleLog::End()
+{
+	if (_saveOnExit)
+	{
+		SaveToFile("EditorLog.txt");
+	}
+}
+
 // Might need to expand
 void ConsoleLog::AddLog(const std::string item)
 {
@@ -179,6 +206,11 @@ void ConsoleLog::AddLog(const std::string item)
 		std::string errorMsg = "[error] : ";
 		errorMsg.append(e.what());
 		_inputItems.push_back(errorMsg);
+	}
+
+	if (_saveOnLog)
+	{
+		SaveToFile("EditorLog.txt");
 	}
 }
 

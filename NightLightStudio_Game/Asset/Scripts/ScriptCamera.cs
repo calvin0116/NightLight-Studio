@@ -253,23 +253,6 @@ namespace Unicorn
 
     public override void OnCollisionEnter(int other)
     {
-      //Console.WriteLine("OnCollisionEnter");
-    }
-
-    public override void OnCollisionStay(int other)
-    {
-      //Console.WriteLine("OnCollisionStay");
-      //isCollide = true;
-    }
-
-    public override void OnCollisionExit(int other)
-    {
-      //Console.WriteLine("OnCollisionExit");
-      //isCollide = false;
-    }
-
-    public override void OnTriggerEnter(int other)
-    {
         if(other != playerID)
         {
             Console.WriteLine("OnTriggerEnter");
@@ -277,7 +260,7 @@ namespace Unicorn
         }
     }
 
-    public override void OnTriggerStay(int other)
+    public override void OnCollisionStay(int other)
     {
         if(other != playerID)
         {
@@ -286,13 +269,40 @@ namespace Unicorn
         }
     }
 
-    public override void OnTriggerExit(int other)
+    public override void OnCollisionExit(int other)
     {
         if (other != playerID)
         {
             Console.WriteLine("OnTriggerExit");
             isCollide = false;
         }
+    }
+
+    public override void OnTriggerEnter(int other)
+    {
+        //if(other != playerID)
+        //{
+        //    Console.WriteLine("OnTriggerEnter");
+        //    isCollide = true;
+        //}
+    }
+
+    public override void OnTriggerStay(int other)
+    {
+        //if(other != playerID)
+        //{
+        //    Console.WriteLine("OnTriggerStay");
+        //    isCollide = true;
+        //}
+    }
+
+    public override void OnTriggerExit(int other)
+    {
+        //if (other != playerID)
+        //{
+        //    Console.WriteLine("OnTriggerExit");
+        //    isCollide = false;
+        //}
     }
 
     public override void Exit()
