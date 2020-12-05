@@ -41,6 +41,10 @@ void AnimationController::PlayAnimation(const std::string& newAnim, ComponentAni
 			_play = true;
 			_loop = loop;
 			_startFrameTime = startFrame;
+			if (_startFrameTime >= 0.0)
+			{
+				_dt = startFrame;
+			}
 
 			Entity entity = G_ECMANAGER->getEntity(currComp);
 			ComponentGraphics* compGraphic = entity.getComponent<ComponentGraphics>();

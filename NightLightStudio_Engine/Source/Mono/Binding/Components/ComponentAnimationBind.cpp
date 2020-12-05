@@ -14,6 +14,8 @@ namespace ComponentAnimationBind
       "Animation");
     MonoWrapper::BindClassFunction(StopAnimation_Internal, "StopAnimation_Internal",
       "Animation");
+    MonoWrapper::BindClassFunction(IsFinished_Empty_Internal, "IsFinished_Empty_Internal",
+      "Animation");
     MonoWrapper::BindClassFunction(IsFinished_Internal, "IsFinished_Internal",
       "Animation");
   }
@@ -36,6 +38,11 @@ namespace ComponentAnimationBind
   void StopAnimation_Internal(ComponentAnimation* anim)
   {
     anim->StopAnimation();
+  }
+
+  bool IsFinished_Empty_Internal(ComponentAnimation* anim)
+  {
+    return anim->IsFinished();
   }
 
   bool IsFinished_Internal(ComponentAnimation* anim, MonoString* name)
