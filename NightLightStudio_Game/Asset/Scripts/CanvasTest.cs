@@ -29,9 +29,10 @@ namespace Unicorn
       }
       if (Input.GetKeyPress(VK.IKEY_SPACE))
       {
-        Print(ui1.isActive.ToString());
-        Vector3 a = new Vector3(0.0f, 0.0f, 0.0f);
-        ui1.SetColour(a);
+        cnvs.isActive = !cnvs.isActive;
+        //Print(ui1.isActive.ToString());
+        //Vector3 a = new Vector3(0.0f, 0.0f, 0.0f);
+        //ui1.SetColour(a);
       }
     }
     public override void FixedUpdate()
