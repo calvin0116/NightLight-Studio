@@ -65,6 +65,8 @@ void ComponentCanvas::Read(Value& val)
 	else
 		loopCount = val["NumOfUIElement"].GetInt();
 
+	_uiElements.clear();
+
 	for (size_t i = 0; i < loopCount; ++i)
 	{
 		//Loads the ui
@@ -207,9 +209,12 @@ bool UI_Element::OnClick() const
 	glm::vec2 min = glm::vec2{ _position.x - (_size.x * 0.5f), _position.y - (_size.y * 0.5f) };
 	glm::vec2 max = glm::vec2{ _position.x + (_size.x * 0.5f), _position.y + (_size.y * 0.5f) };
 
-	if (min.x < mouse.x && max.x > mouse.x && min.y < mouse.y && max.y > mouse.y)
+	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IMOUSE_LBUTTON))
 	{
-		return true;
+		if (min.x < mouse.x && max.x > mouse.x && min.y < mouse.y && max.y > mouse.y)
+		{
+			return true;
+		}
 	}
 	return false;
 }
