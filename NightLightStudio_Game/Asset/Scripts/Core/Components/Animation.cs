@@ -30,6 +30,11 @@ namespace Unicorn
       StopAnimation_Internal(native_handle);
     }
 
+    public bool isFinished()
+    {
+      return IsFinished_Empty_Internal(native_handle);
+    }
+
     public bool IsFinished(string name)
     {
       return IsFinished_Internal(native_handle, name);
@@ -46,6 +51,9 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void StopAnimation_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool IsFinished_Empty_Internal(IntPtr native_handle);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool IsFinished_Internal(IntPtr native_handle, string name);
