@@ -96,9 +96,9 @@ namespace NS_LOGIC
     // C#
     // Reload Scripts
     std::cout << "Logic GamePreInit" << std::endl;
-    MonoWrapper::ReloadScripts();
-    //MonoWrapper::LoadScriptDomain();
-    //MonoWrapper::OpenDLL();
+    // MonoWrapper::ReloadScripts();
+    MonoWrapper::LoadScriptDomain();
+    MonoWrapper::OpenDLL();
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
     for (; itrS != itrE; ++itrS)
