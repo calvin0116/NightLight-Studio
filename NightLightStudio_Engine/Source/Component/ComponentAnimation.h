@@ -21,6 +21,7 @@ public:
 	void ResumeAnimation();
 	void StopAnimation();
 	bool IsFinished(const std::string& anim);
+	bool IsFinished();
 
 	//read and write function for initialization from saved files
 	void	Read(Value&);

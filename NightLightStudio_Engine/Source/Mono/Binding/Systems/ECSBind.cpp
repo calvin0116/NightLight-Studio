@@ -10,6 +10,8 @@
  // For editor console cout
 #include "../../../Editor/SystemEditor.h"
 
+#define CSDebug
+
 namespace ECSBind
 {
   void BindECS()
@@ -30,10 +32,27 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(GetCanvas, "GetCanvas", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetVariables, "GetVariables", "UniBehaviour");
   }
+  // For debugging in C#
+  bool CheckCompGet(const void* comp, const std::string& type, const int& id)
+  {
+    if (comp == nullptr)
+    {
+#ifdef CSDebug
+      ED_OUT(type + " returned nullptr on Entity ID: " + std::to_string(id));
+#endif
+      return true;
+    }
+    return false;
+  }
 
   int GameObjectFind(MonoString* _name)
   {
-    Entity en = G_ECMANAGER->getEntity(MonoWrapper::ToString(_name));
+    std::string sName = MonoWrapper::ToString(_name);
+    Entity en = G_ECMANAGER->getEntity(sName);
+#ifdef CSDebug
+    if (en.getId() == -1)
+      ED_OUT("GameObjectFind(): Can't find " + sName + "!");
+#endif
     return en.getId();
   }
 
@@ -62,6 +81,7 @@ namespace ECSBind
   {
     Entity en = G_ECMANAGER->getEntity(id);
     ScriptComponent* script = en.getComponent<ScriptComponent>();
+    CheckCompGet(script, "GetScript()", id);
     if (script && script->_MonoData._pInstance)
       return script->_MonoData._pInstance; // Found script
     return nullptr; // nope
@@ -73,30 +93,9 @@ namespace ECSBind
     MonoObject* monoObj = MonoWrapper::ConstructObject("Transform");
     Entity en = G_ECMANAGER->getEntity(id);
     TransformComponent* trans = en.getComponent<TransformComponent>();
+    if (CheckCompGet(trans, "GetTransform()", id))
+      return nullptr;
     MonoWrapper::SetNativeHandle(monoObj, trans);
-
-    //if (trans == nullptr)
-    //  static_assert("get_Transform_handle nullptr");
-
-    //MonoObject* monoVec3;
-    //// Construct and set position(Vec3) native handle and values
-    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
-    //if(trans)
-    //  MonoWrapper::SetNativeHandle(monoVec3, &(trans->_position));
-    //MonoWrapper::SetObjectFieldValue(monoObj, "position", monoVec3);
-    //
-    //// Construct and set rotation(Vec3) native handle and values
-    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
-    //if(trans)
-    //  MonoWrapper::SetNativeHandle(monoVec3, &(trans->_rotation));
-    //MonoWrapper::SetObjectFieldValue(monoObj, "rotation", monoVec3);
-
-    //// Construct and set rotation(Vec3) native handle and values
-    //monoVec3 = MonoWrapper::ConstructObject("Vector3");
-    //if(trans)
-    //  MonoWrapper::SetNativeHandle(monoVec3, &(trans->_scale));
-    //MonoWrapper::SetObjectFieldValue(monoObj, "scale", monoVec3);
-
     return monoObj;
   }
 
@@ -106,8 +105,9 @@ namespace ECSBind
     MonoObject* monoObj = MonoWrapper::ConstructObject("Collider");
     Entity en = G_ECMANAGER->getEntity(id);
     ColliderComponent* col = en.getComponent<ColliderComponent>();
+    if (CheckCompGet(col, "GetCollider()", id))
+      return nullptr;
     MonoWrapper::SetNativeHandle(monoObj, col);
-
     return monoObj;
   }
 
@@ -117,8 +117,9 @@ namespace ECSBind
     MonoObject* monoObj = MonoWrapper::ConstructObject("RigidBody");
     Entity en = G_ECMANAGER->getEntity(id);
     RigidBodyComponent* rb = en.getComponent<RigidBodyComponent>();
+    if (CheckCompGet(rb, "GetRigidBody()", id))
+      return nullptr;
     MonoWrapper::SetNativeHandle(monoObj, rb);
-
     return monoObj;
   }
 
@@ -127,8 +128,10 @@ namespace ECSBind
     // Create C# side component
     MonoObject* monoObj = MonoWrapper::ConstructObject("Graphics");
     Entity en = G_ECMANAGER->getEntity(id);
-    GraphicsComponent* rb = en.getComponent<GraphicsComponent>();
-    MonoWrapper::SetNativeHandle(monoObj, rb);
+    GraphicsComponent* grph = en.getComponent<GraphicsComponent>();
+    if (CheckCompGet(grph, "GetGraphics()", id))
+      return nullptr;
+    MonoWrapper::SetNativeHandle(monoObj, grph);
 
     return monoObj;
   }
@@ -138,6 +141,8 @@ namespace ECSBind
     MonoObject* monoObj = MonoWrapper::ConstructObject("Light");
     Entity en = G_ECMANAGER->getEntity(id);
     LightComponent* lc = en.getComponent<LightComponent>();
+    if (CheckCompGet(lc, "GetLight()", id))
+      return nullptr;
     MonoWrapper::SetNativeHandle(monoObj, lc);
 
     return monoObj;
@@ -148,6 +153,8 @@ namespace ECSBind
     MonoObject* monoObj = MonoWrapper::ConstructObject("Navigator");
     Entity en = G_ECMANAGER->getEntity(id);
     NavigatorComponent* nav = en.getComponent<NavigatorComponent>();
+    if (CheckCompGet(nav, "GetNav()", id))
+      return nullptr;
     MonoWrapper::SetNativeHandle(monoObj, nav);
 
     return monoObj;
@@ -158,6 +165,8 @@ namespace ECSBind
     MonoObject* monoObj = MonoWrapper::ConstructObject("Animation");
     Entity en = G_ECMANAGER->getEntity(id);
     AnimationComponent* anim = en.getComponent<AnimationComponent>();
+    if (CheckCompGet(anim, "GetAnimation()", id))
+      return nullptr;
     MonoWrapper::SetNativeHandle(monoObj, anim);
 
     return monoObj;
@@ -168,6 +177,8 @@ namespace ECSBind
     MonoObject* monoObj = MonoWrapper::ConstructObject("Canvas");
     Entity en = G_ECMANAGER->getEntity(id);
     CanvasComponent* cnvs = en.getComponent<CanvasComponent>();
+    if (CheckCompGet(cnvs, "GetCanvas()", id))
+      return nullptr;
     MonoWrapper::SetNativeHandle(monoObj, cnvs);
 
     return monoObj;
@@ -178,8 +189,9 @@ namespace ECSBind
     MonoObject* monoObj = MonoWrapper::ConstructObject("Variables");
     Entity en = G_ECMANAGER->getEntity(id);
     VariablesComponent* var = en.getComponent<VariablesComponent>();
+    if (CheckCompGet(var, "GetVariables()", id))
+      return nullptr;
     MonoWrapper::SetNativeHandle(monoObj, var);
-
     return monoObj;
   }
 }

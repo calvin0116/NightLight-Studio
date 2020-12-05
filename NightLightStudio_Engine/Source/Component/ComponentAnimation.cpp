@@ -44,6 +44,11 @@ bool ComponentAnimation::IsFinished(const std::string& anim)
 		NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_currAnim == anim;
 }
 
+bool ComponentAnimation::IsFinished()
+{
+	return !NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play;
+}
+
 //read and write function for initialization from saved files
 
 inline void ComponentAnimation::Read(Value& val)

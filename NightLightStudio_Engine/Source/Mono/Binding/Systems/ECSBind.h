@@ -1,8 +1,11 @@
 #pragma once
 #include <mono/metadata/object.h>
+#include <string>
 
 namespace ECSBind
 {
+  // Error check for entity get.
+  bool CheckCompGet(const void* comp, const std::string& type, const int& id);
   // Find object ID from name
   int GameObjectFind(MonoString* _name);
   // Delta Time
