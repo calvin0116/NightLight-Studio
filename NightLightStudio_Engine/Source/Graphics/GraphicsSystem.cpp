@@ -238,11 +238,21 @@ namespace NS_GRAPHICS
 		//auto compItr = _blendsorted.begin();
 		//auto compitrEnd = _blendsorted.end();
 
+		std::vector<ComponentGraphics*> _blended;
+
 		//while(compItr != compitrEnd)
 		while (itr != itrEnd)
 		{
 			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
 			//ComponentGraphics* graphicsComp = *compItr;
+
+			if (graphicsComp->GetAlpha() < 1.f)
+			{
+				_blended.push_back(graphicsComp);
+				++itr;
+				continue;
+			}
+
 
 			Entity entity = G_ECMANAGER->getEntity(itr);
 			//Entity entity = G_ECMANAGER->getEntity(graphicsComp);
@@ -423,6 +433,171 @@ namespace NS_GRAPHICS
 			}
 			++itr;
 			//++compItr;
+		}
+
+
+		auto blendedItr = _blended.begin();
+		auto blendedItrEnd = _blended.end();
+
+		// Render objects with transparency
+		while (blendedItr != blendedItrEnd)
+		{
+			ComponentGraphics* graphicsComp = *blendedItr;
+
+			Entity entity = G_ECMANAGER->getEntity(graphicsComp);
+
+			ComponentAnimation* animComp = entity.getComponent<ComponentAnimation>();
+
+			if (graphicsComp->_modelID < 0)
+			{
+				++blendedItr;
+				continue;
+			}
+
+			if (!graphicsComp->_isActive)
+			{
+				++blendedItr;
+				continue;
+			}
+
+			Model* model = modelManager->_models[graphicsComp->_modelID];
+
+			// get transform component
+			ComponentTransform* transformComp = entity.getComponent<ComponentTransform>();
+
+			glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
+
+			if (animComp)
+			{
+				if (animComp->_isActive && model->_isAnimated)
+				{
+					glm::mat4 identity(1.0f);
+					double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
+					std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
+					if (!currAnimation.empty())
+					{
+						model->GetPose(currAnimation, model->_rootBone, dt, identity, model->_globalInverseTransform);
+					}
+				}
+			}
+
+			if (graphicsComp->_renderType == RENDERTYPE::SOLID)
+			{
+				if (model->_isAnimated)
+				{
+					shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
+				}
+				else
+				{
+					shaderManager->StartProgram(ShaderSystem::PBR); // solid program
+				}
+
+				// Update alpha
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Alpha"), graphicsComp->GetAlpha());
+
+				// Update model and uniform for material
+				glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Albedo"), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Roughness"), graphicsComp->_pbrData._roughness);
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Metallic"), graphicsComp->_pbrData._metallic);
+
+				if (model->_isAnimated)
+				{
+					glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+					for (auto& mesh : model->_animatedMeshes)
+					{
+						glBindVertexArray(mesh->VAO);
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+					}
+				}
+				else
+				{
+					for (auto& mesh : model->_meshes)
+					{
+						glBindVertexArray(mesh->VAO);
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+					}
+				}
+
+				shaderManager->StopProgram();
+			}
+			else // textured program
+			{
+				if (model->_isAnimated)
+				{
+					// If normal map does not exist
+					if (!graphicsComp->_normalID)
+						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
+					else
+						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
+					//glm::mat4 identity(1.0f);
+					//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
+				}
+				else
+				{
+					if (!graphicsComp->_normalID)
+						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
+					else
+						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
+				}
+
+				// Update alpha
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Alpha"), graphicsComp->GetAlpha());
+
+				// Roughness Control
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "RoughnessControl"), graphicsComp->_pbrData._roughness);
+				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "MetallicControl"), graphicsComp->_pbrData._metallic);
+
+				// Bind textures
+				// bind diffuse map
+				textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+
+				// bind metallic map
+				textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+
+				// bind roughness map
+				textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+
+				// bind ao map
+				textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+
+				// bind normal map
+				textureManager->BindNormalTexture(graphicsComp->_normalID);
+
+				if (model->_isAnimated)
+				{
+					glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+					for (auto& mesh : model->_animatedMeshes)
+					{
+						glBindVertexArray(mesh->VAO);
+
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+					}
+				}
+				else
+				{
+					for (auto& mesh : model->_meshes)
+					{
+						glBindVertexArray(mesh->VAO);
+
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+					}
+				}
+
+				shaderManager->StopProgram();
+			}
+			++blendedItr;
 		}
 #endif
 	}

@@ -234,11 +234,11 @@ namespace Unicorn
                 {
                     if (script_player.CurrentState == ScriptPlayer.State.Moth)
                     {
-                        offZ_current = offZ_lerp.Lerp(offZ, RealDT());
+                        offZ_current = offZ_lerp.Lerp(offZ / 2, RealDT());
                     }
                     else
                     {
-                        offZ_current = offZ_lerp.Lerp(offZ / 2, RealDT());
+                        offZ_current = offZ_lerp.Lerp(offZ, RealDT());
                     }
 
                     //Console.WriteLine(">threshold");
