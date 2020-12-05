@@ -10,6 +10,8 @@
  // For editor console cout
 #include "../../../Editor/SystemEditor.h"
 
+#define CSDebug
+
 namespace ECSBind
 {
   void BindECS()
@@ -35,7 +37,9 @@ namespace ECSBind
   {
     if (comp == nullptr)
     {
+#ifdef CSDebug
       ED_OUT(type + " returned nullptr on Entity ID: " + std::to_string(id));
+#endif
       return true;
     }
     return false;
@@ -45,8 +49,10 @@ namespace ECSBind
   {
     std::string sName = MonoWrapper::ToString(_name);
     Entity en = G_ECMANAGER->getEntity(sName);
+#ifdef CSDebug
     if (en.getId() == -1)
       ED_OUT("GameObjectFind(): Can't find " + sName + "!");
+#endif
     return en.getId();
   }
 
@@ -186,7 +192,6 @@ namespace ECSBind
     if (CheckCompGet(var, "GetVariables()", id))
       return nullptr;
     MonoWrapper::SetNativeHandle(monoObj, var);
-
     return monoObj;
   }
 }
