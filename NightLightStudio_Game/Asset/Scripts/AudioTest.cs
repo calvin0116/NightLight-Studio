@@ -10,11 +10,18 @@ namespace Unicorn
     RigidBody rb;
     int leftBGM = -1;
     int rightBGM = -1;
+    int ent = -100;
 
     public override void Init()
     {
       trans = GetTransform(id);
+      if (rb == null)
+        Print("NULL");
       rb = GetRigidBody(id);
+      RigidBody rb1 = GetRigidBody(GameObjectFind("Entity_0"));
+      if (rb1 == null)
+        Print("rb1 null");
+      Print(ent.ToString());
     }
 
     public override void LateInit()

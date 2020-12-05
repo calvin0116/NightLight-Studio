@@ -212,7 +212,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Right": {
@@ -302,7 +303,29 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
+            }
+        },
+        "Entity_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
             }
         }
     }
