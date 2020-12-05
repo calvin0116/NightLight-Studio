@@ -15,10 +15,6 @@ namespace Unicorn
       cnvs = GetCanvas(id);
       Print(id.ToString());
       ui1 = cnvs.FindUI("Cart");
-      if (ui1.native_handle == IntPtr.Zero)
-        Print("Null ptr!");
-      else
-        Print("Value received: " + ui1.native_handle.ToString());
     }
 
     public override void LateInit()
@@ -32,7 +28,11 @@ namespace Unicorn
         Print("Click Blue!");
       }
       if (Input.GetKeyPress(VK.IKEY_SPACE))
-        Print("Derp");
+      {
+        Print(ui1.isActive.ToString());
+        Vector3 a = new Vector3(0.0f, 0.0f, 0.0f);
+        ui1.SetColour(a);
+      }
     }
     public override void FixedUpdate()
     {
