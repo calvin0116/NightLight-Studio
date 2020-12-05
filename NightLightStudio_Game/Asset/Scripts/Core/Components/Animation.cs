@@ -30,7 +30,7 @@ namespace Unicorn
       StopAnimation_Internal(native_handle);
     }
 
-    public bool isFinished()
+    public bool IsFinished()
     {
       return IsFinished_Empty_Internal(native_handle);
     }
