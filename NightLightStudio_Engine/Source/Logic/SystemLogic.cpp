@@ -27,6 +27,7 @@ namespace NS_LOGIC
   {
     MonoWrapper::InitMono();
     MonoWrapper::LoadScriptDomain();
+    MonoWrapper::OpenDLL();
     //MonoWrapper::ReloadScripts();
   }
 
@@ -97,8 +98,7 @@ namespace NS_LOGIC
     // Reload Scripts
     std::cout << "Logic GamePreInit" << std::endl;
     // MonoWrapper::ReloadScripts();
-    MonoWrapper::LoadScriptDomain();
-    MonoWrapper::OpenDLL();
+    //MonoWrapper::LoadScriptDomain();
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
     for (; itrS != itrE; ++itrS)
