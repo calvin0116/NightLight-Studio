@@ -91,14 +91,18 @@ inline void NS_AI::AiManager::Update()
 		mag_dir.y = 0.0f;	//Ignore y axis
 		//5.0f = hardcoded radius to check
 		//std::cout << mag_dir.length() << std::endl;
-		if (mag_dir.length() < 20.0f)	//Check if Ai reached the way point
+		if (mag_dir.length() < navComp->rad_for_detect)	//Check if Ai reached the way point
 		{
 			navComp->SetNextWp();		//Set next way point to be the target for navigation
 			std::cout << "Going to next wp" << std::endl;
+			rb->velocity = 0.0f;
 		}
-		NlMath::Vector3DNormalize(mag_dir);
-		//NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//Move to way point
-		rb->velocity = mag_dir * navComp->speed;
+		else
+		{
+			NlMath::Vector3DNormalize(mag_dir);
+			//NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//Move to way point
+			rb->velocity = mag_dir * navComp->speed;
+		}
 		++itr;
 	}
 }

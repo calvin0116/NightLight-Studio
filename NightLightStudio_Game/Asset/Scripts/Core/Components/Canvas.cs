@@ -10,6 +10,12 @@ namespace Unicorn
     // Native handle for this component
     private IntPtr native_handle = IntPtr.Zero;
 
+    public bool isActive
+    {
+      get { return get_IsActive_Internal(native_handle); }
+      set { set_IsActive_Internal(native_handle, value); }
+    }
+
     public UIElement FindUI(uint index)
     {
       return FindUI_Internal(this.native_handle, index);
@@ -19,6 +25,12 @@ namespace Unicorn
     {
       return FindUIByName_Internal(this.native_handle, name);
     }
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool get_IsActive_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_IsActive_Internal(IntPtr native_handle, bool val);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static UIElement FindUI_Internal(IntPtr native_handle, uint index);

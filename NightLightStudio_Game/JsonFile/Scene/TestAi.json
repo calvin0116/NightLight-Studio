@@ -62,12 +62,13 @@
                 ],
                 "ShininessMat": 32.0,
                 "AlbedoMat": [
-                    1.0,
+                    0.21960784494876862,
                     0.0,
-                    0.0
+                    0.9019607901573181
                 ],
                 "MetallicMat": 0.0,
-                "RoughnessMat": 0.0
+                "RoughnessMat": 0.0,
+                "Alpha": 1.0
             },
             "ScriptComponent": {
                 "isActive": true,
@@ -83,7 +84,8 @@
                 ],
                 "stopAtEachWayPoint": true,
                 "endTime": 2.0,
-                "speed": 0.4009999930858612
+                "radius_for_detection": 25.0,
+                "speed": 0.5
             },
             "ComponentVariables": {
                 "IntList": [],
@@ -144,7 +146,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Waypoint": {
@@ -198,7 +201,8 @@
                     0.0
                 ],
                 "MetallicMat": 0.0,
-                "RoughnessMat": 0.0
+                "RoughnessMat": 0.0,
+                "Alpha": 1.0
             }
         },
         "WayPoint_2": {
@@ -252,7 +256,8 @@
                     0.0
                 ],
                 "MetallicMat": 0.0,
-                "RoughnessMat": 0.0
+                "RoughnessMat": 0.0,
+                "Alpha": 1.0
             }
         },
         "WayPoint_3": {
@@ -306,7 +311,8 @@
                     0.0
                 ],
                 "MetallicMat": 0.0,
-                "RoughnessMat": 0.0
+                "RoughnessMat": 0.0,
+                "Alpha": 1.0
             }
         },
         "WayPoint_4": {
@@ -360,7 +366,8 @@
                     0.0
                 ],
                 "MetallicMat": 0.0,
-                "RoughnessMat": 0.0
+                "RoughnessMat": 0.0,
+                "Alpha": 1.0
             }
         }
     }
