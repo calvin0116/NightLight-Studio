@@ -569,10 +569,65 @@ namespace NlMath
 			}
 		}
 
-        // ray-box intersection
+        //// ray-box intersection
+        //// https://gamedev.stackexchange.com/questions/18436/most-efficient-aabb-vs-ray-collision-algorithms
 
+        //// r.dir is unit direction vector of ray
 
+        //Vector3D ray = tCap2.tip - tCap2.base;
 
+        //if (ray == Vector3D(0.0f, 0.0f, 0.0f))
+        //{
+        //    return SIDES::NO_COLLISION;
+        //}
+
+        //Vector3D ray_n = NlMath::Vector3DNormalize(ray);
+
+        //Vector3D dirfrac;
+        //dirfrac.x = 1.0f / ray_n.x;
+        //dirfrac.y = 1.0f / ray_n.y;
+        //dirfrac.z = 1.0f / ray_n.z;
+
+        //// lb is the corner of AABB with minimal coordinates - left bottom, rt is maximal corner
+        //// r.org is origin of ray
+        //float t1 = (tBox1.vecMin.x - tCap2.base.x) * dirfrac.x;
+        //float t2 = (tBox1.vecMax.x - tCap2.base.x) * dirfrac.x;
+        //float t3 = (tBox1.vecMin.y - tCap2.base.y) * dirfrac.y;
+        //float t4 = (tBox1.vecMax.y - tCap2.base.y) * dirfrac.y;
+        //float t5 = (tBox1.vecMin.z - tCap2.base.z) * dirfrac.z;
+        //float t6 = (tBox1.vecMax.z - tCap2.base.z) * dirfrac.z;
+
+        //float tmin = std::max(std::max(std::min(t1, t2), std::min(t3, t4)), std::min(t5, t6));
+        //float tmax = std::min(std::min(std::max(t1, t2), std::max(t3, t4)), std::max(t5, t6));
+        //float t;
+
+        //// if tmax < 0, ray (line) is intersecting AABB, but the whole AABB is behind us
+        //if (tmax < 0)
+        //{
+        //    t = tmax;
+        //    //return false;
+        //    closestPointOnCapsuleLine = tCap2.base;
+        //}
+        //// if tmin > tmax, ray doesn't intersect AABB
+        //else if (tmin > tmax)
+        //{
+        //    t = tmax;
+        //    //return false;
+        //    closestPointOnCapsuleLine = tCap2.tip;
+        //}
+        //else
+        //{
+        //    t = tmin;
+        //    //return true;
+        //    closestPointOnCapsuleLine = tCap2.base + ray * t;
+        //}
+
+        //// test aabb to spehere using sphere on closest point on capsule linesegment
+
+        //SphereCollider closestsphere;
+        ////closestsphere.center = closestPointOnCapsuleLine[smallestDistIndex];
+        //closestsphere.center = closestPointOnCapsuleLine;
+        //closestsphere.radius = tCap2.radius;
 
 		// test aabb to spehere using sphere on closest point on capsule linesegment
 
@@ -580,7 +635,21 @@ namespace NlMath
 		closestsphere.center = closestPointOnCapsuleLine[smallestDistIndex];
 		closestsphere.radius = tCap2.radius;
 
-		return AABB_SphereCollision(tBox1, closestsphere, nromal);
+        SIDES col = AABB_SphereCollision(tBox1, closestsphere, nromal);
+
+        if (col == SIDES::NO_COLLISION)
+        {
+            closestsphere.center = tCap2.tip;
+            col = AABB_SphereCollision(tBox1, closestsphere, nromal);
+        }
+        
+        if (col == SIDES::NO_COLLISION)
+        {
+            closestsphere.center = tCap2.base;
+            col = AABB_SphereCollision(tBox1, closestsphere, nromal);
+        }
+
+        return col;
 		//return SIDES::NO_COLLISION;
 	}
 
