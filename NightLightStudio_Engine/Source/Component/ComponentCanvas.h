@@ -16,17 +16,17 @@ struct UI_Element
 	UI_TYPE _type;
 
 	//Z will be the depth for drawing order
-	glm::vec3 _position;
-	glm::vec2 _size;
-	glm::vec4 _colour = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glm::vec3 _position;															// Expose
+	glm::vec2 _size;																	// Expose
+	glm::vec4 _colour = { 1.0f, 1.0f, 1.0f, 1.0f };		// Expose
 
-	bool _isActive = true;
+	bool _isActive = true; // Expose
 
 	LocalString<256> _fileName;
 	unsigned _imageID;
 
 	glm::mat4 GetModelMatrix();
-	void AddTexture(std::string filename);
+	void AddTexture(std::string filename); // Expose
 
 	//Expose this
 	//bool OnClick();
@@ -53,7 +53,7 @@ public:
 	// Destructor, destroy all OpenGL objects via graphics system
 	~ComponentCanvas();
 
-	void AddUI();
+	void AddUI();								
 	void RemoveUI(size_t index);
 	void Sort();
 

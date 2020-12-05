@@ -210,56 +210,56 @@ namespace NS_GRAPHICS
 		//    from greatest to smallest (closer = later)
 
 		// Vector of all graphics components
-		std::vector<ComponentGraphics*> _blendsorted;
+		//std::vector<ComponentGraphics*> _blendsorted;
 
-		// Push all graphics component pointers to _blendsorted
+		//// Push all graphics component pointers to _blendsorted
+		//while (itr != itrEnd)
+		//{
+		//	_blendsorted.push_back(reinterpret_cast<ComponentGraphics*>(*itr));
+
+		//	++itr;
+		//}
+
+		//std::sort(_blendsorted.begin(), _blendsorted.end(), [&](ComponentGraphics* comp1, ComponentGraphics* comp2)
+		//	{
+		//		// Compare alpha first
+		//		if (comp1->GetAlpha() < comp2->GetAlpha())
+		//			return false;
+
+		//		// If alpha is the same, compare distance from camera
+		//		ComponentTransform* transformComp1 = G_ECMANAGER->getEntity(comp1).getComponent<ComponentTransform>();
+		//		ComponentTransform* transformComp2 = G_ECMANAGER->getEntity(comp2).getComponent<ComponentTransform>();
+
+		//		return (glm::length2(transformComp1->_position - cameraManager->GetCurrentCameraPosition())
+		//			    < glm::length2(transformComp2->_position - cameraManager->GetCurrentCameraPosition()) ? true : false);
+		//	}
+		//);
+
+		//auto compItr = _blendsorted.begin();
+		//auto compitrEnd = _blendsorted.end();
+
+		//while(compItr != compitrEnd)
 		while (itr != itrEnd)
 		{
-			_blendsorted.push_back(reinterpret_cast<ComponentGraphics*>(*itr));
+			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
+			//ComponentGraphics* graphicsComp = *compItr;
 
-			++itr;
-		}
-
-		std::sort(_blendsorted.begin(), _blendsorted.end(), [&](ComponentGraphics* comp1, ComponentGraphics* comp2)
-			{
-				// Compare alpha first
-				if (comp1->GetAlpha() < comp2->GetAlpha())
-					return false;
-
-				// If alpha is the same, compare distance from camera
-				ComponentTransform* transformComp1 = G_ECMANAGER->getEntity(comp1).getComponent<ComponentTransform>();
-				ComponentTransform* transformComp2 = G_ECMANAGER->getEntity(comp2).getComponent<ComponentTransform>();
-
-				return (glm::length2(transformComp1->_position - cameraManager->GetCurrentCameraPosition())
-					    < glm::length2(transformComp2->_position - cameraManager->GetCurrentCameraPosition()) ? true : false);
-			}
-		);
-
-		auto compItr = _blendsorted.begin();
-		auto compitrEnd = _blendsorted.end();
-
-		//while (itr != itrEnd)
-		while(compItr != compitrEnd)
-		{
-			//ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
-			ComponentGraphics* graphicsComp = *compItr;
-
-			//Entity entity = G_ECMANAGER->getEntity(itr);
-			Entity entity = G_ECMANAGER->getEntity(graphicsComp);
+			Entity entity = G_ECMANAGER->getEntity(itr);
+			//Entity entity = G_ECMANAGER->getEntity(graphicsComp);
 			
 			ComponentAnimation* animComp = entity.getComponent<ComponentAnimation>();
 
 			if (graphicsComp->_modelID < 0)
 			{
-				//++itr;
-				++compItr;
+				++itr;
+				//++compItr;
 				continue;
 			}
 
 			if (!graphicsComp->_isActive)
 			{
-				//++itr;
-				++compItr;
+				++itr;
+				//++compItr;
 				continue;
 			}
 
@@ -421,8 +421,8 @@ namespace NS_GRAPHICS
 
 				shaderManager->StopProgram();
 			}
-			//++itr;
-			++compItr;
+			++itr;
+			//++compItr;
 		}
 #endif
 	}
