@@ -155,6 +155,10 @@ public:
 
 		MemConIterator operator++(int); // post fix // slower
 
+		MemConIterator& operator--();
+
+		MemConIterator operator--(int); // post fix // slower
+
 		int getCurrentIndex();
 
 		int getCurrentObjIndex();
@@ -172,6 +176,10 @@ public:
 
 		// iterate to the next unfree element
 		void nextOccupied();
+
+		bool prev();
+
+		void prevOccupied();
 
 	};
 	// Iterator END

@@ -537,6 +537,10 @@ public:
 			Iterator& operator++();
 			Iterator operator++(int); // post fix // slower
 
+			// decrement
+			Iterator& operator--();
+			Iterator operator--(int); // post fix // slower
+
 		private:
 			//
 		};
