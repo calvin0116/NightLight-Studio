@@ -12,6 +12,8 @@
 #include <fstream> //Temporary
 #include "../Input/SystemInput.h"
 
+#include <algorithm> // std::sort
+
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #define new DEBUG_NEW
@@ -200,30 +202,71 @@ namespace NS_GRAPHICS
 		// One for solids, one for textured
 		auto itr = G_ECMANAGER->begin<ComponentGraphics>();
 		auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
+
+		// perhaps keep a vector of pointers of ComponentGraphics
+		// Use a lambda to compare based on the following priorities:
+		// 1) Opaque objects first(alpha = 1.f)
+		// 2) If transparent to any extent except for 1.f, sort based on distance from camera(get length of distance vector between cameraPos and meshPos)
+		//    from greatest to smallest (closer = later)
+
+		// Vector of all graphics components
+		std::vector<ComponentGraphics*> _blendsorted;
+
+		// Push all graphics component pointers to _blendsorted
 		while (itr != itrEnd)
 		{
-			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
+			_blendsorted.push_back(reinterpret_cast<ComponentGraphics*>(*itr));
 
-			Entity entity = G_ECMANAGER->getEntity(itr);
+			++itr;
+		}
+
+		std::sort(_blendsorted.begin(), _blendsorted.end(), [&](ComponentGraphics* comp1, ComponentGraphics* comp2)
+			{
+				// Compare alpha first
+				if (comp1->GetAlpha() < comp2->GetAlpha())
+					return false;
+
+				// If alpha is the same, compare distance from camera
+				ComponentTransform* transformComp1 = G_ECMANAGER->getEntity(comp1).getComponent<ComponentTransform>();
+				ComponentTransform* transformComp2 = G_ECMANAGER->getEntity(comp2).getComponent<ComponentTransform>();
+
+				return (glm::length2(transformComp1->_position - cameraManager->GetCurrentCameraPosition())
+					    < glm::length2(transformComp2->_position - cameraManager->GetCurrentCameraPosition()) ? true : false);
+			}
+		);
+
+		auto compItr = _blendsorted.begin();
+		auto compitrEnd = _blendsorted.end();
+
+		//while (itr != itrEnd)
+		while(compItr != compitrEnd)
+		{
+			//ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
+			ComponentGraphics* graphicsComp = *compItr;
+
+			//Entity entity = G_ECMANAGER->getEntity(itr);
+			Entity entity = G_ECMANAGER->getEntity(graphicsComp);
 			
 			ComponentAnimation* animComp = entity.getComponent<ComponentAnimation>();
 
 			if (graphicsComp->_modelID < 0)
 			{
-				++itr;
+				//++itr;
+				++compItr;
 				continue;
 			}
 
 			if (!graphicsComp->_isActive)
 			{
-				++itr;
+				//++itr;
+				++compItr;
 				continue;
 			}
 
 			Model* model = modelManager->_models[graphicsComp->_modelID];
 
 			// get transform component
-			ComponentTransform* transformComp = G_ECMANAGER->getEntity(itr).getComponent<ComponentTransform>();
+			ComponentTransform* transformComp = entity.getComponent<ComponentTransform>();
 
 			glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
 
@@ -378,7 +421,8 @@ namespace NS_GRAPHICS
 
 				shaderManager->StopProgram();
 			}
-			itr++;
+			//++itr;
+			++compItr;
 		}
 #endif
 	}
