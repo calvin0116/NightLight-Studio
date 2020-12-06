@@ -670,7 +670,7 @@ namespace NS_COLLISION
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////</Capsule Check Trigger>
 
-		if (Collider1->GetColliderT() == COLLIDERS::OBB)
+		/*if (Collider1->GetColliderT() == COLLIDERS::OBB)
 		{
 			if (Collider2->GetColliderT() == COLLIDERS::AABB)
 			{
@@ -683,14 +683,14 @@ namespace NS_COLLISION
 				OBBCollider* a = &(Collider1->collider.obb);
 				OBBCollider* b = &(Collider2->collider.obb);
 			}
-		}
+		}*/
 
 		if (Collider1->GetColliderT() == COLLIDERS::OBB)
 		{
 			if (Collider2->GetColliderT() == COLLIDERS::AABB)
 			{
-				OBBCollider* a = &(Collider1->collider.obb);
-				AABBCollider* b = &(Collider2->collider.aabb);
+				//OBBCollider* a = &(Collider1->collider.obb);
+				//AABBCollider* b = &(Collider2->collider.aabb);
 				return false;
 			}
 			else if (Collider2->GetColliderT() == COLLIDERS::OBB)
@@ -702,9 +702,9 @@ namespace NS_COLLISION
 			}
 			else if (Collider2->GetColliderT() == COLLIDERS::CAPSULE)
 			{
-				OBBCollider* a = &(Collider1->collider.obb);
-				CapsuleCollider* b = &(Collider2->collider.capsule);
-				NlMath::Vec3 useless;
+				//OBBCollider* a = &(Collider1->collider.obb);
+				//CapsuleCollider* b = &(Collider2->collider.capsule);
+				//NlMath::Vec3 useless;
 				//if (NlMath::AABBToCapsule(*a, *b, useless) != SIDES::NO_COLLISION)
 				//{
 				//	return true;
@@ -713,9 +713,9 @@ namespace NS_COLLISION
 			}
 			else if (Collider2->GetColliderT() == COLLIDERS::SPHERE)
 			{
-				OBBCollider* a = &(Collider1->collider.obb);
-				SphereCollider* b = &(Collider2->collider.sphere);
-				NlMath::Vec3 useless;
+				//OBBCollider* a = &(Collider1->collider.obb);
+				//SphereCollider* b = &(Collider2->collider.sphere);
+				//NlMath::Vec3 useless;
 				//if (NlMath::AABB_SphereCollision(*a, *b, useless) != SIDES::NO_COLLISION)
 				//{
 				//	return true;
@@ -1316,8 +1316,16 @@ namespace NS_COLLISION
 			mesh = NS_COLDEBUGTEST::CreateCube(std::max(1 + meshlod, 1), std::max(1 + meshlod, 1));
 			break;
 		}
+		if (comCol->GetColliderT() == COLLIDERS::AABB)
+		{
+			NS_COLDEBUGTEST::TransformMesh(mesh, comCol->center + comTrans->_phyposition, NlMath::Vector3D(0), colscale);
+		}
+		else
+		{
+			NS_COLDEBUGTEST::TransformMesh(mesh, comCol->center + comTrans->_phyposition, comTrans->_rotation, colscale);
+		}
 
-		NS_COLDEBUGTEST::TransformMesh(mesh, comCol->center + comTrans->_phyposition, comTrans->_rotation, colscale);
+		
 
 
 		NS_COLDEBUGTEST::DrawMesh(mesh, color, lod);
