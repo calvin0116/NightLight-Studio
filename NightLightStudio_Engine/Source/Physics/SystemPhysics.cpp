@@ -78,19 +78,19 @@ namespace NS_PHYSICS
 		for (; itr != itrEnd; ++itr)
 		{
 
+			if (!_isPlaying)
+			{
+				ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+				if(compT)
+					compT->_phyposition = compT->_position;
+			}
+
 			ComponentRigidBody* compR = G_ECMANAGER->getComponent<ComponentRigidBody>(itr);
 			if (compR->isStatic)
 				continue;
 
 			if (!_isPlaying)
 			{
-
-				ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
-
-				//compT->_position = compT->_phyposition;
-				compT->_phyposition = compT->_position;
-
-
 				compR->angularForce = 0;
 				compR->angularAcceleration = 0;
 
