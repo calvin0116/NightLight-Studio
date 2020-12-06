@@ -29,7 +29,7 @@ void DeltaTime::start()
 	//accumulatedTime += dt;
 
 	//
-	int steps = (dt / fixed_dt);
+	int steps = (int)(dt / fixed_dt);
 	float timeSteps = steps * fixed_dt;
 	//accumulatedTime += timeSteps;
 	accumulatedTime = timeSteps;

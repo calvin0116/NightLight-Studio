@@ -363,22 +363,22 @@ namespace NS_GRAPHICS
 		NS_GRAPHICS::ShaderSystem* shaderSystem = &NS_GRAPHICS::ShaderSystem::GetInstance();
 
 		shaderSystem->StartProgram(ShaderSystem::PBR_ANIMATED);
-		glUniform1f(glGetUniformLocation(shaderSystem->GetCurrentProgramHandle(), "Gamma"), _gamma);
+		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
 
 		shaderSystem->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
-		glUniform1f(glGetUniformLocation(shaderSystem->GetCurrentProgramHandle(), "Gamma"), _gamma);
+		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
 
 		shaderSystem->StartProgram(ShaderSystem::PBR);
-		glUniform1f(glGetUniformLocation(shaderSystem->GetCurrentProgramHandle(), "Gamma"), _gamma);
+		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
 
 		shaderSystem->StartProgram(ShaderSystem::PBR_TEXTURED);
-		glUniform1f(glGetUniformLocation(shaderSystem->GetCurrentProgramHandle(), "Gamma"), _gamma);
+		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
 		
 		shaderSystem->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
-		glUniform1f(glGetUniformLocation(shaderSystem->GetCurrentProgramHandle(), "Gamma"), _gamma);
+		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
 
 		shaderSystem->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
-		glUniform1f(glGetUniformLocation(shaderSystem->GetCurrentProgramHandle(), "Gamma"), _gamma);
+		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
 
 		shaderSystem->StopProgram();
 	}

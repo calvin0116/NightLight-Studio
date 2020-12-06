@@ -22,6 +22,22 @@ namespace NS_GRAPHICS
 			~ShaderFile() = default;
 		};
 
+		struct UniformLocations
+		{
+			// UPDATE ALL UNIFORM LOCATIONS REQUIRED FOR ANY SHADER PROGRAM HERE
+			GLint _alpha;
+			GLint _gamma;
+
+			GLint _albedo;
+			GLint _roughness;
+			GLint _metallic;
+
+			GLint _jointsMatrix;
+
+			GLint _roughnessControl;
+			GLint _metallicControl;
+		};
+
 		ShaderSystem();
 		~ShaderSystem();
 
@@ -34,19 +50,24 @@ namespace NS_GRAPHICS
 		// Setup uniform locations & variables
 		void LoadShaderVariables();
 
+		void SetTextureLocations();
+
 		////////////////////////////////////////
 		// MEMBER VARIABLES
 		std::vector<ShaderFile> files;
 		std::vector<GLuint> programs;
-		std::vector<GLuint> uniform_locations; // Uniform block ID for View & Projection Matrix
-		std::vector<GLuint> lights_uniform_locations; // Uniform block ID for LightCalcBlock
+		std::vector<UniformLocations> p_uniformLocations; // Uniform locations for all programs
 		////////////////////////////////////////
 
 		GLuint viewProj_uniformBlockLocation;
 		GLuint lights_uniformBlockLocation;
 
+		GLuint ortho_uniformLocation;
+
 		// if no current program is binded, id is -1
 		int currentProgramID;
+
+		int programIDIndex;
 
 	public:
 
@@ -59,9 +80,9 @@ namespace NS_GRAPHICS
 			PBR_ANIMATED,
 			PBR_TEXTURED,
 			PBR_TEXTURED_ANIMATED,
-			UI,
 			PBR_TEXTURED_NONORMALMAP,
 			PBR_TEXTURED_ANIMATED_NONORMALMAP,
+			UI,
 			PARTICLE,
 			TOTAL_SHADER,
 		};
@@ -91,6 +112,24 @@ namespace NS_GRAPHICS
 		// If currentProgram is 0(no bound program), -1 will be returned(largest possible unsigned)
 		const GLuint& GetLightUniformLocation();
 
+		const GLuint& GetOrthoProjUniformLocation();
+
 		GLuint GetCurrentProgramHandle();
+
+		GLint GetAlphaLocation() const;
+
+		GLint GetGammaLocation() const;
+
+		GLint GetAlbedoLocation() const;
+
+		GLint GetRoughnessLocation() const;
+
+		GLint GetMetallicLocation() const;
+
+		GLint GetJointsMatrixLocation() const;
+
+		GLint GetRoughnessControlLocation() const;
+
+		GLint GetMetallicControlLocation() const;
 	};
 }
