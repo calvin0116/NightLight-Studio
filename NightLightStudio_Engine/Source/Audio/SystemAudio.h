@@ -90,6 +90,7 @@ public:
   // Not used
   void GameLoad() override;
   void GameInit() override;
+  void GameExit() override;
 
   void MyGameInit();
 

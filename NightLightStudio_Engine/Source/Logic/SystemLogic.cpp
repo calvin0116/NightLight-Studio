@@ -95,6 +95,7 @@ namespace NS_LOGIC
 #ifdef CS_ENV
     // C#
     // Reload Scripts
+    //std::cout << "GamePreInit" << std::endl;
     MonoWrapper::ReloadScripts();
     //MonoWrapper::LoadScriptDomain();
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
@@ -105,7 +106,7 @@ namespace NS_LOGIC
       if (MyScript == nullptr)
         continue;
       MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
-      //MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
+      MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
       int ID = G_ECMANAGER->getObjId(itrS);
       MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
     }
@@ -127,6 +128,7 @@ namespace NS_LOGIC
 #endif
 #ifdef CS_ENV
     // C# Script
+    //std::cout << "GameGameInit" << std::endl;
     MonoBind::Bind();
     // Init base functions
     baseInit = MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
@@ -170,6 +172,7 @@ namespace NS_LOGIC
 #endif
 #ifdef CS_ENV
     // C# scripts init
+    //std::cout << "GameLateInit" << std::endl;
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
     for (; itrS != itrE; ++itrS)
@@ -254,6 +257,7 @@ namespace NS_LOGIC
 #endif
 #ifdef CS_ENV
     // C# Scripts Exit
+    //std::cout << "GameGameExit" << std::endl;
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
     for (; itrS != itrE; ++itrS)
@@ -266,7 +270,7 @@ namespace NS_LOGIC
         MonoMethod* MyExit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseExit);
         MonoWrapper::InvokeMethod(MyExit, MyScript->_MonoData._pInstance);
       }
-      //MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
+      MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
     }
 #endif
   }
@@ -491,8 +495,9 @@ namespace NS_LOGIC
     // Handle msg here.
     if (msg.GetID() != "TogglePlay")
       return;
+    std::cout << "Toggle Play" << std::endl;
     _isPlaying = msg.isPlaying;
-    if (!_isPlaying)
+    if (!_isPlaying && _Inited)
     {
       GameGameExit();
       _Inited = false;

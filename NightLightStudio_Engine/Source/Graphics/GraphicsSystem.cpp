@@ -145,7 +145,7 @@ namespace NS_GRAPHICS
 
 		debugManager->Init();
 
-		// Enable depth buffering
+		// Enable depth buffering, this prevents fragments behind another fragment to be rendered
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		//glEnable(GL_MULTISAMPLE);
@@ -184,7 +184,7 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::GameExit()
 	{
-		// Call for lights clear
+		// Call for lights clear upon scene exit
 		lightManager->RemoveAllLights();
 	}
 
@@ -196,7 +196,7 @@ namespace NS_GRAPHICS
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 #ifdef DRAW_DEBUG_GRID
-		debugManager->Render(); // Render opaque objects first
+		debugManager->Render(); // Render opaque objects first, in this case, our grid is most definitely opaque
 #endif
 
 #ifdef PBR_DRAWING
