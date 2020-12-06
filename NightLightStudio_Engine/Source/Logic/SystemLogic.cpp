@@ -23,8 +23,10 @@ namespace NS_LOGIC
   void SystemLogic::Load()
   {
     MonoWrapper::InitMono();
+#ifdef _EDITOR
     MonoWrapper::UnloadScriptDomain();
     MonoWrapper::CompileInitScripts();
+#endif
     MonoWrapper::LoadScriptDomain();
     MonoWrapper::OpenDLL();
     //MonoWrapper::ReloadScripts();
@@ -32,7 +34,7 @@ namespace NS_LOGIC
 
   void SystemLogic::Init()
   {
-    
+#ifdef _EDITOR
     //Start up Scripting system??
     SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ReloadScripts", SystemInput_ns::IKEY_END, "ScriptReload", SystemInput_ns::OnRelease, [this]()
       {
@@ -44,6 +46,7 @@ namespace NS_LOGIC
             MonoWrapper::ReloadScripts();
         }
       });
+#endif
 
     // Attach handler
 #ifdef C_ENV
@@ -96,7 +99,9 @@ namespace NS_LOGIC
     // C#
     // Reload Scripts
     //std::cout << "GamePreInit" << std::endl;
+#ifdef _EDITOR
     MonoWrapper::ReloadScripts();
+#endif
     //MonoWrapper::LoadScriptDomain();
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
