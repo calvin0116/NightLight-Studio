@@ -316,6 +316,8 @@ namespace NS_COLLISION
 
 			// Get the data from CSV File
 			_colliderDataList = reader.getData();
+
+			colResolver.clear();
 			return;
 		}
 
@@ -670,20 +672,20 @@ namespace NS_COLLISION
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////</Capsule Check Trigger>
 
-		/*if (Collider1->GetColliderT() == COLLIDERS::OBB)
+		if (Collider1->GetColliderT() == COLLIDERS::OBB)
 		{
 			if (Collider2->GetColliderT() == COLLIDERS::AABB)
 			{
-				OBBCollider* a = &(Collider1->collider.obb);
-				AABBCollider* b = &(Collider2->collider.aabb);
+				//OBBCollider* a = &(Collider1->collider.obb);
+				//AABBCollider* b = &(Collider2->collider.aabb);
 				return false;
 			}
 			else if (Collider2->GetColliderT() == COLLIDERS::OBB)
 			{
-				OBBCollider* a = &(Collider1->collider.obb);
-				OBBCollider* b = &(Collider2->collider.obb);
+				//OBBCollider* a = &(Collider1->collider.obb);
+				//OBBCollider* b = &(Collider2->collider.obb);
 			}
-		}*/
+		}
 
 		if (Collider1->GetColliderT() == COLLIDERS::OBB)
 		{

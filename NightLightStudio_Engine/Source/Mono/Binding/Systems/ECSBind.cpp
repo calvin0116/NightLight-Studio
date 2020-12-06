@@ -35,6 +35,8 @@ namespace ECSBind
   // For debugging in C#
   bool CheckCompGet(const void* comp, const std::string& type, const int& id)
   {
+      (void)type;
+      (void)id;
     if (comp == nullptr)
     {
 #ifdef CSDebug
