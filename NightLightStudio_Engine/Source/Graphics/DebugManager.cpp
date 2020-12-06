@@ -164,32 +164,32 @@ namespace NS_GRAPHICS
 	void DebugManager::Render()
 	{
 		// Draw grid
-		if (_grid._render_grid == false)
-			return;
-
-		// Set line thickness
-		glLineWidth(0.2f);
-
-		glBindVertexArray(_grid._VAO);
-
-		if (_grid._update_required == true)
+		if (_grid._render_grid)
 		{
-			CalculateGrid();
+			// Set line thickness
+			glLineWidth(0.2f);
 
-			// update to GPU
-			glBindBuffer(GL_ARRAY_BUFFER, _grid._VBO);
+			glBindVertexArray(_grid._VAO);
 
-			// Since size of grid can change, we must use glBufferData to delete old buffer and create a new one to accommodate the size
-			glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * _grid._gridPoints.size(), &_grid._gridPoints[0], GL_STATIC_DRAW);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
-			glEnableVertexAttribArray(0);
+			if (_grid._update_required == true)
+			{
+				CalculateGrid();
+
+				// update to GPU
+				glBindBuffer(GL_ARRAY_BUFFER, _grid._VBO);
+
+				// Since size of grid can change, we must use glBufferData to delete old buffer and create a new one to accommodate the size
+				glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * _grid._gridPoints.size(), &_grid._gridPoints[0], GL_STATIC_DRAW);
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+				glEnableVertexAttribArray(0);
+			}
+
+			ShaderSystem::GetInstance().StartProgram(ShaderSystem::GRID);
+
+			glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(_grid._gridPoints.size()));
+
+			ShaderSystem::GetInstance().StopProgram();
 		}
-
-		ShaderSystem::GetInstance().StartProgram(ShaderSystem::GRID);
-
-		glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(_grid._gridPoints.size()));
-
-		ShaderSystem::GetInstance().StopProgram();
 
 		//////////////////////////////////////////////////////
 

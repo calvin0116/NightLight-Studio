@@ -7,12 +7,13 @@
 namespace NS_GRAPHICS
 {
 	ShaderSystem::ShaderSystem()
-		: viewProj_uniformBlockLocation{ NULL }, lights_uniformBlockLocation{ NULL }, currentProgramID{ -1 }
+		: viewProj_uniformBlockLocation{ NULL }, lights_uniformBlockLocation{ NULL },
+		ortho_uniformLocation{ NULL }, currentProgramID{ -1 }, programIDIndex{ -1 }
 	{
 		// Reserve memory to avoid expensive allocations (Reduces load time)
 		files.reserve(s_max_shaders);
 		programs.reserve(s_max_shaders);
-		uniform_locations.reserve(s_max_shaders);
+		p_uniformLocations.resize(s_max_shaders);
 	}
 
 	ShaderSystem::~ShaderSystem()
@@ -76,8 +77,42 @@ namespace NS_GRAPHICS
 			glUniformBlockBinding(programs[i], matrix_uniform_block_index, 0);
 			glUniformBlockBinding(programs[i], lights_uniform_block_index, 1);
 
-			uniform_locations.push_back(matrix_uniform_block_index);
-			lights_uniform_locations.push_back(lights_uniform_block_index);
+			// Set uniform locations for all programs within same loop
+			if (i == ShaderType::UI)
+			{
+				StartProgram(i);
+				ortho_uniformLocation = glGetUniformLocation(GetCurrentProgramHandle(), "ortho_proj");
+				StopProgram();
+				continue;
+			}
+
+			if ((i >= ShaderType::PBR) && (i <= ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP))
+			{
+				StartProgram(i);
+
+				p_uniformLocations[i]._alpha = glGetUniformLocation(GetCurrentProgramHandle(), "Alpha");
+				p_uniformLocations[i]._gamma = glGetUniformLocation(GetCurrentProgramHandle(), "Gamma");
+
+				if (i == ShaderType::PBR_ANIMATED || i == ShaderType::PBR_TEXTURED_ANIMATED || i == ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP)
+					p_uniformLocations[i]._jointsMatrix = glGetUniformLocation(GetCurrentProgramHandle(), "jointsMat");
+
+				
+				if (i == ShaderType::PBR || i == ShaderType::PBR_ANIMATED)
+				{
+					p_uniformLocations[i]._albedo = glGetUniformLocation(GetCurrentProgramHandle(), "Albedo");
+					p_uniformLocations[i]._roughness = glGetUniformLocation(GetCurrentProgramHandle(), "Roughness");
+					p_uniformLocations[i]._metallic = glGetUniformLocation(GetCurrentProgramHandle(), "Metallic");
+				}
+				else
+				{
+					p_uniformLocations[i]._metallicControl = glGetUniformLocation(GetCurrentProgramHandle(), "RoughnessControl");
+					p_uniformLocations[i]._roughnessControl = glGetUniformLocation(GetCurrentProgramHandle(), "MetallicControl");
+				}
+
+				StopProgram();
+
+				continue;
+			}
 		}
 
 		// Setup single uniform buffer for all programs based on binded uniform block indices
@@ -96,41 +131,7 @@ namespace NS_GRAPHICS
 
 		glBindBufferRange(GL_UNIFORM_BUFFER, 1, lights_uniformBlockLocation, 0, s_lights_buffer_size);
 
-		// Setup uniform values for PBR texture shader
-		if (quantity >= ShaderSystem::PBR_TEXTURED_ANIMATED)
-		{
-			StartProgram(ShaderSystem::PBR_TEXTURED);
-			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
-			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
-			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
-			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
-			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
-			StopProgram();
-
-			StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
-			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
-			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
-			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
-			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
-			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
-			StopProgram();
-
-			StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
-			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
-			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
-			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
-			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
-			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
-			StopProgram();
-
-			StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
-			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
-			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
-			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
-			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
-			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
-			StopProgram();
-		}
+		SetTextureLocations();
 	}
 
 	bool ShaderSystem::CompileLoadedShaders()
@@ -230,15 +231,15 @@ namespace NS_GRAPHICS
 			2) Ensure that SetGamma() in light system is set for any new PBR shaders
 		*/
 
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/default.vert"),std::string("../NightLightStudio_Game/Shaders/default.frag")); //DEFAULT 1
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/grid.vert"),std::string("../NightLightStudio_Game/Shaders/grid.frag")); //GRID 2
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR.vert"), std::string("../NightLightStudio_Game/Shaders/PBR.frag")); //PBR 3
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Animated.frag")); //PBR_ANIMATED 4
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured.frag")); //PBR_TEXTURED 5
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated.frag")); //PBR_TEXTURED_ANIMATED 6
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui.vert"), std::string("../NightLightStudio_Game/Shaders/ui.frag")); //UI 7
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.frag")); //PBR_TEXTURED_NONORMALMAP 8
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.frag")); //PBR_TEXTURED_ANIMATED_NONORMALMAP 9
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/default.vert"),std::string("../NightLightStudio_Game/Shaders/default.frag")); //DEFAULT 0
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/grid.vert"),std::string("../NightLightStudio_Game/Shaders/grid.frag")); //GRID 1
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR.vert"), std::string("../NightLightStudio_Game/Shaders/PBR.frag")); //PBR 2
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Animated.frag")); //PBR_ANIMATED 3
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured.frag")); //PBR_TEXTURED 4
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated.frag")); //PBR_TEXTURED_ANIMATED 5
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.frag")); //PBR_TEXTURED_NONORMALMAP 6
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.frag")); //PBR_TEXTURED_ANIMATED_NONORMALMAP 7
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui.vert"), std::string("../NightLightStudio_Game/Shaders/ui.frag")); //UI 8
 		//LoadShader("../NightLightStudio_Game/Shaders/","../NightLightStudio_Game/Shaders/");
 		//LoadShader("","");
 
@@ -255,12 +256,14 @@ namespace NS_GRAPHICS
 
 			glUseProgram(programs[programType]);
 			currentProgramID = programs[programType];
+			programIDIndex = programType;
 		}
 	}
 	void ShaderSystem::StopProgram()
 	{
 		glUseProgram(NULL);
 		currentProgramID = -1;
+		programIDIndex = -1;
 	}
 	const GLuint& ShaderSystem::GetViewProjectionUniformLocation()
 	{
@@ -270,8 +273,106 @@ namespace NS_GRAPHICS
 	{
 		return lights_uniformBlockLocation;
 	}
+	const GLuint& ShaderSystem::GetOrthoProjUniformLocation()
+	{
+		return ortho_uniformLocation;
+	}
 	GLuint ShaderSystem::GetCurrentProgramHandle()
 	{
 		return currentProgramID;
+	}
+	GLint ShaderSystem::GetAlphaLocation() const
+	{
+		if (programIDIndex == -1)
+			return GL_INVALID_VALUE;
+
+		return p_uniformLocations[programIDIndex]._alpha;
+	}
+	GLint ShaderSystem::GetGammaLocation() const
+	{
+		if (programIDIndex == -1)
+			return GL_INVALID_VALUE;
+
+		return p_uniformLocations[programIDIndex]._gamma;
+	}
+	GLint ShaderSystem::GetAlbedoLocation() const
+	{
+		if (programIDIndex == -1)
+			return GL_INVALID_VALUE;
+
+		return p_uniformLocations[programIDIndex]._albedo;
+	}
+	GLint ShaderSystem::GetRoughnessLocation() const
+	{
+		if (programIDIndex == -1)
+			return GL_INVALID_VALUE;
+
+		return p_uniformLocations[programIDIndex]._roughness;
+	}
+	GLint ShaderSystem::GetMetallicLocation() const
+	{
+		if (programIDIndex == -1)
+			return GL_INVALID_VALUE;
+
+		return p_uniformLocations[programIDIndex]._metallic;
+	}
+	GLint ShaderSystem::GetJointsMatrixLocation() const
+	{
+		if (programIDIndex == -1)
+			return GL_INVALID_VALUE;
+
+		return p_uniformLocations[programIDIndex]._jointsMatrix;
+	}
+	GLint ShaderSystem::GetRoughnessControlLocation() const
+	{
+		if (programIDIndex == -1)
+			return GL_INVALID_VALUE;
+
+		return p_uniformLocations[programIDIndex]._roughnessControl;
+	}
+	GLint ShaderSystem::GetMetallicControlLocation() const
+	{
+		if (programIDIndex == -1)
+			return GL_INVALID_VALUE;
+
+		return p_uniformLocations[programIDIndex]._metallicControl;
+	}
+	void ShaderSystem::SetTextureLocations()
+	{
+		// Setup uniform values for PBR texture shader
+		if (programs.size() >= ShaderSystem::PBR_TEXTURED_ANIMATED)
+		{
+			StartProgram(ShaderSystem::PBR_TEXTURED);
+			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
+			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
+			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
+			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
+			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
+			StopProgram();
+
+			StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
+			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
+			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
+			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
+			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
+			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
+			StopProgram();
+
+			StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
+			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
+			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
+			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
+			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
+			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
+			StopProgram();
+
+			StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
+			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
+			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
+			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
+			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
+			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
+			StopProgram();
+		}
 	}
 }

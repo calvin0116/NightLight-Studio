@@ -91,7 +91,9 @@ namespace NS_GRAPHICS
 		// If client window has not been initialized, return error without initializing sub systems
 		if (!NS_WINDOW::SYS_WINDOW->HasInit())
 		{
+#ifdef _DEBUG
 			std::cout << "ERROR: Window System not initialized before Graphics System, please check WndSystem initialization." << std::endl;
+#endif
 			return;
 		}
 
@@ -122,7 +124,7 @@ namespace NS_GRAPHICS
 
 		uiManager->Init();
 		
-		shaderManager->StartProgram(ShaderSystem::PBR);
+		/*shaderManager->StartProgram(ShaderSystem::PBR);
 
 		GLint blockSize;
 
@@ -135,7 +137,7 @@ namespace NS_GRAPHICS
 		std::cout << "Point Light Size(CPU): " << sizeof(PointLight) << std::endl;
 		std::cout << "Spot Light Size(CPU): " << sizeof(SpotLight) << std::endl;
 
-		shaderManager->StopProgram();
+		shaderManager->StopProgram();*/
 
 		// Set default values for projection matrix
 		SetProjectionMatrix();
@@ -327,16 +329,16 @@ namespace NS_GRAPHICS
 				}
 
 				// Update alpha
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Alpha"), graphicsComp->GetAlpha());
+				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
 
 				// Update model and uniform for material
-				glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Albedo"), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Roughness"), graphicsComp->_pbrData._roughness);
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Metallic"), graphicsComp->_pbrData._metallic);
+				glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+				glUniform1f(shaderManager->GetRoughnessLocation(), graphicsComp->_pbrData._roughness);
+				glUniform1f(shaderManager->GetMetallicLocation(), graphicsComp->_pbrData._metallic);
 
 				if (model->_isAnimated)
 				{
-					glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
 					for (auto& mesh : model->_animatedMeshes)
 					{
 						glBindVertexArray(mesh->VAO);
@@ -381,11 +383,11 @@ namespace NS_GRAPHICS
 				}
 				
 				// Update alpha
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Alpha"), graphicsComp->GetAlpha());
+				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
 
 				// Roughness Control
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "RoughnessControl"), graphicsComp->_pbrData._roughness);
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "MetallicControl"), graphicsComp->_pbrData._metallic);
+				glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+				glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
 
 				// Bind textures
 				// bind diffuse map
@@ -405,7 +407,7 @@ namespace NS_GRAPHICS
 
 				if (model->_isAnimated)
 				{
-					glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
 					for (auto& mesh : model->_animatedMeshes)
 					{
 						glBindVertexArray(mesh->VAO);
@@ -493,16 +495,16 @@ namespace NS_GRAPHICS
 				}
 
 				// Update alpha
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Alpha"), graphicsComp->GetAlpha());
+				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
 
 				// Update model and uniform for material
-				glUniform3fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Albedo"), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Roughness"), graphicsComp->_pbrData._roughness);
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Metallic"), graphicsComp->_pbrData._metallic);
+				glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+				glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+				glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
 
 				if (model->_isAnimated)
 				{
-					glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
 					for (auto& mesh : model->_animatedMeshes)
 					{
 						glBindVertexArray(mesh->VAO);
@@ -547,11 +549,11 @@ namespace NS_GRAPHICS
 				}
 
 				// Update alpha
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "Alpha"), graphicsComp->GetAlpha());
+				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
 
 				// Roughness Control
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "RoughnessControl"), graphicsComp->_pbrData._roughness);
-				glUniform1f(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "MetallicControl"), graphicsComp->_pbrData._metallic);
+				glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+				glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
 
 				// Bind textures
 				// bind diffuse map
@@ -571,7 +573,7 @@ namespace NS_GRAPHICS
 
 				if (model->_isAnimated)
 				{
-					glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "jointsMat"), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
 					for (auto& mesh : model->_animatedMeshes)
 					{
 						glBindVertexArray(mesh->VAO);
@@ -643,7 +645,7 @@ namespace NS_GRAPHICS
 			near_plane,
 			far_plane);
 
-		glUniformMatrix4fv(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "ortho_proj"), 1, GL_FALSE, &_orthoMatrix[0][0]);
+		glUniformMatrix4fv(shaderManager->GetOrthoProjUniformLocation(), 1, GL_FALSE, &_orthoMatrix[0][0]);
 
 		shaderManager->StopProgram();
 	}
