@@ -18,6 +18,7 @@ namespace MonoWrapper
   void        MonoExit();
 
   //Script compilations
+  bool       CompileInitScripts();
   bool       CompileScripts();
   //MonoImage* ReloadScripts_();
   bool       ReloadScripts();

@@ -53,21 +53,21 @@ typedef struct TranslationalForce
 } Force;
 
 ///////////////////////////////////////////////////////////////////////////////////// TODO !!!
-typedef struct TimedTranslationalForce
-{
-	NlMath::Vector3D direction;
-	float magnitute;  //magnitude
-	clock_t activeUntil;
-	TimedTranslationalForce() :
-		direction(0.0f, 0.0f, 0.0f),
-		magnitute(0.0f),
-		activeUntil(clock())
-	{}
-	TimedTranslationalForce(NlMath::Vector3D dir, float mag) :
-		direction(dir),
-		magnitute(mag)
-	{}
-} TimedForce, Force_Timed, TranslationalForce_Timed;
+//typedef struct TimedTranslationalForce
+//{
+//	NlMath::Vector3D direction;
+//	float magnitute;  //magnitude
+//	clock_t activeUntil;
+//	TimedTranslationalForce() :
+//		direction(0.0f, 0.0f, 0.0f),
+//		magnitute(0.0f),
+//		activeUntil(clock())
+//	{}
+//	TimedTranslationalForce(NlMath::Vector3D dir, float mag) :
+//		direction(dir),
+//		magnitute(mag)
+//	{}
+//} TimedForce, Force_Timed, TranslationalForce_Timed;
 
 //typedef struct TranslationalMomentum
 //{

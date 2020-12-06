@@ -399,7 +399,7 @@ void CollsionResolver::resolveEventNormally(CollisionEvent& colEvent)
 
 		float dot1f = colEvent.collisionNormal * entity1Force;
 		NlMath::Vector3D normalForce = colEvent.collisionNormal * dot1f;
-		normalForce = normalForce * -1.0001;
+		normalForce = normalForce * -1.0001f;
 		
 		// normal reaction force
 		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity1, normalForce, 1.0f);
@@ -451,7 +451,7 @@ void CollsionResolver::resolveEventNormally(CollisionEvent& colEvent)
 
 		float dot2f = oppNorm * entity2Force;
 		NlMath::Vector3D normalForce = oppNorm * dot2f;
-		normalForce = normalForce * -1.0001;
+		normalForce = normalForce * -1.0001f;
 
 		// normal reaction force
 		NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(colEvent.entity2, normalForce, 1.0f);

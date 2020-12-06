@@ -73,6 +73,30 @@ namespace MonoWrapper
     system(compileCommand.c_str());
   }
 
+  bool CompileInitScripts()
+  {
+    bool bSucceeded = true;
+    static const std::string compileCommand =
+      std::string(MONO_COMPILER_PATH) + std::string(" -recurse:") + std::string(SCRIPTS_PATH) +
+      std::string("\\*.cs -unsafe -target:library -out:") + std::string(DLL_NAME) +
+      std::string(" 2>&1");
+
+    //Compile the scripts
+    char buffer[128];
+    std::string result;
+    FILE* compileOutput = _popen(compileCommand.c_str(), "r");
+
+    if (compileOutput != NULL)
+    {
+      while (fgets(buffer, static_cast<int>(sizeof(buffer)), compileOutput) != nullptr)
+      {
+        bSucceeded = false;
+      }
+      _pclose(compileOutput);
+    }
+    return bSucceeded;
+  }
+
   bool CompileScripts()
   {
     ED_OUT("Compiling...\n");
