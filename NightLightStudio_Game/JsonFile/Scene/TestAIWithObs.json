@@ -5,9 +5,9 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    0.0,
+                    -130.64608764648438,
                     6.644987106323242,
-                    0.0
+                    142.33810424804688
                 ],
                 "Scale": [
                     1.0,
@@ -80,19 +80,18 @@
                     "Waypoint",
                     "WayPoint_2",
                     "WayPoint_3",
-                    "WayPoint_4",
-                    "WayPoint_5"
+                    "WayPoint_4"
                 ],
                 "stopAtEachWayPoint": false,
-                "endTime": 1.0,
-                "radius_for_detection": 25.0,
-                "speed": 2.5
+                "endTime": 2.0,
+                "radius_for_detection": 10.0,
+                "speed": 1.5
             },
             "ComponentVariables": {
                 "IntList": [],
                 "StringList": [],
                 "FloatList": [
-                    5.0
+                    2.0
                 ]
             }
         },
@@ -156,9 +155,9 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    73.85836029052735,
+                    111.15756225585938,
                     6.644987106323242,
-                    -11.749649047851563
+                    -55.623748779296878
                 ],
                 "Scale": [
                     1.0,
@@ -211,9 +210,9 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -109.19033813476563,
+                    -110.21099853515625,
                     6.644987106323242,
-                    24.34975814819336
+                    135.01380920410157
                 ],
                 "Scale": [
                     1.0,
@@ -266,9 +265,9 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -66.9325180053711,
+                    -108.65453338623047,
                     6.644987106323242,
-                    115.78034973144531
+                    -42.977840423583987
                 ],
                 "Scale": [
                     1.0,
@@ -321,9 +320,9 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    82.12666320800781,
+                    98.43670654296875,
                     6.644987106323242,
-                    122.07212829589844
+                    141.628173828125
                 ],
                 "Scale": [
                     1.0,
@@ -371,23 +370,59 @@
                 "Alpha": 1.0
             }
         },
-        "WayPoint_5": {
+        "Obstacle": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "Obstacle",
                 "Tag": 0,
                 "Position": [
-                    -72.82046508789063,
+                    0.0,
                     6.644987106323242,
-                    -69.65034484863281
+                    -7.517492294311523
                 ],
                 "Scale": [
+                    10.0,
                     1.0,
-                    1.0,
-                    1.0
+                    10.0
                 ],
                 "Rotate": [
                     0.0,
                     -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
                     0.0
                 ]
             },
@@ -417,9 +452,9 @@
                 ],
                 "ShininessMat": 32.0,
                 "AlbedoMat": [
-                    1.0,
-                    0.0,
-                    0.0
+                    0.1568627506494522,
+                    0.6980392336845398,
+                    1.0
                 ],
                 "MetallicMat": 0.0,
                 "RoughnessMat": 0.0,

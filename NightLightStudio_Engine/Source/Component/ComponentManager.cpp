@@ -927,6 +927,22 @@ ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentS
 	return EntityHandle(nullptr, -1);
 }
 
+std::vector<ComponentManager::ComponentSetManager::EntityHandle> ComponentManager::ComponentSetManager::getEntityList(std::string str)
+{
+	std::vector<ComponentManager::ComponentSetManager::EntityHandle> ent_list;
+	auto itr = begin<ComponentTransform>();
+	auto endItr = end<ComponentTransform>();
+	for (; itr != endItr; ++itr)
+	{
+		ComponentTransform* trans = getComponent<ComponentTransform>(itr);
+		if (trans && trans->_entityName.toString() == str)
+		{
+			ent_list.emplace_back(getEntity(itr));
+		}
+	}
+	return ent_list;
+}
+
 ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::getEntityUsingEntName(std::string str)
 {
 	/*

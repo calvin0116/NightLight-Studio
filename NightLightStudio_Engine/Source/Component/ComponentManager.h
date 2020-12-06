@@ -1055,7 +1055,7 @@ public:
 		//class ComponentTransform;
 		EntityHandle getEntity(std::string str);
 
-
+		std::vector<EntityHandle> getEntityList(std::string str); //Get List of object with the same name in transfrom <- By teck wei 
 		// get component using entity name
 		ComponentManager::ComponentSetManager::EntityHandle getEntityUsingEntName(std::string str);
 

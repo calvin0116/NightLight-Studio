@@ -41,14 +41,14 @@ inline void NS_AI::AiManager::GameInit()
 		++itr;
 	}
 
+	Obstacle_list = G_ECMANAGER->getEntityList("Obstacle");
+
 }
 
 inline void NS_AI::AiManager::Update()
 {
 	if (!isActive)
 		return;
-
-
 	//currentNumberOfSteps = 0;
 
 	std::swap(timeLastRound, timeThisRound);
@@ -61,8 +61,7 @@ inline void NS_AI::AiManager::Update()
 	while (itr != itrEnd)
 	{
 		NavigatorComponent* navComp = reinterpret_cast<NavigatorComponent*>(*itr);
-		TransformComponent* trans = G_ECMANAGER->getComponent<TransformComponent>(itr);
-		RigidBody* rb = G_ECMANAGER->getComponent<RigidBody>(itr);
+		//AABBCollider* nav_aabb = &G_ECMANAGER->getComponent<ColliderComponent>(itr)->collider.aabb;
 		
 		if (navComp->WPSize() == 0  || !navComp->isFollowing)
 		{
@@ -70,8 +69,12 @@ inline void NS_AI::AiManager::Update()
 			continue;
 		}
 
+		TransformComponent* navTrans = G_ECMANAGER->getComponent<TransformComponent>(itr);
+		RigidBody* rb = G_ECMANAGER->getComponent<RigidBody>(itr);
+
 		if (navComp->isPaused) //&& navComp->curTime >= 0.0f)
 		{
+			rb->velocity = 0.0f;
 			++itr;
 			if (navComp->curTime >= 0.0f)
 				navComp->curTime += dt;//(DELTA_T->real_dt)*0.001;
@@ -87,13 +90,29 @@ inline void NS_AI::AiManager::Update()
 			continue;
 		}
 
-		NlMath::Vector3D mag_dir = navComp->GetCurWp()->_position - trans->_position ;	//Dir to the next way point
+		NlMath::Vector3D mag_dir = navComp->GetCurWp()->_position - navTrans->_position ;	//Dir to the next way point
 		mag_dir.y = 0.0f;	//Ignore y axis
 		//5.0f = hardcoded radius to check
 		//std::cout << mag_dir.length() << std::endl;
 		if (mag_dir.length() < navComp->rad_for_detect)	//Check if Ai reached the way point
 		{
 			navComp->SetNextWp();		//Set next way point to be the target for navigation
+			/*
+			for (Entity& ent : Obstacle_list)
+			{
+				AABBCollider* obs_aabb = &ent.getComponent<ColliderComponent>()->collider.aabb;
+				TransformComponent* trans_aabb = ent.getComponent<TransformComponent>();
+				/*
+				//If obstacle in the way between way point
+				if (NlMath::RayToAABB(*obs_aabb, navTrans->_position, trans_aabb->_position))
+				{
+					NlMath::Vec3 points[] = {
+						trans_aabb->_position +
+
+
+					}
+				}
+			}*/
 			std::cout << "Going to next wp" << std::endl;
 			rb->velocity = 0.0f;
 		}

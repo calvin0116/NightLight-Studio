@@ -41,7 +41,10 @@ public:
 
 	LocalVector<LocalString<125>> way_point_list;	//Standard way point using entity to plot
 	LocalVector<TransformComponent*> cur_path;
+	
 	int cur_wp_index;
+	int prev_wp_index;
+
 	ComponentNavigator()
 		:isFollowing{ true }
 		,isPaused{false}
@@ -86,6 +89,11 @@ public:
 	{
 		return cur_path.at(cur_wp_index);
 	}
+	TransformComponent* GetPrevWp()
+	{
+		return cur_path.at(prev_wp_index);
+	}
+
 	int WPSize()
 	{
 		return (int)way_point_list.size();
@@ -153,18 +161,19 @@ public:
 	//Function to set next way point to go to
 	void SetNextWp()
 	{
+		prev_wp_index = cur_wp_index;
 		if (stopAtEachWayPoint)
 		{
 			isPaused = true;
 			curTime = 0.0f;
 		}
+
 		if (wp_nav_type == WN_RANDOM)
 		{
 			srand((unsigned int)time(NULL));
 			cur_wp_index = rand() % cur_path.size();
-			return;
 		}
-
+		else
 		if (traverseFront)
 			if (cur_wp_index < cur_path.size() - 1)
 				++cur_wp_index;
@@ -187,6 +196,10 @@ public:
 				traverseFront = true;
 				++cur_wp_index;
 			}
+		
+		//cur_path.at(prev_wp_index) = cur_path.at(cur_wp_index)
+		//for(int)
+		//NlMath::RayToAABB()
 	}
 
 	void SetSpeed(float spd)

@@ -15,6 +15,8 @@ namespace NS_AI
 		std::chrono::system_clock::time_point timeThisRound;
 		std::chrono::system_clock::time_point timeLastRound;
 		std::chrono::system_clock::time_point stepTime;
+
+		std::vector<Entity> Obstacle_list;
 	protected:
 		friend Singleton<AiManager>;
 
