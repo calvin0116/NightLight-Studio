@@ -106,7 +106,7 @@ namespace NS_LOGIC
       if (MyScript == nullptr)
         continue;
       MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
-      //MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
+      MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
       int ID = G_ECMANAGER->getObjId(itrS);
       MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
     }
@@ -270,7 +270,7 @@ namespace NS_LOGIC
         MonoMethod* MyExit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseExit);
         MonoWrapper::InvokeMethod(MyExit, MyScript->_MonoData._pInstance);
       }
-      //MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
+      MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
     }
 #endif
   }
