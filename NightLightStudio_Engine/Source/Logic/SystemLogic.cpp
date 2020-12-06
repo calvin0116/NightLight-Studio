@@ -95,7 +95,7 @@ namespace NS_LOGIC
 #ifdef CS_ENV
     // C#
     // Reload Scripts
-    // MonoWrapper::ReloadScripts();
+    MonoWrapper::ReloadScripts();
     //MonoWrapper::LoadScriptDomain();
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
