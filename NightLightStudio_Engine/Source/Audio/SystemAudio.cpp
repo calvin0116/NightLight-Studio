@@ -279,11 +279,6 @@ void SystemAudio::MyGameInit()
 
 void SystemAudio::Update()
 {
-  if (_isPlaying && _Inited == false)
-  {
-    _Inited = true;
-    MyGameInit();
-  }
   // position update here
   _system->update();
   if (_listenerVecPos)
@@ -336,9 +331,16 @@ void SystemAudio::Exit()
 
 void SystemAudio::HandleTogglePlay(MessageTogglePlay& msg)
 {
-  // Handle msg here.
+  // Handle msg here. Only Before Play MSG
+  if (msg.GetID() != "TogglePlay")
+    return;
   _isPlaying = msg.isPlaying;
-  if (!_isPlaying)
+  if (_isPlaying && _Inited == false)
+  {
+    _Inited = true;
+    MyGameInit();
+  }
+  else if (!_isPlaying)
   {
     ReleaseSounds();
     _Inited = false;
