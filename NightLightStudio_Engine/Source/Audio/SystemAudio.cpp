@@ -216,6 +216,14 @@ void SystemAudio::GameInit()
 
 }
 
+void SystemAudio::GameExit()
+{
+  for (int i = 0; i < s_MAX_CHANNELS; ++i)
+  {
+    _channels[i]->stop();
+  }
+}
+
 void SystemAudio::MyGameInit()
 {
   // For testing
@@ -338,9 +346,6 @@ void SystemAudio::HandleTogglePlay(MessageTogglePlay& msg)
   if (_isPlaying && _Inited == false)
   {
     _Inited = true;
-    // Stop all chnls
-    for (int i = 0; i < s_MAX_CHANNELS; ++i)
-      _channels[i]->stop();
     MyGameInit();
   }
   else if (!_isPlaying)
