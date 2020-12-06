@@ -5,6 +5,13 @@
 // Windows Header Files
 //#include <windows.h>
 //#define NOGDI
+
+// Pragma warning disables to disable warnings from libraries
+#pragma warning( disable : 4244 )  // utility: conversion warning
+#pragma warning( disable : 26451 ) // strtod.h & diyfp.h & biginteger.h: arithmetic overflow
+#pragma warning( disable : 26495 ) // ieee754.h: uninitialized variable
+#pragma warning( disable : 26819 ) // dtoa.h: unannotated fallthrough between switch labels
+
 //THIS IS TO PREVENT STD::MIN AND MIN MACRO CONFLICT
 #define NOMINMAX
 
