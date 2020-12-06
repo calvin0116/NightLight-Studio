@@ -9,6 +9,9 @@
 #include "../Messaging/Messages/MessageApplicationExit.h"
 #include "../Messaging/Messages/MessageTogglePlay.h"
 
+//#define C_ENV
+#define CS_ENV
+
 namespace NS_LOGIC
 {
   class SystemLogic : public MySystem, public Singleton<SystemLogic>
@@ -22,17 +25,17 @@ namespace NS_LOGIC
     static bool _Inited;
 
     // mono base methods
-    MonoMethod* baseInit;
-    MonoMethod* baseLateInit;
-    MonoMethod* baseUpdate;
-    MonoMethod* baseFixedUpdate;
-    MonoMethod* baseExit;
-    MonoMethod* baseCollisionEnter;
-    MonoMethod* baseTriggerEnter;
-    MonoMethod* baseCollisionStay;
-    MonoMethod* baseTriggerStay;
-    MonoMethod* baseCollisionExit;
-    MonoMethod* baseTriggerExit;
+    MonoMethod* baseInit              = nullptr;
+    MonoMethod* baseLateInit          = nullptr;
+    MonoMethod* baseUpdate            = nullptr;
+    MonoMethod* baseFixedUpdate       = nullptr;
+    MonoMethod* baseExit              = nullptr;
+    MonoMethod* baseCollisionEnter    = nullptr;
+    MonoMethod* baseTriggerEnter      = nullptr;
+    MonoMethod* baseCollisionStay     = nullptr;
+    MonoMethod* baseTriggerStay       = nullptr;
+    MonoMethod* baseCollisionExit     = nullptr;
+    MonoMethod* baseTriggerExit       = nullptr;
     
     // For receiving event/message
     SystemMessaging::SystemReceiver r;
@@ -65,8 +68,10 @@ namespace NS_LOGIC
     void OnTriggerStay(Entity _obj1, Entity _obj2);
     void OnTriggerExit(Entity _obj1, Entity _obj2);
 
+#ifdef C_ENV
     void HandleMsg(MessageScriptRequest&);
-    void HandleApplicationExit(MessageApplicationExit&);
+#endif
+    //void HandleApplicationExit(MessageApplicationExit&);
     void HandleTogglePlay(MessageTogglePlay&);
   };
 
