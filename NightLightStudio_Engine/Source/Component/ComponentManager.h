@@ -606,6 +606,9 @@ public:
 			bool isChild;
 		public:
 
+			EntityContainer() :
+				compSetMgr(nullptr), isChild(false) {}
+
 			EntityContainer(ComponentSetManager* _compSetMgr, bool _isChild = false)
 				: compSetMgr(_compSetMgr), isChild(_isChild) {}
 
@@ -617,6 +620,9 @@ public:
 				ComponentSetManager* compSetMgr;
 				ComponentMemoryManager::MemConIterator memItr;
 				bool isChild;
+
+				EntityContainerIterator() :
+					compSetMgr(nullptr), memItr(), isChild(false) {}
 
 			public:
 				EntityHandle operator*()
