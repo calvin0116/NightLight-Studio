@@ -10,7 +10,7 @@
  // For editor console cout
 #include "../../../Editor/SystemEditor.h"
 
-#define CSDebug
+//#define CSDebug
 
 namespace ECSBind
 {

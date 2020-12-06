@@ -8,9 +8,6 @@
 // Scene change
 #include "../Core/SceneManager.h"
 
-//#define C_ENV
-#define CS_ENV
-
 namespace NS_LOGIC
 {
   // Variable to decide whether to run function
@@ -47,8 +44,10 @@ namespace NS_LOGIC
       });
 
     // Attach handler
+#ifdef C_ENV
     r.AttachHandler("ScriptRequest", &SystemLogic::HandleMsg, this);
-    r.AttachHandler("ApplicationExit", &SystemLogic::HandleApplicationExit, this);
+#endif // C_ENV
+    //r.AttachHandler("ApplicationExit", &SystemLogic::HandleApplicationExit, this);
     r.AttachHandler("TogglePlay", &SystemLogic::HandleTogglePlay, this);
   }
 
@@ -69,14 +68,12 @@ namespace NS_LOGIC
 #endif
 #ifdef CS_ENV
     // new smth
-    std::cout << "Logic GameLoad" << std::endl;
     // C# Script
 #endif
   }
 
   void SystemLogic::GameInit()
   {
-    std::cout << "Logic GameInit" << std::endl;
   }
 
   void SystemLogic::GamePreInit()
@@ -96,7 +93,6 @@ namespace NS_LOGIC
 #ifdef CS_ENV
     // C#
     // Reload Scripts
-    std::cout << "Logic GamePreInit" << std::endl;
     // MonoWrapper::ReloadScripts();
     //MonoWrapper::LoadScriptDomain();
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
@@ -129,7 +125,6 @@ namespace NS_LOGIC
 #endif
 #ifdef CS_ENV
     // C# Script
-    std::cout << "Logic GameGameInit" << std::endl;
     MonoBind::Bind();
     // Init base functions
     baseInit = MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
@@ -173,7 +168,6 @@ namespace NS_LOGIC
 #endif
 #ifdef CS_ENV
     // C# scripts init
-    std::cout << "Logic GameLateInit" << std::endl;
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
     for (; itrS != itrE; ++itrS)
@@ -258,7 +252,6 @@ namespace NS_LOGIC
 #endif
 #ifdef CS_ENV
     // C# Scripts Exit
-    std::cout << "Logic GameGameExit" << std::endl;
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
     for (; itrS != itrE; ++itrS)
@@ -291,7 +284,6 @@ namespace NS_LOGIC
     }
 #endif
 #ifdef CS_ENV
-    std::cout << "Logic GameExit" << std::endl;
     if (_isPlaying) // Scene changed
     {
       GameGameExit();
@@ -468,10 +460,9 @@ namespace NS_LOGIC
 #endif
   }
 
+#ifdef C_ENV
   void SystemLogic::HandleMsg(MessageScriptRequest& msg)
   {
-    std::cout << "Received Request for script!" << std::endl;
-#ifdef C_ENV
     auto itr = G_ECMANAGER->begin<CScriptComponent>();
     auto eitr = G_ECMANAGER->end<CScriptComponent>();
     for (; itr != eitr; ++itr)
@@ -484,16 +475,14 @@ namespace NS_LOGIC
       // Break out of loop
       break;
     }
-#endif
-#ifdef CS_ENV
-
-#endif
   }
+#endif
 
-  void SystemLogic::HandleApplicationExit(MessageApplicationExit& msg)
-  {
-    // Handle msg function here
-  }
+  //void SystemLogic::HandleApplicationExit(MessageApplicationExit& msg)
+  //{
+  //  // Handle msg function here
+  //  
+  //}
 
   void SystemLogic::HandleTogglePlay(MessageTogglePlay& msg)
   {
@@ -501,7 +490,6 @@ namespace NS_LOGIC
     if (msg.GetID() != "TogglePlay")
       return;
     _isPlaying = msg.isPlaying;
-    std::cout << "Toggle play from Logic:" << _isPlaying << std::endl;
     if (!_isPlaying)
     {
       GameGameExit();
