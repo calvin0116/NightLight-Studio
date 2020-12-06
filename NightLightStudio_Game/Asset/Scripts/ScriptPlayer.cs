@@ -109,9 +109,9 @@ namespace Unicorn
 
       if (Input.GetKeyPress(VK.IMOUSE_LBUTTON))
       {
-        Console.WriteLine(curEnergy);
+        ////Console.WriteLine(curEnergy);
       }
-      //Console.WriteLine(GetTransform(IDisposab);
+      ////Console.WriteLine(GetTransform(IDisposab);
 
     }
     public override void FixedUpdate()
@@ -216,11 +216,13 @@ namespace Unicorn
         }
         if (movedW || movedA || movedS || movedD)
         {
-          //Console.WriteLine("Applying");
+          ////Console.WriteLine("Applying");
 
-          //Vector3 noYVel = new Vector3(playerRB.GetVel().x, 0.0f, playerRB.GetVel().z);
-          if (playerRB.GetVel().sqrMagnitude >= maxHumnSpd)
+          Vector3 noYVel = new Vector3(playerRB.GetVel().x, 0.0f, playerRB.GetVel().z);
+          Console.WriteLine(playerRB.GetVel().magnitude.ToString());
+          if (noYVel.magnitude >= maxHumnSpd)
           {
+            Console.WriteLine("reach limit");
             playerRB.SetForce(new Vector3(0.0f, playerRB.GetForce().y, 0.0f));
             playerRB.SetAccel(new Vector3(0.0f, playerRB.GetAccel().y, 0.0f));
             playerRB.SetVel(moveDir.normalized * maxHumnSpd);
@@ -229,12 +231,12 @@ namespace Unicorn
           else
           {
             Force.Apply(id, moveDir.normalized, moveForce);
+            
             ///Force.Apply(id, new Vector3(0.0f,0.0f,0.0f), moveForce);
           }
         }
         else
         {
-          //Console.WriteLine("Check");
           //Vector3 zeroVec = new Vector3(0.0f, 0.0f, 0.0f);
           playerRB.SetForce(new Vector3(0.0f, playerRB.GetForce().y, 0.0f));
           playerRB.SetAccel(new Vector3(0.0f, playerRB.GetAccel().y, 0.0f));
@@ -318,7 +320,7 @@ namespace Unicorn
         {
           accumulatedDt = 0.0f;
           CurrentState = NextState;
-          //Console.WriteLine(CurrentState);
+          ////Console.WriteLine(CurrentState);
           switch (CurrentState)
           {
             case State.Human:
@@ -335,17 +337,9 @@ namespace Unicorn
               Vector3 playerPosVect = playerPos.GetPosition(); // Set eye level of player
               //Vector3 eyelevel =  new Vector3(0.0f, 10.0f, 0.0f);
               // playerPos.SetPosition(eyelevel);
-              Console.WriteLine("PlayerPos be4");
-              Console.WriteLine(playerPosVect.x);
-              Console.WriteLine(playerPosVect.y);
-              Console.WriteLine(playerPosVect.z);
-              Console.WriteLine("---------");
+
               playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 50.0f, playerPosVect.z));
-              Console.WriteLine("PlayerPos aft");
-              Console.WriteLine(playerPosVect.x);
-              Console.WriteLine(playerPosVect.y);
-              Console.WriteLine(playerPosVect.z);
-              Console.WriteLine("---------");
+
               canMove = true;
               playerCharModel.AddModel(mothModePath);
               playerRB.isGravity = false;

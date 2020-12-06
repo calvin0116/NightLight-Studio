@@ -5,8 +5,8 @@
 #include "../Input/SystemInput.h" // For testing
 //#include "CScripts/AllScripts.h"
 
-//#define C_ENV
-#define CS_ENV
+// Scene change
+#include "../Core/SceneManager.h"
 
 namespace NS_LOGIC
 {
@@ -23,11 +23,14 @@ namespace NS_LOGIC
   void SystemLogic::Load()
   {
     MonoWrapper::InitMono();
+    MonoWrapper::LoadScriptDomain();
+    MonoWrapper::OpenDLL();
     //MonoWrapper::ReloadScripts();
   }
 
   void SystemLogic::Init()
   {
+    
     //Start up Scripting system??
     SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ReloadScripts", SystemInput_ns::IKEY_END, "ScriptReload", SystemInput_ns::OnRelease, [this]()
       {
@@ -41,8 +44,10 @@ namespace NS_LOGIC
       });
 
     // Attach handler
+#ifdef C_ENV
     r.AttachHandler("ScriptRequest", &SystemLogic::HandleMsg, this);
-    r.AttachHandler("ApplicationExit", &SystemLogic::HandleApplicationExit, this);
+#endif // C_ENV
+    //r.AttachHandler("ApplicationExit", &SystemLogic::HandleApplicationExit, this);
     r.AttachHandler("TogglePlay", &SystemLogic::HandleTogglePlay, this);
   }
 
@@ -67,6 +72,10 @@ namespace NS_LOGIC
 #endif
   }
 
+  void SystemLogic::GameInit()
+  {
+  }
+
   void SystemLogic::GamePreInit()
   {
 #ifdef C_ENV
@@ -84,7 +93,8 @@ namespace NS_LOGIC
 #ifdef CS_ENV
     // C#
     // Reload Scripts
-    MonoWrapper::ReloadScripts();
+    // MonoWrapper::ReloadScripts();
+    //MonoWrapper::LoadScriptDomain();
     auto itrS = G_ECMANAGER->begin<ComponentScript>();
     auto itrE = G_ECMANAGER->end<ComponentScript>();
     for (; itrS != itrE; ++itrS)
@@ -93,18 +103,15 @@ namespace NS_LOGIC
       if (MyScript == nullptr)
         continue;
       MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
-      MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
+      //MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
       int ID = G_ECMANAGER->getObjId(itrS);
       MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
     }
 #endif
   }
 
-  void SystemLogic::GameInit()
+  void SystemLogic::GameGameInit()
   {
-    if (!_isPlaying)
-      return;
-    _Inited = true;
 #ifdef C_ENV
     auto itr = G_ECMANAGER->begin<ComponentCScript>();
     auto itrEnd = G_ECMANAGER->end<ComponentCScript>();
@@ -120,12 +127,12 @@ namespace NS_LOGIC
     // C# Script
     MonoBind::Bind();
     // Init base functions
-    baseInit =            MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
-    baseLateInit =        MonoWrapper::GetObjectMethod("LateInit", "UniBehaviour");
-    baseUpdate =          MonoWrapper::GetObjectMethod("Update", "UniBehaviour");
-    baseFixedUpdate =     MonoWrapper::GetObjectMethod("FixedUpdate", "UniBehaviour");
-    baseExit =            MonoWrapper::GetObjectMethod("Exit", "UniBehaviour");
-    baseCollisionEnter =  MonoWrapper::GetObjectMethod("OnCollisionEnter", "UniBehaviour");
+    baseInit = MonoWrapper::GetObjectMethod("Init", "UniBehaviour");
+    baseLateInit = MonoWrapper::GetObjectMethod("LateInit", "UniBehaviour");
+    baseUpdate = MonoWrapper::GetObjectMethod("Update", "UniBehaviour");
+    baseFixedUpdate = MonoWrapper::GetObjectMethod("FixedUpdate", "UniBehaviour");
+    baseExit = MonoWrapper::GetObjectMethod("Exit", "UniBehaviour");
+    baseCollisionEnter = MonoWrapper::GetObjectMethod("OnCollisionEnter", "UniBehaviour");
     baseCollisionStay = MonoWrapper::GetObjectMethod("OnCollisionStay", "UniBehaviour");
     baseCollisionExit = MonoWrapper::GetObjectMethod("OnCollisionExit", "UniBehaviour");
     baseTriggerEnter = MonoWrapper::GetObjectMethod("OnTriggerEnter", "UniBehaviour");
@@ -180,8 +187,9 @@ namespace NS_LOGIC
       return;
     if (!_Inited)
     {
+      _Inited = true;
       GamePreInit();
-      GameInit();
+      GameGameInit();
       GameLateInit();
     }
     ////Run Script?
@@ -213,7 +221,7 @@ namespace NS_LOGIC
 
   void SystemLogic::FixedUpdate()
   {
-    if (!_isPlaying)
+    if (!_isPlaying || !_Inited)
       return;
 #ifdef CS_ENV
     // C# Scripts Update
@@ -256,7 +264,7 @@ namespace NS_LOGIC
         MonoMethod* MyExit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseExit);
         MonoWrapper::InvokeMethod(MyExit, MyScript->_MonoData._pInstance);
       }
-      MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
+      //MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
     }
 #endif
   }
@@ -276,6 +284,11 @@ namespace NS_LOGIC
     }
 #endif
 #ifdef CS_ENV
+    if (_isPlaying) // Scene changed
+    {
+      GameGameExit();
+      _Inited = false;
+    }
 #endif
   }
 
@@ -285,12 +298,13 @@ namespace NS_LOGIC
 
   void SystemLogic::Exit()
   {
+    MonoWrapper::MonoExit();
     DestroyInstance();
   }
 
   void SystemLogic::OnCollisionEnter(Entity _obj1, Entity _obj2)
   {
-    if (!_isPlaying)
+    if (!_isPlaying || !_Inited)
       return;
 #ifdef C_ENV
     ComponentCScript* comp1 = _obj1.getComponent<ComponentCScript>();
@@ -323,7 +337,7 @@ namespace NS_LOGIC
 
   void SystemLogic::OnCollisionStay(Entity _obj1, Entity _obj2)
   {
-    if (!_isPlaying)
+    if (!_isPlaying || !_Inited)
       return;
 #ifdef CS_ENV
     // C# script
@@ -346,7 +360,7 @@ namespace NS_LOGIC
 
   void SystemLogic::OnCollisionExit(Entity _obj1, Entity _obj2)
   {
-    if (!_isPlaying)
+    if (!_isPlaying || !_Inited)
       return; 
 #ifdef CS_ENV
       // C# script
@@ -369,7 +383,7 @@ namespace NS_LOGIC
 
   void SystemLogic::OnTriggerEnter(Entity _obj1, Entity _obj2)
   {
-    if (!_isPlaying)
+    if (!_isPlaying || !_Inited)
       return;
 #ifdef C_ENV
     ComponentCScript* comp1 = _obj1.getComponent<ComponentCScript>();
@@ -402,7 +416,7 @@ namespace NS_LOGIC
 
   void SystemLogic::OnTriggerStay(Entity _obj1, Entity _obj2)
   {
-    if (!_isPlaying)
+    if (!_isPlaying || !_Inited)
       return;
 #ifdef CS_ENV
     // C# script
@@ -425,7 +439,7 @@ namespace NS_LOGIC
 
   void SystemLogic::OnTriggerExit(Entity _obj1, Entity _obj2)
   {
-    if (!_isPlaying)
+    if (!_isPlaying || !_Inited)
       return;
 #ifdef CS_ENV
     // C# script
@@ -446,10 +460,9 @@ namespace NS_LOGIC
 #endif
   }
 
+#ifdef C_ENV
   void SystemLogic::HandleMsg(MessageScriptRequest& msg)
   {
-    std::cout << "Received Request for script!" << std::endl;
-#ifdef C_ENV
     auto itr = G_ECMANAGER->begin<CScriptComponent>();
     auto eitr = G_ECMANAGER->end<CScriptComponent>();
     for (; itr != eitr; ++itr)
@@ -462,16 +475,14 @@ namespace NS_LOGIC
       // Break out of loop
       break;
     }
-#endif
-#ifdef CS_ENV
-
-#endif
   }
+#endif
 
-  void SystemLogic::HandleApplicationExit(MessageApplicationExit& msg)
-  {
-    // Handle msg function here
-  }
+  //void SystemLogic::HandleApplicationExit(MessageApplicationExit& msg)
+  //{
+  //  // Handle msg function here
+  //  
+  //}
 
   void SystemLogic::HandleTogglePlay(MessageTogglePlay& msg)
   {

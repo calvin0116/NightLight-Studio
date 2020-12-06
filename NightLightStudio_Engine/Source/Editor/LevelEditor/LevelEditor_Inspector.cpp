@@ -1311,15 +1311,16 @@ void InspectorWindow::NavComp(Entity& ent)
 	{
 		if (ImGui::CollapsingHeader("Navigator", &_notRemove))
 		{
-			_levelEditor->LE_AddSliderFloatProperty("speed", nav_comp->speed, 0.0f, 1000.f, ImGuiInputTextFlags_EnterReturnsTrue);
+			_levelEditor->LE_AddInputFloatProperty("Speed", nav_comp->speed, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
 			_levelEditor->LE_AddCombo("Way Point Nav Type", (int&)nav_comp->wp_nav_type,
 				{
 					"To and fro",
 					"circular",
 					"random"
 				});
-
+			_levelEditor->LE_AddInputFloatProperty("Radius for detection", nav_comp->rad_for_detect, []() {},  ImGuiInputTextFlags_EnterReturnsTrue);
 			_levelEditor->LE_AddCheckbox("Stop at each waypoint", &nav_comp->stopAtEachWayPoint);
+
 			if(nav_comp->stopAtEachWayPoint)
 				_levelEditor->LE_AddInputFloatProperty("End time", nav_comp->endTime, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
 
