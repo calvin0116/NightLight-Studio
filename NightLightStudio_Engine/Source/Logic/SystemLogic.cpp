@@ -23,6 +23,8 @@ namespace NS_LOGIC
   void SystemLogic::Load()
   {
     MonoWrapper::InitMono();
+    MonoWrapper::UnloadScriptDomain();
+    MonoWrapper::CompileInitScripts();
     MonoWrapper::LoadScriptDomain();
     MonoWrapper::OpenDLL();
     //MonoWrapper::ReloadScripts();
