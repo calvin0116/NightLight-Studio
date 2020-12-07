@@ -170,8 +170,8 @@ Value ComponentCanvas::Write()
 
 glm::mat4 UI_Element::GetModelMatrix()
 {
-	unsigned width = NS_WINDOW::SYS_WINDOW->GetAppWidth();
-	unsigned height = NS_WINDOW::SYS_WINDOW->GetAppHeight();
+	unsigned width = NS_WINDOW::SYS_WINDOW->GetResolutionWidth();
+	unsigned height = NS_WINDOW::SYS_WINDOW->GetResolutionHeight();
 
 	glm::vec3 pos = _position;
 	pos.x *= width;
