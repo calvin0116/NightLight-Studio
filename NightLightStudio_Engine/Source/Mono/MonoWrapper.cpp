@@ -24,7 +24,8 @@ namespace MonoWrapper
     //but it dosent work, just specify full path for assembly related stuff
     //mono_set_assemblies_path("..\\MonoTest");
 
-    MonoDomain* domain = mono_jit_init_version("Root", "v4.0.30319");
+    //MonoDomain* domain = mono_jit_init_version("Root", "v4.0.30319");
+    MonoDomain* domain = mono_jit_init("Root");
     //ASSERT(domain, "mono_jit_init failed");
 
     return domain;
