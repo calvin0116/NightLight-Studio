@@ -35,7 +35,7 @@ public:
 	ENGINE_API void GameLoad() { for (auto my_sys : Systems) my_sys.second->GameLoad(); };
 	//== Game / Usage of assert phase
 	//ENGINE_API void EarlyInit() { for (auto my_sys : Systems) my_sys.second->EarlyInit(); };
-	ENGINE_API void GameInit() { for (auto my_sys : Systems) my_sys.second->GameInit(); };
+	ENGINE_API void GameInit();
 	//ENGINE_API void LateInit() { for (auto my_sys : Systems) my_sys.second->LateInit(); }
 
 	//== Game / System running loop
@@ -44,12 +44,7 @@ public:
 
 
 	//== Game Asserts clear
-	ENGINE_API void GameExit() { 
-		for (auto my_sys : Systems)
-			if(my_sys.first != S_PRIORITY::SP_SCENEMANAGER)
-				my_sys.second->GameExit(); 
-		Systems[S_PRIORITY::SP_SCENEMANAGER]->GameExit();
-	};
+	ENGINE_API void GameExit();
 
 	//Memory deallocation phase without dependancy
 	ENGINE_API void Free() {

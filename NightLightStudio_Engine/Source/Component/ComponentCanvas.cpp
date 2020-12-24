@@ -3,6 +3,7 @@
 #include "../../glm/gtc/quaternion.hpp"
 #include "../Graphics/UISystem.h"
 #include "../Input/SystemInput.h"
+#include "../Window/WndSystem.h"
 
 ComponentCanvas::ComponentCanvas() : _isActive{ true }
 {
@@ -169,9 +170,18 @@ Value ComponentCanvas::Write()
 
 glm::mat4 UI_Element::GetModelMatrix()
 {
-	glm::mat4 Translate = glm::translate(glm::mat4(1.f), _position);
+	unsigned width = NS_WINDOW::SYS_WINDOW->GetResolutionWidth();
+	unsigned height = NS_WINDOW::SYS_WINDOW->GetResolutionHeight();
 
-	glm::mat4 Scale = glm::scale(glm::mat4(1.f), glm::vec3(_size, 1.0f));
+	glm::vec3 pos = _position;
+	pos.x *= width;
+	pos.y *= height;
+	glm::mat4 Translate = glm::translate(glm::mat4(1.f), pos);
+
+	glm::vec2 size = _size;
+	size.x *= width;
+	size.y *= height;
+	glm::mat4 Scale = glm::scale(glm::mat4(1.f), glm::vec3(size, 1.0f));
 
 	return (Translate * Scale);
 }

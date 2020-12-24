@@ -122,6 +122,13 @@ void HierarchyInspector::Start()
 					for (Entity ent : G_ECMANAGER->getEntityContainer())
 						if (LE_ECHELPER->SelectedEntities()[ent.getId()])
 						{
+							ComponentLight* lightcomp = ent.getComponent<LightComponent>();
+
+							if (lightcomp)
+							{
+								lightcomp->SetType(NS_GRAPHICS::Lights::INVALID_TYPE);
+							}
+
 							G_ECMANAGER->FreeEntity(ent.getId());
 							break;
 						}
