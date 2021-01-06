@@ -3,16 +3,16 @@
         "PlayerCamera": {
             "TransformComponent": {
                 "EntityName": "PlayerCamera",
-                "Tag": 0,
+                "Tag": 100,
                 "Position": [
-                    239.82073974609376,
-                    116.84386444091797,
-                    147.50015258789063
+                    417.0679931640625,
+                    166.216064453125,
+                    -1850.1732177734376
                 ],
                 "Scale": [
-                    10.0,
-                    10.0,
-                    10.0
+                    1.0,
+                    1.0,
+                    1.0
                 ],
                 "Rotate": [
                     0.0,
@@ -21,9 +21,9 @@
                 ]
             },
             "ColliderComponent": {
-                "colliderType": "CAPSULE",
+                "colliderType": "AABB",
                 "tag": 1,
-                "isCollidable": true,
+                "isCollidable": false,
                 "Center": [
                     0.0,
                     0.0,
@@ -65,10 +65,10 @@
                 "IntList": [],
                 "StringList": [],
                 "FloatList": [
-                    50.0,
-                    60.0,
+                    40.0,
+                    -35.0,
                     200.0,
-                    50.0
+                    20.0
                 ]
             }
         },
@@ -132,21 +132,21 @@
         "Player": {
             "TransformComponent": {
                 "EntityName": "Player",
-                "Tag": 0,
+                "Tag": 200,
                 "Position": [
-                    90.0,
-                    186.74085998535157,
-                    70.68305969238281
+                    0.0,
+                    -37.27366638183594,
+                    0.0
                 ],
                 "Scale": [
-                    1.0,
-                    1.0,
-                    1.0
+                    0.9947488307952881,
+                    0.9997184872627258,
+                    0.9998233914375305
                 ],
                 "Rotate": [
-                    0.0,
+                    -90.0,
                     -0.0,
-                    0.0
+                    89.99818420410156
                 ]
             },
             "ColliderComponent": {
@@ -155,13 +155,13 @@
                 "isCollidable": true,
                 "Center": [
                     0.0,
-                    0.0,
+                    25.0,
                     0.0
                 ],
                 "Extend": [
-                    20.0,
-                    20.0,
-                    20.0
+                    25.0,
+                    25.0,
+                    25.0
                 ],
                 "Rotation": [
                     0.0,
@@ -172,8 +172,8 @@
             "RigidBody": {
                 "isStatic": false,
                 "isGravity": true,
-                "mass": 1.0,
-                "friction": 0.6499999761581421,
+                "mass": 100.0,
+                "friction": 0.009999999776482582,
                 "Force": [
                     0.0,
                     0.0,
@@ -187,11 +187,11 @@
             },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "Asset\\3D model\\New_Character_Model_B4.FBX",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
+                "Model": "Asset\\3D model\\Player_Animations\\Player_Character_ANIMATIONSWORKS.FBX",
+                "Albedo": "asset\\textures\\new_character_texture_combined\\new_character_model_base_color.tga",
+                "Normal": "asset\\textures\\new_character_texture_combined\\new_character_model_normal_opengl.tga",
+                "Metallic": "asset\\textures\\new_character_texture_combined\\new_character_model_metallic.tga",
+                "Roughness": "asset\\textures\\new_character_texture_combined\\new_character_model_roughness.tga",
                 "AmbientOcclusion": "",
                 "Specular": "",
                 "DiffuseMat": [
@@ -232,22 +232,33 @@
                     1.0
                 ],
                 "Radius": 10.0,
-                "Intensity": 1.0,
+                "Intensity": 1000.0,
                 "CutOff": 0.0,
                 "OuterCutOff": 0.0
+            },
+            "AnimationComponent": {
+                "isActive": true,
+                "Play": true,
+                "Loop": true,
+                "CurrentAnimation": "Walk1",
+                "Animation0": "Idle1",
+                "Animation1": "Switch1",
+                "Animation2": "Take 001",
+                "Animation3": "Walk1",
+                "Animation4": "clip"
             },
             "ComponentVariables": {
                 "IntList": [],
                 "StringList": [
-                    "Asset\\3D model\\New_Character_Model_B4.FBX",
+                    "Asset\\3D model\\Player_Animations\\Player_Character_ANIMATIONSWORKS.FBX",
                     "Asset\\3D model\\New_Moth_B4.FBX"
                 ],
                 "FloatList": [
-                    15000.0,
+                    250000.0,
                     100.0,
                     15.0,
-                    1.0,
-                    100.0
+                    1.7999999523162842,
+                    180.0
                 ]
             }
         },
@@ -1010,7 +1021,7 @@
                 ]
             },
             "ScriptComponent": {
-                "isActive": true,
+                "isActive": false,
                 "isRunning": true,
                 "ScriptName": "AudioEvent"
             },
@@ -1053,7 +1064,7 @@
                 }
             },
             "ScriptComponent": {
-                "isActive": true,
+                "isActive": false,
                 "isRunning": true,
                 "ScriptName": "AudioManager"
             }

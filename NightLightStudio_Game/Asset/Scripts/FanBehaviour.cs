@@ -62,9 +62,16 @@ namespace Unicorn
         SwitchOnFunction();
       }
 
-      else
+      if ((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) || activate == false)
       {
         SwitchOffFunction();
+
+        // push out player
+        if (script_Player.CurrentState == ScriptPlayer.State.Possessed)
+        {
+          script_Player.NextState = ScriptPlayer.State.Human;
+        }
+
       }
 
 
@@ -76,6 +83,15 @@ namespace Unicorn
 
     public override void OnCollisionEnter(int other)
     {
+
+      // Disable Function
+      if (GetTransform(other).tag == 3)
+      {
+        isActive = false;
+      }
+
+
+
       if (isActive == true && other== player_ID)
       {
         if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
@@ -99,10 +115,7 @@ namespace Unicorn
         }
       }
 
-      //if (isActive == false)
-      //{
-      //  activate = false;
-      //}
+      
     }
 
     public override void OnCollisionExit(int other) 
@@ -128,6 +141,8 @@ namespace Unicorn
     public void SwitchOffFunction()
     {
       script_WindB.Deactivate();
+
+
     }
 
 

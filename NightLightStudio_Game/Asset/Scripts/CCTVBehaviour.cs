@@ -63,6 +63,13 @@ namespace Unicorn
 
     public override void OnCollisionEnter(int other)
     {
+
+      // Disable Function
+      if (GetTransform(other).tag == 3)
+      {
+        isActive = false;
+      }
+
       if (isActive == true)
       {
         if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
@@ -85,10 +92,7 @@ namespace Unicorn
           //script_Player.CurrentState = ScriptPlayer.State.Possessed;
         }
       }
-      if (isActive == false)
-      {
-        activate = false;
-      }
+     
     }
     public void Deactivate()
     {
