@@ -117,6 +117,16 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<AnimationComponent>();
 			entComp._ent.getComponent<AnimationComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(WayPointMapComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<WayPointMapComponent>();
+			entComp._ent.getComponent<WayPointMapComponent>()->Read(*entComp._rjDoc);
+		}
+		else if (t == typeid(WayPointComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<WayPointComponent>();
+			entComp._ent.getComponent<WayPointComponent>()->Read(*entComp._rjDoc);
+		}
 
 		return comp;
 	};
@@ -199,7 +209,16 @@ void InspectorWindow::Start()
 			entComp.Copy(entComp._ent.getComponent<AnimationComponent>()->Write());
 			entComp._ent.RemoveComponent<AnimationComponent>();
 		}
-
+		else if (t == typeid(WayPointMapComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<WayPointMapComponent>()->Write());
+			entComp._ent.RemoveComponent<WayPointMapComponent>();
+		}
+		else if (t == typeid(WayPointComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<WayPointComponent>()->Write());
+			entComp._ent.RemoveComponent<WayPointComponent>();
+		}
 
 		return std::any(entComp);
 	};
@@ -311,6 +330,10 @@ void InspectorWindow::ComponentLayout(Entity& ent)
   VariableComp(ent);
 
   NavComp(ent);
+
+  WayPointPathComp(ent);
+
+  WayPointComp(ent);
 
 	AddSelectedComps(ent);
 }
@@ -1318,26 +1341,65 @@ void InspectorWindow::NavComp(Entity& ent)
 					"circular",
 					"random"
 				});
-			_levelEditor->LE_AddInputFloatProperty("Radius for detection", nav_comp->rad_for_detect, []() {},  ImGuiInputTextFlags_EnterReturnsTrue);
+			//_levelEditor->LE_AddInputFloatProperty("Radius for detection", nav_comp->rad_for_detect, []() {},  ImGuiInputTextFlags_EnterReturnsTrue);
 			_levelEditor->LE_AddCheckbox("Stop at each waypoint", &nav_comp->stopAtEachWayPoint);
 
 			if(nav_comp->stopAtEachWayPoint)
 				_levelEditor->LE_AddInputFloatProperty("End time", nav_comp->endTime, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
+			
+			//Way point path to look at
+			std::string s_name;
 
+			if (nav_comp->cur_wp_path != nullptr)
+				s_name = G_ECMANAGER->EntityName[G_ECMANAGER->getEntity(nav_comp->cur_wp_path).getId()];
+
+			_levelEditor->LE_AddInputText("WayPointPath", s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&s_name, &nav_comp]()
+				{
+					//str = s_name.c_str();
+					nav_comp->cur_wp_path = G_ECMANAGER->getEntityUsingEntName(s_name).getComponent<WayPointMapComponent>();
+				});
+			_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
+				[this, &s_name,&nav_comp](Entity* entptr)
+				{
+					nav_comp->cur_wp_path = entptr->getComponent<WayPointMapComponent>();
+					s_name = G_ECMANAGER->EntityName[entptr->getId()];
+					nav_comp->wp_path_ent_name = s_name;
+				});
+
+		}
+	}
+
+	if (!_notRemove)
+	{
+		//ent.RemoveComponent<ComponentLoadAudio>();
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<NavComponent>()->Write(), typeid(NavComponent).hash_code() };
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+		_notRemove = true;
+	}
+}
+
+void InspectorWindow::WayPointPathComp(Entity& ent)
+{
+	WayPointMapComponent* wpm_comp = ent.getComponent<WayPointMapComponent>();
+	if (wpm_comp != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Way Point Path", &_notRemove))
+		{
 			if (ImGui::Button("Add WayPoint"))
 			{
 				LocalString ls;
-				nav_comp->way_point_list.push_back(ls);
+				wpm_comp->way_point_list.push_back(ls);
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Remove WayPoint"))
 			{
-				nav_comp->way_point_list.pop_back();
+				wpm_comp->way_point_list.pop_back();
 			}
 
 			int str_index = 1;
 
-			for (LocalString<125> & str : nav_comp->way_point_list) //[path, name]
+			for (LocalString<125> & str : wpm_comp->way_point_list) //[path, name]
 			{
 				std::string p = "Waypoint_" + std::to_string(str_index);
 
@@ -1353,10 +1415,8 @@ void InspectorWindow::NavComp(Entity& ent)
 						str = G_ECMANAGER->EntityName[entptr->getId()];
 
 					});
-				
+
 				str_index++;
-
-
 			}
 		}
 	}
@@ -1364,11 +1424,33 @@ void InspectorWindow::NavComp(Entity& ent)
 	if (!_notRemove)
 	{
 		//ent.RemoveComponent<ComponentLoadAudio>();
-		ENTITY_COMP_DOC comp{ ent, ent.getComponent<NavComponent>()->Write(), typeid(NavComponent).hash_code() };
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<WayPointMapComponent>()->Write(), typeid(WayPointMapComponent).hash_code() };
 		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 		_notRemove = true;
 	}
 }
+
+void InspectorWindow::WayPointComp(Entity& ent)
+{
+	WayPointComponent* wp_comp = ent.getComponent<WayPointComponent>();
+	if (wp_comp != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Way-Point Component", &_notRemove))
+		{
+			_levelEditor->LE_AddInputFloatProperty("Self-Define Cost", wp_comp->self_define_var.second, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
+		}
+	}
+
+	if (!_notRemove)
+	{
+		//ent.RemoveComponent<ComponentLoadAudio>();
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<WayPointComponent>()->Write(), typeid(WayPointComponent).hash_code() };
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+		_notRemove = true;
+	}
+}
+
+
 
 void InspectorWindow::AddSelectedComps(Entity& ent)
 {
@@ -1387,6 +1469,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  CauldronStats",
 			"  VariablesComp",
 			"  NavComp",
+			"  WayPointPath",
+			"  WayPointComp"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -1518,7 +1602,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 12: // ComponentVariable
+		case 12: // ComponentNav
 		{
 			if (!ent.getComponent<NavComponent>())
 			{
@@ -1527,6 +1611,25 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
+		case 13: // WayPointPath
+		{
+			if (!ent.getComponent<WayPointMapComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, WayPointMapComponent().Write(), typeid(WayPointMapComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		case 14: // WayPoint
+		{
+			if (!ent.getComponent<WayPointComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, WayPointComponent().Write(), typeid(WayPointComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+
 
 		}
 		//if (next_lol == nullptr)

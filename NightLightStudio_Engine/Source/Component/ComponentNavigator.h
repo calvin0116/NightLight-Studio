@@ -5,8 +5,10 @@
 #include "../Ai/WayPointManager.h"
 #include "../Messaging/Messages/MessageTogglePlay.h"
 #include "../Messaging/SystemReceiver.h"
+#include "ComponentWayPointMap.h"
 
 #include "../Core/DeltaTime.h"
+#include "../Component/LocalString.h"
 #include <time.h>
 
 enum WP_NAV_TYPE {
@@ -15,17 +17,14 @@ enum WP_NAV_TYPE {
 	WN_RANDOM
 };
 
+enum WP_PATH_CREATION_TYPE {
+	WPP_STANDARD = 0,	// 1 ->  N
+	WPP_REVERSE,		// N -> 1
+	WPP_CUSTOM,			// Inserted through script / leveleditor 
+};
+
 typedef class ComponentNavigator : public ISerializable //: public IComponent
 {
-	//LocalVector<NS_AI::WayPoint*> way_point_list;
-	//LocalVector<NS_AI::Edges*> edge_list;
-	//LocalVector<WayPoint*> cur_path;		//Decided by Astar
-
-	//Curent targetted waypoint
-
-	//float startTime = 0.0f;
-
-
 	//Toggle traversing nodes
 	bool traverseFront = true;
 public:
@@ -37,13 +36,16 @@ public:
 	float speed = 1.f;
 	float curTime;
 	float endTime = 0.0f;
-	float rad_for_detect = 25.0f;		//Default radius detection
+	float size_in_rad = 25.0f;			//Circular detection to check if you hit the way point
 
-	LocalVector<LocalString<125>> way_point_list;	//Standard way point using entity to plot
-	LocalVector<TransformComponent*> cur_path;
+	ComponentWayPointMap* cur_wp_path;	//Way points and edges for all routes
+	LocalString<125> wp_path_ent_name;
 	
-	int cur_wp_index;
+	LocalVector<int> path_indexes;		//Current following routes
+	WP_PATH_CREATION_TYPE wp_creation_type;
+ 	int cur_wp_index;
 	int prev_wp_index;
+	
 
 	ComponentNavigator()
 		:isFollowing{ true }
@@ -52,6 +54,8 @@ public:
 		, stopAtEachWayPoint{false}
 		, wp_nav_type{ WN_TOANDFRO }
 		, curTime{-1.f}
+		, cur_wp_path{nullptr}
+		, wp_creation_type{WPP_STANDARD}
 	{
 		strcpy_s(ser_name, "NavigatorComponent");
 	}
@@ -59,23 +63,9 @@ public:
 
 	void CleanCurPath()
 	{
-		cur_path.clear();
 		cur_wp_index = 0;
 	}
 
-
-	//Converts list of entity name to real entity for way point traversing
-	void InitPath()
-	{
-		CleanCurPath();
-		for (LocalString<125> & wp_str : way_point_list)
-		{
-			if (wp_str.empty())
-				continue;
-			Entity ent = G_ECMANAGER->getEntityUsingEntName(wp_str);
-			cur_path.push_back(ent.getComponent<TransformComponent>());
-		}
-	}
 
 	//=============== Getter / Setter =================//
 	/*
@@ -85,37 +75,29 @@ public:
 		//way_point_list = wp_list;
 	}*/
 
-	TransformComponent* GetCurWp()
+	WayPointComponent* GetCurWp()
 	{
-		return cur_path.at(cur_wp_index);
+		return cur_wp_path->GetPath().at(path_indexes.at(cur_wp_index));
 	}
-	TransformComponent* GetPrevWp()
+	WayPointComponent* GetPrevWp()
 	{
-		return cur_path.at(prev_wp_index);
-	}
-
-	int WPSize()
-	{
-		return (int)way_point_list.size();
+		return cur_wp_path->GetPath().at(path_indexes.at(prev_wp_index));
 	}
 
-	virtual void	Read(Value& val) 
-	{
+	//LocalVector<int>
 
+	
+	//Check if navigator have way point to follow
+	bool HaveWayPoint()
+	{
+		return (cur_wp_path != nullptr && cur_wp_path->WPSize() > 1);
+	}
+
+
+	virtual void Read(Value& val) 
+	{
 		for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
 		{
-			if (itr->name == "way_point_list")
-			{
-			auto string_list_val = itr->value.GetArray();
-
-			if (way_point_list.size() == 0)
-				for (unsigned i = 0; i < string_list_val.Size(); ++i)
-					way_point_list.push_back(LocalString(string_list_val[i].GetString()));
-			else
-				for (unsigned i = 0; i < string_list_val.Size(); ++i)
-					way_point_list.at(i) = LocalString(string_list_val[i].GetString());
-			}
-
 			if (itr->name == "speed")
 			{
 				speed = itr->value.GetFloat();
@@ -130,7 +112,12 @@ public:
 			}
 			if (itr->name == "radius_for_detection")
 			{
-				rad_for_detect = itr->value.GetFloat();
+				size_in_rad = itr->value.GetFloat();
+			}
+			if (itr->name == "WayPointMapName")
+			{
+				//size_in_rad = itr->value.GetFloat();
+				wp_path_ent_name = itr->value.GetString();
 			}
 
 		}
@@ -138,15 +125,13 @@ public:
 	virtual Value	Write() { 
 		Value val(rapidjson::kObjectType);
 
-		Value string_list_val(rapidjson::kArrayType);
-		for (LocalString<125>& s : way_point_list)
-			string_list_val.PushBack(rapidjson::StringRef(s.c_str()), global_alloc);
-		NS_SERIALISER::ChangeData(&val, "way_point_list", string_list_val);
 		NS_SERIALISER::ChangeData(&val, "stopAtEachWayPoint", stopAtEachWayPoint);
 		NS_SERIALISER::ChangeData(&val, "endTime", endTime);
-		NS_SERIALISER::ChangeData(&val, "radius_for_detection", rad_for_detect);
 
 		NS_SERIALISER::ChangeData(&val, "speed", speed);
+		NS_SERIALISER::ChangeData(&val, "radius_for_detection", size_in_rad);
+
+		NS_SERIALISER::ChangeData(&val, "WayPointMapName", rapidjson::StringRef(wp_path_ent_name.c_str()));
 		return val;
 	};
 	virtual Value& Write(Value& val) { return val; };	
@@ -157,6 +142,39 @@ public:
 		return newcomp;
 	}
 	//================ Getter / Setter ========================//
+	void InitPath()
+	{
+		if (cur_wp_path == nullptr)
+		{
+			if (!wp_path_ent_name.empty())
+				cur_wp_path = G_ECMANAGER->getEntityUsingEntName((std::string)wp_path_ent_name).getComponent<WayPointMapComponent>();
+			else
+				return;
+		}
+
+		switch (wp_creation_type) 
+		{
+		case WPP_STANDARD:
+		{
+			path_indexes.clear();
+			int wp_size = cur_wp_path->GetPath().size();
+			for (int i = 0; i < wp_size; ++i)
+				path_indexes.push_back(i);
+			break;
+		}
+		case WPP_REVERSE:
+		{
+			path_indexes.clear();
+			int wp_size = cur_wp_path->GetPath().size();
+			for (int i = wp_size; i >= 0; ++i)
+				path_indexes.push_back(i);
+			break;
+		}
+		case WPP_CUSTOM:	//Inserted beforehand
+		{}
+
+		}
+	}
 
 	//Function to set next way point to go to
 	void SetNextWp()
@@ -171,11 +189,11 @@ public:
 		if (wp_nav_type == WN_RANDOM)
 		{
 			srand((unsigned int)time(NULL));
-			cur_wp_index = rand() % cur_path.size();
+			cur_wp_index = rand() % cur_wp_path->GetPath().size();
 		}
 		else
 		if (traverseFront)
-			if (cur_wp_index < cur_path.size() - 1)
+			if (cur_wp_index < cur_wp_path->GetPath().size() - 1)
 				++cur_wp_index;
 			else {
 				if (wp_nav_type == WN_TOANDFRO)
@@ -223,6 +241,16 @@ public:
 	void SetIsPaused(bool pau)
 	{
 		isPaused = pau;
+	}
+
+	void SetCurPathIndex(LocalVector<int> path)
+	{
+		path_indexes = path;
+	}
+
+	LocalVector<WayPointComponent*> GetCurPath()
+	{
+		return cur_wp_path->GetPath();
 	}
 
 } NavigatorComponent, NavComponent;

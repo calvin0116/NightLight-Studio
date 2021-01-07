@@ -2,6 +2,7 @@
 #include "WayPointManager.h"
 #include "../Component/ComponentNavigator.h"
 #include "../Component/ComponentPath.h"
+#include "../Component/ComponentWayPointMap.h"
 #include <chrono>
 
 namespace NS_AI
@@ -79,11 +80,11 @@ namespace NS_AI
 			std::pair<int, float> closest_wp = std::make_pair<int, float>(-1, std::numeric_limits<float>::max());
 			
 			int i = 0;
-			for (; i < nav_comp->cur_path.size(); ++i)
+			for (; i < nav_comp->GetCurPath().size(); ++i)
 			{
-				auto wp = nav_comp->cur_path.at(i);
+				auto wp = nav_comp->GetCurPath().at(i);
 
-				float dist = static_cast<float>((wp->_position - trans_comp->_position).length());
+				float dist = static_cast<float>((wp->GetPos() - trans_comp->_position).length());
 				if (dist < closest_wp.second)
 				{
 					closest_wp.first = i;

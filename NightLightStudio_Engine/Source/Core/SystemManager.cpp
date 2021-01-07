@@ -48,8 +48,6 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	//// 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// Systems OnFirst start
 	for (auto my_sys : Systems)
@@ -66,7 +64,8 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 //ENGINE_API void EarlyInit() { for (auto my_sys : Systems) my_sys.second->EarlyInit(); };
 
 inline ENGINE_API void MySystemManager::GameInit() {
-	for (auto my_sys : Systems) my_sys.second->GameInit();
+	for (auto my_sys : Systems) 
+		my_sys.second->GameInit();
 
 #ifndef _EDITOR
 	MessageTogglePlay isPlaying(true, "TogglePlay");

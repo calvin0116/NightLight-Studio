@@ -27,7 +27,7 @@ struct ConfigData
 	bool toFullScreen;
 
 	//Selected Starting Screen (for ease of changing starting screen for debuggging purpose) 
-	std::string startscene;
+	//std::string startscene;
 
 	//Camera Variables
 	float _positionSensitivity;
@@ -81,7 +81,7 @@ public:
 		config_d.toFullScreen = wind_val["fullscreen"].GetBool();
 
 		Value& config_val = parser["settings"];
-		config_d.startscene = config_val["startscene"].GetString();
+		//config_d.startscene = config_val["startscene"].GetString();
 
 		config_d._positionSensitivity = config_val["positionSensitivity"].GetFloat();
 		config_d._rotationSensitivity = config_val["rotationSensitivity"].GetFloat();
@@ -137,7 +137,7 @@ public:
 		wind_val["fullscreen"].SetBool(config_d.toFullScreen);
 
 		Value& config_val = parser["settings"];
-		config_val["startscene"].SetString(rapidjson::StringRef(config_d.startscene.c_str()));
+		//config_val["startscene"].SetString(rapidjson::StringRef(config_d.startscene.c_str()));
 		config_val["positionSensitivity"].SetFloat(config_d._positionSensitivity);
 		config_val["rotationSensitivity"].SetFloat(config_d._rotationSensitivity);
 		config_val["zoomSensitivity"].SetFloat(config_d._zoomSensitivity);

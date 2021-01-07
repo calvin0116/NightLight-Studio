@@ -54,6 +54,9 @@
     <Filter Include="Source Files\Logic" />
     <Filter Include="Source Files\Logic\CScripts">
     </Filter>
+    <Filter Include="Source Files\AI\Component">
+      <UniqueIdentifier>{4c5809fd-7920-4228-bbdc-7277f702da27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\Include\glm\glm.natvis" />
@@ -124,9 +127,6 @@
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentMemoryManager.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentNavigatorBind.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentPlayerStats.cpp">
@@ -366,6 +366,10 @@
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentCanvasBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\CustomTypes\UIElementBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentNavigatorBind.cpp">
+      <Filter>Source Files\AI\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentWayPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -444,12 +448,6 @@
       <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentMemoryManager.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ComponentNavigator.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentNavigatorBind.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentPath.h">
@@ -749,6 +747,18 @@
     <ClInclude Include="Source\Component\ComponentCScript.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentCanvasBind.h" />
     <ClInclude Include="Source\Mono\Binding\CustomTypes\UIElementBind.h" />
+    <ClInclude Include="Source\Component\ComponentNavigator.h">
+      <Filter>Source Files\AI\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentNavigatorBind.h">
+      <Filter>Source Files\AI\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentWayPointMap.h">
+      <Filter>Source Files\AI\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentWayPoint.h">
+      <Filter>Source Files\AI\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />

@@ -15,14 +15,17 @@
 #include "ComponentScript.h"
 #include "ComponentLight.h"
 #include "ComponentCanvas.h"
-#include "ComponentNavigator.h"
 #include "ComponentAnimation.h"
 
 //Stats components
 #include "ComponentPlayerStats.h"
 #include "ComponentCauldronStats.h"
 #include "ComponentVariables.h"
+
+//Ai components
 #include "ComponentNavigator.h"
+#include "ComponentWayPointMap.h"
+#include "ComponentWayPoint.h"
 
 // Temporary C++ script
 #include "ComponentCScript.h"

@@ -31,14 +31,24 @@ inline void NS_AI::AiManager::Init()
 
 inline void NS_AI::AiManager::GameInit()
 {
-	auto itr = G_ECMANAGER->begin<NavigatorComponent>();
-	auto itrEnd = G_ECMANAGER->end<NavigatorComponent>();
+	auto wpm_itr = G_ECMANAGER->begin<WayPointMapComponent>();
+	auto wpm_itrEnd = G_ECMANAGER->end<WayPointMapComponent>();
 
-	while (itr != itrEnd)
+	while (wpm_itr != wpm_itrEnd)
 	{
-		NavigatorComponent* navComp = reinterpret_cast<NavigatorComponent*>(*itr);
+		WayPointMapComponent* wpmComp = reinterpret_cast<WayPointMapComponent*>(*wpm_itr);
+		wpmComp->InitPath();
+		++wpm_itr;
+	}
+
+	auto nc_itr = G_ECMANAGER->begin<NavigatorComponent>();
+	auto nc_itrEnd = G_ECMANAGER->end<NavigatorComponent>();
+	
+	while (nc_itr != nc_itrEnd)
+	{
+		NavigatorComponent* navComp = reinterpret_cast<NavigatorComponent*>(*nc_itr);
 		navComp->InitPath();
-		++itr;
+		++nc_itr;
 	}
 
 	Obstacle_list = G_ECMANAGER->getEntityList("Obstacle");
@@ -50,7 +60,8 @@ inline void NS_AI::AiManager::Update()
 	if (!isActive)
 		return;
 	//currentNumberOfSteps = 0;
-
+	
+	//Make shift dt
 	std::swap(timeLastRound, timeThisRound);
 	stepTime = timeThisRound = std::chrono::system_clock::now();
 	float dt = (float)(timeThisRound - timeLastRound).count() / 10000000.0f;
@@ -63,7 +74,7 @@ inline void NS_AI::AiManager::Update()
 		NavigatorComponent* navComp = reinterpret_cast<NavigatorComponent*>(*itr);
 		//AABBCollider* nav_aabb = &G_ECMANAGER->getComponent<ColliderComponent>(itr)->collider.aabb;
 		
-		if (navComp->WPSize() == 0  || !navComp->isFollowing)
+		if ( !navComp->HaveWayPoint() || !navComp->isFollowing)
 		{
 			++itr;
 			continue;
@@ -90,11 +101,11 @@ inline void NS_AI::AiManager::Update()
 			continue;
 		}
 
-		NlMath::Vector3D mag_dir = navComp->GetCurWp()->_position - navTrans->_position ;	//Dir to the next way point
+		NlMath::Vector3D mag_dir = navComp->GetCurWp()->GetPos() - navTrans->_position ;	//Dir to the next way point
 		mag_dir.y = 0.0f;	//Ignore y axis
 		//5.0f = hardcoded radius to check
 		//std::cout << mag_dir.length() << std::endl;
-		if (mag_dir.length() < navComp->rad_for_detect)	//Check if Ai reached the way point
+		if (mag_dir.length() < navComp->size_in_rad)	//Check if Ai reached the way point
 		{
 			navComp->SetNextWp();		//Set next way point to be the target for navigation
 			/*

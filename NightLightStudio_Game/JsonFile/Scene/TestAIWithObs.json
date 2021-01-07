@@ -75,24 +75,19 @@
                 "isRunning": true,
                 "ScriptName": "ScriptEnemy"
             },
-            "NavigatorComponent": {
-                "way_point_list": [
-                    "Waypoint",
-                    "WayPoint_2",
-                    "WayPoint_3",
-                    "WayPoint_4"
-                ],
-                "stopAtEachWayPoint": false,
-                "endTime": 2.0,
-                "radius_for_detection": 10.0,
-                "speed": 1.5
-            },
             "ComponentVariables": {
                 "IntList": [],
                 "StringList": [],
                 "FloatList": [
                     2.0
                 ]
+            },
+            "NavigatorComponent": {
+                "stopAtEachWayPoint": false,
+                "endTime": 2.0,
+                "speed": 1.5,
+                "radius_for_detection": 10.0,
+                "WayPointMapName": "Paths"
             }
         },
         "Plane": {
@@ -203,6 +198,9 @@
                 "MetallicMat": 0.0,
                 "RoughnessMat": 0.0,
                 "Alpha": 1.0
+            },
+            "WayPointComponent": {
+                "SelfDefineVariable": 1.0
             }
         },
         "WayPoint_2": {
@@ -258,6 +256,9 @@
                 "MetallicMat": 0.0,
                 "RoughnessMat": 0.0,
                 "Alpha": 1.0
+            },
+            "WayPointComponent": {
+                "SelfDefineVariable": 1.0
             }
         },
         "WayPoint_3": {
@@ -313,6 +314,9 @@
                 "MetallicMat": 0.0,
                 "RoughnessMat": 0.0,
                 "Alpha": 1.0
+            },
+            "WayPointComponent": {
+                "SelfDefineVariable": 1.0
             }
         },
         "WayPoint_4": {
@@ -368,6 +372,9 @@
                 "MetallicMat": 0.0,
                 "RoughnessMat": 0.0,
                 "Alpha": 1.0
+            },
+            "WayPointComponent": {
+                "SelfDefineVariable": 1.0
             }
         },
         "Obstacle": {
@@ -459,6 +466,36 @@
                 "MetallicMat": 0.0,
                 "RoughnessMat": 0.0,
                 "Alpha": 1.0
+            }
+        },
+        "Paths": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "WayPointMapComponent": {
+                "way_point_list": [
+                    "Waypoint",
+                    "WayPoint_2",
+                    "WayPoint_3",
+                    "WayPoint_4"
+                ],
+                "radius_for_detection": 25.0
             }
         }
     }
