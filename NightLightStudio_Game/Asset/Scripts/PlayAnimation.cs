@@ -4,13 +4,16 @@ using System.Collections.Specialized;
 
 namespace Unicorn
 {
-  public class Hello : UniBehaviour
+  public class PlayAnimation: UniBehaviour
   {
-    Transform trans;
+    Graphics playerCharModel;
+    Animation anim;
 
     public override void Init()
     {
-      trans = GetTransform(id);
+      anim = GetAnimation(id);
+      playerCharModel = GetGraphics(id);
+
     }
 
     public override void LateInit()
@@ -23,8 +26,13 @@ namespace Unicorn
     }
     public override void FixedUpdate()
     {
-      if(Input.GetKeyPress(VK.IKEY_SPACE))
-        trans.SetPosition(new Vector3(0.0f, trans.GetPosition().y + 1000.0f, 0.0f));
+      if(Input.GetKeyPress(VK.IKEY_Q))
+        anim.Play("Walk1", true, 1.9f, 3.108f);
+      if (Input.GetKeyPress(VK.IKEY_W))
+        anim.Play("Idle1", true, -1f,30f);
+      if (Input.GetKeyPress(VK.IKEY_E))
+        anim.Play("Switch1", false, -1f, 30f);
+
     }
 
     public override void OnCollisionEnter(int other) { Console.WriteLine("Collision Enter!"); }

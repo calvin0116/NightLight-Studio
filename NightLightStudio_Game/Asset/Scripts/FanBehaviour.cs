@@ -83,24 +83,19 @@ namespace Unicorn
 
     public override void OnCollisionEnter(int other)
     {
-
-      // Disable Function
-      if (GetTransform(other).tag == 3)
-      {
-        isActive = false;
-      }
-
-
-
       if (isActive == true && other== player_ID)
       {
+
+        
+
         if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
         {
 
+          activate = true;
           // Set player script nextspawn position == possessionSpawnPos
           script_Player.NextState = ScriptPlayer.State.Possessed;
 
-      
+
           Vector3 p_AfterSpawnPos = GetTransform(p_SpawnPos).GetPosition();
           script_Player.spawnPoint = p_AfterSpawnPos;
           // Set Camera script  position == possessionSpawnPos
@@ -109,13 +104,16 @@ namespace Unicorn
           script_Player.camScript.tgtID = p_CamPos; // Go and expose other tgt in scriptcamera.
 
           // Activate energy consumption delay 
-          activate = true;
+         
           //script_Player.CurrentState = ScriptPlayer.State.Possessed;
 
         }
       }
 
-      
+      //if (isActive == false)
+      //{
+      //  activate = false;
+      //}
     }
 
     public override void OnCollisionExit(int other) 
@@ -141,8 +139,6 @@ namespace Unicorn
     public void SwitchOffFunction()
     {
       script_WindB.Deactivate();
-
-
     }
 
 
