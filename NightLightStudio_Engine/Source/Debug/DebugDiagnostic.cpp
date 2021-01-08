@@ -17,10 +17,14 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include <sstream>
 #include <exception>
 
+// Set to get Window Handle
+#include "../Window/WndSystem.h"
+
 #include <WinUser.h>
 #include <fileapi.h>
 
-HWND _MAIN_WINDOW_ = nullptr;
+// Set Default Window
+HWND _MAIN_WINDOW_ = GetActiveWindow();
 
 //A basic error output function
 bool SignalErrorHandler(const char* exp, const char* file, int line, const char* msg)

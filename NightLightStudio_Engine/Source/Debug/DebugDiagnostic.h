@@ -15,10 +15,10 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #pragma once
 
 #include <assert.h>
+#include <Windows.h>
 #include "DebugToStream.h"
 
-// Set to get Window Handle
-#include "../Window/WndSystem.h"
+extern HWND _MAIN_WINDOW_;
 
 //Define the debug break using the MS specific or general using assembly interrupt 3
 #ifdef _MSC_VER
