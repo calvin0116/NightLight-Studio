@@ -17,6 +17,9 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include <assert.h>
 #include "DebugToStream.h"
 
+// Set to get Window Handle
+#include "../Window/WndSystem.h"
+
 //Define the debug break using the MS specific or general using assembly interrupt 3
 #ifdef _MSC_VER
 #define G_DEBUG_BREAK __debugbreak()
