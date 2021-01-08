@@ -54,8 +54,38 @@
     <Filter Include="Source Files\Logic" />
     <Filter Include="Source Files\Logic\CScripts">
     </Filter>
-    <Filter Include="Source Files\AI\Component">
-      <UniqueIdentifier>{4c5809fd-7920-4228-bbdc-7277f702da27}</UniqueIdentifier>
+    <Filter Include="Source Files\Debug">
+      <UniqueIdentifier>{16e51090-10ed-4dc0-abc5-1aec457e199f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\LevelEditor\Asset Inspector">
+      <UniqueIdentifier>{4c98221a-2f0a-4d13-85db-06fc021a2b34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\LevelEditor\Console">
+      <UniqueIdentifier>{044fa11a-ce8d-4528-835c-46658a0a7698}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\LevelEditor\Hierarchy">
+      <UniqueIdentifier>{faf1bcfa-81fd-4a59-bc8b-5907249be055}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\LevelEditor\Object Inspector">
+      <UniqueIdentifier>{2545def6-0f85-447e-9529-b31dc6259f64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\LevelEditor\Performance Metrics">
+      <UniqueIdentifier>{7dd1654e-2c00-499a-8fb8-f79eaf3d1d34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\LevelEditor\Helper">
+      <UniqueIdentifier>{8d2bd12c-83f1-4f68-adbc-ce0d5b81a702}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\LevelEditor\CSV Tags">
+      <UniqueIdentifier>{2b00ebc4-ae8e-4e44-a1cf-1782358c2b2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\LevelEditor\Main Menu Bar">
+      <UniqueIdentifier>{9d58a399-800c-445b-861a-245ab4a92549}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\LevelEditor\Imgui">
+      <UniqueIdentifier>{1d36f092-3846-4797-8e2f-df5017d3f10e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\LevelEditor\Picking">
+      <UniqueIdentifier>{bdcd9b8c-92d5-4aa1-bb8f-53459e431d6c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +157,9 @@
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentMemoryManager.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentNavigatorBind.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentPlayerStats.cpp">
@@ -267,43 +300,7 @@
     <ClCompile Include="Source\Input\SystemInput.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Console.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_DropDowns.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Hierarchy.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Inspector.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Picking.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\WindowsDialogBox.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor.cpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\CpuUsage.cpp">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\imgui\imgui.cpp">
@@ -366,10 +363,49 @@
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentCanvasBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\CustomTypes\UIElementBind.cpp" />
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentNavigatorBind.cpp">
-      <Filter>Source Files\AI\Component</Filter>
+    <ClCompile Include="Source\Debug\DebugDiagnostic.cpp">
+      <Filter>Source Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\ComponentWayPoint.cpp" />
+    <ClCompile Include="Source\Debug\DebugToStream.cpp">
+      <Filter>Source Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.cpp">
+      <Filter>Source Files\Editor\LevelEditor\Asset Inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Console.cpp">
+      <Filter>Source Files\Editor\LevelEditor\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Hierarchy.cpp">
+      <Filter>Source Files\Editor\LevelEditor\Hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Inspector.cpp">
+      <Filter>Source Files\Editor\LevelEditor\Object Inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.cpp">
+      <Filter>Source Files\Editor\LevelEditor\Performance Metrics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\CpuUsage.cpp">
+      <Filter>Source Files\Editor\LevelEditor\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\WindowsDialogBox.cpp">
+      <Filter>Source Files\Editor\LevelEditor\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.cpp">
+      <Filter>Source Files\Editor\LevelEditor\CSV Tags</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_MainMenuBar.cpp">
+      <Filter>Source Files\Editor\LevelEditor\Main Menu Bar</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_DropDowns.cpp">
+      <Filter>Source Files\Editor\LevelEditor\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp">
+      <Filter>Source Files\Editor\LevelEditor\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Picking.cpp">
+      <Filter>Source Files\Editor\LevelEditor\Picking</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Animation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -448,6 +484,12 @@
       <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentMemoryManager.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentNavigator.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentNavigatorBind.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentPath.h">
@@ -624,40 +666,10 @@
     <ClInclude Include="Source\Input\SystemInput.h">
       <Filter>Source Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_ECHelper.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Hierarchy.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Inspector.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Picking.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_TemplateFuncs.hpp">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\WindowsDialogBox.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor.h">
-      <Filter>Source Files\Editor\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Editor\LevelEditor\CpuUsage.h">
       <Filter>Source Files\Editor\LevelEditor</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\imgui\imgui.h">
@@ -747,18 +759,43 @@
     <ClInclude Include="Source\Component\ComponentCScript.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentCanvasBind.h" />
     <ClInclude Include="Source\Mono\Binding\CustomTypes\UIElementBind.h" />
-    <ClInclude Include="Source\Component\ComponentNavigator.h">
-      <Filter>Source Files\AI\Component</Filter>
+    <ClInclude Include="Source\Debug\DebugDiagnostic.h">
+      <Filter>Source Files\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentNavigatorBind.h">
-      <Filter>Source Files\AI\Component</Filter>
+    <ClInclude Include="Source\Debug\DebugToStream.h">
+      <Filter>Source Files\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\ComponentWayPointMap.h">
-      <Filter>Source Files\AI\Component</Filter>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.h">
+      <Filter>Source Files\Editor\LevelEditor\Asset Inspector</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\ComponentWayPoint.h">
-      <Filter>Source Files\AI\Component</Filter>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Console.h">
+      <Filter>Source Files\Editor\LevelEditor\Console</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Hierarchy.h">
+      <Filter>Source Files\Editor\LevelEditor\Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Inspector.h">
+      <Filter>Source Files\Editor\LevelEditor\Object Inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_PerfMetrics.h">
+      <Filter>Source Files\Editor\LevelEditor\Performance Metrics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\CpuUsage.h">
+      <Filter>Source Files\Editor\LevelEditor\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\WindowsDialogBox.h">
+      <Filter>Source Files\Editor\LevelEditor\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h">
+      <Filter>Source Files\Editor\LevelEditor\CSV Tags</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_TemplateFuncs.hpp">
+      <Filter>Source Files\Editor\LevelEditor\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Picking.h">
+      <Filter>Source Files\Editor\LevelEditor\Picking</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Animation.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
