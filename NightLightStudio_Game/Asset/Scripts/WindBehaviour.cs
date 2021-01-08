@@ -66,14 +66,16 @@ namespace Unicorn
     }
    
 
-    public override void OnTriggerEnter(int other)
+    public override void OnTriggerStay(int other)
     {
-     
+    
       //Tailsmen Object tag = 2 
       if(GetTransform(other).tag == 2 && activate==true)
       {
+        
 
-         Force.Apply(other,dir , windStrength);
+        Force.Apply(other,dir , windStrength);
+       
 
       }
 

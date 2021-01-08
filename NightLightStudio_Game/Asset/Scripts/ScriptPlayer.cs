@@ -18,6 +18,8 @@ namespace Unicorn
     Variables playerVar;
     Graphics playerCharModel;
     Transform playerPos;
+    Animation anim;
+
     // Other entity's components
     public ScriptCamera camScript; // To set camera tgt back to player after becoming human.
 
@@ -25,7 +27,7 @@ namespace Unicorn
     public static float humnForce = 100000.0f;  // Move force while human
     public static float mothSpeed = 10000.0f;  // Move force while moth
     public static float maxEnergy = 15.0f;
-    public static float transformTime = 1.0f; // time to change state
+    public static float transformTime = 3.5f; // time to change state
     public static float maxHumnSpd = 500.0f;
     //public static float maxMothSpd = 100.0f;
     public static float moveForce = humnForce; // Current force
@@ -35,6 +37,10 @@ namespace Unicorn
     public static float EnergyDrain = 1.0f;
     public static float EnergyGain = 1.0f;
     bool canMove;
+    // Animation
+    bool idle = true;
+    bool played = false;
+    bool switching = false;
 
     // spawn point
     public Vector3 spawnPoint;
@@ -49,6 +55,7 @@ namespace Unicorn
     // Player State
     public State CurrentState { get; private set; }
     public State NextState = State.Human;
+    State PreviousState;
     //Vector3 inVec;
     // accumulated dt
     private float accumulatedDt = 0.0f;
@@ -66,6 +73,7 @@ namespace Unicorn
       playerCharModel = GetGraphics(id);
       playerVar = GetVariables(id);
       playerPos = GetTransform(id);
+      anim = GetAnimation(id);
 
       // Get scripts
       camScript = GetScript(GameObjectFind("PlayerCamera"));
@@ -83,6 +91,9 @@ namespace Unicorn
       curEnergy = maxEnergy;
       moveForce = humnForce;
       canMove = true;
+      switching = false;
+
+      playerCharModel.AddModel(humanModePath);
     }
 
     public override void LateInit()
@@ -91,17 +102,47 @@ namespace Unicorn
 
     public override void Update()
     {
+
       if (canMove == true)
       {
         Move();
       }
       else
       {
-
-        //playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 50.0f, playerPosVect.z));
-        playerRB.SetAccel(new Vector3(0.0f, 0.0f, 0.0f));
-        playerRB.SetVel(new Vector3(0.0f, 0.0f, 0.0f));
+        if (CurrentState == State.Human)
+        {
+          playerRB.SetForce(new Vector3(0.0f, playerRB.GetForce().y, 0.0f));
+          playerRB.SetAccel(new Vector3(0.0f, playerRB.GetAccel().y, 0.0f));
+          playerRB.SetVel(new Vector3(0.0f, playerRB.GetVel().y, 0.0f));
+        }
+        else
+        {
+          playerRB.SetForce(new Vector3(0.0f, 0.0f, 0.0f));
+          playerRB.SetAccel(new Vector3(0.0f, 0.0f, 0.0f));
+          playerRB.SetVel(new Vector3(0.0f, 0.0f, 0.0f));
+        }
       }
+
+
+      if (switching == true)
+      {
+        //playerCharModel.AddModel(mothModePath);
+        // switching = false;
+        //  anim.Play("Idle1", true);
+
+        //if (anim.IsFinished("Switch1"))
+        //{
+        //  //
+         
+        //  canMove = true;
+        //  NextState = State.Moth;
+        //  // playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 100, playerPosVect.z));
+        //  switching = false;
+
+        //}
+
+      }
+
 
       ManualStateControl();
       AutoStateControl();
@@ -109,9 +150,9 @@ namespace Unicorn
 
       if (Input.GetKeyPress(VK.IMOUSE_LBUTTON))
       {
-        ////Console.WriteLine(curEnergy);
+        Console.WriteLine(curEnergy);
       }
-      ////Console.WriteLine(GetTransform(IDisposab);
+      //Console.WriteLine(GetTransform(IDisposab);
 
     }
     public override void FixedUpdate()
@@ -175,6 +216,9 @@ namespace Unicorn
         {
           moveDir += fwd;
           movedW = true;
+
+          
+
           //Force.Apply(id, fwd, moveForce);
         }
         else if (Input.GetKeyUp(VK.IKEY_W))
@@ -186,43 +230,96 @@ namespace Unicorn
         {
           moveDir += -rht;
           movedA = true;
+      
           //Force.Apply(id, -rht, moveForce);
         }
         else if (Input.GetKeyUp(VK.IKEY_A))
         {
+          
           movedA = false;
         }
         // Backward
         if (Input.GetKeyHold(VK.IKEY_S))
         {
+          
           moveDir += -fwd;
           movedS = true;
           //Force.Apply(id, -fwd, moveForce);
         }
         else if (Input.GetKeyUp(VK.IKEY_S))
         {
+          
           movedS = false;
         }
         // Right
         if (Input.GetKeyHold(VK.IKEY_D))
         {
+         
           moveDir += rht;
           movedD = true;
           //Force.Apply(id, rht, moveForce);
         }
         else if (Input.GetKeyUp(VK.IKEY_D))
         {
+          
           movedD = false;
         }
+
+        // Check any movement 
         if (movedW || movedA || movedS || movedD)
         {
+          playerRB.isGravity = true;
+          //Console.WriteLine("Applying");
+
+          Vector3 rotation = Camera.GetViewVector();
+
+          float r = (float)Math.Sqrt(rotation.x * rotation.x + rotation.z * rotation.z);
+          float t = (float)(Math.Atan(rotation.y / r) / Math.PI * 180);
+          float p = (float)(Math.Acos(rotation.z / r) / Math.PI * 180);
+
+          // t = t + 90;
+
+
+          if (rotation.x < 0)
+          {
+            //rotation = new Vector3(0, -p, 0);
+            rotation = new Vector3(-p, 0, 90);
+          }
+          else
+          {
+
+            //rotation = new Vector3(0, p, 0);
+            rotation = new Vector3(p, 0, 90);
+          }
+
+          rotation.x += 90;
+         // p = p + 90;
+
+          GetTransform(id).SetRotation(rotation);
+
+
+
+          if (switching == false)
+          {
+
+            if (anim.IsFinished())
+            {
+              anim.Stop();
+            }
+
+
+            anim.Play("Walk1", true, 1.9f, 3.108f);
+
+          }
+
+        
           ////Console.WriteLine("Applying");
 
           Vector3 noYVel = new Vector3(playerRB.GetVel().x, 0.0f, playerRB.GetVel().z);
-          Console.WriteLine(playerRB.GetVel().magnitude.ToString());
+          //Console.WriteLine(playerRB.GetVel().magnitude.ToString());
           if (noYVel.magnitude >= maxHumnSpd)
           {
-            Console.WriteLine("reach limit");
+            //Console.WriteLine("reach limit");
             playerRB.SetForce(new Vector3(0.0f, playerRB.GetForce().y, 0.0f));
             playerRB.SetAccel(new Vector3(0.0f, playerRB.GetAccel().y, 0.0f));
             playerRB.SetVel(moveDir.normalized * maxHumnSpd);
@@ -237,15 +334,61 @@ namespace Unicorn
         }
         else
         {
-          //Vector3 zeroVec = new Vector3(0.0f, 0.0f, 0.0f);
+
           playerRB.SetForce(new Vector3(0.0f, playerRB.GetForce().y, 0.0f));
           playerRB.SetAccel(new Vector3(0.0f, playerRB.GetAccel().y, 0.0f));
           playerRB.SetVel(new Vector3(0.0f, playerRB.GetVel().y, 0.0f));
+
+          //GetTransform(id).SetRotation(Camera.GetXZViewVector()+ new Vector3(-90.0f,0.0f,90.0f));
+
+          if (switching == false)
+          {
+            if (anim.IsFinished())
+            {
+              anim.Stop();
+            }
+
+            anim.Play("Idle1", true, -1f, 30f);
+
+
+
+
+          }
         }
       }
 
       else if (CurrentState == State.Moth)
       {
+        Vector3 rotation = Camera.GetViewVector();
+
+        float r = (float)Math.Sqrt(rotation.x * rotation.x + rotation.z * rotation.z);
+        float t = (float)(Math.Atan(rotation.y / r) / Math.PI * 180);
+        float p = (float)(Math.Acos(rotation.z / r) / Math.PI * 180);
+
+        t = t + 90;
+        if (rotation.x < 0)
+        {
+          //rotation = new Vector3(0, -p, 0);
+          rotation = new Vector3(-t, -p, 0);
+        }
+        else
+        {
+          //rotation = new Vector3(0, p, 0);
+          rotation = new Vector3(-t, p, 0);
+        }
+
+
+       
+        //p = p - 90;
+
+        rotation.y += 90;
+       // rotation.x += 90;
+       
+
+        GetTransform(id).SetRotation(rotation);
+
+
+        //GetTransform(id).SetRotation(Camera.GetXZViewVector() + new Vector3(-90.0f, 0.0f, 90.0f));
         playerRB.SetForce(new Vector3(0.0f, 0.0f, 0.0f));
         playerRB.SetVel(fwd * mothSpeed);
         playerRB.SetAccel(new Vector3(0.0f, 0.0f, 0.0f));
@@ -257,27 +400,47 @@ namespace Unicorn
       // Manual change
       if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
       {
-        switch (CurrentState)
+
+        if (played == false)
         {
-          case State.Human:
-            // Only can change to moth if enough energy
-            if (curEnergy >= EnergyTreshold)
+          switch (CurrentState)
+          {
+            case State.Human:
+              // Only can change to moth if enough energy
+              switching = true;
+              canMove = false;
+             
+              // Run an animation (no loop)
+              if ( curEnergy >= EnergyTreshold )
+              {
+                //anim.Stop();
+
+                played = true;
+
+                anim.Play("Switch1", false, -1f, 30f);
+              }
+              // Prep for state change 
               NextState = State.Moth;
-            // Shouldn't have logic here. This function is for setting next state only.
-            //Transform p_Target = GetTransform(id);
-            //spawnPoint = p_Target.GetPosition();
-            break;
-          case State.Moth:
-            NextState = State.Human;
-            break;
-          case State.Possessed:
-            NextState = State.Human;
-            // Same thing, no logic here.
-            //Transform p_Target2 = GetTransform(id);
-            //p_Target2.SetPosition(spawnPoint);
-            break;
+
+              // Shouldn't have logic here. This function is for setting next state only.
+              //Transform p_Target = GetTransform(id);
+              //spawnPoint = p_Target.GetPosition();
+              break;
+
+            case State.Moth:
+              canMove = false;
+              NextState = State.Human;
+
+              break;
+            case State.Possessed:
+              NextState = State.Human;
+              // Same thing, no logic here.
+
+              break;
+          }
         }
       }
+       
     }
 
     public void AutoStateControl()
@@ -313,43 +476,83 @@ namespace Unicorn
         {
           // Logic for possessed state
           CurrentState = NextState;
-          playerCharModel.AddModel(humanModePath);
+          //playerCharModel.AddModel(humanModePath);
           canMove = false;
         }
+
         else if (accumulatedDt >= transformTime)
         {
           accumulatedDt = 0.0f;
+          PreviousState = CurrentState;
           CurrentState = NextState;
-          ////Console.WriteLine(CurrentState);
+          //Console.WriteLine(CurrentState);
           switch (CurrentState)
           {
             case State.Human:
               moveForce = humnForce;
               playerCharModel.AddModel(humanModePath);
               camScript.tgtID = id;
-              playerRB.isGravity = true;
+              
               canMove = true;
+              camScript.useOffset = true;
+              GetTransform(id).SetRotation(new Vector3(-90.0f, 0.0f, 90.0f));
+              
+              if(PreviousState == State.Possessed)
+              {
+                Transform p_Target2 = GetTransform(id);
+                p_Target2.SetPosition(spawnPoint);
+              }
+              playerRB.isGravity = true;
               break;
+
             case State.Moth:
+
+              camScript.useOffset = false;
               //moveForce = mothForce;
               //Set to Moth spawn Eyelevel//// not working
               playerPos = GetTransform(id);
               Vector3 playerPosVect = playerPos.GetPosition(); // Set eye level of player
               //Vector3 eyelevel =  new Vector3(0.0f, 10.0f, 0.0f);
               // playerPos.SetPosition(eyelevel);
+              //Console.WriteLine("PlayerPos be4");
+              //Console.WriteLine(playerPosVect.x);
+              //Console.WriteLine(playerPosVect.y);
+              //Console.WriteLine(playerPosVect.z);
+              //Console.WriteLine("---------");
+              playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 80 , playerPosVect.z));
+            //  playerPos.SetRotation(new Vector3(90.0f, -90.0f, 180.0f));
+              //Console.WriteLine("PlayerPos aft");
+              //Console.WriteLine(playerPosVect.x);
+              //Console.WriteLine(playerPosVect.y);
+              //Console.WriteLine(playerPosVect.z);
+              //Console.WriteLine("---------");
 
-              playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 50.0f, playerPosVect.z));
-
-              canMove = true;
+              //anim.Stop();
               playerCharModel.AddModel(mothModePath);
               playerRB.isGravity = false;
+              
+              canMove = true;
+              played = false;
+              switching = false;
+             
               break;
           }
         }
         else
         {
           canMove = false;
-          accumulatedDt += RealDT();
+          if(NextState == State.Human)
+          {
+            accumulatedDt += RealDT()*5.0f;
+          }
+          else
+          {
+            accumulatedDt += RealDT();
+          }
+          
+
+          
+            
         }
       }
     }

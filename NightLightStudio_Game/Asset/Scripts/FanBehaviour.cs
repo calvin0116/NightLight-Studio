@@ -62,9 +62,16 @@ namespace Unicorn
         SwitchOnFunction();
       }
 
-      else
+      if ((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) || activate == false)
       {
         SwitchOffFunction();
+
+        // push out player
+        if (script_Player.CurrentState == ScriptPlayer.State.Possessed)
+        {
+          script_Player.NextState = ScriptPlayer.State.Human;
+        }
+
       }
 
 
@@ -78,13 +85,17 @@ namespace Unicorn
     {
       if (isActive == true && other== player_ID)
       {
+
+        
+
         if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
         {
 
+          activate = true;
           // Set player script nextspawn position == possessionSpawnPos
           script_Player.NextState = ScriptPlayer.State.Possessed;
 
-      
+
           Vector3 p_AfterSpawnPos = GetTransform(p_SpawnPos).GetPosition();
           script_Player.spawnPoint = p_AfterSpawnPos;
           // Set Camera script  position == possessionSpawnPos
@@ -93,7 +104,7 @@ namespace Unicorn
           script_Player.camScript.tgtID = p_CamPos; // Go and expose other tgt in scriptcamera.
 
           // Activate energy consumption delay 
-          activate = true;
+         
           //script_Player.CurrentState = ScriptPlayer.State.Possessed;
 
         }

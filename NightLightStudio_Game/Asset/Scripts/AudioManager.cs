@@ -8,6 +8,8 @@ namespace Unicorn
   public class AudioManager : UniBehaviour
   {
     // Variables  
+    int cc2;
+    int cc3;
 
     //Required Components
     //Variables ObjVariables;
@@ -17,7 +19,7 @@ namespace Unicorn
     //Variable Component Values
   
 
-   int bgm;
+   //int bgm;
 
 
     // Getting Script
@@ -26,8 +28,9 @@ namespace Unicorn
 
     public override void Init()
     {
-    
-
+     
+      Audio.PlayBGM("6");
+      
     }
 
     public override void LateInit()
@@ -45,46 +48,37 @@ namespace Unicorn
 
     }
     
-    public void PlayAudio (int index)
+    public int PlayAudio (int index)
     {
+      int chnl = -1;
       switch (index)
       {
-
         case 1:
+          chnl = Audio.PlayBGM("0");
+          break;
 
-          Audio.PlayOnce("0");
-          
-
-         break;
         case 2:
-
-         // Audio.PlayOnce(audioPath2);
-
+          chnl = Audio.PlayBGM("1");
           break;
+
         case 3:
-
-         // Audio.PlayOnce(audioPath3);
-
+          chnl = Audio.PlayBGM("2");
           break;
+
         case 4:
-
-         // Audio.PlayOnce(audioPath4);
-
+          chnl = Audio.PlayBGM("3");
           break;
+
         case 5:
-
-        //  Audio.PlayOnce(audioPath5);
-
+          chnl = Audio.PlayBGM("1");
           break;
 
         case 6:
-
-          bgm = Audio.PlayBGM("5");
-
+          chnl = Audio.PlayBGM("5");
+          //Audio.SetBGMVol(0.5f);
           break;
-
-
       }
+      return chnl;
     }
    
 

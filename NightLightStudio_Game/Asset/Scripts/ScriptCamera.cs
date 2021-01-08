@@ -101,16 +101,15 @@ namespace Unicorn
         float offZ_current;
 
         bool isCollide = false;
-        int colThresholdMax = 10;
-        int colThresholdCurrent = 0;
 
         Lerper offZ_lerp = new Lerper(0.0f, 10.0f, 0.5f); // old, thresold, spd
 
-
         Vector3 camOffSet;
+        Vector3 camDist;
 
         // Scripts
         ScriptPlayer script_player;
+        public bool useOffset = true;
 
         public override void Init()
         {
@@ -124,6 +123,7 @@ namespace Unicorn
             offZ = camVar.GetFloat(2);
             offZ_min = camVar.GetFloat(3);
             camOffSet = new Vector3(offX, offY, offZ);
+            //camDist = new Vector3(0.0f, 0.0f, offZ);
 
             Camera.SetUseThirdPersonCam(true);
             Camera.SetThirdPersonCamCanRotateAnot(true);
@@ -136,10 +136,6 @@ namespace Unicorn
 
             // Set tgt id
             tgtID = playerID;
-
-            //set transform pos
-            //Vector3 camPos = Camera.GetPosition();
-            //camTrans.SetPosition(camPos);
         }
 
         public override void LateInit()
@@ -150,103 +146,47 @@ namespace Unicorn
 
         public override void Update()
         {
-            Vector3 tgtTPos = GetTgtFromID(tgtID);
+            Vector3 camPos = Camera.GetPosition();
+            camTrans.SetPosition(camPos);
 
-            Vector3 tgtPos = Lerp(tgtTPos + getCamOffsetVec());
+            Vector3 tgtPos;
+            if (script_player.CurrentState == ScriptPlayer.State.Moth)
+            {
+                Vector3 ofs = new Vector3(0.0f, 15.0f, 0.0f);
+                tgtPos = Lerp(GetTgtFromID(tgtID) + ofs);
+            }
+            else
+            {
+                Vector3 ofs = new Vector3(0.0f, 200.0f, 0.0f);
+                tgtPos = Lerp(GetTgtFromID(tgtID) + ofs);
+            }
+            if (useOffset)
+                tgtPos += getCamOffsetVec();
             oldTgtPos = tgtPos;
             //if (script_player.CurrentState == ScriptPlayer.State.Human)
             //  tgtPos = playerTrans.GetPosition() + getCamOffsetVec();
             //if (script_player.CurrentState == ScriptPlayer.State.Moth)
             //  tgtPos = GetTgtFromID(playerID);
+
+
             Camera.SetThirdPersonCamTarget(tgtPos);
             //Console.WriteLine(offZ_current);
 
 
 
-            Vector3 camPos = Camera.GetPosition();
-
-            Vector3 midv = tgtTPos - camPos;
-            midv.x = midv.x * 0.5f;
-            midv.y = midv.y * 0.5f;
-            midv.z = midv.z * 0.5f;
-            Vector3 mid = camPos + midv; // midpoint
-
-            //Console.WriteLine(Camera.GetViewVector().x);
-            //Console.WriteLine(Camera.GetViewVector().y);
-            //Console.WriteLine(Camera.GetViewVector().z);
-
-
-            camTrans.SetPosition(mid);
-
-
-            // https://community.khronos.org/t/converting-a-3d-vector-into-three-euler-angles/49889/2
-
-            //You can post it in 3D coordinates. You must think of a sphere, rather than just a circle.
-            //Let r = radius, t = angle on x-y plane, & p = angle off of z-axis. Then you get:
-
-            //x = r * sin§ * cos(t)
-            //y = r * sin§ * sin(t)
-            //z = r * cos§
-
-            //If you already have x,y,z and want to switch it back, this is the conversion:
-
-            //r = sqrt(xx + yy + z*z)
-            //t = arctan(y/x)
-            //p = arccos(z/r)
-            //*For computing p, it’s easier to compute r first, then use it as the denominator (assuming ![x = y = z = 0]).
-
-            Vector3 rotation = Camera.GetViewVector();
-
-            float r = (float)Math.Sqrt(rotation.x * rotation.x + rotation.z * rotation.z);
-            float t = (float)(Math.Atan(rotation.y / r) / Math.PI * 180);
-            float p = (float)(Math.Acos(rotation.z / r) / Math.PI * 180);
-            t = t + 90;
-            if (rotation.x < 0)
-            {
-                //rotation = new Vector3(0, -p, 0);
-                rotation = new Vector3(-t, -p, 0);
-            }
-            else
-            {
-                //rotation = new Vector3(0, p, 0);
-                rotation = new Vector3(-t, p, 0);
-            }
-
-            //Vector3 rot = new Vector3(90.0f, 0.0f, 0.0f);
-            camTrans.SetRotation(rotation);
-
-            Vector3 sca = new Vector3(8.0f, offZ_current/* * 0.5f*/, 8.0f);
-            camTrans.SetScale(sca);
-
             if (isCollide)
             {
                 offZ_current = offZ_lerp.Lerp(offZ_min, RealDT());
-                colThresholdCurrent = 0;
-
-
-                //Console.WriteLine("isCollide");
             }
             else
             {
-
-
-                if (colThresholdCurrent > colThresholdMax)
+                if (script_player.CurrentState == ScriptPlayer.State.Moth)
                 {
-                    if (script_player.CurrentState == ScriptPlayer.State.Moth)
-                    {
-                        offZ_current = offZ_lerp.Lerp(offZ / 2, RealDT());
-                    }
-                    else
-                    {
-                        offZ_current = offZ_lerp.Lerp(offZ, RealDT());
-                    }
-
-                    //Console.WriteLine(">threshold");
+                    offZ_current = offZ_lerp.Lerp(offZ / 2, RealDT());
                 }
                 else
                 {
-                    ++colThresholdCurrent;
-                    //Console.WriteLine("++threshold");
+                    offZ_current = offZ_lerp.Lerp(offZ, RealDT());
                 }
             }
             //Console.WriteLine("offZ_current" + offZ_current);
@@ -260,18 +200,12 @@ namespace Unicorn
 
         public override void OnCollisionEnter(int other)
         {
-            if (other != playerID)
-            {
-                Console.WriteLine("OnTriggerEnter");
-                isCollide = true;
-            }
         }
 
         public override void OnCollisionStay(int other)
         {
             if (other != playerID)
             {
-                Console.WriteLine("OnTriggerStay");
                 isCollide = true;
             }
         }
@@ -280,36 +214,20 @@ namespace Unicorn
         {
             if (other != playerID)
             {
-                Console.WriteLine("OnTriggerExit");
                 isCollide = false;
             }
         }
 
         public override void OnTriggerEnter(int other)
         {
-            //if(other != playerID)
-            //{
-            //    Console.WriteLine("OnTriggerEnter");
-            //    isCollide = true;
-            //}
         }
 
         public override void OnTriggerStay(int other)
         {
-            //if(other != playerID)
-            //{
-            //    Console.WriteLine("OnTriggerStay");
-            //    isCollide = true;
-            //}
         }
 
         public override void OnTriggerExit(int other)
         {
-            //if (other != playerID)
-            //{
-            //    Console.WriteLine("OnTriggerExit");
-            //    isCollide = false;
-            //}
         }
 
         public override void Exit()
