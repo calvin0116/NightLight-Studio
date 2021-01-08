@@ -121,6 +121,8 @@ public:
 	{
 		ComponentGraphics* newcomp = new ComponentGraphics();
 		*newcomp = *this;
+		newcomp->_modelFileName = "";
+		newcomp->AddModel(_modelFileName);
 		return newcomp;
 	}
 } GraphicsComponent;

@@ -13,7 +13,8 @@ namespace NS_GRAPHICS
 		: //meshIDs{ 0 }, 
 		_modelIDs{ 0 }
 	{
-
+		_models.resize(INITIAL_MAX_COUNT, nullptr);
+		_usedStatus.resize(INITIAL_MAX_COUNT, false);
 	}
 
 	ModelManager::~ModelManager()
@@ -23,19 +24,26 @@ namespace NS_GRAPHICS
 
 	size_t ModelManager::GetFreeIndex()
 	{
-		return std::distance(_usedStatus.begin(), std::find(_usedStatus.begin(), _usedStatus.end(), false)) - 1;
-	}
-
-	void ModelManager::SetFreeIndex(unsigned index, bool state)
-	{
-		_usedStatus[index] = state;
+		return std::distance(_usedStatus.begin(), std::find(_usedStatus.begin(), _usedStatus.end(), false));
 	}
 
 	int ModelManager::AddModel(Model* const model)
 	{
-		_models.push_back(model);
+		unsigned index = GetFreeIndex();
 
-		return _modelIDs++;
+		//Full time to resize
+		if (index >= _models.size())
+		{
+			_models.push_back(model);
+			_usedStatus.push_back(true);
+		}
+		else
+		{
+			_models[index] = model;
+			_usedStatus[index] = true;
+		}
+
+		return index;
 	}
 
 	int ModelManager::AddModel(const std::string& modelkey)
@@ -51,10 +59,13 @@ namespace NS_GRAPHICS
 				Model* model = new Model();
 				size_t meshSize = check->second->_animatedMeshes.size();
 				model->_isAnimated = check->second->_isAnimated;
-				model->_boneMapping = check->second->_boneMapping;
-				model->_rootBone = check->second->_rootBone;
+				model->_rootBone = new Skeleton();
+				model->_rootBone->_boneMapping = check->second->_rootBone->_boneMapping;
+				model->_rootBone->_boneCount = check->second->_rootBone->_boneCount;
+				model->_rootBone->_rootJoint = check->second->_rootBone->_rootJoint;
+
 				model->_rootNode = check->second->_rootNode;
-				//model->_globalInverseTransform = check->second->_globalInverseTransform;
+				model->_globalInverseTransform = check->second->_globalInverseTransform;
 
 				//MAYBE REMOVED NOT THE BEST WAY TO DO THIS
 				for (size_t meshIndex = 0; meshIndex != meshSize; ++meshIndex)
@@ -213,6 +224,37 @@ namespace NS_GRAPHICS
 		return -1;
 	}
 
+	bool ModelManager::RemoveModelByID(const int& index)
+	{
+		if (_models[index] == nullptr || index >= _models.size())
+		{
+			return false;
+		}
+
+		if (_models[index]->_isAnimated)
+		{
+			for (auto& mesh : _models[index]->_animatedMeshes)
+			{
+				glDeleteBuffers(1, &mesh->VBO);
+				glDeleteBuffers(1, &mesh->ModelMatrixBO);
+				glDeleteBuffers(1, &mesh->EBO);
+				glDeleteVertexArrays(1, &mesh->VAO);
+
+				delete mesh;
+			}
+
+			for (auto& anim : _models[index]->_animations)
+			{
+				delete anim.second;
+			}
+
+			delete _models[index];
+		}
+
+		_models[index] = nullptr;
+		_usedStatus[index] = false;
+	}
+
 	void ModelManager::AddLoadedModel(Model* model, const std::string& modelkey)
 	{
 		_modelList.insert({ modelkey, std::move(model) });
@@ -253,24 +295,28 @@ namespace NS_GRAPHICS
 
 		for (auto& m : _models)
 		{
-			if(m->_isAnimated)
-			{ 
-				for (auto& mesh : m->_animatedMeshes)
+			if (m)
+			{
+				if (m->_isAnimated)
 				{
-					glDeleteBuffers(1, &mesh->VBO);
-					glDeleteBuffers(1, &mesh->ModelMatrixBO);
-					glDeleteBuffers(1, &mesh->EBO);
-					glDeleteVertexArrays(1, &mesh->VAO);
+					for (auto& mesh : m->_animatedMeshes)
+					{
+						glDeleteBuffers(1, &mesh->VBO);
+						glDeleteBuffers(1, &mesh->ModelMatrixBO);
+						glDeleteBuffers(1, &mesh->EBO);
+						glDeleteVertexArrays(1, &mesh->VAO);
 
-					delete mesh;
+						delete mesh;
+					}
+
+					for (auto& anim : m->_animations)
+					{
+						delete anim.second;
+					}
+
+					delete m->_rootBone;
+					delete m;
 				}
-
-				for (auto& anim : m->_animations)
-				{
-					delete anim.second;
-				}
-
-				delete m;
 			}
 		}
 
@@ -309,6 +355,10 @@ namespace NS_GRAPHICS
 				}
 			}
 
+			if (n.second->_rootBone)
+			{
+				delete n.second->_rootBone;
+			}
 			delete n.second;
 		}
 	}

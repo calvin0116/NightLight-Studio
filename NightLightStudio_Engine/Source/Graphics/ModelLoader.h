@@ -30,7 +30,7 @@ namespace NS_GRAPHICS
 		/// Needed for animations
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		void ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, AnimatedMesh* animatedMesh);
-		bool CreateSkeletal(BoneData& bone, aiNode* node, const aiScene* scene, Model*& model);
+		bool CreateSkeletal(Joint& joint, aiNode* node, const aiScene* scene, Model*& model);
 		void ProcessAnimation(aiNode* node, const aiScene* scene, Model*& model);
 		void FillNode(Node& ourNode, aiNode* node, const aiScene* scene, Model*& model);
 
