@@ -103,11 +103,10 @@ inline void NS_AI::AiManager::Update()
 
 		NlMath::Vector3D mag_dir = navComp->GetCurWp()->GetPos() - navTrans->_position ;	//Dir to the next way point
 		mag_dir.y = 0.0f;	//Ignore y axis
-		//5.0f = hardcoded radius to check
-		//std::cout << mag_dir.length() << std::endl;
 		if (mag_dir.length() < navComp->size_in_rad)	//Check if Ai reached the way point
 		{
 			navComp->SetNextWp();		//Set next way point to be the target for navigation
+
 			/*
 			for (Entity& ent : Obstacle_list)
 			{
@@ -135,4 +134,27 @@ inline void NS_AI::AiManager::Update()
 		}
 		++itr;
 	}
+}
+
+inline void NS_AI::AiManager::WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)
+{
+	if (wp_man.GetWayPointNumber())	//If there is way point
+	{
+		//nav_comp->SetCurPathIndex(wp_man.AstarPathFinding(my_pos, target_position,nav_comp->GetCurPath()));
+	}
+	else
+	{
+		//LocalVector<WayPoint*> temp_wp_list;
+		//wp_man.InsertWayPoint(my_pos, (my_pos - target_position).length());
+		//nav_comp->SetCurrentPath
+	}
+}
+
+inline void NS_AI::AiManager::WalkTowards(int ent_id, NlMath::Vec3 target_position)
+{
+	Entity ent = G_ECMANAGER->getEntity(ent_id);
+	NavigatorComponent* nav_comp = ent.getComponent<NavigatorComponent>();
+	TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+
+	WalkTowards(nav_comp, trans_comp->_position, target_position);
 }

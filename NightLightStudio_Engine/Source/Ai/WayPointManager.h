@@ -6,15 +6,16 @@
 #include "../Component/ComponentManager.h"
 
 #include <memory>
-
+#include <unordered_map>
 namespace NS_AI
 {
 	struct WayPoint;
 	struct Edges;
 
 	typedef enum class COST_VARIABLE {
-		Distance = 0,
-		SelfDefine
+		G_DIST = 0,
+		H_DIST,
+		SELF_DEFINE,
 	}CV;
 
 	const float dist_multiper = 1.0f;
@@ -23,7 +24,7 @@ namespace NS_AI
 	//Circular way point as of now
 	struct WayPoint
 	{
-		//int ent_id;								//Keep track of the owner of the way point			
+		int wp_id;											
 		bool isActive;         					//True for usual, false for when obstacle contains the point
 		//NlMath::Vector3D position;
 		//NlMath::Vector3D radius;				// 0 for none circular waypoint
@@ -31,12 +32,14 @@ namespace NS_AI
 
 		//float cost;  //<-self inserted cost	
 		//->std::map<CV, int> cost_var;			//map of variable that affect the cost
-		std::pair<CV, float> distance_var;		//Heuristic distance away from the end point
+		std::pair<CV, float> h_dist_var;		//Heuristic distance away from the end point
+		std::pair<CV, float> g_dist_var;		//Heuristic distance away from the start point
 		std::pair<CV, float> self_define_var;
 
 		//std::vector<std::shared_ptr<Edges>> connected_edges;	
 		LocalVector<Edges*> connected_edges;		//Keep track of connecting edges
-		
+		WayPoint* parent;
+
 		//=== Constructor===//  
 		WayPoint() //ent_id{-1},
 			:isActive{ true }
@@ -45,11 +48,11 @@ namespace NS_AI
 				NlMath::Vector3D{0.0f,0.0f,0.0f},
 				1.0f
 			}
-			, distance_var{ CV::Distance, 0.0f }
-			, self_define_var{ CV::SelfDefine, 1.0f }
-		{
-
-		}
+			, g_dist_var{ CV::G_DIST, 0.0f }
+			, h_dist_var{ CV::H_DIST, 0.0f }
+			, self_define_var{ CV::SELF_DEFINE, 1.0f }
+			, parent{nullptr}
+		{}
 		//======Getter / Setter for alternate access ========//
 		NlMath::Vec3& GetPos()
 		{
@@ -61,6 +64,11 @@ namespace NS_AI
 			return sphere_col.radius;
 		}
 
+		float GetFCost()
+		{
+			return g_dist_var.second + h_dist_var.second + self_define_var.second;
+		}
+
 	};
 
 	//Edges that connects two points
@@ -69,8 +77,8 @@ namespace NS_AI
 		bool isActive; 							//True for usual, false for when obstacle is obstructing
 		WayPoint* wp1, * wp2;
 		//std::map<CV, int> cost_var;				//map of variable that affect the cost
-		std::pair<CV, float> distance_var;
-		std::pair<CV, float> self_define_var;
+		//std::pair<CV, float> distance_var;
+		//std::pair<CV, float> self_define_var;
 		//float length;
 		float total_cost;		//Depends on length only as of now
 
@@ -78,8 +86,8 @@ namespace NS_AI
 			:isActive{ true }
 			, wp1{ nullptr }
 			, wp2{ nullptr }
-			, distance_var{ CV::Distance, 0.0f }
-			, self_define_var{ CV::SelfDefine, 1.0f }
+			//, distance_var{ CV::Distance, 0.0f }
+			//, self_define_var{ CV::SelfDefine, 1.0f }
 			, total_cost{ 0.0f }
 		{}
 
@@ -87,7 +95,7 @@ namespace NS_AI
 		NlMath::Vec3 DirVec() { return wp2->GetPos() - wp1->GetPos(); };
 		
 		float Magnitude() { 
-			return distance_var.second;
+			return DirVec().length();
 		};
 
 		WayPoint* NextWayPoint(WayPoint* other_wp)
@@ -114,6 +122,7 @@ namespace NS_AI
 		bool isActive;
 		bool runtimeUpdate;
 
+		/*
 		//Costing for single edge
 		float CalcCost(Edges& edge)
 		{
@@ -132,9 +141,10 @@ namespace NS_AI
 		{
 			edge.distance_var.second = (edge.wp1->sphere_col.center - edge.wp2->sphere_col.center).length();
 		};
-
+		*/
 	public:
 		//======Inserting circular way point======//
+		/*
 		WayPoint& InsertWayPoint(WayPoint wp, LocalVector<Edges*>* _edges_list = nullptr) {
 			//0 way point
 			//waypoint_list.push_back(std::shared_ptr<WayPoint>(new WayPoint(wp)));
@@ -182,7 +192,7 @@ namespace NS_AI
 				CalcLength(edge);
 				CalcCost(edge);
 			}
-		};
+		};*/
 		void InsertObstacle(ComponentCollider* col_ptr)
 		{
 			obstacle_list.push_back(col_ptr);
@@ -211,7 +221,6 @@ namespace NS_AI
 			for (WayPoint& wp : waypoint_list)
 			{
 				float sqrtlen = (wp.GetPos() - end_point).sqrtlength();
-				wp.distance_var.second = sqrtlen;
 				if (sqrtlen > result)
 					result = sqrtlen;
 			}
@@ -229,64 +238,93 @@ namespace NS_AI
 
 		}
 		//Search for best way point to 
-		LocalVector<WayPoint*> AstarWayPointFinding(WayPoint* start_wp, WayPoint* end_wp)
+		LocalVector<int> AstarWayPointFinding(WayPoint* start_wp, WayPoint* end_wp)
 		{
-			//int best_path_cost;
-			//std::vector<WayPoint*> best_path;
-			//std::vector<WayPoint*> explored_path;
-			LocalVector<WayPoint*> cur_path;
+			//LocalVector<WayPoint*> cur_path;
+			//pair -> way point & f value 
+			std::unordered_map<WayPoint*, int> openList;
+			std::unordered_map<WayPoint*, int> closeList;
+
 			//Insert starting way point as the first
-			cur_path.push_back(start_wp);
+			openList[start_wp] = 0;
+			WayPoint* cur_wp = start_wp;
 
 			//Loop till you hit the end point
-			while (cur_path.back() != end_wp)
+			while (openList.find(end_wp)!= openList.end())
 			{
 				int cur_cost = INT_MAX;
-				Edges* cur_best_edges = nullptr;
+				WayPoint* cur_best_wp = nullptr;
+				WayPoint* prev_wp = cur_wp;
 
-				//Get the best detail
-				for (Edges* edge : cur_path.back()->connected_edges)
+				//Get the best node with the least cost
+				for (Edges* edge : cur_wp->connected_edges)
 				{
-					if (edge->GetCost() < cur_cost)
+					WayPoint* next_wp = edge->NextWayPoint(cur_wp);
+					if (next_wp->GetFCost() < cur_cost)
 					{
-						cur_cost = edge->GetCost();
-						cur_best_edges = edge;
+						cur_cost = next_wp->GetFCost();
+						cur_best_wp = next_wp;
 					}
 				}
-				//Add way point into the current path
-				cur_path.push_back(cur_best_edges->NextWayPoint(cur_path.back()));
+				//Check if best wp is the end;
+				if (cur_best_wp == end_wp)
+				{
+					cur_best_wp->parent = prev_wp;
+					openList[cur_best_wp] = openList[cur_best_wp] + cur_best_wp->GetFCost();
+					break;
+				}
+				else //Put into close list
+				{
+					//closeList[cur_best_wp]
+				}
+
 			}
 			
-			return cur_path;
+			//Loop backwards to find the best path
+			LocalVector<int> best_path;
+			while (cur_wp != start_wp)
+			{
+
+			}
+			//return cur_path;
+			return best_path;
 		}
 
 
-		LocalVector<WayPoint*> AstarPathFinding(NlMath::Vector3D start_point,
+		LocalVector<int> AstarPathFinding(NlMath::Vector3D start_point,
 			NlMath::Vector3D end_point,
-			LocalVector<WayPoint> way_points,
+			LocalVector<WayPoint*> way_points,
 			int ent_id = -1)
 		{
+			//0.1 Setup for Astar
+			int indexing = 0;
+			for (WayPoint*& _wp : way_points)
+			{
+				_wp->wp_id = indexing;
+				++indexing;
+			}
+			
 			//1. Find collided waypoint for start and end
 			WayPoint* start_wp = nullptr, * end_wp = nullptr;
-			LocalVector<WayPoint*> return_wp;
+			LocalVector<int> return_wp;
 
 			if (ent_id == -1)
 			{
-				for (WayPoint& wp : way_points)
+				for (WayPoint*& wp : way_points)
 				{
 					//Check if point is in circle
-					if ((wp.GetPos() - start_point).sqrtlength() < wp.GetRad() * wp.GetRad())
+					if ((wp->GetPos() - start_point).sqrtlength() < wp->GetRad() * wp->GetRad())
 					{
-						start_wp = &wp;
+						start_wp = wp;
 					}
 				}
 
-				for (WayPoint& wp : way_points)
+				for (WayPoint*& wp : way_points)
 				{
 					//Check if point is in circle
-					if ((wp.GetPos() - end_point).sqrtlength() < wp.GetRad() * wp.GetRad())
+					if ((wp->GetPos() - end_point).sqrtlength() < wp->GetRad() * wp->GetRad())
 					{
-						end_wp = &wp;
+						end_wp = wp;
 						break;
 					}
 				}
@@ -295,7 +333,7 @@ namespace NS_AI
 			//1.1 Check for being in the same way point
 			if (start_wp == end_wp)
 			{
-				return_wp.push_back(end_wp);
+				return_wp.push_back(end_wp->wp_id);
 				return return_wp;
 			}
 

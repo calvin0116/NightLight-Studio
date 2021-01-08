@@ -1363,10 +1363,44 @@ void InspectorWindow::NavComp(Entity& ent)
 				[this, &s_name,&nav_comp](Entity* entptr)
 				{
 					nav_comp->cur_wp_path = entptr->getComponent<WayPointMapComponent>();
-					s_name = G_ECMANAGER->EntityName[entptr->getId()];
-					nav_comp->wp_path_ent_name = s_name;
+					if (nav_comp->cur_wp_path != nullptr) {
+						s_name = G_ECMANAGER->EntityName[entptr->getId()];
+						nav_comp->wp_path_ent_name = s_name;
+					}
 				});
 
+			if (!s_name.empty())
+			{
+				_levelEditor->LE_AddCombo("WayPoints to navigate", (int&)nav_comp->wp_creation_type,
+				{
+					"Standard (1->N)",
+					"Reverse (N->1)",
+					"Custom"
+				});
+
+				if (nav_comp->wp_creation_type == WPP_CUSTOM)
+				{
+					if (ImGui::Button("Add WayPoint Index"))
+					{
+						int interger = 0;
+						nav_comp->path_indexes.push_back(interger);
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Remove WayPoint Index"))
+					{
+						nav_comp->path_indexes.pop_back();
+					}
+
+					int wp_index = 1;
+					for (int& i : nav_comp->path_indexes) //[path, name]
+					{
+						std::string p = "WayPoint_" + std::to_string(wp_index);
+						_levelEditor->LE_AddInputIntProperty(p, i, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
+						wp_index++;
+					}
+
+				}
+			}
 		}
 	}
 

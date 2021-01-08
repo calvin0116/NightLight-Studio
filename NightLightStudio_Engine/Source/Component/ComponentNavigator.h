@@ -42,6 +42,7 @@ public:
 	LocalString<125> wp_path_ent_name;
 	
 	LocalVector<int> path_indexes;		//Current following routes
+
 	WP_PATH_CREATION_TYPE wp_creation_type;
  	int cur_wp_index;
 	int prev_wp_index;
@@ -152,6 +153,9 @@ public:
 				return;
 		}
 
+		cur_wp_index = 0;
+		prev_wp_index = 0;
+
 		switch (wp_creation_type) 
 		{
 		case WPP_STANDARD:
@@ -193,7 +197,7 @@ public:
 		}
 		else
 		if (traverseFront)
-			if (cur_wp_index < cur_wp_path->GetPath().size() - 1)
+			if (cur_wp_index < path_indexes.size() - 1)
 				++cur_wp_index;
 			else {
 				if (wp_nav_type == WN_TOANDFRO)
