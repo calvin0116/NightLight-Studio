@@ -54,6 +54,9 @@
     <Filter Include="Source Files\Logic" />
     <Filter Include="Source Files\Logic\CScripts">
     </Filter>
+    <Filter Include="Source Files\Debug">
+      <UniqueIdentifier>{16e51090-10ed-4dc0-abc5-1aec457e199f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\Include\glm\glm.natvis" />
@@ -366,6 +369,12 @@
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentCanvasBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\CustomTypes\UIElementBind.cpp" />
+    <ClCompile Include="Source\Debug\DebugDiagnostic.cpp">
+      <Filter>Source Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Debug\DebugToStream.cpp">
+      <Filter>Source Files\Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -749,6 +758,12 @@
     <ClInclude Include="Source\Component\ComponentCScript.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentCanvasBind.h" />
     <ClInclude Include="Source\Mono\Binding\CustomTypes\UIElementBind.h" />
+    <ClInclude Include="Source\Debug\DebugDiagnostic.h">
+      <Filter>Source Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Debug\DebugToStream.h">
+      <Filter>Source Files\Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
