@@ -794,6 +794,7 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Picking.h">
       <Filter>Source Files\Editor\LevelEditor\Picking</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Graphics\Animation.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />

@@ -248,6 +248,7 @@
     <ClInclude Include="Source\Editor\LevelEditor\WindowsDialogBox.h" />
     <ClInclude Include="Source\Editor\PrefabManager.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
+    <ClInclude Include="Source\Graphics\Animation.h" />
     <ClInclude Include="Source\Graphics\AnimationController.h" />
     <ClInclude Include="Source\Graphics\AnimationSystem.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
