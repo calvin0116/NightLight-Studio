@@ -1,6 +1,6 @@
 {
 	"SceneFolder" : "Scene/",
-	"StartUpScene" : "TestAIWithObs",
+	"StartUpScene" : "Default",
 	"ListOfSceneToLoad" : 
 	[]
 }

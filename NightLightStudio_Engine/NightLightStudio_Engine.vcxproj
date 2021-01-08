@@ -314,6 +314,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Ai\AiManager.cpp" />
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
+    <ClCompile Include="Source\Component\ComponentWayPoint.cpp" />
     <ClCompile Include="Source\Debug\DebugDiagnostic.cpp" />
     <ClCompile Include="Source\Debug\DebugToStream.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.cpp" />

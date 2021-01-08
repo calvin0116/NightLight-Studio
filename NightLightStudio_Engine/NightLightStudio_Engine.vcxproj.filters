@@ -406,6 +406,9 @@
       <Filter>Source Files\Editor\LevelEditor\Picking</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\Animation.cpp" />
+    <ClCompile Include="Source\Component\ComponentWayPoint.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
