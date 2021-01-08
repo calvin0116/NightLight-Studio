@@ -374,6 +374,7 @@
     <ClCompile Include="Source\Editor\LevelEditor\WindowsDialogBox.cpp" />
     <ClCompile Include="Source\Editor\PrefabManager.cpp" />
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
+    <ClCompile Include="Source\Graphics\Animation.cpp" />
     <ClCompile Include="Source\Graphics\AnimationController.cpp" />
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
     <ClCompile Include="Source\Component\ComponentAnimation.cpp" />
