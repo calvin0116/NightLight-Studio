@@ -12,8 +12,8 @@
 #include <time.h>
 
 enum WP_NAV_TYPE {
-	WN_TOANDFRO = 0,
-	WN_CIRCULAR,
+	WN_TOANDFRO = 0,	// 1 -> N -> (Reset) -> 1 -> N
+	WN_CIRCULAR,		// 1 -> N -> 1
 	WN_RANDOM
 };
 
@@ -21,6 +21,11 @@ enum WP_PATH_CREATION_TYPE {
 	WPP_STANDARD = 0,	// 1 ->  N
 	WPP_REVERSE,		// N -> 1
 	WPP_CUSTOM,			// Inserted through script / leveleditor 
+};
+
+enum NAV_STATE {
+	NV_PATROL,		// Go from way point to way point
+	NV_CIRCLING,	// Patrol around current way point
 };
 
 typedef class ComponentNavigator : public ISerializable //: public IComponent
@@ -47,6 +52,8 @@ public:
  	int cur_wp_index;
 	int prev_wp_index;
 	
+	NAV_STATE nav_state;
+	float circuling_rad = 20.0f;
 
 	ComponentNavigator()
 		:isFollowing{ true }
@@ -57,6 +64,8 @@ public:
 		, curTime{-1.f}
 		, cur_wp_path{nullptr}
 		, wp_creation_type{WPP_STANDARD}
+		, nav_state{ NV_CIRCLING }
+		
 	{
 		strcpy_s(ser_name, "NavigatorComponent");
 	}
@@ -218,11 +227,8 @@ public:
 				traverseFront = true;
 				++cur_wp_index;
 			}
-		
-		//cur_path.at(prev_wp_index) = cur_path.at(cur_wp_index)
-		//for(int)
-		//NlMath::RayToAABB()
 	}
+
 
 	void SetSpeed(float spd)
 	{
