@@ -64,7 +64,7 @@ public:
 		, curTime{-1.f}
 		, cur_wp_path{nullptr}
 		, wp_creation_type{WPP_STANDARD}
-		, nav_state{ NV_CIRCLING }
+		, nav_state{ NV_PATROL }
 		
 	{
 		strcpy_s(ser_name, "NavigatorComponent");
