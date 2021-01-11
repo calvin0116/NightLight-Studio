@@ -152,8 +152,10 @@ inline void NS_AI::AiManager::Update()
 				{
 					//Circular motion
 					//Caculate the angle from the way point
+					/*
 					glm::vec3 up_vec = { 1.0f, 0.f, 0.f };
 					glm::vec3 rev_dir = navTrans->_position - wp_pos;
+
 					float ab_dot = glm::dot(rev_dir, up_vec);
 					float ab_mag = up_vec.length() * rev_dir.length();
 					 
@@ -171,9 +173,20 @@ inline void NS_AI::AiManager::Update()
 
 					glm::vec3 new_pos = TranslateBack * glm::vec4{ navTrans->_position , 1.0f};
 					//auto rotatedVec = ;
-
+					
 					rb->velocity = (new_pos - navTrans->_position);
+					*/
+
+					glm::vec3 rev_dir = navTrans->_position - wp_pos;
+					rev_dir.y = 0.0f;
+					glm::quat Quaternion(glm::vec3(0.0f, 1.5708f, 0.0f));
+					glm::mat4 Rotate =  glm::mat4_cast(Quaternion);
+
+					glm::vec3 dir = Rotate * glm::vec4{ rev_dir , 1.0f };
+					dir = glm::normalize(dir);
+					rb->velocity = dir * navComp->speed;
 				}
+				
 				else
 				{
 					mag_dir = glm::normalize(mag_dir);
