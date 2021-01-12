@@ -336,6 +336,10 @@ namespace NS_AI
 				return_wp.push_back(end_wp->wp_id);
 				return return_wp;
 			}
+			else if (start_wp == nullptr || end_wp == nullptr)
+			{
+				std::cout << "Starting / Ending way point not found " << std::endl;
+			}
 
 			//2. Start from starting waypoint, loop through each the edges conected to find the paths to the end
 			return AstarWayPointFinding(start_wp, end_wp);

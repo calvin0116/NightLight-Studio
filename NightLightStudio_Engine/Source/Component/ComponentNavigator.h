@@ -25,7 +25,7 @@ enum WP_PATH_CREATION_TYPE {
 
 enum NAV_STATE {
 	NV_PATROL = 0,		// Go from way point to way point
-	NV_CIRCLING,	// Patrol around current way point
+	NV_CIRCLING,		// Patrol around current way point
 };
 
 typedef class ComponentNavigator : public ISerializable //: public IComponent
@@ -46,7 +46,7 @@ public:
 	ComponentWayPointMap* cur_wp_path;	//Way points and edges for all routes
 	LocalString<125> wp_path_ent_name;
 	
-	LocalVector<int> path_indexes;		//Current following routes
+	LocalVector<std::pair<int,bool>> path_indexes;		//Current following routes
 
 	WP_PATH_CREATION_TYPE wp_creation_type;
  	int cur_wp_index;
@@ -87,11 +87,11 @@ public:
 
 	WayPointComponent* GetCurWp()
 	{
-		return cur_wp_path->GetPath().at(path_indexes.at(cur_wp_index));
+		return cur_wp_path->GetPath().at(path_indexes.at(cur_wp_index).first);
 	}
 	WayPointComponent* GetPrevWp()
 	{
-		return cur_wp_path->GetPath().at(path_indexes.at(prev_wp_index));
+		return cur_wp_path->GetPath().at(path_indexes.at(prev_wp_index).first);
 	}
 
 	//LocalVector<int>
@@ -172,7 +172,7 @@ public:
 			path_indexes.clear();
 			int wp_size = cur_wp_path->GetPath().size();
 			for (int i = 0; i < wp_size; ++i)
-				path_indexes.push_back(i);
+				path_indexes.push_back(std::make_pair(i, true));
 			break;
 		}
 		case WPP_REVERSE:
@@ -180,7 +180,7 @@ public:
 			path_indexes.clear();
 			int wp_size = cur_wp_path->GetPath().size();
 			for (int i = wp_size; i >= 0; ++i)
-				path_indexes.push_back(i);
+				path_indexes.push_back(std::make_pair(i, true));
 			break;
 		}
 		case WPP_CUSTOM:	//Inserted beforehand
@@ -227,6 +227,10 @@ public:
 				traverseFront = true;
 				++cur_wp_index;
 			}
+
+		//2. Check for direct route
+
+		//3. Find route to way point if being blocked
 	}
 
 
@@ -255,12 +259,18 @@ public:
 
 	void SetCurPathIndex(LocalVector<int> path)
 	{
-		path_indexes = path;
+		for(int node : path)
+			path_indexes.push_back(std::make_pair(node, true));
 	}
 
 	LocalVector<WayPointComponent*> GetCurPath()
 	{
 		return cur_wp_path->GetPath();
+	}
+
+	void TurnOffCurWayointPoint()
+	{
+		path_indexes.at(cur_wp_index).second = false;
 	}
 
 } NavigatorComponent, NavComponent;

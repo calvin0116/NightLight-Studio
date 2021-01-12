@@ -1386,8 +1386,7 @@ void InspectorWindow::NavComp(Entity& ent)
 				{
 					if (ImGui::Button("Add WayPoint Index"))
 					{
-						int interger = 0;
-						nav_comp->path_indexes.push_back(interger);
+						nav_comp->path_indexes.push_back(std::make_pair(0,true));
 					}
 					ImGui::SameLine();
 					if (ImGui::Button("Remove WayPoint Index"))
@@ -1396,10 +1395,10 @@ void InspectorWindow::NavComp(Entity& ent)
 					}
 
 					int wp_index = 1;
-					for (int& i : nav_comp->path_indexes) //[path, name]
+					for (auto& i : nav_comp->path_indexes) //[path, name]
 					{
 						std::string p = "WayPoint_" + std::to_string(wp_index);
-						_levelEditor->LE_AddInputIntProperty(p, i, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
+						_levelEditor->LE_AddInputIntProperty(p, i.first, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
 						wp_index++;
 					}
 
@@ -1450,7 +1449,10 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
 					[this, &str](Entity* entptr)
 					{
-						str = G_ECMANAGER->EntityName[entptr->getId()];
+						WayPointComponent* wpc = entptr->getComponent<WayPointComponent>();
+						if (wpc != nullptr) {
+							str = G_ECMANAGER->EntityName[entptr->getId()];
+						}
 
 					});
 
