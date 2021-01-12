@@ -178,8 +178,8 @@ public:
 		case WPP_REVERSE:
 		{
 			path_indexes.clear();
-			int wp_size = cur_wp_path->GetPath().size();
-			for (int i = wp_size; i >= 0; ++i)
+			int wp_size = cur_wp_path->GetPath().size() - 1;
+			for (int i = wp_size; i >= 0; --i)
 				path_indexes.push_back(std::make_pair(i, true));
 			break;
 		}

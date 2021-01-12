@@ -1351,6 +1351,7 @@ void InspectorWindow::NavComp(Entity& ent)
 			if(nav_comp->stopAtEachWayPoint)
 				_levelEditor->LE_AddInputFloatProperty("End time", nav_comp->endTime, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
 			
+			_levelEditor->LE_AddCheckbox("Pause at start", &nav_comp->isPaused);
 			//Way point path to look at
 			std::string s_name;
 
@@ -1372,6 +1373,14 @@ void InspectorWindow::NavComp(Entity& ent)
 						nav_comp->wp_path_ent_name = s_name;
 					}
 				});
+
+			_levelEditor->LE_AddCombo("Starting Nav State", (int&)nav_comp->nav_state,
+				{
+					"Patrol",
+					"Circling around first way point"
+				});
+			_levelEditor->LE_AddInputFloatProperty("Circling Radius", nav_comp->circuling_rad, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
+
 
 			if (!s_name.empty())
 			{
