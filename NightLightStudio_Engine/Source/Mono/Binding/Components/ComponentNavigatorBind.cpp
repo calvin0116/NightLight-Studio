@@ -20,6 +20,11 @@ namespace ComponentNavigatorBind
       "Navigator");
     MonoWrapper::BindClassFunction(set_IsPaused_Internal, "set_IsPaused_Internal",
       "Navigator");
+
+    MonoWrapper::BindClassFunction(get_NavState_Internal, "get_NavState_Internal",
+        "Navigator");
+    MonoWrapper::BindClassFunction(set_NavState_Internal, "set_NavState_Internal",
+        "Navigator");
   }
 
   float get_Speed_Internal(NavComponent* nav)
@@ -50,5 +55,13 @@ namespace ComponentNavigatorBind
   void set_IsPaused_Internal(NavComponent* nav, bool val)
   {
     nav->SetIsPaused(val);
+  }
+  int get_NavState_Internal(NavComponent* nav)
+  {
+      return (int)nav->nav_state;
+  }
+  void set_NavState_Internal(NavComponent* nav, int val)
+  {
+      nav->nav_state = (NAV_STATE)val;
   }
 }

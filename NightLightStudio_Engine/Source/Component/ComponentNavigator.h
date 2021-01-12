@@ -24,7 +24,7 @@ enum WP_PATH_CREATION_TYPE {
 };
 
 enum NAV_STATE {
-	NV_PATROL,		// Go from way point to way point
+	NV_PATROL = 0,		// Go from way point to way point
 	NV_CIRCLING,	// Patrol around current way point
 };
 

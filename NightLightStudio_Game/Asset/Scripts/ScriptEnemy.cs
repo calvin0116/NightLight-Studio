@@ -159,6 +159,14 @@ namespace Unicorn
           startPatroling = true;
         */
       }
+	  if (Input.GetKeyPress(VK.IKEY_Y))
+      {
+        enemyNavigator.NavState = 0;
+      }
+	  if (Input.GetKeyPress(VK.IKEY_U))
+      {
+        enemyNavigator.NavState = 1;
+      }
       //Speed up
       if (Input.GetKeyPress(VK.IKEY_K))
       {
