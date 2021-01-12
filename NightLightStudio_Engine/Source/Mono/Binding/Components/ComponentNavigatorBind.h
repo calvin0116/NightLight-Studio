@@ -16,5 +16,7 @@ namespace ComponentNavigatorBind
   int get_NavState_Internal(NavComponent* trans);
   void set_NavState_Internal(NavComponent* trans, int val);
 
+  void toggle_WayPointActive_Internal(NavComponent* nav, int val, bool act);
+
   void BindComponentNavigator();
 }

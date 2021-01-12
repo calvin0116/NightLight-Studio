@@ -170,7 +170,12 @@ namespace Unicorn
       {
         enemyNavigator.NavState = 1;
       }
-	  
+
+    //Set active to specify wp
+      if (Input.GetKeyPress(VK.IKEY_J))
+      {
+        enemyNavigator.SetWpActive(1, false);
+      }
       //Speed up
       if (Input.GetKeyPress(VK.IKEY_K))
       {

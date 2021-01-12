@@ -228,6 +228,9 @@ public:
 				++cur_wp_index;
 			}
 
+
+		if (!path_indexes.at(cur_wp_index).second)
+			SetNextWp();
 		//2. Check for direct route
 
 		//3. Find route to way point if being blocked
@@ -271,6 +274,11 @@ public:
 	void TurnOffCurWayointPoint()
 	{
 		path_indexes.at(cur_wp_index).second = false;
+	}
+
+	void ToggleWayPointActive(int index, bool act)
+	{
+		path_indexes.at(index).second = act;
 	}
 
 } NavigatorComponent, NavComponent;
