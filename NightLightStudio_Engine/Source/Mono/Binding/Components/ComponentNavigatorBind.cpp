@@ -25,6 +25,9 @@ namespace ComponentNavigatorBind
         "Navigator");
     MonoWrapper::BindClassFunction(set_NavState_Internal, "set_NavState_Internal",
         "Navigator");
+
+    MonoWrapper::BindClassFunction(toggle_WayPointActive_Internal, "toggle_WayPointActive_Internal",
+        "Navigator");
   }
 
   float get_Speed_Internal(NavComponent* nav)
@@ -63,5 +66,10 @@ namespace ComponentNavigatorBind
   void set_NavState_Internal(NavComponent* nav, int val)
   {
       nav->nav_state = (NAV_STATE)val;
+  }
+
+  void toggle_WayPointActive_Internal(NavComponent* nav, int val, bool act)
+  {
+      nav->ToggleWayPointActive(val, act);
   }
 }

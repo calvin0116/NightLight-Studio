@@ -178,8 +178,8 @@ public:
 		case WPP_REVERSE:
 		{
 			path_indexes.clear();
-			int wp_size = cur_wp_path->GetPath().size();
-			for (int i = wp_size; i >= 0; ++i)
+			int wp_size = cur_wp_path->GetPath().size() - 1;
+			for (int i = wp_size; i >= 0; --i)
 				path_indexes.push_back(std::make_pair(i, true));
 			break;
 		}
@@ -228,6 +228,9 @@ public:
 				++cur_wp_index;
 			}
 
+
+		if (!path_indexes.at(cur_wp_index).second)
+			SetNextWp();
 		//2. Check for direct route
 
 		//3. Find route to way point if being blocked
@@ -271,6 +274,11 @@ public:
 	void TurnOffCurWayointPoint()
 	{
 		path_indexes.at(cur_wp_index).second = false;
+	}
+
+	void ToggleWayPointActive(int index, bool act)
+	{
+		path_indexes.at(index).second = act;
 	}
 
 } NavigatorComponent, NavComponent;
