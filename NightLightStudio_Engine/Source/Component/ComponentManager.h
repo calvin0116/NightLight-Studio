@@ -905,8 +905,12 @@ public:
 				//free(reinterpret_cast<void*>(comp));
 
 
-				T* returnComp = compSetMgr->AttachComponent<T>(*this, T());
+				//T t;
+				//ISerializable* ser = reinterpret_cast<ISerializable*>(&t);
+				//ser->objId = objId;
+				//T* returnComp = compSetMgr->AttachComponent<T>(*this, t);
 
+				T* returnComp = compSetMgr->AttachComponent<T>(*this, T());
 				ISerializable* ser = reinterpret_cast<ISerializable*>(returnComp);
 				ser->objId = objId;
 

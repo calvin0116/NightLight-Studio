@@ -223,6 +223,9 @@ void* ComponentManager::ComponentSetManager::AttachComponent(ComponentManager::C
 	compData->containerIndex = newCId; // set component index within the container
 
 
+	ISerializable* ser = reinterpret_cast<ISerializable*>(compData->compPtr);
+	ser->objId = objId + compSet->idIndexModifier;
+
 	// return the component
 	return compData->compPtr;
 }
@@ -678,63 +681,76 @@ void* ComponentManager::ComponentSetManager::getComponent(ComponentManager::Cont
 
 int ComponentManager::ComponentSetManager::getObjId(Iterator itr)
 {
-	int containerId = itr.itrCurrState == Iterator::IteratorState::ITR_ROOT ? itr.containerId : itr.containerIdChild;
-	int objContainerId = itr.itrCurrState == Iterator::IteratorState::ITR_ROOT ? compSet->objContainerId : compSet->objContainerIdChilds;
-
-	int objId = -1;
 
 
-	//compSet->cmm.getElementAt(compSet->objContainerId, 0);
-	auto itrOb = compSet->cmm.begin(objContainerId);
-	auto itrObEnd = compSet->cmm.end(objContainerId);
-	while (itrOb != itrObEnd)
-	{
-		char* obj = (*itrOb);
+	ISerializable* ser = reinterpret_cast<ISerializable*>(*itr);
 
-		ComponentSet::ObjectData* obj_o = reinterpret_cast<ComponentSet::ObjectData*>(obj);
-		
 
-		obj += sizeof(ComponentManager::ComponentSet::ObjectData);
+	return ser->objId;
 
-		// find the container id
-		int n = 0;
-		for (int currentId : compSet->componentContainerIDs)
-		{
-			if (currentId == containerId)
-				break;
-			++n;
-		}
+	
+	//if(ser->objId != 0xcccccccc) // 0xcccccccc == -858993460 // uninit value
+	//	return ser->objId;
 
-		// get the position of the component data
-		obj += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * (n/2);
+	// the below code is not O(1) // depreciated
 
-		//check
-		ComponentSet::ObjectData::ComponentData* comp = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(obj);
-		if (itr.itrCurrState == Iterator::IteratorState::ITR_ROOT)
-		{
-			if (comp->containerIndex == itr.memItr.getCurrentIndex())
-			//if (comp->containerId == itr.containerId) //memItr.getCurrentIndex())
-			{
-				objId = obj_o->objId;
-				break;
-			}
-		}
-		else
-		{
-			if (comp->containerIndex == itr.memItrChild.getCurrentIndex())
-			{
-				objId = obj_o->objId;
-				break;
-			}
-		}
+	//int containerId = itr.itrCurrState == Iterator::IteratorState::ITR_ROOT ? itr.containerId : itr.containerIdChild;
+	//int objContainerId = itr.itrCurrState == Iterator::IteratorState::ITR_ROOT ? compSet->objContainerId : compSet->objContainerIdChilds;
 
-		++itrOb;
-	}
+	//int objId = -1;
 
-	if (objId == -1) throw;
 
-	//return objId + compSet->idIndexModifier;
-	return itr.itrCurrState == Iterator::IteratorState::ITR_ROOT ? objId + compSet->idIndexModifier : objId + compSet->idIndexModifier + IDRANGE_RT;
+	////compSet->cmm.getElementAt(compSet->objContainerId, 0);
+	//auto itrOb = compSet->cmm.begin(objContainerId);
+	//auto itrObEnd = compSet->cmm.end(objContainerId);
+	//while (itrOb != itrObEnd)
+	//{
+	//	char* obj = (*itrOb);
+
+	//	ComponentSet::ObjectData* obj_o = reinterpret_cast<ComponentSet::ObjectData*>(obj);
+	//	
+
+	//	obj += sizeof(ComponentManager::ComponentSet::ObjectData);
+
+	//	// find the container id
+	//	int n = 0;
+	//	for (int currentId : compSet->componentContainerIDs)
+	//	{
+	//		if (currentId == containerId)
+	//			break;
+	//		++n;
+	//	}
+
+	//	// get the position of the component data
+	//	obj += sizeof(ComponentManager::ComponentSet::ObjectData::ComponentData) * (n/2);
+
+	//	//check
+	//	ComponentSet::ObjectData::ComponentData* comp = reinterpret_cast<ComponentSet::ObjectData::ComponentData*>(obj);
+	//	if (itr.itrCurrState == Iterator::IteratorState::ITR_ROOT)
+	//	{
+	//		if (comp->containerIndex == itr.memItr.getCurrentIndex())
+	//		//if (comp->containerId == itr.containerId) //memItr.getCurrentIndex())
+	//		{
+	//			objId = obj_o->objId;
+	//			break;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		if (comp->containerIndex == itr.memItrChild.getCurrentIndex())
+	//		{
+	//			objId = obj_o->objId;
+	//			break;
+	//		}
+	//	}
+
+	//	++itrOb;
+	//}
+
+	//if (objId == -1) throw;
+
+	////return objId + compSet->idIndexModifier;
+	//return itr.itrCurrState == Iterator::IteratorState::ITR_ROOT ? objId + compSet->idIndexModifier : objId + compSet->idIndexModifier + IDRANGE_RT;
 }
 
 //////////////////////////
@@ -898,7 +914,11 @@ ComponentManager::ChildContainerT* ComponentManager::ComponentSetManager::Entity
 
 ComponentManager::ComponentSetManager::EntityHandle ComponentManager::ComponentSetManager::getEntity(Iterator itr)
 {
+	
+
 	EntityHandle obj(this, this->getObjId(itr));
+
+
 	//obj.compSetMgr = this;
 	//obj.objId = this->getObjId(itr);
 
@@ -1797,44 +1817,94 @@ void ComponentManager::TestComponents()
 
 	//
 
-	Entity newEntity0 = G_ECMANAGER->BuildEntity();
-	newEntity0 = G_ECMANAGER->BuildEntity();
+	//Entity newEntity0 = G_ECMANAGER->BuildEntity();
+	//newEntity0 = G_ECMANAGER->BuildEntity();
 
-	newEntity0.AddComponent<ComponentGraphics>();
+	//newEntity0.AddComponent<ComponentGraphics>();
 
-	ComponentGraphics* g = newEntity0.getComponent<ComponentGraphics>();
+	//ComponentGraphics* g = newEntity0.getComponent<ComponentGraphics>();
 
-	newEntity0.AttachComponent<ComponentTransform>();
+	//newEntity0.AttachComponent<ComponentTransform>();
 
-	ComponentTransform* t = newEntity0.getComponent<ComponentTransform>();
-
-
-	newEntity0 = G_ECMANAGER->BuildEntity();
-	newEntity0 = G_ECMANAGER->BuildEntity();
-
-	newEntity0.getId();
-
-	newEntity0.getParentId();
-
-	//G_ECMANAGER->FreeEntity();
-
-	Entity getE = G_ECMANAGER->getEntity(g);
-
-	getE = G_ECMANAGER->getEntity(t);
-
-	G_ECMANAGER->getEntity("t");
-
-	G_ECMANAGER->getEntity(1);
-
-	G_ECMANAGER->getEntity(G_ECMANAGER->begin<ComponentGraphics>());
-
-	G_ECMANAGER->getObjId(G_ECMANAGER->begin<ComponentGraphics>());
+	//ComponentTransform* t = newEntity0.getComponent<ComponentTransform>();
 
 
-	newEntity0.getComponent< ComponentGraphics>();
+	//newEntity0 = G_ECMANAGER->BuildEntity();
+	//newEntity0 = G_ECMANAGER->BuildEntity();
+
+	//newEntity0.getId();
+
+	//newEntity0.getParentId();
+
+	////G_ECMANAGER->FreeEntity();
+
+	//Entity getE = G_ECMANAGER->getEntity(g);
+
+	//getE = G_ECMANAGER->getEntity(t);
+
+	//G_ECMANAGER->getEntity("t");
+
+	//G_ECMANAGER->getEntity(1);
+
+	//G_ECMANAGER->getEntity(G_ECMANAGER->begin<ComponentGraphics>());
+
+	//G_ECMANAGER->getObjId(G_ECMANAGER->begin<ComponentGraphics>());
 
 
-	// 
+	//newEntity0.getComponent<ComponentGraphics>();
+
+
+	//// 
+
+
+	//G_ECMANAGER->getComponent<ComponentTransform>(G_ECMANAGER->begin<ComponentGraphics>());
+
+
+	////G_ECMANAGER->getComponent<ComponentGraphics>((NS_COMPONENT::ComponentManager::ContainerID) 1, G_ECMANAGER->begin<ComponentGraphics>());
+
+	////G_ECMANAGER->getComponent(1, 1);
+
+	//G_ECMANAGER->getComponent(1, G_ECMANAGER->begin<ComponentGraphics>());
+
+
+	//for (int i = 0; i < 1000; ++i)
+	//{
+
+	//	Entity newEntity0 = G_ECMANAGER->BuildEntity();
+
+	//	newEntity0.AttachComponent<ComponentTransform>();
+	//	newEntity0.AttachComponent<ComponentRigidBody>();
+
+	//	//newEntity0.AddComponent<ComponentTransform>();
+	//	//newEntity0.AddComponent<ComponentRigidBody>();
+	//}
+
+	//auto itr = G_ECMANAGER->begin<ComponentRigidBody>();
+	//auto itrEnd = G_ECMANAGER->end<ComponentRigidBody>();
+
+
+	//for (int i = 0; i < 10000000; ++i)
+	//{
+	//	for (; itr != itrEnd; ++itr)
+	//	{
+
+	//		ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+
+	//		ComponentRigidBody* compR = G_ECMANAGER->getComponent<ComponentRigidBody>(itr);
+
+	//		G_ECMANAGER->getEntity(itr);
+
+	//		G_ECMANAGER->getEntity(compT);
+
+	//		newEntity0.getComponent<ComponentGraphics>();
+
+	//	}
+	//}
+
+	// ###TESTCODE###
+
+	//G_ECMANAGER->AddComponent<ComponentRigidBody>(newEntity0);
+	//G_ECMANAGER->AttachComponent(newEntity0, ComponentRigidBody());
 
 	Clear();
 
