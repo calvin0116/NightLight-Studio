@@ -86,6 +86,8 @@ namespace Unicorn
       if (GetTransform(other).tag == 3)
       {
         isActive = false;
+        Print("Disabled");
+        
       }
 
 
