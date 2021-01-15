@@ -75,9 +75,6 @@ public:
 	{
 		cur_wp_index = 0;
 	}
-
-
-	//=============== Getter / Setter =================//
 	/*
 	void SetCurrentPath(LocalVector<NS_AI::WayPoint*> wp_list)
 	{
@@ -95,6 +92,20 @@ public:
 	}
 
 	//LocalVector<int>
+	bool MoreThenOneWPActive()
+	{
+		int act_wp_amt = 0;
+		for (auto path : path_indexes)
+		{
+			if (path.second) //Check if path is active
+			{
+				++act_wp_amt;
+				if (act_wp_amt > 1)
+					return true;
+			}
+		}
+		return false;
+	}
 
 	
 	//Check if navigator have way point to follow
@@ -280,5 +291,7 @@ public:
 	{
 		path_indexes.at(index).second = act;
 	}
+
+
 
 } NavigatorComponent, NavComponent;

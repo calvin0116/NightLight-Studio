@@ -18,5 +18,7 @@ namespace ComponentNavigatorBind
 
   void toggle_WayPointActive_Internal(NavComponent* nav, int val, bool act);
 
+  bool MoreThenOneWPActive_Internal(NavComponent* nav);
+
   void BindComponentNavigator();
 }

@@ -160,6 +160,8 @@ namespace Unicorn
         */
       }
 	  
+	  enemyNavigator.MoreThenOneWPActive(); // <- Check for more then one way point active
+	  
 	  // 0 -> Patrol
 	  // 1 -> Circling at cur_wp
 	  if (Input.GetKeyPress(VK.IKEY_Y))
