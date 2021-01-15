@@ -2,6 +2,7 @@
 #include "WayPointManager.h"
 #include "../Component/ComponentNavigator.h"
 #include "../Component/ComponentPath.h"
+#include "../Component/ComponentWayPointMap.h"
 #include <chrono>
 
 namespace NS_AI
@@ -15,6 +16,8 @@ namespace NS_AI
 		std::chrono::system_clock::time_point timeThisRound;
 		std::chrono::system_clock::time_point timeLastRound;
 		std::chrono::system_clock::time_point stepTime;
+
+		std::vector<Entity> Obstacle_list;
 	protected:
 		friend Singleton<AiManager>;
 
@@ -36,31 +39,11 @@ namespace NS_AI
 			DestroyInstance();
 		}
 
-		void WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)
-		{
-			nav_comp;
-			if (wp_man.GetWayPointNumber())	//If there is way point
-			{
-				//nav_comp->SetCurrentPath(wp_man.AstarPathFinding(my_pos, target_position));
-			}
-			else
-			{
-				LocalVector<WayPoint*> temp_wp_list;
-				wp_man.InsertWayPoint(my_pos, (my_pos - target_position).length());
-				//nav_comp->SetCurrentPath
-			}
-		}
-
-		void WalkTowards(int ent_id, NlMath::Vec3 target_position)
-		{
-			Entity ent = G_ECMANAGER->getEntity(ent_id);
-			NavigatorComponent* nav_comp = ent.getComponent<NavigatorComponent>();
-			TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
-
-			WalkTowards(nav_comp, trans_comp->_position, target_position);
-		}
+		void WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position);		//using nav comp, position, and target position
+		void WalkTowards(int ent_id, NlMath::Vec3 target_position);												//using entity id and target position				
 
 		//==================WayPointManager Fnc======================================//
+		/*
 		WayPoint& InsertWayPoint(WayPoint wp, LocalVector<Edges*>* _edges_list = nullptr)
 		{
 			wp_man.InsertWayPoint(wp, _edges_list);
@@ -69,7 +52,7 @@ namespace NS_AI
 		WayPoint& InsertWayPoint(NlMath::Vector3D position, float radius, int _ent_id = -1, LocalVector<Edges*>* _edges_list = nullptr)
 		{
 			wp_man.InsertWayPoint(position, radius, _ent_id, _edges_list);
-		}
+		}*/
 
 		//Select closest way point to move to
 		void FindClosestWP(NavigatorComponent* nav_comp, TransformComponent* trans_comp)
@@ -77,11 +60,11 @@ namespace NS_AI
 			std::pair<int, float> closest_wp = std::make_pair<int, float>(-1, std::numeric_limits<float>::max());
 			
 			int i = 0;
-			for (; i < nav_comp->cur_path.size(); ++i)
+			for (; i < nav_comp->GetCurPath().size(); ++i)
 			{
-				auto wp = nav_comp->cur_path.at(i);
+				auto wp = nav_comp->GetCurPath().at(i);
 
-				float dist = static_cast<float>((wp->_position - trans_comp->_position).length());
+				float dist = static_cast<float>((wp->GetPos() - trans_comp->_position).length());
 				if (dist < closest_wp.second)
 				{
 					closest_wp.first = i;

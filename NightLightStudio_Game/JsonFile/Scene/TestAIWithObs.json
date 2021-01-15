@@ -85,7 +85,7 @@
             "NavigatorComponent": {
                 "stopAtEachWayPoint": false,
                 "endTime": 2.0,
-                "speed": 1.5,
+                "speed": 100.0,
                 "radius_for_detection": 10.0,
                 "WayPointMapName": "Paths"
             }
@@ -198,6 +198,9 @@
                 "MetallicMat": 0.0,
                 "RoughnessMat": 0.0,
                 "Alpha": 1.0
+            },
+            "WayPointComponent": {
+                "SelfDefineVariable": 1.0
             }
         },
         "WayPoint_2": {
@@ -253,6 +256,9 @@
                 "MetallicMat": 0.0,
                 "RoughnessMat": 0.0,
                 "Alpha": 1.0
+            },
+            "WayPointComponent": {
+                "SelfDefineVariable": 1.0
             }
         },
         "WayPoint_3": {
@@ -308,6 +314,9 @@
                 "MetallicMat": 0.0,
                 "RoughnessMat": 0.0,
                 "Alpha": 1.0
+            },
+            "WayPointComponent": {
+                "SelfDefineVariable": 1.0
             }
         },
         "WayPoint_4": {
@@ -363,6 +372,9 @@
                 "MetallicMat": 0.0,
                 "RoughnessMat": 0.0,
                 "Alpha": 1.0
+            },
+            "WayPointComponent": {
+                "SelfDefineVariable": 1.0
             }
         },
         "Obstacle": {

@@ -88,6 +88,8 @@ private:
   void CauldronStatsComp(Entity& ent);
 	  void VariableComp(Entity& ent);
 	  void NavComp(Entity& ent);
+	  void WayPointPathComp(Entity& ent);
+	  void WayPointComp(Entity& ent);
 
 
 	void AddSelectedComps(Entity& ent);

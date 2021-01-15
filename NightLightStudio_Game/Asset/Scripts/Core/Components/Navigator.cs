@@ -28,6 +28,17 @@ namespace Unicorn
       set { set_IsPaused_Internal(this.native_handle, value); }
     }
 
+    public int NavState
+    {
+      get { return get_NavState_Internal(this.native_handle); }
+      set { set_NavState_Internal(this.native_handle, value); }
+    }
+
+    public void SetWpActive(int val, bool act)
+    {
+      toggle_WayPointActive_Internal(native_handle, val, act);
+    }
+
     // Getter/Setter for speed
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static float get_Speed_Internal(IntPtr native_handle);
@@ -48,6 +59,16 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void set_IsPaused_Internal(IntPtr native_handle, bool val);
+
+    // Getter/Setter for Float
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static int get_NavState_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_NavState_Internal(IntPtr native_handle, int val);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void toggle_WayPointActive_Internal(IntPtr native_handle, int val, bool act);
   }
 }
 

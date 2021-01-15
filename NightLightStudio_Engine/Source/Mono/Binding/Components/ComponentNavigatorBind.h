@@ -13,5 +13,10 @@ namespace ComponentNavigatorBind
   bool get_IsPaused_Internal(NavComponent* trans);
   void set_IsPaused_Internal(NavComponent* trans, bool val);
 
+  int get_NavState_Internal(NavComponent* trans);
+  void set_NavState_Internal(NavComponent* trans, int val);
+
+  void toggle_WayPointActive_Internal(NavComponent* nav, int val, bool act);
+
   void BindComponentNavigator();
 }

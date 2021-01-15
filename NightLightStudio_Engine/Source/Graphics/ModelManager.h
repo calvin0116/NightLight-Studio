@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "../Window/WndUtils.h"
 #include <unordered_map>
+#define INITIAL_MAX_COUNT 128
 
 namespace NS_GRAPHICS
 {
@@ -53,7 +54,6 @@ namespace NS_GRAPHICS
 		std::unordered_map<std::string, Model*> _modelList;
 
 		size_t GetFreeIndex();
-		void SetFreeIndex(unsigned index, bool state = false);
 
 		//std::unordered_map<std::string, Mesh> meshes;
 
@@ -76,6 +76,8 @@ namespace NS_GRAPHICS
 		// Adds new model instance to vector of model instances and returns model ID
 		// Takes in model key for model list
 		int AddModel(const std::string& modelkey);
+
+		bool RemoveModelByID(const int& index);
 
 		// Adds loaded model into master list, requires name as key and context
 		// E.g.

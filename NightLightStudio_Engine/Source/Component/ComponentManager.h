@@ -872,14 +872,22 @@ public:
 			template<typename T>
 			EntityHandle AttachComponent(T& comp)
 			{
-				compSetMgr->AttachComponent<T>(*this, comp);
+				T* returnComp = compSetMgr->AttachComponent<T>(*this, comp);
+
+				ISerializable* ser = reinterpret_cast<ISerializable*>(returnComp);
+				ser->objId = objId;
+
 				return *this;
 			}
 
 			template<typename T>
 			EntityHandle AttachComponent(T&& comp = T())
 			{
-				compSetMgr->AttachComponent<T>(*this, comp);
+				T* returnComp = compSetMgr->AttachComponent<T>(*this, comp);
+
+				ISerializable* ser = reinterpret_cast<ISerializable*>(returnComp);
+				ser->objId = objId;
+
 				return *this;
 			}
 
@@ -897,7 +905,14 @@ public:
 				//free(reinterpret_cast<void*>(comp));
 
 
+				//T t;
+				//ISerializable* ser = reinterpret_cast<ISerializable*>(&t);
+				//ser->objId = objId;
+				//T* returnComp = compSetMgr->AttachComponent<T>(*this, t);
+
 				T* returnComp = compSetMgr->AttachComponent<T>(*this, T());
+				ISerializable* ser = reinterpret_cast<ISerializable*>(returnComp);
+				ser->objId = objId;
 
 				return returnComp;
 			}
@@ -1061,25 +1076,15 @@ public:
 		//class ComponentTransform;
 		EntityHandle getEntity(std::string str);
 
-
+		std::vector<EntityHandle> getEntityList(std::string str); //Get List of object with the same name in transfrom <- By teck wei 
 		// get component using entity name
 		ComponentManager::ComponentSetManager::EntityHandle getEntityUsingEntName(std::string str);
 
 
 		std::vector<EntityHandle> getEntityTagContainer(std::string str);
 
-		template<typename T>
-		EntityHandle getEntity(T* component)
-		{
-			for (EntityHandle ent : getEntityContainer())
-			{
-				if (component == ent.getComponent<T>())
-				{
-					return ent;
-				}
-			}
-			return EntityHandle();
-		}
+		//template<typename T>
+		EntityHandle getEntity(ISerializable* component);
 
 
 	private:

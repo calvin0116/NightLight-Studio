@@ -105,6 +105,14 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<NavigatorComponent>(Comp_list, entity, component_name, g_ecman);
             }
+            else if (component_name == "WayPointMapComponent")
+            {
+                CreateAndWriteComp<WayPointMapComponent>(Comp_list, entity, component_name, g_ecman);
+            }
+            else if (component_name == "WayPointComponent")
+            {
+                CreateAndWriteComp<WayPointComponent>(Comp_list, entity, component_name, g_ecman);
+            }
         }
     }
 
@@ -207,6 +215,14 @@ namespace NS_SERIALISER {
             else if (component_name == "NavigatorComponent")
             {
                 ReadComp<NavigatorComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "WayPointMapComponent")
+            {
+                ReadComp<WayPointMapComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "WayPointComponent")
+            {
+                ReadComp<WayPointComponent>(Comp_list, entity, component_name);
             }
         }
     }

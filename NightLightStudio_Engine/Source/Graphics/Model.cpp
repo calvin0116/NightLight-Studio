@@ -5,7 +5,7 @@ NS_GRAPHICS::Model::Model()
 	_poseTransform.resize(MAX_BONE_COUNT, glm::mat4(1.0f));
 }
 
-void NS_GRAPHICS::Model::GetPose(const std::string& animName, BoneData& bone, double dt, glm::mat4& parentTransform, glm::mat4& globalInverseTransform)
+void NS_GRAPHICS::Model::GetPose(const std::string& animName, Joint& joint, double dt, glm::mat4& parentTransform, glm::mat4& globalInverseTransform)
 {
 	// ASSUMES IF IS BAKED AND ALL BONES AND FRAME EXISTS
 	glm::mat4 globalTransform(1.0f);
@@ -22,17 +22,17 @@ void NS_GRAPHICS::Model::GetPose(const std::string& animName, BoneData& bone, do
 	glm::vec3 startPos;
 	glm::vec3 endPos;
 	bool translation = false;
-	if (_animations[animName]->_frames[bone._boneName]._posTime.size() > 1)
+	if (_animations[animName]->_frames[joint._boneName]._posTime.size() > 1)
 	{
-		InterpTime(index, timeScale, dt, _animations[animName]->_frames[bone._boneName]._posTime);
-		startPos = _animations[animName]->_frames[bone._boneName]._position[index - 1];
-		endPos = _animations[animName]->_frames[bone._boneName]._position[index];
+		InterpTime(index, timeScale, dt, _animations[animName]->_frames[joint._boneName]._posTime);
+		startPos = _animations[animName]->_frames[joint._boneName]._position[index - 1];
+		endPos = _animations[animName]->_frames[joint._boneName]._position[index];
 		newPosition = glm::mix(startPos, endPos, timeScale);
 		translation = true;
 	}
-	else if (_animations[animName]->_frames[bone._boneName]._posTime.size() == 1)
+	else if (_animations[animName]->_frames[joint._boneName]._posTime.size() == 1)
 	{
-		newPosition = _animations[animName]->_frames[bone._boneName]._position[0];
+		newPosition = _animations[animName]->_frames[joint._boneName]._position[0];
 	}
 
 	index = 0;
@@ -43,17 +43,17 @@ void NS_GRAPHICS::Model::GetPose(const std::string& animName, BoneData& bone, do
 	glm::quat endRot;
 
 	bool rotation = false;
-	if (_animations[animName]->_frames[bone._boneName]._rotateTime.size() > 1)
+	if (_animations[animName]->_frames[joint._boneName]._rotateTime.size() > 1)
 	{
-		InterpTime(index, timeScale, dt, _animations[animName]->_frames[bone._boneName]._rotateTime);
-		startRot = _animations[animName]->_frames[bone._boneName]._rotation[index - 1];
-		endRot = _animations[animName]->_frames[bone._boneName]._rotation[index];
+		InterpTime(index, timeScale, dt, _animations[animName]->_frames[joint._boneName]._rotateTime);
+		startRot = _animations[animName]->_frames[joint._boneName]._rotation[index - 1];
+		endRot = _animations[animName]->_frames[joint._boneName]._rotation[index];
 		newRotation = glm::slerp(startRot, endRot, timeScale);
 		rotation = true;
 	}
-	else if (_animations[animName]->_frames[bone._boneName]._rotateTime.size() == 1)
+	else if (_animations[animName]->_frames[joint._boneName]._rotateTime.size() == 1)
 	{
-		newRotation = _animations[animName]->_frames[bone._boneName]._rotation[0];
+		newRotation = _animations[animName]->_frames[joint._boneName]._rotation[0];
 	}
 
 	index = 0;
@@ -63,17 +63,17 @@ void NS_GRAPHICS::Model::GetPose(const std::string& animName, BoneData& bone, do
 	glm::vec3 startScale;
 	glm::vec3 endScale;
 	bool scale = false;
-	if (_animations[animName]->_frames[bone._boneName]._scaleTime.size() > 1)
+	if (_animations[animName]->_frames[joint._boneName]._scaleTime.size() > 1)
 	{
-		InterpTime(index, timeScale, dt, _animations[animName]->_frames[bone._boneName]._scaleTime);
-		startScale = _animations[animName]->_frames[bone._boneName]._scale[index - 1];
-		endScale = _animations[animName]->_frames[bone._boneName]._scale[index];
+		InterpTime(index, timeScale, dt, _animations[animName]->_frames[joint._boneName]._scaleTime);
+		startScale = _animations[animName]->_frames[joint._boneName]._scale[index - 1];
+		endScale = _animations[animName]->_frames[joint._boneName]._scale[index];
 		newScale = glm::mix(startScale, endScale, timeScale);
 		scale = true;
 	}
-	else if (_animations[animName]->_frames[bone._boneName]._scaleTime.size() == 1)
+	else if (_animations[animName]->_frames[joint._boneName]._scaleTime.size() == 1)
 	{
-		newScale = _animations[animName]->_frames[bone._boneName]._scale[0];
+		newScale = _animations[animName]->_frames[joint._boneName]._scale[0];
 	}
 
 	glm::mat4 positionMat = glm::mat4(1.0);
@@ -97,7 +97,7 @@ void NS_GRAPHICS::Model::GetPose(const std::string& animName, BoneData& bone, do
 	
 	if (!translation)
 	{
-		localTransform = bone._boneTransform;
+		localTransform = joint._boneTransform;
 	}
 	else
 	{
@@ -105,10 +105,10 @@ void NS_GRAPHICS::Model::GetPose(const std::string& animName, BoneData& bone, do
 	}
 
 	globalTransform = parentTransform * localTransform;
-	_poseTransform[bone._boneID] = globalInverseTransform * globalTransform * bone._boneTransformOffset;
+	_poseTransform[joint._boneID] = globalInverseTransform * globalTransform * joint._boneTransformOffset;
 
-	//update values for children bones
-	for (BoneData& child : bone._childrenBones)
+	//update values for children joints
+	for (Joint& child : joint._childrenJoints)
 	{
 		GetPose(animName, child, dt, globalTransform, globalInverseTransform);
 	}

@@ -159,6 +159,23 @@ namespace Unicorn
           startPatroling = true;
         */
       }
+	  
+	  // 0 -> Patrol
+	  // 1 -> Circling at cur_wp
+	  if (Input.GetKeyPress(VK.IKEY_Y))
+      {
+        enemyNavigator.NavState = 0;	
+      }
+	  if (Input.GetKeyPress(VK.IKEY_U))
+      {
+        enemyNavigator.NavState = 1;
+      }
+
+    //Set active to specify wp
+      if (Input.GetKeyPress(VK.IKEY_J))
+      {
+        enemyNavigator.SetWpActive(1, false);
+      }
       //Speed up
       if (Input.GetKeyPress(VK.IKEY_K))
       {

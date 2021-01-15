@@ -80,18 +80,19 @@
                     "Waypoint",
                     "WayPoint_2",
                     "WayPoint_3",
-                    "WayPoint_4"
+                    "WayPoint_4",
+                    "WayPoint_5"
                 ],
-                "stopAtEachWayPoint": true,
-                "endTime": 2.0,
+                "stopAtEachWayPoint": false,
+                "endTime": 1.0,
                 "radius_for_detection": 25.0,
-                "speed": 0.5
+                "speed": 2.5
             },
             "ComponentVariables": {
                 "IntList": [],
                 "StringList": [],
                 "FloatList": [
-                    2.0
+                    5.0
                 ]
             }
         },
@@ -155,9 +156,9 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    60.43544006347656,
+                    73.85836029052735,
                     6.644987106323242,
-                    0.0
+                    -11.749649047851563
                 ],
                 "Scale": [
                     1.0,
@@ -210,9 +211,9 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    -56.99589538574219,
+                    -109.19033813476563,
                     6.644987106323242,
-                    0.0
+                    24.34975814819336
                 ],
                 "Scale": [
                     1.0,
@@ -265,9 +266,9 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    0.0015583038330078126,
+                    -66.9325180053711,
                     6.644987106323242,
-                    86.48776245117188
+                    115.78034973144531
                 ],
                 "Scale": [
                     1.0,
@@ -320,9 +321,64 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    62.6693115234375,
+                    82.12666320800781,
                     6.644987106323242,
-                    86.48776245117188
+                    122.07212829589844
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\3d model\\test_cube.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "MetallicMat": 0.0,
+                "RoughnessMat": 0.0,
+                "Alpha": 1.0
+            }
+        },
+        "WayPoint_5": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -72.82046508789063,
+                    6.644987106323242,
+                    -69.65034484863281
                 ],
                 "Scale": [
                     1.0,

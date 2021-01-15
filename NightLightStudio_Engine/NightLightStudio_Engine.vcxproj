@@ -179,6 +179,8 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="Source\Component\ComponentCScript.h" />
+    <ClInclude Include="Source\Debug\DebugDiagnostic.h" />
+    <ClInclude Include="Source\Debug\DebugToStream.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Source\Ai\AiManager.h" />
@@ -246,6 +248,7 @@
     <ClInclude Include="Source\Editor\LevelEditor\WindowsDialogBox.h" />
     <ClInclude Include="Source\Editor\PrefabManager.h" />
     <ClInclude Include="Source\Editor\SystemEditor.h" />
+    <ClInclude Include="Source\Graphics\Animation.h" />
     <ClInclude Include="Source\Graphics\AnimationController.h" />
     <ClInclude Include="Source\Graphics\AnimationSystem.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
@@ -311,6 +314,9 @@
   <ItemGroup>
     <ClCompile Include="Source\Ai\AiManager.cpp" />
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
+    <ClCompile Include="Source\Component\ComponentWayPoint.cpp" />
+    <ClCompile Include="Source\Debug\DebugDiagnostic.cpp" />
+    <ClCompile Include="Source\Debug\DebugToStream.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -369,6 +375,7 @@
     <ClCompile Include="Source\Editor\LevelEditor\WindowsDialogBox.cpp" />
     <ClCompile Include="Source\Editor\PrefabManager.cpp" />
     <ClCompile Include="Source\Editor\SystemEditor.cpp" />
+    <ClCompile Include="Source\Graphics\Animation.cpp" />
     <ClCompile Include="Source\Graphics\AnimationController.cpp" />
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
     <ClCompile Include="Source\Component\ComponentAnimation.cpp" />

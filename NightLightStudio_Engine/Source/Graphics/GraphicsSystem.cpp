@@ -291,7 +291,7 @@ namespace NS_GRAPHICS
 					std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
 					if (!currAnimation.empty())
 					{
-						model->GetPose(currAnimation, model->_rootBone, dt, identity, model->_globalInverseTransform);
+						model->GetPose(currAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
 					}
 				}
 				// Test Codes
@@ -299,20 +299,29 @@ namespace NS_GRAPHICS
 				//{
 				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_K))
 				//	{
-				//		graphicsComp->AddModel("boxtest.fbx");
+				//		graphicsComp->AddModel("player_character_animationsworks.fbx");
+				//	}
+				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_L))
+				//	{
+				//		graphicsComp->AddModel("New_Moth_B4.fbx");
 				//	}
 				//}
 
 				//if (entity.getComponent<ComponentTransform>()->_entityName.toString() == "Player")
 				//{
+				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_J))
+				//	{
+				//		animComp->PlayAnimation("Switch1");
+				//	}
+
 				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_K))
 				//	{
-				//		animComp->PlayAnimation("Walk1");
+				//		animComp->PlayAnimation("Walk1", true, 1.9, 3.108);
 				//	}
 
 				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_L))
 				//	{
-				//		animComp->PlayAnimation("Switch1");
+				//		animComp->PlayAnimation("Walk1");
 				//	}
 				//}
 			}
@@ -478,7 +487,7 @@ namespace NS_GRAPHICS
 					std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
 					if (!currAnimation.empty())
 					{
-						model->GetPose(currAnimation, model->_rootBone, dt, identity, model->_globalInverseTransform);
+						model->GetPose(currAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
 					}
 				}
 			}
