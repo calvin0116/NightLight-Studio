@@ -35,6 +35,13 @@ namespace Unicorn
                                             // accumulated dt
     private float accumulatedDt = 0.0f;
 
+    //for Behaviour
+    float pathSwitchTimer;
+    float decisionTimer;
+    bool thinking;
+
+
+
     public override void Init()
     {
       enemyRB = GetRigidBody(id);
@@ -42,6 +49,11 @@ namespace Unicorn
       enemyVar = GetVariables(id);
       // Get default values from variables
       maxEnemySpd = enemyVar.GetFloat(0);
+
+
+      //enemyNavigator.NavState = 0;
+      thinking = true;
+
     }
 
     public override void LateInit()
@@ -53,6 +65,25 @@ namespace Unicorn
       Decision();
       Move();
       Control();
+
+      if(enemyNavigator.NavState == 0)
+      {
+        pathSwitchTimer += RealDT();
+
+        if(pathSwitchTimer > 0.5f)
+        {
+          enemyNavigator.NavState = 1;
+          pathSwitchTimer = 0;
+          if(thinking== false)
+          {
+            thinking = true;
+          }
+          
+        }
+
+      }
+
+
     }
     public override void FixedUpdate()
     {
@@ -82,47 +113,53 @@ namespace Unicorn
     public void Decision()
     {
       //======Init phase====//
+
+
+      //---- Moth Logic----//
+
+      if (thinking == true)
+      {
+        decisionTimer += RealDT();
+
+        if (decisionTimer > 5.0f)
+        {
+          if (enemyNavigator.MoreThenOneWPActive())
+          {
+            enemyNavigator.NavState = 0;
+            thinking = false;
+          }
+
+          decisionTimer = 0;
+
+        }
+
+      }
+
+
+      // Wait for 1s 
+      // Check if there is another waypoint active
+
+      // if yes ()
+      // change to mode & back
+
+
+
       if (startIdling)
       {
-        Console.WriteLine("Start Idle");
-        if (isPatroling)
-        {
-          enemyNavigator.isFollowing = false;
-          isPatroling = false;
-        }
-        startIdling = false;
+        
       }
 
       if (startPaused)
       {
-        Console.WriteLine("Start Pause");
-        if (isPatroling)
-        {
-          enemyNavigator.isPaused = true;
-          isPatroling = false;
-        }
-        startPaused = false;
+        
       }
 
 
       if (startPatroling)
       {
-        Console.WriteLine("Start Patrol");
-        if (enemyNavigator.isPaused)
-        {
-          //enemyNavigator->SetIsPaused(false);
-          enemyNavigator.isPaused = false;
-
-        }
-        else
-        {
-          //enemyNavigator->SetIsFollowing(true);
-          enemyNavigator.isFollowing = true;
-          isPatroling = false;
-        }
-        isPatroling = true;
-        startPatroling = false;
+        
       }
+
     }
 
     // Enemy functions
@@ -158,6 +195,23 @@ namespace Unicorn
         else
           startPatroling = true;
         */
+      }
+
+      // 0 -> Patrol
+      // 1 -> Circling at cur_wp
+      if (Input.GetKeyPress(VK.IKEY_Y))
+      {
+        enemyNavigator.NavState = 0;
+      }
+      if (Input.GetKeyPress(VK.IKEY_U))
+      {
+        enemyNavigator.NavState = 1;
+      }
+
+      //Set active to specify wp
+      if (Input.GetKeyPress(VK.IKEY_J))
+      {
+        enemyNavigator.SetWpActive(1, false);
       }
       //Speed up
       if (Input.GetKeyPress(VK.IKEY_K))
