@@ -21,6 +21,7 @@ namespace NS_GRAPHICS
 		std::vector<Camera> _cameras;
 
 		// Check if scene camera is active, if any
+		// Editor camera will be used by default if no scene camera is available
 		bool _activeSceneCamera;
 
 		// Check if rotation has been changed
