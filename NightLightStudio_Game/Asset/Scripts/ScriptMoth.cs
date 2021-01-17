@@ -10,8 +10,10 @@ namespace Unicorn
     RigidBody enemyRB;
     Variables enemyVar;
     Navigator enemyNavigator; //<- Get Navigator
+   // Transform myPosition;
     // Other entity's components
-
+    public int player_ID;
+    ScriptPlayer script_Player;
 
     // Player Stats, default values
     public static float enemyForce = 100000.0f;  // Move force while human
@@ -39,14 +41,19 @@ namespace Unicorn
     float pathSwitchTimer;
     float decisionTimer;
     bool thinking;
+    bool possessed;
 
 
 
     public override void Init()
     {
+
       enemyRB = GetRigidBody(id);
       enemyNavigator = GetNavigator(id);
       enemyVar = GetVariables(id);
+      //myPosition = GetTransform(id);
+
+      player_ID = GameObjectFind("Player");
       // Get default values from variables
       maxEnemySpd = enemyVar.GetFloat(0);
 
@@ -58,6 +65,7 @@ namespace Unicorn
 
     public override void LateInit()
     {
+      script_Player = GetScript(player_ID);
     }
 
     public override void Update()
@@ -83,8 +91,28 @@ namespace Unicorn
 
       }
 
+      //// -------Dismount logic
+      //if (possessed == true)
+      //{
+      //  if(script_Player.CurrentState == ScriptPlayer.State.Moth)
+      //}
+
+
 
     }
+
+
+    public void ActivateWP(int ID)
+    {
+      enemyNavigator.SetWpActive(ID, true);
+    }
+
+    public void DeactivateWP(int ID)
+    {
+      enemyNavigator.SetWpActive(ID, false);
+    }
+
+
     public override void FixedUpdate()
     {
     }
@@ -94,11 +122,30 @@ namespace Unicorn
       //Transform tag
       // tag 1 = Possessable
       // 
-      Transform otherTransform = GetTransform(other);
-      if (otherTransform.tag == 1)
+      //Transform otherTransform = GetTransform(other);
+      if (GetTransform(other).tag == 200)
       {
 
+        if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
+        {
+
+          // Set player script nextspawn position == possessionSpawnPos
+          script_Player.NextState = ScriptPlayer.State.Possessed;
+
+         
+          // Set Camera script  position == possessionSpawnPos
+          script_Player.camScript.tgtID = id; // Go and expose other tgt in scriptcamera.
+          possessed = true;
+
+        }
+
       }
+
+
+
+
+
+
     }
 
     public override void OnTriggerEnter(int other)
