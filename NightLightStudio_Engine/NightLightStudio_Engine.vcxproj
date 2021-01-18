@@ -179,6 +179,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="Source\Component\ComponentCScript.h" />
+    <ClInclude Include="Source\Component\ComponentEmitter.h" />
     <ClInclude Include="Source\Debug\DebugDiagnostic.h" />
     <ClInclude Include="Source\Debug\DebugToStream.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h" />
@@ -262,6 +263,7 @@
     <ClInclude Include="Source\Graphics\Model.h" />
     <ClInclude Include="Source\Graphics\ModelLoader.h" />
     <ClInclude Include="Source\Graphics\ModelManager.h" />
+    <ClInclude Include="Source\Graphics\Particle.h" />
     <ClInclude Include="Source\Graphics\ShaderSystem.h" />
     <ClInclude Include="Source\Graphics\Skeleton.h" />
     <ClInclude Include="Source\Graphics\UISystem.h" />
@@ -314,6 +316,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Ai\AiManager.cpp" />
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
+    <ClCompile Include="Source\Component\ComponentEmitter.cpp" />
     <ClCompile Include="Source\Component\ComponentWayPoint.cpp" />
     <ClCompile Include="Source\Debug\DebugDiagnostic.cpp" />
     <ClCompile Include="Source\Debug\DebugToStream.cpp" />
@@ -386,6 +389,7 @@
     <ClCompile Include="Source\Graphics\Model.cpp" />
     <ClCompile Include="Source\Graphics\ModelLoader.cpp" />
     <ClCompile Include="Source\Graphics\ModelManager.cpp" />
+    <ClCompile Include="Source\Graphics\Particle.cpp" />
     <ClCompile Include="Source\Graphics\ShaderSystem.cpp" />
     <ClCompile Include="Source\Graphics\Skeleton.cpp" />
     <ClCompile Include="Source\Graphics\AnimationSystem.cpp" />
