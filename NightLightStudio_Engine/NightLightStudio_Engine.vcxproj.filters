@@ -419,6 +419,7 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\Particle.cpp" />
     <ClCompile Include="Source\Component\ComponentEmitter.cpp" />
+    <ClCompile Include="Source\Graphics\SystemEmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -819,6 +820,7 @@
     </ClInclude>
     <ClInclude Include="Source\Graphics\Particle.h" />
     <ClInclude Include="Source\Component\ComponentEmitter.h" />
+    <ClInclude Include="Source\Graphics\SystemEmitter.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />

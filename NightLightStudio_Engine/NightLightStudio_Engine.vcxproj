@@ -266,6 +266,7 @@
     <ClInclude Include="Source\Graphics\Particle.h" />
     <ClInclude Include="Source\Graphics\ShaderSystem.h" />
     <ClInclude Include="Source\Graphics\Skeleton.h" />
+    <ClInclude Include="Source\Graphics\SystemEmitter.h" />
     <ClInclude Include="Source\Graphics\UISystem.h" />
     <ClInclude Include="Source\Graphics\TextureLoader.h" />
     <ClInclude Include="Source\Graphics\TextureManager.h" />
@@ -393,6 +394,7 @@
     <ClCompile Include="Source\Graphics\ShaderSystem.cpp" />
     <ClCompile Include="Source\Graphics\Skeleton.cpp" />
     <ClCompile Include="Source\Graphics\AnimationSystem.cpp" />
+    <ClCompile Include="Source\Graphics\SystemEmitter.cpp" />
     <ClCompile Include="Source\Graphics\UISystem.cpp" />
     <ClCompile Include="Source\Graphics\TextureLoader.cpp" />
     <ClCompile Include="Source\Graphics\TextureManager.cpp" />
