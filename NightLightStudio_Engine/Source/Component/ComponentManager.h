@@ -874,8 +874,8 @@ public:
 			{
 				T* returnComp = compSetMgr->AttachComponent<T>(*this, comp);
 
-				ISerializable* ser = reinterpret_cast<ISerializable*>(returnComp);
-				ser->objId = objId;
+				//ISerializable* ser = reinterpret_cast<ISerializable*>(returnComp);
+				//ser->objId = objId;
 
 				return *this;
 			}
@@ -885,8 +885,15 @@ public:
 			{
 				T* returnComp = compSetMgr->AttachComponent<T>(*this, comp);
 
-				ISerializable* ser = reinterpret_cast<ISerializable*>(returnComp);
-				ser->objId = objId;
+				//ISerializable* ser = reinterpret_cast<ISerializable*>(returnComp);
+				//ser->objId = objId;
+
+				//if (returnComp == nullptr)
+				//{
+				//	ISerializable* ser = getComponent<T>();
+
+					// TODO MAYBE
+				//}
 
 				return *this;
 			}
@@ -911,8 +918,9 @@ public:
 				//T* returnComp = compSetMgr->AttachComponent<T>(*this, t);
 
 				T* returnComp = compSetMgr->AttachComponent<T>(*this, T());
-				ISerializable* ser = reinterpret_cast<ISerializable*>(returnComp);
-				ser->objId = objId;
+
+				//ISerializable* ser = reinterpret_cast<ISerializable*>(returnComp);
+				//ser->objId = objId;
 
 				return returnComp;
 			}
