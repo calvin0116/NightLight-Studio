@@ -16,7 +16,7 @@ public:
 
 	bool _isActive; // Temporarily set to true at beginning
 
-	// value is -1 if no light is assigned
+	// value is -1 if no camera is assigned
 	int _cameraID;
 
 	//Camera Variables
@@ -47,6 +47,10 @@ public:
 	~ComponentCamera();
 
 	/////////// GETTERS/SETTERS ////////////
+
+	// Set as current scene camera
+	// Editor camera will still take precedence if editor is active
+	void SetCurrentCamera();
 
 	////////////////////////////////////////
 

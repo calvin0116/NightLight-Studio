@@ -360,9 +360,15 @@
     <ClCompile Include="Source\Mono\Binding\Systems\InputBind.cpp">
       <Filter>Source Files\Mono\Binding\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\ComponentCScript.cpp" />
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentCanvasBind.cpp" />
-    <ClCompile Include="Source\Mono\Binding\CustomTypes\UIElementBind.cpp" />
+    <ClCompile Include="Source\Component\ComponentCScript.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentCanvasBind.cpp">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\CustomTypes\UIElementBind.cpp">
+      <Filter>Source Files\Mono\Binding\CustomTypes</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Debug\DebugDiagnostic.cpp">
       <Filter>Source Files\Debug</Filter>
     </ClCompile>
@@ -405,7 +411,9 @@
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Picking.cpp">
       <Filter>Source Files\Editor\LevelEditor\Picking</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\Animation.cpp" />
+    <ClCompile Include="Source\Graphics\Animation.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Component\ComponentWayPoint.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
@@ -759,9 +767,15 @@
     <ClInclude Include="Source\Mono\Binding\Systems\InputBind.h">
       <Filter>Source Files\Mono\Binding\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\ComponentCScript.h" />
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentCanvasBind.h" />
-    <ClInclude Include="Source\Mono\Binding\CustomTypes\UIElementBind.h" />
+    <ClInclude Include="Source\Component\ComponentCScript.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentCanvasBind.h">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\CustomTypes\UIElementBind.h">
+      <Filter>Source Files\Mono\Binding\CustomTypes</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Debug\DebugDiagnostic.h">
       <Filter>Source Files\Debug</Filter>
     </ClInclude>
@@ -798,7 +812,9 @@
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Picking.h">
       <Filter>Source Files\Editor\LevelEditor\Picking</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\Animation.h" />
+    <ClInclude Include="Source\Graphics\Animation.h">
+    <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />

@@ -151,7 +151,6 @@ inline void NS_AI::AiManager::Update()
 				if ((len-navComp->circuling_rad) < FLT_EPSILON)	//Check if Ai reached the way point
 				{
 					//Circular motion
-					//Caculate the angle from the way point
 					/*
 					glm::vec3 up_vec = { 1.0f, 0.f, 0.f };
 					glm::vec3 rev_dir = navTrans->_position - wp_pos;

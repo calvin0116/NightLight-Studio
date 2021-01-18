@@ -1,0 +1,91 @@
+{
+    "Name": "Moth",
+    "TransformComponent": {
+        "EntityName": "",
+        "Tag": 0,
+        "Position": [
+            -130.64608764648438,
+            6.644987106323242,
+            142.33810424804688
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Rotate": [
+            0.0,
+            -0.0,
+            0.0
+        ]
+    },
+    "RigidBody": {
+        "isStatic": false,
+        "isGravity": false,
+        "mass": 0.0,
+        "friction": 0.009999999776482582,
+        "Force": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Accelaration": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "GraphicsComponent": {
+        "isActive": true,
+        "Model": "asset\\3d model\\test_cube.fbx",
+        "Albedo": "",
+        "Normal": "",
+        "Metallic": "",
+        "Roughness": "",
+        "AmbientOcclusion": "",
+        "Specular": "",
+        "DiffuseMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "AmbientMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "SpecularMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "ShininessMat": 32.0,
+        "AlbedoMat": [
+            0.21960784494876862,
+            0.0,
+            0.9019607901573181
+        ],
+        "MetallicMat": 0.0,
+        "RoughnessMat": 0.0,
+        "Alpha": 1.0
+    },
+    "ScriptComponent": {
+        "isActive": true,
+        "isRunning": true,
+        "ScriptName": "ScriptEnemy"
+    },
+    "ComponentVariables": {
+        "IntList": [],
+        "StringList": [],
+        "FloatList": [
+            2.0
+        ]
+    },
+    "NavigatorComponent": {
+        "stopAtEachWayPoint": false,
+        "endTime": 2.0,
+        "speed": 100.0,
+        "radius_for_detection": 10.0,
+        "WayPointMapName": "Paths"
+    }
+}

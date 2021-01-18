@@ -48,12 +48,14 @@ namespace NS_GRAPHICS
 
 	int ModelManager::AddModel(const std::string& modelkey)
 	{
+		// Check for duplicate loads
 		auto check = _modelList.find(modelkey);
 
 		if (check != _modelList.end())
 		{
 			// Make new copy of model
 			// Reason: Animation IS A FKER
+			// Due to this, only animation requires unique models
 			if (check->second->_isAnimated)
 			{
 				Model* model = new Model();
@@ -152,6 +154,11 @@ namespace NS_GRAPHICS
 			}
 			else
 			{
+				// For non animated models, we can perform instancing by setting reference model
+				// Same VAO, VBO and EBO
+				// Model matrix attribute will be different across all instances
+				// Create large model matrix BO to store required size for number of instances
+				// 
 				size_t meshSize = check->second->_meshes.size();
 
 				//MAYBE REMOVED NOT THE BEST WAY TO DO THIS

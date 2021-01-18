@@ -13,8 +13,11 @@ namespace Unicorn
     public int cam_ID;
     public int p_CamPos;
     public int p_SpawnPos;
+    int ai_ID;
     bool isActive;
     public bool isWaypoint;
+    bool isOn;
+
 
     //Required Components
     Variables ObjVariables;
@@ -23,9 +26,13 @@ namespace Unicorn
     //Variable Component Values
     public static string possessionCamPos;
     public static string possessionSpawnPos;
+    public static string mothAIName;
+    public static int wayPointID;
+    public static int onOff;
 
     // Getting Script
     ScriptPlayer script_Player;
+    ScriptMoth script_Moth;
     //ScriptCamera script_Cam;
 
     public override void Init()
@@ -38,37 +45,63 @@ namespace Unicorn
 
       possessionCamPos = ObjVariables.GetString(0);
       possessionSpawnPos = ObjVariables.GetString(1);
+      mothAIName = ObjVariables.GetString(2);
+      wayPointID = ObjVariables.GetInt(0);
+      onOff = ObjVariables.GetInt(1);
+
+      if (onOff < 1)
+      {
+        isOn = false;
+      }
+      else
+      {
+        isOn = true;
+      }
 
       p_CamPos = GameObjectFind(possessionCamPos);
       p_SpawnPos = GameObjectFind(possessionSpawnPos);
+      ai_ID= GameObjectFind(mothAIName);
+
+      if (isWaypoint == true)
+      {
+        SwitchOffFunction();
+      }
+
+      else
+      {
+        SwitchOnFunction();
+      }
+
+
     }
 
     public override void LateInit()
     {
       script_Player = GetScript(player_ID);
+      script_Moth= GetScript(ai_ID);
       //script_Cam = GetScript(cam_ID);
     }
 
     public override void Update()
     {
 
-      if (activate == true)
-      {
-        // Set Player State to possessionstate
-        SwitchOnFunction();
-      }
+      //if (activate == true)
+      //{
+      //   Set Player State to possessionstate
+      //  SwitchOnFunction();
+      //}
 
-      if((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed)|| activate ==false )
-      {
-         SwitchOffFunction();
+      //if((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed)|| activate ==false )
+      //{
+      //   SwitchOffFunction();
 
-        // push out player
-        if(script_Player.CurrentState == ScriptPlayer.State.Possessed)
-        {
-          script_Player.NextState = ScriptPlayer.State.Human;
-        }
+      //   push out player
+      //  if(script_Player.CurrentState == ScriptPlayer.State.Possessed)
+      //  {
+      //    script_Player.NextState = ScriptPlayer.State.Human;
+      //  }
 
-      }
+      //}
 
 
 
@@ -86,11 +119,13 @@ namespace Unicorn
       if (GetTransform(other).tag == 3)
       {
         isActive = false;
+        Print("Disabled");
+        
       }
 
 
 
-      if (isActive == true)
+      if (isActive == true && GetTransform(other).tag == 200)
       {
         if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
         {
@@ -103,14 +138,21 @@ namespace Unicorn
           script_Player.spawnPoint = p_AfterSpawnPos;
           // Set Camera script  position == possessionSpawnPos
 
-          //Transform p_Target = GetTransform(p_CamPos);
-          //Vector3 p_TargetPos = p_Target.getPosition();
+          
           script_Player.camScript.tgtID = p_CamPos; // Go and expose other tgt in scriptcamera.
-
-          // Activate energy consumption delay 
-          //activate = true;
-          //script_Player.CurrentState = ScriptPlayer.State.Possessed;
+      
         }
+
+        if (isWaypoint == true)
+        {
+          SwitchOffFunction();
+        }
+
+        else
+        {
+          SwitchOnFunction();
+        }
+
       }
 
       
@@ -130,11 +172,14 @@ namespace Unicorn
     public void SwitchOnFunction()
     {
       isWaypoint = true;
+      script_Moth.ActivateWP(wayPointID);
+
     }
 
     public void SwitchOffFunction()
     {
       isWaypoint = false;
+      script_Moth.DeactivateWP(wayPointID);
     }
 
 

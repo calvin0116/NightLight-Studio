@@ -39,6 +39,11 @@ namespace Unicorn
       toggle_WayPointActive_Internal(native_handle, val, act);
     }
 
+    public bool MoreThenOneWPActive()
+    {
+      return MoreThenOneWPActive_Internal(native_handle);
+    }
+
     // Getter/Setter for speed
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static float get_Speed_Internal(IntPtr native_handle);
@@ -69,6 +74,10 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void toggle_WayPointActive_Internal(IntPtr native_handle, int val, bool act);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool MoreThenOneWPActive_Internal(IntPtr native_handle);
+
   }
 }
 
