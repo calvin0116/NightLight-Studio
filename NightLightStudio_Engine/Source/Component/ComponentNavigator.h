@@ -47,6 +47,7 @@ public:
 	LocalString<125> wp_path_ent_name;
 	
 	LocalVector<std::pair<int,bool>> path_indexes;		//Current following routes
+	LocalVector<int> wp_to_reach_end;					//List of way point to go from one point to another -> navigation
 
 	WP_PATH_CREATION_TYPE wp_creation_type;
  	int cur_wp_index;
@@ -199,49 +200,57 @@ public:
 
 		}
 	}
-
-	//Function to set next way point to go to
-	void SetNextWp()
+	
+	void StopAtEachWPCheck()
 	{
-		prev_wp_index = cur_wp_index;
 		if (stopAtEachWayPoint)
 		{
 			isPaused = true;
 			curTime = 0.0f;
 		}
+	}
 
+	void DecideOnNextWp()
+	{
+		prev_wp_index = cur_wp_index;
 		if (wp_nav_type == WN_RANDOM)
 		{
 			srand((unsigned int)time(NULL));
 			cur_wp_index = rand() % cur_wp_path->GetPath().size();
 		}
 		else
-		if (traverseFront)
-			if (cur_wp_index < path_indexes.size() - 1)
-				++cur_wp_index;
-			else {
-				if (wp_nav_type == WN_TOANDFRO)
-				{
-					traverseFront = false;
-					--cur_wp_index;
+			if (traverseFront)
+				if (cur_wp_index < path_indexes.size() - 1)
+					++cur_wp_index;
+				else {
+					if (wp_nav_type == WN_TOANDFRO)
+					{
+						traverseFront = false;
+						--cur_wp_index;
+					}
+					else if (wp_nav_type == WN_CIRCULAR)
+					{
+						cur_wp_index = 0;
+					}
 				}
-				else if (wp_nav_type == WN_CIRCULAR)
-				{
-					cur_wp_index = 0;
-				}
-			}
-		else
-			if (cur_wp_index > 0)
-				--cur_wp_index;
 			else
-			{
-				traverseFront = true;
-				++cur_wp_index;
-			}
-
+				if (cur_wp_index > 0)
+					--cur_wp_index;
+				else
+				{
+					traverseFront = true;
+					++cur_wp_index;
+				}
 
 		if (!path_indexes.at(cur_wp_index).second)
-			SetNextWp();
+			DecideOnNextWp();
+	}
+
+	//Function to set next way point to go to
+	void SetNextWp(ComponentNavigator* nav)
+	{
+		StopAtEachWPCheck();			//Check if stopping around a way point 
+		DecideOnNextWp();				//Decide on which way point to go to next
 		//2. Check for direct route
 
 		//3. Find route to way point if being blocked

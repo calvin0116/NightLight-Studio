@@ -116,7 +116,7 @@ inline void NS_AI::AiManager::Update()
 				float len = glm::length(mag_dir);
 				if (len < navComp->size_in_rad)	//Check if Ai reached the way point
 				{
-					navComp->SetNextWp();		//Set next way point to be the target for navigation
+					navComp->SetNextWp(nullptr);		//Set next way point to be the target for navigation
 
 					/*
 					for (Entity& ent : Obstacle_list)
@@ -221,4 +221,26 @@ inline void NS_AI::AiManager::WalkTowards(int ent_id, NlMath::Vec3 target_positi
 	TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
 
 	WalkTowards(nav_comp, trans_comp->_position, target_position);
+}
+
+//Select closest way point to move to
+
+inline void NS_AI::AiManager::FindClosestWP(NavigatorComponent* nav_comp, TransformComponent* trans_comp)
+{
+	std::pair<int, float> closest_wp = std::make_pair<int, float>(-1, std::numeric_limits<float>::max());
+
+	int i = 0;
+	for (; i < nav_comp->GetCurPath().size(); ++i)
+	{
+		auto wp = nav_comp->GetCurPath().at(i);
+
+		float dist = static_cast<float>((wp->GetPos() - trans_comp->_position).length());
+		if (dist < closest_wp.second)
+		{
+			closest_wp.first = i;
+			closest_wp.second = dist;
+		}
+	}
+
+	nav_comp->cur_wp_index = i;	//wp index to go to will be the closest one
 }
