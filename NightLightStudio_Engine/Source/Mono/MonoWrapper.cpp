@@ -222,6 +222,11 @@ namespace MonoWrapper
   {
     return mono_class_from_name(currImage, _namespace.c_str(), _className.c_str());
   }
+
+  MonoClass* GetMonoClass(MonoObject* _obj)
+  {
+    return mono_object_get_class(_obj);
+  }
     
   MonoObject* ConstructObject(std::string _className, 
     std::string _namespace)

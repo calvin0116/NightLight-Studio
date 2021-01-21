@@ -32,4 +32,8 @@ public:
 	  *newcomp = *this;
 	  return newcomp;
   }
+
+  // Reflect public values
+  void ShowPublicValues();
+
 } ScriptComponent;

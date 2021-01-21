@@ -1,4 +1,4 @@
-#include "LevelEditor_Inspector.h"
+﻿#include "LevelEditor_Inspector.h"
 
 #include "LevelEditor_ECHelper.h"
 #include "../../Core/SceneManager.h"
@@ -946,6 +946,11 @@ void InspectorWindow::ScriptComp(Entity& ent)
 		if (ImGui::CollapsingHeader("Script component", &_notRemove))
 		{
 			ImGui::Checkbox("IsActive##CScript", &Script_comp->_isActive);
+			ImGui::SameLine();
+			if (ImGui::Button("Refresh"))
+			{
+				// Call function to reflect
+			}
 			std::string tex = Script_comp->_ScriptName.toString();
       std::string old = tex;
 
