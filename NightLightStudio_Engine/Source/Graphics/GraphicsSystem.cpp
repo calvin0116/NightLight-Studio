@@ -245,7 +245,7 @@ namespace NS_GRAPHICS
 		//while(compItr != compitrEnd)
 		while (itr != itrEnd)
 		{
-			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
+			ComponentGraphics* graphicsComp = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
 			//ComponentGraphics* graphicsComp = *compItr;
 
 			if (graphicsComp->GetAlpha() < 1.f)
