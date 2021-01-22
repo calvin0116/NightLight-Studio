@@ -257,6 +257,7 @@
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
     <ClInclude Include="Source\Component\ComponentAnimation.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
+    <ClInclude Include="Source\Graphics\Emitter.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
     <ClInclude Include="Source\Graphics\Lights.h" />
     <ClInclude Include="Source\Graphics\LightSystem.h" />
@@ -385,6 +386,7 @@
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
     <ClCompile Include="Source\Component\ComponentAnimation.cpp" />
     <ClCompile Include="Source\Graphics\DebugManager.cpp" />
+    <ClCompile Include="Source\Graphics\Emitter.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsSystem.cpp" />
     <ClCompile Include="Source\Graphics\LightSystem.cpp" />
     <ClCompile Include="Source\Graphics\Mesh.cpp" />

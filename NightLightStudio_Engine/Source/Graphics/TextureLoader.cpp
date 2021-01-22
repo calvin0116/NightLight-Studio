@@ -344,7 +344,7 @@ namespace NS_GRAPHICS
 		{
 			/* read RLE */
 			TGA_ERROR error = LoadRLE(dest, fp);
-			if (error != TGA_ERROR::NO_ERRORRETURNED) 
+			if (error != TGA_ERROR::ERROR_NONE)
 				BARF(error);
 		}
 		else
@@ -354,7 +354,7 @@ namespace NS_GRAPHICS
 				dest->_width * dest->_height * dest->_pixelDepth / 8);
 		}
 
-		return TGA_ERROR::NO_ERRORRETURNED;
+		return TGA_ERROR::ERROR_NONE;
 		#undef BARF
 		#undef READ
 		#undef READ16
@@ -406,7 +406,7 @@ namespace NS_GRAPHICS
 				pos += count * bytesPerPixel;
 			}
 		}
-		return TGA_ERROR::NO_ERRORRETURNED;
+		return TGA_ERROR::ERROR_NONE;
 		#undef RLE_BIT
 		#undef READ
 	}
@@ -474,7 +474,7 @@ namespace NS_GRAPHICS
 		if (!topToBottom)
 			tga->_imageDescriptor |= TGA_T_TO_B_BIT;
 
-		return TGA_ERROR::NO_ERRORRETURNED;
+		return TGA_ERROR::ERROR_NONE;
 	}
 
 	TGA_ERROR FlipHorizontal(TGAImage* tga)
@@ -511,7 +511,7 @@ namespace NS_GRAPHICS
 		if (!rightToLeft)
 			tga->_imageDescriptor |= TGA_R_TO_L_BIT;
 
-		return TGA_ERROR::NO_ERRORRETURNED;
+		return TGA_ERROR::ERROR_NONE;
 	}
 
 	TGA_ERROR ConvertDepth(TGAImage* tga, const uint8_t bits)
@@ -527,11 +527,11 @@ namespace NS_GRAPHICS
 		if (IsColourMapped(tga))
 		{
 			TGA_ERROR error = UnmapColour(tga);
-			if (error != TGA_ERROR::NO_ERRORRETURNED) return error;
+			if (error != TGA_ERROR::ERROR_NONE) return error;
 		}
 
 		if (tga->_pixelDepth == bits) 
-			return TGA_ERROR::NO_ERRORRETURNED;
+			return TGA_ERROR::ERROR_NONE;
 
 		srcBytesPerPixel = tga->_pixelDepth / 8;
 		destBytePerPixel = bits / 8;
@@ -584,7 +584,7 @@ namespace NS_GRAPHICS
 		}
 
 		tga->_pixelDepth = bits;
-		return TGA_ERROR::NO_ERRORRETURNED;
+		return TGA_ERROR::ERROR_NONE;
 	}
 
 	TGA_ERROR UnmapColour(TGAImage* tga)
@@ -626,7 +626,7 @@ namespace NS_GRAPHICS
 		tga->_colourMapLength = 0;
 		tga->_colourMapDepth = 0;
 
-		return TGA_ERROR::NO_ERRORRETURNED;
+		return TGA_ERROR::ERROR_NONE;
 	}
 
 	TGA_ERROR UnpackPixel(const uint8_t* src, const uint8_t bits, uint8_t* b, uint8_t* g, uint8_t* r, uint8_t* a)
@@ -670,7 +670,7 @@ namespace NS_GRAPHICS
 		default:
 			return TGA_ERROR::ERROR_PIXEL_DEPTH;
 		}
-		return TGA_ERROR::NO_ERRORRETURNED;
+		return TGA_ERROR::ERROR_NONE;
 	}
 
 	TGA_ERROR PackPixel(uint8_t* dest, const uint8_t bits, const uint8_t b, const uint8_t g, const uint8_t r, const uint8_t a)
@@ -709,14 +709,14 @@ namespace NS_GRAPHICS
 		default:
 			return TGA_ERROR::ERROR_PIXEL_DEPTH;
 		}
-		return TGA_ERROR::NO_ERRORRETURNED;
+		return TGA_ERROR::ERROR_NONE;
 	}
 
 	std::string GetError(const TGA_ERROR errcode)
 	{
 		switch (errcode)
 		{
-		case TGA_ERROR::NO_ERRORRETURNED:
+		case TGA_ERROR::ERROR_NONE:
 			return std::string("No Error");
 		case TGA_ERROR::ERROR_FOPEN:
 			return std::string("Error opening file");
@@ -779,7 +779,7 @@ namespace NS_GRAPHICS
 	{
 		TGAImage image;
 
-		if (Load(&image, file) == TGA_ERROR::NO_ERRORRETURNED)
+		if (Load(&image, file) == TGA_ERROR::ERROR_NONE)
 		{
 			// Make sure the image is left to right
 			if (IsRightToLeft(&image))

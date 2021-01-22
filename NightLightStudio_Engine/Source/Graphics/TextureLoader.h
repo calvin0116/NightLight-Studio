@@ -83,7 +83,7 @@ namespace NS_GRAPHICS
 	};
 
 	enum class TGA_ERROR{
-		NO_ERRORRETURNED,
+		ERROR_NONE,
 		ERROR_FOPEN,
 		ERROR_EOF,
 		ERROR_WRITE,

@@ -23,6 +23,20 @@ public:
 	bool IsFinished(const std::string& anim);
 	bool IsFinished();
 
+	//Alex expose this (I try to think of a way to swap animation of models mid game without 
+	//it crashing so this is what i came up with)
+	/////////////////////////////////////////////////////////
+	/// //With human model with animation loaded
+	/// unsigned humanAnim = GetAnimController();
+	/// //Change model to moth that has animation
+	/// unsigned mothAnim = GetAnimController();
+	/// //Whenever form change just use
+	/// SetAnimController(humanAnim); //Human mode
+	/// SetAnimController(mothAnim); //Moth mode
+	/////////////////////////////////////////////////////////
+	void SetAnimController(unsigned index);
+	unsigned GetAnimController();
+
 	//read and write function for initialization from saved files
 	void	Read(Value&);
 	Value	Write();
