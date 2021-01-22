@@ -40,7 +40,7 @@ void NS_GRAPHICS::AnimationSystem::Exit()
 
 unsigned NS_GRAPHICS::AnimationSystem::AddAnimController()
 {
-	unsigned index = GetFreeIndex();
+	size_t index = GetFreeIndex();
 
 	//Full time to resize
 	if (index >= _animControllers.size())
@@ -66,6 +66,8 @@ bool NS_GRAPHICS::AnimationSystem::RemoveAnimControllerByID(const int& index)
 
 	_animControllers[index] = nullptr;
 	_usedStatus[index] = false;
+
+	return true;
 }
 
 size_t NS_GRAPHICS::AnimationSystem::GetFreeIndex()

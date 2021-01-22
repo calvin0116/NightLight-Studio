@@ -51,6 +51,28 @@ bool ComponentAnimation::IsFinished()
 
 //read and write function for initialization from saved files
 
+void ComponentAnimation::SetAnimController(unsigned index)
+{
+	if (NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers.size() <= index)
+	{
+		//Doesn't exist
+		return;
+	}
+
+	if (NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[index] == nullptr)
+	{
+		//Doesn't exist
+		return;
+	}
+
+	_controllerID = index;
+}
+
+unsigned ComponentAnimation::GetAnimController()
+{
+	return _controllerID;
+}
+
 inline void ComponentAnimation::Read(Value& val)
 {
 	if (val.FindMember("isActive") == val.MemberEnd())
