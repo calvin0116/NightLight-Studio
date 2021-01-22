@@ -62,15 +62,7 @@ namespace Unicorn
       p_SpawnPos = GameObjectFind(possessionSpawnPos);
       ai_ID= GameObjectFind(mothAIName);
 
-      if (isWaypoint == true)
-      {
-        SwitchOffFunction();
-      }
 
-      else
-      {
-        SwitchOnFunction();
-      }
 
 
     }
@@ -80,6 +72,17 @@ namespace Unicorn
       script_Player = GetScript(player_ID);
       script_Moth= GetScript(ai_ID);
       //script_Cam = GetScript(cam_ID);
+	  
+	  if (isWaypoint == true)
+      {
+        SwitchOffFunction();
+      }
+
+      else
+      {
+        SwitchOnFunction();
+      }
+	  
     }
 
     public override void Update()
@@ -127,6 +130,7 @@ namespace Unicorn
 
       if (isActive == true && GetTransform(other).tag == 200)
       {
+		  
         if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
         {
 
@@ -193,5 +197,7 @@ namespace Unicorn
     {
 
     }
+	
   }
+  
 }

@@ -2,7 +2,7 @@
     "Objects": {
         "Plane": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "Plane",
                 "Tag": 0,
                 "Position": [
                     5.0,
@@ -67,7 +67,7 @@
                     0.0
                 ],
                 "Scale": [
-                    0.9945771098136902,
+                    0.9945458769798279,
                     0.9997184872627258,
                     0.9998233914375305
                 ],
@@ -762,7 +762,7 @@
         },
         "Moth": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "Moth",
                 "Tag": 0,
                 "Position": [
                     421.18572998046877,
@@ -939,7 +939,7 @@
                 ],
                 "Scale": [
                     1.0,
-                    1.0,
+                    0.9999997615814209,
                     1.0
                 ],
                 "Rotate": [
@@ -1017,6 +1017,24 @@
                 "MetallicMat": 1.0,
                 "RoughnessMat": 0.5,
                 "Alpha": 1.0
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "LampBehaviour"
+            },
+            "ComponentVariables": {
+                "IntList": [
+                    0,
+                    0,
+                    0
+                ],
+                "StringList": [
+                    "Plane",
+                    "Plane",
+                    "Moth"
+                ],
+                "FloatList": []
             }
         },
         "WayPoint_2": {
