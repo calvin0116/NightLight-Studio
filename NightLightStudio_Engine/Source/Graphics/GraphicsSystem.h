@@ -150,6 +150,16 @@ namespace NS_GRAPHICS
         //1 HDR PER SCENE
         unsigned _hdrID;
 
+        // Deferred Shading Variables
+        GLuint _geometryBuffer;
+        unsigned int _geometryBufferPosition; // Position color buffer
+        unsigned int _geometryBufferNormalMapAndMetallic; // Normal + metallic map color buffer, normal map data will replace with polygon normals if no texture exists
+        unsigned int _geometryBufferAlbedoMapAndRoughness;// Albedo + roughness map color buffer
+
+        unsigned int _colorAttachments[3]
+            = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+        
+
         // Should NOT be calculated every frame
         glm::mat4 _projectionMatrix;
 
