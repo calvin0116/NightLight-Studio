@@ -29,6 +29,7 @@ namespace NS_GRAPHICS
 		glm::vec3 cameraRight;
 		glm::vec3 cameraUp;
 		glm::quat m_orientation;
+		glm::vec3 cameraTarget; // Not currently in use for multi camera
 
 		// Dictates how fast the camera will move
 		float _rotation_sensitivity = 1000.f;
@@ -85,6 +86,11 @@ namespace NS_GRAPHICS
 			//return rotate * translate;
 		}
 
+		const glm::vec3& GetTarget()
+		{
+			return cameraTarget;
+		}
+
 		const glm::vec3& GetPosition()
 		{
 			return cameraPos;
@@ -128,6 +134,11 @@ namespace NS_GRAPHICS
 		const float& GetPitch()
 		{
 			return cameraPitch;
+		}
+
+		void SetCameraTarget(const glm::vec3& target)
+		{
+			cameraTarget = target;
 		}
 
 		void SetCameraPosition(const glm::vec3& position)

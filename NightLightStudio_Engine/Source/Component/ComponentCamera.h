@@ -1,6 +1,7 @@
 #pragma once
 #include "..\\..\\ISerializable.h"
 #include "..\glm\glm.hpp"
+#include "../Graphics/CameraSystem.h"
 
 enum CAMERA_FLAG
 {
@@ -18,6 +19,23 @@ public:
 
 	// value is -1 if no camera is assigned
 	int _cameraID;
+
+	// View variables
+	// Camera Vectors & Position(Point)
+	glm::vec3 cameraPos;
+	glm::quat m_orientation;
+	glm::vec3 cameraTarget; // Not currently in use for multi camera
+
+	// Dictates how fast the camera will move
+	float _rotation_sensitivity = 1000.f;
+	float _drag_sensitivity = 200.f;
+	float _zoom_sensitivity = 50.f;
+
+	// Variables for camera rotation
+	// Given in radians
+	float yaw;	// x-axis rotation (Rotation about y axis vector)
+	float pitch;  // y-axis rotation (Rotation about x axis vector)
+	float roll;   // z-axis rotation (Rotation about z axis vector)
 
 	//Camera Variables
 	CAMERA_FLAG _flag;
@@ -50,6 +68,8 @@ public:
 
 	// Set as current scene camera
 	// Editor camera will still take precedence if editor is active
+	// utilizes _isActive
+	// Note that camera will be created here if no existing camera id is connected
 	void SetCurrentCamera();
 
 	////////////////////////////////////////
