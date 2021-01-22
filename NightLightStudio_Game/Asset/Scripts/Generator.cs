@@ -123,15 +123,15 @@ namespace Unicorn
       // Setting player spawn & Cam location
       if (isActive == true && GetTransform(other).tag == 200)
       {
-        if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
+        if (script_Player.CurrentState == ScriptPlayer.State.Moth)
         {
 
           // Set player script nextspawn position == possessionSpawnPos
-          script_Player.NextState = ScriptPlayer.State.Possessed;
+         script_Player.NextState = ScriptPlayer.State.Possessed;
 
-          Transform p_AfterSpawn = GetTransform(p_SpawnPos);
-          Vector3 p_AfterSpawnPos = p_AfterSpawn.GetPosition();
-          script_Player.spawnPoint = p_AfterSpawnPos;
+         Vector3 p_AfterSpawnPos = GetTransform(p_SpawnPos).GetPosition();
+         script_Player.spawnPoint = p_AfterSpawnPos;        
+
           // Set Camera script  position == possessionSpawnPos
 
 
@@ -204,6 +204,6 @@ namespace Unicorn
     public override void Exit()
     {
 
-    }
+    } 
   }
 }

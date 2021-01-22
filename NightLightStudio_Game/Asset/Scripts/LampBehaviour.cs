@@ -50,14 +50,6 @@ namespace Unicorn
       isSwitchOn = ObjVariables.GetInt(1);
       mothAIName = ObjVariables.GetString(0);
 
-      if (isSwitchOn == 0)
-      {
-        SwitchOffFunction();
-      }
-      else
-      {
-        SwitchOnFunction();
-      }
 
 
       ai_ID = GameObjectFind(mothAIName);
@@ -73,7 +65,15 @@ namespace Unicorn
       script_Moth = GetScript(ai_ID);
 
 
-      
+      if (isSwitchOn == 0)
+      {
+        SwitchOffFunction();
+      }
+      else
+      {
+        SwitchOnFunction();
+      }
+
     }
 
     public override void Update()
