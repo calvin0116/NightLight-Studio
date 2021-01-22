@@ -31,6 +31,9 @@ namespace ComponentNavigatorBind
 
     MonoWrapper::BindClassFunction(MoreThenOneWPActive_Internal, "MoreThenOneWPActive_Internal",
         "Navigator");
+
+    MonoWrapper::BindClassFunction(GoToNextWp_Internal, "GoToNextWp_Internal",
+        "Navigator");
   }
 
   float get_Speed_Internal(NavComponent* nav)
@@ -78,5 +81,9 @@ namespace ComponentNavigatorBind
   bool MoreThenOneWPActive_Internal(NavComponent* nav)
   {
       return nav->MoreThenOneWPActive();
+  }
+  void GoToNextWp_Internal(NavComponent* nav)
+  {
+      nav->DecideOnNextWp();
   }
 }

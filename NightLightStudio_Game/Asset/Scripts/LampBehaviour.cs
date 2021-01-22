@@ -43,11 +43,11 @@ namespace Unicorn
       ObjVariables = GetVariables(id);
       isActive = true;
 
-      //possessionCamPos = ObjVariables.GetString(0);
-      //possessionSpawnPos = ObjVariables.GetString(1);
-      mothAIName = ObjVariables.GetString(0);
+      possessionCamPos = ObjVariables.GetString(0);
+      possessionSpawnPos = ObjVariables.GetString(1);
+      mothAIName = ObjVariables.GetString(2);
       wayPointID = ObjVariables.GetInt(0);
-      //onOff = ObjVariables.GetInt(1);
+      onOff = ObjVariables.GetInt(1);
 
       //if (onOff < 1)
       //{
@@ -58,8 +58,8 @@ namespace Unicorn
       //  isOn = true;
       //}
 
-      //p_CamPos = GameObjectFind(possessionCamPos);
-      //p_SpawnPos = GameObjectFind(possessionSpawnPos);
+      p_CamPos = GameObjectFind(possessionCamPos);
+      p_SpawnPos = GameObjectFind(possessionSpawnPos);
       ai_ID = GameObjectFind(mothAIName);
 
 
@@ -72,17 +72,17 @@ namespace Unicorn
       script_Player = GetScript(player_ID);
       script_Moth = GetScript(ai_ID);
 
-      //if (isWaypoint == true)
-      //{
-      //  SwitchOffFunction();
-      //}
+      if (isWaypoint == true)
+      {
+        SwitchOffFunction();
+      }
 
-      //else
-      //{
-      //  SwitchOnFunction();
-      //}
+      else
+      {
+        SwitchOnFunction();
+      }
 
-      //script_Cam = GetScript(cam_ID);
+      script_Cam = GetScript(cam_ID);
     }
 
     public override void Update()

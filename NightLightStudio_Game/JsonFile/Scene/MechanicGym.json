@@ -67,7 +67,7 @@
                     0.0
                 ],
                 "Scale": [
-                    0.9945771098136902,
+                    0.9945665597915649,
                     0.9997184872627258,
                     0.9998233914375305
                 ],
@@ -952,7 +952,7 @@
                     -284.6959533691406
                 ],
                 "Scale": [
-                    1.0,
+                    0.0000010000001111620805,
                     1.0,
                     1.0
                 ],
@@ -1031,6 +1031,23 @@
                 "MetallicMat": 1.0,
                 "RoughnessMat": 0.5,
                 "Alpha": 1.0
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "LampBehaviour"
+            },
+            "ComponentVariables": {
+                "IntList": [
+                    0,
+                    0
+                ],
+                "StringList": [
+                    "Moth1",
+                    "Moth1",
+                    "Moth1"
+                ],
+                "FloatList": []
             }
         },
         "WayPoint_2": {
@@ -1387,6 +1404,114 @@
                     -0.0,
                     0.0
                 ]
+            }
+        },
+        "Bugis_Street_Lamp_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -231.65113830566407,
+                    14.077624320983887,
+                    -284.6959533691406
+                ],
+                "Scale": [
+                    0.0000010000001111620805,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\model\\bugis_street_lamp.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    0.8078431487083435,
+                    0.3529411852359772
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "LampBehaviour"
+            },
+            "ComponentVariables": {
+                "IntList": [
+                    0,
+                    0
+                ],
+                "StringList": [
+                    "Moth1",
+                    "Moth1",
+                    "Moth1"
+                ],
+                "FloatList": []
             }
         }
     }
