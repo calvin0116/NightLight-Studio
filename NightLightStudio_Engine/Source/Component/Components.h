@@ -38,18 +38,27 @@
 //When a new component is created, these are places you need at your component to make them
 //appear in the game
 
+//ComponentManager.cpp -> void ComponentCreation()
+// Initialise container for component to be created
+
 //<OwnComponent>.cpp
 // Inherit ISeriabllzable
 // Override the Write and Read
 //*Example is shown in TransformComponent
 
-//*SceneManager.cpp
+//*JsonFunction.cpp
 //~~ void ComponentsCreation(Value& Comp_list, Entity& entity)
+//~~ void ComponentsInit(Value& Comp_list, Entity& entity)
 //~~~~~ ^This function to read in json data of your component and create them
 
 //*LevelEditor_Inspector.cpp
-//~~ void InspectorWindow::Run() < Most likely gonna put the component parts into another function
-//~~~~~^ This function is where you insert your component into the window to inspector window
+// void InspectorWindow::Start()
+// ~~ Place to initailise adding and removing component functions
+//void InspectorWindow::Run() < Most likely gonna put the component parts into another function
+//~~^ This function is where you insert your component into the window to inspector window
+// void InspectorWindow::AddSelectedComps(Entity& ent)
+// ~~^ for the add compoent button to work
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 
