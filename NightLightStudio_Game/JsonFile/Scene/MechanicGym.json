@@ -646,6 +646,7 @@
             },
             "ComponentVariables": {
                 "IntList": [
+                    0,
                     1
                 ],
                 "StringList": [

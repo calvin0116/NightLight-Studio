@@ -176,7 +176,7 @@ namespace Unicorn
 
       else
       {
-        script_Lamp.SwitchOnFunction();
+        script_Lamp.ToggleSwitch();
       }
 
     }
@@ -190,7 +190,7 @@ namespace Unicorn
 
       else
       {
-        script_Lamp.SwitchOffFunction();
+        script_Lamp.ToggleSwitch();
       }
     }
 

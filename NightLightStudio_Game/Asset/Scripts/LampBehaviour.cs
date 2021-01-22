@@ -28,6 +28,7 @@ namespace Unicorn
    // public static string possessionSpawnPos;
     public static string mothAIName;
     public static int wayPointID;
+    public static int isSwitchOn;
    // public int onOff;
 
     // Getting Script
@@ -38,28 +39,27 @@ namespace Unicorn
     public override void Init()
     {
       player_ID = GameObjectFind("Player");
-      cam_ID = GameObjectFind("PlayerCamera");
+      //cam_ID = GameObjectFind("PlayerCamera");
 
       ObjVariables = GetVariables(id);
       isActive = true;
 
-      possessionCamPos = ObjVariables.GetString(0);
-      possessionSpawnPos = ObjVariables.GetString(1);
-      mothAIName = ObjVariables.GetString(2);
+     
+     
       wayPointID = ObjVariables.GetInt(0);
-      onOff = ObjVariables.GetInt(1);
+      isSwitchOn = ObjVariables.GetInt(1);
+      mothAIName = ObjVariables.GetString(0);
 
-      //if (onOff < 1)
-      //{
-      //  isOn = false;
-      //}
-      //else
-      //{
-      //  isOn = true;
-      //}
+      if (isSwitchOn == 0)
+      {
+        SwitchOffFunction();
+      }
+      else
+      {
+        SwitchOnFunction();
+      }
 
-      p_CamPos = GameObjectFind(possessionCamPos);
-      p_SpawnPos = GameObjectFind(possessionSpawnPos);
+
       ai_ID = GameObjectFind(mothAIName);
 
 
@@ -72,17 +72,8 @@ namespace Unicorn
       script_Player = GetScript(player_ID);
       script_Moth = GetScript(ai_ID);
 
-      if (isWaypoint == true)
-      {
-        SwitchOffFunction();
-      }
 
-      else
-      {
-        SwitchOnFunction();
-      }
-
-      script_Cam = GetScript(cam_ID);
+      
     }
 
     public override void Update()
@@ -169,6 +160,21 @@ namespace Unicorn
       //{
       //  isActive = true;
       //}
+    }
+
+
+    public void ToggleSwitch()
+    {
+      if (isOn == true)
+      {
+        SwitchOffFunction();
+      }
+
+      else
+      {
+        SwitchOnFunction();
+      }
+
     }
 
 
