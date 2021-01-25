@@ -68,9 +68,9 @@ namespace NS_COLLISION
 
 		////
 		// ray thingy
-		bool Check_RayCollider(ComponentCollider* collider, NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect);
+		bool Check_RayCollider(ComponentCollider* collider, NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect, float& iSqLen);
 
-		bool Check_RayCollision(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect);
+		bool Check_RayCollision(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect, int& othId);
 
 		void Test_Ray(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd);
 

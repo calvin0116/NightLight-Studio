@@ -59,6 +59,41 @@ namespace NlMath
 
         return true;
     }
+
+    bool RayToSphere(const SphereCollider& tSphere, const Point3D& rayStartPoint, const Point3D& rayEndPoint)
+    {
+        /*
+        Vector3D m = rayStartPoint - tSphere.center;
+        float b = NlMath::Vector3DDotProduct(m, rayEndPoint - rayStartPoint);
+        float c = NlMath::Vector3DDotProduct(m, m) - tSphere.radius * tSphere.radius;
+
+        // Exit if r’s origin outside s (c > 0) and r pointing away from s (b > 0)
+        if (c > 0.0f && b > 0.0f) return 0;
+        float discr = b * b - c;
+
+        // A negative discriminant corresponds to ray missing sphere
+        return (discr >= 0.0f);
+        */
+
+        Vector3D oc = rayStartPoint - tSphere.center;
+        Vector3D rayDir = rayEndPoint - rayStartPoint;
+        float a = NlMath::Vector3DDotProduct(rayDir, rayDir);
+        float b = 2.0 * NlMath::Vector3DDotProduct(oc, rayDir);
+        float c = NlMath::Vector3DDotProduct(oc, oc) - tSphere.radius * tSphere.radius;
+        float discriminant = b * b - 4 * a * c;
+        return (discriminant > 0);
+        /*
+        if (discriminant < 0) {
+            return false; // -1.0;
+        }
+        else {
+            return true;// (-b - sqrt(discriminant)) / (2.0 * a); // Distance
+        }
+        */
+    }
+
+
+
     Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint)
     {
 
@@ -1566,7 +1601,7 @@ namespace NlMath
         return true; /* ray hits box */
     }
 
-    bool Ray_AABB(Vec3 vecMax, Vec3 vecMin, Vec3 rayOrigin, Vec3 rayEnd, Vec3& intersect)
+    bool Ray_AABB(Vec3 vecMax, Vec3 vecMin, Vec3 rayOrigin, Vec3 rayEnd, Vec3& intersect, float& iSqLen)
     {
 
         if (RayInf_AABB(vecMax, vecMin, rayOrigin, rayEnd, intersect))
@@ -1575,6 +1610,8 @@ namespace NlMath
             float raySqLen = ray.sqrtlength();
             Vec3 rayInt = intersect - rayOrigin;
             float rayIntSqLen = rayInt.sqrtlength();
+
+            iSqLen = rayIntSqLen; // intersect square length from origin
 
             if (rayIntSqLen - raySqLen > 0)
             {
