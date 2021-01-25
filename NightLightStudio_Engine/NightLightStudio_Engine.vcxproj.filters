@@ -420,6 +420,7 @@
     <ClCompile Include="Source\Graphics\Particle.cpp" />
     <ClCompile Include="Source\Component\ComponentEmitter.cpp" />
     <ClCompile Include="Source\Graphics\SystemEmitter.cpp" />
+    <ClCompile Include="Source\Graphics\Emitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -824,6 +825,7 @@
     <ClInclude Include="Source\Ai\AiGraph.h">
       <Filter>Source Files\AI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Graphics\Emitter.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />

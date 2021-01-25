@@ -172,6 +172,11 @@ namespace Unicorn
       {
         enemyNavigator.NavState = 1;
       }
+	  
+	  if (Input.GetKeyPress(VK.IKEY_T))
+      {
+        enemyNavigator.GoToNextWp();
+      }
 
     //Set active to specify wp
       if (Input.GetKeyPress(VK.IKEY_J))

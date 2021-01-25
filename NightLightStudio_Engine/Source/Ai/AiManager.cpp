@@ -64,8 +64,8 @@ inline void NS_AI::AiManager::Update()
 	//Make shift dt
 	std::swap(timeLastRound, timeThisRound);
 	stepTime = timeThisRound = std::chrono::system_clock::now();
-	float dt = (float)(timeThisRound - timeLastRound).count() / 10000000.0f;
-
+	float dt = (float)(timeThisRound - timeLastRound).count()/10000000.0f;
+	//std::chrono::duration_cast<std::chrono::microseconds>();
 	auto itr = G_ECMANAGER->begin<NavigatorComponent>();
 	auto itrEnd = G_ECMANAGER->end<NavigatorComponent>();
 

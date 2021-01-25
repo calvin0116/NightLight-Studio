@@ -44,6 +44,11 @@ namespace Unicorn
       return MoreThenOneWPActive_Internal(native_handle);
     }
 
+    public void GoToNextWp()
+    {
+       GoToNextWp_Internal(native_handle);
+    }
+
     // Getter/Setter for speed
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static float get_Speed_Internal(IntPtr native_handle);
@@ -78,6 +83,8 @@ namespace Unicorn
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool MoreThenOneWPActive_Internal(IntPtr native_handle);
 
-  }
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool GoToNextWp_Internal(IntPtr native_handle);
+    }
 }
 
