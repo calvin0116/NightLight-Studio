@@ -277,22 +277,22 @@ namespace NS_COLLISION
 
 
 		// test line aabb col
-		{
-			Entity boxTest = G_ECMANAGER->BuildEntity(std::string("newBox").append(std::to_string(test_count)));
-			++test_count;
-			ComponentTransform boxTestTransform;
-			boxTestTransform._position = glm::vec3(0.0f, 0.0f, 0.0f);
-			boxTestTransform._scale = glm::vec3(50.0f, 200.0f, 200.0f);
-			boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
-			ComponentCollider boxTestCollider(COLLIDERS::AABB);
-			//ComponentCollider boxTestCollider(COLLIDERS::SPHERE);
-			boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
-			//ComponentRigidBody boxTestrbody;
-			//boxTestrbody.isStatic = false;
-			//boxTestrbody.isGravity = true;
-			//boxTestrbody.mass = 1.0f;
-			//boxTest.AttachComponent<ComponentRigidBody>(boxTestrbody);
-		}
+		//{
+		//	Entity boxTest = G_ECMANAGER->BuildEntity(std::string("newBox").append(std::to_string(test_count)));
+		//	++test_count;
+		//	ComponentTransform boxTestTransform;
+		//	boxTestTransform._position = glm::vec3(0.0f, 0.0f, 0.0f);
+		//	boxTestTransform._scale = glm::vec3(50.0f, 200.0f, 200.0f);
+		//	boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
+		//	ComponentCollider boxTestCollider(COLLIDERS::AABB);
+		//	//ComponentCollider boxTestCollider(COLLIDERS::SPHERE);
+		//	boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
+		//	//ComponentRigidBody boxTestrbody;
+		//	//boxTestrbody.isStatic = false;
+		//	//boxTestrbody.isGravity = true;
+		//	//boxTestrbody.mass = 1.0f;
+		//	//boxTest.AttachComponent<ComponentRigidBody>(boxTestrbody);
+		//}
 
 
 	}
@@ -300,13 +300,13 @@ namespace NS_COLLISION
 	void CollisionSystem::FixedUpdate()
 	{
 		 //test line col
-		NlMath::Vec3 ray1Origin(-100.0f, 0.0f, 0.0f);
-		NlMath::Vec3 ray1End(100.0f, 0.0f, 0.0f);
-		Test_Ray(ray1Origin, ray1End);
+		//NlMath::Vec3 ray1Origin(-100.0f, 0.0f, 0.0f);
+		//NlMath::Vec3 ray1End(100.0f, 0.0f, 0.0f);
+		//Test_Ray(ray1Origin, ray1End);
 
-		NlMath::Vec3 ray2Origin(-100.0f, 100.0f, 0.0f);
-		NlMath::Vec3 ray2End(100.0f, 200.0f, 0.0f);
-		Test_Ray(ray2Origin, ray2End);
+		//NlMath::Vec3 ray2Origin(-100.0f, 100.0f, 0.0f);
+		//NlMath::Vec3 ray2End(100.0f, 200.0f, 0.0f);
+		//Test_Ray(ray2Origin, ray2End);
 
 
 		//draw debug mesh
