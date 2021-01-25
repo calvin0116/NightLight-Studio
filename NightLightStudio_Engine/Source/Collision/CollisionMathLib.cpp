@@ -1566,7 +1566,7 @@ namespace NlMath
         return true; /* ray hits box */
     }
 
-    bool Ray_AABB(Vec3 vecMax, Vec3 vecMin, Vec3 rayOrigin, Vec3 rayEnd, Vec3& intersect)
+    bool Ray_AABB(Vec3 vecMax, Vec3 vecMin, Vec3 rayOrigin, Vec3 rayEnd, Vec3& intersect, float& iSqLen)
     {
 
         if (RayInf_AABB(vecMax, vecMin, rayOrigin, rayEnd, intersect))
@@ -1575,6 +1575,8 @@ namespace NlMath
             float raySqLen = ray.sqrtlength();
             Vec3 rayInt = intersect - rayOrigin;
             float rayIntSqLen = rayInt.sqrtlength();
+
+            iSqLen = rayIntSqLen; // intersect square length from origin
 
             if (rayIntSqLen - raySqLen > 0)
             {

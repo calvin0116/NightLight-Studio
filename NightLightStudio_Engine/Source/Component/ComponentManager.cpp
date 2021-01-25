@@ -764,6 +764,10 @@ ComponentManager::ComponentSetManager::EntityHandle::EntityHandle(ComponentSetMa
 
 void* ComponentManager::ComponentSetManager::EntityHandle::getComponent(int compId)
 {
+
+	if (objId == -1) return nullptr; // if objId is -1 it will crash 
+	//if (objId == -1) throw; // can use throw to debug !!
+
 	return compSetMgr->getComponent(compId, objId);
 }
 
