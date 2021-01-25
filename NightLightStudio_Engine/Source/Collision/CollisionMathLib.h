@@ -72,6 +72,14 @@ namespace NlMath
 	bool Line_Circle_2D(Vec3 circleCenter, float circleRadius, Vec3 rectVertA, Vec3 rectVertB);
 	
 	bool Circle_Rectangle_2D(Vec3 circleCenter, float circleRadius, Vec3 rectVertA, Vec3 rectVertB, Vec3 rectVertC, Vec3 rectVertD);
+
+
+	////
+	bool RayInf_AABB(Vec3 vecMax, Vec3 vecMin, Vec3 rayOrigin, Vec3 rayEnd, Vec3& intersect);
+
+	bool Ray_AABB(Vec3 vecMax, Vec3 vecMin, Vec3 rayOrigin, Vec3 rayEnd, Vec3& intersect);
+
+
 }
 
 

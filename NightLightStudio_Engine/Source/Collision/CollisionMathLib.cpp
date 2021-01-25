@@ -1460,4 +1460,133 @@ namespace NlMath
         *collidingPointA = StartA + VectorA * LengthA;
         *collidingPointB = StartB + VectorB * LengthB;
     }
+
+
+
+    //// 
+
+    // https://gamedev.stackexchange.com/questions/18436/most-efficient-aabb-vs-ray-collision-algorithms
+    // https://github.com/erich666/GraphicsGems/blob/master/gems/RayBox.c
+    
+    int constexpr NUMDIM = 3;
+    int constexpr RIGHT	 = 0;
+    int constexpr LEFT	 = 1;
+    int constexpr MIDDLE = 2;
+
+    bool RayInf_AABB(Vec3 vecMax, Vec3 vecMin, Vec3 rayOrigin, Vec3 rayEnd, Vec3& intersect)
+    {
+        Vec3 dir = rayEnd - rayOrigin;
+        //Vec3 dir = rayEnd;
+
+        bool inside = true;
+        char quadrant[NUMDIM];
+        register int i; // register is a hint to the compiler, 
+                        // advising it to store that variable in a processor register 
+                        // instead of memory (for example, instead of the stack).
+                        // The compiler may or may not follow that hint.
+                        // https://stackoverflow.com/questions/3207018/register-keyword-in-chttps://stackoverflow.com/questions/3207018/register-keyword-in-c
+        int whichPlane;
+        float maxT[NUMDIM];
+        float candidatePlane[NUMDIM];
+
+        /* Find candidate planes; this loop can be avoided if
+        rays cast all from the eye(assume perpsective view) */
+        for (i = 0; i < NUMDIM; i++)
+        {
+            if (rayOrigin[i] < vecMin[i]) 
+            {
+                quadrant[i] = LEFT;
+                candidatePlane[i] = vecMin[i];
+                inside = false;
+            }
+            else if (rayOrigin[i] > vecMax[i]) 
+            {
+                quadrant[i] = RIGHT;
+                candidatePlane[i] = vecMax[i];
+                inside = false;
+            }
+            else 
+            {
+                quadrant[i] = MIDDLE;
+            }
+        }
+
+        /* Ray origin inside bounding box */
+        if (inside) 
+        {
+            intersect = rayOrigin;
+            return true;
+        }
+
+        /* Calculate T distances to candidate planes */
+        for (i = 0; i < NUMDIM; i++)
+        {
+            if (quadrant[i] != MIDDLE && dir[i] != 0.)
+            {
+                maxT[i] = (candidatePlane[i] - rayOrigin[i]) / dir[i];
+            }
+            else
+            {
+                maxT[i] = -1.;
+            }
+        }
+
+        /* Get largest of the maxT's for final choice of intersection */
+        whichPlane = 0;
+        for (i = 1; i < NUMDIM; i++)
+        {
+            if (maxT[whichPlane] < maxT[i])
+            {
+                whichPlane = i;
+            }
+        }
+
+        /* Check final candidate actually inside box */
+        if (maxT[whichPlane] < 0.0f)
+        {
+            return false;
+        }
+
+        for (i = 0; i < NUMDIM; i++)
+        {
+            if (whichPlane != i) 
+            {
+                intersect[i] = rayOrigin[i] + maxT[whichPlane] * dir[i];
+                if (intersect[i] < vecMin[i] || intersect[i] > vecMax[i])
+                {
+                    return false;
+                }
+            }
+            else 
+            {
+                intersect[i] = candidatePlane[i];
+            }
+        }
+
+        return true; /* ray hits box */
+    }
+
+    bool Ray_AABB(Vec3 vecMax, Vec3 vecMin, Vec3 rayOrigin, Vec3 rayEnd, Vec3& intersect)
+    {
+
+        if (RayInf_AABB(vecMax, vecMin, rayOrigin, rayEnd, intersect))
+        {
+            Vec3 ray = rayEnd - rayOrigin;
+            float raySqLen = ray.sqrtlength();
+            Vec3 rayInt = intersect - rayOrigin;
+            float rayIntSqLen = rayInt.sqrtlength();
+
+            if (rayIntSqLen - raySqLen > 0)
+            {
+                // intersect is beyond the end
+
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 }

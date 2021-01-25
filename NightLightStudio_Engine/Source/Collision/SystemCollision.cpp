@@ -249,6 +249,7 @@ namespace NS_COLLISION
 
 #endif
 		//////////////////////////////////////////////////////////////////////////////////////
+
 	}
 
 	void CollisionSystem::GameLoad()
@@ -274,11 +275,38 @@ namespace NS_COLLISION
 		}
 
 
+
+		//// test line aabb col
+		//{
+		//	Entity boxTest = G_ECMANAGER->BuildEntity(std::string("newBox").append(std::to_string(test_count)));
+		//	++test_count;
+		//	ComponentTransform boxTestTransform;
+		//	boxTestTransform._position = glm::vec3(0.0f, 0.0f, 0.0f);
+		//	boxTestTransform._scale = glm::vec3(200.0f, 200.0f, 200.0f);
+		//	boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
+		//	ComponentCollider boxTestCollider(COLLIDERS::AABB);
+		//	//ComponentCollider boxTestCollider(COLLIDERS::SPHERE);
+		//	boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
+		//	//ComponentRigidBody boxTestrbody;
+		//	//boxTestrbody.isStatic = false;
+		//	//boxTestrbody.isGravity = true;
+		//	//boxTestrbody.mass = 1.0f;
+		//	//boxTest.AttachComponent<ComponentRigidBody>(boxTestrbody);
+		//}
+
+
 	}
 
 	void CollisionSystem::FixedUpdate()
 	{
+		// test line col
+		//NlMath::Vec3 ray1Origin(-100.0f, 0.0f, 0.0f);
+		//NlMath::Vec3 ray1End(100.0f, 0.0f, 0.0f);
+		//Test_Ray(ray1Origin, ray1End);
 
+		//NlMath::Vec3 ray2Origin(-100.0f, 100.0f, 0.0f);
+		//NlMath::Vec3 ray2End(100.0f, 200.0f, 0.0f);
+		//Test_Ray(ray2Origin, ray2End);
 
 
 		//draw debug mesh
@@ -1251,6 +1279,89 @@ namespace NS_COLLISION
 		_isPlaying = msg.isPlaying;
 		//if (!_isPlaying)
 		//  GameExit();
+	}
+
+	bool CollisionSystem::Check_RayCollider(ComponentCollider* collider, NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect)
+	{
+
+		if (collider->GetColliderT() == COLLIDERS::AABB)
+		{
+			return NlMath::Ray_AABB(collider->collider.aabb.vecMax, collider->collider.aabb.vecMin, rayOrigin, rayEnd, intersect);
+		}
+		else if (collider->GetColliderT() == COLLIDERS::SPHERE)
+		{
+
+		}
+		else if (collider->GetColliderT() == COLLIDERS::CAPSULE)
+		{
+
+		}
+
+
+		return false;
+	}
+
+	bool CollisionSystem::Check_RayCollision(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect)
+	{
+		// does not check rigidbody and transform
+
+		auto itr = G_ECMANAGER->begin<ComponentCollider>();
+		auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
+
+		bool gotCollide = false;
+
+		while (itr != itrEnd)
+		{
+			ComponentCollider* comCol = G_ECMANAGER->getComponent<ComponentCollider>(itr);
+
+			if (Check_RayCollider(comCol, rayOrigin, rayEnd, intersect))
+			{
+				gotCollide = true;
+			}
+
+			++itr;
+		}
+
+		return gotCollide;
+	}
+
+	void CollisionSystem::Test_Ray(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd)
+	{
+		NlMath::Vec3 intersect(0.0f, 0.0f, 0.0f);
+
+		if (Check_RayCollision(rayOrigin, rayEnd, intersect))
+		{
+			Draw3DCross(rayOrigin, 5.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+			NS_GRAPHICS::SYS_GRAPHICS->DrawLine(rayOrigin, rayEnd, glm::vec3(0.0f, 1.0f, 1.0f));
+
+			Draw3DCross(intersect, 10.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+		}
+		else
+		{
+			NS_GRAPHICS::SYS_GRAPHICS->DrawLine(rayOrigin, rayEnd, glm::vec3(0.0f, 0.0f, 1.0f));
+		}
+	}
+
+	void CollisionSystem::Draw3DCross(NlMath::Vec3 point, float size, NlMath::Vec3 color)
+	{
+		NlMath::Vec3 pointA = point;
+		pointA.x -= size;
+		NlMath::Vec3 pointB = point;
+		pointB.x += size;
+		NS_GRAPHICS::SYS_GRAPHICS->DrawLine(pointA, pointB, color);
+
+		pointA = point;
+		pointA.y -= size;
+		pointB = point;
+		pointB.y += size;
+		NS_GRAPHICS::SYS_GRAPHICS->DrawLine(pointA, pointB, color);
+
+		pointA = point;
+		pointA.z -= size;
+		pointB = point;
+		pointB.z += size;
+		NS_GRAPHICS::SYS_GRAPHICS->DrawLine(pointA, pointB, color);
 	}
 
 

@@ -1867,20 +1867,20 @@ void ComponentManager::TestComponents()
 	//G_ECMANAGER->getComponent(1, G_ECMANAGER->begin<ComponentGraphics>());
 
 
-	//for (int i = 0; i < 1000; ++i)
-	//{
+	for (int i = 0; i < 1000; ++i)
+	{
 
-	//	Entity newEntity0 = G_ECMANAGER->BuildEntity();
+		Entity newEntity0 = G_ECMANAGER->BuildEntity();
 
-	//	newEntity0.AttachComponent<ComponentTransform>();
-	//	newEntity0.AttachComponent<ComponentRigidBody>();
+		newEntity0.AttachComponent<ComponentTransform>();
+		newEntity0.AttachComponent<ComponentRigidBody>();
 
-	//	//newEntity0.AddComponent<ComponentTransform>();
-	//	//newEntity0.AddComponent<ComponentRigidBody>();
-	//}
+		//newEntity0.AddComponent<ComponentTransform>();
+		//newEntity0.AddComponent<ComponentRigidBody>();
+	}
 
-	//auto itr = G_ECMANAGER->begin<ComponentRigidBody>();
-	//auto itrEnd = G_ECMANAGER->end<ComponentRigidBody>();
+	auto itr = G_ECMANAGER->begin<ComponentRigidBody>();
+	auto itrEnd = G_ECMANAGER->end<ComponentRigidBody>();
 
 
 	//for (int i = 0; i < 10000000; ++i)
@@ -1905,6 +1905,53 @@ void ComponentManager::TestComponents()
 
 	//G_ECMANAGER->AddComponent<ComponentRigidBody>(newEntity0);
 	//G_ECMANAGER->AttachComponent(newEntity0, ComponentRigidBody());
+
+
+
+	//ComponentTransform* compT;
+	//for (int i = 0; i < 1000000; ++i)
+	//{
+	//	compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+	//	compT->_nextPos.x = (float)i;
+	//}
+
+	//ComponentRigidBody* compR;
+	//for (int i = 0; i < 1000000; ++i)
+	//{
+	//	compR = G_ECMANAGER->getComponent<ComponentRigidBody>(itr);
+	//	compR->mass = (float)i;
+	//}
+
+	//for (int i = 0; i < 1000000; ++i)
+	//{
+	//	if (itr != itrEnd)
+	//	{
+	//		compR->isActive = false;
+	//	}
+	//}
+
+	//Entity newEntity0;
+	//for (int i = 0; i < 1000000; ++i)
+	//{
+	//	newEntity0 = G_ECMANAGER->getEntity(itr);
+	//}
+
+	//for (int i = 0; i < 1000000; ++i)
+	//{
+	//	newEntity0 = G_ECMANAGER->getEntity(compT);
+	//}
+
+	//for (int i = 0; i < 1000000; ++i)
+	//{
+	//	newEntity0.getComponent<ComponentGraphics>();
+	//}
+
+	//for (int i = 0; i < 1000000; ++i)
+	//{
+	//	++itr;
+	//	--itr;
+	//}
+
 
 	Clear();
 
