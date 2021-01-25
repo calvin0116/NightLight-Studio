@@ -41,19 +41,29 @@ void LE_Picking::LE_PickingRun()
 
         for (Entity ent : G_ECMANAGER->getEntityContainer())
         {
-            AABBCollider aabb;
-            if (ent.getComponent<ComponentCollider>() && ent.getComponent<ComponentCollider>()->GetColliderT() == COLLIDERS::AABB)
+            if (ent.getComponent<ComponentCollider>())
             {
-                aabb = ent.getComponent<ComponentCollider>()->collider.aabb;
+                // Checks which collider
+                if (ent.getComponent<ComponentCollider>()->GetColliderT() == COLLIDERS::AABB)
+                {
+                    AABBCollider aabb = ent.getComponent<ComponentCollider>()->collider.aabb;
+                    if (NlMath::RayToAABB(aabb, startRay, endRay))
+                    {
+                        hitList.push_back(ent.getId());
+                    }
+                }
+                else if (ent.getComponent<ComponentCollider>()->GetColliderT() == COLLIDERS::SPHERE)
+                {
+                    SphereCollider sphere = ent.getComponent<ComponentCollider>()->collider.sphere;
+                    if (NlMath::RayToSphere(sphere, startRay, endRay))
+                    {
+                        hitList.push_back(ent.getId());
+                    }
+                }
             }
-            else
+            else // No Collider 
             {
-                aabb.posUpdate(ent.getComponent<ComponentTransform>());
-            }
 
-            if (NlMath::RayToAABB(aabb, startRay, endRay))
-            {
-                hitList.push_back(ent.getId());
             }
         }
 
@@ -80,6 +90,15 @@ void LE_Picking::LE_PickingRun()
             _hitEntityNum = 0;
             _hitEntities = hitList;
             LE_ECHELPER->SelectEntity(_hitEntities[_hitEntityNum]);
+        }
+        else
+        {
+            /*
+            _hitEntityNum = 0;
+            _hitEntities.clear();
+            LE_ECHELPER->DeSelectEntity(LE_ECHELPER->GetSelectedEntityID());
+            LE_ECHELPER->SelectEntity(-1);
+            */
         }
     }
 }
