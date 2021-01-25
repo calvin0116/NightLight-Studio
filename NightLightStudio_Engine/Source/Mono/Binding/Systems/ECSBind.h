@@ -5,16 +5,19 @@
 namespace ECSBind
 {
   // Error check for entity get.
-  bool CheckCompGet(const void* comp, const std::string& type, const int& id);
+  bool  CheckCompGet(const void* comp, const std::string& type, const int& id);
   // Find object ID from name
-  int GameObjectFind(MonoString* _name);
+  int   GameObjectFind(MonoString* _name);
   // Delta Time
   float dt();
   float realDt();
   // Scene change
-  void SetNextScene(MonoString* scene_name);
+  void  SetNextScene(MonoString* scene_name);
   // Print in console
-  void Print(MonoString* text);
+  void  Print(MonoString* text);
+  // Ray cast
+  int   RayCastIntersect(MonoObject* origin, MonoObject* endPos, MonoObject* intersect);
+  int   RayCast(MonoObject* origin, MonoObject* endPos);
   // Get components from object ID
   MonoObject* GetScript(int id);
   MonoObject* GetTransform(int id);
@@ -27,5 +30,5 @@ namespace ECSBind
   MonoObject* GetCanvas(int id);
   MonoObject* GetVariables(int id); // Use this for now until reflection is out
 
-  void BindECS();    
+  void BindECS();
 }
