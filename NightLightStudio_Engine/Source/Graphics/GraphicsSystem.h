@@ -112,6 +112,16 @@ namespace NS_GRAPHICS
 
         void DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& rgb = glm::vec3(0.f,0.f,0.f));
 
+        // Draws circle based on provided parameters, default segments for circle is 8
+        // Note that circle will not draw at all if segments are less than or equal to 3
+        // Draws circle based on X and Y axes
+        void DrawXYCircle(const glm::vec3& center, const float& radius, const int& segments = 8, const glm::vec3& rgb = glm::vec3(0.f, 0.f, 0.f));
+
+        // Draws circle based on provided parameters, default segments for circle is 8
+        // Note that circle will not draw at all if segments are less than or equal to 3
+        // Draws circle based on X and Z axes
+        void DrawXZCircle(const glm::vec3& center, const float& radius, const int& segments = 8, const glm::vec3& rgb = glm::vec3(0.f, 0.f, 0.f));
+
         /////////////////////////////////////////////////////////////////////
 
         // Sets whole mesh color

@@ -105,6 +105,9 @@ namespace NS_GRAPHICS
 		// If no camera exists, return dummy camera
 		Camera& GetSceneCamera(const int& cameraID);
 
+		// Returns current active camera, regardless of editor or game camera
+		Camera& GetCurrentCamera();
+
 		////////////////////////////////////////////
 
 
