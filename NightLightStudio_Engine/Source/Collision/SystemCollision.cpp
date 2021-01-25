@@ -276,37 +276,37 @@ namespace NS_COLLISION
 
 
 
-		//// test line aabb col
-		//{
-		//	Entity boxTest = G_ECMANAGER->BuildEntity(std::string("newBox").append(std::to_string(test_count)));
-		//	++test_count;
-		//	ComponentTransform boxTestTransform;
-		//	boxTestTransform._position = glm::vec3(0.0f, 0.0f, 0.0f);
-		//	boxTestTransform._scale = glm::vec3(50.0f, 200.0f, 200.0f);
-		//	boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
-		//	ComponentCollider boxTestCollider(COLLIDERS::AABB);
-		//	//ComponentCollider boxTestCollider(COLLIDERS::SPHERE);
-		//	boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
-		//	//ComponentRigidBody boxTestrbody;
-		//	//boxTestrbody.isStatic = false;
-		//	//boxTestrbody.isGravity = true;
-		//	//boxTestrbody.mass = 1.0f;
-		//	//boxTest.AttachComponent<ComponentRigidBody>(boxTestrbody);
-		//}
+		// test line aabb col
+		{
+			Entity boxTest = G_ECMANAGER->BuildEntity(std::string("newBox").append(std::to_string(test_count)));
+			++test_count;
+			ComponentTransform boxTestTransform;
+			boxTestTransform._position = glm::vec3(0.0f, 0.0f, 0.0f);
+			boxTestTransform._scale = glm::vec3(50.0f, 200.0f, 200.0f);
+			boxTest.AttachComponent<ComponentTransform>(boxTestTransform);
+			ComponentCollider boxTestCollider(COLLIDERS::AABB);
+			//ComponentCollider boxTestCollider(COLLIDERS::SPHERE);
+			boxTest.AttachComponent<ComponentCollider>(boxTestCollider);
+			//ComponentRigidBody boxTestrbody;
+			//boxTestrbody.isStatic = false;
+			//boxTestrbody.isGravity = true;
+			//boxTestrbody.mass = 1.0f;
+			//boxTest.AttachComponent<ComponentRigidBody>(boxTestrbody);
+		}
 
 
 	}
 
 	void CollisionSystem::FixedUpdate()
 	{
-		// test line col
-		//NlMath::Vec3 ray1Origin(-100.0f, 0.0f, 0.0f);
-		//NlMath::Vec3 ray1End(100.0f, 0.0f, 0.0f);
-		//Test_Ray(ray1Origin, ray1End);
+		 //test line col
+		NlMath::Vec3 ray1Origin(-100.0f, 0.0f, 0.0f);
+		NlMath::Vec3 ray1End(100.0f, 0.0f, 0.0f);
+		Test_Ray(ray1Origin, ray1End);
 
-		//NlMath::Vec3 ray2Origin(-100.0f, 100.0f, 0.0f);
-		//NlMath::Vec3 ray2End(100.0f, 200.0f, 0.0f);
-		//Test_Ray(ray2Origin, ray2End);
+		NlMath::Vec3 ray2Origin(-100.0f, 100.0f, 0.0f);
+		NlMath::Vec3 ray2End(100.0f, 200.0f, 0.0f);
+		Test_Ray(ray2Origin, ray2End);
 
 
 		//draw debug mesh
@@ -1303,7 +1303,7 @@ namespace NS_COLLISION
 	// if collision occurs
 	// intersect - nearest point of intersect to rayOrigin
 	// othId - id of nearest object to rayOrigin
-	bool CollisionSystem::Check_RayCollision(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect, int& othId)
+	int CollisionSystem::Check_RayCollision(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect)
 	{
 		// does not check rigidbody and transform
 
@@ -1314,7 +1314,7 @@ namespace NS_COLLISION
 
 		float iSqLen_smallest = FLT_MAX;
 
-		othId = -1;
+		int othId = -1;
 
 		while (itr != itrEnd)
 		{
@@ -1337,15 +1337,18 @@ namespace NS_COLLISION
 			}
 			++itr;
 		}
-		return gotCollide;
+
+		if (gotCollide == true && othId == -1) throw; // !!! <- remove this in the future
+
+		return othId;
 	}
 
 	void CollisionSystem::Test_Ray(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd)
 	{
 		NlMath::Vec3 intersect(0.0f, 0.0f, 0.0f);
-		int othId = -1;
+		int othId = Check_RayCollision(rayOrigin, rayEnd, intersect);
 
-		if (Check_RayCollision(rayOrigin, rayEnd, intersect, othId))
+		if (othId > 0)
 		{
 			Draw3DCross(rayOrigin, 5.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
