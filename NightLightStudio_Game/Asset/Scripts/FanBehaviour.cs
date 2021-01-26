@@ -62,17 +62,17 @@ namespace Unicorn
         SwitchOnFunction();
       }
 
-      if ((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) || activate == false)
-      {
-        SwitchOffFunction();
+      //if ((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) || activate == false)
+      //{
+      //  SwitchOffFunction();
 
-        // push out player
-        if (script_Player.CurrentState == ScriptPlayer.State.Possessed)
-        {
-          script_Player.NextState = ScriptPlayer.State.Human;
-        }
+      //  // push out player
+      //  if (script_Player.CurrentState == ScriptPlayer.State.Possessed)
+      //  {
+      //    script_Player.NextState = ScriptPlayer.State.Human;
+      //  }
 
-      }
+      //}
 
 
     }

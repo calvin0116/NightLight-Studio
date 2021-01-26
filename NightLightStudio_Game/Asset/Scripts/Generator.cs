@@ -87,17 +87,17 @@ namespace Unicorn
         SwitchOnFunction();
       }
 
-      if ((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) || activate == false)
-      {
-        SwitchOffFunction();
+      //if (activate == false || (isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) )
+      //{
+      //  SwitchOffFunction();
 
-        //push out player
-        if (script_Player.CurrentState == ScriptPlayer.State.Possessed)
-        {
-          script_Player.NextState = ScriptPlayer.State.Human;
-        }
+      //  //push out player
+      //  if (script_Player.CurrentState == ScriptPlayer.State.Possessed)
+      //  {
+      //    script_Player.NextState = ScriptPlayer.State.Human;
+      //  }
 
-      }
+      //}
 
 
 
@@ -121,23 +121,21 @@ namespace Unicorn
 
 
       // Setting player spawn & Cam location
-      if (isActive == true && GetTransform(other).tag == 200)
+      if (isActive == true && other == player_ID)
       {
         if (script_Player.CurrentState == ScriptPlayer.State.Moth)
         {
+           activate = true;
 
           // Set player script nextspawn position == possessionSpawnPos
-         script_Player.NextState = ScriptPlayer.State.Possessed;
+          script_Player.NextState = ScriptPlayer.State.Possessed;
 
          Vector3 p_AfterSpawnPos = GetTransform(p_SpawnPos).GetPosition();
          script_Player.spawnPoint = p_AfterSpawnPos;        
 
-          // Set Camera script  position == possessionSpawnPos
-
-
-          script_Player.camScript.tgtID = p_CamPos; // Go and expose other tgt in scriptcamera.
-
-          activate = true;
+         // Set Camera script  position == possessionSpawnPos
+          script_Player.camScript.tgtID = p_CamPos;  // Go and expose other tgt in scriptcamera.
+         
 
         }
 

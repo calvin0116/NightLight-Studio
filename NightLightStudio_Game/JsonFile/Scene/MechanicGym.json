@@ -67,7 +67,7 @@
                     0.0
                 ],
                 "Scale": [
-                    0.9945665597915649,
+                    0.9942808151245117,
                     0.9997184872627258,
                     0.9998233914375305
                 ],
@@ -184,7 +184,7 @@
                 "FloatList": [
                     250000.0,
                     100.0,
-                    15.0,
+                    1000.0,
                     1.7999999523162842,
                     180.0
                 ]
@@ -943,17 +943,17 @@
                 "SelfDefineVariable": 1.0
             }
         },
-        "Bugis_Street_Lamp_1": {
+        "StreetLight3": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "StreetLight2",
                 "Tag": 0,
                 "Position": [
-                    -231.65113830566407,
+                    160.37884521484376,
                     14.077624320983887,
-                    -284.6959533691406
+                    228.73533630371095
                 ],
                 "Scale": [
-                    0.0000010000001111620805,
+                    1.0,
                     1.0,
                     1.0
                 ],
@@ -1040,12 +1040,10 @@
             },
             "ComponentVariables": {
                 "IntList": [
-                    0,
+                    2,
                     0
                 ],
                 "StringList": [
-                    "Moth1",
-                    "Moth1",
                     "Moth1"
                 ],
                 "FloatList": []
@@ -1167,97 +1165,6 @@
                 "SelfDefineVariable": 1.0
             }
         },
-        "Bugis_Street_Lamp_2": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    80.46028900146485,
-                    14.077624320983887,
-                    384.4620361328125
-                ],
-                "Scale": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ]
-            },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
-                ],
-                "Rotation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "RigidBody": {
-                "isStatic": true,
-                "isGravity": false,
-                "mass": 0.0,
-                "friction": 0.009999999776482582,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "asset\\model\\bugis_street_lamp.fbx",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    0.8078431487083435,
-                    0.3529411852359772
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5,
-                "Alpha": 1.0
-            }
-        },
         "Generator": {
             "TransformComponent": {
                 "EntityName": "",
@@ -1367,7 +1274,7 @@
         },
         "GeneratorCam": {
             "TransformComponent": {
-                "EntityName": "GeneratorCamPos",
+                "EntityName": "GeneratorCam",
                 "Tag": 0,
                 "Position": [
                     -237.3302459716797,
@@ -1407,17 +1314,17 @@
                 ]
             }
         },
-        "Bugis_Street_Lamp_3": {
+        "StreetLight2": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "StreetLight2",
                 "Tag": 0,
                 "Position": [
-                    -231.65113830566407,
+                    -235.04905700683595,
                     14.077624320983887,
                     -284.6959533691406
                 ],
                 "Scale": [
-                    0.0000010000001111620805,
+                    1.0,
                     1.0,
                     1.0
                 ],
@@ -1504,12 +1411,10 @@
             },
             "ComponentVariables": {
                 "IntList": [
-                    0,
-                    0
+                    1,
+                    1
                 ],
                 "StringList": [
-                    "Moth1",
-                    "Moth1",
                     "Moth1"
                 ],
                 "FloatList": []
