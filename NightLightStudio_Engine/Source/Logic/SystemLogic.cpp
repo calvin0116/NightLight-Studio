@@ -7,6 +7,8 @@
 
 // Scene change
 #include "../Core/SceneManager.h"
+// Saving of reloaded scripts' values
+#include <any>
 
 namespace NS_LOGIC
 {
@@ -39,11 +41,141 @@ namespace NS_LOGIC
     SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ReloadScripts", SystemInput_ns::IKEY_END, "ScriptReload", SystemInput_ns::OnRelease, [this]()
       {
         //Only if mouse wheel + alt button is pressed, camera will move.
-        //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
         if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_END))
         {
-          if(!_isPlaying)
+          if (!_isPlaying)
+          {
+            std::unordered_map<std::string, std::any> ScriptValues;
+
+            auto itrS = G_ECMANAGER->begin<ComponentScript>();
+            auto itrE = G_ECMANAGER->end<ComponentScript>();
+            for (; itrS != itrE; ++itrS)
+            {
+              ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+              if (MyScript == nullptr)
+                continue;
+              ComponentScript::data& MonoData = MyScript->_MonoData;
+              if (MonoData._pInstance)
+              {
+                MonoClass* klass = MonoWrapper::GetMonoClass(MonoData._pInstance);
+                void* iter = NULL;
+                MonoClassField* field = mono_class_get_fields(klass, &iter);
+                while (field)
+                {
+                  const char* var_name = mono_field_get_name(field);
+                  int var_typeid = mono_type_get_type(mono_field_get_type(field));
+                  unsigned var_flag = mono_field_get_flags(field);
+                  // Store values into local vector
+                  if (var_flag == MONO_FIELD_ATTR_PUBLIC)
+                  {
+                    std::string tempVar(var_name);
+                    switch (var_typeid)
+                    {
+                    case MONO_TYPE_BOOLEAN:
+                      tempVar += "bool";
+                      ScriptValues.emplace(tempVar, MonoWrapper::GetObjectFieldValue<bool>(MonoData._pInstance, var_name));
+                      break;
+                    case MONO_TYPE_I4:
+                      tempVar += "int";
+                      ScriptValues.emplace(tempVar, MonoWrapper::GetObjectFieldValue<int>(MonoData._pInstance, var_name));
+                      break;
+                    case MONO_TYPE_U4:
+                      tempVar += "unsigned";
+                      ScriptValues.emplace(tempVar, MonoWrapper::GetObjectFieldValue<unsigned>(MonoData._pInstance, var_name));
+                      break;
+                    case MONO_TYPE_R4:
+                      tempVar += "float";
+                      ScriptValues.emplace(tempVar, MonoWrapper::GetObjectFieldValue<float>(MonoData._pInstance, var_name));
+                      break;
+                    case MONO_TYPE_R8:
+                      tempVar += "double";
+                      ScriptValues.emplace(tempVar, MonoWrapper::GetObjectFieldValue<double>(MonoData._pInstance, var_name));
+                      break;
+                    case MONO_TYPE_STRING:
+                      tempVar += "string";
+                      ScriptValues.emplace(tempVar, MonoWrapper::ToString(MonoWrapper::GetObjectFieldValue<MonoString*>(MonoData._pInstance, var_name)));
+                      break;
+                    default:
+                      // Unhandled type, do nothing.
+                      break;
+                    }
+                  }
+                  // Move to next field
+                  field = mono_class_get_fields(klass, &iter);
+                }
+              }
+            }
+
             MonoWrapper::ReloadScripts();
+            // Create script instance again after reloading
+            itrS = G_ECMANAGER->begin<ComponentScript>();
+            //auto itrE = G_ECMANAGER->end<ComponentScript>();
+            for (; itrS != itrE; ++itrS)
+            {
+              ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+              if (MyScript == nullptr)
+               continue;
+              MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
+              MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
+              int ID = G_ECMANAGER->getObjId(itrS);
+              MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
+              // Reflect values
+              //MyScript->ShowPublicValues();
+              //MyScript->Read();
+              MonoClass* klass = MonoWrapper::GetMonoClass(MyScript->_MonoData._pInstance);
+              void* iter = NULL;
+              MonoClassField* field = mono_class_get_fields(klass, &iter);
+              while (field)
+              {
+                const char* var_name = mono_field_get_name(field);
+                int var_typeid = mono_type_get_type(mono_field_get_type(field));
+                unsigned var_flag = mono_field_get_flags(field);
+                // Store values into local vector
+                if (var_flag == MONO_FIELD_ATTR_PUBLIC)
+                {
+                  std::string tempVar(var_name);
+                  if (var_typeid == MONO_TYPE_BOOLEAN)
+                  {
+                    tempVar += "bool";
+                    bool val = std::any_cast<bool>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+                  }
+                  else if (var_typeid == MONO_TYPE_I4)
+                  {
+                    tempVar += "int";
+                    int val = std::any_cast<int>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+                  }
+                  else if (var_typeid == MONO_TYPE_U4)
+                  {
+                    tempVar += "unsigned";
+                    unsigned val = std::any_cast<unsigned>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+                  }
+                  else if (var_typeid == MONO_TYPE_R4)
+                  {
+                    tempVar += "float";
+                    float val = std::any_cast<float>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+                  }
+                  else if (var_typeid == MONO_TYPE_R8)
+                  {
+                    tempVar += "double";
+                    double val = std::any_cast<double>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+                  }
+                  else if (var_typeid == MONO_TYPE_STRING)
+                  {
+                    tempVar += "string";
+                    std::string val = std::any_cast<std::string>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, *MonoWrapper::ToMonoString(val));
+                  }
+                }
+                // Move to next field
+                field = mono_class_get_fields(klass, &iter);
+              }
+            }
+          }
         }
       });
 #endif
@@ -79,6 +211,20 @@ namespace NS_LOGIC
 
   void SystemLogic::GameInit()
   {
+    // Construct scripts and get values from serialising
+    auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    auto itrE = G_ECMANAGER->end<ComponentScript>();
+    //for (; itrS != itrE; ++itrS)
+    //{
+    //  std::cout << "Constructed!" << std::endl;
+    //  ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+    //  if (MyScript == nullptr)
+    //    continue;
+    //  MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
+    //  MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
+    //  int ID = G_ECMANAGER->getObjId(itrS);
+    //  MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
+    //}
   }
 
   void SystemLogic::GamePreInit()
@@ -100,21 +246,21 @@ namespace NS_LOGIC
     // Reload Scripts
     //std::cout << "GamePreInit" << std::endl;
 #ifdef _EDITOR
-    MonoWrapper::ReloadScripts();
+    //MonoWrapper::ReloadScripts();
 #endif
-    //MonoWrapper::LoadScriptDomain();
-    auto itrS = G_ECMANAGER->begin<ComponentScript>();
-    auto itrE = G_ECMANAGER->end<ComponentScript>();
-    for (; itrS != itrE; ++itrS)
-    {
-      ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
-      if (MyScript == nullptr)
-        continue;
-      MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
-      MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
-      int ID = G_ECMANAGER->getObjId(itrS);
-      MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
-    }
+    // Create script instance
+    //auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    //auto itrE = G_ECMANAGER->end<ComponentScript>();
+    //for (; itrS != itrE; ++itrS)
+    //{
+    //  ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+    //  if (MyScript == nullptr)
+    //    continue;
+    //  MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
+    //  MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
+    //  int ID = G_ECMANAGER->getObjId(itrS);
+    //  MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
+    //}
 #endif
   }
 
@@ -275,7 +421,7 @@ namespace NS_LOGIC
         MonoMethod* MyExit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseExit);
         MonoWrapper::InvokeMethod(MyExit, MyScript->_MonoData._pInstance);
       }
-      MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
+      //MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
     }
 #endif
   }

@@ -14,10 +14,15 @@ public:
     MonoObject*     _pInstance = nullptr;
     uint32_t        _GCHandle  = 0;
   };
-  bool            _isActive;    // Show on editor, can edit
-  bool            _isRunning;   // Show on editor, can edit
-  LocalString<64> _ScriptName;  // Show on editor, can edit
-  data            _MonoData;    // Mono Data
+  bool             _isActive;         // Show on editor, can edit
+  bool             _isRunning;        // Show on editor, can edit
+  LocalString<64>  _ScriptName;       // Show on editor, can edit
+  data             _MonoData;         // Mono Data
+
+  // For inspector of C# script
+  int              _savedCount;       // How many strings currently
+  LocalString<256> _SavedID[10];      // Saved IDs of string up to 10 max.
+  LocalString<256> _SavedStrings[10]; // Saved values of string
 
   ComponentScript();
 	~ComponentScript();
