@@ -53,7 +53,7 @@ namespace Unicorn
       p_CamPos = GameObjectFind(possessionCamPos);
       p_SpawnPos = GameObjectFind(possessionSpawnPos);
       output_ID = GameObjectFind(output);
-     
+
       
 
 
@@ -75,7 +75,9 @@ namespace Unicorn
       {
         script_Lamp = GetScript(output_ID);
       }
-      
+
+      activate = true;
+
     }
 
     public override void Update()
@@ -93,7 +95,7 @@ namespace Unicorn
         {
           SwitchOffFunction();
         }
-        activate = false;
+        //activate = false;
 
         //if (script_Player.CurrentState == ScriptPlayer.State.Human)
         //{
@@ -152,8 +154,8 @@ namespace Unicorn
           // Set player script nextspawn position == possessionSpawnPos
           script_Player.NextState = ScriptPlayer.State.Possessed;
 
-         Vector3 p_AfterSpawnPos = GetTransform(p_SpawnPos).GetPosition();
-         script_Player.spawnPoint = p_AfterSpawnPos;        
+          Vector3 p_AfterSpawnPos = GetTransform(p_SpawnPos).GetPosition();
+          script_Player.spawnPoint = p_AfterSpawnPos;        
 
          // Set Camera script  position == possessionSpawnPos
           script_Player.camScript.tgtID = p_CamPos;  // Go and expose other tgt in scriptcamera.
@@ -184,7 +186,7 @@ namespace Unicorn
 
     public void SwitchOnFunction()
     {
-      isOn = true;
+     
       if (type == 0)
       {
         script_Fan.SwitchOnFunction();
@@ -195,11 +197,12 @@ namespace Unicorn
         script_Lamp.ToggleSwitch();
       }
 
+      isOn = true;
     }
 
     public void SwitchOffFunction()
     {
-      isOn = false;
+    
 
       if (type == 0)
       {
@@ -210,6 +213,8 @@ namespace Unicorn
       {
         script_Lamp.ToggleSwitch();
       }
+
+      isOn = false;
     }
 
 
