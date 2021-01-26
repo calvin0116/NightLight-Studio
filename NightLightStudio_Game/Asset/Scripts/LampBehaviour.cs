@@ -17,7 +17,7 @@ namespace Unicorn
     bool isActive;
     public bool isWaypoint;
     bool isOn;
-
+    
 
     //Required Components
     Variables ObjVariables;
@@ -47,14 +47,14 @@ namespace Unicorn
      
      
       wayPointID = ObjVariables.GetInt(0);
-      isSwitchOn = ObjVariables.GetInt(1);
+      //isSwitchOn = ObjVariables.GetInt(1);
       mothAIName = ObjVariables.GetString(0);
 
 
 
       ai_ID = GameObjectFind(mothAIName);
 
-
+     
 
 
     }
@@ -65,14 +65,15 @@ namespace Unicorn
       script_Moth = GetScript(ai_ID);
 
 
-      if (isSwitchOn == 0)
+      if (isWaypoint == true)
       {
-        SwitchOffFunction();
+
+        SwitchOnFunction();
       }
       else
       {
 
-        SwitchOnFunction();
+        SwitchOffFunction();
       }
 
     }
@@ -166,6 +167,8 @@ namespace Unicorn
 
     public void ToggleSwitch()
     {
+      
+
       if (isOn == true)
       {
         SwitchOffFunction();

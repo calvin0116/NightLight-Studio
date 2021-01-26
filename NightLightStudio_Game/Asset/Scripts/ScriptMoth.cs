@@ -37,12 +37,14 @@ namespace Unicorn
                                             // accumulated dt
     private float accumulatedDt = 0.0f;
 
+    bool invalidPath;
+
     //for Behaviour
     float pathSwitchTimer;
     float decisionTimer;
     bool thinking;
     bool possessed;
-
+    bool activate;
 
 
     public override void Init()
@@ -74,7 +76,23 @@ namespace Unicorn
       Move();
       Control();
 
-      if(enemyNavigator.NavState == 0)
+      if (activate == true)
+      {
+        //Set Player State to possessionstate
+        SwitchOnFunction();
+
+        if (script_Player.CurrentState == ScriptPlayer.State.Human)
+        {
+          SwitchOffFunction();
+          activate = false;
+        }
+
+
+      }
+
+
+
+      if (enemyNavigator.NavState == 0)
       {
         pathSwitchTimer += RealDT();
 
@@ -82,6 +100,7 @@ namespace Unicorn
         {
           enemyNavigator.NavState = 1;
           pathSwitchTimer = 0;
+
           if(thinking== false)
           {
             thinking = true;
@@ -130,12 +149,16 @@ namespace Unicorn
         {
 
           // Set player script nextspawn position == possessionSpawnPos
-          script_Player.NextState = ScriptPlayer.State.Possessed;
+          //script_Player.NextState = ScriptPlayer.State.Possessed;
 
-         
+
           // Set Camera script  position == possessionSpawnPos
-          script_Player.camScript.tgtID = id; // Go and expose other tgt in scriptcamera.
-          possessed = true;
+          // script_Player.camScript.tgtID = id; // Go and expose other tgt in scriptcamera.
+
+
+          activate = true;
+
+         // possessed = true;
 
         }
 
@@ -164,7 +187,7 @@ namespace Unicorn
 
       //---- Moth Logic----//
 
-      if (thinking == true)
+      if (thinking == true && invalidPath ==false )
       {
         decisionTimer += RealDT();
 
@@ -180,6 +203,11 @@ namespace Unicorn
 
         }
 
+      }
+
+      else if (thinking == true && invalidPath == true)
+      {
+        thinking = false;
       }
 
 
@@ -276,5 +304,20 @@ namespace Unicorn
           enemyNavigator.speed -= 0.5f;
       }
     }
+
+    public void SwitchOnFunction()
+    {
+
+      GetTransform(player_ID).SetPosition(GetTransform(id).GetPosition());
+
+
+    }
+
+
+    public void SwitchOffFunction()
+    {
+
+    }
+
   }
 }

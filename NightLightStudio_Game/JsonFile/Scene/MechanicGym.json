@@ -67,7 +67,7 @@
                     0.0
                 ],
                 "Scale": [
-                    0.9942808151245117,
+                    0.9942247271537781,
                     0.9997184872627258,
                     0.9998233914375305
                 ],
@@ -249,7 +249,10 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "ScriptCamera"
+                "ScriptName": "ScriptCamera",
+                "tgtIDint": 0,
+                "sPlayerstring": "Player",
+                "useOffsetbool": true
             },
             "ComponentVariables": {
                 "IntList": [],
@@ -355,7 +358,13 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "FanBehaviour"
+                "ScriptName": "FanBehaviour",
+                "activatebool": false,
+                "player_IDint": 0,
+                "cam_IDint": 0,
+                "p_CamPosint": 0,
+                "p_SpawnPosint": 0,
+                "windIDint": 0
             },
             "ComponentVariables": {
                 "IntList": [],
@@ -481,7 +490,10 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "WindBehaviour"
+                "ScriptName": "WindBehaviour",
+                "dirXfloat": 0.0,
+                "dirYfloat": 0.0,
+                "dirZfloat": 0.0
             },
             "ComponentVariables": {
                 "IntList": [],
@@ -575,7 +587,7 @@
                 "isCollidable": true,
                 "Center": [
                     0.0,
-                    155.0,
+                    100.0,
                     0.0
                 ],
                 "Extend": [
@@ -642,7 +654,13 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "LampBehaviour"
+                "ScriptName": "LampBehaviour",
+                "activatebool": false,
+                "player_IDint": 0,
+                "cam_IDint": 0,
+                "p_CamPosint": 0,
+                "p_SpawnPosint": 0,
+                "isWaypointbool": true
             },
             "ComponentVariables": {
                 "IntList": [
@@ -795,6 +813,26 @@
                     -89.99994659423828
                 ]
             },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    5.0,
+                    5.0,
+                    5.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
             "RigidBody": {
                 "isStatic": false,
                 "isGravity": false,
@@ -848,7 +886,15 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "ScriptMoth"
+                "ScriptName": "ScriptMoth",
+                "player_IDint": 0,
+                "startPatrolingbool": false,
+                "startIdlingbool": false,
+                "startPausedbool": false,
+                "isPatrolingbool": true,
+                "isIdlingbool": false,
+                "isPausedbool": false,
+                "dectectsPlayerbool": false
             },
             "ComponentVariables": {
                 "IntList": [],
@@ -882,26 +928,6 @@
                 "Rotate": [
                     0.0,
                     -0.0,
-                    0.0
-                ]
-            },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Extend": [
-                    30.0,
-                    30.0,
-                    30.0
-                ],
-                "Rotation": [
-                    0.0,
-                    0.0,
                     0.0
                 ]
             },
@@ -950,7 +976,7 @@
                 "Position": [
                     160.37884521484376,
                     14.077624320983887,
-                    228.73533630371095
+                    477.1328125
                 ],
                 "Scale": [
                     1.0,
@@ -969,13 +995,13 @@
                 "isCollidable": true,
                 "Center": [
                     0.0,
-                    0.0,
+                    100.0,
                     0.0
                 ],
                 "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
+                    20.0,
+                    155.0,
+                    20.0
                 ],
                 "Rotation": [
                     0.0,
@@ -1036,7 +1062,13 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "LampBehaviour"
+                "ScriptName": "LampBehaviour",
+                "activatebool": false,
+                "player_IDint": 0,
+                "cam_IDint": 0,
+                "p_CamPosint": 0,
+                "p_SpawnPosint": 0,
+                "isWaypointbool": true
             },
             "ComponentVariables": {
                 "IntList": [
@@ -1112,9 +1144,9 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    78.3109359741211,
+                    160.33526611328126,
                     300.0,
-                    375.07940673828127
+                    485.8052062988281
                 ],
                 "Scale": [
                     1.0,
@@ -1258,7 +1290,14 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "Generator"
+                "ScriptName": "Generator",
+                "activatebool": false,
+                "player_IDint": 0,
+                "cam_IDint": 0,
+                "output_IDint": 0,
+                "p_CamPosint": 0,
+                "p_SpawnPosint": 0,
+                "isWaypointbool": false
             },
             "ComponentVariables": {
                 "IntList": [
@@ -1340,13 +1379,13 @@
                 "isCollidable": true,
                 "Center": [
                     0.0,
-                    0.0,
+                    100.0,
                     0.0
                 ],
                 "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
+                    20.0,
+                    155.0,
+                    20.0
                 ],
                 "Rotation": [
                     0.0,
@@ -1407,7 +1446,13 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "LampBehaviour"
+                "ScriptName": "LampBehaviour",
+                "activatebool": false,
+                "player_IDint": 0,
+                "cam_IDint": 0,
+                "p_CamPosint": 0,
+                "p_SpawnPosint": 0,
+                "isWaypointbool": false
             },
             "ComponentVariables": {
                 "IntList": [
