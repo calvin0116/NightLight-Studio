@@ -299,6 +299,14 @@ namespace NS_GRAPHICS
 		return dummyCam;
 	}
 
+	Camera& CameraSystem::GetCurrentCamera()
+	{
+		if (!_activeSceneCamera)
+			return _camera; // Editor Camera
+		else
+			return _cameras[_sceneCameraID];
+	}
+
 	Camera& CameraSystem::GetCamera()
 	{
 		return _camera;

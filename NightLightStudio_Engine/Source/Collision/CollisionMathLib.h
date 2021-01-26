@@ -23,6 +23,8 @@ namespace NlMath
 {
 	bool RayToAABB(const AABBCollider& tBox, const Point3D& rayStartingPoint, const Point3D& rayEndPoint);
 
+	bool RayToSphere(const SphereCollider& tSphere, const Point3D& rayStartPoint, const Point3D& rayEndPoint);
+
 	Vector3D ClosestPointOnLineSegment(Vector3D segmentPointA, Vector3D segmentPointB, Vector3D CheckPoint);
 
 	bool PointInAABB(const AABBCollider& tBox, const NlMath::Vector3D& vecPoint);
@@ -72,6 +74,14 @@ namespace NlMath
 	bool Line_Circle_2D(Vec3 circleCenter, float circleRadius, Vec3 rectVertA, Vec3 rectVertB);
 	
 	bool Circle_Rectangle_2D(Vec3 circleCenter, float circleRadius, Vec3 rectVertA, Vec3 rectVertB, Vec3 rectVertC, Vec3 rectVertD);
+
+
+	////
+	bool RayInf_AABB(Vec3 vecMax, Vec3 vecMin, Vec3 rayOrigin, Vec3 rayEnd, Vec3& intersect);
+
+	bool Ray_AABB(Vec3 vecMax, Vec3 vecMin, Vec3 rayOrigin, Vec3 rayEnd, Vec3& intersect, float& iSqLen);
+
+
 }
 
 

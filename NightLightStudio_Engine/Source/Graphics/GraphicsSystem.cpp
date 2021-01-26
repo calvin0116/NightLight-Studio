@@ -717,6 +717,50 @@ namespace NS_GRAPHICS
 		debugManager->AddLine(start, end, rgb);
 	}
 
+	void GraphicsSystem::DrawXYCircle(const glm::vec3& center, const float& radius, const int& segments, const glm::vec3& rgb)
+	{
+		if (segments <= 3)
+			return;
+
+		float pi2 = 2.f * PI;
+		
+		for (int i = 0; i < segments; i++)
+		{
+			float theta0 = pi2 * static_cast<float>(i) / static_cast<float>(segments);     // p0
+			float theta1 = pi2 * static_cast<float>(i + 1) / static_cast<float>(segments); // p1
+
+			float x0 = radius * cosf(theta0) + center.x;
+			float y0 = radius * sinf(theta0) + center.y;
+
+			float x1 = radius * cosf(theta1) + center.x;
+			float y1 = radius * sinf(theta1) + center.y;
+
+			DrawLine(glm::vec3(x0, y0, center.z), glm::vec3(x1, y1, center.z), rgb);
+		}
+	}
+
+	void GraphicsSystem::DrawXZCircle(const glm::vec3& center, const float& radius, const int& segments, const glm::vec3& rgb)
+	{
+		if (segments <= 3)
+			return;
+
+		float pi2 = 2.f * PI;
+
+		for (int i = 0; i < segments; i++)
+		{
+			float theta0 = pi2 * static_cast<float>(i) / static_cast<float>(segments);     // p0
+			float theta1 = pi2 * static_cast<float>(i + 1) / static_cast<float>(segments); // p1
+
+			float x0 = radius * cosf(theta0) + center.x;
+			float z0 = radius * sinf(theta0) + center.z;
+
+			float x1 = radius * cosf(theta1) + center.x;
+			float z1 = radius * sinf(theta1) + center.z;
+
+			DrawLine(glm::vec3(x0, center.y, z0), glm::vec3(x1, center.y, z1), rgb);
+		}
+	}
+
 	void GraphicsSystem::SetMeshColor(Entity& entity, const glm::vec3& rgb)
 	{
 		ComponentGraphics* graphicsComp = entity.getComponent<ComponentGraphics>();

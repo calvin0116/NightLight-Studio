@@ -72,18 +72,32 @@ namespace NS_PHYSICS
 		_forceManager.updateTranslationalForces();
 
 
+		if (!_isPlaying)
+		{
+			auto itr = G_ECMANAGER->begin<ComponentTransform>();
+			auto itrEnd = G_ECMANAGER->end<ComponentTransform>();
+			for (; itr != itrEnd; ++itr)
+			{
+				ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+				if (compT)
+					compT->_phyposition = compT->_position;
+			}
+		}
+		// ^^ here
+
 		auto itr = G_ECMANAGER->begin<ComponentRigidBody>();
 		auto itrEnd = G_ECMANAGER->end<ComponentRigidBody>();
 
 		for (; itr != itrEnd; ++itr)
 		{
 
-			if (!_isPlaying)
-			{
-				ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
-				if(compT)
-					compT->_phyposition = compT->_position;
-			}
+			// i moved this out to above ^^
+			//if (!_isPlaying)
+			//{
+			//	ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
+			//	if(compT)
+			//		compT->_phyposition = compT->_position;
+			//}
 
 			ComponentRigidBody* compR = G_ECMANAGER->getComponent<ComponentRigidBody>(itr);
 			if (compR->isStatic)
