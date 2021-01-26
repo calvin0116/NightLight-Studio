@@ -575,7 +575,7 @@
                 "isCollidable": true,
                 "Center": [
                     0.0,
-                    155.0,
+                    100.0,
                     0.0
                 ],
                 "Extend": [
@@ -795,6 +795,26 @@
                     -89.99994659423828
                 ]
             },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    5.0,
+                    5.0,
+                    5.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
             "RigidBody": {
                 "isStatic": false,
                 "isGravity": false,
@@ -885,26 +905,6 @@
                     0.0
                 ]
             },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Extend": [
-                    30.0,
-                    30.0,
-                    30.0
-                ],
-                "Rotation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
             "GraphicsComponent": {
                 "isActive": true,
                 "Model": "asset\\3d model\\test_cube.fbx",
@@ -950,7 +950,7 @@
                 "Position": [
                     160.37884521484376,
                     14.077624320983887,
-                    228.73533630371095
+                    477.1328125
                 ],
                 "Scale": [
                     1.0,
@@ -969,13 +969,13 @@
                 "isCollidable": true,
                 "Center": [
                     0.0,
-                    0.0,
+                    100.0,
                     0.0
                 ],
                 "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
+                    20.0,
+                    155.0,
+                    20.0
                 ],
                 "Rotation": [
                     0.0,
@@ -1112,9 +1112,9 @@
                 "EntityName": "",
                 "Tag": 0,
                 "Position": [
-                    78.3109359741211,
+                    160.33526611328126,
                     300.0,
-                    375.07940673828127
+                    485.8052062988281
                 ],
                 "Scale": [
                     1.0,
@@ -1340,13 +1340,13 @@
                 "isCollidable": true,
                 "Center": [
                     0.0,
-                    0.0,
+                    100.0,
                     0.0
                 ],
                 "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
+                    20.0,
+                    155.0,
+                    20.0
                 ],
                 "Rotation": [
                     0.0,

@@ -84,8 +84,30 @@ namespace Unicorn
       if (activate == true)
       {
         //Set Player State to possessionstate
-        SwitchOnFunction();
+
+        if (isOn == false)
+        {
+          SwitchOnFunction();
+        }
+        else
+        {
+          SwitchOffFunction();
+        }
+        activate = false;
+
+        //if (script_Player.CurrentState == ScriptPlayer.State.Human)
+        //{
+        //  //
+          
+        //}
+
+
       }
+
+
+
+      
+
 
       //if (activate == false || (isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) )
       //{
@@ -139,17 +161,7 @@ namespace Unicorn
 
         }
 
-        //  if (isWaypoint == true)
-        //  {
-        //    SwitchOffFunction();
-        //  }
-
-        //  else
-        //  {
-        //    SwitchOnFunction();
-        //  }
-
-        //}
+        
 
 
       }
@@ -161,12 +173,18 @@ namespace Unicorn
       if (GetTransform(other).tag == 3)
       {
         isActive = false;
+
+       // SwitchOffFunction();
       }
+
+
+
     }
 
 
     public void SwitchOnFunction()
     {
+      isOn = true;
       if (type == 0)
       {
         script_Fan.SwitchOnFunction();
@@ -181,6 +199,8 @@ namespace Unicorn
 
     public void SwitchOffFunction()
     {
+      isOn = false;
+
       if (type == 0)
       {
         script_Fan.SwitchOffFunction();

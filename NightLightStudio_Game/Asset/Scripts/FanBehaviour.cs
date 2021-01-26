@@ -58,21 +58,19 @@ namespace Unicorn
     {
       if (activate == true)
       {
-        // Set Player State to possessionstate
+        //Set Player State to possessionstate
         SwitchOnFunction();
+
+        if (script_Player.CurrentState == ScriptPlayer.State.Human)
+        {
+          SwitchOffFunction();
+          activate = false;
+        }
+
+
       }
 
-      //if ((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) || activate == false)
-      //{
-      //  SwitchOffFunction();
-
-      //  // push out player
-      //  if (script_Player.CurrentState == ScriptPlayer.State.Possessed)
-      //  {
-      //    script_Player.NextState = ScriptPlayer.State.Human;
-      //  }
-
-      //}
+     
 
 
     }
