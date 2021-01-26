@@ -25,6 +25,14 @@ ComponentCamera::~ComponentCamera()
 
 //read and write function for initialization from saved files
 
+void ComponentCamera::SetCurrentCamera()
+{
+	if (_cameraID == -1)
+		_cameraID = NS_GRAPHICS::CameraSystem::GetInstance().CreateCamera(cameraPos, cameraTarget, pitch, yaw);
+
+	NS_GRAPHICS::CameraSystem::GetInstance().SetCurrentCamera(_cameraID);
+}
+
 inline void ComponentCamera::Read(Value& val)
 {
 	if (val.FindMember("isActive") == val.MemberEnd())

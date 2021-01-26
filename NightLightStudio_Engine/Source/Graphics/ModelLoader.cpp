@@ -66,10 +66,10 @@ namespace NS_GRAPHICS
 			for (unsigned int j = 0; j < mesh->mNumBones; j++)
 			{
 				std::cout << "Bone " << j << ": " << mesh->mBones[j]->mName.C_Str() << std::endl;
-				BoneData bone;
+				Joint joint;
 
-				bone._boneID = j;
-				bone._boneName = mesh->mBones[j]->mName.C_Str();
+				joint._boneID = j;
+				joint._boneName = mesh->mBones[j]->mName.C_Str();
 			}
 		}
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -257,19 +257,19 @@ namespace NS_GRAPHICS
 			unsigned boneID = 0;
 			std::string boneName = mesh->mBones[i]->mName.C_Str();
 
-			if (model->_boneMapping.find(boneName) == model->_boneMapping.end()) 
+			if (model->_rootBone->_boneMapping.find(boneName) == model->_rootBone->_boneMapping.end())
 			{
 				// Allocate an index for a new bone
-				boneID = model->_boneCount;
-				model->_boneCount++;
+				boneID = model->_rootBone->_boneCount;
+				model->_rootBone->_boneCount++;
 				glm::mat4 boneOffset;
 				AssimpToGLM(mesh->mBones[i]->mOffsetMatrix, boneOffset);
 
-				model->_boneMapping[boneName] = std::make_pair(boneID, boneOffset);
+				model->_rootBone->_boneMapping[boneName] = std::make_pair(boneID, boneOffset);
 			}
 			else 
 			{
-				boneID = model->_boneMapping[boneName].first;
+				boneID = model->_rootBone->_boneMapping[boneName].first;
 			}
 
 			for (size_t j = 0; j < mesh->mBones[i]->mNumWeights; j++) 
@@ -282,22 +282,22 @@ namespace NS_GRAPHICS
 		}
 	}
 
-	bool ModelLoader::CreateSkeletal(BoneData& bone, aiNode* node, const aiScene* scene, Model*& model)
+	bool ModelLoader::CreateSkeletal(Joint& joint, aiNode* node, const aiScene* scene, Model*& model)
 	{
 		//Only if node is a bone
-		if (model->_boneMapping.find(node->mName.C_Str()) != model->_boneMapping.end()) 
+		if (model->_rootBone->_boneMapping.find(node->mName.C_Str()) != model->_rootBone->_boneMapping.end())
 		{
-			bone._boneName = node->mName.C_Str();
-			bone._boneID = model->_boneMapping[bone._boneName].first;
-			bone._boneTransformOffset = model->_boneMapping[bone._boneName].second;
-			AssimpToGLM(node->mTransformation, bone._boneTransform);
+			joint._boneName = node->mName.C_Str();
+			joint._boneID = model->_rootBone->_boneMapping[joint._boneName].first;
+			joint._boneTransformOffset = model->_rootBone->_boneMapping[joint._boneName].second;
+			AssimpToGLM(node->mTransformation, joint._boneTransform);
 
 			for (unsigned i = 0; i < node->mNumChildren; i++) 
 			{
-				BoneData childBone;
-				if (CreateSkeletal(childBone, node->mChildren[i], scene, model))
+				Joint childJoint;
+				if (CreateSkeletal(childJoint, node->mChildren[i], scene, model))
 				{
-					bone._childrenBones.push_back(childBone);
+					joint._childrenJoints.push_back(childJoint);
 				}
 			}
 			return true;
@@ -307,7 +307,7 @@ namespace NS_GRAPHICS
 			//Find other bone in children
 			for (unsigned i = 0; i < node->mNumChildren; i++) 
 			{
-				if (CreateSkeletal(bone ,node->mChildren[i], scene, model))
+				if (CreateSkeletal(joint ,node->mChildren[i], scene, model))
 				{
 					return true;
 				}
@@ -455,9 +455,10 @@ namespace NS_GRAPHICS
 			model->_poseTransform.resize(MAX_BONE_COUNT, glm::mat4(1.0f));
 
 			//First get the vertex info and bone info
+			model->_rootBone = new Skeleton();
 			ProcessNode(scene->mRootNode, scene, model);
 			//Then, create the skeleton hierarchy
-			CreateSkeletal(model->_rootBone, scene->mRootNode, scene, model);
+			CreateSkeletal(model->_rootBone->_rootJoint, scene->mRootNode, scene, model);
 			//Finally, get the animation data
 			ProcessAnimation(scene->mRootNode, scene, model);
 		}
@@ -644,6 +645,16 @@ namespace NS_GRAPHICS
 		//Gets rid of warning for now
 		std::ofstream meshFile;
 		meshFile.open(model->_fileName.c_str());
+
+		
+		if (model->_isAnimated)
+		{
+			meshFile << "IsAnimated 1,";
+		}
+		else
+		{
+			meshFile << "IsAnimated 0,";
+		}
 
 		if (model->_isAnimated)
 		{

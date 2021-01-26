@@ -269,6 +269,44 @@ namespace NS_GRAPHICS
 		return _camera.GetZoomSensitivity();
 	}
 
+	void CameraSystem::SetCurrentCamera(const int& cameraID)
+	{
+		_sceneCameraID = cameraID;
+	}
+
+	int CameraSystem::CreateCamera(const glm::vec3& position, const glm::vec3& target, const float& pitch, const float& yaw)
+	{
+		Camera newCam;
+
+		newCam.SetCameraPosition(position);
+		newCam.SetCameraPitch(pitch);
+		newCam.SetCameraYaw(yaw);
+		newCam.SetCameraTarget(target);
+
+
+		_cameras.push_back(newCam);
+
+		return _cameras.size() - 1;
+	}
+
+	Camera& CameraSystem::GetSceneCamera(const int& cameraID)
+	{
+		if (cameraID >= 0 && cameraID < _cameras.size())
+			return _cameras[cameraID];
+
+		Camera dummyCam;
+
+		return dummyCam;
+	}
+
+	Camera& CameraSystem::GetCurrentCamera()
+	{
+		if (!_activeSceneCamera)
+			return _camera; // Editor Camera
+		else
+			return _cameras[_sceneCameraID];
+	}
+
 	Camera& CameraSystem::GetCamera()
 	{
 		return _camera;

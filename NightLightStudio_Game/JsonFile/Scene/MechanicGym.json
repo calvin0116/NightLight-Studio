@@ -67,7 +67,7 @@
                     0.0
                 ],
                 "Scale": [
-                    0.9945807456970215,
+                    0.9942808151245117,
                     0.9997184872627258,
                     0.9998233914375305
                 ],
@@ -184,7 +184,7 @@
                 "FloatList": [
                     250000.0,
                     100.0,
-                    15.0,
+                    1000.0,
                     1.7999999523162842,
                     180.0
                 ]
@@ -549,9 +549,9 @@
                 "OuterCutOff": 0.0
             }
         },
-        "Bugis_Street_Lamp_5": {
+        "StreetLight1": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "StreetLight1",
                 "Tag": 0,
                 "Position": [
                     361.75775146484377,
@@ -638,16 +638,31 @@
                 "MetallicMat": 1.0,
                 "RoughnessMat": 0.5,
                 "Alpha": 1.0
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "LampBehaviour"
+            },
+            "ComponentVariables": {
+                "IntList": [
+                    0,
+                    1
+                ],
+                "StringList": [
+                    "Moth1"
+                ],
+                "FloatList": []
             }
         },
         "Street_Talisman_1": {
             "TransformComponent": {
                 "EntityName": "Talisman_1",
-                "Tag": 2,
+                "Tag": 3,
                 "Position": [
-                    -599.3660278320313,
+                    293.07440185546877,
                     0.0,
-                    -512.5982666015625
+                    -992.921142578125
                 ],
                 "Scale": [
                     425.0,
@@ -729,6 +744,680 @@
                 "MetallicMat": 0.0,
                 "RoughnessMat": 0.5,
                 "Alpha": 0.5
+            }
+        },
+        "Paths": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "WayPointMapComponent": {
+                "way_point_list": [
+                    "WayPoint_1",
+                    "WayPoint_2",
+                    "WayPoint_3"
+                ],
+                "radius_for_detection": 25.0
+            }
+        },
+        "Moth": {
+            "TransformComponent": {
+                "EntityName": "Moth1",
+                "Tag": 0,
+                "Position": [
+                    421.18572998046877,
+                    300.6934509277344,
+                    -293.47021484375
+                ],
+                "Scale": [
+                    2.0,
+                    2.0,
+                    2.0
+                ],
+                "Rotate": [
+                    0.0,
+                    3.256885646590879e-12,
+                    -89.99994659423828
+                ]
+            },
+            "RigidBody": {
+                "isStatic": false,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\3d model\\mothtest.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    0.21960784494876862,
+                    0.0,
+                    0.9019607901573181
+                ],
+                "MetallicMat": 0.0,
+                "RoughnessMat": 0.0,
+                "Alpha": 1.0
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "ScriptMoth"
+            },
+            "ComponentVariables": {
+                "IntList": [],
+                "StringList": [],
+                "FloatList": [
+                    2.0
+                ]
+            },
+            "NavigatorComponent": {
+                "stopAtEachWayPoint": false,
+                "endTime": 2.0,
+                "speed": 100.0,
+                "radius_for_detection": 10.0,
+                "WayPointMapName": "Paths"
+            }
+        },
+        "WayPoint_1": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    368.93182373046877,
+                    300.0,
+                    -284.5354309082031
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    30.0,
+                    30.0,
+                    30.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\3d model\\test_cube.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "MetallicMat": 0.0,
+                "RoughnessMat": 0.0,
+                "Alpha": 1.0
+            },
+            "WayPointComponent": {
+                "SelfDefineVariable": 1.0
+            }
+        },
+        "StreetLight3": {
+            "TransformComponent": {
+                "EntityName": "StreetLight2",
+                "Tag": 0,
+                "Position": [
+                    160.37884521484376,
+                    14.077624320983887,
+                    228.73533630371095
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\model\\bugis_street_lamp.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    0.8078431487083435,
+                    0.3529411852359772
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "LampBehaviour"
+            },
+            "ComponentVariables": {
+                "IntList": [
+                    2,
+                    0
+                ],
+                "StringList": [
+                    "Moth1"
+                ],
+                "FloatList": []
+            }
+        },
+        "WayPoint_2": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -239.0659637451172,
+                    300.0,
+                    -293.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\3d model\\test_cube.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "MetallicMat": 0.0,
+                "RoughnessMat": 0.0,
+                "Alpha": 1.0
+            },
+            "WayPointComponent": {
+                "SelfDefineVariable": 1.0
+            }
+        },
+        "WayPoint_3": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    78.3109359741211,
+                    300.0,
+                    375.07940673828127
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\3d model\\test_cube.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "MetallicMat": 0.0,
+                "RoughnessMat": 0.0,
+                "Alpha": 1.0
+            },
+            "WayPointComponent": {
+                "SelfDefineVariable": 1.0
+            }
+        },
+        "Generator": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "Position": [
+                    -240.27420043945313,
+                    -19.381256103515626,
+                    -136.20846557617188
+                ],
+                "Scale": [
+                    100.0,
+                    99.99999237060547,
+                    100.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    50.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "Generator"
+            },
+            "ComponentVariables": {
+                "IntList": [
+                    1
+                ],
+                "StringList": [
+                    "GeneratorCam",
+                    "GeneratorSpawn",
+                    "StreetLight1"
+                ],
+                "FloatList": []
+            }
+        },
+        "GeneratorCam": {
+            "TransformComponent": {
+                "EntityName": "GeneratorCam",
+                "Tag": 0,
+                "Position": [
+                    -237.3302459716797,
+                    136.1642608642578,
+                    0.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            }
+        },
+        "GeneratorSpawn": {
+            "TransformComponent": {
+                "EntityName": "GeneratorSpawn",
+                "Tag": 0,
+                "Position": [
+                    -230.61654663085938,
+                    0.0,
+                    120.90493774414063
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            }
+        },
+        "StreetLight2": {
+            "TransformComponent": {
+                "EntityName": "StreetLight2",
+                "Tag": 0,
+                "Position": [
+                    -235.04905700683595,
+                    14.077624320983887,
+                    -284.6959533691406
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\model\\bugis_street_lamp.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    0.8078431487083435,
+                    0.3529411852359772
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "LampBehaviour"
+            },
+            "ComponentVariables": {
+                "IntList": [
+                    1,
+                    1
+                ],
+                "StringList": [
+                    "Moth1"
+                ],
+                "FloatList": []
             }
         }
     }

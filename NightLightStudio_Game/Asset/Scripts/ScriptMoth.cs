@@ -10,8 +10,10 @@ namespace Unicorn
     RigidBody enemyRB;
     Variables enemyVar;
     Navigator enemyNavigator; //<- Get Navigator
+   // Transform myPosition;
     // Other entity's components
-
+    public int player_ID;
+    ScriptPlayer script_Player;
 
     // Player Stats, default values
     public static float enemyForce = 100000.0f;  // Move force while human
@@ -35,17 +37,35 @@ namespace Unicorn
                                             // accumulated dt
     private float accumulatedDt = 0.0f;
 
+    //for Behaviour
+    float pathSwitchTimer;
+    float decisionTimer;
+    bool thinking;
+    bool possessed;
+
+
+
     public override void Init()
     {
+
       enemyRB = GetRigidBody(id);
       enemyNavigator = GetNavigator(id);
       enemyVar = GetVariables(id);
+      //myPosition = GetTransform(id);
+
+      player_ID = GameObjectFind("Player");
       // Get default values from variables
       maxEnemySpd = enemyVar.GetFloat(0);
+
+
+      //enemyNavigator.NavState = 0;
+      thinking = true;
+
     }
 
     public override void LateInit()
     {
+      script_Player = GetScript(player_ID);
     }
 
     public override void Update()
@@ -53,7 +73,46 @@ namespace Unicorn
       Decision();
       Move();
       Control();
+
+      if(enemyNavigator.NavState == 0)
+      {
+        pathSwitchTimer += RealDT();
+
+        if(pathSwitchTimer > 0.5f)
+        {
+          enemyNavigator.NavState = 1;
+          pathSwitchTimer = 0;
+          if(thinking== false)
+          {
+            thinking = true;
+          }
+          
+        }
+
+      }
+
+      //// -------Dismount logic
+      //if (possessed == true)
+      //{
+      //  if(script_Player.CurrentState == ScriptPlayer.State.Moth)
+      //}
+
+
+
     }
+
+
+    public void ActivateWP(int ID)
+    {
+      enemyNavigator.SetWpActive(ID, true);
+    }
+
+    public void DeactivateWP(int ID)
+    {
+      enemyNavigator.SetWpActive(ID, false);
+    }
+
+
     public override void FixedUpdate()
     {
     }
@@ -63,11 +122,30 @@ namespace Unicorn
       //Transform tag
       // tag 1 = Possessable
       // 
-      Transform otherTransform = GetTransform(other);
-      if (otherTransform.tag == 1)
+      //Transform otherTransform = GetTransform(other);
+      if (GetTransform(other).tag == 200)
       {
 
+        if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
+        {
+
+          // Set player script nextspawn position == possessionSpawnPos
+          script_Player.NextState = ScriptPlayer.State.Possessed;
+
+         
+          // Set Camera script  position == possessionSpawnPos
+          script_Player.camScript.tgtID = id; // Go and expose other tgt in scriptcamera.
+          possessed = true;
+
+        }
+
       }
+
+
+
+
+
+
     }
 
     public override void OnTriggerEnter(int other)
@@ -82,47 +160,53 @@ namespace Unicorn
     public void Decision()
     {
       //======Init phase====//
+
+
+      //---- Moth Logic----//
+
+      if (thinking == true)
+      {
+        decisionTimer += RealDT();
+
+        if (decisionTimer > 5.0f)
+        {
+          if (enemyNavigator.MoreThenOneWPActive())
+          {
+            enemyNavigator.NavState = 0;
+            thinking = false;
+          }
+
+          decisionTimer = 0;
+
+        }
+
+      }
+
+
+      // Wait for 1s 
+      // Check if there is another waypoint active
+
+      // if yes ()
+      // change to mode & back
+
+
+
       if (startIdling)
       {
-        Console.WriteLine("Start Idle");
-        if (isPatroling)
-        {
-          enemyNavigator.isFollowing = false;
-          isPatroling = false;
-        }
-        startIdling = false;
+        
       }
 
       if (startPaused)
       {
-        Console.WriteLine("Start Pause");
-        if (isPatroling)
-        {
-          enemyNavigator.isPaused = true;
-          isPatroling = false;
-        }
-        startPaused = false;
+        
       }
 
 
       if (startPatroling)
       {
-        Console.WriteLine("Start Patrol");
-        if (enemyNavigator.isPaused)
-        {
-          //enemyNavigator->SetIsPaused(false);
-          enemyNavigator.isPaused = false;
-
-        }
-        else
-        {
-          //enemyNavigator->SetIsFollowing(true);
-          enemyNavigator.isFollowing = true;
-          isPatroling = false;
-        }
-        isPatroling = true;
-        startPatroling = false;
+        
       }
+
     }
 
     // Enemy functions
@@ -158,6 +242,23 @@ namespace Unicorn
         else
           startPatroling = true;
         */
+      }
+
+      // 0 -> Patrol
+      // 1 -> Circling at cur_wp
+      if (Input.GetKeyPress(VK.IKEY_Y))
+      {
+        enemyNavigator.NavState = 0;
+      }
+      if (Input.GetKeyPress(VK.IKEY_U))
+      {
+        enemyNavigator.NavState = 1;
+      }
+
+      //Set active to specify wp
+      if (Input.GetKeyPress(VK.IKEY_J))
+      {
+        enemyNavigator.SetWpActive(1, false);
       }
       //Speed up
       if (Input.GetKeyPress(VK.IKEY_K))

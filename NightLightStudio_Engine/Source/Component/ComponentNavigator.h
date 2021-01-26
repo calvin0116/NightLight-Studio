@@ -12,8 +12,8 @@
 #include <time.h>
 
 enum WP_NAV_TYPE {
-	WN_TOANDFRO = 0,
-	WN_CIRCULAR,
+	WN_TOANDFRO = 0,	// 1 -> N -> (Reset) -> 1 -> N
+	WN_CIRCULAR,		// 1 -> N -> 1
 	WN_RANDOM
 };
 
@@ -21,6 +21,11 @@ enum WP_PATH_CREATION_TYPE {
 	WPP_STANDARD = 0,	// 1 ->  N
 	WPP_REVERSE,		// N -> 1
 	WPP_CUSTOM,			// Inserted through script / leveleditor 
+};
+
+enum NAV_STATE {
+	NV_PATROL = 0,		// Go from way point to way point
+	NV_CIRCLING,		// Patrol around current way point
 };
 
 typedef class ComponentNavigator : public ISerializable //: public IComponent
@@ -41,12 +46,15 @@ public:
 	ComponentWayPointMap* cur_wp_path;	//Way points and edges for all routes
 	LocalString<125> wp_path_ent_name;
 	
-	LocalVector<int> path_indexes;		//Current following routes
+	LocalVector<std::pair<int,bool>> path_indexes;		//Current following routes
+	LocalVector<int> wp_to_reach_end;					//List of way point to go from one point to another -> navigation
 
 	WP_PATH_CREATION_TYPE wp_creation_type;
  	int cur_wp_index;
 	int prev_wp_index;
 	
+	NAV_STATE nav_state;
+	float circuling_rad = 20.0f;
 
 	ComponentNavigator()
 		:isFollowing{ true }
@@ -57,6 +65,8 @@ public:
 		, curTime{-1.f}
 		, cur_wp_path{nullptr}
 		, wp_creation_type{WPP_STANDARD}
+		, nav_state{ NV_CIRCLING }
+		
 	{
 		strcpy_s(ser_name, "NavigatorComponent");
 	}
@@ -66,9 +76,6 @@ public:
 	{
 		cur_wp_index = 0;
 	}
-
-
-	//=============== Getter / Setter =================//
 	/*
 	void SetCurrentPath(LocalVector<NS_AI::WayPoint*> wp_list)
 	{
@@ -78,14 +85,28 @@ public:
 
 	WayPointComponent* GetCurWp()
 	{
-		return cur_wp_path->GetPath().at(path_indexes.at(cur_wp_index));
+		return cur_wp_path->GetPath().at(path_indexes.at(cur_wp_index).first);
 	}
 	WayPointComponent* GetPrevWp()
 	{
-		return cur_wp_path->GetPath().at(path_indexes.at(prev_wp_index));
+		return cur_wp_path->GetPath().at(path_indexes.at(prev_wp_index).first);
 	}
 
 	//LocalVector<int>
+	bool MoreThenOneWPActive()
+	{
+		int act_wp_amt = 0;
+		for (auto path : path_indexes)
+		{
+			if (path.second) //Check if path is active
+			{
+				++act_wp_amt;
+				if (act_wp_amt > 1)
+					return true;
+			}
+		}
+		return false;
+	}
 
 	
 	//Check if navigator have way point to follow
@@ -163,15 +184,15 @@ public:
 			path_indexes.clear();
 			int wp_size = cur_wp_path->GetPath().size();
 			for (int i = 0; i < wp_size; ++i)
-				path_indexes.push_back(i);
+				path_indexes.push_back(std::make_pair(i, true));
 			break;
 		}
 		case WPP_REVERSE:
 		{
 			path_indexes.clear();
-			int wp_size = cur_wp_path->GetPath().size();
-			for (int i = wp_size; i >= 0; ++i)
-				path_indexes.push_back(i);
+			int wp_size = cur_wp_path->GetPath().size() - 1;
+			for (int i = wp_size; i >= 0; --i)
+				path_indexes.push_back(std::make_pair(i, true));
 			break;
 		}
 		case WPP_CUSTOM:	//Inserted beforehand
@@ -179,50 +200,62 @@ public:
 
 		}
 	}
-
-	//Function to set next way point to go to
-	void SetNextWp()
+	
+	void StopAtEachWPCheck()
 	{
-		prev_wp_index = cur_wp_index;
 		if (stopAtEachWayPoint)
 		{
 			isPaused = true;
 			curTime = 0.0f;
 		}
+	}
 
+	void DecideOnNextWp()
+	{
+		prev_wp_index = cur_wp_index;
 		if (wp_nav_type == WN_RANDOM)
 		{
 			srand((unsigned int)time(NULL));
 			cur_wp_index = rand() % cur_wp_path->GetPath().size();
 		}
 		else
-		if (traverseFront)
-			if (cur_wp_index < path_indexes.size() - 1)
-				++cur_wp_index;
-			else {
-				if (wp_nav_type == WN_TOANDFRO)
-				{
-					traverseFront = false;
-					--cur_wp_index;
+			if (traverseFront)
+				if (cur_wp_index < path_indexes.size() - 1)
+					++cur_wp_index;
+				else {
+					if (wp_nav_type == WN_TOANDFRO)
+					{
+						traverseFront = false;
+						--cur_wp_index;
+					}
+					else if (wp_nav_type == WN_CIRCULAR)
+					{
+						cur_wp_index = 0;
+					}
 				}
-				else if (wp_nav_type == WN_CIRCULAR)
-				{
-					cur_wp_index = 0;
-				}
-			}
-		else
-			if (cur_wp_index > 0)
-				--cur_wp_index;
 			else
-			{
-				traverseFront = true;
-				++cur_wp_index;
-			}
-		
-		//cur_path.at(prev_wp_index) = cur_path.at(cur_wp_index)
-		//for(int)
-		//NlMath::RayToAABB()
+				if (cur_wp_index > 0)
+					--cur_wp_index;
+				else
+				{
+					traverseFront = true;
+					++cur_wp_index;
+				}
+
+		if (!path_indexes.at(cur_wp_index).second)
+			DecideOnNextWp();
 	}
+
+	//Function to set next way point to go to
+	void SetNextWp(ComponentNavigator* nav)
+	{
+		StopAtEachWPCheck();			//Check if stopping around a way point 
+		DecideOnNextWp();				//Decide on which way point to go to next
+		//2. Check for direct route
+
+		//3. Find route to way point if being blocked
+	}
+
 
 	void SetSpeed(float spd)
 	{
@@ -249,12 +282,25 @@ public:
 
 	void SetCurPathIndex(LocalVector<int> path)
 	{
-		path_indexes = path;
+		for(int node : path)
+			path_indexes.push_back(std::make_pair(node, true));
 	}
 
 	LocalVector<WayPointComponent*> GetCurPath()
 	{
 		return cur_wp_path->GetPath();
 	}
+
+	void TurnOffCurWayointPoint()
+	{
+		path_indexes.at(cur_wp_index).second = false;
+	}
+
+	void ToggleWayPointActive(int index, bool act)
+	{
+		path_indexes.at(index).second = act;
+	}
+
+
 
 } NavigatorComponent, NavComponent;

@@ -178,7 +178,9 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="ISerializable.h" />
+    <ClInclude Include="Source\Ai\AiGraph.h" />
     <ClInclude Include="Source\Component\ComponentCScript.h" />
+    <ClInclude Include="Source\Component\ComponentEmitter.h" />
     <ClInclude Include="Source\Debug\DebugDiagnostic.h" />
     <ClInclude Include="Source\Debug\DebugToStream.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h" />
@@ -255,6 +257,7 @@
     <ClInclude Include="Source\Graphics\CameraSystem.h" />
     <ClInclude Include="Source\Component\ComponentAnimation.h" />
     <ClInclude Include="Source\Graphics\DebugManager.h" />
+    <ClInclude Include="Source\Graphics\Emitter.h" />
     <ClInclude Include="Source\Graphics\GraphicsSystem.h" />
     <ClInclude Include="Source\Graphics\Lights.h" />
     <ClInclude Include="Source\Graphics\LightSystem.h" />
@@ -262,8 +265,10 @@
     <ClInclude Include="Source\Graphics\Model.h" />
     <ClInclude Include="Source\Graphics\ModelLoader.h" />
     <ClInclude Include="Source\Graphics\ModelManager.h" />
+    <ClInclude Include="Source\Graphics\Particle.h" />
     <ClInclude Include="Source\Graphics\ShaderSystem.h" />
     <ClInclude Include="Source\Graphics\Skeleton.h" />
+    <ClInclude Include="Source\Graphics\SystemEmitter.h" />
     <ClInclude Include="Source\Graphics\UISystem.h" />
     <ClInclude Include="Source\Graphics\TextureLoader.h" />
     <ClInclude Include="Source\Graphics\TextureManager.h" />
@@ -314,6 +319,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Ai\AiManager.cpp" />
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
+    <ClCompile Include="Source\Component\ComponentEmitter.cpp" />
     <ClCompile Include="Source\Component\ComponentWayPoint.cpp" />
     <ClCompile Include="Source\Debug\DebugDiagnostic.cpp" />
     <ClCompile Include="Source\Debug\DebugToStream.cpp" />
@@ -380,15 +386,18 @@
     <ClCompile Include="Source\Graphics\CameraSystem.cpp" />
     <ClCompile Include="Source\Component\ComponentAnimation.cpp" />
     <ClCompile Include="Source\Graphics\DebugManager.cpp" />
+    <ClCompile Include="Source\Graphics\Emitter.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsSystem.cpp" />
     <ClCompile Include="Source\Graphics\LightSystem.cpp" />
     <ClCompile Include="Source\Graphics\Mesh.cpp" />
     <ClCompile Include="Source\Graphics\Model.cpp" />
     <ClCompile Include="Source\Graphics\ModelLoader.cpp" />
     <ClCompile Include="Source\Graphics\ModelManager.cpp" />
+    <ClCompile Include="Source\Graphics\Particle.cpp" />
     <ClCompile Include="Source\Graphics\ShaderSystem.cpp" />
     <ClCompile Include="Source\Graphics\Skeleton.cpp" />
     <ClCompile Include="Source\Graphics\AnimationSystem.cpp" />
+    <ClCompile Include="Source\Graphics\SystemEmitter.cpp" />
     <ClCompile Include="Source\Graphics\UISystem.cpp" />
     <ClCompile Include="Source\Graphics\TextureLoader.cpp" />
     <ClCompile Include="Source\Graphics\TextureManager.cpp" />

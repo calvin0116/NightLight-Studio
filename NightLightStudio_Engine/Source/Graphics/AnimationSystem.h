@@ -12,7 +12,6 @@
 
 #include "../glm/glm.hpp"   // glm::mat4
 
-
 namespace NS_GRAPHICS
 {
     class AnimationSystem
@@ -33,9 +32,13 @@ namespace NS_GRAPHICS
         void Init();
         void Exit();
 
-        unsigned AddAnimController();
+        std::vector<AnimationController*> _animControllers;
+        std::vector<bool> _usedStatus;
 
-        std::map<unsigned, AnimationController*> _animControllers;
-        unsigned _animIndex = 0;
+        unsigned AddAnimController();
+        bool RemoveAnimControllerByID(const int& index);
+
+        size_t GetFreeIndex();
     };
 }
+

@@ -159,6 +159,30 @@ namespace Unicorn
           startPatroling = true;
         */
       }
+	  
+	  enemyNavigator.MoreThenOneWPActive(); // <- Check for more then one way point active
+	  
+	  // 0 -> Patrol
+	  // 1 -> Circling at cur_wp
+	  if (Input.GetKeyPress(VK.IKEY_Y))
+      {
+        enemyNavigator.NavState = 0;	
+      }
+	  if (Input.GetKeyPress(VK.IKEY_U))
+      {
+        enemyNavigator.NavState = 1;
+      }
+	  
+	  if (Input.GetKeyPress(VK.IKEY_T))
+      {
+        enemyNavigator.GoToNextWp();
+      }
+
+    //Set active to specify wp
+      if (Input.GetKeyPress(VK.IKEY_J))
+      {
+        enemyNavigator.SetWpActive(1, false);
+      }
       //Speed up
       if (Input.GetKeyPress(VK.IKEY_K))
       {

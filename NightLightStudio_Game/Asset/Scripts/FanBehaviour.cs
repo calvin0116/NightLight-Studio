@@ -62,17 +62,17 @@ namespace Unicorn
         SwitchOnFunction();
       }
 
-      if ((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) || activate == false)
-      {
-        SwitchOffFunction();
+      //if ((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) || activate == false)
+      //{
+      //  SwitchOffFunction();
 
-        // push out player
-        if (script_Player.CurrentState == ScriptPlayer.State.Possessed)
-        {
-          script_Player.NextState = ScriptPlayer.State.Human;
-        }
+      //  // push out player
+      //  if (script_Player.CurrentState == ScriptPlayer.State.Possessed)
+      //  {
+      //    script_Player.NextState = ScriptPlayer.State.Human;
+      //  }
 
-      }
+      //}
 
 
     }
@@ -83,6 +83,14 @@ namespace Unicorn
 
     public override void OnCollisionEnter(int other)
     {
+
+      // Disable Function
+      if (GetTransform(other).tag == 3)
+      {
+        isActive = false;
+        Print("Disabled");
+      }
+
       if (isActive == true && other== player_ID)
       {
 
@@ -122,6 +130,12 @@ namespace Unicorn
       {
         activate = false;
       }
+
+      if (GetTransform(other).tag == 3)
+      {
+        isActive = true;
+      }
+
 
     }
 

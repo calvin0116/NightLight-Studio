@@ -26,19 +26,17 @@ namespace NS_AI
 		~AiManager() {}
 
 	public:
-
+		//System function
 		void HandleMsg(MessageTogglePlay& mst);
 		void Init();
 		void GameInit();
-
-
 		void Update();
-
 		void Exit()
 		{
 			DestroyInstance();
 		}
 
+		//=======================Ai functionality=================================//
 		void WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position);		//using nav comp, position, and target position
 		void WalkTowards(int ent_id, NlMath::Vec3 target_position);												//using entity id and target position				
 
@@ -55,25 +53,7 @@ namespace NS_AI
 		}*/
 
 		//Select closest way point to move to
-		void FindClosestWP(NavigatorComponent* nav_comp, TransformComponent* trans_comp)
-		{
-			std::pair<int, float> closest_wp = std::make_pair<int, float>(-1, std::numeric_limits<float>::max());
-			
-			int i = 0;
-			for (; i < nav_comp->GetCurPath().size(); ++i)
-			{
-				auto wp = nav_comp->GetCurPath().at(i);
-
-				float dist = static_cast<float>((wp->GetPos() - trans_comp->_position).length());
-				if (dist < closest_wp.second)
-				{
-					closest_wp.first = i;
-					closest_wp.second = dist;
-				}
-			}
-
-			nav_comp->cur_wp_index = i;	//wp index to go to will be the closest one
-		}
+		void FindClosestWP(NavigatorComponent* nav_comp, TransformComponent* trans_comp);
 
 
 		//=============Getter / Setter=================//

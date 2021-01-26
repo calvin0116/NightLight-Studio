@@ -112,6 +112,16 @@ namespace NS_GRAPHICS
 
         void DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& rgb = glm::vec3(0.f,0.f,0.f));
 
+        // Draws circle based on provided parameters, default segments for circle is 8
+        // Note that circle will not draw at all if segments are less than or equal to 3
+        // Draws circle based on X and Y axes
+        void DrawXYCircle(const glm::vec3& center, const float& radius, const int& segments = 8, const glm::vec3& rgb = glm::vec3(0.f, 0.f, 0.f));
+
+        // Draws circle based on provided parameters, default segments for circle is 8
+        // Note that circle will not draw at all if segments are less than or equal to 3
+        // Draws circle based on X and Z axes
+        void DrawXZCircle(const glm::vec3& center, const float& radius, const int& segments = 8, const glm::vec3& rgb = glm::vec3(0.f, 0.f, 0.f));
+
         /////////////////////////////////////////////////////////////////////
 
         // Sets whole mesh color
@@ -149,6 +159,16 @@ namespace NS_GRAPHICS
 
         //1 HDR PER SCENE
         unsigned _hdrID;
+
+        // Deferred Shading Variables
+        GLuint _geometryBuffer;
+        unsigned int _geometryBufferPosition; // Position color buffer
+        unsigned int _geometryBufferNormalMapAndMetallic; // Normal + metallic map color buffer, normal map data will replace with polygon normals if no texture exists
+        unsigned int _geometryBufferAlbedoMapAndRoughness;// Albedo + roughness map color buffer
+
+        unsigned int _colorAttachments[3]
+            = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+        
 
         // Should NOT be calculated every frame
         glm::mat4 _projectionMatrix;

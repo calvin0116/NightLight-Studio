@@ -5,23 +5,26 @@
 #include "../glm/mat4x4.hpp"
 #include "../glm/gtx/quaternion.hpp"
 
-struct Animation
+namespace NS_GRAPHICS
 {
-	struct KeyFrames
+	struct Animation
 	{
-		std::vector<double> _posTime;
-		std::vector<double> _rotateTime;
-		std::vector<double> _scaleTime;
+		struct KeyFrames
+		{
+			std::vector<double> _posTime;
+			std::vector<double> _rotateTime;
+			std::vector<double> _scaleTime;
 
-		std::vector <glm::vec3> _position;
-		std::vector <glm::quat> _rotation;
-		std::vector <glm::vec3> _scale;
+			std::vector <glm::vec3> _position;
+			std::vector <glm::quat> _rotation;
+			std::vector <glm::vec3> _scale;
 
-		KeyFrames() = default;
-		~KeyFrames() = default;
+			KeyFrames() = default;
+			~KeyFrames() = default;
+		};
+
+		std::string _animName;
+		double _time = 0.0f;
+		std::unordered_map<std::string, KeyFrames> _frames;
 	};
-
-	std::string _animName;
-	double _time = 0.0f;
-	std::unordered_map<std::string, KeyFrames> _frames;
-};
+}

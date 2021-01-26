@@ -64,8 +64,8 @@ inline void NS_AI::AiManager::Update()
 	//Make shift dt
 	std::swap(timeLastRound, timeThisRound);
 	stepTime = timeThisRound = std::chrono::system_clock::now();
-	float dt = (float)(timeThisRound - timeLastRound).count() / 10000000.0f;
-
+	float dt = (float)(timeThisRound - timeLastRound).count()/10000000.0f;
+	//std::chrono::duration_cast<std::chrono::microseconds>();
 	auto itr = G_ECMANAGER->begin<NavigatorComponent>();
 	auto itrEnd = G_ECMANAGER->end<NavigatorComponent>();
 
@@ -83,9 +83,13 @@ inline void NS_AI::AiManager::Update()
 		TransformComponent* navTrans = G_ECMANAGER->getComponent<TransformComponent>(itr);
 		RigidBody* rb = G_ECMANAGER->getComponent<RigidBody>(itr);
 
+		//Paused
 		if (navComp->isPaused) //&& navComp->curTime >= 0.0f)
 		{
 			rb->velocity = 0.0f;
+			if (navComp->endTime <= 0.0f)  //Check if infinitely or with timing given
+				continue;
+
 			++itr;
 			if (navComp->curTime >= 0.0f)
 				navComp->curTime += dt;//(DELTA_T->real_dt)*0.001;
@@ -101,37 +105,97 @@ inline void NS_AI::AiManager::Update()
 			continue;
 		}
 
-		NlMath::Vector3D mag_dir = navComp->GetCurWp()->GetPos() - navTrans->_position ;	//Dir to the next way point
+		glm::vec3 wp_pos = navComp->GetCurWp()->GetPos();
+		wp_pos.y = 0.0f;
+		glm::vec3 mag_dir = wp_pos - navTrans->_position;	//Dir to the next way point
 		mag_dir.y = 0.0f;	//Ignore y axis
-		if (mag_dir.length() < navComp->size_in_rad)	//Check if Ai reached the way point
+		switch (navComp->nav_state)
 		{
-			navComp->SetNextWp();		//Set next way point to be the target for navigation
-
-			/*
-			for (Entity& ent : Obstacle_list)
+			case NV_PATROL:
 			{
-				AABBCollider* obs_aabb = &ent.getComponent<ColliderComponent>()->collider.aabb;
-				TransformComponent* trans_aabb = ent.getComponent<TransformComponent>();
-				/*
-				//If obstacle in the way between way point
-				if (NlMath::RayToAABB(*obs_aabb, navTrans->_position, trans_aabb->_position))
+				float len = glm::length(mag_dir);
+				if (len < navComp->size_in_rad)	//Check if Ai reached the way point
 				{
-					NlMath::Vec3 points[] = {
-						trans_aabb->_position +
+					navComp->SetNextWp(nullptr);		//Set next way point to be the target for navigation
+
+					/*
+					for (Entity& ent : Obstacle_list)
+					{
+						AABBCollider* obs_aabb = &ent.getComponent<ColliderComponent>()->collider.aabb;
+						TransformComponent* trans_aabb = ent.getComponent<TransformComponent>();
+						/*
+						//If obstacle in the way between way point
+						if (NlMath::RayToAABB(*obs_aabb, navTrans->_position, trans_aabb->_position))
+						{
+							NlMath::Vec3 points[] = {
+								trans_aabb->_position +
 
 
-					}
+							}
+						}
+					}*/
+					std::cout << "Going to next wp" << std::endl;
+					rb->velocity = 0.0f;
 				}
-			}*/
-			std::cout << "Going to next wp" << std::endl;
-			rb->velocity = 0.0f;
+				else
+				{
+					mag_dir = glm::normalize(mag_dir);
+					//NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//Move to way point
+					rb->velocity = mag_dir * navComp->speed;
+				}
+				break;
+			}
+			case NV_CIRCLING:
+			{
+				float len = glm::length(mag_dir);
+				if ((len-navComp->circuling_rad) < FLT_EPSILON)	//Check if Ai reached the way point
+				{
+					//Circular motion
+					/*
+					glm::vec3 up_vec = { 1.0f, 0.f, 0.f };
+					glm::vec3 rev_dir = navTrans->_position - wp_pos;
+
+					float ab_dot = glm::dot(rev_dir, up_vec);
+					float ab_mag = up_vec.length() * rev_dir.length();
+					 
+					float f = fabsf(ab_dot) / ab_mag;
+					float angle = glm::acos(glm::radians(f));
+						
+					//Create the matrix
+					glm::mat4 BackToCenter = glm::identity<glm::mat4>();
+					BackToCenter = glm::translate(BackToCenter, glm::vec3(-wp_pos.x, 0.0f, -wp_pos.z));
+
+					glm::quat Quaternion(glm::radians(glm::vec3(0.0f, angle +  0.1f, 0.0f)));
+					glm::mat4 Rotate = BackToCenter * glm::mat4_cast(Quaternion);
+
+					glm::mat4 TranslateBack = glm::translate(Rotate, wp_pos);
+
+					glm::vec3 new_pos = TranslateBack * glm::vec4{ navTrans->_position , 1.0f};
+					//auto rotatedVec = ;
+					
+					rb->velocity = (new_pos - navTrans->_position);
+					*/
+
+					glm::vec3 rev_dir = navTrans->_position - wp_pos;
+					rev_dir.y = 0.0f;
+					glm::quat Quaternion(glm::vec3(0.0f, 1.5708f, 0.0f));
+					glm::mat4 Rotate =  glm::mat4_cast(Quaternion);
+
+					glm::vec3 dir = Rotate * glm::vec4{ rev_dir , 1.0f };
+					dir = glm::normalize(dir);
+					rb->velocity = dir * navComp->speed;
+				}
+				
+				else
+				{
+					mag_dir = glm::normalize(mag_dir);
+					//NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//Move to way point
+					rb->velocity = mag_dir * navComp->speed;
+				}
+				break;
+			}
 		}
-		else
-		{
-			NlMath::Vector3DNormalize(mag_dir);
-			//NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//Move to way point
-			rb->velocity = mag_dir * navComp->speed;
-		}
+
 		++itr;
 	}
 }
@@ -157,4 +221,26 @@ inline void NS_AI::AiManager::WalkTowards(int ent_id, NlMath::Vec3 target_positi
 	TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
 
 	WalkTowards(nav_comp, trans_comp->_position, target_position);
+}
+
+//Select closest way point to move to
+
+inline void NS_AI::AiManager::FindClosestWP(NavigatorComponent* nav_comp, TransformComponent* trans_comp)
+{
+	std::pair<int, float> closest_wp = std::make_pair<int, float>(-1, std::numeric_limits<float>::max());
+
+	int i = 0;
+	for (; i < nav_comp->GetCurPath().size(); ++i)
+	{
+		auto wp = nav_comp->GetCurPath().at(i);
+
+		float dist = static_cast<float>((wp->GetPos() - trans_comp->_position).length());
+		if (dist < closest_wp.second)
+		{
+			closest_wp.first = i;
+			closest_wp.second = dist;
+		}
+	}
+
+	nav_comp->cur_wp_index = i;	//wp index to go to will be the closest one
 }

@@ -1,0 +1,31 @@
+{
+    "Name": "Paths",
+    "TransformComponent": {
+        "EntityName": "",
+        "Tag": 0,
+        "Position": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Rotate": [
+            0.0,
+            -0.0,
+            0.0
+        ]
+    },
+    "WayPointMapComponent": {
+        "way_point_list": [
+            "Waypoint",
+            "WayPoint_2",
+            "WayPoint_3",
+            "WayPoint_4"
+        ],
+        "radius_for_detection": 25.0
+    }
+}

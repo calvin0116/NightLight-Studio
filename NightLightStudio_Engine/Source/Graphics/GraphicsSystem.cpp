@@ -245,7 +245,7 @@ namespace NS_GRAPHICS
 		//while(compItr != compitrEnd)
 		while (itr != itrEnd)
 		{
-			ComponentGraphics* graphicsComp = reinterpret_cast<ComponentGraphics*>(*itr);
+			ComponentGraphics* graphicsComp = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
 			//ComponentGraphics* graphicsComp = *compItr;
 
 			if (graphicsComp->GetAlpha() < 1.f)
@@ -291,7 +291,7 @@ namespace NS_GRAPHICS
 					std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
 					if (!currAnimation.empty())
 					{
-						model->GetPose(currAnimation, model->_rootBone, dt, identity, model->_globalInverseTransform);
+						model->GetPose(currAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
 					}
 				}
 				// Test Codes
@@ -299,20 +299,29 @@ namespace NS_GRAPHICS
 				//{
 				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_K))
 				//	{
-				//		graphicsComp->AddModel("boxtest.fbx");
+				//		graphicsComp->AddModel("player_character_animationsworks.fbx");
+				//	}
+				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_L))
+				//	{
+				//		graphicsComp->AddModel("New_Moth_B4.fbx");
 				//	}
 				//}
 
 				//if (entity.getComponent<ComponentTransform>()->_entityName.toString() == "Player")
 				//{
+				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_J))
+				//	{
+				//		animComp->PlayAnimation("Switch1");
+				//	}
+
 				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_K))
 				//	{
-				//		animComp->PlayAnimation("Walk1");
+				//		animComp->PlayAnimation("Walk1", true, 1.9, 3.108);
 				//	}
 
 				//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_L))
 				//	{
-				//		animComp->PlayAnimation("Switch1");
+				//		animComp->PlayAnimation("Walk1");
 				//	}
 				//}
 			}
@@ -478,7 +487,7 @@ namespace NS_GRAPHICS
 					std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
 					if (!currAnimation.empty())
 					{
-						model->GetPose(currAnimation, model->_rootBone, dt, identity, model->_globalInverseTransform);
+						model->GetPose(currAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
 					}
 				}
 			}
@@ -706,6 +715,50 @@ namespace NS_GRAPHICS
 	void GraphicsSystem::DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& rgb)
 	{
 		debugManager->AddLine(start, end, rgb);
+	}
+
+	void GraphicsSystem::DrawXYCircle(const glm::vec3& center, const float& radius, const int& segments, const glm::vec3& rgb)
+	{
+		if (segments <= 3)
+			return;
+
+		float pi2 = 2.f * PI;
+		
+		for (int i = 0; i < segments; i++)
+		{
+			float theta0 = pi2 * static_cast<float>(i) / static_cast<float>(segments);     // p0
+			float theta1 = pi2 * static_cast<float>(i + 1) / static_cast<float>(segments); // p1
+
+			float x0 = radius * cosf(theta0) + center.x;
+			float y0 = radius * sinf(theta0) + center.y;
+
+			float x1 = radius * cosf(theta1) + center.x;
+			float y1 = radius * sinf(theta1) + center.y;
+
+			DrawLine(glm::vec3(x0, y0, center.z), glm::vec3(x1, y1, center.z), rgb);
+		}
+	}
+
+	void GraphicsSystem::DrawXZCircle(const glm::vec3& center, const float& radius, const int& segments, const glm::vec3& rgb)
+	{
+		if (segments <= 3)
+			return;
+
+		float pi2 = 2.f * PI;
+
+		for (int i = 0; i < segments; i++)
+		{
+			float theta0 = pi2 * static_cast<float>(i) / static_cast<float>(segments);     // p0
+			float theta1 = pi2 * static_cast<float>(i + 1) / static_cast<float>(segments); // p1
+
+			float x0 = radius * cosf(theta0) + center.x;
+			float z0 = radius * sinf(theta0) + center.z;
+
+			float x1 = radius * cosf(theta1) + center.x;
+			float z1 = radius * sinf(theta1) + center.z;
+
+			DrawLine(glm::vec3(x0, center.y, z0), glm::vec3(x1, center.y, z1), rgb);
+		}
 	}
 
 	void GraphicsSystem::SetMeshColor(Entity& entity, const glm::vec3& rgb)

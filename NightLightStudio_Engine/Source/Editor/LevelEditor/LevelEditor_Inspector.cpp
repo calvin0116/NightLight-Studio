@@ -575,15 +575,19 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				{
 					graphics_comp->AddModel(mod);
 
-					if (NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_isAnimated)
+					//Only if valid model
+					if (graphics_comp->_modelID >= 0)
 					{
-						ent.AttachComponent<ComponentAnimation>();
-						ComponentAnimation* anim = ent.getComponent<ComponentAnimation>();
-						anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
-						AnimationController* animCtrl = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID];
-						for (auto& anims : NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_animations)
+						if (NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_isAnimated)
 						{
-							animCtrl->_allAnims.insert(anims.first);
+							ent.AttachComponent<ComponentAnimation>();
+							ComponentAnimation* anim = ent.getComponent<ComponentAnimation>();
+							anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
+							AnimationController* animCtrl = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID];
+							for (auto& anims : NS_GRAPHICS::ModelManager::GetInstance()._models[graphics_comp->_modelID]->_animations)
+							{
+								animCtrl->_allAnims.insert(anims.first);
+							}
 						}
 					}
 				});
@@ -1454,6 +1458,7 @@ void InspectorWindow::NavComp(Entity& ent)
 			if(nav_comp->stopAtEachWayPoint)
 				_levelEditor->LE_AddInputFloatProperty("End time", nav_comp->endTime, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
 			
+			_levelEditor->LE_AddCheckbox("Pause at start", &nav_comp->isPaused);
 			//Way point path to look at
 			std::string s_name;
 
@@ -1476,6 +1481,14 @@ void InspectorWindow::NavComp(Entity& ent)
 					}
 				});
 
+			_levelEditor->LE_AddCombo("Starting Nav State", (int&)nav_comp->nav_state,
+				{
+					"Patrol",
+					"Circling around first way point"
+				});
+			_levelEditor->LE_AddInputFloatProperty("Circling Radius", nav_comp->circuling_rad, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
+
+
 			if (!s_name.empty())
 			{
 				_levelEditor->LE_AddCombo("WayPoints to navigate", (int&)nav_comp->wp_creation_type,
@@ -1489,8 +1502,7 @@ void InspectorWindow::NavComp(Entity& ent)
 				{
 					if (ImGui::Button("Add WayPoint Index"))
 					{
-						int interger = 0;
-						nav_comp->path_indexes.push_back(interger);
+						nav_comp->path_indexes.push_back(std::make_pair(0,true));
 					}
 					ImGui::SameLine();
 					if (ImGui::Button("Remove WayPoint Index"))
@@ -1499,10 +1511,10 @@ void InspectorWindow::NavComp(Entity& ent)
 					}
 
 					int wp_index = 1;
-					for (int& i : nav_comp->path_indexes) //[path, name]
+					for (auto& i : nav_comp->path_indexes) //[path, name]
 					{
 						std::string p = "WayPoint_" + std::to_string(wp_index);
-						_levelEditor->LE_AddInputIntProperty(p, i, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
+						_levelEditor->LE_AddInputIntProperty(p, i.first, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
 						wp_index++;
 					}
 
@@ -1553,7 +1565,10 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
 					[this, &str](Entity* entptr)
 					{
-						str = G_ECMANAGER->EntityName[entptr->getId()];
+						WayPointComponent* wpc = entptr->getComponent<WayPointComponent>();
+						if (wpc != nullptr) {
+							str = G_ECMANAGER->EntityName[entptr->getId()];
+						}
 
 					});
 

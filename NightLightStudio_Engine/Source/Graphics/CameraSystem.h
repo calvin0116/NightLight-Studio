@@ -21,7 +21,11 @@ namespace NS_GRAPHICS
 		std::vector<Camera> _cameras;
 
 		// Check if scene camera is active, if any
-		bool _activeSceneCamera;
+		// Editor camera will be used by default if no scene camera is available
+		bool _activeSceneCamera = false;
+
+		// Camera ID for selected active scene camera
+		int _sceneCameraID = -1;
 
 		// Check if rotation has been changed
 		bool updatedRot;
@@ -73,6 +77,7 @@ namespace NS_GRAPHICS
 
 		void AckUpdate();
 
+		// Editor camera functions
 		glm::mat4 GetViewMatrix();
 
 		glm::vec3 GetCurrentCameraPosition();
@@ -93,14 +98,15 @@ namespace NS_GRAPHICS
 		void SetCurrentCamera(const int& cameraID);
 		
 		// Create camera based on provided parameters
-		int CreateCamera(const glm::vec3& position = glm::vec3(0.f,0.f,0.f), const glm::vec3& rotation = glm::vec3(0.f, 0.f, 0.f));
+		int CreateCamera(const glm::vec3& position = glm::vec3(0.f,0.f,0.f), const glm::vec3& target = glm::vec3(0.f, 0.f, 0.f),
+						const float& pitch = 0.f, const float& yaw = 0.f);
 
-		void RotateCamera();
+		// Getter for specified scene camera camera, used to access its properties
+		// If no camera exists, return dummy camera
+		Camera& GetSceneCamera(const int& cameraID);
 
-		void AddRotationToCamera();
-
-		void TranslateCamera();
-
+		// Returns current active camera, regardless of editor or game camera
+		Camera& GetCurrentCamera();
 
 		////////////////////////////////////////////
 
@@ -131,7 +137,7 @@ namespace NS_GRAPHICS
 		// get viewVector on XZ plane, rotate @Y -90 deg     // Expose
 		glm::vec3 GetXZViewVector_Right();                   // Expose
 
-		// set weather to use thrid person cam                     //Expose
+		// set third person cam as current active                  //Expose
 		void SetUseThridPersonCam(bool set);                       //Expose
 		// toggle weather to use thrid person cam                  //Expose
 		void ToggleUseThridPersonCam();                            //Expose
