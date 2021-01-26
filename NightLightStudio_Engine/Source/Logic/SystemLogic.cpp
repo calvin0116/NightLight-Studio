@@ -42,8 +42,37 @@ namespace NS_LOGIC
         //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
         if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_END))
         {
-          if(!_isPlaying)
+          if (!_isPlaying)
+          {
+
+            auto itrS = G_ECMANAGER->begin<ComponentScript>();
+            auto itrE = G_ECMANAGER->end<ComponentScript>();
+            for (; itrS != itrE; ++itrS)
+            {
+              ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+              if (MyScript == nullptr)
+                continue;
+              MyScript->Write();
+            }
+
             MonoWrapper::ReloadScripts();
+            // Create script instance again after reloading
+            itrS = G_ECMANAGER->begin<ComponentScript>();
+            //auto itrE = G_ECMANAGER->end<ComponentScript>();
+            for (; itrS != itrE; ++itrS)
+            {
+              ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+              if (MyScript == nullptr)
+               continue;
+              MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
+              MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
+              int ID = G_ECMANAGER->getObjId(itrS);
+              MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
+              // Reflect values
+              //MyScript->ShowPublicValues();
+              //MyScript->Read();
+            }
+          }
         }
       });
 #endif
@@ -79,6 +108,20 @@ namespace NS_LOGIC
 
   void SystemLogic::GameInit()
   {
+    // Construct scripts and get values from serialising
+    auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    auto itrE = G_ECMANAGER->end<ComponentScript>();
+    //for (; itrS != itrE; ++itrS)
+    //{
+    //  std::cout << "Constructed!" << std::endl;
+    //  ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+    //  if (MyScript == nullptr)
+    //    continue;
+    //  MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
+    //  MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
+    //  int ID = G_ECMANAGER->getObjId(itrS);
+    //  MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
+    //}
   }
 
   void SystemLogic::GamePreInit()
@@ -100,21 +143,21 @@ namespace NS_LOGIC
     // Reload Scripts
     //std::cout << "GamePreInit" << std::endl;
 #ifdef _EDITOR
-    MonoWrapper::ReloadScripts();
+    //MonoWrapper::ReloadScripts();
 #endif
-    //MonoWrapper::LoadScriptDomain();
-    auto itrS = G_ECMANAGER->begin<ComponentScript>();
-    auto itrE = G_ECMANAGER->end<ComponentScript>();
-    for (; itrS != itrE; ++itrS)
-    {
-      ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
-      if (MyScript == nullptr)
-        continue;
-      MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
-      MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
-      int ID = G_ECMANAGER->getObjId(itrS);
-      MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
-    }
+    // Create script instance
+    //auto itrS = G_ECMANAGER->begin<ComponentScript>();
+    //auto itrE = G_ECMANAGER->end<ComponentScript>();
+    //for (; itrS != itrE; ++itrS)
+    //{
+    //  ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+    //  if (MyScript == nullptr)
+    //    continue;
+    //  MyScript->_MonoData._pInstance = MonoWrapper::ConstructObject(MyScript->_ScriptName.toString());
+    //  MyScript->_MonoData._GCHandle = MonoWrapper::ConstructGCHandle(MyScript->_MonoData._pInstance);
+    //  int ID = G_ECMANAGER->getObjId(itrS);
+    //  MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, "id", ID);
+    //}
 #endif
   }
 
@@ -275,7 +318,7 @@ namespace NS_LOGIC
         MonoMethod* MyExit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseExit);
         MonoWrapper::InvokeMethod(MyExit, MyScript->_MonoData._pInstance);
       }
-      MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
+      //MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
     }
 #endif
   }

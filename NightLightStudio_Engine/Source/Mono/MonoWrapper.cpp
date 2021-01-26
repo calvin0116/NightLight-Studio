@@ -293,8 +293,6 @@ namespace MonoWrapper
     void* iter = NULL;
     MonoClassField* field = mono_class_get_fields(toklass, &iter);
 
-      
-      
     //Loop through all variable
     while (field)
     {
