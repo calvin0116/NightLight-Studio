@@ -79,7 +79,24 @@ namespace NS_LOGIC
                       tempVar += "int";
                       ScriptValues.emplace(tempVar, MonoWrapper::GetObjectFieldValue<int>(MonoData._pInstance, var_name));
                       break;
+                    case MONO_TYPE_U4:
+                      tempVar += "unsigned";
+                      ScriptValues.emplace(tempVar, MonoWrapper::GetObjectFieldValue<unsigned>(MonoData._pInstance, var_name));
+                      break;
+                    case MONO_TYPE_R4:
+                      tempVar += "float";
+                      ScriptValues.emplace(tempVar, MonoWrapper::GetObjectFieldValue<float>(MonoData._pInstance, var_name));
+                      break;
+                    case MONO_TYPE_R8:
+                      tempVar += "double";
+                      ScriptValues.emplace(tempVar, MonoWrapper::GetObjectFieldValue<double>(MonoData._pInstance, var_name));
+                      break;
+                    case MONO_TYPE_STRING:
+                      tempVar += "string";
+                      ScriptValues.emplace(tempVar, MonoWrapper::ToString(MonoWrapper::GetObjectFieldValue<MonoString*>(MonoData._pInstance, var_name)));
+                      break;
                     default:
+                      // Unhandled type, do nothing.
                       break;
                     }
                   }
@@ -120,14 +137,38 @@ namespace NS_LOGIC
                   if (var_typeid == MONO_TYPE_BOOLEAN)
                   {
                     tempVar += "bool";
-                    bool typeBool = std::any_cast<bool>(ScriptValues[tempVar]);
-                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, typeBool);
+                    bool val = std::any_cast<bool>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
                   }
                   else if (var_typeid == MONO_TYPE_I4)
                   {
                     tempVar += "int";
-                    int typeInt = std::any_cast<int>(ScriptValues[tempVar]);
-                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, typeInt);
+                    int val = std::any_cast<int>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+                  }
+                  else if (var_typeid == MONO_TYPE_U4)
+                  {
+                    tempVar += "unsigned";
+                    unsigned val = std::any_cast<unsigned>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+                  }
+                  else if (var_typeid == MONO_TYPE_R4)
+                  {
+                    tempVar += "float";
+                    float val = std::any_cast<float>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+                  }
+                  else if (var_typeid == MONO_TYPE_R8)
+                  {
+                    tempVar += "double";
+                    double val = std::any_cast<double>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+                  }
+                  else if (var_typeid == MONO_TYPE_STRING)
+                  {
+                    tempVar += "string";
+                    std::string val = std::any_cast<std::string>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, *MonoWrapper::ToMonoString(val));
                   }
                 }
                 // Move to next field
