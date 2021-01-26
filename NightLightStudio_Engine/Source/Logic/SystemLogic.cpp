@@ -7,6 +7,8 @@
 
 // Scene change
 #include "../Core/SceneManager.h"
+// Saving of reloaded scripts' values
+#include <any>
 
 namespace NS_LOGIC
 {
@@ -39,11 +41,11 @@ namespace NS_LOGIC
     SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ReloadScripts", SystemInput_ns::IKEY_END, "ScriptReload", SystemInput_ns::OnRelease, [this]()
       {
         //Only if mouse wheel + alt button is pressed, camera will move.
-        //NO CAMERA SPEED AS IT IS TOO FAST FOR FORWARD MOVEMENT
         if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IKEY_END))
         {
           if (!_isPlaying)
           {
+            std::unordered_map<std::string, std::any> ScriptValues;
 
             auto itrS = G_ECMANAGER->begin<ComponentScript>();
             auto itrE = G_ECMANAGER->end<ComponentScript>();
@@ -52,7 +54,39 @@ namespace NS_LOGIC
               ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
               if (MyScript == nullptr)
                 continue;
-              MyScript->Write();
+              ComponentScript::data& MonoData = MyScript->_MonoData;
+              if (MonoData._pInstance)
+              {
+                MonoClass* klass = MonoWrapper::GetMonoClass(MonoData._pInstance);
+                void* iter = NULL;
+                MonoClassField* field = mono_class_get_fields(klass, &iter);
+                while (field)
+                {
+                  const char* var_name = mono_field_get_name(field);
+                  int var_typeid = mono_type_get_type(mono_field_get_type(field));
+                  unsigned var_flag = mono_field_get_flags(field);
+                  // Store values into local vector
+                  if (var_flag == MONO_FIELD_ATTR_PUBLIC)
+                  {
+                    std::string tempVar(var_name);
+                    switch (var_typeid)
+                    {
+                    case MONO_TYPE_BOOLEAN:
+                      tempVar += "bool";
+                      ScriptValues.emplace(tempVar, MonoWrapper::GetObjectFieldValue<bool>(MonoData._pInstance, var_name));
+                      break;
+                    case MONO_TYPE_I4:
+                      tempVar += "int";
+                      ScriptValues.emplace(tempVar, MonoWrapper::GetObjectFieldValue<int>(MonoData._pInstance, var_name));
+                      break;
+                    default:
+                      break;
+                    }
+                  }
+                  // Move to next field
+                  field = mono_class_get_fields(klass, &iter);
+                }
+              }
             }
 
             MonoWrapper::ReloadScripts();
@@ -71,6 +105,34 @@ namespace NS_LOGIC
               // Reflect values
               //MyScript->ShowPublicValues();
               //MyScript->Read();
+              MonoClass* klass = MonoWrapper::GetMonoClass(MyScript->_MonoData._pInstance);
+              void* iter = NULL;
+              MonoClassField* field = mono_class_get_fields(klass, &iter);
+              while (field)
+              {
+                const char* var_name = mono_field_get_name(field);
+                int var_typeid = mono_type_get_type(mono_field_get_type(field));
+                unsigned var_flag = mono_field_get_flags(field);
+                // Store values into local vector
+                if (var_flag == MONO_FIELD_ATTR_PUBLIC)
+                {
+                  std::string tempVar(var_name);
+                  if (var_typeid == MONO_TYPE_BOOLEAN)
+                  {
+                    tempVar += "bool";
+                    bool typeBool = std::any_cast<bool>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, typeBool);
+                  }
+                  else if (var_typeid == MONO_TYPE_I4)
+                  {
+                    tempVar += "int";
+                    int typeInt = std::any_cast<int>(ScriptValues[tempVar]);
+                    MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, typeInt);
+                  }
+                }
+                // Move to next field
+                field = mono_class_get_fields(klass, &iter);
+              }
             }
           }
         }
