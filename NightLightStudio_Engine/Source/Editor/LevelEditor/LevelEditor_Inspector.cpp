@@ -984,7 +984,7 @@ void InspectorWindow::ScriptComp(Entity& ent)
           bool bChanged = false; // If value changed, save it back to mono.
           // Inspect values here
           // Name of variable
-          std::string sName = std::string(var_name) + " : ";          
+          std::string sName = std::string(var_name) + " : ";
           _levelEditor->LE_AddText("\t");
           ImGui::SameLine();
           // type of variable
@@ -1061,7 +1061,7 @@ void InspectorWindow::ScriptComp(Entity& ent)
           }
           else
           {
-            std::cout << "Unsupported type!" << std::endl;
+            _levelEditor->LE_AddText(var_name);
           }
         }
         // Move to next field
