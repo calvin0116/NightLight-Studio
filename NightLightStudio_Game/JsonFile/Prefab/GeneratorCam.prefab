@@ -1,0 +1,22 @@
+{
+    "Name": "GeneratorCam",
+    "TransformComponent": {
+        "EntityName": "GeneratorCam",
+        "Tag": 0,
+        "Position": [
+            -237.3302459716797,
+            136.1642608642578,
+            0.0
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Rotate": [
+            0.0,
+            -0.0,
+            0.0
+        ]
+    }
+}

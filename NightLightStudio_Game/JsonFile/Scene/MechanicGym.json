@@ -676,11 +676,11 @@
         "Street_Talisman_1": {
             "TransformComponent": {
                 "EntityName": "Talisman_1",
-                "Tag": 3,
+                "Tag": 2,
                 "Position": [
-                    293.07440185546877,
+                    -101.2679443359375,
                     0.0,
-                    -992.921142578125
+                    -973.5684814453125
                 ],
                 "Scale": [
                     425.0,
@@ -1297,7 +1297,7 @@
                 "output_IDint": 0,
                 "p_CamPosint": 0,
                 "p_SpawnPosint": 0,
-                "isWaypointbool": false
+                "isWaypointbool": true
             },
             "ComponentVariables": {
                 "IntList": [

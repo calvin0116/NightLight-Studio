@@ -76,7 +76,7 @@ namespace Unicorn
         script_Lamp = GetScript(output_ID);
       }
 
-      activate = true;
+      //activate = true;
 
     }
 

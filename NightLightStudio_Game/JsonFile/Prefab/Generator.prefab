@@ -1,22 +1,22 @@
 {
-    "Name": "Moth",
+    "Name": "Generator",
     "TransformComponent": {
-        "EntityName": "Moth1",
+        "EntityName": "",
         "Tag": 0,
         "Position": [
-            421.18572998046877,
-            300.6934509277344,
-            -293.47021484375
+            -240.27420043945313,
+            -19.381256103515626,
+            -136.20846557617188
         ],
         "Scale": [
-            2.0,
-            2.0,
-            2.0
+            100.0,
+            99.99999237060547,
+            100.0
         ],
         "Rotate": [
             0.0,
-            3.256885646590879e-12,
-            -89.99994659423828
+            -0.0,
+            0.0
         ]
     },
     "ColliderComponent": {
@@ -25,13 +25,13 @@
         "isCollidable": true,
         "Center": [
             0.0,
-            0.0,
+            50.0,
             0.0
         ],
         "Extend": [
-            5.0,
-            5.0,
-            5.0
+            0.5,
+            0.5,
+            0.5
         ],
         "Rotation": [
             0.0,
@@ -40,7 +40,7 @@
         ]
     },
     "RigidBody": {
-        "isStatic": false,
+        "isStatic": true,
         "isGravity": false,
         "mass": 0.0,
         "friction": 0.009999999776482582,
@@ -57,7 +57,7 @@
     },
     "GraphicsComponent": {
         "isActive": true,
-        "Model": "asset\\3d model\\mothtest.fbx",
+        "Model": "box.fbx",
         "Albedo": "",
         "Normal": "",
         "Metallic": "",
@@ -81,39 +81,35 @@
         ],
         "ShininessMat": 32.0,
         "AlbedoMat": [
-            0.21960784494876862,
-            0.0,
-            0.9019607901573181
+            1.0,
+            1.0,
+            1.0
         ],
-        "MetallicMat": 0.0,
-        "RoughnessMat": 0.0,
+        "MetallicMat": 1.0,
+        "RoughnessMat": 0.5,
         "Alpha": 1.0
     },
     "ScriptComponent": {
         "isActive": true,
         "isRunning": true,
-        "ScriptName": "ScriptMoth",
+        "ScriptName": "Generator",
+        "activatebool": false,
         "player_IDint": 0,
-        "startPatrolingbool": false,
-        "startIdlingbool": false,
-        "startPausedbool": false,
-        "isPatrolingbool": true,
-        "isIdlingbool": false,
-        "isPausedbool": false,
-        "dectectsPlayerbool": false
+        "cam_IDint": 0,
+        "output_IDint": 0,
+        "p_CamPosint": 0,
+        "p_SpawnPosint": 0,
+        "isWaypointbool": true
     },
     "ComponentVariables": {
-        "IntList": [],
-        "StringList": [],
-        "FloatList": [
-            2.0
-        ]
-    },
-    "NavigatorComponent": {
-        "stopAtEachWayPoint": false,
-        "endTime": 2.0,
-        "speed": 100.0,
-        "radius_for_detection": 10.0,
-        "WayPointMapName": "Paths"
+        "IntList": [
+            1
+        ],
+        "StringList": [
+            "GeneratorCam",
+            "GeneratorSpawn",
+            "StreetLight1"
+        ],
+        "FloatList": []
     }
 }
