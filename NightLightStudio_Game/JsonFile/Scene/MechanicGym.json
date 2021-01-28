@@ -1072,7 +1072,7 @@
             },
             "ComponentVariables": {
                 "IntList": [
-                    2,
+                    1,
                     0
                 ],
                 "StringList": [
@@ -1452,11 +1452,11 @@
                 "cam_IDint": 0,
                 "p_CamPosint": 0,
                 "p_SpawnPosint": 0,
-                "isWaypointbool": false
+                "isWaypointbool": true
             },
             "ComponentVariables": {
                 "IntList": [
-                    1,
+                    2,
                     1
                 ],
                 "StringList": [

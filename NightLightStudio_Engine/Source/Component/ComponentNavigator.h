@@ -44,14 +44,19 @@ public:
 	float size_in_rad = 25.0f;			//Circular detection to check if you hit the way point
 
 	ComponentWayPointMap* cur_wp_path;	//Way points and edges for all routes
+	ComponentTransform* trans;
+	ComponentRigidBody* rb;
+
 	LocalString<125> wp_path_ent_name;
 	
 	LocalVector<std::pair<int,bool>> path_indexes;		//Current following routes
-	LocalVector<int> wp_to_reach_end;					//List of way point to go from one point to another -> navigation
-
 	WP_PATH_CREATION_TYPE wp_creation_type;
- 	int cur_wp_index;
-	int prev_wp_index;
+ 	int cur_path_wp_index = 0;
+	int prev_path_wp_index = 0;
+
+	LocalVector<int> wp_to_reach_end;					//List of way point to go from one point to another -> navigation
+	int cur_route_wp_index = 0;
+	int prev_route_wp_index = 0;
 	
 	NAV_STATE nav_state;
 	float circuling_rad = 20.0f;
@@ -59,7 +64,7 @@ public:
 	ComponentNavigator()
 		:isFollowing{ true }
 		,isPaused{false}
-		,cur_wp_index{ 0 }
+		, cur_path_wp_index{ 0 }
 		, stopAtEachWayPoint{false}
 		, wp_nav_type{ WN_TOANDFRO }
 		, curTime{-1.f}
@@ -74,7 +79,7 @@ public:
 
 	void CleanCurPath()
 	{
-		cur_wp_index = 0;
+		cur_path_wp_index = 0;
 	}
 	/*
 	void SetCurrentPath(LocalVector<NS_AI::WayPoint*> wp_list)
@@ -83,13 +88,22 @@ public:
 		//way_point_list = wp_list;
 	}*/
 
-	WayPointComponent* GetCurWp()
+	WayPointComponent* GetCurPathWp()
 	{
-		return cur_wp_path->GetPath().at(path_indexes.at(cur_wp_index).first);
+		return cur_wp_path->GetPath().at(path_indexes.at(cur_path_wp_index).first);
 	}
-	WayPointComponent* GetPrevWp()
+	WayPointComponent* GetPrevPathWp()
 	{
-		return cur_wp_path->GetPath().at(path_indexes.at(prev_wp_index).first);
+		return cur_wp_path->GetPath().at(path_indexes.at(prev_route_wp_index).first);
+	}
+
+	WayPointComponent* GetCurWalkingWp()
+	{
+		return cur_wp_path->GetPath().at(path_indexes.at(cur_route_wp_index).first);
+	}
+	WayPointComponent* GetPrevWalkingWp()
+	{
+		return cur_wp_path->GetPath().at(path_indexes.at(prev_route_wp_index).first);
 	}
 
 	//LocalVector<int>
@@ -166,6 +180,10 @@ public:
 	//================ Getter / Setter ========================//
 	void InitPath()
 	{
+		Entity ent = G_ECMANAGER->getEntity(this);
+		trans = ent.getComponent<TransformComponent>();
+		rb = ent.getComponent<RigidBody>();
+
 		if (cur_wp_path == nullptr)
 		{
 			if (!wp_path_ent_name.empty())
@@ -174,8 +192,8 @@ public:
 				return;
 		}
 
-		cur_wp_index = 0;
-		prev_wp_index = 0;
+		cur_route_wp_index = 0;
+		prev_route_wp_index = 0;
 
 		switch (wp_creation_type) 
 		{
@@ -197,8 +215,8 @@ public:
 		}
 		case WPP_CUSTOM:	//Inserted beforehand
 		{}
-
 		}
+		SetNextWp(this);
 	}
 	
 	void StopAtEachWPCheck()
@@ -212,38 +230,46 @@ public:
 
 	void DecideOnNextWp()
 	{
-		prev_wp_index = cur_wp_index;
+		if (!HaveWayPoint()) //Dont need to move if one or less way point
+			return;
+
+		prev_route_wp_index = cur_route_wp_index;
 		if (wp_nav_type == WN_RANDOM)
 		{
 			srand((unsigned int)time(NULL));
-			cur_wp_index = rand() % cur_wp_path->GetPath().size();
+			cur_route_wp_index = rand() % cur_wp_path->GetPath().size();
 		}
 		else
 			if (traverseFront)
-				if (cur_wp_index < path_indexes.size() - 1)
-					++cur_wp_index;
+				if (cur_route_wp_index < path_indexes.size() - 1)
+					++cur_route_wp_index;
 				else {
 					if (wp_nav_type == WN_TOANDFRO)
 					{
 						traverseFront = false;
-						--cur_wp_index;
+						--cur_route_wp_index;
 					}
 					else if (wp_nav_type == WN_CIRCULAR)
 					{
-						cur_wp_index = 0;
+						cur_route_wp_index = 0;
 					}
 				}
 			else
-				if (cur_wp_index > 0)
-					--cur_wp_index;
+				if (cur_route_wp_index > 0)
+					--cur_route_wp_index;
 				else
 				{
 					traverseFront = true;
-					++cur_wp_index;
+					++cur_route_wp_index;
 				}
 
-		if (!path_indexes.at(cur_wp_index).second)
+		if (!path_indexes.at(cur_route_wp_index).second)
 			DecideOnNextWp();
+
+		cur_path_wp_index = cur_route_wp_index;			//Temp ==
+		prev_path_wp_index = prev_route_wp_index;
+		//cur_path_wp_index = 0;.
+		//prev_path_wp_index = 0;
 	}
 
 	//Function to set next way point to go to
@@ -293,7 +319,7 @@ public:
 
 	void TurnOffCurWayointPoint()
 	{
-		path_indexes.at(cur_wp_index).second = false;
+		path_indexes.at(cur_path_wp_index).second = false;
 	}
 
 	void ToggleWayPointActive(int index, bool act)
