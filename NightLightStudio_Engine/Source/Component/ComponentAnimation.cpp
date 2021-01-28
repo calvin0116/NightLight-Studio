@@ -128,7 +128,7 @@ inline void ComponentAnimation::Read(Value& val)
 	}
 
 	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_currAnim = currentAnim;
-	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_defaultAnim = defaultAnim;	
+	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_defaultAnim = defaultAnim;
 }
 
 inline Value ComponentAnimation::Write()
