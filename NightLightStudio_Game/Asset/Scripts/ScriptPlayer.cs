@@ -20,6 +20,14 @@ namespace Unicorn
     Transform playerPos;
     Animation anim;
 
+    /// <summary>
+    /// ////////////////Place holder Variables
+    public static bool flying = false;
+    public Vector3 FormalPos;
+    public static float mothTime = 0.0f; // time to change state
+    /// ////////////////
+    /// </summary>
+
     // Other entity's components
     public ScriptCamera camScript; // To set camera tgt back to player after becoming human.
 
@@ -28,6 +36,7 @@ namespace Unicorn
     public static float mothSpeed = 10000.0f;  // Move force while moth
     public static float maxEnergy = 15.0f;
     public static float transformTime = 3.5f; // time to change state
+
     public static float maxHumnSpd = 500.0f;
     //public static float maxMothSpd = 100.0f;
     public static float moveForce = humnForce; // Current force
@@ -216,9 +225,6 @@ namespace Unicorn
         {
           moveDir += fwd;
           movedW = true;
-
-          
-
           //Force.Apply(id, fwd, moveForce);
         }
         else if (Input.GetKeyUp(VK.IKEY_W))
@@ -298,7 +304,6 @@ namespace Unicorn
           GetTransform(id).SetRotation(rotation);
 
 
-
           if (switching == false)
           {
 
@@ -322,14 +327,11 @@ namespace Unicorn
             //Console.WriteLine("reach limit");
             playerRB.SetForce(new Vector3(0.0f, playerRB.GetForce().y, 0.0f));
             playerRB.SetAccel(new Vector3(0.0f, playerRB.GetAccel().y, 0.0f));
-            playerRB.SetVel(moveDir.normalized * maxHumnSpd);
-            //playerRB.SetVel(new Vector3(0.0f, 0.0f, 0.0f));
+            playerRB.SetVel(new Vector3(moveDir.normalized.x * maxHumnSpd, playerRB.GetVel().y, moveDir.normalized.z * maxHumnSpd));
           }
           else
           {
             Force.Apply(id, moveDir.normalized, moveForce);
-            
-            ///Force.Apply(id, new Vector3(0.0f,0.0f,0.0f), moveForce);
           }
         }
         else
@@ -339,8 +341,6 @@ namespace Unicorn
           playerRB.SetAccel(new Vector3(0.0f, playerRB.GetAccel().y, 0.0f));
           playerRB.SetVel(new Vector3(0.0f, playerRB.GetVel().y, 0.0f));
 
-          //GetTransform(id).SetRotation(Camera.GetXZViewVector()+ new Vector3(-90.0f,0.0f,90.0f));
-
           if (switching == false)
           {
             if (anim.IsFinished())
@@ -349,10 +349,6 @@ namespace Unicorn
             }
 
             anim.Play("Idle", true, -1f, 10f);
-
-
-
-
           }
         }
       }
@@ -421,7 +417,6 @@ namespace Unicorn
               }
               // Prep for state change 
               NextState = State.Moth;
-
               // Shouldn't have logic here. This function is for setting next state only.
               //Transform p_Target = GetTransform(id);
               //spawnPoint = p_Target.GetPosition();
@@ -445,24 +440,36 @@ namespace Unicorn
 
     public void AutoStateControl()
     {
-      if (CurrentState != State.Human)
+      //if (CurrentState != State.Human)
+      //{
+      //  // Reduce energy when not in human state
+      //  curEnergy -= EnergyDrain * RealDT();
+      //  // Change back to human if current energy is not enough
+      //  if (curEnergy <= 0.0f)
+      //  {
+      //    curEnergy = 0.0f;
+      //    NextState = State.Human;
+      //  }
+      //}
+      //else
+      //{
+      //  // Regain energy when in human state
+      //  curEnergy += EnergyGain * RealDT();
+      //  // Cap at maxEnergy
+      //  if (curEnergy >= maxEnergy)
+      //    curEnergy = maxEnergy;
+      //}
+
+      if (flying)
       {
-        // Reduce energy when not in human state
-        curEnergy -= EnergyDrain * RealDT();
-        // Change back to human if current energy is not enough
-        if (curEnergy <= 0.0f)
+        mothTime += RealDT();
+        if (mothTime >= 5.0f) 
         {
-          curEnergy = 0.0f;
+          mothTime = 0;
+          flying = false;
           NextState = State.Human;
+          playerPos.SetPosition(FormalPos);
         }
-      }
-      else
-      {
-        // Regain energy when in human state
-        curEnergy += EnergyGain * RealDT();
-        // Cap at maxEnergy
-        if (curEnergy >= maxEnergy)
-          curEnergy = maxEnergy;
       }
     }
 
@@ -483,12 +490,14 @@ namespace Unicorn
         else if (accumulatedDt >= transformTime)
         {
           accumulatedDt = 0.0f;
+          
           PreviousState = CurrentState;
           CurrentState = NextState;
-          //Console.WriteLine(CurrentState);
+          //
           switch (CurrentState)
           {
             case State.Human:
+              mothTime = 999;
               moveForce = humnForce;
               playerCharModel.AddModel(humanModePath);
               camScript.tgtID = id;
@@ -512,6 +521,8 @@ namespace Unicorn
               //Set to Moth spawn Eyelevel//// not working
               playerPos = GetTransform(id);
               Vector3 playerPosVect = playerPos.GetPosition(); // Set eye level of player
+              FormalPos = playerPosVect;
+              flying = true;
               //Vector3 eyelevel =  new Vector3(0.0f, 10.0f, 0.0f);
               // playerPos.SetPosition(eyelevel);
               //Console.WriteLine("PlayerPos be4");
@@ -520,7 +531,7 @@ namespace Unicorn
               //Console.WriteLine(playerPosVect.z);
               //Console.WriteLine("---------");
               playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 80 , playerPosVect.z));
-            //  playerPos.SetRotation(new Vector3(90.0f, -90.0f, 180.0f));
+              //playerPos.SetRotation(new Vector3(90.0f, -90.0f, 180.0f));
               //Console.WriteLine("PlayerPos aft");
               //Console.WriteLine(playerPosVect.x);
               //Console.WriteLine(playerPosVect.y);
@@ -549,10 +560,6 @@ namespace Unicorn
           {
             accumulatedDt += RealDT();
           }
-          
-
-          
-            
         }
       }
     }

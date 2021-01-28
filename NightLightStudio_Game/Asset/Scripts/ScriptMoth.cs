@@ -149,7 +149,6 @@ namespace Unicorn
 
         if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
         {
-
           // Set player script nextspawn position == possessionSpawnPos
           //script_Player.NextState = ScriptPlayer.State.Possessed;
 
@@ -157,10 +156,11 @@ namespace Unicorn
           // Set Camera script  position == possessionSpawnPos
           // script_Player.camScript.tgtID = id; // Go and expose other tgt in scriptcamera.
 
-
+          
           activate = true;
+          ScriptPlayer.flying = false;
 
-         // possessed = true;
+          // possessed = true;
 
         }
 
