@@ -216,10 +216,8 @@ bool UI_Element::OnClick() const
 	mouse.x = mouse.x - SYS_INPUT->GetSystemMousePos().GetClientRectSize().x * 0.5f;
 	mouse.y = mouse.y - SYS_INPUT->GetSystemMousePos().GetClientRectSize().y * 0.5f;
 
-	glm::vec2 min = glm::vec2{ (_position.x - (_size.x * 0.5f)) * SYS_INPUT->GetSystemMousePos().GetClientRectSize().x, 
-								(_position.y - (_size.y * 0.5f)) * SYS_INPUT->GetSystemMousePos().GetClientRectSize().y };
-	glm::vec2 max = glm::vec2{ (_position.x + (_size.x * 0.5f)) * SYS_INPUT->GetSystemMousePos().GetClientRectSize().x, 
-								(_position.y + (_size.y * 0.5f)) * SYS_INPUT->GetSystemMousePos().GetClientRectSize().y };
+	glm::vec2 min = glm::vec2{ _position.x - (_size.x * 0.5f), _position.y - (_size.y * 0.5f) };
+	glm::vec2 max = glm::vec2{ _position.x + (_size.x * 0.5f), _position.y + (_size.y * 0.5f) };
 
 	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IMOUSE_LBUTTON))
 	{
