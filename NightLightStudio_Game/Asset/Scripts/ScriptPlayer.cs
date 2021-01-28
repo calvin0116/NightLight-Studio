@@ -308,7 +308,7 @@ namespace Unicorn
             }
 
 
-            anim.Play("Walk1", true, 1.9f, 3.108f);
+            anim.Play("Sneak_Walk", true, 1.9f, 3.108f);
 
           }
 
@@ -348,7 +348,7 @@ namespace Unicorn
               anim.Stop();
             }
 
-            anim.Play("Idle1", true, -1f, 30f);
+            anim.Play("Idle", true, -1f, 10f);
 
 
 
@@ -417,7 +417,7 @@ namespace Unicorn
 
                 played = true;
 
-                anim.Play("Switch1", false, -1f, 30f);
+                anim.Play("Pray", false, -1f, 30f);
               }
               // Prep for state change 
               NextState = State.Moth;

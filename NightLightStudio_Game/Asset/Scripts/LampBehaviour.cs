@@ -9,6 +9,7 @@ namespace Unicorn
   {
     // Variables
     public bool activate = false;
+    public int wayPointID;
     public int player_ID;
     public int cam_ID;
     public int p_CamPos;
@@ -27,8 +28,8 @@ namespace Unicorn
     //public static string possessionCamPos;
    // public static string possessionSpawnPos;
     public static string mothAIName;
-    public static int wayPointID;
-    public static int isSwitchOn;
+   // public int wayPointID;
+   // public static int isSwitchOn;
    // public int onOff;
 
     // Getting Script
@@ -46,7 +47,7 @@ namespace Unicorn
 
      
      
-      wayPointID = ObjVariables.GetInt(0);
+      //wayPointID = ObjVariables.GetInt(0);
       //isSwitchOn = ObjVariables.GetInt(1);
       mothAIName = ObjVariables.GetString(0);
 
@@ -165,21 +166,21 @@ namespace Unicorn
     }
 
 
-    public void ToggleSwitch()
-    {
+    //public void ToggleSwitch()
+    //{
       
 
-      if (isOn == true)
-      {
-        SwitchOffFunction();
-      }
+    //  if (isOn == true)
+    //  {
+    //    SwitchOffFunction();
+    //  }
 
-      else
-      {
-        SwitchOnFunction();
-      }
+    //  else
+    //  {
+    //    SwitchOnFunction();
+    //  }
 
-    }
+    //}
 
 
     public void SwitchOnFunction()
@@ -187,6 +188,7 @@ namespace Unicorn
       isWaypoint = true;
       script_Moth.ActivateWP(wayPointID);
       isOn = true;
+      
 
     }
 
@@ -195,6 +197,7 @@ namespace Unicorn
       isWaypoint = false;
       script_Moth.DeactivateWP(wayPointID);
       isOn = false;
+     
     }
 
 

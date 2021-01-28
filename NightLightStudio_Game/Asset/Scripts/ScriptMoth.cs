@@ -124,11 +124,13 @@ namespace Unicorn
     public void ActivateWP(int ID)
     {
       enemyNavigator.SetWpActive(ID, true);
+      Print("Start");
     }
 
     public void DeactivateWP(int ID)
     {
       enemyNavigator.SetWpActive(ID, false);
+      Print("off");
     }
 
 
@@ -183,7 +185,7 @@ namespace Unicorn
     public void Decision()
     {
       //======Init phase====//
-
+      //Print("Thinking");
 
       //---- Moth Logic----//
 
@@ -191,24 +193,34 @@ namespace Unicorn
       {
         decisionTimer += RealDT();
 
-        if (decisionTimer > 5.0f)
+        if (decisionTimer > 4.0f)
         {
           if (enemyNavigator.MoreThenOneWPActive())
           {
             enemyNavigator.NavState = 0;
+            
+            decisionTimer = 0;
+            Print("target");
             thinking = false;
           }
 
-          decisionTimer = 0;
+          else
+          {
+            Print("No target");
+            decisionTimer = 0;
+            Decision();
+          }
 
+          
+          
         }
 
       }
 
-      else if (thinking == true && invalidPath == true)
-      {
-        thinking = false;
-      }
+      //else if (thinking == true && invalidPath == true)
+      //{
+      //  thinking = false;
+      //}
 
 
       // Wait for 1s 

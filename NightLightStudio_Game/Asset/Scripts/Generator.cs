@@ -18,6 +18,7 @@ namespace Unicorn
     public bool isWaypoint;
     bool isOn;
     bool isLamp;
+    bool toggleOn;
 
 
     //Required Components
@@ -89,13 +90,18 @@ namespace Unicorn
 
         if (isOn == false)
         {
+         
+          
           SwitchOnFunction();
         }
         else
         {
+          activate = false;
+          Print("off");
           SwitchOffFunction();
         }
-        //activate = false;
+
+        
 
         //if (script_Player.CurrentState == ScriptPlayer.State.Human)
         //{
@@ -149,8 +155,8 @@ namespace Unicorn
       {
         if (script_Player.CurrentState == ScriptPlayer.State.Moth)
         {
-           activate = true;
-
+          activate = true;
+          Print("Activate");
           // Set player script nextspawn position == possessionSpawnPos
           script_Player.NextState = ScriptPlayer.State.Possessed;
 
@@ -186,35 +192,64 @@ namespace Unicorn
 
     public void SwitchOnFunction()
     {
-     
+      
       if (type == 0)
       {
         script_Fan.SwitchOnFunction();
+        isOn = true;
+        activate = false;
       }
 
       else
       {
-        script_Lamp.ToggleSwitch();
+
+        if (toggleOn == false)
+        {
+          script_Lamp.SwitchOnFunction();
+          toggleOn = true;
+        }
+        else
+        {
+          script_Lamp.SwitchOffFunction();
+          toggleOn = false;
+        }
+
+        activate = false;
+
       }
 
-      isOn = true;
+   
+     
     }
 
     public void SwitchOffFunction()
     {
-    
 
+     
       if (type == 0)
       {
         script_Fan.SwitchOffFunction();
+        isOn = false;
+        activate = false;
       }
 
       else
       {
-        script_Lamp.ToggleSwitch();
+        if (toggleOn == false)
+        {
+          script_Lamp.SwitchOnFunction();
+          toggleOn = true;
+        }
+        else
+        {
+          script_Lamp.SwitchOffFunction();
+          toggleOn = false;
+        }
+        activate = false;
+
       }
 
-      isOn = false;
+
     }
 
 
