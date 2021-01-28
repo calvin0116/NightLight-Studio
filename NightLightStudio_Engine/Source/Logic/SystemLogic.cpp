@@ -45,6 +45,7 @@ namespace NS_LOGIC
           if (var_flag == MONO_FIELD_ATTR_PUBLIC)
           {
             std::string tempVar(var_name);
+            tempVar += MonoWrapper::GetObjectFieldValue<int>(MonoData._pInstance, "id");
             switch (var_typeid)
             {
             case MONO_TYPE_BOOLEAN:
@@ -69,7 +70,10 @@ namespace NS_LOGIC
               break;
             case MONO_TYPE_STRING:
               tempVar += "string";
-              ScriptValues.emplace(tempVar, MonoWrapper::ToString(MonoWrapper::GetObjectFieldValue<MonoString*>(MonoData._pInstance, var_name)));
+              if (MonoWrapper::GetObjectFieldValue<MonoString*>(MonoData._pInstance, var_name))
+                ScriptValues.emplace(tempVar, MonoWrapper::ToString(MonoWrapper::GetObjectFieldValue<MonoString*>(MonoData._pInstance, var_name)));
+              else
+                ScriptValues.emplace(tempVar, std::string(""));
               break;
             default:
               // Unhandled type, do nothing.
@@ -104,6 +108,7 @@ namespace NS_LOGIC
         if (var_flag == MONO_FIELD_ATTR_PUBLIC)
         {
           std::string tempVar(var_name);
+          tempVar += MyScript->objId;
           if (var_typeid == MONO_TYPE_BOOLEAN)
           {
             tempVar += "bool";
@@ -138,7 +143,8 @@ namespace NS_LOGIC
           {
             tempVar += "string";
             std::string val = std::any_cast<std::string>(ScriptValues[tempVar]);
-            MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, *MonoWrapper::ToMonoString(val));
+            if(!val.empty())
+              MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, *MonoWrapper::ToMonoString(val));
           }
         }
         // Move to next field
