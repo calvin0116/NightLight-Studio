@@ -25,7 +25,6 @@ void AnimationController::Update(float dt)
 			else
 			{
 				_play = false;
-				_currAnim = "";
 			}
 		}
 	}

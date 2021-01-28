@@ -286,31 +286,14 @@ namespace NS_GRAPHICS
 			{
 				if (animComp->_isActive && model->_isAnimated)
 				{
-					if (animManager->_animControllers[animComp->_controllerID]->_play)
+					glm::mat4 identity(1.0f);
+					double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
+					std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
+					if (!currAnimation.empty())
 					{
-						glm::mat4 identity(1.0f);
-						double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
-						std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
-						if (!currAnimation.empty())
-						{
-							model->GetPose(currAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
-						}
-					}
-					else
-					{
-						std::string& defaultAnimation = animManager->_animControllers[animComp->_controllerID]->_defaultAnim;					
-						
-						if (!defaultAnimation.empty())
-						{
-							animManager->_animControllers[animComp->_controllerID]->PlayAnimation(defaultAnimation, animComp);
-
-							glm::mat4 identity(1.0f);
-							double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
-							model->GetPose(defaultAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
-						}
+						model->GetPose(currAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
 					}
 				}
-
 				// Test Codes
 				//if (entity.getComponent<ComponentTransform>()->_entityName.toString() == "Player")
 				//{
@@ -657,7 +640,7 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::SetUIMatrix(const int& width, const int& height, const float& near_plane, const float& far_plane)
 	{
-		shaderManager->StartProgram(ShaderSystem::UI_SCREENSPACE);
+		shaderManager->StartProgram(ShaderSystem::UI);
 
 		//Scales with screen or not?
 		//float ratioWidth = (float)width / NS_WINDOW::SYS_WINDOW->GetAppWidth();

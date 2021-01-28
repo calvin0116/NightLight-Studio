@@ -127,11 +127,6 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<WayPointComponent>();
 			entComp._ent.getComponent<WayPointComponent>()->Read(*entComp._rjDoc);
 		}
-		else if (t == typeid(EmitterComponent).hash_code())
-		{
-			entComp._ent.AttachComponent<EmitterComponent>();
-			entComp._ent.getComponent<EmitterComponent>()->Read(*entComp._rjDoc);
-		}
 
 		return comp;
 	};
@@ -224,11 +219,6 @@ void InspectorWindow::Start()
 			entComp.Copy(entComp._ent.getComponent<WayPointComponent>()->Write());
 			entComp._ent.RemoveComponent<WayPointComponent>();
 		}
-		else if (t == typeid(EmitterComponent).hash_code())
-		{
-			entComp.Copy(entComp._ent.getComponent<EmitterComponent>()->Write());
-			entComp._ent.RemoveComponent<EmitterComponent>();
-		}
 
 		return std::any(entComp);
 	};
@@ -315,8 +305,6 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	//Standard bool for all component to use
 	_notRemove = true;
 
-	CameraComp(ent);
-
 	ColliderComp(ent);
 
 	AudioComp(ent);
@@ -332,8 +320,6 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	CanvasComp(ent);
 
 	AnimationComp(ent);
-
-	EmitterComp(ent);
 
   CScriptComp(ent);
 
@@ -1203,7 +1189,6 @@ void InspectorWindow::AnimationComp(Entity& ent)
 		{
 			ImGui::Checkbox("IsActive##Animation", &anim->_isActive);
 
-			ImGui::Text("Current Animation: ");
 			auto it = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
 			while ( it != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
 			{
@@ -1211,24 +1196,9 @@ void InspectorWindow::AnimationComp(Entity& ent)
 				if (ImGui::Selectable(it->c_str(), &currAnim))
 				{
 					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim = it->c_str();
-					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play = false;
-					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_dt = 0.0f;
-					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = "";
+					anim->StopAnimation();
 				}
 				++it;
-			}
-
-			ImGui::Separator();
-			ImGui::Text("Default Animation: ");
-			auto it2 = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
-			while (it2 != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
-			{
-				bool defaultAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim == *it2;
-				if (ImGui::Selectable(std::string(it2->c_str()).append("##defaultAnim").c_str(), &defaultAnim))
-				{
-					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = it2->c_str();
-				}
-				++it2;
 			}
 
 			if (ImGui::Button("Preview Animation"))
@@ -1262,14 +1232,6 @@ void InspectorWindow::AnimationComp(Entity& ent)
 
 		ImGui::Separator();
 	}
-}
-
-void InspectorWindow::EmitterComp(Entity& ent)
-{
-}
-
-void InspectorWindow::CameraComp(Entity& ent)
-{
 }
 
 void InspectorWindow::CScriptComp(Entity& ent)
@@ -1664,8 +1626,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  VariablesComp",
 			"  NavComp",
 			"  WayPointPath",
-			"  WayPointComp",
-			"  Emitter"
+			"  WayPointComp"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -1826,15 +1787,6 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			break;
 		}
 
-		case 15: // Emitter
-		{
-			if (!ent.getComponent<EmitterComponent>())
-			{
-				ENTITY_COMP_DOC comp{ ent, EmitterComponent().Write(), typeid(EmitterComponent).hash_code() };
-				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
-			}
-			break;
-		}
 
 		}
 		//if (next_lol == nullptr)

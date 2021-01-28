@@ -157,7 +157,7 @@ void NS_GRAPHICS::UISystem::RenderUI()
 			glm::mat4 ModelMatrix = canvas->_uiElements.at(i).GetModelMatrix();
 
 			//For now ui only got picture
-			_shaderSystem->StartProgram(ShaderSystem::ShaderType::UI_SCREENSPACE); // textured program
+			_shaderSystem->StartProgram(ShaderSystem::ShaderType::UI); // textured program
 			glBindVertexArray(_vao);
 
 			// Update model and uniform for material
@@ -179,7 +179,7 @@ void NS_GRAPHICS::UISystem::RenderUI()
 	}
 
 	//_shaderSystem->
-	//(ShaderSystem::ShaderType::UI_SCREENSPACE); // textured program
+	(ShaderSystem::ShaderType::UI); // textured program
 
 	//glBindVertexArray(_vao);
 

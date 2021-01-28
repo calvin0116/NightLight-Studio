@@ -16,7 +16,6 @@
 #include "ComponentLight.h"
 #include "ComponentCanvas.h"
 #include "ComponentAnimation.h"
-#include "ComponentEmitter.h"
 
 //Stats components
 #include "ComponentPlayerStats.h"
