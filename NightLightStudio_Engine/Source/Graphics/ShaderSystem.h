@@ -82,9 +82,10 @@ namespace NS_GRAPHICS
 			PBR_TEXTURED_ANIMATED,
 			PBR_TEXTURED_NONORMALMAP,
 			PBR_TEXTURED_ANIMATED_NONORMALMAP,
-			UI,
+			UI_SCREENSPACE,
+			UI_WORLDSPACE,
 			PARTICLE,
-			TOTAL_SHADER,
+			TOTAL_SHADER //If shader type is this means GG
 		};
 
 		// Unique Singleton instance
