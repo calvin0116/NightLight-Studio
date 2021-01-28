@@ -10,6 +10,12 @@ enum UI_TYPE
 	ALL_UI
 };
 
+enum CANVAS_TYPE
+{
+	SCREEN_SPACE,
+	WORLD_SPACE
+};
+
 struct UI_Element
 {
 	LocalString<256> _uiName;
@@ -30,6 +36,7 @@ struct UI_Element
 
 	//Expose this
 	//bool OnClick();
+	//Works only on screen space
 	bool OnClick() const;
 
 	bool operator<(const UI_Element& rhs);
@@ -46,6 +53,8 @@ public:
 	/// Material without texture
 	/////////////////////////////////////////
 	LocalVector<UI_Element, 32> _uiElements;
+	//TODO 
+	CANVAS_TYPE _canvasType;
 
 	// Default constructor
 	ComponentCanvas();

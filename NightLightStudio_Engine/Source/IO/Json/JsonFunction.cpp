@@ -113,6 +113,10 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<WayPointComponent>(Comp_list, entity, component_name, g_ecman);
             }
+            else if (component_name == "EmitterComponent")
+            {
+                CreateAndWriteComp<EmitterComponent>(Comp_list, entity, component_name, g_ecman);
+            }
         }
     }
 
