@@ -434,7 +434,7 @@ namespace NS_GRAPHICS
 
 		Assimp::Importer import;
 		const aiScene* scene = import.ReadFile(model->_fileName, aiProcess_Triangulate | 
-																 aiProcess_FlipUVs | 
+																 //aiProcess_FlipUVs | 
 																 aiProcess_JoinIdenticalVertices |
 																 aiProcess_LimitBoneWeights |
 																 aiProcess_CalcTangentSpace);
