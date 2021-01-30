@@ -40,7 +40,7 @@ namespace Unicorn
     public override void OnCollisionExit(int other) { Console.WriteLine("Collision Exit!"); }
 
     public override void OnTriggerEnter(int other) { Console.WriteLine("Trigger Enter!"); }
-    public override void OnTriggerStay(int other) { Console.WriteLine("Trigger Stay!"); }
+    public override void OnTriggerStay(int other) { /*Console.WriteLine("Trigger Stay!");*/ }
     public override void OnTriggerExit(int other) { Console.WriteLine("Trigger Exit!"); }
 
     public override void Exit() { Console.WriteLine("Exit from C#"); }

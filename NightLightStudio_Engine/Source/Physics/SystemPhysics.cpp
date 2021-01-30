@@ -7,7 +7,7 @@
 
 //#define USEVEL 0
 //#define USEVEL 1
-#define EPSILON 0.01f
+#define EPSILON std::numeric_limits<float>::epsilon()
 
 namespace NS_PHYSICS
 {
@@ -137,6 +137,8 @@ namespace NS_PHYSICS
 			//get the transform to update
 			ComponentTransform* compT = G_ECMANAGER->getComponent<ComponentTransform>(itr);
 
+
+
 			Entity ent = G_ECMANAGER->getEntity(itr);
 			if (compT != ent.getComponent<ComponentTransform>())
 				throw;
@@ -145,7 +147,7 @@ namespace NS_PHYSICS
 			//compR->prevPos = compT->_position;
 
 			//deltatime, convert to second
-			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
+			float realDt = DELTA_T->real_dt;// / CLOCKS_PER_SEC;
 
 			// enable gravity
 			//compR->velocity.y -= gravity * realDt;
@@ -200,6 +202,8 @@ namespace NS_PHYSICS
 
 			glm::vec3 changeInDisplacement = (glm::vec3)compR->velocity * realDt;
 
+			//if (compT->_entityName.toString() == "Moth1")
+				//std::cout << compR->velocity.x << " , " <<compR->velocity.y << " , "<< compR->velocity.z << std::endl;
 			//// limit max displacement
 			//if (abs(changeInDisplacement.x) > _maxspeed.x)
 			//{
@@ -237,27 +241,27 @@ namespace NS_PHYSICS
 			//{
 			//	changeInDisplacement.z = 0;
 			//}
-			if (abs(compR->velocity.x) < EPSILON)
+			if (fabsf(compR->velocity.x) < EPSILON)
 			{
 				compR->velocity.x = 0;
 			}
-			if (abs(compR->velocity.y) < EPSILON)
+			if (fabsf(compR->velocity.y) < EPSILON)
 			{
 				compR->velocity.y = 0;
 			}
-			if (abs(compR->velocity.z) < EPSILON)
+			if (fabsf(compR->velocity.z) < EPSILON)
 			{
 				compR->velocity.z = 0;
 			}
-			if (abs(compR->acceleration.x) < EPSILON)
+			if (fabsf(compR->acceleration.x) < EPSILON)
 			{
 				compR->acceleration.x = 0;
 			}
-			if (abs(compR->acceleration.y) < EPSILON)
+			if (fabsf(compR->acceleration.y) < EPSILON)
 			{
 				compR->acceleration.y = 0;
 			}
-			if (abs(compR->acceleration.z) < EPSILON)
+			if (fabsf(compR->acceleration.z) < EPSILON)
 			{
 				compR->acceleration.z = 0;
 			}
@@ -276,10 +280,10 @@ namespace NS_PHYSICS
 
 			//NLMath::Vector3d nextPosition =compT->_position = (glm::vec3)compR->velocity * realDt; // keep in rigid body
 
-			if ((compT->_phyposition.x == compR->prevprevPos.x) && (compR->prevPos.x == compR->prevprevprevPos.x))
+			if (fabsf(compT->_phyposition.x - compR->prevprevPos.x)> EPSILON && fabsf(compR->prevPos.x - compR->prevprevprevPos.x) > EPSILON)
 			{
 				// jitter
-				//compT->_position = compT->_phyposition;
+				compT->_position = compT->_phyposition;
 			}
 			else
 			{
@@ -287,10 +291,10 @@ namespace NS_PHYSICS
 				compT->_position.x = compT->_phyposition.x;
 			}
 
-			if ((compT->_phyposition.y == compR->prevprevPos.y) && (compR->prevPos.y == compR->prevprevprevPos.y))
+			if (fabsf(compT->_phyposition.y - compR->prevprevPos.y) > EPSILON && fabsf(compR->prevPos.y == compR->prevprevprevPos.y) > EPSILON)
 			{
 				// jitter
-				//compT->_position = compT->_phyposition;
+				compT->_position = compT->_phyposition;
 			}
 			else
 			{
@@ -298,10 +302,10 @@ namespace NS_PHYSICS
 				compT->_position.y = compT->_phyposition.y;
 			}
 
-			if ((compT->_phyposition.z == compR->prevprevPos.z) && (compR->prevPos.z == compR->prevprevprevPos.z))
+			if (fabsf(compT->_phyposition.z - compR->prevprevPos.z) > EPSILON && fabsf(compR->prevPos.z == compR->prevprevprevPos.z) > EPSILON)
 			{
 				// jitter
-				//compT->_position = compT->_phyposition;
+				compT->_position = compT->_phyposition;
 			}
 			else
 			{

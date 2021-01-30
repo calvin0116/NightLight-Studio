@@ -1,8 +1,8 @@
 {
     "window": {
         "fullscreen": false,
-        "width": 1920,
-        "height": 1080
+        "width": 1280,
+        "height": 800
     },
     "settings": {
         "master_volume": 37.5,

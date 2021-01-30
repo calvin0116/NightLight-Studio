@@ -34,16 +34,19 @@ void FluffyUnicornEngine::Run()
 		while (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() == NS_SCENE::SC_NOCHANGE)	
 		{
 			SYS_MAN->GameInit();
+			DELTA_T->load();
 			while (CONFIG_DATA->GetConfigData().sceneRunning)	//Scene / Game loop
 			{
 				//fps start
 				DELTA_T->start();
 
 				//Fixed update
-				while (DELTA_T->accumulatedTime >= DELTA_T->fixed_dt)
+				int step = DeltaTime::GetInstance()->GetCurrNumberOfSteps();
+				//while (DELTA_T->accumulatedTime >= DELTA_T->fixed_dt)
+				for (int i = 0; i < step; ++i)
 				{
-					DELTA_T->accumulatedTime -= DELTA_T->fixed_dt;
-					++DELTA_T->currentNumberOfSteps;
+					//DELTA_T->accumulatedTime -= DELTA_T->fixed_dt;
+					//++DELTA_T->currentNumberOfSteps;
 					SYS_MAN->FixedUpdate();
 				}
 				SYS_MAN->Update();		//Update

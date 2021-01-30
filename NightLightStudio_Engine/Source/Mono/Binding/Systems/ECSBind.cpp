@@ -65,12 +65,12 @@ namespace ECSBind
   // Delta Time
   float dt()
   {
-    return DELTA_T->dt;
+    return DELTA_T->real_dt;
   }
 
   float realDt()
   {
-    return DELTA_T->dt / CLOCKS_PER_SEC;
+      return DELTA_T->real_dt;// / CLOCKS_PER_SEC;
   }
 
   void SetNextScene(MonoString* scene_name)
