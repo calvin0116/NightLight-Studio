@@ -318,6 +318,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Ai\AiManager.cpp" />
+    <ClCompile Include="Source\Ai\WayPointManager.cpp" />
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
     <ClCompile Include="Source\Component\ComponentEmitter.cpp" />
     <ClCompile Include="Source\Component\ComponentWayPoint.cpp" />

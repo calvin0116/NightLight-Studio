@@ -19,6 +19,8 @@ namespace NS_AI
 		LocalVector<Edges> edges_list;
 		std::vector<ComponentCollider*> obstacle_list;
 
+		//LocalVector<WayPointMapComponent> wpm_list;
+
 		//Std::vector<NavMeshAgent*> navmesh_agent_list;
 		bool isActive;
 		bool runtimeUpdate;
@@ -101,19 +103,8 @@ namespace NS_AI
 
 		//void RemoveWayPoint(int index) {};
 		//Void RemoveObstacle(int index);
-
-		void Update() {
-			if(runtimeUpdate)
-				//Check if edges has any obstacle inbetween them
-				for (Edges& edge : edges_list)
-				{
-					for (ColliderComponent* obst : obstacle_list)
-						if (NlMath::RayToAABB(obst->collider.aabb, edge.wp1->GetPos(), edge.wp2->GetPos()))
-							edge.isActive = false;		//turn off something is inbetween
-														//** alternate idea may be have a new waypoint around the obstacle to go around it
-				}
-		
-		}; //Check for both edges and waypoint if they have been obstructed
+		void GameInit();
+		void Update(); //Check for both edges and waypoint if they have been obstructed
 
 		float Heuristic(NlMath::Vector3D end_point)
 		{

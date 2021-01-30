@@ -8,10 +8,11 @@
 typedef class ComponentWayPointMap : public ISerializable //: public IComponent
 {
 	LocalVector<ComponentWayPoint*> cur_path;
-
+	LocalVector<NS_AI::Edges> cur_edge;
 	float rad_for_detect = 25.0f;		//Default radius detection
 public:
 	LocalVector<LocalString<125>> way_point_list;	//Standard way point using entity to plot
+
 
 	ComponentWayPointMap()
 	{

@@ -41,6 +41,8 @@ inline void NS_AI::AiManager::GameInit()
 		++wpm_itr;
 	}
 
+	wp_man.GameInit();
+
 	auto nc_itr = G_ECMANAGER->begin<NavigatorComponent>();
 	auto nc_itrEnd = G_ECMANAGER->end<NavigatorComponent>();
 	
@@ -198,6 +200,8 @@ inline void NS_AI::AiManager::Update()
 
 		++itr;
 	}
+
+	wp_man.Update();
 }
 
 inline void NS_AI::AiManager::WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)
