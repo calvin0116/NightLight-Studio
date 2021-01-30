@@ -51,7 +51,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Camera": {
@@ -70,9 +71,16 @@
                 ],
                 "Rotate": [
                     0.0,
-                    0.0,
+                    -0.0,
                     0.0
                 ]
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "Hello",
+                "testint": 7,
+                "test2string": "test"
             }
         },
         "Plane": {
@@ -91,7 +99,7 @@
                 ],
                 "Rotate": [
                     0.0,
-                    0.0,
+                    -0.0,
                     0.0
                 ]
             },
@@ -166,7 +174,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_2_Wall_2": {
@@ -220,7 +229,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Tree_H10_8": {
@@ -274,7 +284,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall": {
@@ -328,7 +339,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_3_Wall_1": {
@@ -382,7 +394,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Tree_H10_2": {
@@ -436,7 +449,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Tree_H10_1": {
@@ -490,7 +504,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Tree_H10_7": {
@@ -544,7 +559,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Tree_H10_3": {
@@ -598,7 +614,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Tree_H10_4": {
@@ -652,7 +669,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Tree_H10_6": {
@@ -706,7 +724,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Tree_H10_5": {
@@ -760,7 +779,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_1": {
@@ -814,7 +834,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_2": {
@@ -868,7 +889,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_3_Wall_2": {
@@ -922,7 +944,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_3": {
@@ -976,7 +999,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_4": {
@@ -1030,7 +1054,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_5": {
@@ -1084,7 +1109,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_7": {
@@ -1138,7 +1164,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_6": {
@@ -1192,7 +1219,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_8": {
@@ -1246,7 +1274,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_9": {
@@ -1300,7 +1329,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_10": {
@@ -1354,7 +1384,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_11": {
@@ -1408,7 +1439,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_12": {
@@ -1462,7 +1494,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_13": {
@@ -1516,7 +1549,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_14": {
@@ -1570,7 +1604,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_15": {
@@ -1624,7 +1659,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_16": {
@@ -1678,7 +1714,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_17": {
@@ -1732,7 +1769,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_18": {
@@ -1786,7 +1824,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_19": {
@@ -1840,7 +1879,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_2_Wall_3": {
@@ -1894,7 +1934,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_2_Wall_4": {
@@ -1948,7 +1989,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         },
         "Height_4_Wall_15_copy": {
@@ -2002,7 +2044,8 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             }
         }
     }

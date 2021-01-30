@@ -37,12 +37,14 @@ namespace Unicorn
                                             // accumulated dt
     private float accumulatedDt = 0.0f;
 
+    bool invalidPath;
+
     //for Behaviour
     float pathSwitchTimer;
     float decisionTimer;
     bool thinking;
     bool possessed;
-
+    bool activate;
 
 
     public override void Init()
@@ -74,7 +76,23 @@ namespace Unicorn
       Move();
       Control();
 
-      if(enemyNavigator.NavState == 0)
+      if (activate == true)
+      {
+        //Set Player State to possessionstate
+        SwitchOnFunction();
+
+        if (script_Player.CurrentState == ScriptPlayer.State.Human)
+        {
+          SwitchOffFunction();
+          activate = false;
+        }
+
+
+      }
+
+
+
+      if (enemyNavigator.NavState == 0)
       {
         pathSwitchTimer += RealDT();
 
@@ -82,6 +100,7 @@ namespace Unicorn
         {
           enemyNavigator.NavState = 1;
           pathSwitchTimer = 0;
+
           if(thinking== false)
           {
             thinking = true;
@@ -105,11 +124,13 @@ namespace Unicorn
     public void ActivateWP(int ID)
     {
       enemyNavigator.SetWpActive(ID, true);
+      Print("Start");
     }
 
     public void DeactivateWP(int ID)
     {
       enemyNavigator.SetWpActive(ID, false);
+      Print("off");
     }
 
 
@@ -128,14 +149,18 @@ namespace Unicorn
 
         if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
         {
-
           // Set player script nextspawn position == possessionSpawnPos
-          script_Player.NextState = ScriptPlayer.State.Possessed;
+          //script_Player.NextState = ScriptPlayer.State.Possessed;
 
-         
+
           // Set Camera script  position == possessionSpawnPos
-          script_Player.camScript.tgtID = id; // Go and expose other tgt in scriptcamera.
-          possessed = true;
+          // script_Player.camScript.tgtID = id; // Go and expose other tgt in scriptcamera.
+
+          
+          activate = true;
+          ScriptPlayer.flying = false;
+
+          // possessed = true;
 
         }
 
@@ -160,27 +185,42 @@ namespace Unicorn
     public void Decision()
     {
       //======Init phase====//
-
+      //Print("Thinking");
 
       //---- Moth Logic----//
 
-      if (thinking == true)
+      if (thinking == true && invalidPath ==false )
       {
         decisionTimer += RealDT();
 
-        if (decisionTimer > 5.0f)
+        if (decisionTimer > 4.0f)
         {
           if (enemyNavigator.MoreThenOneWPActive())
           {
             enemyNavigator.NavState = 0;
+            
+            decisionTimer = 0;
+            Print("target");
             thinking = false;
           }
 
-          decisionTimer = 0;
+          else
+          {
+            Print("No target");
+            decisionTimer = 0;
+            Decision();
+          }
 
+          
+          
         }
 
       }
+
+      //else if (thinking == true && invalidPath == true)
+      //{
+      //  thinking = false;
+      //}
 
 
       // Wait for 1s 
@@ -276,5 +316,20 @@ namespace Unicorn
           enemyNavigator.speed -= 0.5f;
       }
     }
+
+    public void SwitchOnFunction()
+    {
+
+      GetTransform(player_ID).SetPosition(GetTransform(id).GetPosition());
+
+
+    }
+
+
+    public void SwitchOffFunction()
+    {
+
+    }
+
   }
 }

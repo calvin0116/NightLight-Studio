@@ -18,6 +18,7 @@ namespace Unicorn
     public bool isWaypoint;
     bool isOn;
     bool isLamp;
+    bool toggleOn;
 
 
     //Required Components
@@ -53,7 +54,7 @@ namespace Unicorn
       p_CamPos = GameObjectFind(possessionCamPos);
       p_SpawnPos = GameObjectFind(possessionSpawnPos);
       output_ID = GameObjectFind(output);
-     
+
       
 
 
@@ -75,7 +76,9 @@ namespace Unicorn
       {
         script_Lamp = GetScript(output_ID);
       }
-      
+
+      //activate = true;
+
     }
 
     public override void Update()
@@ -84,20 +87,47 @@ namespace Unicorn
       if (activate == true)
       {
         //Set Player State to possessionstate
-        SwitchOnFunction();
-      }
 
-      if ((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) || activate == false)
-      {
-        SwitchOffFunction();
-
-        //push out player
-        if (script_Player.CurrentState == ScriptPlayer.State.Possessed)
+        if (isOn == false)
         {
-          script_Player.NextState = ScriptPlayer.State.Human;
+         
+          
+          SwitchOnFunction();
+        }
+        else
+        {
+          activate = false;
+          Print("off");
+          SwitchOffFunction();
         }
 
+        
+
+        //if (script_Player.CurrentState == ScriptPlayer.State.Human)
+        //{
+        //  //
+          
+        //}
+
+
       }
+
+
+
+      
+
+
+      //if (activate == false || (isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) )
+      //{
+      //  SwitchOffFunction();
+
+      //  //push out player
+      //  if (script_Player.CurrentState == ScriptPlayer.State.Possessed)
+      //  {
+      //    script_Player.NextState = ScriptPlayer.State.Human;
+      //  }
+
+      //}
 
 
 
@@ -121,37 +151,25 @@ namespace Unicorn
 
 
       // Setting player spawn & Cam location
-      if (isActive == true && GetTransform(other).tag == 200)
+      if (isActive == true && other == player_ID)
       {
         if (script_Player.CurrentState == ScriptPlayer.State.Moth)
         {
-
-          // Set player script nextspawn position == possessionSpawnPos
-         script_Player.NextState = ScriptPlayer.State.Possessed;
-
-         Vector3 p_AfterSpawnPos = GetTransform(p_SpawnPos).GetPosition();
-         script_Player.spawnPoint = p_AfterSpawnPos;        
-
-          // Set Camera script  position == possessionSpawnPos
-
-
-          script_Player.camScript.tgtID = p_CamPos; // Go and expose other tgt in scriptcamera.
-
           activate = true;
+          Print("Activate");
+          // Set player script nextspawn position == possessionSpawnPos
+          script_Player.NextState = ScriptPlayer.State.Possessed;
+
+          Vector3 p_AfterSpawnPos = GetTransform(p_SpawnPos).GetPosition();
+          script_Player.spawnPoint = p_AfterSpawnPos;        
+
+         // Set Camera script  position == possessionSpawnPos
+          script_Player.camScript.tgtID = p_CamPos;  // Go and expose other tgt in scriptcamera.
+         
 
         }
 
-        //  if (isWaypoint == true)
-        //  {
-        //    SwitchOffFunction();
-        //  }
-
-        //  else
-        //  {
-        //    SwitchOnFunction();
-        //  }
-
-        //}
+        
 
 
       }
@@ -163,35 +181,75 @@ namespace Unicorn
       if (GetTransform(other).tag == 3)
       {
         isActive = false;
+
+       // SwitchOffFunction();
       }
+
+
+
     }
 
 
     public void SwitchOnFunction()
     {
+      
       if (type == 0)
       {
         script_Fan.SwitchOnFunction();
+        isOn = true;
+        activate = false;
       }
 
       else
       {
-        script_Lamp.ToggleSwitch();
+
+        if (toggleOn == false)
+        {
+          script_Lamp.SwitchOnFunction();
+          toggleOn = true;
+        }
+        else
+        {
+          script_Lamp.SwitchOffFunction();
+          toggleOn = false;
+        }
+
+        activate = false;
+
       }
 
+   
+     
     }
 
     public void SwitchOffFunction()
     {
+
+     
       if (type == 0)
       {
         script_Fan.SwitchOffFunction();
+        isOn = false;
+        activate = false;
       }
 
       else
       {
-        script_Lamp.ToggleSwitch();
+        if (toggleOn == false)
+        {
+          script_Lamp.SwitchOnFunction();
+          toggleOn = true;
+        }
+        else
+        {
+          script_Lamp.SwitchOffFunction();
+          toggleOn = false;
+        }
+        activate = false;
+
       }
+
+
     }
 
 

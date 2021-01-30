@@ -1,0 +1,115 @@
+{
+    "Name": "Generator",
+    "TransformComponent": {
+        "EntityName": "",
+        "Tag": 0,
+        "Position": [
+            -240.27420043945313,
+            -19.381256103515626,
+            -136.20846557617188
+        ],
+        "Scale": [
+            100.0,
+            99.99999237060547,
+            100.0
+        ],
+        "Rotate": [
+            0.0,
+            -0.0,
+            0.0
+        ]
+    },
+    "ColliderComponent": {
+        "colliderType": "AABB",
+        "tag": 1,
+        "isCollidable": true,
+        "Center": [
+            0.0,
+            50.0,
+            0.0
+        ],
+        "Extend": [
+            0.5,
+            0.5,
+            0.5
+        ],
+        "Rotation": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "RigidBody": {
+        "isStatic": true,
+        "isGravity": false,
+        "mass": 0.0,
+        "friction": 0.009999999776482582,
+        "Force": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Accelaration": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "GraphicsComponent": {
+        "isActive": true,
+        "Model": "box.fbx",
+        "Albedo": "",
+        "Normal": "",
+        "Metallic": "",
+        "Roughness": "",
+        "AmbientOcclusion": "",
+        "Specular": "",
+        "DiffuseMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "AmbientMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "SpecularMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "ShininessMat": 32.0,
+        "AlbedoMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "MetallicMat": 1.0,
+        "RoughnessMat": 0.5,
+        "Alpha": 1.0
+    },
+    "ScriptComponent": {
+        "isActive": true,
+        "isRunning": true,
+        "ScriptName": "Generator",
+        "activatebool": false,
+        "player_IDint": 0,
+        "cam_IDint": 0,
+        "output_IDint": 0,
+        "p_CamPosint": 0,
+        "p_SpawnPosint": 0,
+        "isWaypointbool": true
+    },
+    "ComponentVariables": {
+        "IntList": [
+            1
+        ],
+        "StringList": [
+            "GeneratorCam",
+            "GeneratorSpawn",
+            "StreetLight1"
+        ],
+        "FloatList": []
+    }
+}

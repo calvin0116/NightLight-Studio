@@ -6,11 +6,11 @@ namespace Unicorn
 {
   public class Hello : UniBehaviour
   {
-    Transform trans;
+    public int test = 0;
+    public string test2 = "AyeAyeAye!";
 
     public override void Init()
     {
-      trans = GetTransform(id);
     }
 
     public override void LateInit()
@@ -24,7 +24,10 @@ namespace Unicorn
     public override void FixedUpdate()
     {
       if(Input.GetKeyPress(VK.IKEY_SPACE))
-        trans.SetPosition(new Vector3(0.0f, trans.GetPosition().y + 1000.0f, 0.0f));
+      {
+        Print(test2);
+        Console.WriteLine(test2);
+      }
     }
 
     public override void OnCollisionEnter(int other) { Console.WriteLine("Collision Enter!"); }

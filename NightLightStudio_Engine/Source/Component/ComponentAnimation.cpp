@@ -36,6 +36,8 @@ void ComponentAnimation::StopAnimation()
 {
 	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play = false;
 	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_dt = 0.0f;
+	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_currAnim = "";
+	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_defaultAnim = "";
 }
 
 bool ComponentAnimation::IsFinished(const std::string& anim)
@@ -92,10 +94,17 @@ inline void ComponentAnimation::Read(Value& val)
 	else
 		NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_loop = val["Loop"].GetBool();
 
+	std::string currentAnim;
 	if (val.FindMember("CurrentAnimation") == val.MemberEnd())
 		std::cout << "No anim data has been found" << std::endl;
 	else
-		NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_currAnim = val["CurrentAnimation"].GetString();
+		currentAnim = val["CurrentAnimation"].GetString();
+
+	std::string defaultAnim;
+	if (val.FindMember("DefaultAnimation") == val.MemberEnd())
+		std::cout << "No anim data has been found" << std::endl;
+	else
+		defaultAnim = val["DefaultAnimation"].GetString();
 
 	int i = 0;
 	std::string animName = std::string("Animation").append(std::to_string(i));
@@ -105,6 +114,21 @@ inline void ComponentAnimation::Read(Value& val)
 		++i;
 		animName = std::string("Animation").append(std::to_string(i));
 	}
+
+	if (NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play)
+	{
+		if (!defaultAnim.empty())
+		{
+			PlayAnimation(defaultAnim);
+		}
+		else if (!currentAnim.empty())
+		{
+			PlayAnimation(currentAnim);
+		}
+	}
+
+	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_currAnim = currentAnim;
+	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_defaultAnim = defaultAnim;
 }
 
 inline Value ComponentAnimation::Write()
@@ -116,6 +140,7 @@ inline Value ComponentAnimation::Write()
 	NS_SERIALISER::ChangeData(&val, "Play", NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play);
 	NS_SERIALISER::ChangeData(&val, "Loop", NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_loop);
 	NS_SERIALISER::ChangeData(&val, "CurrentAnimation", rapidjson::StringRef(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_currAnim.c_str()));
+	NS_SERIALISER::ChangeData(&val, "DefaultAnimation", rapidjson::StringRef(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_defaultAnim.c_str()));
 
 	int i = 0;
 	for(auto& name : NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_allAnims)

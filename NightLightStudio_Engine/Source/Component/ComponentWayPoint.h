@@ -27,6 +27,13 @@ public:
 		return val;
 	}
 
+	virtual ComponentWayPoint* Clone()
+	{
+		ComponentWayPoint* newCWP = new ComponentWayPoint();
+		*newCWP = *this;
+		return newCWP;
+	}
+
 	glm::vec3 GetPos();
 
 } WayPointComponent;

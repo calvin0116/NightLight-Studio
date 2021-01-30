@@ -1,4 +1,4 @@
-#include "LevelEditor_Inspector.h"
+﻿#include "LevelEditor_Inspector.h"
 
 #include "LevelEditor_ECHelper.h"
 #include "../../Core/SceneManager.h"
@@ -9,7 +9,7 @@
 #include "../../Input/SystemInput.h"
 // Construct script
 #include "../../Logic/CScripts/AllScripts.h"
-//#include "../../Mono/MonoWrapper.h"
+#include "../../Mono/MonoWrapper.h"
 
 void InspectorWindow::Start()
 {
@@ -127,6 +127,11 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<WayPointComponent>();
 			entComp._ent.getComponent<WayPointComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(EmitterComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<EmitterComponent>();
+			entComp._ent.getComponent<EmitterComponent>()->Read(*entComp._rjDoc);
+		}
 
 		return comp;
 	};
@@ -219,6 +224,11 @@ void InspectorWindow::Start()
 			entComp.Copy(entComp._ent.getComponent<WayPointComponent>()->Write());
 			entComp._ent.RemoveComponent<WayPointComponent>();
 		}
+		else if (t == typeid(EmitterComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<EmitterComponent>()->Write());
+			entComp._ent.RemoveComponent<EmitterComponent>();
+		}
 
 		return std::any(entComp);
 	};
@@ -305,6 +315,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	//Standard bool for all component to use
 	_notRemove = true;
 
+	CameraComp(ent);
+
 	ColliderComp(ent);
 
 	AudioComp(ent);
@@ -320,6 +332,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	CanvasComp(ent);
 
 	AnimationComp(ent);
+
+	EmitterComp(ent);
 
   CScriptComp(ent);
 
@@ -950,6 +964,124 @@ void InspectorWindow::ScriptComp(Entity& ent)
 		if (ImGui::CollapsingHeader("Script component", &_notRemove))
 		{
 			ImGui::Checkbox("IsActive##CScript", &Script_comp->_isActive);
+
+      MonoClass* klass = nullptr;
+      void* iter = NULL;
+      MonoClassField* field = nullptr;
+      ScriptComponent::data& monoData = Script_comp->_MonoData;
+      if (monoData._pInstance)
+      {
+        klass = MonoWrapper::GetMonoClass(monoData._pInstance);
+        field = mono_class_get_fields(klass, &iter);
+      }
+      //ImGui::SameLine();
+      //// Get new values
+      //if (ImGui::Button("Refresh"))
+      //{
+      //  monoData._pInstance = MonoWrapper::ConstructObject(Script_comp->_ScriptName.toString());
+      //  monoData._GCHandle = MonoWrapper::ConstructGCHandle(Script_comp->_MonoData._pInstance);
+      //  int ID = ent.getId();
+      //  MonoWrapper::SetObjectFieldValue(monoData._pInstance, "id", ID);
+      //}
+      //}
+      // Loop through C# fields/variable
+      while (field)
+      {
+        // Name of variables
+        const char* var_name = mono_field_get_name(field);
+        // Type id
+        int var_typeid = mono_type_get_type(mono_field_get_type(field));
+        // To check for public fields/variables
+        unsigned var_flag = mono_field_get_flags(field);
+        if (var_flag == MONO_FIELD_ATTR_PUBLIC) // MONO_FIELD_ATTR_PUBLIC
+        {
+          bool bChanged = false; // If value changed, save it back to mono.
+          // Inspect values here
+          // Name of variable
+          std::string sName = std::string(var_name) + " : ";
+          _levelEditor->LE_AddText("\t");
+          ImGui::SameLine();
+          // type of variable
+          if (var_typeid == MONO_TYPE_BOOLEAN) // bool
+          {
+            //std::cout << "Bool" << std::endl;
+            sName += " bool";
+            bool typeBool = MonoWrapper::GetObjectFieldValue<bool>(monoData._pInstance, var_name);
+            if (ImGui::Checkbox(sName.c_str(), &typeBool))
+              MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeBool);
+          }
+          else if (var_typeid == MONO_TYPE_I4) // int
+          {
+            //std::cout << "Int" << std::endl;
+            sName += " int";
+            int typeInt = MonoWrapper::GetObjectFieldValue<int>(monoData._pInstance, var_name);
+            if (ImGui::InputInt(sName.c_str(), &typeInt))
+              MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeInt);
+          }
+          else if (var_typeid == MONO_TYPE_U4) // unsigned
+          {
+            //std::cout << "Unsigned" << std::endl;
+            sName += " unsigned";
+            int typeUnsigned = MonoWrapper::GetObjectFieldValue<unsigned>(monoData._pInstance, var_name);
+            if (ImGui::InputInt(sName.c_str(), &typeUnsigned))
+              MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeUnsigned);
+          }
+          else if (var_typeid == MONO_TYPE_R4) // float
+          {
+            //std::cout << "Float" << std::endl;
+            sName += " float";
+            float typeFloat = MonoWrapper::GetObjectFieldValue<float>(monoData._pInstance, var_name);
+            if (ImGui::InputFloat(sName.c_str(), &typeFloat))
+              MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeFloat);
+          }
+          else if (var_typeid == MONO_TYPE_R8) // double
+          {
+            //std::cout << "Double" << std::endl;
+            sName += " double";
+            double typeDouble = MonoWrapper::GetObjectFieldValue<double>(monoData._pInstance, var_name);
+            if (ImGui::InputDouble(sName.c_str(), &typeDouble))
+              MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeDouble);
+          }
+          else if (var_typeid == MONO_TYPE_STRING) // string
+          {
+            //std::cout << "String" << std::endl;
+            sName += " string";
+            MonoString* monoString = MonoWrapper::GetObjectFieldValue<MonoString*>(monoData._pInstance, var_name);
+            std::string saved;
+            ///**** For saving/getting ID ****/
+            //int i = 0;
+            //for (; i < Script_comp->_savedCount; ++i)
+            //{
+            //  // Found ID
+            //  if (var_name == Script_comp->_SavedID[i])
+            //    break;
+            //}
+            //if (i == Script_comp->_savedCount)
+            //{
+            //  Script_comp->_SavedID[i] = var_name;
+            //  ++Script_comp->_savedCount;
+            //}
+            ///************************/
+            if (monoString != nullptr)
+              saved = MonoWrapper::ToString(monoString);
+            //std::string& saved = Script_comp->_SavedStrings[i];
+            //std::cout << "Saved: " << saved << std::endl;
+            //std::cout << "Actual: " << Script_comp->_SavedStrings[i] << std::endl;
+            _levelEditor->LE_AddInputText(sName.c_str(), saved, 500, ImGuiInputTextFlags_EnterReturnsTrue, [&saved, &monoString, &var_name, &monoData]()
+              {
+                monoString = MonoWrapper::ToMonoString(saved);
+                MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, *monoString);
+              });
+          }
+          else
+          {
+            _levelEditor->LE_AddText(var_name);
+          }
+        }
+        // Move to next field
+        field = mono_class_get_fields(klass, &iter);
+        //ImGui::NewLine();
+      }
 			std::string tex = Script_comp->_ScriptName.toString();
       std::string old = tex;
 
@@ -958,17 +1090,6 @@ void InspectorWindow::ScriptComp(Entity& ent)
 			{
 				Script_comp->_ScriptName = tex;
 			});
-
-      //// Changes occured
-      //if (tex != old)
-      //{
-      //  std::cout << "Constructing _pScript..." << std::endl;
-      //  if (Script_comp->_MonoData._GCHandle) // Already has a script
-      //  {
-
-      //  }
-      //  cScript_comp->_pScript = AllScripts::Construct(tex);
-      //}
 		}
 
 		if (!_notRemove)
@@ -1082,6 +1203,7 @@ void InspectorWindow::AnimationComp(Entity& ent)
 		{
 			ImGui::Checkbox("IsActive##Animation", &anim->_isActive);
 
+			ImGui::Text("Current Animation: ");
 			auto it = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
 			while ( it != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
 			{
@@ -1089,9 +1211,24 @@ void InspectorWindow::AnimationComp(Entity& ent)
 				if (ImGui::Selectable(it->c_str(), &currAnim))
 				{
 					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim = it->c_str();
-					anim->StopAnimation();
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play = false;
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_dt = 0.0f;
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = "";
 				}
 				++it;
+			}
+
+			ImGui::Separator();
+			ImGui::Text("Default Animation: ");
+			auto it2 = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
+			while (it2 != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
+			{
+				bool defaultAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim == *it2;
+				if (ImGui::Selectable(std::string(it2->c_str()).append("##defaultAnim").c_str(), &defaultAnim))
+				{
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = it2->c_str();
+				}
+				++it2;
 			}
 
 			if (ImGui::Button("Preview Animation"))
@@ -1125,6 +1262,14 @@ void InspectorWindow::AnimationComp(Entity& ent)
 
 		ImGui::Separator();
 	}
+}
+
+void InspectorWindow::EmitterComp(Entity& ent)
+{
+}
+
+void InspectorWindow::CameraComp(Entity& ent)
+{
 }
 
 void InspectorWindow::CScriptComp(Entity& ent)
@@ -1519,7 +1664,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  VariablesComp",
 			"  NavComp",
 			"  WayPointPath",
-			"  WayPointComp"
+			"  WayPointComp",
+			"  Emitter"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -1599,6 +1745,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 				ent.AddComponent<CScriptComponent>();
         ENTITY_COMP_DOC comp{ ent, CScriptComponent().Write(),typeid(CScriptComponent).hash_code() };
         _levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+
 			}
 			break;
 		}
@@ -1679,6 +1826,15 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			break;
 		}
 
+		case 15: // Emitter
+		{
+			if (!ent.getComponent<EmitterComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, EmitterComponent().Write(), typeid(EmitterComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
 
 		}
 		//if (next_lol == nullptr)

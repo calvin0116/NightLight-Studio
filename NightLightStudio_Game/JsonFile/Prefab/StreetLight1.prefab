@@ -1,0 +1,113 @@
+{
+    "Name": "StreetLight1",
+    "TransformComponent": {
+        "EntityName": "StreetLight1",
+        "Tag": 0,
+        "Position": [
+            361.75775146484377,
+            14.077624320983887,
+            -284.6959533691406
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Rotate": [
+            0.0,
+            -0.0,
+            0.0
+        ]
+    },
+    "ColliderComponent": {
+        "colliderType": "AABB",
+        "tag": 1,
+        "isCollidable": true,
+        "Center": [
+            0.0,
+            100.0,
+            0.0
+        ],
+        "Extend": [
+            25.0,
+            155.0,
+            25.0
+        ],
+        "Rotation": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "RigidBody": {
+        "isStatic": true,
+        "isGravity": false,
+        "mass": 0.0,
+        "friction": 0.009999999776482582,
+        "Force": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Accelaration": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "GraphicsComponent": {
+        "isActive": true,
+        "Model": "asset\\model\\bugis_street_lamp.fbx",
+        "Albedo": "",
+        "Normal": "",
+        "Metallic": "",
+        "Roughness": "",
+        "AmbientOcclusion": "",
+        "Specular": "",
+        "DiffuseMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "AmbientMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "SpecularMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "ShininessMat": 32.0,
+        "AlbedoMat": [
+            1.0,
+            0.8078431487083435,
+            0.3529411852359772
+        ],
+        "MetallicMat": 1.0,
+        "RoughnessMat": 0.5,
+        "Alpha": 1.0
+    },
+    "ScriptComponent": {
+        "isActive": true,
+        "isRunning": true,
+        "ScriptName": "LampBehaviour",
+        "activatebool": false,
+        "player_IDint": 0,
+        "cam_IDint": 0,
+        "p_CamPosint": 0,
+        "p_SpawnPosint": 0,
+        "isWaypointbool": true
+    },
+    "ComponentVariables": {
+        "IntList": [
+            0,
+            1
+        ],
+        "StringList": [
+            "Moth1"
+        ],
+        "FloatList": []
+    }
+}

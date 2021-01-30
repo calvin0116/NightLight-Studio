@@ -80,4 +80,12 @@ public:
 		NS_SERIALISER::ChangeData(&val, "radius_for_detection", rad_for_detect);
 		return val;
 	}
+
+	virtual ComponentWayPointMap* Clone()
+	{
+		ComponentWayPointMap* newCWPM = new ComponentWayPointMap();
+		*newCWPM = *this;
+		return newCWPM;
+	}
+
 } WayPointMapComponent;
