@@ -262,6 +262,11 @@ namespace NS_GRAPHICS
     GraphicsSystem::GetInstance()->SetProjectionMatrix(fov);
   }
 
+	float CameraSystem::GetFOV()
+	{
+		return GetCurrentCamera().GetCameraFOV();
+	}
+
 	const float& CameraSystem::GetRotationSensitivity()
 	{
 		return _camera.GetRotationSensitivity();

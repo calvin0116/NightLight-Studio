@@ -86,6 +86,7 @@ namespace NS_GRAPHICS
 		void SetDragSensitivity(const float& sensitivity);
 		void SetZoomSensitivity(const float& sensitivity);
     void SetFOV(const float& fov);
+		float GetFOV();
 
 		const float& GetRotationSensitivity();
 		const float& GetDragSensitivity();

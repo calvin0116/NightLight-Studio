@@ -143,6 +143,11 @@ namespace NS_GRAPHICS
 			return cameraPitch;
 		}
 
+		float GetCameraFOV()
+		{
+			return cameraFOV;
+		}
+
     void SetCameraFOV(const float& fov)
     {
       cameraFOV = fov;
