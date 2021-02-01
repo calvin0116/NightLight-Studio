@@ -155,7 +155,11 @@ public:
 				//size_in_rad = itr->value.GetFloat();
 				wp_path_ent_name = itr->value.GetString();
 			}
-
+			if (itr->name == "circuling_rad")
+			{
+				//size_in_rad = itr->value.GetFloat();
+				circuling_rad = itr->value.GetFloat();
+			}
 		}
 	};
 	virtual Value	Write() { 
@@ -168,6 +172,7 @@ public:
 		NS_SERIALISER::ChangeData(&val, "radius_for_detection", size_in_rad);
 
 		NS_SERIALISER::ChangeData(&val, "WayPointMapName", rapidjson::StringRef(wp_path_ent_name.c_str()));
+		NS_SERIALISER::ChangeData(&val, "circuling_rad", circuling_rad);
 		return val;
 	};
 	virtual Value& Write(Value& val) { return val; };	
