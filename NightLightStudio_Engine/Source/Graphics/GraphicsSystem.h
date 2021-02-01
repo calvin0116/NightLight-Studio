@@ -140,6 +140,8 @@ namespace NS_GRAPHICS
 
         void SetHDRTexture(const std::string& filename);
 
+
+
     private:
 
         bool _hasInit;

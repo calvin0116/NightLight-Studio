@@ -5,6 +5,8 @@
 
 #include "../IO/Json/Config.h"
 
+#include "GraphicsSystem.h"
+
 #define TESTMOVETARGET 1
 
 namespace NS_GRAPHICS
@@ -253,6 +255,12 @@ namespace NS_GRAPHICS
 	{
 		_camera.SetZoomSensitivity(sensitivity);
 	}
+
+  void CameraSystem::SetFOV(const float& fov)
+  {
+    GetCurrentCamera().SetCameraFOV(fov);
+    GraphicsSystem::GetInstance()->SetProjectionMatrix(fov);
+  }
 
 	const float& CameraSystem::GetRotationSensitivity()
 	{
