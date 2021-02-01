@@ -24,7 +24,8 @@ void LE_Picking::LE_PickingRun()
 {
     if (!ImGui::IsAnyItemHovered()
         && !ImGuizmo::IsOver()
-        && SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IMOUSE_LBUTTON))
+        && SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IMOUSE_LBUTTON)
+        && !SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ALT))
     {
         //NS_GRAPHICS::CameraSystem& camSys = NS_GRAPHICS::CameraSystem::GetInstance();
         glm::vec2 pos = SYS_INPUT->GetSystemMousePos().GetRelativeLocation();
@@ -55,7 +56,7 @@ void LE_Picking::LE_PickingRun()
                 else if (ent.getComponent<ComponentCollider>()->GetColliderT() == COLLIDERS::SPHERE)
                 {
                     SphereCollider sphere = ent.getComponent<ComponentCollider>()->collider.sphere;
-                    if (NlMath::RayToSphere(sphere, startRay, endRay))
+                    if (NlMath::RayToSphere(sphere, startRay, endRay) >= 0.0f)
                     {
                         hitList.push_back(ent.getId());
                     }
