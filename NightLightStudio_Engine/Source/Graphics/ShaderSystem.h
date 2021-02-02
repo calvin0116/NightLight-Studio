@@ -85,6 +85,7 @@ namespace NS_GRAPHICS
 			UI_SCREENSPACE,
 			UI_WORLDSPACE,
 			PARTICLE,
+			PBR_LIGHTPASS,
 			TOTAL_SHADER //If shader type is this means GG
 		};
 

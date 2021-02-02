@@ -134,6 +134,8 @@ public:
 	// Sets a Windows Flag. Please use in Start.
 	void LE_SetWindowFlag(const std::string& name, const ImGuiWindowFlags& flag);
 
+	HWND LE_GetWindowHandle();
+
 	/**********************************************************************/
 
 	// std::function<void()> Mostly, use either helper functions OR lambdas

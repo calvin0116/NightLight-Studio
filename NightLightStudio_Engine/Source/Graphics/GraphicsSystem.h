@@ -67,6 +67,12 @@ namespace NS_GRAPHICS
         */
         void Init() override;
 
+        // IMPORTANT NOTE: MUST BE INITIALIZED AGAIN IF WINDOW SIZE IS CHANGED IN RUNTIME
+        bool InitFrameBuffers();
+
+        // Init screen "texture" quad
+        void InitScreenQuad();
+
         void Exit() override;
 
         void GameExit() override;
@@ -140,6 +146,10 @@ namespace NS_GRAPHICS
 
         void SetHDRTexture(const std::string& filename);
 
+        // Render screen "texture" quad for deferred shading
+        // Note: Shader program handling must be done outside of function
+        void RenderScreenQuad();
+
     private:
 
         bool _hasInit;
@@ -161,14 +171,13 @@ namespace NS_GRAPHICS
         unsigned _hdrID;
 
         // Deferred Shading Variables
-        GLuint _geometryBuffer;
-        unsigned int _geometryBufferPosition; // Position color buffer
-        unsigned int _geometryBufferNormalMapAndMetallic; // Normal + metallic map color buffer, normal map data will replace with polygon normals if no texture exists
-        unsigned int _geometryBufferAlbedoMapAndRoughness;// Albedo + roughness map color buffer
-
-        unsigned int _colorAttachments[3]
-            = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+        GLuint _geometryBuffer = 0;
+        unsigned int _rtPositionAlpha = 0;         // Position color buffer/render target
+        unsigned int _rtNormalMapAndMetallic = 0;  // Normal + metallic map color buffer/render target, normal map data will replace with polygon normals if no texture exists
+        unsigned int _rtAlbedoMapAndRoughness = 0; // Albedo + roughness map color buffer/render targets
+        unsigned int _rtAmbientOcclusion = 0;      // Ambient Occlusion mapping color buffer/render target 
         
+        GLuint _depthBuffer = 0; // Used to help determine screen pixel and its data for deferred light pass
 
         // Should NOT be calculated every frame
         glm::mat4 _projectionMatrix;
@@ -180,6 +189,10 @@ namespace NS_GRAPHICS
         glm::mat4 _orthoMatrix;
 
         float _testTimeElapsed;
+
+        // Screen Quad Variables (Deferred Shading)
+        GLuint screenQuadVAO = 0;
+        GLuint screenQuadVBO = 0;
     };
 
     //GLOBAL pointer to an instance of graphic system

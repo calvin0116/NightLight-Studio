@@ -170,6 +170,11 @@ void LevelEditor::LE_SetWindowFlag(const std::string& name, const ImGuiWindowFla
         }
 }
 
+HWND LevelEditor::LE_GetWindowHandle()
+{
+    return _window;
+}
+
 std::vector<float>* LevelEditor::LE_GetSystemsUsage()
 {
 #ifdef LEVELEDITOR_PERFORMANCE_METRICS

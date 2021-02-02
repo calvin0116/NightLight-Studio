@@ -175,6 +175,98 @@ namespace NS_GRAPHICS
 			debugManager->SetGridLength(CONFIG_DATA->GetConfigData()._gridSize);
 		}
 
+		// Set up frame buffers
+		bool checkFBO = InitFrameBuffers();
+
+#ifdef _DEBUG
+		if (!checkFBO)
+			std::cout << "ERROR: Unable to load frame buffer object (FN: NS_GRAPHICS::GraphicsSystem::InitFrameBuffers()" << std::endl;
+#endif
+		InitScreenQuad();
+	}
+
+	bool GraphicsSystem::InitFrameBuffers()
+	{
+		// Generate frame buffer object
+		glGenFramebuffers(1, &_geometryBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, _geometryBuffer);
+
+		// Generate data buffers for geometry buffer + render targets
+
+		// Position
+		glGenTextures(1, &_rtPositionAlpha);
+		glBindTexture(GL_TEXTURE_2D, _rtPositionAlpha);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _rtPositionAlpha, 0);
+
+		// Calculated normals/normal map + metallic
+		glGenTextures(1, &_rtNormalMapAndMetallic);
+		glBindTexture(GL_TEXTURE_2D, _rtNormalMapAndMetallic);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, _rtNormalMapAndMetallic, 0);
+		
+		// Albedo/Diffuse map + roughness
+		glGenTextures(1, &_rtAlbedoMapAndRoughness);
+		glBindTexture(GL_TEXTURE_2D, _rtAlbedoMapAndRoughness);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, _rtAlbedoMapAndRoughness, 0);
+
+		// Ambient Occlusion
+		glGenTextures(1, &_rtAmbientOcclusion);
+		glBindTexture(GL_TEXTURE_2D, _rtAmbientOcclusion);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, _rtAmbientOcclusion, 0);
+
+		// Tell opengl which color attachments to use for rendering
+		unsigned int _renderTargets[4]
+			= { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+		glDrawBuffers(4, _renderTargets);
+
+		// Depth buffer
+		glGenRenderbuffers(1, &_depthBuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, _depthBuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthBuffer);
+		// finally check if framebuffer is complete
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			return false;
+		}
+		
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// Frame buffers setup is complete, return true
+		return true;
+	}
+
+	void GraphicsSystem::InitScreenQuad()
+	{
+		float quadVertices[] = {
+			// positions        // texture Coords
+			-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+			 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+			 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		};
+		// setup plane VAO
+		glGenVertexArrays(1, &screenQuadVAO);
+		glGenBuffers(1, &screenQuadVBO);
+		glBindVertexArray(screenQuadVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, screenQuadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	}
 
 	void GraphicsSystem::Exit()
@@ -194,10 +286,6 @@ namespace NS_GRAPHICS
 		// Clears to gray bg
 		glClearColor(0.03f, 0.086f, 0.102f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-#ifdef DRAW_DEBUG_GRID
-		debugManager->Render(); // Render opaque objects first, in this case, our grid is most definitely opaque
-#endif
 
 #ifdef PBR_DRAWING
 		// Perform PBR update here
@@ -240,25 +328,59 @@ namespace NS_GRAPHICS
 		//auto compItr = _blendsorted.begin();
 		//auto compitrEnd = _blendsorted.end();
 
-		std::vector<ComponentGraphics*> _blended;
+		// Steps for deferred shading
+		/*
+			1) Bind geometry buffer(GL_FRAMEBUFFER)
+			2) Activate geometry pass shaders
+			3) Render as per normal to geometry pass shaders, BUT WITHOUT LIGHTS
+			4) Unbind geometry buffer/ set frame buffer to 0
+			5) call glClear again
+			6) Activate lighting pass shaders
+			7) Activate and bind render targets to textures(glActiveTexture, glBindTexture)
+			8) Set required uniforms and variables for light calculation
+			9) Render 2D screen filled quad (to draw scene onto a texture, which will serve as our "screen/view")
+			10) Bind geometry buffer again, this time with GL_READ_FRAMEBUFFER command
+			11) Bind GL_DRAW_FRAMEBUFFER to 0, this will set write to default framebuffer
+			12) 
+			// blit to default framebuffer. Note that this may or may not work as the internal formats of both the FBO and default framebuffer have to match.
+			// the internal formats are implementation defined. This works on all of my systems, but if it doesn't on yours you'll likely have to write to the
+			// depth buffer in another shader stage (or somehow see to match the default framebuffer's internal format with the FBO's internal format).
+			glBlitFramebuffer(0, 0, SCR_WIDTH, SCR_HEIGHT, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+			13) Unbind framebuffer/ set frame buffer to 0
+			14) **** MIGHT WANT TO RENDER UI AND SUCH AFTER INSTEAD
+		*/
 
-		//while(compItr != compitrEnd)
+		///////////////////////////////////////
+		// START OF DEFERRED SHADING
+
+		// Frame buffer was initiallly set up, so no further initialization is required
+		glBindFramebuffer(GL_FRAMEBUFFER, _geometryBuffer);
+
+		// Must be done once again for frame buffer
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Activate geometry pass shaders and render models (textured and non-textured)
+		// This will write to geometry buffer first
+		//TODO
+		///////////////////////////////////////////
+		// START OF DRAWING BASE MODELS
+
+		//std::vector<ComponentGraphics*> _blended;
+
 		while (itr != itrEnd)
 		{
 			ComponentGraphics* graphicsComp = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
-			//ComponentGraphics* graphicsComp = *compItr;
 
-			if (graphicsComp->GetAlpha() < 1.f)
+			/*if (graphicsComp->GetAlpha() < 1.f)
 			{
 				_blended.push_back(graphicsComp);
 				++itr;
 				continue;
-			}
+			}*/
 
 
 			Entity entity = G_ECMANAGER->getEntity(itr);
-			//Entity entity = G_ECMANAGER->getEntity(graphicsComp);
-			
+
 			ComponentAnimation* animComp = entity.getComponent<ComponentAnimation>();
 
 			if (graphicsComp->_modelID < 0)
@@ -298,8 +420,8 @@ namespace NS_GRAPHICS
 					}
 					else
 					{
-						std::string& defaultAnimation = animManager->_animControllers[animComp->_controllerID]->_defaultAnim;					
-						
+						std::string& defaultAnimation = animManager->_animControllers[animComp->_controllerID]->_defaultAnim;
+
 						if (!defaultAnimation.empty())
 						{
 							animManager->_animControllers[animComp->_controllerID]->PlayAnimation(defaultAnimation, animComp);
@@ -393,7 +515,7 @@ namespace NS_GRAPHICS
 				if (model->_isAnimated)
 				{
 					// If normal map does not exist
-					if(!graphicsComp->_normalID)
+					if (!graphicsComp->_normalID)
 						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
 					else
 						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
@@ -402,12 +524,12 @@ namespace NS_GRAPHICS
 				}
 				else
 				{
-					if(!graphicsComp->_normalID)
+					if (!graphicsComp->_normalID)
 						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
 					else
 						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
 				}
-				
+
 				// Update alpha
 				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
 
@@ -464,169 +586,601 @@ namespace NS_GRAPHICS
 		}
 
 
-		auto blendedItr = _blended.begin();
-		auto blendedItrEnd = _blended.end();
+		//auto blendedItr = _blended.begin();
+		//auto blendedItrEnd = _blended.end();
 
-		// Render objects with transparency
-		while (blendedItr != blendedItrEnd)
-		{
-			ComponentGraphics* graphicsComp = *blendedItr;
+		//// Render objects with transparency
+		//while (blendedItr != blendedItrEnd)
+		//{
+		//	ComponentGraphics* graphicsComp = *blendedItr;
 
-			Entity entity = G_ECMANAGER->getEntity(graphicsComp);
+		//	Entity entity = G_ECMANAGER->getEntity(graphicsComp);
 
-			ComponentAnimation* animComp = entity.getComponent<ComponentAnimation>();
+		//	ComponentAnimation* animComp = entity.getComponent<ComponentAnimation>();
 
-			if (graphicsComp->_modelID < 0)
-			{
-				++blendedItr;
-				continue;
-			}
+		//	if (graphicsComp->_modelID < 0)
+		//	{
+		//		++blendedItr;
+		//		continue;
+		//	}
 
-			if (!graphicsComp->_isActive)
-			{
-				++blendedItr;
-				continue;
-			}
+		//	if (!graphicsComp->_isActive)
+		//	{
+		//		++blendedItr;
+		//		continue;
+		//	}
 
-			Model* model = modelManager->_models[graphicsComp->_modelID];
+		//	Model* model = modelManager->_models[graphicsComp->_modelID];
 
-			// get transform component
-			ComponentTransform* transformComp = entity.getComponent<ComponentTransform>();
+		//	// get transform component
+		//	ComponentTransform* transformComp = entity.getComponent<ComponentTransform>();
 
-			glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
+		//	glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
 
-			if (animComp)
-			{
-				if (animComp->_isActive && model->_isAnimated)
-				{
-					glm::mat4 identity(1.0f);
-					double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
-					std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
-					if (!currAnimation.empty())
-					{
-						model->GetPose(currAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
-					}
-				}
-			}
+		//	if (animComp)
+		//	{
+		//		if (animComp->_isActive && model->_isAnimated)
+		//		{
+		//			glm::mat4 identity(1.0f);
+		//			double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
+		//			std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
+		//			if (!currAnimation.empty())
+		//			{
+		//				model->GetPose(currAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
+		//			}
+		//		}
+		//	}
 
-			if (graphicsComp->_renderType == RENDERTYPE::SOLID)
-			{
-				if (model->_isAnimated)
-				{
-					shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
-				}
-				else
-				{
-					shaderManager->StartProgram(ShaderSystem::PBR); // solid program
-				}
+		//	if (graphicsComp->_renderType == RENDERTYPE::SOLID)
+		//	{
+		//		if (model->_isAnimated)
+		//		{
+		//			shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
+		//		}
+		//		else
+		//		{
+		//			shaderManager->StartProgram(ShaderSystem::PBR); // solid program
+		//		}
 
-				// Update alpha
-				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
+		//		// Update alpha
+		//		glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
 
-				// Update model and uniform for material
-				glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
-				glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
-				glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+		//		// Update model and uniform for material
+		//		glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+		//		glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+		//		glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
 
-				if (model->_isAnimated)
-				{
-					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-					for (auto& mesh : model->_animatedMeshes)
-					{
-						glBindVertexArray(mesh->VAO);
-						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+		//		if (model->_isAnimated)
+		//		{
+		//			glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+		//			for (auto& mesh : model->_animatedMeshes)
+		//			{
+		//				glBindVertexArray(mesh->VAO);
+		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
-					}
-				}
-				else
-				{
-					for (auto& mesh : model->_meshes)
-					{
-						glBindVertexArray(mesh->VAO);
-						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+		//			}
+		//		}
+		//		else
+		//		{
+		//			for (auto& mesh : model->_meshes)
+		//			{
+		//				glBindVertexArray(mesh->VAO);
+		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
-					}
-				}
+		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+		//			}
+		//		}
 
-				shaderManager->StopProgram();
-			}
-			else // textured program
-			{
-				if (model->_isAnimated)
-				{
-					// If normal map does not exist
-					if (!graphicsComp->_normalID)
-						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
-					else
-						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
-					//glm::mat4 identity(1.0f);
-					//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
-				}
-				else
-				{
-					if (!graphicsComp->_normalID)
-						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
-					else
-						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
-				}
+		//		shaderManager->StopProgram();
+		//	}
+		//	else // textured program
+		//	{
+		//		if (model->_isAnimated)
+		//		{
+		//			// If normal map does not exist
+		//			if (!graphicsComp->_normalID)
+		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
+		//			else
+		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
+		//			//glm::mat4 identity(1.0f);
+		//			//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
+		//		}
+		//		else
+		//		{
+		//			if (!graphicsComp->_normalID)
+		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
+		//			else
+		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
+		//		}
 
-				// Update alpha
-				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
+		//		// Update alpha
+		//		glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
 
-				// Roughness Control
-				glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
-				glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+		//		// Roughness Control
+		//		glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+		//		glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
 
-				// Bind textures
-				// bind diffuse map
-				textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+		//		// Bind textures
+		//		// bind diffuse map
+		//		textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 
-				// bind metallic map
-				textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+		//		// bind metallic map
+		//		textureManager->BindMetallicTexture(graphicsComp->_metallicID);
 
-				// bind roughness map
-				textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+		//		// bind roughness map
+		//		textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
 
-				// bind ao map
-				textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+		//		// bind ao map
+		//		textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
 
-				// bind normal map
-				textureManager->BindNormalTexture(graphicsComp->_normalID);
+		//		// bind normal map
+		//		textureManager->BindNormalTexture(graphicsComp->_normalID);
 
-				if (model->_isAnimated)
-				{
-					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-					for (auto& mesh : model->_animatedMeshes)
-					{
-						glBindVertexArray(mesh->VAO);
+		//		if (model->_isAnimated)
+		//		{
+		//			glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+		//			for (auto& mesh : model->_animatedMeshes)
+		//			{
+		//				glBindVertexArray(mesh->VAO);
 
-						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
-					}
-				}
-				else
-				{
-					for (auto& mesh : model->_meshes)
-					{
-						glBindVertexArray(mesh->VAO);
+		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+		//			}
+		//		}
+		//		else
+		//		{
+		//			for (auto& mesh : model->_meshes)
+		//			{
+		//				glBindVertexArray(mesh->VAO);
 
-						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
-						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
-					}
-				}
+		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+		//			}
+		//		}
 
-				shaderManager->StopProgram();
-			}
-			++blendedItr;
-		}
+		//		shaderManager->StopProgram();
+		//	}
+		//	++blendedItr;
+		//}
+		// END OF DRAWING BASE MODELS
+		///////////////////////////////////////////
+
+		// Unbind
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Activate lighting pass shaders
+		shaderManager->StartProgram(ShaderSystem::PBR_LIGHTPASS);
+
+		// Set up processed G-buffer for light calculation
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _rtPositionAlpha);
+		glUniform1i(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "gPositionAlpha"), 0);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, _rtNormalMapAndMetallic);
+		glUniform1i(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "gNormalMetallic"), 1);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, _rtAlbedoMapAndRoughness);
+		glUniform1i(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "gAlbedoRoughness"), 2);
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, _rtAmbientOcclusion);
+		glUniform1i(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "gAmbientOcclusion"), 3);
+
+		// Render to a 2D screen quad for our view
+		RenderScreenQuad();
+
+		// Bind geometry buffer again, this time with GL_READ_FRAMEBUFFER command
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, _geometryBuffer);
+
+		// Bind GL_DRAW_FRAMEBUFFER to 0, this will set write to default framebuffer
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+		// Copies info(in this case, depth data)to a user-defined region of read framebuffer to user-defined region of draw framebuffer
+		glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// Then render other non-light affected stuff as per normal
+#ifdef DRAW_DEBUG_GRID
+		debugManager->Render(); // Render opaque objects first, in this case, our grid is most definitely opaque
+#endif
+		// END OF DEFERRED SHADING
+		///////////////////////////////////////
+
+		//std::vector<ComponentGraphics*> _blended;
+
+		////while(compItr != compitrEnd)
+		//while (itr != itrEnd)
+		//{
+		//	ComponentGraphics* graphicsComp = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
+		//	//ComponentGraphics* graphicsComp = *compItr;
+
+		//	if (graphicsComp->GetAlpha() < 1.f)
+		//	{
+		//		_blended.push_back(graphicsComp);
+		//		++itr;
+		//		continue;
+		//	}
+
+
+		//	Entity entity = G_ECMANAGER->getEntity(itr);
+		//	//Entity entity = G_ECMANAGER->getEntity(graphicsComp);
+		//	
+		//	ComponentAnimation* animComp = entity.getComponent<ComponentAnimation>();
+
+		//	if (graphicsComp->_modelID < 0)
+		//	{
+		//		++itr;
+		//		//++compItr;
+		//		continue;
+		//	}
+
+		//	if (!graphicsComp->_isActive)
+		//	{
+		//		++itr;
+		//		//++compItr;
+		//		continue;
+		//	}
+
+		//	Model* model = modelManager->_models[graphicsComp->_modelID];
+
+		//	// get transform component
+		//	ComponentTransform* transformComp = entity.getComponent<ComponentTransform>();
+
+		//	glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
+
+		//	if (animComp)
+		//	{
+		//		if (animComp->_isActive && model->_isAnimated)
+		//		{
+		//			if (animManager->_animControllers[animComp->_controllerID]->_play)
+		//			{
+		//				glm::mat4 identity(1.0f);
+		//				double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
+		//				std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
+		//				if (!currAnimation.empty())
+		//				{
+		//					model->GetPose(currAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
+		//				}
+		//			}
+		//			else
+		//			{
+		//				std::string& defaultAnimation = animManager->_animControllers[animComp->_controllerID]->_defaultAnim;					
+		//				
+		//				if (!defaultAnimation.empty())
+		//				{
+		//					animManager->_animControllers[animComp->_controllerID]->PlayAnimation(defaultAnimation, animComp);
+
+		//					glm::mat4 identity(1.0f);
+		//					double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
+		//					model->GetPose(defaultAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
+		//				}
+		//			}
+		//		}
+
+		//		// Test Codes
+		//		//if (entity.getComponent<ComponentTransform>()->_entityName.toString() == "Player")
+		//		//{
+		//		//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_K))
+		//		//	{
+		//		//		graphicsComp->AddModel("player_character_animationsworks.fbx");
+		//		//	}
+		//		//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_L))
+		//		//	{
+		//		//		graphicsComp->AddModel("New_Moth_B4.fbx");
+		//		//	}
+		//		//}
+
+		//		//if (entity.getComponent<ComponentTransform>()->_entityName.toString() == "Player")
+		//		//{
+		//		//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_J))
+		//		//	{
+		//		//		animComp->PlayAnimation("Switch1");
+		//		//	}
+
+		//		//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_K))
+		//		//	{
+		//		//		animComp->PlayAnimation("Walk1", true, 1.9, 3.108);
+		//		//	}
+
+		//		//	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_L))
+		//		//	{
+		//		//		animComp->PlayAnimation("Walk1");
+		//		//	}
+		//		//}
+		//	}
+
+		//	if (graphicsComp->_renderType == RENDERTYPE::SOLID)
+		//	{
+		//		if (model->_isAnimated)
+		//		{
+		//			shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
+		//		}
+		//		else
+		//		{
+		//			shaderManager->StartProgram(ShaderSystem::PBR); // solid program
+		//		}
+
+		//		// Update alpha
+		//		glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
+
+		//		// Update model and uniform for material
+		//		glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+		//		glUniform1f(shaderManager->GetRoughnessLocation(), graphicsComp->_pbrData._roughness);
+		//		glUniform1f(shaderManager->GetMetallicLocation(), graphicsComp->_pbrData._metallic);
+
+		//		if (model->_isAnimated)
+		//		{
+		//			glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+		//			for (auto& mesh : model->_animatedMeshes)
+		//			{
+		//				glBindVertexArray(mesh->VAO);
+		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+		//			}
+		//		}
+		//		else
+		//		{
+		//			for (auto& mesh : model->_meshes)
+		//			{
+		//				glBindVertexArray(mesh->VAO);
+		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+		//			}
+		//		}
+
+		//		shaderManager->StopProgram();
+		//	}
+		//	else // textured program
+		//	{
+		//		if (model->_isAnimated)
+		//		{
+		//			// If normal map does not exist
+		//			if(!graphicsComp->_normalID)
+		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
+		//			else
+		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
+		//			//glm::mat4 identity(1.0f);
+		//			//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
+		//		}
+		//		else
+		//		{
+		//			if(!graphicsComp->_normalID)
+		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
+		//			else
+		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
+		//		}
+		//		
+		//		// Update alpha
+		//		glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
+
+		//		// Roughness Control
+		//		glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+		//		glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+
+		//		// Bind textures
+		//		// bind diffuse map
+		//		textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+
+		//		// bind metallic map
+		//		textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+
+		//		// bind roughness map
+		//		textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+
+		//		// bind ao map
+		//		textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+
+		//		// bind normal map
+		//		textureManager->BindNormalTexture(graphicsComp->_normalID);
+
+		//		if (model->_isAnimated)
+		//		{
+		//			glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+		//			for (auto& mesh : model->_animatedMeshes)
+		//			{
+		//				glBindVertexArray(mesh->VAO);
+
+		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+		//			}
+		//		}
+		//		else
+		//		{
+		//			for (auto& mesh : model->_meshes)
+		//			{
+		//				glBindVertexArray(mesh->VAO);
+
+		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+		//			}
+		//		}
+
+		//		shaderManager->StopProgram();
+		//	}
+		//	++itr;
+		//	//++compItr;
+		//}
+
+
+		//auto blendedItr = _blended.begin();
+		//auto blendedItrEnd = _blended.end();
+
+		//// Render objects with transparency
+		//while (blendedItr != blendedItrEnd)
+		//{
+		//	ComponentGraphics* graphicsComp = *blendedItr;
+
+		//	Entity entity = G_ECMANAGER->getEntity(graphicsComp);
+
+		//	ComponentAnimation* animComp = entity.getComponent<ComponentAnimation>();
+
+		//	if (graphicsComp->_modelID < 0)
+		//	{
+		//		++blendedItr;
+		//		continue;
+		//	}
+
+		//	if (!graphicsComp->_isActive)
+		//	{
+		//		++blendedItr;
+		//		continue;
+		//	}
+
+		//	Model* model = modelManager->_models[graphicsComp->_modelID];
+
+		//	// get transform component
+		//	ComponentTransform* transformComp = entity.getComponent<ComponentTransform>();
+
+		//	glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
+
+		//	if (animComp)
+		//	{
+		//		if (animComp->_isActive && model->_isAnimated)
+		//		{
+		//			glm::mat4 identity(1.0f);
+		//			double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
+		//			std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
+		//			if (!currAnimation.empty())
+		//			{
+		//				model->GetPose(currAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
+		//			}
+		//		}
+		//	}
+
+		//	if (graphicsComp->_renderType == RENDERTYPE::SOLID)
+		//	{
+		//		if (model->_isAnimated)
+		//		{
+		//			shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
+		//		}
+		//		else
+		//		{
+		//			shaderManager->StartProgram(ShaderSystem::PBR); // solid program
+		//		}
+
+		//		// Update alpha
+		//		glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
+
+		//		// Update model and uniform for material
+		//		glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+		//		glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+		//		glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+
+		//		if (model->_isAnimated)
+		//		{
+		//			glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+		//			for (auto& mesh : model->_animatedMeshes)
+		//			{
+		//				glBindVertexArray(mesh->VAO);
+		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+		//			}
+		//		}
+		//		else
+		//		{
+		//			for (auto& mesh : model->_meshes)
+		//			{
+		//				glBindVertexArray(mesh->VAO);
+		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+		//			}
+		//		}
+
+		//		shaderManager->StopProgram();
+		//	}
+		//	else // textured program
+		//	{
+		//		if (model->_isAnimated)
+		//		{
+		//			// If normal map does not exist
+		//			if (!graphicsComp->_normalID)
+		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
+		//			else
+		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
+		//			//glm::mat4 identity(1.0f);
+		//			//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
+		//		}
+		//		else
+		//		{
+		//			if (!graphicsComp->_normalID)
+		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
+		//			else
+		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
+		//		}
+
+		//		// Update alpha
+		//		glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
+
+		//		// Roughness Control
+		//		glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+		//		glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+
+		//		// Bind textures
+		//		// bind diffuse map
+		//		textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+
+		//		// bind metallic map
+		//		textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+
+		//		// bind roughness map
+		//		textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+
+		//		// bind ao map
+		//		textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+
+		//		// bind normal map
+		//		textureManager->BindNormalTexture(graphicsComp->_normalID);
+
+		//		if (model->_isAnimated)
+		//		{
+		//			glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+		//			for (auto& mesh : model->_animatedMeshes)
+		//			{
+		//				glBindVertexArray(mesh->VAO);
+
+		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+		//			}
+		//		}
+		//		else
+		//		{
+		//			for (auto& mesh : model->_meshes)
+		//			{
+		//				glBindVertexArray(mesh->VAO);
+
+		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+		//			}
+		//		}
+
+		//		shaderManager->StopProgram();
+		//	}
+		//	++blendedItr;
+		//}
 #endif
 	}
 
@@ -826,5 +1380,11 @@ namespace NS_GRAPHICS
 	void GraphicsSystem::SetHDRTexture(const std::string& filename)
 	{
 		_hdrID = textureManager->GetTexture(filename);
+	}
+	void GraphicsSystem::RenderScreenQuad()
+	{
+		glBindVertexArray(screenQuadVAO);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		glBindVertexArray(0);
 	}
 }

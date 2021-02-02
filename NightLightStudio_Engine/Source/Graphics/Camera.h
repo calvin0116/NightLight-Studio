@@ -20,6 +20,8 @@ namespace NS_GRAPHICS
 
 	class Camera
 	{
+    float cameraFOV = 45.f;
+
 		// World/Global Up Vector
 		glm::vec3 globalUp;
 
@@ -86,6 +88,11 @@ namespace NS_GRAPHICS
 			//return rotate * translate;
 		}
 
+    const float& GetFOV()
+    {
+      return cameraFOV;
+    }
+
 		const glm::vec3& GetTarget()
 		{
 			return cameraTarget;
@@ -135,6 +142,16 @@ namespace NS_GRAPHICS
 		{
 			return cameraPitch;
 		}
+
+		float GetCameraFOV()
+		{
+			return cameraFOV;
+		}
+
+    void SetCameraFOV(const float& fov)
+    {
+      cameraFOV = fov;
+    }
 
 		void SetCameraTarget(const glm::vec3& target)
 		{
