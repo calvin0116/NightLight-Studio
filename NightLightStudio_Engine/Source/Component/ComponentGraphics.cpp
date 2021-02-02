@@ -3,6 +3,7 @@
 #include "../Graphics/ModelManager.h"
 #include "Components.h"
 #include "ComponentManager.h"
+#include <fstream>
 
 ComponentGraphics::ComponentGraphics()
 	: _isActive{ true },
@@ -431,4 +432,50 @@ inline Value ComponentGraphics::Write()
 	NS_SERIALISER::ChangeData(&val, "Alpha", _alpha);
 
 	return val;
+}
+
+bool ComponentGraphics::SaveMaterialDataFile(std::string filepath)
+{
+	if (_matDataVec.empty())
+	{
+		std::string name = "1";
+		_matDataVec.insert(std::pair<std::string, std::string>(name, name));
+	}
+	if (filepath.size())
+	{
+		// Write Material Data to a file
+		std::ofstream saveFile(filepath, std::ios::trunc);
+		if (saveFile.is_open())
+		{
+			// Mostly just for easy access
+			saveFile << _pbrData._albedo.x << " " <<  _pbrData._albedo.y << " " << _pbrData._albedo.z << "\n";
+			saveFile << _pbrData._metallic << "\n";
+			saveFile << _pbrData._roughness << "\n";
+			saveFile << _alpha << "\n";
+			saveFile.close();
+
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ComponentGraphics::LoadMaterialDataFile(std::string filepath)
+{
+	if (filepath.size())
+	{
+		std::ifstream loadFile(filepath);
+		if (loadFile.is_open())
+		{
+			std::string word;
+			loadFile >> word; _pbrData._albedo.x = std::stof(word);
+			loadFile >> word; _pbrData._albedo.y = std::stof(word);
+			loadFile >> word; _pbrData._albedo.z = std::stof(word);
+			loadFile >> word; _pbrData._metallic = std::stof(word);
+			loadFile >> word; _pbrData._roughness = std::stof(word);
+			loadFile >> word; _alpha = std::stof(word);
+			return true;
+		}
+	}
+	return false;
 }
