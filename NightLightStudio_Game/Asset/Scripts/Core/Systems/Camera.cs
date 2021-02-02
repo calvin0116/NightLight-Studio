@@ -52,5 +52,11 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void SetThirdPersonCamPitchAndYaw(float pitch, float yaw);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float GetFOV();
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void SetFOV(float fov);
   }
 }

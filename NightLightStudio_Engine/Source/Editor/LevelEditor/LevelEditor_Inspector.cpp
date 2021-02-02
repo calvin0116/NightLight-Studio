@@ -7,6 +7,9 @@
 #include <set>
 #include "LevelEditor_Console.h"
 #include "../../Input/SystemInput.h"
+
+#include "WindowsDialogBox.h"
+
 // Construct script
 #include "../../Logic/CScripts/AllScripts.h"
 #include "../../Mono/MonoWrapper.h"
@@ -792,8 +795,52 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 
 			ImGui::Separator();
 
-			ImGui::Text("Materials");
+			ImGui::Text("Materials   ");
+			ImGui::SameLine(ImGui::GetWindowWidth() - 40);
+			if (ImGui::SmallButton("V"))
+			{
+				ImGui::OpenPopup("SubMenuSettingsGraphics");
+			}
+			if (ImGui::BeginPopup("SubMenuSettingsGraphics"))
+			{
+				if (ImGui::Button("Save"))
+				{
+					// Do Stuff here
+					COMDLG_FILTERSPEC rgSpec[] =
+					{
+						{ L"*.mater", L"*.mater" }
+					};
+					// Gets the RELATIVE File Path to Save to
+					std::string fileToSaveTo = WindowsSaveFileBox(_levelEditor->LE_GetWindowHandle(), rgSpec, 1);
 
+					if (fileToSaveTo.size())
+					{
+						//... Save Material Data
+						graphics_comp->SaveMaterialDataFile(fileToSaveTo);
+					}
+
+					ImGui::CloseCurrentPopup();
+				}
+				if (ImGui::Button("Load"))
+				{
+					COMDLG_FILTERSPEC rgSpec[] =
+					{
+						{ L"*.mater", L"*.mater" }
+					};
+					// Gets the RELATIVE File Path to Open from
+					std::string fileToOpen = WindowsOpenFileBox(_levelEditor->LE_GetWindowHandle(), rgSpec, 1);
+
+					if (fileToOpen.size())
+					{
+						//... Load Material Data
+						graphics_comp->LoadMaterialDataFile(fileToOpen);
+					}
+					
+					// Do Stuff here
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
 			/*ImGui::ColorEdit3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
 
 			ImGui::ColorEdit3("Ambient##Graphics", glm::value_ptr(graphics_comp->_materialData._ambient));
