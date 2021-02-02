@@ -365,7 +365,6 @@ namespace NS_GRAPHICS
 
 		// Activate geometry pass shaders and render models (textured and non-textured)
 		// This will write to geometry buffer first
-		//TODO
 		///////////////////////////////////////////
 		// START OF DRAWING BASE MODELS
 
@@ -759,7 +758,7 @@ namespace NS_GRAPHICS
 		// Unbind
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Activate lighting pass shaders
 		shaderManager->StartProgram(ShaderSystem::PBR_LIGHTPASS);

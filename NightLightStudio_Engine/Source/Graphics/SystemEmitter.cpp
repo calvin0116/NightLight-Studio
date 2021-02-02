@@ -38,13 +38,13 @@ void NS_GRAPHICS::EmitterSystem::Update()
 {
 	if (_particleDrawing)
 	{
-		_shaderSystem->StartProgram(ShaderSystem::ShaderType::PARTICLE);
+		_shaderSystem->StartProgram(ShaderSystem::PARTICLE);
 
 		auto itr = G_ECMANAGER->begin<ComponentEmitter>();
 		auto itrEnd = G_ECMANAGER->end<ComponentEmitter>();
 		while (itr != itrEnd)
 		{
-			ComponentEmitter* emitter = reinterpret_cast<ComponentEmitter*>(*itr);
+			ComponentEmitter* emitter = G_ECMANAGER->getComponent<ComponentEmitter>(itr);
 
 			if (!emitter->_isActive)
 			{

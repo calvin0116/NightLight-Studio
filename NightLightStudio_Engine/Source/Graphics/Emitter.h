@@ -88,8 +88,12 @@ public:
 	void RespawnParticle();
 	unsigned FindUnused();
 	
+
+	// Comments
 	glm::vec3 RandomVec3();
 	
+
+	// Comments please
 	void InitBuffer();
 	void UpdateBuffer();
 	void SortParticle();

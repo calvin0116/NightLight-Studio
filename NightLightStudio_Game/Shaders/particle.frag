@@ -1,6 +1,8 @@
 #version 330 core
 
 in vec2 texCoords;
+in vec4 particleColour;
+
 out vec4 fragColor;
 
 // Fragment material

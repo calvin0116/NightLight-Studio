@@ -300,21 +300,20 @@ void Emitter::InitBuffer()
 	glBindVertexArray(_vao);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * numOfSides, &particleVertice[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(particleVertice), &particleVertice[0], GL_STATIC_DRAW);
+	// original square polygon 
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(0);
 
 	//Buffer orphan
 	glBindBuffer(GL_ARRAY_BUFFER, _posBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, _colBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
-
-	// original square polygon 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glEnableVertexAttribArray(0);
 	// centre positions and size of all particle
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, _colBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
 	// colour
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(2);
@@ -333,11 +332,19 @@ void Emitter::InitBuffer()
 
 void Emitter::UpdateBuffer()
 {
+	// Bind VAO
+
 	glBindBuffer(GL_ARRAY_BUFFER, _posBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
 
+	// Do glVertexAttribPointer and glEnableVertexAttribArray again as in line 312-313
+
 	glBindBuffer(GL_ARRAY_BUFFER, _colBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
+
+	// Do glVertexAttribPointer and glEnableVertexAttribArray again as in line 318-319
+
+	// Do glVertexAttribDivisor as in line 326-327
 }
 
 void Emitter::SortParticle()
