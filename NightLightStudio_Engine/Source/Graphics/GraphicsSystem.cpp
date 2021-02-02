@@ -151,12 +151,12 @@ namespace NS_GRAPHICS
 
 		// Enable depth buffering, this prevents fragments behind another fragment to be rendered
 		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
+		//glEnable(GL_BLEND);
 		//glEnable(GL_MULTISAMPLE);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Passes if the fragment's depth value is less than the stored depth value.
 		// This is the default, but we will call this function to be explicit
