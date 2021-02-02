@@ -436,11 +436,6 @@ inline Value ComponentGraphics::Write()
 
 bool ComponentGraphics::SaveMaterialDataFile(std::string filepath)
 {
-	if (_matDataVec.empty())
-	{
-		std::string name = "1";
-		_matDataVec.insert(std::pair<std::string, std::string>(name, name));
-	}
 	if (filepath.size())
 	{
 		// Write Material Data to a file
