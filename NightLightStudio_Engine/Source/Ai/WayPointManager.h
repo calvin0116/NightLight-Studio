@@ -15,8 +15,10 @@ namespace NS_AI
 	class WayPointManager
 	{
 		//from assignment: NavMesh.
-		LocalVector<WayPoint> waypoint_list;			//List of object
-		LocalVector<Edges> edges_list;
+		LocalVector<WayPoint*> waypoint_list;			//List of object
+
+		LocalVector<Edges> mem_edges_list;
+		LocalVector<Edges*> edges_list;
 		std::vector<ComponentCollider*> obstacle_list;
 
 		//LocalVector<WayPointMapComponent> wpm_list;
@@ -46,15 +48,70 @@ namespace NS_AI
 		};
 		*/
 	public:
-		//======Inserting circular way point======//
-		/*
-		WayPoint& InsertWayPoint(WayPoint wp, LocalVector<Edges*>* _edges_list = nullptr) {
-			//0 way point
-			//waypoint_list.push_back(std::shared_ptr<WayPoint>(new WayPoint(wp)));
-			waypoint_list.push_back(wp);
-			WayPoint& inserted_wp = waypoint_list.at(waypoint_list.size() - 1);
-			for (auto cur_wp : waypoint_list)
+		~WayPointManager()
+		{
+			for (WayPoint* wp : waypoint_list)
 			{
+				delete wp;
+			}
+			/*
+			for (Edges* edge : edges_list)
+			{
+				delete edge;
+			}*/
+		}
+
+		//void RemoveWayPoint(int index) {};
+		//Void RemoveObstacle(int index);
+		void Init();
+		void GameInit();
+		void Update(); //Check for both edges and waypoint if they have been obstructed
+
+
+		//======Inserting circular way point======//
+
+		void InsertWayPoint(WayPoint* wp, LocalVector<WayPoint*>* _wp_list = nullptr, LocalVector<Edges*>* _edges_list = nullptr) {
+			LocalVector<Edges*>* loc_edge_list;
+
+			if (_edges_list != nullptr)
+				loc_edge_list = _edges_list;
+			else
+				loc_edge_list = &edges_list;
+
+			LocalVector<WayPoint*>* loc_wp_list;
+			if (_wp_list != nullptr)
+				loc_wp_list = _wp_list;
+			else
+				loc_wp_list = &waypoint_list;
+
+			//waypoint_list.push_back(std::shared_ptr<WayPoint>(new WayPoint(wp)));
+			loc_wp_list->push_back(wp);
+
+			if (loc_wp_list->size() < 2)
+				return;
+
+			WayPoint* inserted_wp = wp;// loc_wp_list->back();
+			for (auto cur_wp : *loc_wp_list)
+			{
+				bool isObstructed = false;
+				for (auto obs : obstacle_list)
+				{
+					if (NlMath::RayToAABB(obs->collider.aabb, cur_wp->GetPos(), inserted_wp->GetPos()))
+					{
+						isObstructed = true;
+					}
+				}
+				if (!isObstructed)
+				{
+					mem_edges_list.push_back(Edges());
+					loc_edge_list->push_back(&mem_edges_list.back());
+
+					Edges* new_edge = loc_edge_list->at(edges_list.size() - 1);
+					new_edge->wp1 = inserted_wp;
+					new_edge->wp2 = cur_wp;
+					//  new_edge->distance_var.second = dist;
+				}
+				/*
 				float dist = NlMath::Sphere_SphereCollision(cur_wp.sphere_col, wp.sphere_col).length();
 				if (!dist)
 				{
@@ -71,10 +128,11 @@ namespace NS_AI
 					inserted_wp.connected_edges.push_back(&new_edge);
 					_edges_list->push_back(&new_edge);
 				}
+				*/
 			}
-			return inserted_wp;
+			//return inserted_wp;
 		}
-
+		/*
 		WayPoint& InsertWayPoint(NlMath::Vector3D position, float radius, int _ent_id = -1, LocalVector<Edges*>* _edges_list = nullptr)
 		{
 			WayPoint wp;
@@ -101,24 +159,20 @@ namespace NS_AI
 			obstacle_list.push_back(col_ptr);
 		};
 
-		//void RemoveWayPoint(int index) {};
-		//Void RemoveObstacle(int index);
-		void GameInit();
-		void Update(); //Check for both edges and waypoint if they have been obstructed
-
 		float Heuristic(NlMath::Vector3D end_point)
 		{
 			// -- Returns the furthest point from all the points to the end point
 			float result = 0;
-			for (WayPoint& wp : waypoint_list)
+			for (WayPoint* wp : waypoint_list)
 			{
-				float sqrtlen = (wp.GetPos() - end_point).sqrtlength();
+				float sqrtlen = (wp->GetPos() - end_point).sqrtlength();
 				if (sqrtlen > result)
 					result = sqrtlen;
 			}
 			return result;
 		}
 
+		void BakeEdge();
 
 		//Take in the path and edges to traverse
 		//Return if path has reached the end and the resulting path and its value

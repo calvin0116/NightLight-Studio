@@ -8,6 +8,14 @@
 
 #include "LocalString.h"
 
+const std::string S_OBS = "Obstacle";
+
+const std::vector<std::string>TAGNAMES =
+{
+	"None",
+	S_OBS
+};
+
 typedef class ComponentTransform  : public ISerializable//: public IComponent
 {
 public:
@@ -15,8 +23,9 @@ public:
 	//char* name;
 
 	LocalString<256> _entityName;
-  int _tag;
+	int _tag;
 
+	LocalVector<int> _tagNames;
 	//for collision check
 	NlMath::Vector3D _nextPos;
 

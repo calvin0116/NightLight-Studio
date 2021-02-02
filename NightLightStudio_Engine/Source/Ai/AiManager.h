@@ -17,7 +17,7 @@ namespace NS_AI
 		std::chrono::system_clock::time_point timeLastRound;
 		std::chrono::system_clock::time_point stepTime;
 
-		std::vector<Entity> Obstacle_list;
+		//std::vector<Entity> Obstacle_list;
 	protected:
 		friend Singleton<AiManager>;
 
@@ -42,12 +42,13 @@ namespace NS_AI
 
 		void NavBehaviour(NavigatorComponent* nav_comp);
 		//==================WayPointManager Fnc======================================//
-		/*
-		WayPoint& InsertWayPoint(WayPoint wp, LocalVector<Edges*>* _edges_list = nullptr)
-		{
-			wp_man.InsertWayPoint(wp, _edges_list);
-		}
 
+		
+		void InsertWayPoint(WayPoint* wp, LocalVector<WayPoint*>* _wp_list = nullptr,LocalVector<Edges*>* _edges_list = nullptr)
+		{
+			wp_man.InsertWayPoint(wp, _wp_list,_edges_list);
+		}
+		/*
 		WayPoint& InsertWayPoint(NlMath::Vector3D position, float radius, int _ent_id = -1, LocalVector<Edges*>* _edges_list = nullptr)
 		{
 			wp_man.InsertWayPoint(position, radius, _ent_id, _edges_list);
@@ -56,6 +57,10 @@ namespace NS_AI
 		//Select closest way point to move to
 		void FindClosestWP(NavigatorComponent* nav_comp, TransformComponent* trans_comp);
 
+		void InsertObstacle(ColliderComponent* c_comp)
+		{
+			wp_man.InsertObstacle(c_comp);
+		}
 
 		//=============Getter / Setter=================//
 		/*

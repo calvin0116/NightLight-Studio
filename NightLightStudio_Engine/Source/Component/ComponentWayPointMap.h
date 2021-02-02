@@ -7,8 +7,8 @@
 
 typedef class ComponentWayPointMap : public ISerializable //: public IComponent
 {
-	LocalVector<ComponentWayPoint*> cur_path;
-	LocalVector<NS_AI::Edges> cur_edge;
+	LocalVector<WayPointComponent*> cur_path;
+	LocalVector<NS_AI::Edges*> cur_edge;
 	float rad_for_detect = 25.0f;		//Default radius detection
 public:
 	LocalVector<LocalString<125>> way_point_list;	//Standard way point using entity to plot
@@ -24,9 +24,13 @@ public:
 		cur_path.clear();
 	}
 
-	LocalVector<WayPointComponent*> GetPath()
+	LocalVector<WayPointComponent*>& GetPath()
 	{
 		return cur_path;
+	}
+	LocalVector<NS_AI::Edges*>& GetEdge()
+	{
+		return cur_edge;
 	}
 
 	//Converts list of entity name to real entity for way point traversing
@@ -58,10 +62,18 @@ public:
 
 				if (way_point_list.size() == 0)
 					for (unsigned i = 0; i < string_list_val.Size(); ++i)
+					{
 						way_point_list.push_back(LocalString(string_list_val[i].GetString()));
+						WayPointComponent* wp_comp = G_ECMANAGER->getEntityUsingEntName(way_point_list.back()).getComponent<WayPointComponent>();
+						cur_path.push_back(wp_comp);
+
+					}
 				else
 					for (unsigned i = 0; i < string_list_val.Size(); ++i)
+					{
 						way_point_list.at(i) = LocalString(string_list_val[i].GetString());
+						cur_path.push_back(G_ECMANAGER->getEntityUsingEntName(way_point_list.at(i)).getComponent<WayPointComponent>());
+					}
 			}
 			if (itr->name == "radius_for_detection")
 			{
