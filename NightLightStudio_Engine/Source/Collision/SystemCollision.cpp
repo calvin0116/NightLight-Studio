@@ -1348,6 +1348,8 @@ namespace NS_COLLISION
 
 	int CollisionSystem::Check_RayCollision(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect, int k)
 	{
+		if (k == 1)
+			return Check_RayCollision(rayOrigin, rayEnd, intersect);
 
 		auto itr = G_ECMANAGER->begin<ComponentCollider>();
 		auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
