@@ -61,6 +61,12 @@ void ComponentGraphics::AddModel(std::string filename)
 	//	if (anim)
 	//	{
 	//		//Existing anim component
+	//		anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
+	//		AnimationController* animCtrl =  NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID];
+	//		for (auto& anims : NS_GRAPHICS::ModelManager::GetInstance()._models[_modelID]->_animations)
+	//		{
+	//			animCtrl->_allAnims.insert(anims.first);
+	//		}
 	//	}
 	//	else
 	//	{

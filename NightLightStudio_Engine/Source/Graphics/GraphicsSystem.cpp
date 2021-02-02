@@ -73,6 +73,7 @@ namespace NS_GRAPHICS
 		Render();
 
 		uiManager->Update();
+		emitterManager->Update();
 
 		//std::cout << "Time current passed: " << _testTimeElapsed << std::endl;
 	}
@@ -108,6 +109,7 @@ namespace NS_GRAPHICS
 		textureManager = &TextureManager::GetInstance();
 		uiManager = &UISystem::GetInstance();
 		animManager = &AnimationSystem::GetInstance();
+		emitterManager = &EmitterSystem::GetInstance();
 
 		//modelLoader->Init();
 		
@@ -123,6 +125,8 @@ namespace NS_GRAPHICS
 		lightManager->Init();
 
 		uiManager->Init();
+
+		emitterManager->Init();
 		
 		/*shaderManager->StartProgram(ShaderSystem::PBR);
 
