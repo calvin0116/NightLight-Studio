@@ -22,6 +22,7 @@ public:
 	float _emitterTime;
 	float _timePassed;
 
+	//Emitter transform variables
 	glm::vec3 _emitterPosition;
 	glm::vec3 _emitterRotation;
 	glm::vec3 _emitterScale;
@@ -80,23 +81,26 @@ public:
 	Emitter();
 	~Emitter();
 
+	//Helper functions for emitter to work
 	void AddTime(float dt);
-	float RandFloat();
-
+	float RandFloat(); // Between 0.0f to 1.0f
 	void InitParticles();
 	void ResetParticle(size_t index);
 	void RespawnParticle();
 	unsigned FindUnused();
 	
 
-	// Comments
+	// Generates a random unit vector3
 	glm::vec3 RandomVec3();
 	
 
-	// Comments please
+	//Prepares buffer
 	void InitBuffer();
+	//Updates the buffer due to size change
 	void UpdateBuffer();
+	//Sort Particle Container
 	void SortParticle();
+	//Update size changes to containers
 	void UpdateSize();
 
 	void Play();
