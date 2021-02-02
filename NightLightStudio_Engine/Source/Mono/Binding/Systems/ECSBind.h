@@ -16,8 +16,8 @@ namespace ECSBind
   // Print in console
   void  Print(MonoString* text);
   // Ray cast
-  int   RayCastIntersect(MonoObject* origin, MonoObject* endPos, MonoObject* intersect);
-  int   RayCast(MonoObject* origin, MonoObject* endPos);
+  int   RayCastIntersect(MonoObject* origin, MonoObject* endPos, MonoObject* intersect, int pos);
+  int   RayCast(MonoObject* origin, MonoObject* endPos, int pos);
   // Get components from object ID
   MonoObject* GetScript(int id);
   MonoObject* GetTransform(int id);
