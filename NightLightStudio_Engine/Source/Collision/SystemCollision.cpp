@@ -276,7 +276,7 @@ namespace NS_COLLISION
 
 
 
-		// test line aabb col
+		// // test line aabb col
 		//{
 		//	Entity boxTest = G_ECMANAGER->BuildEntity(std::string("newBox").append(std::to_string(test_count)));
 		//	++test_count;
@@ -299,7 +299,7 @@ namespace NS_COLLISION
 
 	void CollisionSystem::FixedUpdate()
 	{
-		 //test line col
+		// //test line col
 		//NlMath::Vec3 ray1Origin(-100.0f, 0.0f, 0.0f);
 		//NlMath::Vec3 ray1End(100.0f, 0.0f, 0.0f);
 		//Test_Ray(ray1Origin, ray1End);
@@ -308,6 +308,9 @@ namespace NS_COLLISION
 		//NlMath::Vec3 ray2End(100.0f, 200.0f, 0.0f);
 		//Test_Ray(ray2Origin, ray2End);
 
+		//NlMath::Vec3 ray3Origin(-100.0f, 100.0f, -100.0f);
+		//NlMath::Vec3 ray3End(100.0f, 200.0f, 100.0f);
+		//Test_Ray(ray3Origin, ray3End);
 
 		//draw debug mesh
 		if (true) // lmao was this prev -> if (doDrawLineMesh) <- caused a bug xD
@@ -1343,10 +1346,55 @@ namespace NS_COLLISION
 		return othId;
 	}
 
+	int CollisionSystem::Check_RayCollision(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect, int k)
+	{
+		if (k == 1)
+			return Check_RayCollision(rayOrigin, rayEnd, intersect);
+
+		auto itr = G_ECMANAGER->begin<ComponentCollider>();
+		auto itrEnd = G_ECMANAGER->end<ComponentCollider>();
+
+		bool gotCollide = false;
+
+		std::vector<std::tuple<float, int, NlMath::Vec3>> iSqLens; // list of id and intersect len and intersect
+
+		while (itr != itrEnd)
+		{
+			ComponentCollider* comCol = G_ECMANAGER->getComponent<ComponentCollider>(itr);
+
+			NlMath::Vec3 i;
+
+			float iSqLen = -1.0f;
+
+			if (Check_RayCollider(comCol, rayOrigin, rayEnd, i, iSqLen))
+			{
+				gotCollide = true;
+
+				iSqLens.push_back(std::tuple<float, int, NlMath::Vec3>(iSqLen, G_ECMANAGER->getObjId(itr), i));
+			}
+			++itr;
+		}
+
+		if (gotCollide)
+		{
+			if(iSqLens.size() < k) return -1; // ignore
+
+			// get kth smallest
+			std::nth_element(iSqLens.begin(), iSqLens.begin() + k - 1, iSqLens.end(), [](const std::tuple<float, int, NlMath::Vec3>& lhs, const std::tuple<float, int, NlMath::Vec3>& rhs)
+			{
+				return std::get<0>(lhs) < std::get<0>(rhs);
+			});
+			intersect = std::get<2>(iSqLens[k - 1]);
+			return std::get<1>(iSqLens[k - 1]);
+		}
+
+		return -1; // no collision
+	}
+
 	void CollisionSystem::Test_Ray(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd)
 	{
 		NlMath::Vec3 intersect(0.0f, 0.0f, 0.0f);
-		int othId = Check_RayCollision(rayOrigin, rayEnd, intersect);
+		int othId = Check_RayCollision(rayOrigin, rayEnd, intersect, 2);
 
 		if (othId > 0)
 		{
