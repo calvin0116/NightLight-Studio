@@ -24,7 +24,9 @@ public:
 	void SetEmitterID(const int& emitterID); // Help expose Alex
 	int GetEmitterID(); // Help expose Alex
 
-	void AddImage(std::string filename);      // Expose
+	void AddTexture(std::string filename);// Expose
+	void Play();// Help expose Alex
+	void Stop();// Help expose Alex
 
 	// Destructor, destroy all OpenGL objects via graphics system
 	~ComponentEmitter();
@@ -37,6 +39,7 @@ public:
 	{
 		ComponentEmitter* newcomp = new ComponentEmitter();
 		*newcomp = *this;
+		//_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
 		return newcomp;
 	}
 } EmitterComponent;

@@ -3,6 +3,7 @@
 #include "LevelEditor_ECHelper.h"
 #include "../../Core/SceneManager.h"
 #include "../../Graphics/GraphicsSystem.h"
+#include "../../Graphics/SystemEmitter.h"
 
 #include <set>
 #include "LevelEditor_Console.h"
@@ -134,6 +135,7 @@ void InspectorWindow::Start()
 		{
 			entComp._ent.AttachComponent<EmitterComponent>();
 			entComp._ent.getComponent<EmitterComponent>()->Read(*entComp._rjDoc);
+			entComp._ent.getComponent<EmitterComponent>()->_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
 		}
 
 		return comp;
@@ -230,6 +232,7 @@ void InspectorWindow::Start()
 		else if (t == typeid(EmitterComponent).hash_code())
 		{
 			entComp.Copy(entComp._ent.getComponent<EmitterComponent>()->Write());
+			NS_GRAPHICS::EmitterSystem::GetInstance().RemoveEmitterByID(entComp._ent.getComponent<EmitterComponent>()->_emitterID);
 			entComp._ent.RemoveComponent<EmitterComponent>();
 		}
 
@@ -1313,6 +1316,192 @@ void InspectorWindow::AnimationComp(Entity& ent)
 
 void InspectorWindow::EmitterComp(Entity& ent)
 {
+	EmitterComponent* emitter = ent.getComponent<EmitterComponent>();
+	if (emitter != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Emitter component", &_notRemove))
+		{
+			ImGui::Checkbox("IsActive##Emitter", &emitter->_isActive);
+
+			std::string tex = emitter->_image;
+			Emitter* emit = NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[emitter->_emitterID];
+			
+			const char* emitterType[TOTAL_SHAPE] = { "Sphere", "Cone" };
+			const char* currentEmitter = (emit->_type >= 0 && emit->_type < TOTAL_SHAPE) ? emitterType[emit->_type] : "";
+			ImGui::SliderInt("Type", (int*)&emit->_type, 0, TOTAL_SHAPE-1, currentEmitter);
+
+			_levelEditor->LE_AddInputText(std::string("Particle Image##"), tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&tex, &emitter]()
+				{
+					emitter->AddTexture(tex);
+					emitter->_image = tex;
+				});
+			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+				[this, &tex, &emitter](std::string* str)
+				{
+					std::string data = *str;
+					std::transform(data.begin(), data.end(), data.begin(),
+						[](unsigned char c)
+						{ return (char)std::tolower(c); });
+
+					std::string fileType = LE_GetFileType(data);
+					if (fileType == "png" || fileType == "tga" || fileType == "dds")
+					{
+						//SOIL doesnt deal with preceding slash
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
+						tex = data;
+						emitter->AddTexture(tex);
+						emitter->_image = tex;
+					}
+				});
+
+			ImGui::InputFloat("Duration Time", &emit->_durationPerCycle);
+			ImGui::InputFloat("Emission Rate", &emit->_emissionRate);
+
+			if (ImGui::InputScalar("Max Particles", ImGuiDataType_U32, &emit->_maxParticles))
+			{
+				emit->UpdateSize();
+			}
+
+			if (emit->_type == SPHERE)
+			{
+				ImGui::InputFloat("Angle", &emit->_spawnAngle);
+				ImGui::InputFloat("Radius", &emit->_radius);
+			}
+			if (ImGui::TreeNode("Particle Size"))
+			{
+				ImGui::Checkbox("Random Size", &emit->_randomizeSize);
+				if (emit->_randomizeSize)
+				{
+					ImGui::InputFloat("Minimum Size", &emit->_minParticleSize);
+					ImGui::InputFloat("Maximum Size", &emit->_maxParticleSize);
+				}
+				else
+				{
+					ImGui::InputFloat("Size", &emit->_maxParticleSize);
+				}
+				ImGui::TreePop();
+			}
+
+
+			if (ImGui::TreeNode("Particle Speed"))
+			{
+				ImGui::Checkbox("Random Speed", &emit->_randomizeSpeed);
+				if (emit->_randomizeSpeed)
+				{
+					ImGui::InputFloat("Minimum Speed", &emit->_minParticleSpeed);
+					ImGui::InputFloat("Maximum Speed", &emit->_maxParticleSpeed);
+				}
+				else
+				{
+					ImGui::InputFloat("Speed", &emit->_maxParticleSpeed);
+				}
+				ImGui::TreePop();
+			}
+
+			if (ImGui::TreeNode("Particle Lifespan"))
+			{
+				ImGui::Checkbox("Random LifeSpan", &emit->_randomizeLifespan);
+				if (emit->_randomizeLifespan)
+				{
+					ImGui::InputFloat("Minimum LifeSpan", &emit->_minLifespan);
+					ImGui::InputFloat("Maximum LifeSpan", &emit->_maxLifespan);
+				}
+				else
+				{
+					ImGui::InputFloat("LifeSpan", &emit->_maxLifespan);
+				}
+				ImGui::TreePop();
+			}
+
+			if (!emit->_colourOverTime)
+			{
+				if (ImGui::TreeNode("Particle Colour"))
+				{
+					ImGui::Checkbox("Random Colour", &emit->_randomizeColour);
+					if (emit->_randomizeColour)
+					{
+						float colourA[4] = { emit->_colourA.x, emit->_colourA.y, emit->_colourA.z, emit->_colourA.w };
+						ImGui::ColorEdit4("Colour Range Low", colourA);
+						emit->_colourA = { colourA[0], colourA[1], colourA[2], colourA[3] };
+			
+						float colourB[4] = { emit->_colourB.x, emit->_colourB.y, emit->_colourB.z, emit->_colourB.w };
+						ImGui::ColorEdit4("Colour Range High", colourB);
+						emit->_colourB = { colourB[0], colourB[1], colourB[2], colourB[3] };
+					}
+					else
+					{
+						float colour[4] = { emit->_colourB.x, emit->_colourB.y, emit->_colourB.z, emit->_colourB.w };
+						ImGui::ColorEdit4("Colour", colour);
+						emit->_colourB = { colour[0], colour[1], colour[2], colour[3] };
+					}
+					ImGui::TreePop();
+				}
+			}
+
+			ImGui::Checkbox("PreWarm##", &emit->_preWarm);
+			ImGui::Checkbox("Loop##", &emit->_loop);
+			ImGui::Checkbox("Burst##", &emit->_burst);
+			ImGui::Checkbox("Play##Particle", &emit->_play);
+			//emitter->Play();
+
+			//if (emit->_type == CONE)
+			//{
+			//	ImGui::Checkbox("Reverse", &emit->_reverse);
+			//}
+
+			if (ImGui::Checkbox("Follow", &emit->_follow))
+			{
+				if (emit->_play)
+				{
+					emit->Stop();
+					emit->Play();
+				}
+			}
+			ImGui::Checkbox("Fade", &emit->_fade);
+
+			if (ImGui::TreeNode("Special Behaviour"))
+			{
+				ImGui::Checkbox("Velocity over time", &emit->_velocityOverTime);
+				if (emit->_velocityOverTime)
+				{
+					ImGui::InputFloat("X", &emit->_velocity.x);
+					ImGui::InputFloat("Y", &emit->_velocity.y);
+				}
+
+				ImGui::Checkbox("Size over time", &emit->_sizeOverTime);
+				ImGui::Checkbox("Speed over time", &emit->_speedOverTime);
+				ImGui::Checkbox("Colour over time", &emit->_colourOverTime);
+				if (emit->_colourOverTime)
+				{
+					float colourStart[4] = { emit->_colourStart.x, emit->_colourStart.y, emit->_colourStart.z, emit->_colourStart.w };
+					ImGui::ColorEdit4("Colour Start", colourStart);
+					emit->_colourStart = { colourStart[0], colourStart[1], colourStart[2], colourStart[3] };
+
+					float colourEnd[4] = { emit->_colourEnd.x, emit->_colourEnd.y, emit->_colourEnd.z, emit->_colourEnd.w };
+					ImGui::ColorEdit4("Colour End", colourEnd);
+					emit->_colourEnd = { colourEnd[0], colourEnd[1], colourEnd[2], colourEnd[3] };
+				}
+
+				ImGui::TreePop();
+			}
+
+			if (ImGui::Button("Preview Particle"))
+			{
+				emit->Play();
+			}
+
+			if (ImGui::Button("Stop Particle"))
+			{
+				emit->Stop();
+			}
+		}
+
+		ImGui::Separator();
+	}
 }
 
 void InspectorWindow::CameraComp(Entity& ent)

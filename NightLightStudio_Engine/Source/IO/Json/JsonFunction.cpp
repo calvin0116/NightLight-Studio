@@ -228,6 +228,10 @@ namespace NS_SERIALISER {
             {
                 ReadComp<WayPointComponent>(Comp_list, entity, component_name);
             }
+            else if (component_name == "EmitterComponent")
+            {
+                ReadComp<EmitterComponent>(Comp_list, entity, component_name);
+            }
         }
     }
 }

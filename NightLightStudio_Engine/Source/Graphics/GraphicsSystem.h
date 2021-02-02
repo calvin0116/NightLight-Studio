@@ -15,6 +15,7 @@
 #include "TextureManager.h"
 #include "UISystem.h"
 #include "AnimationSystem.h"
+#include "SystemEmitter.h"
 
 #include "../glm/glm.hpp"   // glm::mat4
 
@@ -166,6 +167,7 @@ namespace NS_GRAPHICS
         TextureManager* textureManager;
         UISystem* uiManager;
         AnimationSystem* animManager;
+        EmitterSystem* emitterManager;
 
         //1 HDR PER SCENE
         unsigned _hdrID;

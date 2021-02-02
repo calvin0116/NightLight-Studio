@@ -18,7 +18,6 @@ ComponentCanvas::~ComponentCanvas()
 void ComponentCanvas::AddUI()
 {
 	_uiElements.push_back(UI_Element{});
-	_uiElements.sort();
 }
 
 void ComponentCanvas::RemoveUI(size_t index)
@@ -127,6 +126,7 @@ void ComponentCanvas::Read(Value& val)
 		_uiElements.push_back(toPush);
 	}
 
+	Sort();
 }
 
 Value ComponentCanvas::Write()
