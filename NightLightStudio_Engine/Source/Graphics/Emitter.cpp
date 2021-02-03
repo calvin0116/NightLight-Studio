@@ -29,8 +29,8 @@ Emitter::Emitter():
 	_vao{ 0 }, _vbo{ 0 }, _ebo{ 0 }, _posBuffer{ 0 }, _colBuffer{ 0 }, _particlesPosition{}, _particlesColour{}
 {
 	_particles.resize(_maxParticles);
-	_particlesPosition.resize(_maxParticles);
-	_particlesColour.resize(_maxParticles);
+	_particlesPosition.resize(_maxParticles, glm::vec4());
+	_particlesColour.resize(_maxParticles, glm::vec4(1.0f,1.0f,1.0f,1.0f));
 }
 
 Emitter::~Emitter()
@@ -305,16 +305,15 @@ void Emitter::InitBuffer()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(0);
 
-	//Buffer orphan
+	// centre positions and size of all particle
 	glBindBuffer(GL_ARRAY_BUFFER, _posBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
-	// centre positions and size of all particle
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(1);
 
+	// colour
 	glBindBuffer(GL_ARRAY_BUFFER, _colBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
-	// colour
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(2);
 
@@ -332,19 +331,21 @@ void Emitter::InitBuffer()
 
 void Emitter::UpdateBuffer()
 {
-	// Bind VAO
+	// Bind VAO else buffer stuff wont work
+	glBindVertexArray(_vao);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _posBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
-
-	// Do glVertexAttribPointer and glEnableVertexAttribArray again as in line 312-313
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _colBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(2);
 
-	// Do glVertexAttribPointer and glEnableVertexAttribArray again as in line 318-319
-
-	// Do glVertexAttribDivisor as in line 326-327
+	glVertexAttribDivisor(1, 1);
+	glVertexAttribDivisor(2, 1);
 }
 
 void Emitter::SortParticle()
@@ -355,8 +356,8 @@ void Emitter::SortParticle()
 void Emitter::UpdateSize()
 {
 	_particles.resize(_maxParticles);
-	_particlesPosition.resize(_maxParticles);
-	_particlesColour.resize(_maxParticles);
+	_particlesPosition.resize(_maxParticles, glm::vec4());
+	_particlesColour.resize(_maxParticles, glm::vec4(1.0f,1.0f,1.0f,1.0f));
 
 	UpdateBuffer();
 }

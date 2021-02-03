@@ -12,5 +12,5 @@ void main()
 {
 	vec4 image = texture(diffuse_texture, texCoords);
 	fragColor = image * particleColour;
-	//fragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	//fragColor = particleColour;
 }
