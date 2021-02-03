@@ -44,7 +44,7 @@ namespace NS_AI
 		//==================WayPointManager Fnc======================================//
 
 		
-		void InsertWayPoint(WayPoint* wp, LocalVector<WayPoint*>* _wp_list = nullptr,LocalVector<Edges*>* _edges_list = nullptr)
+		void InsertWayPoint(WayPoint* wp, LocalVector<WayPoint*>* _wp_list = nullptr,LocalVector<Edge*,256>* _edges_list = nullptr)
 		{
 			wp_man.InsertWayPoint(wp, _wp_list,_edges_list);
 		}
@@ -60,6 +60,25 @@ namespace NS_AI
 		void InsertObstacle(ColliderComponent* c_comp)
 		{
 			wp_man.InsertObstacle(c_comp);
+		}
+
+		void BakeEdge()
+		{
+			auto trans_itr = G_ECMANAGER->begin<TransformComponent>();
+			auto trans_itrEnd = G_ECMANAGER->end<TransformComponent>();
+
+			wp_man.ClearObstacle();
+			while (trans_itr != trans_itrEnd)
+			{
+				TransformComponent* trans_Comp = reinterpret_cast<TransformComponent*>(*trans_itr);
+				for (int& tagID : trans_Comp->_tagNames)
+					if (TAGNAMES[tagID] == S_OBS)
+						InsertObstacle(G_ECMANAGER->getEntity(trans_itr).getComponent<ColliderComponent>());
+
+				++trans_itr;
+			}
+
+			wp_man.BakeEdge();
 		}
 
 		//=============Getter / Setter=================//

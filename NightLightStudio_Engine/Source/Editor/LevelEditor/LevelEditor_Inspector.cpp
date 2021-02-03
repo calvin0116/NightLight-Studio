@@ -15,6 +15,8 @@
 #include "../../Logic/CScripts/AllScripts.h"
 #include "../../Mono/MonoWrapper.h"
 
+#include "../../Ai/AiManager.h"
+
 void InspectorWindow::Start()
 {
 	// Set up Command to run to move objects
@@ -1835,7 +1837,7 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 
 			if (ImGui::Button("Update WayPoint"))
 			{
-				
+				NS_AI::SYS_AI->BakeEdge();
 			}
 			int str_index = 1;
 

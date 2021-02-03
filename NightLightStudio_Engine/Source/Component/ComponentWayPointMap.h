@@ -1,14 +1,15 @@
 #pragma once
-#include "../Ai/WayPointManager.h"
+//#include "../Ai/WayPointManager.h"
 #include "..\\..\ISerializable.h"
 #include "ComponentWayPoint.h"
+#include "../Ai/AiGraph.h"
 
 //Component where it stores the list of way point and produce an map of paths
 
 typedef class ComponentWayPointMap : public ISerializable //: public IComponent
 {
 	LocalVector<WayPointComponent*> cur_path;
-	LocalVector<NS_AI::Edges*> cur_edge;
+	LocalVector<NS_AI::Edge*,256> cur_edge;
 	float rad_for_detect = 25.0f;		//Default radius detection
 public:
 	LocalVector<LocalString<125>> way_point_list;	//Standard way point using entity to plot
@@ -28,7 +29,7 @@ public:
 	{
 		return cur_path;
 	}
-	LocalVector<NS_AI::Edges*>& GetEdge()
+	LocalVector<NS_AI::Edge*, 256>& GetEdge()
 	{
 		return cur_edge;
 	}
