@@ -2,7 +2,7 @@
     "Objects": {
         "Plane": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "p",
                 "Tag": 0,
                 "Position": [
                     5.0,
@@ -67,7 +67,7 @@
                     0.0
                 ],
                 "Scale": [
-                    0.9942247271537781,
+                    0.9942009449005127,
                     0.9997184872627258,
                     0.9998233914375305
                 ],
@@ -169,6 +169,7 @@
                 "Play": true,
                 "Loop": true,
                 "CurrentAnimation": "Walk1",
+                "DefaultAnimation": "",
                 "Animation0": "Idle1",
                 "Animation1": "Switch1",
                 "Animation2": "Take 001",
@@ -183,7 +184,7 @@
                 ],
                 "FloatList": [
                     250000.0,
-                    100.0,
+                    250.0,
                     1000.0,
                     1.7999999523162842,
                     180.0
@@ -267,7 +268,7 @@
         },
         "Electric_Fan_1": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "efan",
                 "Tag": 0,
                 "Position": [
                     193.75,
@@ -287,7 +288,7 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "tag": 1,
+                "tag": 3,
                 "isCollidable": true,
                 "Center": [
                     0.0,
@@ -529,7 +530,7 @@
         },
         "DirectionalLight": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "ddddd",
                 "Tag": 0,
                 "Position": [
                     -31.25,
@@ -656,6 +657,7 @@
                 "isRunning": true,
                 "ScriptName": "LampBehaviour",
                 "activatebool": false,
+                "wayPointIDint": 0,
                 "player_IDint": 0,
                 "cam_IDint": 0,
                 "p_CamPosint": 0,
@@ -766,7 +768,7 @@
         },
         "Paths": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "ppppp",
                 "Tag": 0,
                 "Position": [
                     0.0,
@@ -908,12 +910,13 @@
                 "endTime": 2.0,
                 "speed": 100.0,
                 "radius_for_detection": 10.0,
-                "WayPointMapName": "Paths"
+                "WayPointMapName": "Paths",
+                "circuling_rad": 20.0
             }
         },
         "WayPoint_1": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "wp1",
                 "Tag": 0,
                 "Position": [
                     368.93182373046877,
@@ -971,7 +974,7 @@
         },
         "StreetLight3": {
             "TransformComponent": {
-                "EntityName": "StreetLight2",
+                "EntityName": "StreetLight3",
                 "Tag": 0,
                 "Position": [
                     160.37884521484376,
@@ -1064,6 +1067,7 @@
                 "isRunning": true,
                 "ScriptName": "LampBehaviour",
                 "activatebool": false,
+                "wayPointIDint": 0,
                 "player_IDint": 0,
                 "cam_IDint": 0,
                 "p_CamPosint": 0,
@@ -1083,7 +1087,7 @@
         },
         "WayPoint_2": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "wp2",
                 "Tag": 0,
                 "Position": [
                     -239.0659637451172,
@@ -1141,7 +1145,7 @@
         },
         "WayPoint_3": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "wp3",
                 "Tag": 0,
                 "Position": [
                     160.33526611328126,
@@ -1199,7 +1203,7 @@
         },
         "Generator": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "Gener",
                 "Tag": 0,
                 "Position": [
                     -240.27420043945313,
@@ -1219,7 +1223,7 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "tag": 1,
+                "tag": 2,
                 "isCollidable": true,
                 "Center": [
                     0.0,
@@ -1238,9 +1242,9 @@
                 ]
             },
             "RigidBody": {
-                "isStatic": true,
-                "isGravity": false,
-                "mass": 0.0,
+                "isStatic": false,
+                "isGravity": true,
+                "mass": 10000000.0,
                 "friction": 0.009999999776482582,
                 "Force": [
                     0.0,
@@ -1448,6 +1452,7 @@
                 "isRunning": true,
                 "ScriptName": "LampBehaviour",
                 "activatebool": false,
+                "wayPointIDint": 0,
                 "player_IDint": 0,
                 "cam_IDint": 0,
                 "p_CamPosint": 0,
