@@ -137,7 +137,7 @@ namespace ECSBind
     myEnd.y = MonoWrapper::GetObjectFieldValue<float>(end, "Y");
     myEnd.z = MonoWrapper::GetObjectFieldValue<float>(end, "Z");
 
-    return NS_COLLISION::SYS_COLLISION->Test_Ray(myOrigin, myEnd);
+    NS_COLLISION::SYS_COLLISION->Test_Ray(myOrigin, myEnd);
   }
 
   MonoObject* GetScript(int id)
