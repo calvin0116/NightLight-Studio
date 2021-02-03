@@ -159,19 +159,19 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 	
 	//Determine next way point and whether to move towards it out not
 	glm::vec3 wp_pos = navComp->GetCurWalkingWp()->GetPos();
-	wp_pos.y = 0.0f;
-	glm::vec3 mag_dir = wp_pos - navTrans->_position;	//Dir to the next way point
-	mag_dir.y = 0.0f;	//Ignore y axis
+	//wp_pos.y = 0.0f;
+	navComp->dir = wp_pos - navTrans->_position;	//Dir to the next way point
+	//mag_dir.y = 0.0f;	//Ignore y axis
 
 	switch (navComp->nav_state)
 	{
 		case NV_PATROL:
 		{
-			float len = glm::length(mag_dir);
+			float len = glm::length(navComp->dir);
 			if (len < navComp->size_in_rad)	//Check if Ai reached the way point
 			{
 				navComp->SetNextWp(nullptr);//Set next way point to be the target for navigation
-
+				navComp->dir = glm::normalize(navComp->dir);
 				/*
 				for (Entity& ent : Obstacle_list)
 				{
@@ -193,15 +193,15 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 			}
 			else
 			{
-				mag_dir = glm::normalize(mag_dir);
+				navComp->dir = glm::normalize(navComp->dir);
 				//NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//Move to way point
-				rb->velocity = mag_dir * navComp->speed;
+				rb->velocity = navComp->dir * navComp->speed;
 			}
 			break;
 		}
 		case NV_CIRCLING:
 		{
-			float len = glm::length(mag_dir);
+			float len = glm::length(navComp->dir);
 			if ((len - navComp->circuling_rad) < FLT_EPSILON)	//Check if Ai reached the way point
 			{
 				//Circular motion
@@ -213,13 +213,14 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 				glm::vec3 dir = Rotate * glm::vec4{ rev_dir , 1.0f };
 				dir = glm::normalize(dir);
 				rb->velocity = dir * navComp->speed;
+				navComp->dir = glm::normalize(dir);
 			}
 
 			else
 			{
-				mag_dir = glm::normalize(mag_dir);
+				navComp->dir = glm::normalize(navComp->dir);
 				//NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//Move to way point
-				rb->velocity = mag_dir * navComp->speed;
+				rb->velocity = navComp->dir * navComp->speed;
 			}
 			break;
 		}

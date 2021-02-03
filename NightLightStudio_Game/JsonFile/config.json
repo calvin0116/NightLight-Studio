@@ -1,8 +1,8 @@
 {
     "window": {
         "fullscreen": false,
-        "width": 1920,
-        "height": 1080
+        "width": 1080,
+        "height": 768
     },
     "settings": {
         "master_volume": 37.5,
@@ -16,6 +16,6 @@
         "gridColourGreen": 0.2681025564670563,
         "gridColourBlue": 0.7009804248809815,
         "gridColourAlpha": 0.9411764740943909,
-        "Gamma": 4.199999809265137
+        "Gamma": 28.700000762939454
     }
 }

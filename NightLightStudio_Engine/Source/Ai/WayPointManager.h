@@ -52,10 +52,11 @@ namespace NS_AI
 	public:
 		~WayPointManager()
 		{
+			/*
 			for (WayPoint* wp : waypoint_list)
 			{
 				delete wp;
-			}
+			}*/
 			/*
 			for (Edges* edge : edges_list)
 			{
@@ -65,7 +66,7 @@ namespace NS_AI
 
 		//void RemoveWayPoint(int index) {};
 		//Void RemoveObstacle(int index);
-		void Init();
+		void GameLoad();
 		void GameInit();
 		void Update(); //Check for both edges and waypoint if they have been obstructed
 

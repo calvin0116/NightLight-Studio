@@ -9,14 +9,6 @@ namespace NS_AI {
 
 	void WayPointManager::GameLoad()
 	{
-		auto itr = G_ECMANAGER->begin<WayPointMapComponent>();
-		auto itrEnd = G_ECMANAGER->end<WayPointMapComponent>();
-
-		while (itr != itrEnd)
-		{
-			WayPointMapComponent* wpm_comp = reinterpret_cast<WayPointMapComponent*>(*itr);
-			wpm_comp->InitPath();
-		}
 		/*
 		if (edges_list.size() == 0)
 		{
@@ -30,6 +22,7 @@ namespace NS_AI {
 	}
 
 	void WayPointManager::Update() {
+#ifdef _EDITOR
 		auto itr = G_ECMANAGER->begin<WayPointMapComponent>();
 		auto itrEnd = G_ECMANAGER->end<WayPointMapComponent>();
 
@@ -59,6 +52,7 @@ namespace NS_AI {
 			}
 			itr++;
 		}
+#endif
 		/**
 		if(runtimeUpdate)
 		//Check if edges has any obstacle inbetween them
