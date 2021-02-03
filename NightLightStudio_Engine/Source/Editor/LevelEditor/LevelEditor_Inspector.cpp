@@ -374,12 +374,17 @@ void InspectorWindow::TransformComp(Entity& ent)
 		{
 				trans_comp->_entityName = enam;
 		});
+		bool toRemove = false;
+		int index = 0;
 		for (int& tn : trans_comp->_tagNames)
 		{
-			_levelEditor->LE_AddCombo("##ADDTAGNAME" + std::to_string(tn), tn, TAGNAMES);
+			if (_levelEditor->LE_AddCombo("##ADDTAGNAME" + std::to_string(index), tn, TAGNAMES) && tn == 0 && trans_comp->_tagNames.size() > 1)
+				toRemove = true;
+			++index;
 		}
-
-		if (trans_comp->_tagNames.back() != 0)
+		if (toRemove)
+			trans_comp->_tagNames.pop_back();
+		if (trans_comp->_tagNames.size() > 1 && trans_comp->_tagNames.back() != 0)
 			trans_comp->_tagNames.push_back(0);
 
 	TransformGizmo(trans_comp);
