@@ -7,8 +7,16 @@ namespace NS_AI {
 
 
 
-	void WayPointManager::Init()
+	void WayPointManager::GameLoad()
 	{
+		auto itr = G_ECMANAGER->begin<WayPointMapComponent>();
+		auto itrEnd = G_ECMANAGER->end<WayPointMapComponent>();
+
+		while (itr != itrEnd)
+		{
+			WayPointMapComponent* wpm_comp = reinterpret_cast<WayPointMapComponent*>(*itr);
+			wpm_comp->InitPath();
+		}
 		/*
 		if (edges_list.size() == 0)
 		{

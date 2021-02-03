@@ -28,9 +28,16 @@ inline void NS_AI::AiManager::Init()
 
 	timeLastRound = timeThisRound = std::chrono::system_clock::now();
 
+
+
+
+	//wp_man.Init();
+}
+
+inline void NS_AI::AiManager::GameInit()
+{
 	auto trans_itr = G_ECMANAGER->begin<TransformComponent>();
 	auto trans_itrEnd = G_ECMANAGER->end<TransformComponent>();
-
 	while (trans_itr != trans_itrEnd)
 	{
 		TransformComponent* trans_Comp = reinterpret_cast<TransformComponent*>(*trans_itr);
@@ -40,18 +47,14 @@ inline void NS_AI::AiManager::Init()
 
 		++trans_itr;
 	}
-	wp_man.Init();
-}
 
-inline void NS_AI::AiManager::GameInit()
-{
 	auto wpm_itr = G_ECMANAGER->begin<WayPointMapComponent>();
 	auto wpm_itrEnd = G_ECMANAGER->end<WayPointMapComponent>();
 
 	while (wpm_itr != wpm_itrEnd)
 	{
 		WayPointMapComponent* wpmComp = reinterpret_cast<WayPointMapComponent*>(*wpm_itr);
-		//wpmComp->InitPath();
+		wpmComp->InitPath();
 		++wpm_itr;
 	}
 

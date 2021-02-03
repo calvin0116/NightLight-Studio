@@ -65,15 +65,15 @@ public:
 					for (unsigned i = 0; i < string_list_val.Size(); ++i)
 					{
 						way_point_list.push_back(LocalString(string_list_val[i].GetString()));
-						WayPointComponent* wp_comp = G_ECMANAGER->getEntityUsingEntName(way_point_list.back()).getComponent<WayPointComponent>();
-						cur_path.push_back(wp_comp);
+						//WayPointComponent* wp_comp = G_ECMANAGER->getEntityUsingEntName(way_point_list.back()).getComponent<WayPointComponent>();
+						//cur_path.push_back(wp_comp);
 
 					}
 				else
 					for (unsigned i = 0; i < string_list_val.Size(); ++i)
 					{
 						way_point_list.at(i) = LocalString(string_list_val[i].GetString());
-						cur_path.push_back(G_ECMANAGER->getEntityUsingEntName(way_point_list.at(i)).getComponent<WayPointComponent>());
+						//cur_path.push_back(G_ECMANAGER->getEntityUsingEntName(way_point_list.at(i)).getComponent<WayPointComponent>());
 					}
 			}
 			if (itr->name == "radius_for_detection")
