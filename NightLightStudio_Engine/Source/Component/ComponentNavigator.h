@@ -221,7 +221,7 @@ public:
 		case WPP_CUSTOM:	//Inserted beforehand
 		{}
 		}
-		SetNextWp(this);
+		//SetNextWp(this);
 	}
 	
 	void StopAtEachWPCheck()

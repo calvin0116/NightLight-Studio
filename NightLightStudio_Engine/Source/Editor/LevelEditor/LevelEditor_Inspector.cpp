@@ -15,6 +15,8 @@
 #include "../../Logic/CScripts/AllScripts.h"
 #include "../../Mono/MonoWrapper.h"
 
+#include "../../Ai/AiManager.h"
+
 void InspectorWindow::Start()
 {
 	// Set up Command to run to move objects
@@ -372,8 +374,15 @@ void InspectorWindow::TransformComp(Entity& ent)
 		{
 				trans_comp->_entityName = enam;
 		});
+		for (int& tn : trans_comp->_tagNames)
+		{
+			_levelEditor->LE_AddCombo("##ADDTAGNAME" + std::to_string(tn), tn, TAGNAMES);
+		}
 
-		TransformGizmo(trans_comp);
+		if (trans_comp->_tagNames.back() != 0)
+			trans_comp->_tagNames.push_back(0);
+
+	TransformGizmo(trans_comp);
     //ImGui::NewLine();
     //int tag = trans_comp->_tag;
 		/*
@@ -1817,13 +1826,19 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 			{
 				LocalString ls;
 				wpm_comp->way_point_list.push_back(ls);
+				wpm_comp->GetPath().push_back(nullptr);
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Remove WayPoint"))
 			{
 				wpm_comp->way_point_list.pop_back();
+				wpm_comp->GetPath().pop_back();
 			}
 
+			if (ImGui::Button("Update WayPoint"))
+			{
+				NS_AI::SYS_AI->BakeEdge();
+			}
 			int str_index = 1;
 
 			for (LocalString<125> & str : wpm_comp->way_point_list) //[path, name]
@@ -1832,15 +1847,25 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 
 				std::string s_name = str;
 				_levelEditor->LE_AddInputText(p, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
-					[&str, &s_name]()
+					[&str, &s_name, &wpm_comp, &str_index]()
 					{
-						str = s_name.c_str();
+						WayPointComponent* wpc = G_ECMANAGER->getEntityUsingEntName(str).getComponent<WayPointComponent>();
+						if (wpc != nullptr) {
+							wpm_comp->GetPath().at(str_index-1) = wpc;
+							str = s_name.c_str();
+						}
+						else
+						{
+							std::cout << "No entity with waypoint component found" << std::endl;
+						}
 					});
 				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
-					[this, &str](Entity* entptr)
+					[this, &str, &wpm_comp, &str_index](Entity* entptr)
 					{
 						WayPointComponent* wpc = entptr->getComponent<WayPointComponent>();
-						if (wpc != nullptr) {
+						if (wpc != nullptr) 
+						{
+							wpm_comp->GetPath().at(str_index - 1) = wpc;
 							str = G_ECMANAGER->EntityName[entptr->getId()];
 						}
 
@@ -1848,6 +1873,8 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 
 				str_index++;
 			}
+
+
 		}
 	}
 

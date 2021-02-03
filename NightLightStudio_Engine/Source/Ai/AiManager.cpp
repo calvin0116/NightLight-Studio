@@ -27,6 +27,20 @@ inline void NS_AI::AiManager::Init()
 		isActive = false;
 
 	timeLastRound = timeThisRound = std::chrono::system_clock::now();
+
+	auto trans_itr = G_ECMANAGER->begin<TransformComponent>();
+	auto trans_itrEnd = G_ECMANAGER->end<TransformComponent>();
+
+	while (trans_itr != trans_itrEnd)
+	{
+		TransformComponent* trans_Comp = reinterpret_cast<TransformComponent*>(*trans_itr);
+		for (int& tagID : trans_Comp->_tagNames)
+			if (TAGNAMES[tagID] == S_OBS)
+				InsertObstacle(G_ECMANAGER->getEntity(trans_itr).getComponent<ColliderComponent>());
+
+		++trans_itr;
+	}
+	wp_man.Init();
 }
 
 inline void NS_AI::AiManager::GameInit()
@@ -37,7 +51,7 @@ inline void NS_AI::AiManager::GameInit()
 	while (wpm_itr != wpm_itrEnd)
 	{
 		WayPointMapComponent* wpmComp = reinterpret_cast<WayPointMapComponent*>(*wpm_itr);
-		wpmComp->InitPath();
+		//wpmComp->InitPath();
 		++wpm_itr;
 	}
 
@@ -54,12 +68,14 @@ inline void NS_AI::AiManager::GameInit()
 		++nc_itr;
 	}
 
-	Obstacle_list = G_ECMANAGER->getEntityList("Obstacle");
+	//Obstacle_list = G_ECMANAGER->getEntityList("Obstacle");
 
 }
 
 inline void NS_AI::AiManager::Update()
 {
+	wp_man.Update();
+
 	if (!isActive)
 		return;
 	//currentNumberOfSteps = 0;
@@ -74,7 +90,7 @@ inline void NS_AI::AiManager::Update()
 		++itr;
 	}
 
-	wp_man.Update();
+
 }
 
 inline void NS_AI::AiManager::WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)
