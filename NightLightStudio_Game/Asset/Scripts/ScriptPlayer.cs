@@ -52,6 +52,7 @@ namespace Unicorn
     bool idle = true;
     bool played = false;
     bool switching = false;
+	public bool isDead = false;
 
     // spawn point
     public Vector3 spawnPoint;

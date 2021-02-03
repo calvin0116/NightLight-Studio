@@ -3,6 +3,9 @@
     "TransformComponent": {
         "EntityName": "Player",
         "Tag": 0,
+        "tagNames": [
+            0
+        ],
         "Position": [
             12.903614044189454,
             57.606937408447269,
@@ -86,11 +89,7 @@
             1.0
         ],
         "MetallicMat": 1.0,
-        "RoughnessMat": 0.5
-    },
-    "CScriptComponent": {
-        "isActive": true,
-        "Name": "Player",
-        "Tag": 0
+        "RoughnessMat": 0.5,
+        "Alpha": 1.0
     }
 }

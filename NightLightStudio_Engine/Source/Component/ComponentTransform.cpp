@@ -78,6 +78,21 @@ void ComponentTransform::Read(Value& val)
 		_rotation.y = rotate[1].GetFloat();
 		_rotation.z = rotate[2].GetFloat();
 	}
+
+	if (val.FindMember("tagNames") == val.MemberEnd())
+		std::cout << "No tagNames data has been found" << std::endl;
+	else
+	{
+		auto tn_list_val = val["tagNames"].GetArray();
+		if (_tagNames.size() == 0)
+			for (unsigned i = 0; i < tn_list_val.Size(); ++i)
+				_tagNames.push_back(tn_list_val[i].GetInt());
+		else
+			for (unsigned i = 0; i < tn_list_val.Size(); ++i)
+				_tagNames.at(i) = tn_list_val[i].GetInt();
+	}
+	if(_tagNames.size() == 0)
+		_tagNames.push_back(0);
 }
 
 Value ComponentTransform::Write()
@@ -86,6 +101,11 @@ Value ComponentTransform::Write()
 
 	NS_SERIALISER::ChangeData(&val, "EntityName", rapidjson::StringRef(_entityName.c_str())); // Entity Name
   NS_SERIALISER::ChangeData(&val, "Tag", _tag);
+
+  Value tn_list_val(rapidjson::kArrayType);
+  for (int& tn : _tagNames)
+	  tn_list_val.PushBack(tn, global_alloc);
+  NS_SERIALISER::ChangeData(&val, "tagNames", tn_list_val);
 
 	Value position(rapidjson::kArrayType);
 	position.PushBack(_position.x, global_alloc);

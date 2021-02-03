@@ -1,6 +1,7 @@
 #pragma once
 #include "..\\..\ISerializable.h"
-#include "../Ai/WayPointManager.h"
+//#include "../Ai/WayPointManager.h"
+#include "../Ai/AiGraph.h"
 
 typedef class ComponentWayPoint: public ISerializable, public NS_AI::WayPoint
 {
@@ -34,6 +35,6 @@ public:
 		return newCWP;
 	}
 
-	glm::vec3 GetPos();
+	glm::vec3& GetPos() override;
 
 } WayPointComponent;

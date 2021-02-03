@@ -7,7 +7,7 @@
 typedef class ComponentPath: public ISerializable //: public IComponent
 {
 	LocalVector<NS_AI::WayPoint*> way_point_list;
-	LocalVector<NS_AI::Edges*> edge_list;
+	LocalVector<NS_AI::Edge*> edge_list;
 public:
 	ComponentPath()
 	{

@@ -217,7 +217,7 @@ unsigned Emitter::FindUnused()
 {
 	for (unsigned i = _lastUsed; i < _maxParticles; ++i)
 	{
-		if (_particles[i]._alive)
+		if (!_particles[i]._alive)
 		{
 			_lastUsed = i;
 			return i;
@@ -226,7 +226,7 @@ unsigned Emitter::FindUnused()
 
 	for (unsigned i = 0; i < _lastUsed; ++i)
 	{
-		if (_particles[i]._alive)
+		if (!_particles[i]._alive)
 		{
 			_lastUsed = i;
 			return i;
@@ -346,6 +346,9 @@ void Emitter::UpdateBuffer()
 
 	glVertexAttribDivisor(1, 1);
 	glVertexAttribDivisor(2, 1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 void Emitter::SortParticle()
