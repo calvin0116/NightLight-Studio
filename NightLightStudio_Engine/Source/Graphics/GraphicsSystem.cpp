@@ -151,12 +151,13 @@ namespace NS_GRAPHICS
 
 		// Enable depth buffering, this prevents fragments behind another fragment to be rendered
 		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
+		//glEnable(GL_BLEND);
 		//glEnable(GL_MULTISAMPLE);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE);
 
 		// Passes if the fragment's depth value is less than the stored depth value.
 		// This is the default, but we will call this function to be explicit
@@ -297,41 +298,6 @@ namespace NS_GRAPHICS
 		auto itr = G_ECMANAGER->begin<ComponentGraphics>();
 		auto itrEnd = G_ECMANAGER->end<ComponentGraphics>();
 
-		// perhaps keep a vector of pointers of ComponentGraphics
-		// Use a lambda to compare based on the following priorities:
-		// 1) Opaque objects first(alpha = 1.f)
-		// 2) If transparent to any extent except for 1.f, sort based on distance from camera(get length of distance vector between cameraPos and meshPos)
-		//    from greatest to smallest (closer = later)
-
-		// Vector of all graphics components
-		//std::vector<ComponentGraphics*> _blendsorted;
-
-		//// Push all graphics component pointers to _blendsorted
-		//while (itr != itrEnd)
-		//{
-		//	_blendsorted.push_back(reinterpret_cast<ComponentGraphics*>(*itr));
-
-		//	++itr;
-		//}
-
-		//std::sort(_blendsorted.begin(), _blendsorted.end(), [&](ComponentGraphics* comp1, ComponentGraphics* comp2)
-		//	{
-		//		// Compare alpha first
-		//		if (comp1->GetAlpha() < comp2->GetAlpha())
-		//			return false;
-
-		//		// If alpha is the same, compare distance from camera
-		//		ComponentTransform* transformComp1 = G_ECMANAGER->getEntity(comp1).getComponent<ComponentTransform>();
-		//		ComponentTransform* transformComp2 = G_ECMANAGER->getEntity(comp2).getComponent<ComponentTransform>();
-
-		//		return (glm::length2(transformComp1->_position - cameraManager->GetCurrentCameraPosition())
-		//			    < glm::length2(transformComp2->_position - cameraManager->GetCurrentCameraPosition()) ? true : false);
-		//	}
-		//);
-
-		//auto compItr = _blendsorted.begin();
-		//auto compitrEnd = _blendsorted.end();
-
 		// Steps for deferred shading
 		/*
 			1) Bind geometry buffer(GL_FRAMEBUFFER)
@@ -352,7 +318,12 @@ namespace NS_GRAPHICS
 			glBlitFramebuffer(0, 0, SCR_WIDTH, SCR_HEIGHT, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 			13) Unbind framebuffer/ set frame buffer to 0
 			14) **** MIGHT WANT TO RENDER UI AND SUCH AFTER INSTEAD
+
+			// To deal with blending, perhaps turn off blending while rendering to fbo, then turn on again for transparent objects
 		*/
+
+		// To deal with transparent items
+		//std::vector<ComponentGraphics*> _blended;
 
 		///////////////////////////////////////
 		// START OF DEFERRED SHADING
@@ -365,11 +336,8 @@ namespace NS_GRAPHICS
 
 		// Activate geometry pass shaders and render models (textured and non-textured)
 		// This will write to geometry buffer first
-		//TODO
 		///////////////////////////////////////////
 		// START OF DRAWING BASE MODELS
-
-		//std::vector<ComponentGraphics*> _blended;
 
 		while (itr != itrEnd)
 		{
@@ -586,9 +554,54 @@ namespace NS_GRAPHICS
 				shaderManager->StopProgram();
 			}
 			++itr;
-			//++compItr;
 		}
 
+		// END OF DRAWING BASE MODELS
+		///////////////////////////////////////////
+
+		// Unbind
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Activate lighting pass shaders
+		shaderManager->StartProgram(ShaderSystem::PBR_LIGHTPASS);
+
+		// Set up processed G-buffer for light calculation
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _rtPositionAlpha);
+		glUniform1i(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "gPositionAlpha"), 0);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, _rtNormalMapAndMetallic);
+		glUniform1i(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "gNormalMetallic"), 1);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, _rtAlbedoMapAndRoughness);
+		glUniform1i(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "gAlbedoRoughness"), 2);
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, _rtAmbientOcclusion);
+		glUniform1i(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "gAmbientOcclusion"), 3);
+
+		// Render to a 2D screen quad for our view
+		RenderScreenQuad();
+
+		// Bind geometry buffer again, this time with GL_READ_FRAMEBUFFER command
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, _geometryBuffer);
+
+		// Bind GL_DRAW_FRAMEBUFFER to 0, this will set write to default framebuffer
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+		// Copies info(in this case, depth data)to a user-defined region of read framebuffer to user-defined region of draw framebuffer
+		//glBlitFramebuffer(_geometryBuffer, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// Then render other non-light affected stuff as per normal
+		// In here, we try to render transparent objects
+		// Enable glBlend here and disable afterwards
+		// Requires use of old shaders to render
+		// In other words, make way for older shaders to utilize blending as we are no longer in the lighting pass
+
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		//auto blendedItr = _blended.begin();
 		//auto blendedItrEnd = _blended.end();
@@ -753,45 +766,10 @@ namespace NS_GRAPHICS
 		//	}
 		//	++blendedItr;
 		//}
-		// END OF DRAWING BASE MODELS
-		///////////////////////////////////////////
 
-		// Unbind
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//glDisable(GL_BLEND);
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Activate lighting pass shaders
-		shaderManager->StartProgram(ShaderSystem::PBR_LIGHTPASS);
-
-		// Set up processed G-buffer for light calculation
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, _rtPositionAlpha);
-		glUniform1i(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "gPositionAlpha"), 0);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, _rtNormalMapAndMetallic);
-		glUniform1i(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "gNormalMetallic"), 1);
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, _rtAlbedoMapAndRoughness);
-		glUniform1i(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "gAlbedoRoughness"), 2);
-		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D, _rtAmbientOcclusion);
-		glUniform1i(glGetUniformLocation(shaderManager->GetCurrentProgramHandle(), "gAmbientOcclusion"), 3);
-
-		// Render to a 2D screen quad for our view
-		RenderScreenQuad();
-
-		// Bind geometry buffer again, this time with GL_READ_FRAMEBUFFER command
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, _geometryBuffer);
-
-		// Bind GL_DRAW_FRAMEBUFFER to 0, this will set write to default framebuffer
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
-		// Copies info(in this case, depth data)to a user-defined region of read framebuffer to user-defined region of draw framebuffer
-		glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		// Then render other non-light affected stuff as per normal
 #ifdef DRAW_DEBUG_GRID
 		debugManager->Render(); // Render opaque objects first, in this case, our grid is most definitely opaque
 #endif
