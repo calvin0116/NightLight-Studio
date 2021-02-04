@@ -399,6 +399,11 @@ void LevelEditor::LE_MainMenuBar()
        winFocus = true;
     }
 
+    if (ImGui::IsWindowHovered())
+    {
+        _lePicking.LE_PickingRun();
+    }
+
     ImGui::End();
 }
 
