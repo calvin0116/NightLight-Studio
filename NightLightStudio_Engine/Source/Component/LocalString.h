@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-//#include <algorithm>
 
 template<size_t N = 125>
 class LocalString
@@ -12,13 +11,15 @@ private:
 	// helper fn
 	bool copyFromString(const std::string& rhs)
 	{
-		//memcpy( stringData, rhs.c_str(), std::min(rhs.size(), N - 1) );
+		//size_t sz = rhs.size() < N - 1 ? rhs.size() : N - 1;
+		//memcpy(stringData, rhs.c_str(), sz);
 
-		size_t sz = rhs.size() < N - 1 ? rhs.size() : N - 1 ;
-		memcpy(stringData, rhs.c_str(), sz);
+		//sz = rhs.size() + 1 < N - 1 ? rhs.size() + 1 : N - 1;
+		//stringData[sz] = 0; // nani
+		//return rhs.size() > (N - 1);
 
-		sz = rhs.size() + 1 < N - 1 ? rhs.size() + 1 : N - 1;
-		stringData[sz] = 0; // nani
+		memcpy(stringData, rhs.c_str(), N - 1);
+		stringData[N - 2] = 0; // nani
 		return rhs.size() > (N - 1);
 	}
 	void copyFromLocalString(const LocalString& rhs)
