@@ -61,6 +61,8 @@ void NS_GRAPHICS::EmitterSystem::Update()
 			itr++;
 		}
 
+		glDisable(GL_BLEND);
+
 		_shaderSystem->StopProgram();
 	}
 }
@@ -137,17 +139,19 @@ void NS_GRAPHICS::EmitterSystem::UpdateEmitter(ComponentEmitter* emitter, float 
 		//Duration still within time passed or it is looping
 		else
 		{
-			if (_emitters[emitter->_emitterID]->_emitterTime > _emitters[emitter->_emitterID]->_emissionRate)
+			if (_emitters[emitter->_emitterID]->_emitterTime >= _emitters[emitter->_emitterID]->_emissionRate)
 			{
-				if (_emitters[emitter->_emitterID]->_burst)
+				_emitters[emitter->_emitterID]->_emitterTime = 0.0f;
+				_emitters[emitter->_emitterID]->RespawnParticle();
+			}
+
+
+			if (_emitters[emitter->_emitterID]->_burst)
+			{
+				if (_emitters[emitter->_emitterID]->_burstTime >= _emitters[emitter->_emitterID]->_burstRate)
 				{
-					_emitters[emitter->_emitterID]->_emitterTime = 0.0f;
-					_emitters[emitter->_emitterID]->InitParticles();
-				}
-				else
-				{
-					_emitters[emitter->_emitterID]->_emitterTime = 0.0f;
-					_emitters[emitter->_emitterID]->RespawnParticle();
+					_emitters[emitter->_emitterID]->_burstTime = 0.0f;
+					_emitters[emitter->_emitterID]->InitParticles(_emitters[emitter->_emitterID]->_burstAmount);
 				}
 			}
 		}

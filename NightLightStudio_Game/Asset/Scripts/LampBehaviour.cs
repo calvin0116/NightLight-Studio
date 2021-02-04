@@ -12,6 +12,7 @@ namespace Unicorn
     public int wayPointID;
     public int player_ID;
     public int cam_ID;
+    public int light_ID;
     public int p_CamPos;
     public int p_SpawnPos;
     int ai_ID;
@@ -22,12 +23,14 @@ namespace Unicorn
 
     //Required Components
     Variables ObjVariables;
+    Light lightSource;
     // Rigidbody
 
     //Variable Component Values
     //public static string possessionCamPos;
-   // public static string possessionSpawnPos;
+    // public static string possessionSpawnPos;
     public static string mothAIName;
+    public static string lightSourceName;
    // public int wayPointID;
    // public static int isSwitchOn;
    // public int onOff;
@@ -50,12 +53,18 @@ namespace Unicorn
       //wayPointID = ObjVariables.GetInt(0);
       //isSwitchOn = ObjVariables.GetInt(1);
       mothAIName = ObjVariables.GetString(0);
-
+      lightSourceName = ObjVariables.GetString(1);
 
 
       ai_ID = GameObjectFind(mothAIName);
 
-     
+      if(lightSourceName != null)
+      {
+        light_ID = GameObjectFind(lightSourceName);
+        lightSource = GetLight(light_ID);
+      }
+   
+
 
 
     }
@@ -69,12 +78,27 @@ namespace Unicorn
       if (isWaypoint == true)
       {
 
-        SwitchOnFunction();
+        
+        script_Moth.ActivateWP(wayPointID);
+
+        if (lightSource != null)
+        {
+          lightSource.isActive = true;
+        }
+
+        isOn = true;
       }
       else
       {
 
-        SwitchOffFunction();
+        
+        script_Moth.DeactivateWP(wayPointID);
+        isOn = false;
+
+        if (lightSource != null)
+        {
+          lightSource.isActive = false;
+        }
       }
 
     }
@@ -82,23 +106,7 @@ namespace Unicorn
     public override void Update()
     {
 
-      //if (activate == true)
-      //{
-      //   Set Player State to possessionstate
-      //  SwitchOnFunction();
-      //}
-
-      //if((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed)|| activate ==false )
-      //{
-      //   SwitchOffFunction();
-
-      //   push out player
-      //  if(script_Player.CurrentState == ScriptPlayer.State.Possessed)
-      //  {
-      //    script_Player.NextState = ScriptPlayer.State.Human;
-      //  }
-
-      //}
+     
 
 
 
@@ -112,45 +120,7 @@ namespace Unicorn
     {
 
 
-      //// Disable Function
-      //if (GetTransform(other).tag == 3)
-      //{
-      //  isActive = false;
-      //  Print("Disabled");
-
-      //}
-
-
-
-      //if (isActive == true && GetTransform(other).tag == 200)
-      //{
-      //  if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
-      //  {
-
-      //    // Set player script nextspawn position == possessionSpawnPos
-      //    script_Player.NextState = ScriptPlayer.State.Possessed;
-
-      //    Transform p_AfterSpawn = GetTransform(p_SpawnPos);
-      //    Vector3 p_AfterSpawnPos = p_AfterSpawn.GetPosition();
-      //    script_Player.spawnPoint = p_AfterSpawnPos;
-      //    // Set Camera script  position == possessionSpawnPos
-
-
-      //    script_Player.camScript.tgtID = p_CamPos; // Go and expose other tgt in scriptcamera.
-
-      //  }
-
-      //  if (isWaypoint == true)
-      //  {
-      //    SwitchOffFunction();
-      //  }
-
-      //  else
-      //  {
-      //    SwitchOnFunction();
-      //  }
-
-      //}
+     
 
 
     }
@@ -166,27 +136,20 @@ namespace Unicorn
     }
 
 
-    //public void ToggleSwitch()
-    //{
-      
-
-    //  if (isOn == true)
-    //  {
-    //    SwitchOffFunction();
-    //  }
-
-    //  else
-    //  {
-    //    SwitchOnFunction();
-    //  }
-
-    //}
+    
 
 
     public void SwitchOnFunction()
     {
+      Audio.PlayOnce("9");
       isWaypoint = true;
       script_Moth.ActivateWP(wayPointID);
+
+      if (lightSource != null)
+      {
+        lightSource.isActive = true;
+      }
+     
       isOn = true;
       
 
@@ -194,10 +157,16 @@ namespace Unicorn
 
     public void SwitchOffFunction()
     {
+      Audio.PlayOnce("10");
       isWaypoint = false;
       script_Moth.DeactivateWP(wayPointID);
       isOn = false;
-     
+
+      if (lightSource != null)
+      {
+        lightSource.isActive = false;
+      }
+      
     }
 
 

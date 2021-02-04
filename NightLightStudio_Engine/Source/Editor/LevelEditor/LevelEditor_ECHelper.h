@@ -37,11 +37,16 @@ public:
 	bool setFocus;
 
 	//==========Single select==============//
-	void SelectEntity(int id)
+	void SelectEntity(int id, bool multi)
 	{
 		//Deselect Previous entity
-		if(selected_ent_id!= -1)
-			DeSelectEntity(selected_ent_id);
+		if (selected_ent_id != -1 && !multi)
+		{
+			for (std::map<int, bool>::iterator it = selected_ents.begin(); it != selected_ents.end(); ++it)
+			{
+				DeSelectEntity(it->first);
+			}
+		}
 
 		if (prefab_inst.prefab_id != -1)
 		{

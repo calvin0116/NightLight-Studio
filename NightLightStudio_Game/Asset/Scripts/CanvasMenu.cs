@@ -60,7 +60,7 @@ namespace Unicorn
         {
           Print("next");
           //reset 
-          SetNextScene("GymLevel_Final");
+          SetNextScene("Level01_V2");
         }
 
 

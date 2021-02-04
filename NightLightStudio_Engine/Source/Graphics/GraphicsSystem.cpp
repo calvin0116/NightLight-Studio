@@ -240,6 +240,7 @@ namespace NS_GRAPHICS
 		glBindRenderbuffer(GL_RENDERBUFFER, _depthBuffer);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthBuffer);
+
 		// finally check if framebuffer is complete
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		{
@@ -591,6 +592,8 @@ namespace NS_GRAPHICS
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 		// Copies info(in this case, depth data)to a user-defined region of read framebuffer to user-defined region of draw framebuffer
+		glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width * 2, static_cast<int>(static_cast<float>(CONFIG_DATA->GetConfigData().height) * 1.9f), GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
+		//glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width * 2, CONFIG_DATA->GetConfigData().height * 2, GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
 		//glBlitFramebuffer(_geometryBuffer, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

@@ -70,17 +70,46 @@ namespace Unicorn
           break;
 
         case 5:
-          chnl = Audio.PlayBGM("1");
+          chnl = Audio.PlayBGM("4");
           break;
 
         case 6:
           chnl = Audio.PlayBGM("5");
           //Audio.SetBGMVol(0.5f);
           break;
+
+        case 7:
+          chnl = Audio.PlayBGM("6");
+          //Audio.SetBGMVol(0.5f);
+          break;
+        
+
       }
+
       return chnl;
     }
-   
+
+
+    public int PlaySFX(int index)
+    {
+      cc2 = 0;
+      switch (index)
+      {
+        case 1:
+          cc2 = Audio.PlayBGM("7");
+          break;
+
+        case 2:
+        Audio.PlayOnce("8");
+          break;
+
+      }
+
+      return cc2;
+    }
+
+
+
 
     public override void OnTriggerEnter(int other)
     {

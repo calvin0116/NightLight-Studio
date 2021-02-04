@@ -156,7 +156,7 @@ namespace Unicorn
           // Set Camera script  position == possessionSpawnPos
           // script_Player.camScript.tgtID = id; // Go and expose other tgt in scriptcamera.
 
-          
+          Audio.PlayOnce("13");
           activate = true;
           ScriptPlayer.flying = false;
 

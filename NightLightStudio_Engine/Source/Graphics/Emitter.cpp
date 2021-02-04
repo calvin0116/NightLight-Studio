@@ -16,9 +16,10 @@ float Emitter::RandFloat()
 }
 
 Emitter::Emitter():
-	_particles{}, _numAlive{ 0 }, _lastUsed{ 0 }, _emitterTime{ 0.0f }, _timePassed{ 0.0f }, _emitterPosition{}, _emitterRotation{},
-	_type{ EmitterShapeType::SPHERE }, _durationPerCycle{ 5.0f }, _emissionRate{ 1.0f }, _maxParticles{ 100 }, //Main particle data
-	_spawnAngle{ 30.0f }, _radius{ 100.0f }, //For cone and circle
+	_particles{}, _numAlive{ 0 }, _lastUsed{ 0 }, _emitterTime{ 0.0f }, _timePassed{ 0.0f }, _emitterPosition{}, _emitterRotation{},//Main particle data
+	_type{ EmitterShapeType::SPHERE }, _durationPerCycle{ 5.0f }, _emissionRate{ 1.0f }, _maxParticles{ 100 },//Main particle data
+	_burstTime{ 0.0f }, _burstRate{ 1.0f }, _burstAmount{ 20 },//Main particle data
+	_spawnAngle{ 30.0f }, _radius{ 100.0f }, //For cone and sphere
 	_randomizeSize{ false }, _minParticleSize{ 10 }, _maxParticleSize{ 100 }, //Particle Size
 	_randomizeSpeed{ false }, _minParticleSpeed{ 10 }, _maxParticleSpeed{ 100 }, //Particle Speed
 	_randomizeLifespan{ false }, _minLifespan{ 1.0f }, _maxLifespan{ 5.0f }, //Particle Lifespan
@@ -40,10 +41,11 @@ Emitter::~Emitter()
 void Emitter::AddTime(float dt)
 {
 	_emitterTime += dt;
+	_burstTime += dt;
 	_timePassed += dt;
 }
 
-void Emitter::InitParticles()
+void Emitter::InitAllParticles(bool prewarm)
 {
 	if (_numAlive == _maxParticles)
 	{
@@ -117,6 +119,12 @@ void Emitter::InitParticles()
 					_particles[i]._size = _maxParticleSize;
 				}
 
+				if (prewarm)
+				{
+					_particles[i]._timeAlive = RandFloat() * _particles[i]._lifespan;
+					_particles[i]._position += _particles[i]._velocity * _particles[i]._speed * _particles[i]._timeAlive;
+				}
+
 				//Remember to set it alive
 				_particles[i]._alive = true;
 
@@ -127,9 +135,22 @@ void Emitter::InitParticles()
 	}
 }
 
+void Emitter::InitParticles(unsigned amount)
+{
+	for (int i = 0; i < amount; ++i)
+	{
+		RespawnParticle();
+	}
+}
+
+void Emitter::PreWarmParticles()
+{
+	InitAllParticles(true);
+}
+
 void Emitter::ResetParticle(size_t index)
 {
-	if (_numAlive == _maxParticles)
+	if (_numAlive == _maxParticles || index >= _maxParticles)
 	{
 		return;
 	}
@@ -217,6 +238,10 @@ unsigned Emitter::FindUnused()
 {
 	for (unsigned i = _lastUsed; i < _maxParticles; ++i)
 	{
+		if (i >= _maxParticles)
+		{
+			break;
+		}
 		if (!_particles[i]._alive)
 		{
 			_lastUsed = i;
@@ -226,12 +251,18 @@ unsigned Emitter::FindUnused()
 
 	for (unsigned i = 0; i < _lastUsed; ++i)
 	{
+		if (i >= _maxParticles)
+		{
+			break;
+		}
 		if (!_particles[i]._alive)
 		{
 			_lastUsed = i;
 			return i;
 		}
 	}
+
+	return _maxParticles;
 }
 
 glm::vec3 Emitter::RandomVec3()
@@ -365,6 +396,13 @@ void Emitter::UpdateSize()
 	UpdateBuffer();
 }
 
+void Emitter::UpdateTransform(glm::vec3 pos, glm::vec3 rotate, glm::vec3 scale)
+{
+	_emitterPosition = pos;
+	_emitterRotation = rotate;
+	_emitterScale = scale;
+}
+
 void Emitter::Play()
 {
 	if (_play)
@@ -378,7 +416,7 @@ void Emitter::Play()
 
 	if (_preWarm)
 	{
-		InitParticles();
+		PreWarmParticles();
 	}
 }
 

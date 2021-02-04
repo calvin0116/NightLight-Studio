@@ -1459,6 +1459,12 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			ImGui::Checkbox("PreWarm##", &emit->_preWarm);
 			ImGui::Checkbox("Loop##", &emit->_loop);
 			ImGui::Checkbox("Burst##", &emit->_burst);
+			if (emit->_burst)
+			{
+				ImGui::InputFloat("Burst Rate", &emit->_burstRate);
+				ImGui::InputScalar("Burst Amount", ImGuiDataType_U32, &emit->_burstAmount);
+			}
+
 			ImGui::Checkbox("Play##Particle", &emit->_play);
 			//emitter->Play();
 
@@ -1471,8 +1477,8 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			{
 				if (emit->_play)
 				{
-					emit->Stop();
-					emit->Play();
+					emitter->Stop();
+					emitter->Play();
 				}
 			}
 			ImGui::Checkbox("Fade", &emit->_fade);
@@ -1505,12 +1511,12 @@ void InspectorWindow::EmitterComp(Entity& ent)
 
 			if (ImGui::Button("Preview Particle"))
 			{
-				emit->Play();
+				emitter->Play();
 			}
 
 			if (ImGui::Button("Stop Particle"))
 			{
-				emit->Stop();
+				emitter->Stop();
 			}
 		}
 
@@ -2239,6 +2245,25 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 
 					// Runs command to move object to new position from old position
 					_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
+
+
+					glm::vec3 vecMove = trans_comp->_position - glm::make_vec3(trans);
+					
+					std::map<int, bool>& SelectedEntities = LE_ECHELPER->SelectedEntities();
+					for (std::map<int, bool>::iterator iter = SelectedEntities.begin(); iter != SelectedEntities.end(); ++iter)
+					{
+						if (iter->second && iter->first != trans_comp->objId)
+						{
+							TransformComponent* otherSelects = G_ECMANAGER->getEntity(iter->first).getComponent<TransformComponent>();
+							glm::vec3 oldOthers = otherSelects->_position;
+							otherSelects->_position += vecMove;
+							glm::mat4 othersObj = otherSelects->GetModelMatrix();
+							otherSelects->_position = oldOthers;
+							ENTITY_LAST_POS otherObj{ otherSelects , othersObj };
+							std::any otherPos = otherObj;
+							_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), otherPos);
+						}
+					}
 				}
 				else if (_lastEnter)
 				{
