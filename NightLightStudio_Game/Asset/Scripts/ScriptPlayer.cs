@@ -85,13 +85,18 @@ namespace Unicorn
     int aMID;
     bool isPlaying;
     int chnl = -1;
+	
+	//Player states, for enemy interaction
+	public bool isDead = false;
+	public float health = 20.0f;
+
 
     public override void Init()
     {
-      
+
       aMID = GameObjectFind("AudioManager");
-      
-    
+
+
 
       CurrentState = State.Human;
       NextState = State.Human;
@@ -121,7 +126,7 @@ namespace Unicorn
       canMove = true;
       switching = false;
 
-     
+
 
       playerCharModel.AddModel(humanModePath);
     }
@@ -140,7 +145,7 @@ namespace Unicorn
       raycastID = RayCast(camPos + camDir * 400, camPos + camDir * 1000, 1);
       raycastID2 = RayCast(camPos + camDir * 400, camPos + camDir * 1000, 2);
       RayTest(camPos + camPos * 400, camPos + camDir * 1000);
-      
+
       if (raycastID != -1)
       {
         Collider col = GetCollider(raycastID);
@@ -311,7 +316,7 @@ namespace Unicorn
         //if (anim.IsFinished("Switch1"))
         //{
         //  //
-         
+
         //  canMove = true;
         //  NextState = State.Moth;
         //  // playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 100, playerPosVect.z));
@@ -330,6 +335,11 @@ namespace Unicorn
       {
         Console.WriteLine(curEnergy);
       }
+	  
+	if(health <= 0.0f)
+	  {
+		isDead = true;
+	  }
       //Console.WriteLine(GetTransform(IDisposab);
 
     }
@@ -341,7 +351,7 @@ namespace Unicorn
     {
       //Transform tag
       // tag 1 = Possessable
-      // 
+      //
       Transform otherTransform = GetTransform(other);
 
       if (otherTransform.tag == 1)
@@ -405,42 +415,42 @@ namespace Unicorn
         {
           moveDir += -rht;
           movedA = true;
-      
+
           //Force.Apply(id, -rht, moveForce);
         }
         else if (Input.GetKeyUp(VK.IKEY_A))
         {
-          
+
           movedA = false;
         }
         // Backward
         if (Input.GetKeyHold(VK.IKEY_S))
         {
-          
+
           moveDir += -fwd;
           movedS = true;
           //Force.Apply(id, -fwd, moveForce);
         }
         else if (Input.GetKeyUp(VK.IKEY_S))
         {
-          
+
           movedS = false;
         }
         // Right
         if (Input.GetKeyHold(VK.IKEY_D))
         {
-         
+
           moveDir += rht;
           movedD = true;
           //Force.Apply(id, rht, moveForce);
         }
         else if (Input.GetKeyUp(VK.IKEY_D))
         {
-          
+
           movedD = false;
         }
 
-        // Check any movement 
+        // Check any movement
         if (movedW || movedA || movedS || movedD)
         {
           playerRB.isGravity = true;
@@ -485,7 +495,7 @@ namespace Unicorn
 
             anim.Play("Sneak_Walk", true, 1.9f, 3.108f);
             //
-           
+
 
             if (isPlaying == false)
             {
@@ -495,7 +505,7 @@ namespace Unicorn
 
           }
 
-        
+
           ////Console.WriteLine("Applying");
 
           Vector3 noYVel = new Vector3(playerRB.GetVel().x, 0.0f, playerRB.GetVel().z);
@@ -524,7 +534,7 @@ namespace Unicorn
             if (anim.IsFinished())
             {
               anim.Stop();
-             
+
             }
 
             anim.Play("Idle_2", true, -1f, 10f);
@@ -555,12 +565,12 @@ namespace Unicorn
         }
 
 
-       
+
         //p = p - 90;
 
         rotation.y += 90;
        // rotation.x += 90;
-       
+
 
         GetTransform(id).SetRotation(rotation);
 
@@ -597,7 +607,7 @@ namespace Unicorn
               // Only can change to moth if enough energy
               switching = true;
               canMove = false;
-             
+
               // Run an animation (no loop)
               if ( curEnergy >= EnergyTreshold )
               {
@@ -614,9 +624,9 @@ namespace Unicorn
                 anim.Play("Pray", false, 10f, 30f);
               }
 
-              
+
               isPlaying = false;
-              // Prep for state change 
+              // Prep for state change
               NextState = State.Moth;
               // Shouldn't have logic here. This function is for setting next state only.
               //Transform p_Target = GetTransform(id);
@@ -631,7 +641,7 @@ namespace Unicorn
 
               break;
             case State.Possessed:
-              
+
               NextState = State.Human;
               // Same thing, no logic here.
 
@@ -639,7 +649,7 @@ namespace Unicorn
           }
         }
       }
-       
+
     }
 
     public void AutoStateControl()
@@ -667,13 +677,13 @@ namespace Unicorn
       if (flying)
       {
         mothTime += RealDT();
-        if (mothTime >= 2.0f) 
+        if (mothTime >= 2.0f)
         {
           NextState = State.Human;
           mothTime = 0;
-        
-          
-         
+
+
+
         }
       }
     }
@@ -697,7 +707,7 @@ namespace Unicorn
         else if (accumulatedDt >= transformTime)
         {
           accumulatedDt = 0.0f;
-          
+
           PreviousState = CurrentState;
           CurrentState = NextState;
           //
@@ -708,11 +718,11 @@ namespace Unicorn
               moveForce = humnForce;
               playerCharModel.AddModel(humanModePath);
               camScript.tgtID = id;
-              
+
               canMove = true;
               camScript.useOffset = true;
               GetTransform(id).SetRotation(new Vector3(-90.0f, 0.0f, 90.0f));
-              
+
               if(PreviousState == State.Possessed)
               {
                 Transform p_Target2 = GetTransform(id);
@@ -757,11 +767,11 @@ namespace Unicorn
               //anim.Stop();
               playerCharModel.AddModel(mothModePath);
               playerRB.isGravity = false;
-              
+
               canMove = true;
               played = false;
               switching = false;
-             
+
               break;
           }
         }

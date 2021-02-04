@@ -1,6 +1,7 @@
 #pragma once
 #include "../Collision/CollisionMathLib.h"
 
+#include <unordered_map>
 namespace NS_AI
 {
 	struct WayPoint;
@@ -117,5 +118,11 @@ namespace NS_AI
 			return nullptr;
 		};
 	};
+
+
+	//Search for best way point to 
+	inline LocalVector<int> AstarWayPointFinding(WayPoint* start_wp, WayPoint* end_wp);
+	
+	inline LocalVector<int> AstarPathFinding(NlMath::Vector3D start_point, NlMath::Vector3D end_point, LocalVector<WayPoint*> way_points, int ent_id);
 
 }

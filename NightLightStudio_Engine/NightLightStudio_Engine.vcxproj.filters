@@ -422,6 +422,8 @@
     <ClCompile Include="Source\Graphics\SystemEmitter.cpp" />
     <ClCompile Include="Source\Graphics\Emitter.cpp" />
     <ClCompile Include="Source\Ai\WayPointManager.cpp" />
+    <ClCompile Include="Source\Component\ComponentNavigator.cpp" />
+    <ClCompile Include="Source\Ai\AiGraph.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
