@@ -130,8 +130,6 @@ bool LevelEditor::Update(float)
     if (!_runEngine)
     {
         LE_RunWindows();
-
-        _lePicking.LE_PickingRun();
     }
     else
     {
