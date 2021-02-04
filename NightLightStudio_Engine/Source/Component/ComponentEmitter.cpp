@@ -346,6 +346,10 @@ void ComponentEmitter::Read(Value& val)
 Value ComponentEmitter::Write()
 {
 	Value val(rapidjson::kObjectType);
+	if (_emitterID < 0)
+	{
+		return val;
+	}
 
 	NS_GRAPHICS::EmitterSystem& emitSys = NS_GRAPHICS::EmitterSystem::GetInstance();
 
