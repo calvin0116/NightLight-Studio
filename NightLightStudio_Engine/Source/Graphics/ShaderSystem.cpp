@@ -98,6 +98,7 @@ namespace NS_GRAPHICS
 			{
 				StartProgram(i);
 
+				p_uniformLocations[i]._gamma = glGetUniformLocation(GetCurrentProgramHandle(), "Gamma");
 				p_uniformLocations[i]._alpha = glGetUniformLocation(GetCurrentProgramHandle(), "Alpha");
 
 				if (i == ShaderType::PBR_ANIMATED || i == ShaderType::PBR_TEXTURED_ANIMATED || i == ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP)

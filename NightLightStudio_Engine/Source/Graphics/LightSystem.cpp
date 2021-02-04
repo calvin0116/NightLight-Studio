@@ -366,7 +366,7 @@ namespace NS_GRAPHICS
 		shaderSystem->StartProgram(ShaderSystem::PBR_LIGHTPASS);
 		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
 
-		/*shaderSystem->StartProgram(ShaderSystem::PBR_ANIMATED);
+		shaderSystem->StartProgram(ShaderSystem::PBR_ANIMATED);
 		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
 
 		shaderSystem->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
@@ -382,7 +382,7 @@ namespace NS_GRAPHICS
 		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
 
 		shaderSystem->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
-		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);*/
+		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
 
 		shaderSystem->StopProgram();
 	}
