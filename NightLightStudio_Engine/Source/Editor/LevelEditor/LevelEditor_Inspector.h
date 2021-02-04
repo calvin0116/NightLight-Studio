@@ -56,6 +56,9 @@ public:
 			return std::string(buffer.GetString());
 		}
 	};
+
+	void SetFOV(const float& FOV);
+
 private:
 	int selected_index;
 
@@ -73,6 +76,9 @@ private:
 	int _itemType;
 
 	bool _notRemove;
+
+	// Added by YY to match current camera's fov
+	float _fov = 44.5f;
 
 	void TransformComp(Entity& ent);
 	void ColliderComp(Entity& ent);

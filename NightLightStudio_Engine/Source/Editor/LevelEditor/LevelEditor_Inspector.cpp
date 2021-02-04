@@ -17,6 +17,8 @@
 
 #include "../../Ai/AiManager.h"
 
+#include "../../Graphics/CameraSystem.h"
+
 void InspectorWindow::Start()
 {
 	// Set up Command to run to move objects
@@ -358,6 +360,11 @@ void InspectorWindow::ComponentLayout(Entity& ent)
   WayPointComp(ent);
 
 	AddSelectedComps(ent);
+}
+
+void InspectorWindow::SetFOV(const float& FOV)
+{
+	_fov = FOV;
 }
 
 void InspectorWindow::TransformComp(Entity& ent)
@@ -2193,17 +2200,18 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 			float* camView = glm::value_ptr(cmMat);
 			// Matches the most closely to the actual camera
 			// If gizmos don't match, change this?
-			float fov = 44.5f;
+			_fov = NS_GRAPHICS::CameraSystem::GetInstance().GetFOV();
+
 			//Perspective(fov, io.DisplaySize.x / io.DisplaySize.y, 1.0f, 1000.f, cameraProjection);
 			float* cameraProjection;
 			if (windowSize.x && windowSize.y)
 			{
-				glm::mat4 persp = glm::perspective(glm::radians(fov), (float)windowSize.x / (float)windowSize.y, 1.0f, 1000.0f);
+				glm::mat4 persp = glm::perspective(glm::radians(_fov), (float)windowSize.x / (float)windowSize.y, 1.0f, 1000.0f);
 				cameraProjection = glm::value_ptr(persp);
 			}
 			else
 			{
-				glm::mat4 persp = glm::perspective(glm::radians(fov), 1280.0f / 720.0f, 1.0f, 1000.0f);
+				glm::mat4 persp = glm::perspective(glm::radians(_fov), 1280.0f / 720.0f, 1.0f, 1000.0f);
 				cameraProjection = glm::value_ptr(persp);
 			}
 
