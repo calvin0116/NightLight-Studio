@@ -15,6 +15,8 @@
 #include "../../Logic/CScripts/AllScripts.h"
 #include "../../Mono/MonoWrapper.h"
 
+#include "../../Ai/AiManager.h"
+
 void InspectorWindow::Start()
 {
 	// Set up Command to run to move objects
@@ -372,8 +374,20 @@ void InspectorWindow::TransformComp(Entity& ent)
 		{
 				trans_comp->_entityName = enam;
 		});
+		bool toRemove = false;
+		int index = 0;
+		for (int& tn : trans_comp->_tagNames)
+		{
+			if (_levelEditor->LE_AddCombo("##ADDTAGNAME" + std::to_string(index), tn, TAGNAMES) && tn == 0 && trans_comp->_tagNames.size() > 1)
+				toRemove = true;
+			++index;
+		}
+		if (toRemove)
+			trans_comp->_tagNames.pop_back();
+		if (trans_comp->_tagNames.size() > 1 && trans_comp->_tagNames.back() != 0)
+			trans_comp->_tagNames.push_back(0);
 
-		TransformGizmo(trans_comp);
+	TransformGizmo(trans_comp);
     //ImGui::NewLine();
     //int tag = trans_comp->_tag;
 		/*
@@ -1445,6 +1459,12 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			ImGui::Checkbox("PreWarm##", &emit->_preWarm);
 			ImGui::Checkbox("Loop##", &emit->_loop);
 			ImGui::Checkbox("Burst##", &emit->_burst);
+			if (emit->_burst)
+			{
+				ImGui::InputFloat("Burst Rate", &emit->_burstRate);
+				ImGui::InputScalar("Burst Amount", ImGuiDataType_U32, &emit->_burstAmount);
+			}
+
 			ImGui::Checkbox("Play##Particle", &emit->_play);
 			//emitter->Play();
 
@@ -1457,8 +1477,8 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			{
 				if (emit->_play)
 				{
-					emit->Stop();
-					emit->Play();
+					emitter->Stop();
+					emitter->Play();
 				}
 			}
 			ImGui::Checkbox("Fade", &emit->_fade);
@@ -1491,12 +1511,12 @@ void InspectorWindow::EmitterComp(Entity& ent)
 
 			if (ImGui::Button("Preview Particle"))
 			{
-				emit->Play();
+				emitter->Play();
 			}
 
 			if (ImGui::Button("Stop Particle"))
 			{
-				emit->Stop();
+				emitter->Stop();
 			}
 		}
 
@@ -1817,13 +1837,19 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 			{
 				LocalString ls;
 				wpm_comp->way_point_list.push_back(ls);
+				wpm_comp->GetPath().push_back(nullptr);
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Remove WayPoint"))
 			{
 				wpm_comp->way_point_list.pop_back();
+				wpm_comp->GetPath().pop_back();
 			}
 
+			if (ImGui::Button("Update WayPoint"))
+			{
+				NS_AI::SYS_AI->BakeEdge();
+			}
 			int str_index = 1;
 
 			for (LocalString<125> & str : wpm_comp->way_point_list) //[path, name]
@@ -1832,15 +1858,25 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 
 				std::string s_name = str;
 				_levelEditor->LE_AddInputText(p, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
-					[&str, &s_name]()
+					[&str, &s_name, &wpm_comp, &str_index]()
 					{
-						str = s_name.c_str();
+						WayPointComponent* wpc = G_ECMANAGER->getEntityUsingEntName(str).getComponent<WayPointComponent>();
+						if (wpc != nullptr) {
+							wpm_comp->GetPath().at(str_index-1) = wpc;
+							str = s_name.c_str();
+						}
+						else
+						{
+							std::cout << "No entity with waypoint component found" << std::endl;
+						}
 					});
 				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
-					[this, &str](Entity* entptr)
+					[this, &str, &wpm_comp, &str_index](Entity* entptr)
 					{
 						WayPointComponent* wpc = entptr->getComponent<WayPointComponent>();
-						if (wpc != nullptr) {
+						if (wpc != nullptr) 
+						{
+							wpm_comp->GetPath().at(str_index - 1) = wpc;
 							str = G_ECMANAGER->EntityName[entptr->getId()];
 						}
 
@@ -1848,6 +1884,8 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 
 				str_index++;
 			}
+
+
 		}
 	}
 
@@ -2207,6 +2245,25 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 
 					// Runs command to move object to new position from old position
 					_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
+
+
+					glm::vec3 vecMove = trans_comp->_position - glm::make_vec3(trans);
+					
+					std::map<int, bool>& SelectedEntities = LE_ECHELPER->SelectedEntities();
+					for (std::map<int, bool>::iterator iter = SelectedEntities.begin(); iter != SelectedEntities.end(); ++iter)
+					{
+						if (iter->second && iter->first != trans_comp->objId)
+						{
+							TransformComponent* otherSelects = G_ECMANAGER->getEntity(iter->first).getComponent<TransformComponent>();
+							glm::vec3 oldOthers = otherSelects->_position;
+							otherSelects->_position += vecMove;
+							glm::mat4 othersObj = otherSelects->GetModelMatrix();
+							otherSelects->_position = oldOthers;
+							ENTITY_LAST_POS otherObj{ otherSelects , othersObj };
+							std::any otherPos = otherObj;
+							_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), otherPos);
+						}
+					}
 				}
 				else if (_lastEnter)
 				{

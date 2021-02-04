@@ -27,10 +27,27 @@ inline void NS_AI::AiManager::Init()
 		isActive = false;
 
 	timeLastRound = timeThisRound = std::chrono::system_clock::now();
+
+
+
+
+	//wp_man.Init();
 }
 
 inline void NS_AI::AiManager::GameInit()
 {
+	auto trans_itr = G_ECMANAGER->begin<TransformComponent>();
+	auto trans_itrEnd = G_ECMANAGER->end<TransformComponent>();
+	while (trans_itr != trans_itrEnd)
+	{
+		TransformComponent* trans_Comp = reinterpret_cast<TransformComponent*>(*trans_itr);
+		for (int& tagID : trans_Comp->_tagNames)
+			if (TAGNAMES[tagID] == S_OBS)
+				InsertObstacle(G_ECMANAGER->getEntity(trans_itr).getComponent<ColliderComponent>());
+
+		++trans_itr;
+	}
+
 	auto wpm_itr = G_ECMANAGER->begin<WayPointMapComponent>();
 	auto wpm_itrEnd = G_ECMANAGER->end<WayPointMapComponent>();
 
@@ -54,12 +71,14 @@ inline void NS_AI::AiManager::GameInit()
 		++nc_itr;
 	}
 
-	Obstacle_list = G_ECMANAGER->getEntityList("Obstacle");
+	//Obstacle_list = G_ECMANAGER->getEntityList("Obstacle");
 
 }
 
 inline void NS_AI::AiManager::Update()
 {
+	wp_man.Update();
+
 	if (!isActive)
 		return;
 	//currentNumberOfSteps = 0;
@@ -74,7 +93,7 @@ inline void NS_AI::AiManager::Update()
 		++itr;
 	}
 
-	wp_man.Update();
+
 }
 
 inline void NS_AI::AiManager::WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)
@@ -140,19 +159,19 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 	
 	//Determine next way point and whether to move towards it out not
 	glm::vec3 wp_pos = navComp->GetCurWalkingWp()->GetPos();
-	wp_pos.y = 0.0f;
-	glm::vec3 mag_dir = wp_pos - navTrans->_position;	//Dir to the next way point
-	mag_dir.y = 0.0f;	//Ignore y axis
+	//wp_pos.y = 0.0f;
+	navComp->dir = wp_pos - navTrans->_position;	//Dir to the next way point
+	//mag_dir.y = 0.0f;	//Ignore y axis
 
 	switch (navComp->nav_state)
 	{
 		case NV_PATROL:
 		{
-			float len = glm::length(mag_dir);
+			float len = glm::length(navComp->dir);
 			if (len < navComp->size_in_rad)	//Check if Ai reached the way point
 			{
 				navComp->SetNextWp(nullptr);//Set next way point to be the target for navigation
-
+				navComp->dir = glm::normalize(navComp->dir);
 				/*
 				for (Entity& ent : Obstacle_list)
 				{
@@ -174,15 +193,15 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 			}
 			else
 			{
-				mag_dir = glm::normalize(mag_dir);
+				navComp->dir = glm::normalize(navComp->dir);
 				//NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//Move to way point
-				rb->velocity = mag_dir * navComp->speed;
+				rb->velocity = navComp->dir * navComp->speed;
 			}
 			break;
 		}
 		case NV_CIRCLING:
 		{
-			float len = glm::length(mag_dir);
+			float len = glm::length(navComp->dir);
 			if ((len - navComp->circuling_rad) < FLT_EPSILON)	//Check if Ai reached the way point
 			{
 				//Circular motion
@@ -194,13 +213,14 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 				glm::vec3 dir = Rotate * glm::vec4{ rev_dir , 1.0f };
 				dir = glm::normalize(dir);
 				rb->velocity = dir * navComp->speed;
+				navComp->dir = glm::normalize(dir);
 			}
 
 			else
 			{
-				mag_dir = glm::normalize(mag_dir);
+				navComp->dir = glm::normalize(navComp->dir);
 				//NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//Move to way point
-				rb->velocity = mag_dir * navComp->speed;
+				rb->velocity = navComp->dir * navComp->speed;
 			}
 			break;
 		}

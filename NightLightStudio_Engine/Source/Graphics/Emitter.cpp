@@ -16,9 +16,10 @@ float Emitter::RandFloat()
 }
 
 Emitter::Emitter():
-	_particles{}, _numAlive{ 0 }, _lastUsed{ 0 }, _emitterTime{ 0.0f }, _timePassed{ 0.0f }, _emitterPosition{}, _emitterRotation{},
-	_type{ EmitterShapeType::SPHERE }, _durationPerCycle{ 5.0f }, _emissionRate{ 1.0f }, _maxParticles{ 100 }, //Main particle data
-	_spawnAngle{ 30.0f }, _radius{ 100.0f }, //For cone and circle
+	_particles{}, _numAlive{ 0 }, _lastUsed{ 0 }, _emitterTime{ 0.0f }, _timePassed{ 0.0f }, _emitterPosition{}, _emitterRotation{},//Main particle data
+	_type{ EmitterShapeType::SPHERE }, _durationPerCycle{ 5.0f }, _emissionRate{ 1.0f }, _maxParticles{ 100 },//Main particle data
+	_burstTime{ 0.0f }, _burstRate{ 1.0f }, _burstAmount{ 20 },//Main particle data
+	_spawnAngle{ 30.0f }, _radius{ 100.0f }, //For cone and sphere
 	_randomizeSize{ false }, _minParticleSize{ 10 }, _maxParticleSize{ 100 }, //Particle Size
 	_randomizeSpeed{ false }, _minParticleSpeed{ 10 }, _maxParticleSpeed{ 100 }, //Particle Speed
 	_randomizeLifespan{ false }, _minLifespan{ 1.0f }, _maxLifespan{ 5.0f }, //Particle Lifespan
@@ -29,8 +30,8 @@ Emitter::Emitter():
 	_vao{ 0 }, _vbo{ 0 }, _ebo{ 0 }, _posBuffer{ 0 }, _colBuffer{ 0 }, _particlesPosition{}, _particlesColour{}
 {
 	_particles.resize(_maxParticles);
-	_particlesPosition.resize(_maxParticles);
-	_particlesColour.resize(_maxParticles);
+	_particlesPosition.resize(_maxParticles, glm::vec4());
+	_particlesColour.resize(_maxParticles, glm::vec4(1.0f,1.0f,1.0f,1.0f));
 }
 
 Emitter::~Emitter()
@@ -40,10 +41,11 @@ Emitter::~Emitter()
 void Emitter::AddTime(float dt)
 {
 	_emitterTime += dt;
+	_burstTime += dt;
 	_timePassed += dt;
 }
 
-void Emitter::InitParticles()
+void Emitter::InitAllParticles(bool prewarm)
 {
 	if (_numAlive == _maxParticles)
 	{
@@ -117,6 +119,12 @@ void Emitter::InitParticles()
 					_particles[i]._size = _maxParticleSize;
 				}
 
+				if (prewarm)
+				{
+					_particles[i]._timeAlive = RandFloat() * _particles[i]._lifespan;
+					_particles[i]._position += _particles[i]._velocity * _particles[i]._speed * _particles[i]._timeAlive;
+				}
+
 				//Remember to set it alive
 				_particles[i]._alive = true;
 
@@ -127,9 +135,22 @@ void Emitter::InitParticles()
 	}
 }
 
+void Emitter::InitParticles(unsigned amount)
+{
+	for (int i = 0; i < amount; ++i)
+	{
+		RespawnParticle();
+	}
+}
+
+void Emitter::PreWarmParticles()
+{
+	InitAllParticles(true);
+}
+
 void Emitter::ResetParticle(size_t index)
 {
-	if (_numAlive == _maxParticles)
+	if (_numAlive == _maxParticles || index >= _maxParticles)
 	{
 		return;
 	}
@@ -217,7 +238,11 @@ unsigned Emitter::FindUnused()
 {
 	for (unsigned i = _lastUsed; i < _maxParticles; ++i)
 	{
-		if (_particles[i]._alive)
+		if (i >= _maxParticles)
+		{
+			break;
+		}
+		if (!_particles[i]._alive)
 		{
 			_lastUsed = i;
 			return i;
@@ -226,12 +251,18 @@ unsigned Emitter::FindUnused()
 
 	for (unsigned i = 0; i < _lastUsed; ++i)
 	{
-		if (_particles[i]._alive)
+		if (i >= _maxParticles)
+		{
+			break;
+		}
+		if (!_particles[i]._alive)
 		{
 			_lastUsed = i;
 			return i;
 		}
 	}
+
+	return _maxParticles;
 }
 
 glm::vec3 Emitter::RandomVec3()
@@ -300,22 +331,20 @@ void Emitter::InitBuffer()
 	glBindVertexArray(_vao);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * numOfSides, &particleVertice[0], GL_STATIC_DRAW);
-
-	//Buffer orphan
-	glBindBuffer(GL_ARRAY_BUFFER, _posBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, _colBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
-
+	glBufferData(GL_ARRAY_BUFFER, sizeof(particleVertice), &particleVertice[0], GL_STATIC_DRAW);
 	// original square polygon 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(0);
+
 	// centre positions and size of all particle
+	glBindBuffer(GL_ARRAY_BUFFER, _posBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(1);
+
 	// colour
+	glBindBuffer(GL_ARRAY_BUFFER, _colBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(2);
 
@@ -333,11 +362,24 @@ void Emitter::InitBuffer()
 
 void Emitter::UpdateBuffer()
 {
+	// Bind VAO else buffer stuff wont work
+	glBindVertexArray(_vao);
+
 	glBindBuffer(GL_ARRAY_BUFFER, _posBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _colBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * _maxParticles, NULL, GL_STREAM_DRAW);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(2);
+
+	glVertexAttribDivisor(1, 1);
+	glVertexAttribDivisor(2, 1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 void Emitter::SortParticle()
@@ -348,10 +390,17 @@ void Emitter::SortParticle()
 void Emitter::UpdateSize()
 {
 	_particles.resize(_maxParticles);
-	_particlesPosition.resize(_maxParticles);
-	_particlesColour.resize(_maxParticles);
+	_particlesPosition.resize(_maxParticles, glm::vec4());
+	_particlesColour.resize(_maxParticles, glm::vec4(1.0f,1.0f,1.0f,1.0f));
 
 	UpdateBuffer();
+}
+
+void Emitter::UpdateTransform(glm::vec3 pos, glm::vec3 rotate, glm::vec3 scale)
+{
+	_emitterPosition = pos;
+	_emitterRotation = rotate;
+	_emitterScale = scale;
 }
 
 void Emitter::Play()
@@ -367,7 +416,7 @@ void Emitter::Play()
 
 	if (_preWarm)
 	{
-		InitParticles();
+		PreWarmParticles();
 	}
 }
 

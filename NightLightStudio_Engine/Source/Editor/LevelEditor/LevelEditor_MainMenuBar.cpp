@@ -321,7 +321,7 @@ void LevelEditor::LE_MainMenuBar()
                 data = "..//NightLightStudio_Game" + *str;          //Temp solution, please help =v
                 int id = PFunc::PrefabReadAndCreate(data);      //Create Prefab
                 if(id != -1)
-                    LE_ECHELPER->SelectEntity(id);             //Select Entity
+                    LE_ECHELPER->SelectEntity(id, false);             //Select Entity
             }
 
 

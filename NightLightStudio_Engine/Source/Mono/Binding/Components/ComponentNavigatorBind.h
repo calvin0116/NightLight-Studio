@@ -21,5 +21,7 @@ namespace ComponentNavigatorBind
   bool MoreThenOneWPActive_Internal(NavComponent* nav);
   void GoToNextWp_Internal(NavComponent* nav);
 
+  MonoObject* get_Dir_Internal(NavComponent* nav);
+
   void BindComponentNavigator();
 }

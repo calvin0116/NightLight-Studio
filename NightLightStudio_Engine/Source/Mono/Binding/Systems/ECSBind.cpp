@@ -25,6 +25,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(Print, "Print", "UniBehaviour");
     MonoWrapper::BindClassFunction(RayCastIntersect, "RayCastIntersect", "UniBehaviour");
     MonoWrapper::BindClassFunction(RayCast, "RayCast", "UniBehaviour");
+    MonoWrapper::BindClassFunction(RayTest, "RayTest", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetScript, "GetScript", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetCollider, "GetCollider", "UniBehaviour");
@@ -83,7 +84,7 @@ namespace ECSBind
     ED_OUT(MonoWrapper::ToString(text));
   }
 
-  int RayCastIntersect(MonoObject* origin, MonoObject* endPos, MonoObject* intersect)
+  int RayCastIntersect(MonoObject* origin, MonoObject* endPos, MonoObject* intersect, int pos)
   {
     NlMath::Vec3 myOrigin;
     myOrigin.x = MonoWrapper::GetObjectFieldValue<float>(origin, "X");
@@ -97,7 +98,7 @@ namespace ECSBind
     
     NlMath::Vec3 myIntersect;
     int entity = -1;
-    entity = NS_COLLISION::SYS_COLLISION->Check_RayCollision(myOrigin, myEndPos, myIntersect);
+    entity = NS_COLLISION::SYS_COLLISION->Check_RayCollision(myOrigin, myEndPos, myIntersect, pos);
 
     MonoWrapper::SetObjectFieldValue<float>(intersect, "X", myIntersect.x);
     MonoWrapper::SetObjectFieldValue<float>(intersect, "Y", myIntersect.y);
@@ -106,7 +107,7 @@ namespace ECSBind
     return entity;
   }
 
-  int RayCast(MonoObject* origin, MonoObject* endPos)
+  int RayCast(MonoObject* origin, MonoObject* endPos, int pos)
   {
     NlMath::Vec3 myOrigin;
     NlMath::Vec3 myEndPos;
@@ -120,7 +121,23 @@ namespace ECSBind
     myEndPos.y = MonoWrapper::GetObjectFieldValue<float>(endPos, "Y");
     myEndPos.z = MonoWrapper::GetObjectFieldValue<float>(endPos, "Z");
 
-    return NS_COLLISION::SYS_COLLISION->Check_RayCollision(myOrigin, myEndPos, myIntersect);
+    return NS_COLLISION::SYS_COLLISION->Check_RayCollision(myOrigin, myEndPos, myIntersect, pos);
+  }
+
+  void  RayTest(MonoObject* origin, MonoObject* end)
+  {
+    NlMath::Vec3 myOrigin;
+    NlMath::Vec3 myEnd;
+
+    myOrigin.x = MonoWrapper::GetObjectFieldValue<float>(origin, "X");
+    myOrigin.y = MonoWrapper::GetObjectFieldValue<float>(origin, "Y");
+    myOrigin.z = MonoWrapper::GetObjectFieldValue<float>(origin, "Z");
+
+    myEnd.x = MonoWrapper::GetObjectFieldValue<float>(end, "X");
+    myEnd.y = MonoWrapper::GetObjectFieldValue<float>(end, "Y");
+    myEnd.z = MonoWrapper::GetObjectFieldValue<float>(end, "Z");
+
+    NS_COLLISION::SYS_COLLISION->Test_Ray(myOrigin, myEnd);
   }
 
   MonoObject* GetScript(int id)

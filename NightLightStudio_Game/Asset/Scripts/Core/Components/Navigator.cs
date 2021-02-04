@@ -34,6 +34,12 @@ namespace Unicorn
       set { set_NavState_Internal(this.native_handle, value); }
     }
 
+    public Vector3 GetDir()
+    {
+        return get_Dir_Internal(native_handle);
+    }
+
+
     public void SetWpActive(int val, bool act)
     {
       toggle_WayPointActive_Internal(native_handle, val, act);
@@ -85,6 +91,9 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool GoToNextWp_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 get_Dir_Internal(IntPtr native_handle);
     }
 }
 

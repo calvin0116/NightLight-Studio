@@ -61,13 +61,17 @@ namespace Unicorn
         //Set Player State to possessionstate
         SwitchOnFunction();
 
-        if (script_Player.CurrentState == ScriptPlayer.State.Human)
-        {
-          SwitchOffFunction();
-          activate = false;
-        }
+        //if (script_Player.CurrentState == ScriptPlayer.State.Human)
+        //{
+        //  SwitchOffFunction();
+        //  activate = false;
+        //}
 
 
+      }
+      else 
+      {
+        SwitchOffFunction();
       }
 
      
@@ -91,9 +95,6 @@ namespace Unicorn
 
       if (isActive == true && other== player_ID)
       {
-
-        
-
         if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
         {
 

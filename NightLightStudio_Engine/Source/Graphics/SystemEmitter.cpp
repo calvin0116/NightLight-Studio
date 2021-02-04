@@ -38,13 +38,16 @@ void NS_GRAPHICS::EmitterSystem::Update()
 {
 	if (_particleDrawing)
 	{
-		_shaderSystem->StartProgram(ShaderSystem::ShaderType::PARTICLE);
+		_shaderSystem->StartProgram(ShaderSystem::PARTICLE);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		auto itr = G_ECMANAGER->begin<ComponentEmitter>();
 		auto itrEnd = G_ECMANAGER->end<ComponentEmitter>();
 		while (itr != itrEnd)
 		{
-			ComponentEmitter* emitter = reinterpret_cast<ComponentEmitter*>(*itr);
+			ComponentEmitter* emitter = G_ECMANAGER->getComponent<ComponentEmitter>(itr);
 
 			if (!emitter->_isActive)
 			{
@@ -57,6 +60,8 @@ void NS_GRAPHICS::EmitterSystem::Update()
 
 			itr++;
 		}
+
+		glDisable(GL_BLEND);
 
 		_shaderSystem->StopProgram();
 	}
@@ -134,17 +139,19 @@ void NS_GRAPHICS::EmitterSystem::UpdateEmitter(ComponentEmitter* emitter, float 
 		//Duration still within time passed or it is looping
 		else
 		{
-			if (_emitters[emitter->_emitterID]->_emitterTime > _emitters[emitter->_emitterID]->_emissionRate)
+			if (_emitters[emitter->_emitterID]->_emitterTime >= _emitters[emitter->_emitterID]->_emissionRate)
 			{
-				if (_emitters[emitter->_emitterID]->_burst)
+				_emitters[emitter->_emitterID]->_emitterTime = 0.0f;
+				_emitters[emitter->_emitterID]->RespawnParticle();
+			}
+
+
+			if (_emitters[emitter->_emitterID]->_burst)
+			{
+				if (_emitters[emitter->_emitterID]->_burstTime >= _emitters[emitter->_emitterID]->_burstRate)
 				{
-					_emitters[emitter->_emitterID]->_emitterTime = 0.0f;
-					_emitters[emitter->_emitterID]->InitParticles();
-				}
-				else
-				{
-					_emitters[emitter->_emitterID]->_emitterTime = 0.0f;
-					_emitters[emitter->_emitterID]->RespawnParticle();
+					_emitters[emitter->_emitterID]->_burstTime = 0.0f;
+					_emitters[emitter->_emitterID]->InitParticles(_emitters[emitter->_emitterID]->_burstAmount);
 				}
 			}
 		}
@@ -226,10 +233,10 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 	glBindVertexArray(_emitters[emitter->_emitterID]->_vao);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _emitters[emitter->_emitterID]->_posBuffer);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec4) * toDraw, &_emitters[emitter->_emitterID]->_particlesPosition);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec4) * toDraw, &_emitters[emitter->_emitterID]->_particlesPosition[0]);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _emitters[emitter->_emitterID]->_colBuffer);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec4) * toDraw, &_emitters[emitter->_emitterID]->_particlesColour);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec4) * toDraw, &_emitters[emitter->_emitterID]->_particlesColour[0]);
 
 	glm::vec3 camRight = glm::vec3(viewMat[0][0], viewMat[1][0], viewMat[2][0]);
 	glm::vec3 camUp = glm::vec3(viewMat[0][1], viewMat[1][1], viewMat[2][1]);
@@ -237,7 +244,7 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 	glUniform3fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "camera_up"), 1, &camUp[0]);
 
 	_textureManager->BindAlbedoTexture(emitter->_imageID);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, toDraw);
 }
 
 unsigned NS_GRAPHICS::EmitterSystem::LoadTexture(std::string filename)
