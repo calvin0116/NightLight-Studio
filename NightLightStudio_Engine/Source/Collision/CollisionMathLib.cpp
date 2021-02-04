@@ -1619,6 +1619,7 @@ namespace NlMath
 
                 return false;
             }
+            return true;
         }
         else
         {
