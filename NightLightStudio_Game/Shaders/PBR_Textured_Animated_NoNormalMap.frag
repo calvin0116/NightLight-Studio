@@ -95,6 +95,12 @@ float GeometrySmith(float NdotV, float NdotL, float roughness)
     return ggx1 * ggx2;
 }
 
+float lengthSqr(vec3 A,vec3 B)
+{
+    vec3 C = A - B;
+    return dot( C, C );
+}
+
 void main(void)
 {
     // In case of textures, calculate properties for each point
@@ -173,46 +179,51 @@ void main(void)
     // Should be quite easy due to sample code
     for(int j = 0; j < pLights_Num; j++)
     {
-        // calculate per-light radiance
-        vec3 L = normalize(pLights[j].position.xyz - fragPos); // light vector
-        vec3 H = normalize(V + L); // Halfway-bisecting vector
-        float distance = length(pLights[j].position.xyz - fragPos);
-        //float attenuation = 1.f / (distance * distance); // inverse squared
-        float attenuation = smoothstep(pLights[j].radius, 0.f, distance); // where 100.f is the radius
+        float distanceSqr = lengthSqr(pLights[j].position.xyz, fragPos);
 
-        vec3 radiance = ((pLights[j].diffuse.rgb * pLights[j].intensity) * attenuation); // diffuse used in place of color
+        if(distanceSqr < pLights[j].radius * pLights[j].radius)
+        {
+            // calculate per-light radiance
+            vec3 L = normalize(pLights[j].position.xyz - fragPos); // light vector
+            vec3 H = normalize(V + L); // Halfway-bisecting vector
+            float distance = length(pLights[j].position.xyz - fragPos);
+            //float attenuation = 1.f / (distance * distance); // inverse squared
+            float attenuation = smoothstep(pLights[j].radius, 0.f, distance); // where 100.f is the radius
 
-        // Cook-Torrance BRDF
-        // epsilon to avoid division by zero
-        float NdotV = max(dot(N, V), 0.0001f); 
-        float NdotL = max(dot(N, L), 0.0001f);
-        float HdotV = max(dot(H, V), 0.0f);
-        float NdotH = max(dot(N, H), 0.0f);
+            vec3 radiance = ((pLights[j].diffuse.rgb * pLights[j].intensity) * attenuation); // diffuse used in place of color
 
-        //fragColor = vec4(NdotH,0.f,0.f, 1.f); // 1.f should be replaced with uniform later
-        //return;
+            // Cook-Torrance BRDF
+            // epsilon to avoid division by zero
+            float NdotV = max(dot(N, V), 0.0001f);
+            float NdotL = max(dot(N, L), 0.0001f);
+            float HdotV = max(dot(H, V), 0.0f);
+            float NdotH = max(dot(N, H), 0.0f);
 
-        float D = DistributionGGX(NdotH, roughness);
-        float G = GeometrySmith(NdotV, NdotL, roughness);
-        vec3 F = FresnelSchlick(HdotV, F0); // kS
+            //fragColor = vec4(NdotH,0.f,0.f, 1.f); // 1.f should be replaced with uniform later
+            //return;
 
-        vec3 specular = D * G * F;
-        specular /= (4.f * NdotV * NdotL);
+            float D = DistributionGGX(NdotH, roughness);
+            float G = GeometrySmith(NdotV, NdotL, roughness);
+            vec3 F = FresnelSchlick(HdotV, F0); // kS
 
-        // Energy Conservation where diffuse + specular <= 1.f
-        // Calculation of diffuse factor
-        vec3 kD = vec3(1.f) - F;
+            vec3 specular = D * G * F;
+            specular /= (4.f * NdotV * NdotL);
 
-        // Multiply kD by inverse metalness
-        // since only dia-electric materials have diffuse lighting
-        // Linear blend if partially metal
-        kD *= 1.f - metallic;
+            // Energy Conservation where diffuse + specular <= 1.f
+            // Calculation of diffuse factor
+            vec3 kD = vec3(1.f) - F;
 
-        // angle of light to surface affects specular and diffuse
-        // Mix albedo with diffuse, but not specular
-        // This is just how reality works
-        // Specular component bounces off the surface
-        Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+            // Multiply kD by inverse metalness
+            // since only dia-electric materials have diffuse lighting
+            // Linear blend if partially metal
+            kD *= 1.f - metallic;
+
+            // angle of light to surface affects specular and diffuse
+            // Mix albedo with diffuse, but not specular
+            // This is just how reality works
+            // Specular component bounces off the surface
+            Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+        }
     }
 
     // Calculation for all spot lights
