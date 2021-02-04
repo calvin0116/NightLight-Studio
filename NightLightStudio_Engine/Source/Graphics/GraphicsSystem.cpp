@@ -591,10 +591,17 @@ namespace NS_GRAPHICS
 		// Bind GL_DRAW_FRAMEBUFFER to 0, this will set write to default framebuffer
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
+#ifdef _DEBUG
+		// Setting for GIT so that it doesn't look weird
 		// Copies info(in this case, depth data)to a user-defined region of read framebuffer to user-defined region of draw framebuffer
 		glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width * 2, static_cast<int>(static_cast<float>(CONFIG_DATA->GetConfigData().height) * 1.9f), GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
-		//glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width * 2, CONFIG_DATA->GetConfigData().height * 2, GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
-		//glBlitFramebuffer(_geometryBuffer, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+#endif
+
+#ifndef _DEBUG
+		// Setting for SVN so it doesn't look weird
+		glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+#endif
+		
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// Then render other non-light affected stuff as per normal
