@@ -1459,6 +1459,12 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			ImGui::Checkbox("PreWarm##", &emit->_preWarm);
 			ImGui::Checkbox("Loop##", &emit->_loop);
 			ImGui::Checkbox("Burst##", &emit->_burst);
+			if (emit->_burst)
+			{
+				ImGui::InputFloat("Burst Rate", &emit->_burstRate);
+				ImGui::InputScalar("Burst Amount", ImGuiDataType_U32, &emit->_burstAmount);
+			}
+
 			ImGui::Checkbox("Play##Particle", &emit->_play);
 			//emitter->Play();
 
@@ -1471,8 +1477,8 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			{
 				if (emit->_play)
 				{
-					emit->Stop();
-					emit->Play();
+					emitter->Stop();
+					emitter->Play();
 				}
 			}
 			ImGui::Checkbox("Fade", &emit->_fade);
@@ -1505,12 +1511,12 @@ void InspectorWindow::EmitterComp(Entity& ent)
 
 			if (ImGui::Button("Preview Particle"))
 			{
-				emit->Play();
+				emitter->Play();
 			}
 
 			if (ImGui::Button("Stop Particle"))
 			{
-				emit->Stop();
+				emitter->Stop();
 			}
 		}
 

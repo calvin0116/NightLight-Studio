@@ -38,6 +38,9 @@ void ComponentEmitter::AddTexture(std::string filename)
 
 void ComponentEmitter::Play()
 {
+	Entity entity = G_ECMANAGER->getEntity(this);
+	ComponentTransform* trans = entity.getComponent<ComponentTransform>();
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->UpdateTransform(trans->_position, trans->_rotation, trans->_scale);
 	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->Play();
 }
 
@@ -102,6 +105,21 @@ void ComponentEmitter::Read(Value& val)
 	else
 	{
 		emitSys._emitters[_emitterID]->_maxParticles = val["MaxParticle"].GetUint();
+		emitSys._emitters[_emitterID]->UpdateSize();
+	}
+
+	if (val.FindMember("BurstRate") == val.MemberEnd())
+		std::cout << "No BurstRate data has been found" << std::endl;
+	else
+	{
+		emitSys._emitters[_emitterID]->_burstRate = val["BurstRate"].GetFloat();
+	}
+
+	if (val.FindMember("BurstAmount") == val.MemberEnd())
+		std::cout << "No BurstAmount data has been found" << std::endl;
+	else
+	{
+		emitSys._emitters[_emitterID]->_burstAmount = val["BurstAmount"].GetUint();
 	}
 
 	if (val.FindMember("Angle") == val.MemberEnd())
@@ -348,6 +366,9 @@ Value ComponentEmitter::Write()
 	NS_SERIALISER::ChangeData(&val, "EmissionRate", emitSys._emitters[_emitterID]->_emissionRate);
 
 	NS_SERIALISER::ChangeData(&val, "MaxParticle", emitSys._emitters[_emitterID]->_maxParticles);
+
+	NS_SERIALISER::ChangeData(&val, "BurstRate", emitSys._emitters[_emitterID]->_burstRate);
+	NS_SERIALISER::ChangeData(&val, "BurstAmount", emitSys._emitters[_emitterID]->_burstAmount);
 
 	NS_SERIALISER::ChangeData(&val, "Angle", emitSys._emitters[_emitterID]->_spawnAngle);
 	NS_SERIALISER::ChangeData(&val, "Radius", emitSys._emitters[_emitterID]->_radius);
