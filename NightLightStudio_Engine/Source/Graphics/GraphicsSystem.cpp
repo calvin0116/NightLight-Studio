@@ -238,8 +238,8 @@ namespace NS_GRAPHICS
 		// Depth buffer
 		glGenRenderbuffers(1, &_depthBuffer);
 		glBindRenderbuffer(GL_RENDERBUFFER, _depthBuffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _depthBuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthBuffer);
 
 		// finally check if framebuffer is complete
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
