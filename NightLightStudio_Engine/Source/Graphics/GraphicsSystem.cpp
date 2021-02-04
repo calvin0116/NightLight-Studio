@@ -258,10 +258,10 @@ namespace NS_GRAPHICS
 	{
 		float quadVertices[] = {
 			// positions        // texture Coords
-			-1.0f,  0.95f, 0.0f, 0.0f, 1.0f,
-			-1.0f, -0.95f, 0.0f, 0.0f, 0.0f,
-			 1.0f,  0.95f, 0.0f, 1.0f, 1.0f,
-			 1.0f, -0.95f, 0.0f, 1.0f, 0.0f,
+			-1.0f,  1.05f, 0.0f, 0.0f, 1.0f,
+			-1.0f, -1.05f, 0.0f, 0.0f, 0.0f,
+			 1.0f,  1.05f, 0.0f, 1.0f, 1.0f,
+			 1.0f, -1.05f, 0.0f, 1.0f, 0.0f,
 		};
 		// setup plane VAO
 		glGenVertexArrays(1, &screenQuadVAO);
@@ -592,7 +592,7 @@ namespace NS_GRAPHICS
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 		// Copies info(in this case, depth data)to a user-defined region of read framebuffer to user-defined region of draw framebuffer
-		glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width * 2, CONFIG_DATA->GetConfigData().height * 2, GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
+		glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width * 2, static_cast<int>(static_cast<float>(CONFIG_DATA->GetConfigData().height) * 1.9f), GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// Then render other non-light affected stuff as per normal
