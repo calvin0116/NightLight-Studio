@@ -1327,15 +1327,18 @@ namespace NS_COLLISION
 
 			float iSqLen = -1.0f;
 
-			if (Check_RayCollider(comCol, rayOrigin, rayEnd, i, iSqLen))
+			if (comCol->isCollidable)
 			{
-				gotCollide = true;
-
-				if (iSqLen < iSqLen_smallest) // get the nearest to ray origin
+				if (Check_RayCollider(comCol, rayOrigin, rayEnd, i, iSqLen))
 				{
-					intersect = i;
-					iSqLen_smallest = iSqLen;
-					othId = G_ECMANAGER->getObjId(itr);
+						gotCollide = true;
+
+						if (iSqLen < iSqLen_smallest) // get the nearest to ray origin
+						{
+							intersect = i;
+							iSqLen_smallest = iSqLen;
+							othId = G_ECMANAGER->getObjId(itr);
+						}
 				}
 			}
 			++itr;
@@ -1366,11 +1369,14 @@ namespace NS_COLLISION
 
 			float iSqLen = -1.0f;
 
-			if (Check_RayCollider(comCol, rayOrigin, rayEnd, i, iSqLen))
+			if (comCol->isCollidable)
 			{
-				gotCollide = true;
+				if (Check_RayCollider(comCol, rayOrigin, rayEnd, i, iSqLen))
+				{
+						gotCollide = true;
 
-				iSqLens.push_back(std::tuple<float, int, NlMath::Vec3>(iSqLen, G_ECMANAGER->getObjId(itr), i));
+						iSqLens.push_back(std::tuple<float, int, NlMath::Vec3>(iSqLen, G_ECMANAGER->getObjId(itr), i));
+				}
 			}
 			++itr;
 		}
