@@ -451,3 +451,11 @@ Value ComponentEmitter::Write()
 
 	return val;
 }
+
+ComponentEmitter* ComponentEmitter::Clone()
+{
+	ComponentEmitter* newcomp = new ComponentEmitter();
+	*newcomp = *this;
+	_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
+	return newcomp;
+}
