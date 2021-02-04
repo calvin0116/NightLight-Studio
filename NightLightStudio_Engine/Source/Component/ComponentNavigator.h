@@ -166,6 +166,10 @@ public:
 				//size_in_rad = itr->value.GetFloat();
 				nav_state = (NAV_STATE)itr->value.GetInt();
 			}
+			if (itr->name == "wp_creation_type")
+			{
+				wp_creation_type = (WP_PATH_CREATION_TYPE)itr->value.GetInt();
+			}
 		}
 	};
 	virtual Value	Write() { 
@@ -180,6 +184,7 @@ public:
 		NS_SERIALISER::ChangeData(&val, "WayPointMapName", rapidjson::StringRef(wp_path_ent_name.c_str()));
 		NS_SERIALISER::ChangeData(&val, "circuling_rad", circuling_rad);
 		NS_SERIALISER::ChangeData(&val, "nav_state", (int)nav_state);
+		NS_SERIALISER::ChangeData(&val, "wp_creation_type", (int)wp_creation_type);
 		return val;
 	};
 	virtual Value& Write(Value& val) { return val; };	

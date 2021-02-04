@@ -85,6 +85,11 @@ namespace Unicorn
     int aMID;
     bool isPlaying;
     int chnl = -1;
+	
+	//Player states, for enemy interaction
+	public bool isDead = false;
+	public float health = 20.0f;
+
 
     public override void Init()
     {
@@ -330,6 +335,11 @@ namespace Unicorn
       {
         Console.WriteLine(curEnergy);
       }
+	  
+	if(health <= 0.0f)
+	  {
+		isDead = true;
+	  }
       //Console.WriteLine(GetTransform(IDisposab);
 
     }

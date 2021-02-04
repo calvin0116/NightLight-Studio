@@ -6,9 +6,14 @@ namespace Unicorn
 {
   public class ScriptEnemy : UniBehaviour
   {
+	 public string sPlayer = "Player";
+	Transform playerTrans ;
+	int playerID;
+	ScriptPlayer playerScript;
     // Used player components
     RigidBody enemyRB;
     Variables enemyVar;
+	Transform enemyTrans;
     Navigator enemyNavigator; //<- Get Navigator
     // Other entity's components
 
@@ -30,7 +35,14 @@ namespace Unicorn
     public bool isIdling = false;
     public bool isPaused = false;
 
+	public float distToDetectPlayer = 100.0f;
+	public float chaseSpeed = 10.0f;
     public bool dectectsPlayer = false;     //Boolean to react to player later on
+	
+	//Attacking States
+	public float attackDmg = 10.0f;
+	public float toAttackHitDur = 3.0f;
+	float toAttackHitCD = 0.0f; 
                                             //Vector3 inVec;
                                             // accumulated dt
     private float accumulatedDt = 0.0f;
@@ -40,12 +52,17 @@ namespace Unicorn
       enemyRB = GetRigidBody(id);
       enemyNavigator = GetNavigator(id);
       enemyVar = GetVariables(id);
+	  enemyTrans = GetTransform(id);
+	  
+	  playerID = GameObjectFind(sPlayer);
+	  playerTrans = GetTransform(playerID);
       // Get default values from variables
       maxEnemySpd = enemyVar.GetFloat(0);
     }
 
     public override void LateInit()
     {
+		playerScript = GetScript(playerID);
     }
 
     public override void Update()
@@ -81,6 +98,26 @@ namespace Unicorn
     //If need a ai state like behaviour, just rough idea only
     public void Decision()
     {
+	float dist = (playerTrans.GetPosition() - enemyTrans.GetPosition()).magnitude;
+	//Console.WriteLine(enemyNavigator.GetDir().x );	<- For direction of force	
+	  if( dist < distToDetectPlayer && !playerScript.isDead)
+	  {
+		  if(!dectectsPlayer)
+		  {
+			  Console.WriteLine("Detects player");
+			  dectectsPlayer = true;
+			  startPaused = true;
+		  }
+	  }
+	  else
+	  {
+		  if(dectectsPlayer)
+		  {
+			 dectectsPlayer = false;
+			startPatroling = true;
+		  }
+	  }
+		
       //======Init phase====//
       if (startIdling)
       {
@@ -90,6 +127,7 @@ namespace Unicorn
           enemyNavigator.isFollowing = false;
           isPatroling = false;
         }
+		isIdling = true;
         startIdling = false;
       }
 
@@ -101,6 +139,7 @@ namespace Unicorn
           enemyNavigator.isPaused = true;
           isPatroling = false;
         }
+		isPaused = true;
         startPaused = false;
       }
 
@@ -120,6 +159,8 @@ namespace Unicorn
           enemyNavigator.isFollowing = true;
           isPatroling = false;
         }
+		isPaused = false;
+		isIdling = false;
         isPatroling = true;
         startPatroling = false;
       }
@@ -133,8 +174,45 @@ namespace Unicorn
 
       //======================//
       //====Update phase=====//
-      if (isIdling || isPaused)   //Stop movement if idle/pause
+      if (isIdling)   //Stop movement if idle/pause
+	  {
+		  Console.WriteLine("Naniiiii");
         return;
+	  }
+	  
+	  //Console.WriteLine(isPaused);
+	  if(isPaused)
+	  {
+		  if(dectectsPlayer && !playerScript.isDead)
+		  {
+			  Vector3 dir = playerTrans.GetPosition() - enemyTrans.GetPosition();
+			  if(dir.magnitude < 25.0f)
+			  {
+				  toAttackHitCD += RealDT();
+				  
+				  if(toAttackHitCD > toAttackHitDur)
+				  {
+					playerScript.health -= attackDmg;
+					Console.WriteLine("Player Hit");
+					toAttackHitCD = 0.0f;
+				  }
+			  }
+			  else
+			  {
+				  toAttackHitCD = 0.0f;
+			  }
+			  Force.Apply(id, dir.normalized, chaseSpeed);
+			  //Console.WriteLine("Going towards player");
+		  }
+		  
+		  if(playerScript.isDead)
+		  {
+			  Console.WriteLine("Player Killed");
+			  startPatroling = true;
+		  }
+	  }
+	  
+	  
       if (isPatroling)
       {
         //Any unique movement behaviour can be stated here
