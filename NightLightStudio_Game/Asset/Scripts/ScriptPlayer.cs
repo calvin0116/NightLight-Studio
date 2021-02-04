@@ -53,7 +53,7 @@ namespace Unicorn
     bool played = false;
     bool switching = false;
 	public bool isDead = false;
-
+	
     // spawn point
     public Vector3 spawnPoint;
     // Move dir for camera to player
@@ -77,6 +77,10 @@ namespace Unicorn
     string mothModePath;
     int raycastID = 0;
     bool rayCastHit = false;
+
+	//Player states, for enemy interaction
+
+	public float health = 20.0f;
 
     public override void Init()
     {
@@ -242,7 +246,11 @@ namespace Unicorn
         Console.WriteLine(curEnergy);
       }
       //Console.WriteLine(GetTransform(IDisposab);
-
+	  
+	  if(health <= 0.0f)
+	  {
+		isDead = true;
+	  }
     }
     public override void FixedUpdate()
     {

@@ -95,7 +95,7 @@ public:
 	}
 	WayPointComponent* GetPrevPathWp()
 	{
-		return cur_wp_path->GetPath().at(path_indexes.at(prev_route_wp_index).first);
+		return cur_wp_path->GetPath().at(path_indexes.at(prev_path_wp_index).first);
 	}
 
 	WayPointComponent* GetCurWalkingWp()
@@ -246,6 +246,11 @@ public:
 		if (!HaveWayPoint()) //Dont need to move if one or less way point
 			return;
 
+		//if(wp_to_reach_end.size() == 0 || cur_route_wp_index == wp_to_reach_end.size())
+			//Astar to find the route
+			//return;
+
+
 		prev_route_wp_index = cur_route_wp_index;
 		if (wp_nav_type == WN_RANDOM)
 		{
@@ -294,6 +299,8 @@ public:
 
 		//3. Find route to way point if being blocked
 	}
+
+	void FindClosestWP();
 
 
 	void SetSpeed(float spd)

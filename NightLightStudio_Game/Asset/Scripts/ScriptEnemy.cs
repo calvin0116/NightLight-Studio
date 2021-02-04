@@ -43,6 +43,11 @@ namespace Unicorn
                                             //Vector3 inVec;
                                             // accumulated dt
     private float accumulatedDt = 0.0f;
+	
+	//Attacking States
+	public float attackDmg = 10.0f;
+	public float toAttackHitDur = 25.0f;
+	float toAttackHitCD = 0.0f; 
 
     public override void Init()
     {
@@ -182,10 +187,20 @@ namespace Unicorn
 		  if(dectectsPlayer && !playerScript.isDead)
 		  {
 			  Vector3 dir = playerTrans.GetPosition() - enemyTrans.GetPosition();
-			  if(dir.magnitude < 10.0f)
+			  if(dir.magnitude < 25.0f)
 			  {
-				  playerScript.isDead = true;
-				  Console.WriteLine("Player killed");
+				  toAttackHitCD += RealDT();
+				  
+				  if(toAttackHitCD > toAttackHitDur)
+				  {
+					playerScript.health -= attackDmg;
+					Console.WriteLine("Player killed");
+					toAttackHitCD = 0.0f;
+				  }
+			  }
+			  else
+			  {
+				  toAttackHitCD = 0.0f;
 			  }
 			  Force.Apply(id, dir.normalized, chaseSpeed);
 			  //Console.WriteLine("Going towards player");
@@ -196,7 +211,6 @@ namespace Unicorn
 			  startPatroling = true;
 		  }
 	  }
-	  
       if (isPatroling)
       {
         //Any unique movement behaviour can be stated here

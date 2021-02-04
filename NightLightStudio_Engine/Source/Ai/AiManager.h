@@ -55,7 +55,7 @@ namespace NS_AI
 		}*/
 
 		//Select closest way point to move to
-		void FindClosestWP(NavigatorComponent* nav_comp, TransformComponent* trans_comp);
+		//void FindClosestWP(NavigatorComponent* nav_comp, TransformComponent* trans_comp);
 
 		void InsertObstacle(ColliderComponent* c_comp)
 		{

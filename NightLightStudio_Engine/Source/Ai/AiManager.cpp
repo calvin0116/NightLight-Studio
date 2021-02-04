@@ -228,7 +228,7 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 }
 
 //Select closest way point to move to
-
+/*
 inline void NS_AI::AiManager::FindClosestWP(NavigatorComponent* nav_comp, TransformComponent* trans_comp)
 {
 	std::pair<int, float> closest_wp = std::make_pair<int, float>(-1, std::numeric_limits<float>::max());
@@ -247,4 +247,4 @@ inline void NS_AI::AiManager::FindClosestWP(NavigatorComponent* nav_comp, Transf
 	}
 
 	nav_comp->cur_route_wp_index = i;	//wp index to go to will be the closest one
-}
+}*/
