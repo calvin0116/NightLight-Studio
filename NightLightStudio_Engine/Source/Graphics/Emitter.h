@@ -84,7 +84,8 @@ public:
 	//Helper functions for emitter to work
 	void AddTime(float dt);
 	float RandFloat(); // Between 0.0f to 1.0f
-	void InitParticles();
+	void InitParticles(bool prewarm = false);
+	void PreWarmParticles();
 	void ResetParticle(size_t index);
 	void RespawnParticle();
 	unsigned FindUnused();

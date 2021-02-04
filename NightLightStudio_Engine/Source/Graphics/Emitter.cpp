@@ -43,7 +43,7 @@ void Emitter::AddTime(float dt)
 	_timePassed += dt;
 }
 
-void Emitter::InitParticles()
+void Emitter::InitParticles(bool prewarm)
 {
 	if (_numAlive == _maxParticles)
 	{
@@ -117,6 +117,12 @@ void Emitter::InitParticles()
 					_particles[i]._size = _maxParticleSize;
 				}
 
+				if (prewarm)
+				{
+					_particles[i]._timeAlive = RandFloat() * _particles[i]._lifespan;
+					_particles[i]._position += _particles[i]._velocity * _particles[i]._speed * _particles[i]._timeAlive;
+				}
+
 				//Remember to set it alive
 				_particles[i]._alive = true;
 
@@ -125,6 +131,11 @@ void Emitter::InitParticles()
 			}
 		}
 	}
+}
+
+void Emitter::PreWarmParticles()
+{
+	InitParticles(true);
 }
 
 void Emitter::ResetParticle(size_t index)
@@ -378,7 +389,7 @@ void Emitter::Play()
 
 	if (_preWarm)
 	{
-		InitParticles();
+		PreWarmParticles();
 	}
 }
 

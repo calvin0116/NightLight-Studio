@@ -61,6 +61,8 @@ void NS_GRAPHICS::EmitterSystem::Update()
 			itr++;
 		}
 
+		glDisable(GL_BLEND);
+
 		_shaderSystem->StopProgram();
 	}
 }

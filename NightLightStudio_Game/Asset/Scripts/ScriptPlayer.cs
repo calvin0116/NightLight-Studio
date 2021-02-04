@@ -143,12 +143,12 @@ namespace Unicorn
           if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
           {
             tmp.activate = true;
-            Console.WriteLine("generator activate");
+            //Console.WriteLine("generator activate");
           }
           if (Input.GetKeyUp(VK.IMOUSE_RBUTTON))
           {
             tmp.activate = false;
-            Console.WriteLine("generator deactivate");
+            //Console.WriteLine("generator deactivate");
           }
           
         }
@@ -157,17 +157,21 @@ namespace Unicorn
         {
           //Fan Script
           FanBehaviour tmp = GetScript(raycastID);
+          Transform trans = GetTransform(raycastID);
+          Vector3 pos = trans.GetPosition();
+          trans.SetPosition(new Vector3(pos.x, pos.y + 1, pos.z));
+
           rayCastHit = true;
           //Console.WriteLine(tmp.name);
           if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
           {
             tmp.activate = true;
-            Console.WriteLine("fan activate");
+            //Console.WriteLine("fan activate");
           }
           if (Input.GetKeyUp(VK.IMOUSE_RBUTTON))
           {
             tmp.activate = false;
-            Console.WriteLine("fan deactivate");
+            //Console.WriteLine("fan deactivate");
           }
         }
         else
