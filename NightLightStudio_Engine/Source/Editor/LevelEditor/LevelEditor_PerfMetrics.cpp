@@ -158,11 +158,25 @@ void PerformanceMetrics::Run()
 				SP_AUDIO,
 				SP_COMPONENT,
 				SP_EDITOR,
-				SP_LOGIC
+				SP_LOGIC,
+				SP_AI
+
+				Systems[S_PRIORITY::SP_IO] = SYS_IO;
+				Systems[S_PRIORITY::SP_SCENEMANAGER] = NS_SCENE::SYS_SCENE_MANAGER;
+				Systems[S_PRIORITY::SP_WINDOW] = NS_WINDOW::SYS_WINDOW;
+				Systems[S_PRIORITY::SP_INPUT] = SYS_INPUT;
+				Systems[S_PRIORITY::SP_GRAPHICS] = NS_GRAPHICS::SYS_GRAPHICS;
+				Systems[S_PRIORITY::SP_COLLISION] = NS_COLLISION::SYS_COLLISION;
+				Systems[S_PRIORITY::SP_PHYSICS] = NS_PHYSICS::SYS_PHYSICS;
+				Systems[S_PRIORITY::SP_AUDIO] = SYS_AUDIO;
+				Systems[S_PRIORITY::SP_COMPONENT] = SYS_COMPONENT;
+				
+				Systems[S_PRIORITY::SP_LOGIC] = NS_LOGIC::SYS_LOGIC;
+				Systems[S_PRIORITY::SP_AI] = NS_AI::SYS_AI;
 				*/
 
 			std::vector<std::string> sysNamesManual =
-			{ "IO", "SceneManager", "Window", "Input", "Graphics", "Collision", "Physics", "Audio", "Component", "Editor", "Logic"};
+			{ "IO", "SceneManager", "Window", "Input", "Graphics", "Collision", "Physics", "Audio", "Component", "Editor", "Logic", "AI"};
 
 			//_levelEditor->LE_AddHistogram("Systems Use", _systemsUsage, false, 0, 0.0f, 100.0f, ImVec2(0, 50));
 			for (int i = 0; i < orig.size(); ++i)

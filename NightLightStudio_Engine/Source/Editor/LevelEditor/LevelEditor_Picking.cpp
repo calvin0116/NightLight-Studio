@@ -56,7 +56,7 @@ void LE_Picking::LE_PickingRun()
                 else if (ent.getComponent<ComponentCollider>()->GetColliderT() == COLLIDERS::SPHERE)
                 {
                     SphereCollider sphere = ent.getComponent<ComponentCollider>()->collider.sphere;
-                    if (NlMath::RayToSphere(sphere, startRay, endRay) >= 0.0f)
+                    if (NlMath::RayToSphere(sphere, startRay, endRay))
                     {
                         hitList.push_back(ent.getId());
                     }
