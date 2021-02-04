@@ -35,11 +35,6 @@ public:
 	void	Read(Value&);
 	Value	Write();
 	virtual Value& Write(Value& val) { return val; };
-	virtual ComponentEmitter* Clone()
-	{
-		ComponentEmitter* newcomp = new ComponentEmitter();
-		*newcomp = *this;
-		//_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
-		return newcomp;
-	}
+	virtual ComponentEmitter* Clone();
+
 } EmitterComponent;
