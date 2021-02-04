@@ -104,7 +104,13 @@ void HierarchyInspector::Start()
 
 					// Causes memory leaks currently (Probably Graphics Side)
 					Entity newEnt = ent.Copy(G_ECMANAGER, newName);
-					LE_ECHELPER->SelectEntity(newEnt.getId());
+					bool multi = false;
+					if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+					{
+						multi = true;
+					}
+
+					LE_ECHELPER->SelectEntity(newEnt.getId(), multi);
 
 					_scrollBottom = true;
 				}
@@ -239,7 +245,12 @@ void HierarchyInspector::Run()
 			_levelEditor->LE_AddSelectable(name_with_index, LE_ECHELPER->SelectedEntities()[ent.getId()],
 				[&ent, this]()
 				{
-					LE_ECHELPER->SelectEntity(ent.getId());
+					bool multi = false;
+					if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+					{
+						multi = true;
+					}
+					LE_ECHELPER->SelectEntity(ent.getId(), multi);
 					std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
 
 					if (ImGui::IsMouseDoubleClicked(0))

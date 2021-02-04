@@ -2245,6 +2245,25 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 
 					// Runs command to move object to new position from old position
 					_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
+
+
+					glm::vec3 vecMove = trans_comp->_position - glm::make_vec3(trans);
+					
+					std::map<int, bool>& SelectedEntities = LE_ECHELPER->SelectedEntities();
+					for (std::map<int, bool>::iterator iter = SelectedEntities.begin(); iter != SelectedEntities.end(); ++iter)
+					{
+						if (iter->second && iter->first != trans_comp->objId)
+						{
+							TransformComponent* otherSelects = G_ECMANAGER->getEntity(iter->first).getComponent<TransformComponent>();
+							glm::vec3 oldOthers = otherSelects->_position;
+							otherSelects->_position += vecMove;
+							glm::mat4 othersObj = otherSelects->GetModelMatrix();
+							otherSelects->_position = oldOthers;
+							ENTITY_LAST_POS otherObj{ otherSelects , othersObj };
+							std::any otherPos = otherObj;
+							_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), otherPos);
+						}
+					}
 				}
 				else if (_lastEnter)
 				{

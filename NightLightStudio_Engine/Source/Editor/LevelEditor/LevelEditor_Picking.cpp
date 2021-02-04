@@ -56,7 +56,7 @@ void LE_Picking::LE_PickingRun()
                 else if (ent.getComponent<ComponentCollider>()->GetColliderT() == COLLIDERS::SPHERE)
                 {
                     SphereCollider sphere = ent.getComponent<ComponentCollider>()->collider.sphere;
-                    if (NlMath::RayToSphere(sphere, startRay, endRay) >= 0.0f)
+                    if (NlMath::RayToSphere(sphere, startRay, endRay))
                     {
                         hitList.push_back(ent.getId());
                     }
@@ -84,13 +84,23 @@ void LE_Picking::LE_PickingRun()
             _hitEntityNum++;
             if (_hitEntityNum >= _hitEntities.size())
                 _hitEntityNum = 0;
-            LE_ECHELPER->SelectEntity(_hitEntities[_hitEntityNum]);
+            bool multi = false;
+            if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+            {
+                multi = true;
+            }
+            LE_ECHELPER->SelectEntity(_hitEntities[_hitEntityNum], multi);
         }
         else if (hitList.size())
         {
             _hitEntityNum = 0;
             _hitEntities = hitList;
-            LE_ECHELPER->SelectEntity(_hitEntities[_hitEntityNum]);
+            bool multi = false;
+            if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+            {
+                multi = true;
+            }
+            LE_ECHELPER->SelectEntity(_hitEntities[_hitEntityNum], multi);
         }
         else
         {
