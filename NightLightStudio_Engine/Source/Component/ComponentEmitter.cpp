@@ -56,6 +56,12 @@ ComponentEmitter::~ComponentEmitter()
 void ComponentEmitter::Read(Value& val)
 {
 	_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
+
+	if (_emitterID < 0)
+	{
+		return;
+	}
+
 	NS_GRAPHICS::EmitterSystem& emitSys = NS_GRAPHICS::EmitterSystem::GetInstance();
 
 	if (val.FindMember("isActive") == val.MemberEnd())
