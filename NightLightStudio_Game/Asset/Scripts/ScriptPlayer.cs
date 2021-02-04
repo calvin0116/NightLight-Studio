@@ -25,11 +25,13 @@ namespace Unicorn
     public static bool flying = false;
     public Vector3 FormalPos;
     public static float mothTime = 0.0f; // time to change state
+    //public static float floatTime = 0.0f; // time to float for possessable
     /// ////////////////
     /// </summary>
 
     // Other entity's components
     public ScriptCamera camScript; // To set camera tgt back to player after becoming human.
+    public Transform camTrans; // To get cam position for ray cast
 
     // Player Stats, default values
     public static float humnForce = 100000.0f;  // Move force while human
@@ -50,6 +52,7 @@ namespace Unicorn
     bool idle = true;
     bool played = false;
     bool switching = false;
+	public bool isDead = false;
 
     // spawn point
     public Vector3 spawnPoint;
@@ -72,6 +75,8 @@ namespace Unicorn
     //Variables
     string humanModePath;
     string mothModePath;
+    int raycastID = 0;
+    bool rayCastHit = false;
 
     public override void Init()
     {
@@ -86,6 +91,7 @@ namespace Unicorn
 
       // Get scripts
       camScript = GetScript(GameObjectFind("PlayerCamera"));
+      camTrans = GetTransform(GameObjectFind("PlayerCamera"));
 
       // Get default values from variables (5Floats) (2 Strings)
       humnForce = playerVar.GetFloat(0);
@@ -102,6 +108,8 @@ namespace Unicorn
       canMove = true;
       switching = false;
 
+      fwd = ForwardVector();
+
       playerCharModel.AddModel(humanModePath);
     }
 
@@ -111,6 +119,78 @@ namespace Unicorn
 
     public override void Update()
     {
+      Vector3 camPos = camTrans.GetPosition();
+      Vector3 camDir = Camera.GetViewVector();
+
+      raycastID = RayCast(camPos, camPos + camDir * 1000,2);
+
+      if (raycastID != -1)
+      {
+        Collider col = GetCollider(raycastID);
+        //Console.WriteLine(col.tag);
+        //generator
+        if (col.tag == 2)
+        {
+          //generator Script
+          Generator tmp = GetScript(raycastID);
+          //RigidBody rigid = GetRigidBody(raycastID);
+          Transform trans = GetTransform(raycastID);
+          Vector3 pos = trans.GetPosition();
+          trans.SetPosition(new Vector3(pos.x, pos.y + 1, pos.z));
+
+          rayCastHit = true;
+          //Console.WriteLine(tmp.name);
+          if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
+          {
+            tmp.activate = true;
+            Console.WriteLine("generator activate");
+          }
+          if (Input.GetKeyUp(VK.IMOUSE_RBUTTON))
+          {
+            tmp.activate = false;
+            Console.WriteLine("generator deactivate");
+          }
+          
+        }
+        //Fan
+        else if (col.tag == 3)
+        {
+          //Fan Script
+          FanBehaviour tmp = GetScript(raycastID);
+          rayCastHit = true;
+          //Console.WriteLine(tmp.name);
+          if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
+          {
+            tmp.activate = true;
+            Console.WriteLine("fan activate");
+          }
+          if (Input.GetKeyUp(VK.IMOUSE_RBUTTON))
+          {
+            tmp.activate = false;
+            Console.WriteLine("fan deactivate");
+          }
+        }
+        else
+        {
+          //floatTime = 5;
+          rayCastHit = false;
+          //non possessable woth collider
+          //Transform tmp1 = GetTransform(raycastID);
+          //Console.WriteLine("haha");
+          //Console.WriteLine(tmp1.name);
+        }
+
+
+
+      }
+      else
+      {
+        //ray hits nth
+        rayCastHit = false;
+        //Console.WriteLine("hahahahah");
+      }
+
+      //Console.WriteLine(rayCastHit);
 
       if (canMove == true)
       {
@@ -205,6 +285,7 @@ namespace Unicorn
       rht = Camera.GetRightVector();
 
 
+
       // If state is human
       if (CurrentState == State.Human)
       {
@@ -280,7 +361,7 @@ namespace Unicorn
           Vector3 rotation = Camera.GetViewVector();
 
           float r = (float)Math.Sqrt(rotation.x * rotation.x + rotation.z * rotation.z);
-          float t = (float)(Math.Atan(rotation.y / r) / Math.PI * 180);
+          //float t = (float)(Math.Atan(rotation.y / r) / Math.PI * 180);
           float p = (float)(Math.Acos(rotation.z / r) / Math.PI * 180);
 
           // t = t + 90;
@@ -394,7 +475,7 @@ namespace Unicorn
     public void ManualStateControl()
     {
       // Manual change
-      if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
+      if (Input.GetKeyPress(VK.IMOUSE_RBUTTON) && (rayCastHit == false)) 
       {
 
         if (played == false)
@@ -523,6 +604,7 @@ namespace Unicorn
               Vector3 playerPosVect = playerPos.GetPosition(); // Set eye level of player
               FormalPos = playerPosVect;
               flying = true;
+              mothTime = 0;
               //Vector3 eyelevel =  new Vector3(0.0f, 10.0f, 0.0f);
               // playerPos.SetPosition(eyelevel);
               //Console.WriteLine("PlayerPos be4");

@@ -1,9 +1,10 @@
 #pragma once
+#include "../Collision/CollisionMathLib.h"
 
 namespace NS_AI
 {
 	struct WayPoint;
-	struct Edges;
+	struct Edge;
 
 	typedef enum class COST_VARIABLE {
 		G_DIST = 0,
@@ -19,7 +20,7 @@ namespace NS_AI
 	{
 		int wp_id;
 		bool isActive;         					//True for usual, false for when obstacle contains the point
-		//NlMath::Vector3D position;
+		glm::vec3 position;
 		//NlMath::Vector3D radius;				// 0 for none circular waypoint
 		SphereCollider sphere_col;
 
@@ -30,7 +31,7 @@ namespace NS_AI
 		std::pair<CV, float> self_define_var;
 
 		//std::vector<std::shared_ptr<Edges>> connected_edges;	
-		LocalVector<Edges*> connected_edges;		//Keep track of connecting edges
+		LocalVector<Edge*> connected_edges;		//Keep track of connecting edges
 		WayPoint* parent;
 
 		//=== Constructor===//  
@@ -46,17 +47,19 @@ namespace NS_AI
 			, self_define_var{ CV::SELF_DEFINE, 1.0f }
 			, parent{ nullptr }
 		{}
+
 		//======Getter / Setter for alternate access ========//
-		NlMath::Vec3& GetPos()
+	
+		virtual glm::vec3& GetPos()
 		{
-			return sphere_col.center;
+			return position;
 		}
 
 		float& GetRad()
 		{
 			return sphere_col.radius;
 		}
-
+		
 		float GetFCost()
 		{
 			return g_dist_var.second + h_dist_var.second + self_define_var.second;
@@ -65,7 +68,7 @@ namespace NS_AI
 	};
 
 	//Edges that connects two points
-	struct Edges
+	struct Edge
 	{
 		bool isActive; 							//True for usual, false for when obstacle is obstructing
 		WayPoint* wp1, * wp2;
@@ -75,7 +78,7 @@ namespace NS_AI
 		//float length;
 		float total_cost;		//Depends on length only as of now
 
-		Edges()
+		Edge()
 			:isActive{ true }
 			, wp1{ nullptr }
 			, wp2{ nullptr }
@@ -84,8 +87,19 @@ namespace NS_AI
 			, total_cost{ 0.0f }
 		{}
 
+		Edge(WayPoint* _wp1, WayPoint* _wp2)
+			:isActive{ true }
+			, wp1{ _wp1 }
+			, wp2{ _wp2 }
+			//, distance_var{ CV::Distance, 0.0f }
+			//, self_define_var{ CV::SelfDefine, 1.0f }
+			, total_cost{ 0.0f }
+		{}
+
 		float GetCost() { return total_cost; };
-		NlMath::Vec3 DirVec() { return wp2->GetPos() - wp1->GetPos(); };
+		NlMath::Vec3 DirVec() { 
+			//return wp2->GetPos() - wp1->GetPos(); 
+		};
 
 		float Magnitude() {
 			return DirVec().length();
@@ -101,7 +115,7 @@ namespace NS_AI
 			std::cout << "Edges with Missing Way Point" << std::endl;
 			throw(1);
 			return nullptr;
-		}
+		};
 	};
 
 }

@@ -321,7 +321,7 @@ public:
 	/******************************* Drop-Downs ***************************************/
 
 	// Adds a drop-down list of selectable items. Data represents which item is picked.
-	void LE_AddCombo(const std::string& name, int& data, const std::vector<std::string> options);
+	bool LE_AddCombo(const std::string& name, int& data, const std::vector<std::string> options);
 
 	// Adds a collapsing Header.
 	// Runs fn between this ImGui's Begin and End

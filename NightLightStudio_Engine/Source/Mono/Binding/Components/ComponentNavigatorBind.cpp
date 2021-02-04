@@ -34,6 +34,9 @@ namespace ComponentNavigatorBind
 
     MonoWrapper::BindClassFunction(GoToNextWp_Internal, "GoToNextWp_Internal",
         "Navigator");
+
+    MonoWrapper::BindClassFunction(get_Dir_Internal, "get_Dir_Internal",
+        "Navigator");
   }
 
   float get_Speed_Internal(NavComponent* nav)
@@ -85,5 +88,14 @@ namespace ComponentNavigatorBind
   void GoToNextWp_Internal(NavComponent* nav)
   {
       nav->DecideOnNextWp();
+  }
+  MonoObject* get_Dir_Internal(NavComponent* nav)
+  {
+      MonoObject* monoVec = MonoWrapper::ConstructObject("Vector3");
+      glm::vec3& dir = nav->dir;
+      MonoWrapper::SetObjectFieldValue(monoVec, "X", dir.x);
+      MonoWrapper::SetObjectFieldValue(monoVec, "Y", dir.y);
+      MonoWrapper::SetObjectFieldValue(monoVec, "Z", dir.z);
+      return monoVec;
   }
 }
