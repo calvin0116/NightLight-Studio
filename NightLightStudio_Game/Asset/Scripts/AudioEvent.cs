@@ -77,7 +77,7 @@ namespace Unicorn
 
       if (GetTransform(other).tag == 200)
       {
-        Print("Stop playing1");
+        //Print("Stop playing1");
         Audio.Stop(chnl);
         isPlaying = false;
       }
