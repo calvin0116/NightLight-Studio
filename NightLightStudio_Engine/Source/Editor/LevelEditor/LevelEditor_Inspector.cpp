@@ -1067,6 +1067,7 @@ void InspectorWindow::ScriptComp(Entity& ent)
         if (var_flag == MONO_FIELD_ATTR_PUBLIC) // MONO_FIELD_ATTR_PUBLIC
         {
           bool bChanged = false; // If value changed, save it back to mono.
+		  bChanged;
           // Inspect values here
           // Name of variable
           std::string sName = std::string(var_name) + " : ";
@@ -1533,6 +1534,7 @@ void InspectorWindow::EmitterComp(Entity& ent)
 
 void InspectorWindow::CameraComp(Entity& ent)
 {
+	ent;
 }
 
 void InspectorWindow::CScriptComp(Entity& ent)

@@ -13,6 +13,7 @@ ComponentEmitter::ComponentEmitter()
 
 ComponentEmitter::ComponentEmitter(const int& emitterID)
 	: _isActive{ true }
+	, _emitterID{ emitterID }
 {
 	strcpy_s(ser_name, "EmitterComponent");
 }

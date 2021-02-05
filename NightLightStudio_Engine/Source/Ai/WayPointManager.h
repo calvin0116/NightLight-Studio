@@ -187,11 +187,12 @@ namespace NS_AI
 		//Return if path has reached the end and the resulting path and its value
 		//cur_path: int -> next wp , std::vector<WayPoint*> -> path to next_wp
 		//return: 
+		/*
 		std::pair<bool, std::pair<int, std::vector<WayPoint*>> > CheckPath(std::pair<int, std::vector<WayPoint*>> cur_path, Edge* connected_edges)
 		{
 
 
-		}
+		}*/
 
 		//=============================Getter/Setter=====================================//
 		int GetWayPointNumber()
