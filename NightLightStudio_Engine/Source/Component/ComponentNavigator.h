@@ -227,8 +227,8 @@ public:
 		{
 			path_indexes.clear();
 			size_t wp_size = cur_wp_path->GetPath().size() - 1;
-			for (size_t i = wp_size; i >= 0; --i)
-				path_indexes.push_back(std::make_pair((int)i, true));
+			for (int i = static_cast<int>(wp_size); i >= 0; --i)
+				path_indexes.push_back(std::make_pair(i, true));
 			break;
 		}
 		case WPP_CUSTOM:	//Inserted beforehand
