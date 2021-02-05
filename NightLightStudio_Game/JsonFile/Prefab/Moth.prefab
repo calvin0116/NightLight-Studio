@@ -1,21 +1,41 @@
 {
     "Name": "Moth",
     "TransformComponent": {
-        "EntityName": "",
+        "EntityName": "Moth1",
         "Tag": 0,
         "Position": [
-            -130.64608764648438,
-            6.644987106323242,
-            142.33810424804688
+            421.18572998046877,
+            300.6934509277344,
+            -293.47021484375
         ],
         "Scale": [
-            1.0,
-            1.0,
-            1.0
+            2.0,
+            2.0,
+            2.0
         ],
         "Rotate": [
             0.0,
-            -0.0,
+            3.256885646590879e-12,
+            -89.99994659423828
+        ]
+    },
+    "ColliderComponent": {
+        "colliderType": "AABB",
+        "tag": 1,
+        "isCollidable": true,
+        "Center": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Extend": [
+            5.0,
+            5.0,
+            5.0
+        ],
+        "Rotation": [
+            0.0,
+            0.0,
             0.0
         ]
     },
@@ -37,7 +57,7 @@
     },
     "GraphicsComponent": {
         "isActive": true,
-        "Model": "asset\\3d model\\test_cube.fbx",
+        "Model": "asset\\3d model\\mothtest.fbx",
         "Albedo": "",
         "Normal": "",
         "Metallic": "",
@@ -72,7 +92,15 @@
     "ScriptComponent": {
         "isActive": true,
         "isRunning": true,
-        "ScriptName": "ScriptEnemy"
+        "ScriptName": "ScriptMoth",
+        "player_IDint": 0,
+        "startPatrolingbool": false,
+        "startIdlingbool": false,
+        "startPausedbool": false,
+        "isPatrolingbool": true,
+        "isIdlingbool": false,
+        "isPausedbool": false,
+        "dectectsPlayerbool": false
     },
     "ComponentVariables": {
         "IntList": [],

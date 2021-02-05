@@ -1,0 +1,22 @@
+{
+    "Name": "GeneratorSpawn",
+    "TransformComponent": {
+        "EntityName": "GeneratorSpawn",
+        "Tag": 0,
+        "Position": [
+            -230.61654663085938,
+            0.0,
+            120.90493774414063
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Rotate": [
+            0.0,
+            -0.0,
+            0.0
+        ]
+    }
+}

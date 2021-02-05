@@ -125,4 +125,8 @@ public:
 		newcomp->AddModel(_modelFileName);
 		return newcomp;
 	}
+
+	bool SaveMaterialDataFile(std::string filepath);
+	bool LoadMaterialDataFile(std::string filepath);
+
 } GraphicsComponent;

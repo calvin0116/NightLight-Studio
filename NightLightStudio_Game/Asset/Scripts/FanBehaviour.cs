@@ -58,21 +58,19 @@ namespace Unicorn
     {
       if (activate == true)
       {
-        // Set Player State to possessionstate
+        //Set Player State to possessionstate
         SwitchOnFunction();
-      }
 
-      if ((isActive == false && script_Player.CurrentState == ScriptPlayer.State.Possessed) || activate == false)
-      {
-        SwitchOffFunction();
+        //if (script_Player.CurrentState == ScriptPlayer.State.Human)
+        //{
+        //  SwitchOffFunction();
+        //  activate = false;
+        //}
 
-        // push out player
-        if (script_Player.CurrentState == ScriptPlayer.State.Possessed)
-        {
-          script_Player.NextState = ScriptPlayer.State.Human;
-        }
 
       }
+
+     
 
 
     }
@@ -99,6 +97,7 @@ namespace Unicorn
         if (script_Player.CurrentState == ScriptPlayer.State.Moth/* && other == player_ID && activate == false*/)
         {
 
+          Audio.PlayOnce("13");
           activate = true;
           // Set player script nextspawn position == possessionSpawnPos
           script_Player.NextState = ScriptPlayer.State.Possessed;
@@ -147,11 +146,13 @@ namespace Unicorn
     }
     public void SwitchOnFunction()
     {
+      Audio.PlayOnce("11");
       script_WindB.Activate();     
     }
 
     public void SwitchOffFunction()
     {
+      Audio.PlayOnce("12");
       script_WindB.Deactivate();
     }
 

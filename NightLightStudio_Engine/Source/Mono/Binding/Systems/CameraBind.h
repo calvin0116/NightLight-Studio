@@ -26,16 +26,14 @@ namespace CameraBind
 
   // Camera Functions
   void csSetUseThirdPersonCam(bool set);
-
   void csToggleUseThirdPersonCam();
-
   void csSetThirdPersonCamCanRotateAnot(bool set);
-
   void csSetThirdPersonCamCanZoomAnot(bool set);
-
   void csSetThirdPersonCamTarget(MonoObject* tgt);
-
   void csSetThirdPersonCamDistance(float dist);
-
   void csSetThirdPersonCamPitchAndYaw(float pitch, float yaw);
+
+  // Getter/Setter
+  float csGetFOV();
+  void  csSetFOV(float _fov);
 }

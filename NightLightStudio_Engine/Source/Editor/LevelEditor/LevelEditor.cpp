@@ -130,8 +130,6 @@ bool LevelEditor::Update(float)
     if (!_runEngine)
     {
         LE_RunWindows();
-
-        _lePicking.LE_PickingRun();
     }
     else
     {
@@ -168,6 +166,11 @@ void LevelEditor::LE_SetWindowFlag(const std::string& name, const ImGuiWindowFla
             i._flag = flag;
             break;
         }
+}
+
+HWND LevelEditor::LE_GetWindowHandle()
+{
+    return _window;
 }
 
 std::vector<float>* LevelEditor::LE_GetSystemsUsage()

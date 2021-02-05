@@ -46,7 +46,7 @@ public:
 			return *this;
 		}
 
-		Iterator& operator++(int)
+		Iterator operator++(int)
 		{
 			Iterator temp = *this;
 			++currentIndex;
@@ -88,9 +88,10 @@ public:
 		++currentSize;
 	}
 
-	T back()
+	T& back()
 	{
-		if (currentSize == 0) return 0;
+		if (currentSize == 0) 
+			throw;
 
 		return data[currentSize - 1];
 	}

@@ -1,15 +1,23 @@
-#include "LevelEditor_Inspector.h"
+﻿#include "LevelEditor_Inspector.h"
 
 #include "LevelEditor_ECHelper.h"
 #include "../../Core/SceneManager.h"
 #include "../../Graphics/GraphicsSystem.h"
+#include "../../Graphics/SystemEmitter.h"
 
 #include <set>
 #include "LevelEditor_Console.h"
 #include "../../Input/SystemInput.h"
+
+#include "WindowsDialogBox.h"
+
 // Construct script
 #include "../../Logic/CScripts/AllScripts.h"
-//#include "../../Mono/MonoWrapper.h"
+#include "../../Mono/MonoWrapper.h"
+
+#include "../../Ai/AiManager.h"
+
+#include "../../Graphics/CameraSystem.h"
 
 void InspectorWindow::Start()
 {
@@ -127,6 +135,12 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<WayPointComponent>();
 			entComp._ent.getComponent<WayPointComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(EmitterComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<EmitterComponent>();
+			entComp._ent.getComponent<EmitterComponent>()->Read(*entComp._rjDoc);
+			entComp._ent.getComponent<EmitterComponent>()->_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
+		}
 
 		return comp;
 	};
@@ -219,6 +233,12 @@ void InspectorWindow::Start()
 			entComp.Copy(entComp._ent.getComponent<WayPointComponent>()->Write());
 			entComp._ent.RemoveComponent<WayPointComponent>();
 		}
+		else if (t == typeid(EmitterComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<EmitterComponent>()->Write());
+			NS_GRAPHICS::EmitterSystem::GetInstance().RemoveEmitterByID(entComp._ent.getComponent<EmitterComponent>()->_emitterID);
+			entComp._ent.RemoveComponent<EmitterComponent>();
+		}
 
 		return std::any(entComp);
 	};
@@ -305,6 +325,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	//Standard bool for all component to use
 	_notRemove = true;
 
+	CameraComp(ent);
+
 	ColliderComp(ent);
 
 	AudioComp(ent);
@@ -320,6 +342,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	CanvasComp(ent);
 
 	AnimationComp(ent);
+
+	EmitterComp(ent);
 
   CScriptComp(ent);
 
@@ -338,6 +362,11 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	AddSelectedComps(ent);
 }
 
+void InspectorWindow::SetFOV(const float& FOV)
+{
+	_fov = FOV;
+}
+
 void InspectorWindow::TransformComp(Entity& ent)
 {
 	TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
@@ -352,8 +381,20 @@ void InspectorWindow::TransformComp(Entity& ent)
 		{
 				trans_comp->_entityName = enam;
 		});
+		bool toRemove = false;
+		int index = 0;
+		for (int& tn : trans_comp->_tagNames)
+		{
+			if (_levelEditor->LE_AddCombo("##ADDTAGNAME" + std::to_string(index), tn, TAGNAMES) && tn == 0 && trans_comp->_tagNames.size() > 1)
+				toRemove = true;
+			++index;
+		}
+		if (toRemove)
+			trans_comp->_tagNames.pop_back();
+		if (trans_comp->_tagNames.size() > 1 && trans_comp->_tagNames.back() != 0)
+			trans_comp->_tagNames.push_back(0);
 
-		TransformGizmo(trans_comp);
+	TransformGizmo(trans_comp);
     //ImGui::NewLine();
     //int tag = trans_comp->_tag;
 		/*
@@ -778,8 +819,52 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 
 			ImGui::Separator();
 
-			ImGui::Text("Materials");
+			ImGui::Text("Materials   ");
+			ImGui::SameLine(ImGui::GetWindowWidth() - 40);
+			if (ImGui::SmallButton("V"))
+			{
+				ImGui::OpenPopup("SubMenuSettingsGraphics");
+			}
+			if (ImGui::BeginPopup("SubMenuSettingsGraphics"))
+			{
+				if (ImGui::Button("Save"))
+				{
+					// Do Stuff here
+					COMDLG_FILTERSPEC rgSpec[] =
+					{
+						{ L"*.mater", L"*.mater" }
+					};
+					// Gets the RELATIVE File Path to Save to
+					std::string fileToSaveTo = WindowsSaveFileBox(_levelEditor->LE_GetWindowHandle(), rgSpec, 1);
 
+					if (fileToSaveTo.size())
+					{
+						//... Save Material Data
+						graphics_comp->SaveMaterialDataFile(fileToSaveTo);
+					}
+
+					ImGui::CloseCurrentPopup();
+				}
+				if (ImGui::Button("Load"))
+				{
+					COMDLG_FILTERSPEC rgSpec[] =
+					{
+						{ L"*.mater", L"*.mater" }
+					};
+					// Gets the RELATIVE File Path to Open from
+					std::string fileToOpen = WindowsOpenFileBox(_levelEditor->LE_GetWindowHandle(), rgSpec, 1);
+
+					if (fileToOpen.size())
+					{
+						//... Load Material Data
+						graphics_comp->LoadMaterialDataFile(fileToOpen);
+					}
+					
+					// Do Stuff here
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
 			/*ImGui::ColorEdit3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
 
 			ImGui::ColorEdit3("Ambient##Graphics", glm::value_ptr(graphics_comp->_materialData._ambient));
@@ -950,6 +1035,124 @@ void InspectorWindow::ScriptComp(Entity& ent)
 		if (ImGui::CollapsingHeader("Script component", &_notRemove))
 		{
 			ImGui::Checkbox("IsActive##CScript", &Script_comp->_isActive);
+
+      MonoClass* klass = nullptr;
+      void* iter = NULL;
+      MonoClassField* field = nullptr;
+      ScriptComponent::data& monoData = Script_comp->_MonoData;
+      if (monoData._pInstance)
+      {
+        klass = MonoWrapper::GetMonoClass(monoData._pInstance);
+        field = mono_class_get_fields(klass, &iter);
+      }
+      //ImGui::SameLine();
+      //// Get new values
+      //if (ImGui::Button("Refresh"))
+      //{
+      //  monoData._pInstance = MonoWrapper::ConstructObject(Script_comp->_ScriptName.toString());
+      //  monoData._GCHandle = MonoWrapper::ConstructGCHandle(Script_comp->_MonoData._pInstance);
+      //  int ID = ent.getId();
+      //  MonoWrapper::SetObjectFieldValue(monoData._pInstance, "id", ID);
+      //}
+      //}
+      // Loop through C# fields/variable
+      while (field)
+      {
+        // Name of variables
+        const char* var_name = mono_field_get_name(field);
+        // Type id
+        int var_typeid = mono_type_get_type(mono_field_get_type(field));
+        // To check for public fields/variables
+        unsigned var_flag = mono_field_get_flags(field);
+        if (var_flag == MONO_FIELD_ATTR_PUBLIC) // MONO_FIELD_ATTR_PUBLIC
+        {
+          bool bChanged = false; // If value changed, save it back to mono.
+          // Inspect values here
+          // Name of variable
+          std::string sName = std::string(var_name) + " : ";
+          _levelEditor->LE_AddText("\t");
+          ImGui::SameLine();
+          // type of variable
+          if (var_typeid == MONO_TYPE_BOOLEAN) // bool
+          {
+            //std::cout << "Bool" << std::endl;
+            sName += " bool";
+            bool typeBool = MonoWrapper::GetObjectFieldValue<bool>(monoData._pInstance, var_name);
+            if (ImGui::Checkbox(sName.c_str(), &typeBool))
+              MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeBool);
+          }
+          else if (var_typeid == MONO_TYPE_I4) // int
+          {
+            //std::cout << "Int" << std::endl;
+            sName += " int";
+            int typeInt = MonoWrapper::GetObjectFieldValue<int>(monoData._pInstance, var_name);
+            if (ImGui::InputInt(sName.c_str(), &typeInt))
+              MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeInt);
+          }
+          else if (var_typeid == MONO_TYPE_U4) // unsigned
+          {
+            //std::cout << "Unsigned" << std::endl;
+            sName += " unsigned";
+            int typeUnsigned = MonoWrapper::GetObjectFieldValue<unsigned>(monoData._pInstance, var_name);
+            if (ImGui::InputInt(sName.c_str(), &typeUnsigned))
+              MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeUnsigned);
+          }
+          else if (var_typeid == MONO_TYPE_R4) // float
+          {
+            //std::cout << "Float" << std::endl;
+            sName += " float";
+            float typeFloat = MonoWrapper::GetObjectFieldValue<float>(monoData._pInstance, var_name);
+            if (ImGui::InputFloat(sName.c_str(), &typeFloat))
+              MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeFloat);
+          }
+          else if (var_typeid == MONO_TYPE_R8) // double
+          {
+            //std::cout << "Double" << std::endl;
+            sName += " double";
+            double typeDouble = MonoWrapper::GetObjectFieldValue<double>(monoData._pInstance, var_name);
+            if (ImGui::InputDouble(sName.c_str(), &typeDouble))
+              MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeDouble);
+          }
+          else if (var_typeid == MONO_TYPE_STRING) // string
+          {
+            //std::cout << "String" << std::endl;
+            sName += " string";
+            MonoString* monoString = MonoWrapper::GetObjectFieldValue<MonoString*>(monoData._pInstance, var_name);
+            std::string saved;
+            ///**** For saving/getting ID ****/
+            //int i = 0;
+            //for (; i < Script_comp->_savedCount; ++i)
+            //{
+            //  // Found ID
+            //  if (var_name == Script_comp->_SavedID[i])
+            //    break;
+            //}
+            //if (i == Script_comp->_savedCount)
+            //{
+            //  Script_comp->_SavedID[i] = var_name;
+            //  ++Script_comp->_savedCount;
+            //}
+            ///************************/
+            if (monoString != nullptr)
+              saved = MonoWrapper::ToString(monoString);
+            //std::string& saved = Script_comp->_SavedStrings[i];
+            //std::cout << "Saved: " << saved << std::endl;
+            //std::cout << "Actual: " << Script_comp->_SavedStrings[i] << std::endl;
+            _levelEditor->LE_AddInputText(sName.c_str(), saved, 500, ImGuiInputTextFlags_EnterReturnsTrue, [&saved, &monoString, &var_name, &monoData]()
+              {
+                monoString = MonoWrapper::ToMonoString(saved);
+                MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, *monoString);
+              });
+          }
+          else
+          {
+            _levelEditor->LE_AddText(var_name);
+          }
+        }
+        // Move to next field
+        field = mono_class_get_fields(klass, &iter);
+        //ImGui::NewLine();
+      }
 			std::string tex = Script_comp->_ScriptName.toString();
       std::string old = tex;
 
@@ -958,17 +1161,6 @@ void InspectorWindow::ScriptComp(Entity& ent)
 			{
 				Script_comp->_ScriptName = tex;
 			});
-
-      //// Changes occured
-      //if (tex != old)
-      //{
-      //  std::cout << "Constructing _pScript..." << std::endl;
-      //  if (Script_comp->_MonoData._GCHandle) // Already has a script
-      //  {
-
-      //  }
-      //  cScript_comp->_pScript = AllScripts::Construct(tex);
-      //}
 		}
 
 		if (!_notRemove)
@@ -1082,6 +1274,7 @@ void InspectorWindow::AnimationComp(Entity& ent)
 		{
 			ImGui::Checkbox("IsActive##Animation", &anim->_isActive);
 
+			ImGui::Text("Current Animation: ");
 			auto it = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
 			while ( it != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
 			{
@@ -1089,9 +1282,24 @@ void InspectorWindow::AnimationComp(Entity& ent)
 				if (ImGui::Selectable(it->c_str(), &currAnim))
 				{
 					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim = it->c_str();
-					anim->StopAnimation();
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play = false;
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_dt = 0.0f;
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = "";
 				}
 				++it;
+			}
+
+			ImGui::Separator();
+			ImGui::Text("Default Animation: ");
+			auto it2 = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
+			while (it2 != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
+			{
+				bool defaultAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim == *it2;
+				if (ImGui::Selectable(std::string(it2->c_str()).append("##defaultAnim").c_str(), &defaultAnim))
+				{
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = it2->c_str();
+				}
+				++it2;
 			}
 
 			if (ImGui::Button("Preview Animation"))
@@ -1125,6 +1333,206 @@ void InspectorWindow::AnimationComp(Entity& ent)
 
 		ImGui::Separator();
 	}
+}
+
+void InspectorWindow::EmitterComp(Entity& ent)
+{
+	EmitterComponent* emitter = ent.getComponent<EmitterComponent>();
+	if (emitter != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Emitter component", &_notRemove))
+		{
+			ImGui::Checkbox("IsActive##Emitter", &emitter->_isActive);
+
+			std::string tex = emitter->_image;
+			Emitter* emit = NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[emitter->_emitterID];
+			
+			const char* emitterType[TOTAL_SHAPE] = { "Sphere", "Cone" };
+			const char* currentEmitter = (emit->_type >= 0 && emit->_type < TOTAL_SHAPE) ? emitterType[emit->_type] : "";
+			ImGui::SliderInt("Type", (int*)&emit->_type, 0, TOTAL_SHAPE-1, currentEmitter);
+
+			_levelEditor->LE_AddInputText(std::string("Particle Image##"), tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&tex, &emitter]()
+				{
+					emitter->AddTexture(tex);
+					emitter->_image = tex;
+				});
+			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+				[this, &tex, &emitter](std::string* str)
+				{
+					std::string data = *str;
+					std::transform(data.begin(), data.end(), data.begin(),
+						[](unsigned char c)
+						{ return (char)std::tolower(c); });
+
+					std::string fileType = LE_GetFileType(data);
+					if (fileType == "png" || fileType == "tga" || fileType == "dds")
+					{
+						//SOIL doesnt deal with preceding slash
+						if (data[0] == '\\')
+						{
+							data.erase(0, 1);
+						}
+						tex = data;
+						emitter->AddTexture(tex);
+						emitter->_image = tex;
+					}
+				});
+
+			ImGui::InputFloat("Duration Time", &emit->_durationPerCycle);
+			ImGui::InputFloat("Emission Rate", &emit->_emissionRate);
+
+			if (ImGui::InputScalar("Max Particles", ImGuiDataType_U32, &emit->_maxParticles))
+			{
+				emit->UpdateSize();
+			}
+
+			if (emit->_type == SPHERE)
+			{
+				ImGui::InputFloat("Angle", &emit->_spawnAngle);
+				ImGui::InputFloat("Radius", &emit->_radius);
+			}
+			if (ImGui::TreeNode("Particle Size"))
+			{
+				ImGui::Checkbox("Random Size", &emit->_randomizeSize);
+				if (emit->_randomizeSize)
+				{
+					ImGui::InputFloat("Minimum Size", &emit->_minParticleSize);
+					ImGui::InputFloat("Maximum Size", &emit->_maxParticleSize);
+				}
+				else
+				{
+					ImGui::InputFloat("Size", &emit->_maxParticleSize);
+				}
+				ImGui::TreePop();
+			}
+
+
+			if (ImGui::TreeNode("Particle Speed"))
+			{
+				ImGui::Checkbox("Random Speed", &emit->_randomizeSpeed);
+				if (emit->_randomizeSpeed)
+				{
+					ImGui::InputFloat("Minimum Speed", &emit->_minParticleSpeed);
+					ImGui::InputFloat("Maximum Speed", &emit->_maxParticleSpeed);
+				}
+				else
+				{
+					ImGui::InputFloat("Speed", &emit->_maxParticleSpeed);
+				}
+				ImGui::TreePop();
+			}
+
+			if (ImGui::TreeNode("Particle Lifespan"))
+			{
+				ImGui::Checkbox("Random LifeSpan", &emit->_randomizeLifespan);
+				if (emit->_randomizeLifespan)
+				{
+					ImGui::InputFloat("Minimum LifeSpan", &emit->_minLifespan);
+					ImGui::InputFloat("Maximum LifeSpan", &emit->_maxLifespan);
+				}
+				else
+				{
+					ImGui::InputFloat("LifeSpan", &emit->_maxLifespan);
+				}
+				ImGui::TreePop();
+			}
+
+			if (!emit->_colourOverTime)
+			{
+				if (ImGui::TreeNode("Particle Colour"))
+				{
+					ImGui::Checkbox("Random Colour", &emit->_randomizeColour);
+					if (emit->_randomizeColour)
+					{
+						float colourA[4] = { emit->_colourA.x, emit->_colourA.y, emit->_colourA.z, emit->_colourA.w };
+						ImGui::ColorEdit4("Colour Range Low", colourA);
+						emit->_colourA = { colourA[0], colourA[1], colourA[2], colourA[3] };
+			
+						float colourB[4] = { emit->_colourB.x, emit->_colourB.y, emit->_colourB.z, emit->_colourB.w };
+						ImGui::ColorEdit4("Colour Range High", colourB);
+						emit->_colourB = { colourB[0], colourB[1], colourB[2], colourB[3] };
+					}
+					else
+					{
+						float colour[4] = { emit->_colourB.x, emit->_colourB.y, emit->_colourB.z, emit->_colourB.w };
+						ImGui::ColorEdit4("Colour", colour);
+						emit->_colourB = { colour[0], colour[1], colour[2], colour[3] };
+					}
+					ImGui::TreePop();
+				}
+			}
+
+			ImGui::Checkbox("PreWarm##", &emit->_preWarm);
+			ImGui::Checkbox("Loop##", &emit->_loop);
+			ImGui::Checkbox("Burst##", &emit->_burst);
+			if (emit->_burst)
+			{
+				ImGui::InputFloat("Burst Rate", &emit->_burstRate);
+				ImGui::InputScalar("Burst Amount", ImGuiDataType_U32, &emit->_burstAmount);
+			}
+
+			ImGui::Checkbox("Play##Particle", &emit->_play);
+			//emitter->Play();
+
+			//if (emit->_type == CONE)
+			//{
+			//	ImGui::Checkbox("Reverse", &emit->_reverse);
+			//}
+
+			if (ImGui::Checkbox("Follow", &emit->_follow))
+			{
+				if (emit->_play)
+				{
+					emitter->Stop();
+					emitter->Play();
+				}
+			}
+			ImGui::Checkbox("Fade", &emit->_fade);
+
+			if (ImGui::TreeNode("Special Behaviour"))
+			{
+				ImGui::Checkbox("Velocity over time", &emit->_velocityOverTime);
+				if (emit->_velocityOverTime)
+				{
+					ImGui::InputFloat("X", &emit->_velocity.x);
+					ImGui::InputFloat("Y", &emit->_velocity.y);
+				}
+
+				ImGui::Checkbox("Size over time", &emit->_sizeOverTime);
+				ImGui::Checkbox("Speed over time", &emit->_speedOverTime);
+				ImGui::Checkbox("Colour over time", &emit->_colourOverTime);
+				if (emit->_colourOverTime)
+				{
+					float colourStart[4] = { emit->_colourStart.x, emit->_colourStart.y, emit->_colourStart.z, emit->_colourStart.w };
+					ImGui::ColorEdit4("Colour Start", colourStart);
+					emit->_colourStart = { colourStart[0], colourStart[1], colourStart[2], colourStart[3] };
+
+					float colourEnd[4] = { emit->_colourEnd.x, emit->_colourEnd.y, emit->_colourEnd.z, emit->_colourEnd.w };
+					ImGui::ColorEdit4("Colour End", colourEnd);
+					emit->_colourEnd = { colourEnd[0], colourEnd[1], colourEnd[2], colourEnd[3] };
+				}
+
+				ImGui::TreePop();
+			}
+
+			if (ImGui::Button("Preview Particle"))
+			{
+				emitter->Play();
+			}
+
+			if (ImGui::Button("Stop Particle"))
+			{
+				emitter->Stop();
+			}
+		}
+
+		ImGui::Separator();
+	}
+}
+
+void InspectorWindow::CameraComp(Entity& ent)
+{
 }
 
 void InspectorWindow::CScriptComp(Entity& ent)
@@ -1436,13 +1844,19 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 			{
 				LocalString ls;
 				wpm_comp->way_point_list.push_back(ls);
+				wpm_comp->GetPath().push_back(nullptr);
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Remove WayPoint"))
 			{
 				wpm_comp->way_point_list.pop_back();
+				wpm_comp->GetPath().pop_back();
 			}
 
+			if (ImGui::Button("Update WayPoint"))
+			{
+				NS_AI::SYS_AI->BakeEdge();
+			}
 			int str_index = 1;
 
 			for (LocalString<125> & str : wpm_comp->way_point_list) //[path, name]
@@ -1451,15 +1865,25 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 
 				std::string s_name = str;
 				_levelEditor->LE_AddInputText(p, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
-					[&str, &s_name]()
+					[&str, &s_name, &wpm_comp, &str_index]()
 					{
-						str = s_name.c_str();
+						WayPointComponent* wpc = G_ECMANAGER->getEntityUsingEntName(str).getComponent<WayPointComponent>();
+						if (wpc != nullptr) {
+							wpm_comp->GetPath().at(str_index-1) = wpc;
+							str = s_name.c_str();
+						}
+						else
+						{
+							std::cout << "No entity with waypoint component found" << std::endl;
+						}
 					});
 				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
-					[this, &str](Entity* entptr)
+					[this, &str, &wpm_comp, &str_index](Entity* entptr)
 					{
 						WayPointComponent* wpc = entptr->getComponent<WayPointComponent>();
-						if (wpc != nullptr) {
+						if (wpc != nullptr) 
+						{
+							wpm_comp->GetPath().at(str_index - 1) = wpc;
 							str = G_ECMANAGER->EntityName[entptr->getId()];
 						}
 
@@ -1467,6 +1891,8 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 
 				str_index++;
 			}
+
+
 		}
 	}
 
@@ -1519,7 +1945,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  VariablesComp",
 			"  NavComp",
 			"  WayPointPath",
-			"  WayPointComp"
+			"  WayPointComp",
+			"  Emitter"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -1599,6 +2026,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 				ent.AddComponent<CScriptComponent>();
         ENTITY_COMP_DOC comp{ ent, CScriptComponent().Write(),typeid(CScriptComponent).hash_code() };
         _levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+
 			}
 			break;
 		}
@@ -1679,6 +2107,15 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			break;
 		}
 
+		case 15: // Emitter
+		{
+			if (!ent.getComponent<EmitterComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, EmitterComponent().Write(), typeid(EmitterComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
 
 		}
 		//if (next_lol == nullptr)
@@ -1763,17 +2200,18 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 			float* camView = glm::value_ptr(cmMat);
 			// Matches the most closely to the actual camera
 			// If gizmos don't match, change this?
-			float fov = 44.5f;
+			_fov = NS_GRAPHICS::CameraSystem::GetInstance().GetFOV();
+
 			//Perspective(fov, io.DisplaySize.x / io.DisplaySize.y, 1.0f, 1000.f, cameraProjection);
 			float* cameraProjection;
 			if (windowSize.x && windowSize.y)
 			{
-				glm::mat4 persp = glm::perspective(glm::radians(fov), (float)windowSize.x / (float)windowSize.y, 1.0f, 1000.0f);
+				glm::mat4 persp = glm::perspective(glm::radians(_fov), (float)windowSize.x / (float)windowSize.y, 1.0f, 1000.0f);
 				cameraProjection = glm::value_ptr(persp);
 			}
 			else
 			{
-				glm::mat4 persp = glm::perspective(glm::radians(fov), 1280.0f / 720.0f, 1.0f, 1000.0f);
+				glm::mat4 persp = glm::perspective(glm::radians(_fov), 1280.0f / 720.0f, 1.0f, 1000.0f);
 				cameraProjection = glm::value_ptr(persp);
 			}
 
@@ -1815,6 +2253,25 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 
 					// Runs command to move object to new position from old position
 					_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
+
+
+					glm::vec3 vecMove = trans_comp->_position - glm::make_vec3(trans);
+					
+					std::map<int, bool>& SelectedEntities = LE_ECHELPER->SelectedEntities();
+					for (std::map<int, bool>::iterator iter = SelectedEntities.begin(); iter != SelectedEntities.end(); ++iter)
+					{
+						if (iter->second && iter->first != trans_comp->objId)
+						{
+							TransformComponent* otherSelects = G_ECMANAGER->getEntity(iter->first).getComponent<TransformComponent>();
+							glm::vec3 oldOthers = otherSelects->_position;
+							otherSelects->_position += vecMove;
+							glm::mat4 othersObj = otherSelects->GetModelMatrix();
+							otherSelects->_position = oldOthers;
+							ENTITY_LAST_POS otherObj{ otherSelects , othersObj };
+							std::any otherPos = otherObj;
+							_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), otherPos);
+						}
+					}
 				}
 				else if (_lastEnter)
 				{

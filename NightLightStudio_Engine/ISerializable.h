@@ -14,6 +14,7 @@ struct ISerializable
 
 	virtual void	Read(Value&) { };
 	virtual Value	Write() { return Value(rapidjson::kObjectType); };
-	virtual Value&	Write(Value& val) { return val; };	virtual ISerializable* Clone() { return new ISerializable(); }
+	virtual Value&	Write(Value& val) { return val; };	
+	virtual ISerializable* Clone() { return new ISerializable(); }
 	virtual ~ISerializable() {}
 };

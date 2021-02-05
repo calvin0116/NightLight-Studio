@@ -1,6 +1,7 @@
 #include "LightSystem.h"
 #include "../Component/ComponentLight.h"
 #include "../Component/ComponentTransform.h"
+#include "../IO/Json/Config.h"
 #include "ShaderSystem.h"
 
 namespace NS_GRAPHICS
@@ -21,7 +22,7 @@ namespace NS_GRAPHICS
 	void LightSystem::Init()
 	{
 		// Set a default gamma value
-		SetGamma(1.8f);
+		SetGamma(CONFIG_DATA->GetConfigData().gamma);//1.8f);
 	}
 
 	void LightSystem::Update()
@@ -361,6 +362,9 @@ namespace NS_GRAPHICS
 
 		// Four shader programs to account for
 		NS_GRAPHICS::ShaderSystem* shaderSystem = &NS_GRAPHICS::ShaderSystem::GetInstance();
+
+		shaderSystem->StartProgram(ShaderSystem::PBR_LIGHTPASS);
+		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
 
 		shaderSystem->StartProgram(ShaderSystem::PBR_ANIMATED);
 		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);

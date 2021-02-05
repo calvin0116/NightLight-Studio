@@ -2,7 +2,7 @@
     "Objects": {
         "Plane": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "p",
                 "Tag": 0,
                 "Position": [
                     5.0,
@@ -67,7 +67,7 @@
                     0.0
                 ],
                 "Scale": [
-                    0.9945665597915649,
+                    0.9942009449005127,
                     0.9997184872627258,
                     0.9998233914375305
                 ],
@@ -169,6 +169,7 @@
                 "Play": true,
                 "Loop": true,
                 "CurrentAnimation": "Walk1",
+                "DefaultAnimation": "",
                 "Animation0": "Idle1",
                 "Animation1": "Switch1",
                 "Animation2": "Take 001",
@@ -183,8 +184,8 @@
                 ],
                 "FloatList": [
                     250000.0,
-                    100.0,
-                    15.0,
+                    250.0,
+                    1000.0,
                     1.7999999523162842,
                     180.0
                 ]
@@ -249,7 +250,10 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "ScriptCamera"
+                "ScriptName": "ScriptCamera",
+                "tgtIDint": 0,
+                "sPlayerstring": "Player",
+                "useOffsetbool": true
             },
             "ComponentVariables": {
                 "IntList": [],
@@ -264,7 +268,7 @@
         },
         "Electric_Fan_1": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "efan",
                 "Tag": 0,
                 "Position": [
                     193.75,
@@ -284,7 +288,7 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "tag": 1,
+                "tag": 3,
                 "isCollidable": true,
                 "Center": [
                     0.0,
@@ -355,7 +359,13 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "FanBehaviour"
+                "ScriptName": "FanBehaviour",
+                "activatebool": false,
+                "player_IDint": 0,
+                "cam_IDint": 0,
+                "p_CamPosint": 0,
+                "p_SpawnPosint": 0,
+                "windIDint": 0
             },
             "ComponentVariables": {
                 "IntList": [],
@@ -481,7 +491,10 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "WindBehaviour"
+                "ScriptName": "WindBehaviour",
+                "dirXfloat": 0.0,
+                "dirYfloat": 0.0,
+                "dirZfloat": 0.0
             },
             "ComponentVariables": {
                 "IntList": [],
@@ -517,7 +530,7 @@
         },
         "DirectionalLight": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "ddddd",
                 "Tag": 0,
                 "Position": [
                     -31.25,
@@ -575,7 +588,7 @@
                 "isCollidable": true,
                 "Center": [
                     0.0,
-                    155.0,
+                    100.0,
                     0.0
                 ],
                 "Extend": [
@@ -642,10 +655,18 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "LampBehaviour"
+                "ScriptName": "LampBehaviour",
+                "activatebool": false,
+                "wayPointIDint": 0,
+                "player_IDint": 0,
+                "cam_IDint": 0,
+                "p_CamPosint": 0,
+                "p_SpawnPosint": 0,
+                "isWaypointbool": true
             },
             "ComponentVariables": {
                 "IntList": [
+                    0,
                     1
                 ],
                 "StringList": [
@@ -657,11 +678,11 @@
         "Street_Talisman_1": {
             "TransformComponent": {
                 "EntityName": "Talisman_1",
-                "Tag": 3,
+                "Tag": 2,
                 "Position": [
-                    293.07440185546877,
+                    -101.2679443359375,
                     0.0,
-                    -992.921142578125
+                    -973.5684814453125
                 ],
                 "Scale": [
                     425.0,
@@ -747,7 +768,7 @@
         },
         "Paths": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "ppppp",
                 "Tag": 0,
                 "Position": [
                     0.0,
@@ -792,6 +813,26 @@
                     0.0,
                     3.256885646590879e-12,
                     -89.99994659423828
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    5.0,
+                    5.0,
+                    5.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
                 ]
             },
             "RigidBody": {
@@ -847,7 +888,15 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "ScriptMoth"
+                "ScriptName": "ScriptMoth",
+                "player_IDint": 0,
+                "startPatrolingbool": false,
+                "startIdlingbool": false,
+                "startPausedbool": false,
+                "isPatrolingbool": true,
+                "isIdlingbool": false,
+                "isPausedbool": false,
+                "dectectsPlayerbool": false
             },
             "ComponentVariables": {
                 "IntList": [],
@@ -861,12 +910,13 @@
                 "endTime": 2.0,
                 "speed": 100.0,
                 "radius_for_detection": 10.0,
-                "WayPointMapName": "Paths"
+                "WayPointMapName": "Paths",
+                "circuling_rad": 20.0
             }
         },
         "WayPoint_1": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "wp1",
                 "Tag": 0,
                 "Position": [
                     368.93182373046877,
@@ -881,26 +931,6 @@
                 "Rotate": [
                     0.0,
                     -0.0,
-                    0.0
-                ]
-            },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Extend": [
-                    30.0,
-                    30.0,
-                    30.0
-                ],
-                "Rotation": [
-                    0.0,
-                    0.0,
                     0.0
                 ]
             },
@@ -942,17 +972,17 @@
                 "SelfDefineVariable": 1.0
             }
         },
-        "Bugis_Street_Lamp_1": {
+        "StreetLight3": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "StreetLight3",
                 "Tag": 0,
                 "Position": [
-                    -231.65113830566407,
+                    160.37884521484376,
                     14.077624320983887,
-                    -284.6959533691406
+                    477.1328125
                 ],
                 "Scale": [
-                    0.0000010000001111620805,
+                    1.0,
                     1.0,
                     1.0
                 ],
@@ -968,13 +998,13 @@
                 "isCollidable": true,
                 "Center": [
                     0.0,
-                    0.0,
+                    100.0,
                     0.0
                 ],
                 "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
+                    20.0,
+                    155.0,
+                    20.0
                 ],
                 "Rotation": [
                     0.0,
@@ -1035,16 +1065,21 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "LampBehaviour"
+                "ScriptName": "LampBehaviour",
+                "activatebool": false,
+                "wayPointIDint": 0,
+                "player_IDint": 0,
+                "cam_IDint": 0,
+                "p_CamPosint": 0,
+                "p_SpawnPosint": 0,
+                "isWaypointbool": true
             },
             "ComponentVariables": {
                 "IntList": [
-                    0,
+                    1,
                     0
                 ],
                 "StringList": [
-                    "Moth1",
-                    "Moth1",
                     "Moth1"
                 ],
                 "FloatList": []
@@ -1052,7 +1087,7 @@
         },
         "WayPoint_2": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "wp2",
                 "Tag": 0,
                 "Position": [
                     -239.0659637451172,
@@ -1110,12 +1145,12 @@
         },
         "WayPoint_3": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "wp3",
                 "Tag": 0,
                 "Position": [
-                    78.3109359741211,
+                    160.33526611328126,
                     300.0,
-                    375.07940673828127
+                    485.8052062988281
                 ],
                 "Scale": [
                     1.0,
@@ -1166,100 +1201,9 @@
                 "SelfDefineVariable": 1.0
             }
         },
-        "Bugis_Street_Lamp_2": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    80.46028900146485,
-                    14.077624320983887,
-                    384.4620361328125
-                ],
-                "Scale": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "Rotate": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ]
-            },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
-                ],
-                "Rotation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "RigidBody": {
-                "isStatic": true,
-                "isGravity": false,
-                "mass": 0.0,
-                "friction": 0.009999999776482582,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "asset\\model\\bugis_street_lamp.fbx",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    0.8078431487083435,
-                    0.3529411852359772
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5,
-                "Alpha": 1.0
-            }
-        },
         "Generator": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "Gener",
                 "Tag": 0,
                 "Position": [
                     -240.27420043945313,
@@ -1279,7 +1223,7 @@
             },
             "ColliderComponent": {
                 "colliderType": "AABB",
-                "tag": 1,
+                "tag": 2,
                 "isCollidable": true,
                 "Center": [
                     0.0,
@@ -1298,9 +1242,9 @@
                 ]
             },
             "RigidBody": {
-                "isStatic": true,
-                "isGravity": false,
-                "mass": 0.0,
+                "isStatic": false,
+                "isGravity": true,
+                "mass": 10000000.0,
                 "friction": 0.009999999776482582,
                 "Force": [
                     0.0,
@@ -1350,7 +1294,14 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "Generator"
+                "ScriptName": "Generator",
+                "activatebool": false,
+                "player_IDint": 0,
+                "cam_IDint": 0,
+                "output_IDint": 0,
+                "p_CamPosint": 0,
+                "p_SpawnPosint": 0,
+                "isWaypointbool": true
             },
             "ComponentVariables": {
                 "IntList": [
@@ -1366,7 +1317,7 @@
         },
         "GeneratorCam": {
             "TransformComponent": {
-                "EntityName": "GeneratorCamPos",
+                "EntityName": "GeneratorCam",
                 "Tag": 0,
                 "Position": [
                     -237.3302459716797,
@@ -1406,17 +1357,17 @@
                 ]
             }
         },
-        "Bugis_Street_Lamp_3": {
+        "StreetLight2": {
             "TransformComponent": {
-                "EntityName": "",
+                "EntityName": "StreetLight2",
                 "Tag": 0,
                 "Position": [
-                    -231.65113830566407,
+                    -235.04905700683595,
                     14.077624320983887,
                     -284.6959533691406
                 ],
                 "Scale": [
-                    0.0000010000001111620805,
+                    1.0,
                     1.0,
                     1.0
                 ],
@@ -1432,13 +1383,13 @@
                 "isCollidable": true,
                 "Center": [
                     0.0,
-                    0.0,
+                    100.0,
                     0.0
                 ],
                 "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
+                    20.0,
+                    155.0,
+                    20.0
                 ],
                 "Rotation": [
                     0.0,
@@ -1499,16 +1450,21 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "LampBehaviour"
+                "ScriptName": "LampBehaviour",
+                "activatebool": false,
+                "wayPointIDint": 0,
+                "player_IDint": 0,
+                "cam_IDint": 0,
+                "p_CamPosint": 0,
+                "p_SpawnPosint": 0,
+                "isWaypointbool": true
             },
             "ComponentVariables": {
                 "IntList": [
-                    0,
-                    0
+                    2,
+                    1
                 ],
                 "StringList": [
-                    "Moth1",
-                    "Moth1",
                     "Moth1"
                 ],
                 "FloatList": []

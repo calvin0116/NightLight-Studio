@@ -56,6 +56,9 @@ public:
 			return std::string(buffer.GetString());
 		}
 	};
+
+	void SetFOV(const float& FOV);
+
 private:
 	int selected_index;
 
@@ -74,6 +77,9 @@ private:
 
 	bool _notRemove;
 
+	// Added by YY to match current camera's fov
+	float _fov = 44.5f;
+
 	void TransformComp(Entity& ent);
 	void ColliderComp(Entity& ent);
 	void AudioComp(Entity& ent);
@@ -83,6 +89,8 @@ private:
 	void ScriptComp(Entity& ent);
 	void CanvasComp(Entity& ent);
 	void AnimationComp(Entity& ent);
+	void EmitterComp(Entity& ent);
+	void CameraComp(Entity& ent);
   void CScriptComp(Entity& ent);
   void PlayerStatsComp(Entity& ent);
   void CauldronStatsComp(Entity& ent);

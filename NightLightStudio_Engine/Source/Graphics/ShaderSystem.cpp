@@ -78,10 +78,18 @@ namespace NS_GRAPHICS
 			glUniformBlockBinding(programs[i], lights_uniform_block_index, 1);
 
 			// Set uniform locations for all programs within same loop
-			if (i == ShaderType::UI)
+			if (i == ShaderType::UI_SCREENSPACE)
 			{
 				StartProgram(i);
 				ortho_uniformLocation = glGetUniformLocation(GetCurrentProgramHandle(), "ortho_proj");
+				StopProgram();
+				continue;
+			}
+
+			if (i == ShaderType::PBR_LIGHTPASS)
+			{
+				StartProgram(i);
+				p_uniformLocations[i]._gamma = glGetUniformLocation(GetCurrentProgramHandle(), "Gamma");
 				StopProgram();
 				continue;
 			}
@@ -90,8 +98,8 @@ namespace NS_GRAPHICS
 			{
 				StartProgram(i);
 
-				p_uniformLocations[i]._alpha = glGetUniformLocation(GetCurrentProgramHandle(), "Alpha");
 				p_uniformLocations[i]._gamma = glGetUniformLocation(GetCurrentProgramHandle(), "Gamma");
+				p_uniformLocations[i]._alpha = glGetUniformLocation(GetCurrentProgramHandle(), "Alpha");
 
 				if (i == ShaderType::PBR_ANIMATED || i == ShaderType::PBR_TEXTURED_ANIMATED || i == ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP)
 					p_uniformLocations[i]._jointsMatrix = glGetUniformLocation(GetCurrentProgramHandle(), "jointsMat");
@@ -239,7 +247,10 @@ namespace NS_GRAPHICS
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated.frag")); //PBR_TEXTURED_ANIMATED 5
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.frag")); //PBR_TEXTURED_NONORMALMAP 6
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.frag")); //PBR_TEXTURED_ANIMATED_NONORMALMAP 7
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui.vert"), std::string("../NightLightStudio_Game/Shaders/ui.frag")); //UI 8
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui.vert"), std::string("../NightLightStudio_Game/Shaders/ui.frag")); //UI_Screenspace 8
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui_world.vert"), std::string("../NightLightStudio_Game/Shaders/ui_world.frag")); //UI_WorldSpace 9
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/particle.vert"), std::string("../NightLightStudio_Game/Shaders/particle.frag")); //Particle 10
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_LightingPass.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_LightingPass.frag")); // PBR_LIGHTPASS 11
 		//LoadShader("../NightLightStudio_Game/Shaders/","../NightLightStudio_Game/Shaders/");
 		//LoadShader("","");
 
@@ -363,7 +374,6 @@ namespace NS_GRAPHICS
 			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
 			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
 			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
-			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
 			StopProgram();
 
 			StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
@@ -371,8 +381,14 @@ namespace NS_GRAPHICS
 			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
 			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
 			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
-			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
 			StopProgram();
+
+			//StartProgram(ShaderSystem::PBR_LIGHTPASS);
+			//glUniform1i(glGetUniformLocation(currentProgramID, "gPositionAlpha"), 0);    // Position + Alpha
+			//glUniform1i(glGetUniformLocation(currentProgramID, "gNormalMetallic"), 1);   // Normal + Metallic
+			//glUniform1i(glGetUniformLocation(currentProgramID, "gAlbedoRoughness"), 2);  // Albedo + Roughness
+			//glUniform1i(glGetUniformLocation(currentProgramID, "gAmbientOcclusion"), 3); // Ambient Occlusion
+			//StopProgram();
 		}
 	}
 }

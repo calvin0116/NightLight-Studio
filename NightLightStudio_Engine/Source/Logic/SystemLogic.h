@@ -8,6 +8,8 @@
 #include "../Messaging/Messages/MessageScriptRequest.h"
 #include "../Messaging/Messages/MessageApplicationExit.h"
 #include "../Messaging/Messages/MessageTogglePlay.h"
+// Saving of reloaded scripts' values
+#include <any>
 
 //#define C_ENV
 #define CS_ENV
@@ -36,9 +38,15 @@ namespace NS_LOGIC
     MonoMethod* baseTriggerStay       = nullptr;
     MonoMethod* baseCollisionExit     = nullptr;
     MonoMethod* baseTriggerExit       = nullptr;
+
+    // For C# Inspection
+    std::unordered_map<std::string, std::any> ScriptValues;
     
     // For receiving event/message
     SystemMessaging::SystemReceiver r;
+
+    void SaveValues();
+    void LoadValues();
   public:
     // System functions
     void Load() override;

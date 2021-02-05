@@ -65,6 +65,21 @@ namespace NS_COLLISION
 			Entity Entity1, Entity Entity2
 		);
 		void HandleTogglePlay(MessageTogglePlay& msg);
+
+		////
+		// ray thingy
+		bool Check_RayCollider(ComponentCollider* collider, NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect, float& iSqLen);
+
+		int Check_RayCollision(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect);
+
+		int Check_RayCollision(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd, NlMath::Vec3& intersect, int k);
+
+		void Test_Ray(NlMath::Vec3 rayOrigin, NlMath::Vec3 rayEnd);
+
+		void Draw3DCross(NlMath::Vec3 point, float size, NlMath::Vec3 color);
+		//
+		////
+
 	private:
 
 		// test var

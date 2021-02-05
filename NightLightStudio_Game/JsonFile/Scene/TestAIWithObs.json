@@ -4,6 +4,9 @@
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
+                "tagNames": [
+                    0
+                ],
                 "Position": [
                     -130.64608764648438,
                     6.644987106323242,
@@ -67,13 +70,25 @@
                     0.9019607901573181
                 ],
                 "MetallicMat": 0.0,
-                "RoughnessMat": 0.0,
+                "RoughnessMat": 1.0,
                 "Alpha": 1.0
             },
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "ScriptEnemy"
+                "ScriptName": "ScriptEnemy",
+                "sPlayerstring": "Player",
+                "startPatrolingbool": false,
+                "startIdlingbool": false,
+                "startPausedbool": false,
+                "isPatrolingbool": true,
+                "isIdlingbool": false,
+                "isPausedbool": false,
+                "distToDetectPlayerfloat": 200.0,
+                "chaseSpeedfloat": 0.0010000000474974514,
+                "dectectsPlayerbool": false,
+                "attackDmgfloat": 10.0,
+                "toAttackHitDurfloat": 5.0
             },
             "ComponentVariables": {
                 "IntList": [],
@@ -87,22 +102,27 @@
                 "endTime": 2.0,
                 "speed": 100.0,
                 "radius_for_detection": 10.0,
-                "WayPointMapName": "Paths"
+                "WayPointMapName": "Paths",
+                "circuling_rad": 20.0,
+                "nav_state": 0
             }
         },
         "Plane": {
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
+                "tagNames": [
+                    0
+                ],
                 "Position": [
                     0.0,
                     0.0,
-                    -119.93315887451172
+                    -326.1781921386719
                 ],
                 "Scale": [
-                    25.0,
+                    50.0,
                     0.10000000149011612,
-                    25.0
+                    50.0
                 ],
                 "Rotate": [
                     0.0,
@@ -149,6 +169,9 @@
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
+                "tagNames": [
+                    0
+                ],
                 "Position": [
                     111.15756225585938,
                     6.644987106323242,
@@ -196,7 +219,7 @@
                     0.0
                 ],
                 "MetallicMat": 0.0,
-                "RoughnessMat": 0.0,
+                "RoughnessMat": 1.0,
                 "Alpha": 1.0
             },
             "WayPointComponent": {
@@ -207,6 +230,9 @@
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
+                "tagNames": [
+                    0
+                ],
                 "Position": [
                     -110.21099853515625,
                     6.644987106323242,
@@ -254,7 +280,7 @@
                     0.0
                 ],
                 "MetallicMat": 0.0,
-                "RoughnessMat": 0.0,
+                "RoughnessMat": 1.0,
                 "Alpha": 1.0
             },
             "WayPointComponent": {
@@ -265,6 +291,9 @@
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
+                "tagNames": [
+                    0
+                ],
                 "Position": [
                     -108.65453338623047,
                     6.644987106323242,
@@ -312,7 +341,7 @@
                     0.0
                 ],
                 "MetallicMat": 0.0,
-                "RoughnessMat": 0.0,
+                "RoughnessMat": 1.0,
                 "Alpha": 1.0
             },
             "WayPointComponent": {
@@ -323,6 +352,9 @@
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
+                "tagNames": [
+                    0
+                ],
                 "Position": [
                     98.43670654296875,
                     6.644987106323242,
@@ -370,7 +402,7 @@
                     0.0
                 ],
                 "MetallicMat": 0.0,
-                "RoughnessMat": 0.0,
+                "RoughnessMat": 1.0,
                 "Alpha": 1.0
             },
             "WayPointComponent": {
@@ -381,6 +413,10 @@
             "TransformComponent": {
                 "EntityName": "Obstacle",
                 "Tag": 0,
+                "tagNames": [
+                    1,
+                    0
+                ],
                 "Position": [
                     0.0,
                     6.644987106323242,
@@ -407,9 +443,9 @@
                     0.0
                 ],
                 "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
+                    10.0,
+                    10.0,
+                    10.0
                 ],
                 "Rotation": [
                     0.0,
@@ -459,12 +495,12 @@
                 ],
                 "ShininessMat": 32.0,
                 "AlbedoMat": [
-                    0.1568627506494522,
-                    0.6980392336845398,
-                    1.0
+                    0.0,
+                    0.6261539459228516,
+                    0.9754902124404907
                 ],
                 "MetallicMat": 0.0,
-                "RoughnessMat": 0.0,
+                "RoughnessMat": 1.0,
                 "Alpha": 1.0
             }
         },
@@ -472,6 +508,9 @@
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
+                "tagNames": [
+                    0
+                ],
                 "Position": [
                     0.0,
                     0.0,
@@ -496,6 +535,284 @@
                     "WayPoint_4"
                 ],
                 "radius_for_detection": 25.0
+            }
+        },
+        "Player": {
+            "TransformComponent": {
+                "EntityName": "Player",
+                "Tag": 200,
+                "tagNames": [
+                    0
+                ],
+                "Position": [
+                    -152.48365783691407,
+                    9.991842269897461,
+                    -179.12010192871095
+                ],
+                "Scale": [
+                    0.992514967918396,
+                    0.9997184872627258,
+                    0.9998233914375305
+                ],
+                "Rotate": [
+                    -90.0,
+                    -0.0,
+                    89.99818420410156
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    25.0,
+                    0.0
+                ],
+                "Extend": [
+                    25.0,
+                    25.0,
+                    25.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": false,
+                "isGravity": false,
+                "mass": 100.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "Asset\\3D model\\Player_Animations\\Player_Character_ANIMATIONSWORKS.FBX",
+                "Albedo": "asset\\textures\\new_character_texture_combined\\new_character_model_base_color.tga",
+                "Normal": "asset\\textures\\new_character_texture_combined\\new_character_model_normal_opengl.tga",
+                "Metallic": "asset\\textures\\new_character_texture_combined\\new_character_model_metallic.tga",
+                "Roughness": "asset\\textures\\new_character_texture_combined\\new_character_model_roughness.tga",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "ScriptPlayer",
+                "isDeadbool": false,
+                "healthfloat": 20.0
+            },
+            "LightComponent": {
+                "isActive": false,
+                "Diffuse": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Radius": 10.0,
+                "Intensity": 1000.0,
+                "CutOff": 0.0,
+                "OuterCutOff": 0.0
+            },
+            "AnimationComponent": {
+                "isActive": true,
+                "Play": false,
+                "Loop": false,
+                "CurrentAnimation": "",
+                "DefaultAnimation": "",
+                "Animation0": "Idle1",
+                "Animation1": "Switch1",
+                "Animation2": "Take 001",
+                "Animation3": "Walk1",
+                "Animation4": "clip"
+            },
+            "ComponentVariables": {
+                "IntList": [],
+                "StringList": [
+                    "Asset\\3D model\\Player_Animations\\Player_Character_ANIMATIONSWORKS.FBX",
+                    "Asset\\3D model\\New_Moth_B4.FBX"
+                ],
+                "FloatList": [
+                    250000.0,
+                    100.0,
+                    15.0,
+                    1.7999999523162842,
+                    180.0
+                ]
+            }
+        },
+        "WayPoint_5": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "tagNames": [
+                    0
+                ],
+                "Position": [
+                    -211.7017822265625,
+                    6.644987106323242,
+                    -173.49493408203126
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "Model": "asset\\3d model\\test_cube.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "MetallicMat": 0.0,
+                "RoughnessMat": 1.0,
+                "Alpha": 1.0
+            },
+            "WayPointComponent": {
+                "SelfDefineVariable": 1.0
+            }
+        },
+        "PlayerCamera": {
+            "TransformComponent": {
+                "EntityName": "PlayerCamera",
+                "Tag": 100,
+                "tagNames": [
+                    0
+                ],
+                "Position": [
+                    417.0679931640625,
+                    166.216064453125,
+                    -1850.1732177734376
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": false,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": false,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "ScriptCamera",
+                "tgtIDint": 0,
+                "sPlayerstring": "Player",
+                "useOffsetbool": true
+            },
+            "ComponentVariables": {
+                "IntList": [],
+                "StringList": [],
+                "FloatList": [
+                    40.0,
+                    -35.0,
+                    200.0,
+                    20.0
+                ]
             }
         }
     }

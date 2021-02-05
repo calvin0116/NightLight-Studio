@@ -21,10 +21,9 @@
     },
     "WayPointMapComponent": {
         "way_point_list": [
-            "Waypoint",
+            "WayPoint_1",
             "WayPoint_2",
-            "WayPoint_3",
-            "WayPoint_4"
+            "WayPoint_3"
         ],
         "radius_for_detection": 25.0
     }

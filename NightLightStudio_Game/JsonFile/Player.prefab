@@ -1,0 +1,139 @@
+{
+    "Name": "Player",
+    "TransformComponent": {
+        "EntityName": "Player",
+        "Tag": 200,
+        "tagNames": [
+            0
+        ],
+        "Position": [
+            0.0,
+            125.22633361816406,
+            1000.0
+        ],
+        "Scale": [
+            0.992833137512207,
+            0.9997184872627258,
+            0.9998233914375305
+        ],
+        "Rotate": [
+            -90.0,
+            -0.0,
+            89.99818420410156
+        ]
+    },
+    "ColliderComponent": {
+        "colliderType": "AABB",
+        "tag": 1,
+        "isCollidable": true,
+        "Center": [
+            0.0,
+            25.0,
+            0.0
+        ],
+        "Extend": [
+            25.0,
+            25.0,
+            25.0
+        ],
+        "Rotation": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "RigidBody": {
+        "isStatic": false,
+        "isGravity": true,
+        "mass": 100.0,
+        "friction": 0.009999999776482582,
+        "Force": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Accelaration": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "GraphicsComponent": {
+        "isActive": true,
+        "Model": "Asset\\3D model\\Player_Animations\\Player_Character_ANIMATIONSWORKS.FBX",
+        "Albedo": "asset\\textures\\new_character_texture_combined\\new_character_model_base_color.tga",
+        "Normal": "asset\\textures\\new_character_texture_combined\\new_character_model_normal_opengl.tga",
+        "Metallic": "asset\\textures\\new_character_texture_combined\\new_character_model_metallic.tga",
+        "Roughness": "asset\\textures\\new_character_texture_combined\\new_character_model_roughness.tga",
+        "AmbientOcclusion": "",
+        "Specular": "",
+        "DiffuseMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "AmbientMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "SpecularMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "ShininessMat": 32.0,
+        "AlbedoMat": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "MetallicMat": 1.0,
+        "RoughnessMat": 0.5,
+        "Alpha": 1.0
+    },
+    "ScriptComponent": {
+        "isActive": true,
+        "isRunning": true,
+        "ScriptName": "ScriptPlayer",
+        "isDeadbool": false
+    },
+    "LightComponent": {
+        "isActive": false,
+        "Diffuse": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Radius": 10.0,
+        "Intensity": 1000.0,
+        "CutOff": 0.0,
+        "OuterCutOff": 0.0
+    },
+    "AnimationComponent": {
+        "isActive": true,
+        "Play": false,
+        "Loop": false,
+        "CurrentAnimation": "",
+        "DefaultAnimation": "",
+        "Animation0": "Idle1",
+        "Animation1": "Switch1",
+        "Animation2": "Take 001",
+        "Animation3": "Walk1",
+        "Animation4": "clip"
+    },
+    "ComponentVariables": {
+        "IntList": [],
+        "StringList": [
+            "Asset\\3D model\\Player_Animations\\Player_Character_ANIMATIONSWORKS.FBX",
+            "Asset\\3D model\\New_Moth_B4.FBX"
+        ],
+        "FloatList": [
+            250000.0,
+            100.0,
+            15.0,
+            1.7999999523162842,
+            180.0
+        ]
+    }
+}

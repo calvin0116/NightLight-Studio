@@ -222,6 +222,11 @@ namespace MonoWrapper
   {
     return mono_class_from_name(currImage, _namespace.c_str(), _className.c_str());
   }
+
+  MonoClass* GetMonoClass(MonoObject* _obj)
+  {
+    return mono_object_get_class(_obj);
+  }
     
   MonoObject* ConstructObject(std::string _className, 
     std::string _namespace)
@@ -288,8 +293,6 @@ namespace MonoWrapper
     void* iter = NULL;
     MonoClassField* field = mono_class_get_fields(toklass, &iter);
 
-      
-      
     //Loop through all variable
     while (field)
     {

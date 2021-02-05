@@ -1,5 +1,6 @@
 #pragma once
 #include <mono/jit/jit.h>
+#include <mono/metadata/attrdefs.h> // enum values
 #include <string>             // std::string
 
 #define MONO_COMPILER_PATH "..\\Bin\\Mono\\bin\\mcs"
@@ -29,6 +30,7 @@ namespace MonoWrapper
 
   //Objects
   MonoClass*  GetMonoClass(std::string _className, std::string _namespace = "Unicorn");
+  MonoClass*  GetMonoClass(MonoObject* _obj);
   MonoObject* ConstructObject(std::string _className, std::string _namespace = "Unicorn");
   uint32_t    ConstructGCHandle(MonoObject* _obj);
   void        FreeGCHandle(uint32_t _gchandle);
