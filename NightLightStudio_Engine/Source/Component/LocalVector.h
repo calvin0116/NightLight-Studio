@@ -46,7 +46,7 @@ public:
 			return *this;
 		}
 
-		Iterator& operator++(int)
+		Iterator operator++(int)
 		{
 			Iterator temp = *this;
 			++currentIndex;
