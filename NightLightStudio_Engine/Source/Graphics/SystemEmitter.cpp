@@ -40,8 +40,8 @@ void NS_GRAPHICS::EmitterSystem::Update()
 	{
 		_shaderSystem->StartProgram(ShaderSystem::PARTICLE);
 
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		auto itr = G_ECMANAGER->begin<ComponentEmitter>();
 		auto itrEnd = G_ECMANAGER->end<ComponentEmitter>();
@@ -61,7 +61,7 @@ void NS_GRAPHICS::EmitterSystem::Update()
 			itr++;
 		}
 
-		glDisable(GL_BLEND);
+		//glDisable(GL_BLEND);
 
 		_shaderSystem->StopProgram();
 	}
