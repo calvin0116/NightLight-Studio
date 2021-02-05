@@ -103,7 +103,7 @@ namespace NS_GRAPHICS
 
 		// Getter for specified scene camera camera, used to access its properties
 		// If no camera exists, return dummy camera
-		Camera& GetSceneCamera(const int& cameraID);
+		//Camera& GetSceneCamera(const int& cameraID);
 
 		////////////////////////////////////////////
 

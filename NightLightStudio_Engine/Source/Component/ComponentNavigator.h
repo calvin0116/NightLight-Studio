@@ -182,17 +182,17 @@ public:
 		case WPP_STANDARD:
 		{
 			path_indexes.clear();
-			int wp_size = cur_wp_path->GetPath().size();
-			for (int i = 0; i < wp_size; ++i)
-				path_indexes.push_back(std::make_pair(i, true));
+			size_t wp_size = cur_wp_path->GetPath().size();
+			for (size_t i = 0; i < wp_size; ++i)
+				path_indexes.push_back(std::make_pair((int)i, true));
 			break;
 		}
 		case WPP_REVERSE:
 		{
 			path_indexes.clear();
-			int wp_size = cur_wp_path->GetPath().size() - 1;
-			for (int i = wp_size; i >= 0; --i)
-				path_indexes.push_back(std::make_pair(i, true));
+			size_t wp_size = cur_wp_path->GetPath().size() - 1;
+			for (size_t i = wp_size; i >= 0; --i)
+				path_indexes.push_back(std::make_pair((int)i, true));
 			break;
 		}
 		case WPP_CUSTOM:	//Inserted beforehand
@@ -249,6 +249,7 @@ public:
 	//Function to set next way point to go to
 	void SetNextWp(ComponentNavigator* nav)
 	{
+		nav;
 		StopAtEachWPCheck();			//Check if stopping around a way point 
 		DecideOnNextWp();				//Decide on which way point to go to next
 		//2. Check for direct route

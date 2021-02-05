@@ -872,7 +872,8 @@ public:
 			template<typename T>
 			EntityHandle AttachComponent(T& comp)
 			{
-				T* returnComp = compSetMgr->AttachComponent<T>(*this, comp);
+				//T* returnComp = 
+				compSetMgr->AttachComponent<T>(*this, comp);
 
 				//ISerializable* ser = reinterpret_cast<ISerializable*>(returnComp);
 				//ser->objId = objId;
@@ -883,7 +884,8 @@ public:
 			template<typename T>
 			EntityHandle AttachComponent(T&& comp = T())
 			{
-				T* returnComp = compSetMgr->AttachComponent<T>(*this, comp);
+				//T* returnComp = 
+				compSetMgr->AttachComponent<T>(*this, comp);
 
 				//ISerializable* ser = reinterpret_cast<ISerializable*>(returnComp);
 				//ser->objId = objId;

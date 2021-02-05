@@ -2,7 +2,6 @@
 #include "../Physics/SystemPhysics.h"
 #include "../IO/Json/Config.h"
 #include "../Core/DeltaTime.h" 
-
 inline void NS_AI::AiManager::HandleMsg(MessageTogglePlay& mst)
 {
 	if (mst.GetID() == "BeforePlay")
@@ -202,6 +201,9 @@ inline void NS_AI::AiManager::Update()
 
 inline void NS_AI::AiManager::WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)
 {
+	target_position;
+	nav_comp;
+	my_pos;
 	if (wp_man.GetWayPointNumber())	//If there is way point
 	{
 		//nav_comp->SetCurPathIndex(wp_man.AstarPathFinding(my_pos, target_position,nav_comp->GetCurPath()));
