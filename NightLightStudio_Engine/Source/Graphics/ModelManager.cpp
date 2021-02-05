@@ -29,7 +29,7 @@ namespace NS_GRAPHICS
 
 	int ModelManager::AddModel(Model* const model)
 	{
-		unsigned index = GetFreeIndex();
+		size_t index = GetFreeIndex();
 
 		//Full time to resize
 		if (index >= _models.size())
@@ -43,7 +43,7 @@ namespace NS_GRAPHICS
 			_usedStatus[index] = true;
 		}
 
-		return index;
+		return (int)index;
 	}
 
 	int ModelManager::AddModel(const std::string& modelkey)

@@ -54,7 +54,7 @@ unsigned NS_GRAPHICS::AnimationSystem::AddAnimController()
 		_usedStatus[index] = true;
 	}
 
-	return index;
+	return (unsigned)index;
 }
 
 bool NS_GRAPHICS::AnimationSystem::RemoveAnimControllerByID(const int& index)

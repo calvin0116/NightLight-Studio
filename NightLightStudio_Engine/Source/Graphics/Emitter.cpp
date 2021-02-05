@@ -137,7 +137,7 @@ void Emitter::InitAllParticles(bool prewarm)
 
 void Emitter::InitParticles(unsigned amount)
 {
-	for (int i = 0; i < amount; ++i)
+	for (unsigned i = 0; i < amount; ++i)
 	{
 		RespawnParticle();
 	}

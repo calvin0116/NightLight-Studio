@@ -17,7 +17,7 @@ class Emitter
 {
 public:
 	std::vector<Particle> _particles;
-	int _numAlive;
+	unsigned _numAlive;
 	unsigned _lastUsed;
 	float _emitterTime;
 	float _timePassed;

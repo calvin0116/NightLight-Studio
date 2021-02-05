@@ -169,7 +169,7 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 	//Fills the Colour and Particle postion buffer
 	int toDraw = 0;
 	unsigned maxParticle = _emitters[emitter->_emitterID]->_maxParticles;
-	for (int i = 0; i < maxParticle; i++) 
+	for (unsigned i = 0; i < maxParticle; i++) 
 	{
 		if (_emitters[emitter->_emitterID]->_particles[i]._alive) 
 		{
