@@ -39,7 +39,7 @@ public:
 	//ENGINE_API void LateInit() { for (auto my_sys : Systems) my_sys.second->LateInit(); }
 
 	//== Game / System running loop
-	ENGINE_API void FixedUpdate();
+	ENGINE_API void FixedUpdate(float dt);
 	ENGINE_API void Update();
 
 

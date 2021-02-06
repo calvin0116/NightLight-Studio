@@ -41,7 +41,7 @@ namespace NS_PHYSICS
 
 		void Init();
 
-		void FixedUpdate() override;
+		void FixedUpdate(float dt) override;
 
 		void Exit() override;
 

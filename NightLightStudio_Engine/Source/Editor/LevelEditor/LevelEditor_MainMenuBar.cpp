@@ -175,6 +175,7 @@ void LevelEditor::LE_MainMenuBar()
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_2);
                     NS_GRAPHICS::CameraSystem::GetInstance().MoveToSavedPosition();
                 }
+                DELTA_T->load();
             });
 
         ImGui::EndMenuBar();
@@ -275,10 +276,10 @@ void LevelEditor::LE_MainMenuBar()
                 CONFIG_DATA->GetConfigData().gamma = gamma;
             }
 
-
             // Do not remove this
             ImGui::EndMenu();
         }
+        ImGui::Text("FPS: %f" , ImGui::GetIO().Framerate);
 
         ImGui::EndMenuBar();
     }

@@ -45,7 +45,7 @@ namespace NS_COLLISION
 
 		void GameInit() override;
 
-		void FixedUpdate() override;
+		void FixedUpdate(float dt) override;
 
 		void GameExit() override;
 

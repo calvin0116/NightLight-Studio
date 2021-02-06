@@ -12,7 +12,7 @@ void DeltaTime::load()
 	oneSecond = 0;
 	fpsLimit = -1;
 	frameDelay = -1;
-	SetFpsLimit(60);
+	SetFpsLimit(120);
 	timeLastRound = timeThisRound = std::chrono::system_clock::now();
 	real_dt = (float)(timeThisRound - timeLastRound).count() / 10000000;
 	accumulatedTime = 0;

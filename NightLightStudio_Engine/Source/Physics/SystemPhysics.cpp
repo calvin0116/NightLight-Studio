@@ -43,7 +43,7 @@ namespace NS_PHYSICS
 
 	}
 
-	void PhysicsSystem::FixedUpdate()
+	void PhysicsSystem::FixedUpdate(float dt)
 	{
 
 		//TA's example
@@ -147,7 +147,7 @@ namespace NS_PHYSICS
 			//compR->prevPos = compT->_position;
 
 			//deltatime, convert to second
-			float realDt = DELTA_T->real_dt;// / CLOCKS_PER_SEC;
+			float realDt = dt;//  DELTA_T->real_dt;// / CLOCKS_PER_SEC;
 
 			// enable gravity
 			//compR->velocity.y -= gravity * realDt;
@@ -198,7 +198,7 @@ namespace NS_PHYSICS
 			// update velocity // a = dv/dt -> dv = a * dt
 			compR->velocity += compR->acceleration * realDt;
 
-			// update position // v = ds/dt -> ds = v * dt
+ 			// update position // v = ds/dt -> ds = v * dt
 
 			glm::vec3 changeInDisplacement = (glm::vec3)compR->velocity * realDt;
 
@@ -280,10 +280,11 @@ namespace NS_PHYSICS
 
 			//NLMath::Vector3d nextPosition =compT->_position = (glm::vec3)compR->velocity * realDt; // keep in rigid body
 
-			if (fabsf(compT->_phyposition.x - compR->prevprevPos.x)> EPSILON && fabsf(compR->prevPos.x - compR->prevprevprevPos.x) > EPSILON)
+			//if (fabsf(compT->_phyposition.x - compR->prevprevPos.x)> EPSILON && fabsf(compR->prevPos.x - compR->prevprevprevPos.x) > EPSILON)
+			if(compT->_phyposition.x - compR->prevprevPos.x == 0.0f)
 			{
 				// jitter
-				compT->_position = compT->_phyposition;
+				//compT->_position = compT->_phyposition;
 			}
 			else
 			{
