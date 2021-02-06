@@ -1381,7 +1381,10 @@ void InspectorWindow::EmitterComp(Entity& ent)
 				});
 
 			ImGui::InputFloat("Duration Time", &emit->_durationPerCycle);
-			ImGui::InputFloat("Emission Rate", &emit->_emissionRate);
+			if (ImGui::InputScalar("Emission Rate", ImGuiDataType_U32, &emit->_emissionOverTime))
+			{
+				emit->_emissionRate = 1.0f / emit->_emissionOverTime;
+			}
 
 			if (ImGui::InputScalar("Max Particles", ImGuiDataType_U32, &emit->_maxParticles))
 			{
@@ -1390,9 +1393,15 @@ void InspectorWindow::EmitterComp(Entity& ent)
 
 			if (emit->_type == SPHERE)
 			{
+				ImGui::InputFloat("Radius", &emit->_radius);
+			}
+
+			else if (emit->_type == CONE)
+			{
 				ImGui::InputFloat("Angle", &emit->_spawnAngle);
 				ImGui::InputFloat("Radius", &emit->_radius);
 			}
+
 			if (ImGui::TreeNode("Particle Size"))
 			{
 				ImGui::Checkbox("Random Size", &emit->_randomizeSize);
