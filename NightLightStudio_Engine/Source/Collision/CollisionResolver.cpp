@@ -887,7 +887,7 @@ void CollsionResolver::preSolveOBB(CollisionEvent& colEvent)
 			}
 
 			// Precalculate bias factor
-			float realDt = DELTA_T->dt / CLOCKS_PER_SEC;
+			float realDt = DELTA_T->real_dt; /// CLOCKS_PER_SEC;
 			contact.bias = -0.2f * (1.0f / realDt) * std::min(float(0.0), contact.penetration + 0.05f);
 
 			// Warm start contact

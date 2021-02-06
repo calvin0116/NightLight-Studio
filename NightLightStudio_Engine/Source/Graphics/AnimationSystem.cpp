@@ -17,7 +17,7 @@ void NS_GRAPHICS::AnimationSystem::Update()
 	{
 		if (anim)
 		{
-			anim->Update(DELTA_T->real_dt * DT_SCALE);
+			anim->Update(DELTA_T->real_dt);// * DT_SCALE);
 		}
 	}
 }

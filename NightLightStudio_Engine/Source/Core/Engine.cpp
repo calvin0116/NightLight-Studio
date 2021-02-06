@@ -20,6 +20,8 @@ void FluffyUnicornEngine::Init(HINSTANCE& hInstance)
 
 void FluffyUnicornEngine::Run()
 {
+	int prev_step = 0;
+
 	//=====System layer====//
     DELTA_T->load();
 	//System Init
@@ -34,18 +36,35 @@ void FluffyUnicornEngine::Run()
 		while (NS_SCENE::SYS_SCENE_MANAGER->CheckChangeScene() == NS_SCENE::SC_NOCHANGE)	
 		{
 			SYS_MAN->GameInit();
+			DELTA_T->load();
 			while (CONFIG_DATA->GetConfigData().sceneRunning)	//Scene / Game loop
 			{
-				//fps start
 				DELTA_T->start();
-
 				//Fixed update
-				while (DELTA_T->accumulatedTime >= DELTA_T->fixed_dt)
+				int step = DELTA_T->GetCurrNumberOfSteps();
+				//while (DELTA_T->accumulatedTime >= DELTA_T->fixed_dt)
+				float dt_for_fix = DELTA_T->real_dt;
+
+				
+				if (step > 1)
+					dt_for_fix = DELTA_T->fixed_dt;
+				
+				if (step > 5)
+					step = 5;
+
+				if (prev_step > 4)
+					step = 1;
+
+				std::cout << DELTA_T->real_dt <<","<< step<< std::endl;
+				for (int i = 0; i < step; ++i)
 				{
-					DELTA_T->accumulatedTime -= DELTA_T->fixed_dt;
-					++DELTA_T->currentNumberOfSteps;
-					SYS_MAN->FixedUpdate();
+					//DELTA_T->accumulatedTime -= DELTA_T->fixed_dt;
+					//++DELTA_T->currentNumberOfSteps;
+					SYS_MAN->FixedUpdate(dt_for_fix);
 				}
+				//fps start
+
+
 				SYS_MAN->Update();		//Update
 
 				//Check for changing of scene
@@ -58,7 +77,9 @@ void FluffyUnicornEngine::Run()
 						CONFIG_DATA->GetConfigData().engineRunning = false;
 					}
 				}
-				DELTA_T->end();
+
+				prev_step = step;
+				//DELTA_T->end();
 			}
 		}
 		SYS_MAN->GameExit();

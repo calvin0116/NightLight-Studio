@@ -410,7 +410,7 @@ namespace NS_LOGIC
 #endif
   }
 
-  void SystemLogic::FixedUpdate()
+  void SystemLogic::FixedUpdate(float dt)
   {
     if (!_isPlaying || !_Inited)
       return;
