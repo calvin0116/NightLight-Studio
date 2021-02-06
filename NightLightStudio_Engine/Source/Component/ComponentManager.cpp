@@ -1321,7 +1321,7 @@ ComponentManager::ComponentSetManager* ComponentManager::getComponentSetMgr(COMP
 	return csm_p;
 }
 
-void ComponentManager::ComponentCreation()
+void ComponentManager::ComponentContainerCreation()
 {
 	// factory
 	ComponentManager::ComponentSetFactory comsetFac;

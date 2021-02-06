@@ -304,6 +304,8 @@ public:
 	{
 		ComponentSet* compSet; // building this compset
 	public:
+
+
 		// Start building
 		void StartBuild();
 
@@ -1115,8 +1117,8 @@ public:
 
 	ComponentSetManager* getComponentSetMgr(COMPONENTSETNAMES id);
 
-	// add components here
-	void ComponentCreation();
+	// add components container here
+	void ComponentContainerCreation();
 
 	void TestComponents();
 
