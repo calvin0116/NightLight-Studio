@@ -2254,6 +2254,8 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 
 				// Gets the movement vector from original
 				glm::vec3 moveVector = trans_comp->_position - glm::make_vec3(trans);
+				glm::vec3 rotateVector = trans_comp->_rotation - glm::make_vec3(rot);
+				glm::vec3 scaleVector = trans_comp->_scale - glm::make_vec3(scale);
 
 				// Sets all objects back to original and moves it based on difference from current to original locations
 				for (int i = 0; i < _allOtherLastPos_ELP.size(); ++i)
@@ -2265,6 +2267,8 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 					_allOtherLastPos_ELP[i]._transComp->_scale = glm::make_vec3(scale);
 
 					_allOtherLastPos_ELP[i]._transComp->_position += moveVector;
+					_allOtherLastPos_ELP[i]._transComp->_rotation += rotateVector;
+					_allOtherLastPos_ELP[i]._transComp->_scale += scaleVector;
 				}
 			}
 			else
@@ -2286,9 +2290,6 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 
 					// Runs command to move object to new position from old position
 					_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
-
-
-					glm::vec3 moveVector = trans_comp->_position - glm::make_vec3(trans);
 					
 					for (int i = 0; i < _allOtherLastPos_ELP.size(); ++i)
 					{
