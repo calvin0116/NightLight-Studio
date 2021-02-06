@@ -252,6 +252,7 @@ void HierarchyInspector::Run()
 					}
 					if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_SHIFT))
 					{
+						// Selects all objects between smallest to selected object
 						multi = true;
 						int smallest = 0;
 						std::map<int, bool> map = LE_ECHELPER->SelectedEntities();
@@ -269,7 +270,38 @@ void HierarchyInspector::Run()
 						}
 					}
 
-					LE_ECHELPER->SelectEntity(ent.getId(), multi);
+					// Select if Deselected
+					if (!LE_ECHELPER->SelectedEntities()[ent.getId()])
+						LE_ECHELPER->SelectEntity(ent.getId(), multi);
+					else
+					{
+						// If Selected, Deselect if different
+						if (LE_ECHELPER->GetSelectedEntityID() != ent.getId())
+						{
+							LE_ECHELPER->DeSelectEntity(ent.getId());
+						}
+						else
+						{
+							// Change to another object to deselect if there is another that exists
+							// if no other object, ignore
+							int anotherID = -1;
+							std::map<int, bool> anotherMap = LE_ECHELPER->SelectedEntities();
+							for (std::map<int, bool>::iterator j = anotherMap.begin(); j != anotherMap.end(); ++j)
+							{
+								if (j->second)
+								{
+									anotherID = j->first;
+									break;
+								}
+							}
+							if (anotherID != -1)
+							{
+								LE_ECHELPER->DeSelectEntity(ent.getId());
+								LE_ECHELPER->SelectEntity(anotherID, multi);
+							}
+
+						}
+					}
 					std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
 
 					if (ImGui::IsMouseDoubleClicked(0))
