@@ -2226,6 +2226,20 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 				{
 					_lastPos_Start = true;
 					_lastPos_ELP = { trans_comp, trans_comp->GetModelMatrix() };
+
+					_allOtherLastPos_ELP.clear();
+
+					std::map<int, bool>& SelectedEntities = LE_ECHELPER->SelectedEntities();
+
+					for (std::map<int, bool>::iterator iter = SelectedEntities.begin(); iter != SelectedEntities.end(); ++iter)
+					{
+						if (iter->second && iter->first != trans_comp->objId)
+						{
+							TransformComponent* otherSelects = G_ECMANAGER->getEntity(iter->first).getComponent<TransformComponent>();
+							ENTITY_LAST_POS otherPos = { otherSelects, otherSelects->GetModelMatrix() };
+							_allOtherLastPos_ELP.push_back(otherPos);
+						}
+					}
 				}
 
 				// Sets object to new position
@@ -2235,6 +2249,23 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 				trans_comp->_position = glm::make_vec3(trans);
 				trans_comp->_rotation = glm::make_vec3(rot);
 				trans_comp->_scale = glm::make_vec3(scale);
+
+				ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(_lastPos_ELP._newPos), trans, rot, scale);
+
+				// Gets the movement vector from original
+				glm::vec3 moveVector = trans_comp->_position - glm::make_vec3(trans);
+
+				// Sets all objects back to original and moves it based on difference from current to original locations
+				for (int i = 0; i < _allOtherLastPos_ELP.size(); ++i)
+				{
+					ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(_allOtherLastPos_ELP[i]._newPos), trans, rot, scale);
+
+					_allOtherLastPos_ELP[i]._transComp->_position = glm::make_vec3(trans);
+					_allOtherLastPos_ELP[i]._transComp->_rotation = glm::make_vec3(rot);
+					_allOtherLastPos_ELP[i]._transComp->_scale = glm::make_vec3(scale);
+
+					_allOtherLastPos_ELP[i]._transComp->_position += moveVector;
+				}
 			}
 			else
 			{
@@ -2257,22 +2288,20 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 					_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
 
 
-					glm::vec3 vecMove = trans_comp->_position - glm::make_vec3(trans);
+					glm::vec3 moveVector = trans_comp->_position - glm::make_vec3(trans);
 					
-					std::map<int, bool>& SelectedEntities = LE_ECHELPER->SelectedEntities();
-					for (std::map<int, bool>::iterator iter = SelectedEntities.begin(); iter != SelectedEntities.end(); ++iter)
+					for (int i = 0; i < _allOtherLastPos_ELP.size(); ++i)
 					{
-						if (iter->second && iter->first != trans_comp->objId)
-						{
-							TransformComponent* otherSelects = G_ECMANAGER->getEntity(iter->first).getComponent<TransformComponent>();
-							glm::vec3 oldOthers = otherSelects->_position;
-							otherSelects->_position += vecMove;
-							glm::mat4 othersObj = otherSelects->GetModelMatrix();
-							otherSelects->_position = oldOthers;
-							ENTITY_LAST_POS otherObj{ otherSelects , othersObj };
-							std::any otherPos = otherObj;
-							_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), otherPos);
-						}
+						ENTITY_LAST_POS otherObj{ _allOtherLastPos_ELP[i]._transComp , _allOtherLastPos_ELP[i]._transComp->GetModelMatrix() };
+						std::any otherPos = otherObj;
+
+						ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(_allOtherLastPos_ELP[i]._newPos), trans, rot, scale);
+
+						_allOtherLastPos_ELP[i]._transComp->_position = glm::make_vec3(trans);
+						_allOtherLastPos_ELP[i]._transComp->_rotation = glm::make_vec3(rot);
+						_allOtherLastPos_ELP[i]._transComp->_scale = glm::make_vec3(scale);
+
+						_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), otherPos);
 					}
 				}
 				else if (_lastEnter)

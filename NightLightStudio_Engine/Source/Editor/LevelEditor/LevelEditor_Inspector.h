@@ -72,6 +72,7 @@ private:
 	bool _lastPos_Start;
 	bool _lastEnter;
 	ENTITY_LAST_POS _lastPos_ELP;
+	std::vector<ENTITY_LAST_POS> _allOtherLastPos_ELP;
 
 	int _itemType;
 
