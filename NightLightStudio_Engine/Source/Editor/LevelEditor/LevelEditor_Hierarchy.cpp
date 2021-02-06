@@ -250,6 +250,25 @@ void HierarchyInspector::Run()
 					{
 						multi = true;
 					}
+					if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_SHIFT))
+					{
+						multi = true;
+						int smallest = 0;
+						std::map<int, bool> map = LE_ECHELPER->SelectedEntities();
+						for (std::map<int, bool>::iterator i = map.begin(); i != map.end(); ++i)
+						{
+							if (i->second)
+							{
+								smallest = i->first;
+								break;
+							}
+						}
+						for (int i = smallest + 1; i < ent.getId(); ++i)
+						{
+							LE_ECHELPER->SelectEntity(i, multi);
+						}
+					}
+
 					LE_ECHELPER->SelectEntity(ent.getId(), multi);
 					std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
 
