@@ -20,8 +20,7 @@ layout (std140) uniform Matrices
 
 out vec2 texCoords;
 out vec3 fragPos;
-out vec3 fragNormal;
-out mat3 TBN;
+out vec3 normal;
 
 void main(void) {
 
@@ -35,14 +34,8 @@ void main(void) {
     fragPos = vec3(model * newPos);
     gl_Position = projection * view * model * newPos;
 
-    mat3 normalMatrix = mat3(transpose(inverse(model * boneTrans)));
-    fragNormal = normalMatrix * norm;
-
-    vec3 T = normalize(normalMatrix * tangent);
-    vec3 N = normalize(normalMatrix * norm);
-    T = normalize(T - dot(T, N) * N);
-    vec3 B = cross(N, T);
-    TBN = transpose(mat3(T, B, N));
+    mat4 normalMatrix = transpose(inverse(model * boneTrans));
+    normal = vec3(normalMatrix * vec4(norm, 0.f));
 
     texCoords = uv;
 }

@@ -1,8 +1,6 @@
 #version 330 core
 
 in vec2 texCoords;
-in vec3 fragPos;
-in vec3 normal;
 
 out vec4 fragColor;
 
@@ -34,11 +32,11 @@ struct SpotLight {
     float intensity;
 };
 
-// PBR Materials
-uniform vec3 Albedo;
-uniform float Metallic;
-uniform float Roughness;
-uniform float Alpha;
+// G-Buffer Render Targets
+uniform sampler2D gPositionAlpha;
+uniform sampler2D gNormalMetallic;
+uniform sampler2D gAlbedoRoughness;
+uniform sampler2D gAmbientOcclusion;
 
 uniform float Gamma;
 
@@ -90,18 +88,13 @@ float GeometrySmith(float NdotV, float NdotL, float roughness)
     return ggx1 * ggx2;
 }
 
-float lengthSqr(vec3 A,vec3 B)
-{
-    vec3 C = A - B;
-    return dot( C, C );
-}
-
 void main(void)
 {
-    vec3 albedo = Albedo;
-    float metallic = Metallic;
-    float roughness = max(Roughness, 0.01f);
-    float ao = 1.f;
+    vec3 albedo = texture(gAlbedoRoughness, texCoords).rgb;
+    float metallic = texture(gNormalMetallic, texCoords).a;
+    float roughness = max(texture(gAlbedoRoughness, texCoords).a, 0.001f);
+    vec3 fragPos = texture(gPositionAlpha, texCoords).xyz;
+    float ao = texture(gAmbientOcclusion, texCoords).r;
 
     // In case of textures, calculate properties for each point
     //vec3 albedo = texture(albedoTex, texCoords).rgb;
@@ -110,7 +103,7 @@ void main(void)
     //float ao = texture(aoTex, texCoords).r;
 
     // properties
-    vec3 N = normalize(normal); // required normal vector
+    vec3 N = normalize(texture(gNormalMetallic, texCoords).xyz); // required normal vector
     vec3 V = normalize(viewPos.xyz - fragPos); // required view vector
 
     // required Base reflectivity
@@ -173,51 +166,46 @@ void main(void)
     // Should be quite easy due to sample code
     for(int j = 0; j < pLights_Num; j++)
     {
-        float distanceSqr = lengthSqr(pLights[j].position.xyz, fragPos);
+        // calculate per-light radiance
+        vec3 L = normalize(pLights[j].position.xyz - fragPos); // light vector
+        vec3 H = normalize(V + L); // Halfway-bisecting vector
+        float distance = length(pLights[j].position.xyz - fragPos);
+        //float attenuation = 1.f / (distance * distance); // inverse squared
+        float attenuation = smoothstep(pLights[j].radius, 0.f, distance); // where 100.f is the radius
 
-        if(distanceSqr < pLights[j].radius * pLights[j].radius)
-        {
-            // calculate per-light radiance
-            vec3 L = normalize(pLights[j].position.xyz - fragPos); // light vector
-            vec3 H = normalize(V + L); // Halfway-bisecting vector
-            float distance = length(pLights[j].position.xyz - fragPos);
-            //float attenuation = 1.f / (distance * distance); // inverse squared
-            float attenuation = smoothstep(pLights[j].radius, 0.f, distance); // where 100.f is the radius
+        vec3 radiance = ((pLights[j].diffuse.rgb * pLights[j].intensity) * attenuation); // diffuse used in place of color
 
-            vec3 radiance = ((pLights[j].diffuse.rgb * pLights[j].intensity) * attenuation); // diffuse used in place of color
+        // Cook-Torrance BRDF
+        // epsilon to avoid division by zero
+        float NdotV = max(dot(N, V), 0.00001f); 
+        float NdotL = max(dot(N, L), 0.00001f);
+        float HdotV = max(dot(H, V), 0.0f);
+        float NdotH = max(dot(N, H), 0.0f);
 
-            // Cook-Torrance BRDF
-            // epsilon to avoid division by zero
-            float NdotV = max(dot(N, V), 0.0001f);
-            float NdotL = max(dot(N, L), 0.0001f);
-            float HdotV = max(dot(H, V), 0.0f);
-            float NdotH = max(dot(N, H), 0.0f);
+        //fragColor = vec4(NdotH,0.f,0.f, 1.f); // 1.f should be replaced with uniform later
+        //return;
 
-            //fragColor = vec4(NdotH,0.f,0.f, 1.f); // 1.f should be replaced with uniform later
-            //return;
+        float D = DistributionGGX(NdotH, roughness);
+        float G = GeometrySmith(NdotV, NdotL, roughness);
+        vec3 F = FresnelSchlick(HdotV, F0); // kS
 
-            float D = DistributionGGX(NdotH, roughness);
-            float G = GeometrySmith(NdotV, NdotL, roughness);
-            vec3 F = FresnelSchlick(HdotV, F0); // kS
+        vec3 specular = D * G * F;
+        specular /= (4.f * NdotV * NdotL);
 
-            vec3 specular = D * G * F;
-            specular /= (4.f * NdotV * NdotL);
+        // Energy Conservation where diffuse + specular <= 1.f
+        // Calculation of diffuse factor
+        vec3 kD = vec3(1.f) - F;
 
-            // Energy Conservation where diffuse + specular <= 1.f
-            // Calculation of diffuse factor
-            vec3 kD = vec3(1.f) - F;
+        // Multiply kD by inverse metalness
+        // since only dia-electric materials have diffuse lighting
+        // Linear blend if partially metal
+        kD *= 1.f - metallic;
 
-            // Multiply kD by inverse metalness
-            // since only dia-electric materials have diffuse lighting
-            // Linear blend if partially metal
-            kD *= 1.f - metallic;
-
-            // angle of light to surface affects specular and diffuse
-            // Mix albedo with diffuse, but not specular
-            // This is just how reality works
-            // Specular component bounces off the surface
-            Lo += (kD * albedo / PI + specular) * radiance * NdotL;
-        }
+        // angle of light to surface affects specular and diffuse
+        // Mix albedo with diffuse, but not specular
+        // This is just how reality works
+        // Specular component bounces off the surface
+        Lo += (kD * albedo / PI + specular) * radiance * NdotL;
     }
 
     // Calculation for all spot lights
@@ -282,7 +270,7 @@ void main(void)
     // Might replace with uniform gamma value
     resultColor = pow(resultColor, vec3(1.0f/Gamma));
 
-    fragColor = vec4(resultColor, Alpha);
+    fragColor = vec4(resultColor, texture(gPositionAlpha, texCoords).a);
 
     // End of PBR calculation
 }

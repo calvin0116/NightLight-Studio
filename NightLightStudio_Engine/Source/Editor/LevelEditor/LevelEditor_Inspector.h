@@ -56,6 +56,9 @@ public:
 			return std::string(buffer.GetString());
 		}
 	};
+
+	void SetFOV(const float& FOV);
+
 private:
 	int selected_index;
 
@@ -69,10 +72,14 @@ private:
 	bool _lastPos_Start;
 	bool _lastEnter;
 	ENTITY_LAST_POS _lastPos_ELP;
+	std::vector<ENTITY_LAST_POS> _allOtherLastPos_ELP;
 
 	int _itemType;
 
 	bool _notRemove;
+
+	// Added by YY to match current camera's fov
+	float _fov = 44.5f;
 
 	void TransformComp(Entity& ent);
 	void ColliderComp(Entity& ent);

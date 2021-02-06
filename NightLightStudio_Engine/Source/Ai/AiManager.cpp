@@ -2,7 +2,6 @@
 #include "../Physics/SystemPhysics.h"
 #include "../IO/Json/Config.h"
 #include "../Core/DeltaTime.h" 
-
 inline void NS_AI::AiManager::HandleMsg(MessageTogglePlay& mst)
 {
 	if (mst.GetID() == "BeforePlay")
@@ -98,6 +97,9 @@ inline void NS_AI::AiManager::Update()
 
 inline void NS_AI::AiManager::WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)
 {
+	target_position;
+	nav_comp;
+	my_pos;
 	if (wp_man.GetWayPointNumber())	//If there is way point
 	{
 		//nav_comp->SetCurPathIndex(wp_man.AstarPathFinding(my_pos, target_position,nav_comp->GetCurPath()));
@@ -228,7 +230,7 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 }
 
 //Select closest way point to move to
-
+/*
 inline void NS_AI::AiManager::FindClosestWP(NavigatorComponent* nav_comp, TransformComponent* trans_comp)
 {
 	std::pair<int, float> closest_wp = std::make_pair<int, float>(-1, std::numeric_limits<float>::max());
@@ -247,4 +249,4 @@ inline void NS_AI::AiManager::FindClosestWP(NavigatorComponent* nav_comp, Transf
 	}
 
 	nav_comp->cur_route_wp_index = i;	//wp index to go to will be the closest one
-}
+}*/

@@ -95,7 +95,7 @@ public:
 	}
 	WayPointComponent* GetPrevPathWp()
 	{
-		return cur_wp_path->GetPath().at(path_indexes.at(prev_route_wp_index).first);
+		return cur_wp_path->GetPath().at(path_indexes.at(prev_path_wp_index).first);
 	}
 
 	WayPointComponent* GetCurWalkingWp()
@@ -166,6 +166,10 @@ public:
 				//size_in_rad = itr->value.GetFloat();
 				nav_state = (NAV_STATE)itr->value.GetInt();
 			}
+			if (itr->name == "wp_creation_type")
+			{
+				wp_creation_type = (WP_PATH_CREATION_TYPE)itr->value.GetInt();
+			}
 		}
 	};
 	virtual Value	Write() { 
@@ -180,6 +184,7 @@ public:
 		NS_SERIALISER::ChangeData(&val, "WayPointMapName", rapidjson::StringRef(wp_path_ent_name.c_str()));
 		NS_SERIALISER::ChangeData(&val, "circuling_rad", circuling_rad);
 		NS_SERIALISER::ChangeData(&val, "nav_state", (int)nav_state);
+		NS_SERIALISER::ChangeData(&val, "wp_creation_type", (int)wp_creation_type);
 		return val;
 	};
 	virtual Value& Write(Value& val) { return val; };	
@@ -213,16 +218,16 @@ public:
 		case WPP_STANDARD:
 		{
 			path_indexes.clear();
-			int wp_size = cur_wp_path->GetPath().size();
-			for (int i = 0; i < wp_size; ++i)
-				path_indexes.push_back(std::make_pair(i, true));
+			size_t wp_size = cur_wp_path->GetPath().size();
+			for (size_t i = 0; i < wp_size; ++i)
+				path_indexes.push_back(std::make_pair((int)i, true));
 			break;
 		}
 		case WPP_REVERSE:
 		{
 			path_indexes.clear();
-			int wp_size = cur_wp_path->GetPath().size() - 1;
-			for (int i = wp_size; i >= 0; --i)
+			size_t wp_size = cur_wp_path->GetPath().size() - 1;
+			for (int i = static_cast<int>(wp_size); i >= 0; --i)
 				path_indexes.push_back(std::make_pair(i, true));
 			break;
 		}
@@ -245,6 +250,11 @@ public:
 	{
 		if (!HaveWayPoint()) //Dont need to move if one or less way point
 			return;
+
+		//if(wp_to_reach_end.size() == 0 || cur_route_wp_index == wp_to_reach_end.size())
+			//Astar to find the route
+			//return;
+
 
 		prev_route_wp_index = cur_route_wp_index;
 		if (wp_nav_type == WN_RANDOM)
@@ -288,12 +298,15 @@ public:
 	//Function to set next way point to go to
 	void SetNextWp(ComponentNavigator* nav)
 	{
+		nav;
 		StopAtEachWPCheck();			//Check if stopping around a way point 
 		DecideOnNextWp();				//Decide on which way point to go to next
 		//2. Check for direct route
 
 		//3. Find route to way point if being blocked
 	}
+
+	void FindClosestWP();
 
 
 	void SetSpeed(float spd)

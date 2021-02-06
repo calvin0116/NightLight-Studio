@@ -37,7 +37,7 @@ public:
 	bool setFocus;
 
 	//==========Single select==============//
-	void SelectEntity(int id, bool multi)
+	void SelectEntity(int id, bool multi = false)
 	{
 		//Deselect Previous entity
 		if (selected_ent_id != -1 && !multi)

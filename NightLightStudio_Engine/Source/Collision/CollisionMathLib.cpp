@@ -1515,7 +1515,7 @@ namespace NlMath
 
         bool inside = true;
         char quadrant[NUMDIM];
-        register int i; // register is a hint to the compiler, 
+        int i; // register is a hint to the compiler, 
                         // advising it to store that variable in a processor register 
                         // instead of memory (for example, instead of the stack).
                         // The compiler may or may not follow that hint.

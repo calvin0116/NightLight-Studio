@@ -85,7 +85,7 @@ namespace NS_GRAPHICS
 		void SetRotationSensitivity(const float& sensitivity);
 		void SetDragSensitivity(const float& sensitivity);
 		void SetZoomSensitivity(const float& sensitivity);
-    void SetFOV(const float& fov);
+		void SetFOV(const float& fov);
 		float GetFOV();
 
 		const float& GetRotationSensitivity();
@@ -105,7 +105,7 @@ namespace NS_GRAPHICS
 
 		// Getter for specified scene camera camera, used to access its properties
 		// If no camera exists, return dummy camera
-		Camera& GetSceneCamera(const int& cameraID);
+		//Camera& GetSceneCamera(const int& cameraID);
 
 		// Returns current active camera, regardless of editor or game camera
 		Camera& GetCurrentCamera();

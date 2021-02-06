@@ -17,6 +17,8 @@
 
 #include "../../Ai/AiManager.h"
 
+#include "../../Graphics/CameraSystem.h"
+
 void InspectorWindow::Start()
 {
 	// Set up Command to run to move objects
@@ -358,6 +360,11 @@ void InspectorWindow::ComponentLayout(Entity& ent)
   WayPointComp(ent);
 
 	AddSelectedComps(ent);
+}
+
+void InspectorWindow::SetFOV(const float& FOV)
+{
+	_fov = FOV;
 }
 
 void InspectorWindow::TransformComp(Entity& ent)
@@ -1060,6 +1067,7 @@ void InspectorWindow::ScriptComp(Entity& ent)
         if (var_flag == MONO_FIELD_ATTR_PUBLIC) // MONO_FIELD_ATTR_PUBLIC
         {
           bool bChanged = false; // If value changed, save it back to mono.
+		  bChanged;
           // Inspect values here
           // Name of variable
           std::string sName = std::string(var_name) + " : ";
@@ -1180,7 +1188,7 @@ void InspectorWindow::CanvasComp(Entity& ent)
 			size_t uiCount = canvas->_uiElements.size();
 			for (size_t i = 0; i < uiCount; ++i)
 			{
-				ImGui::Checkbox("IsActive##UI", &canvas->_uiElements.at(i)._isActive);
+				ImGui::Checkbox(std::string("IsActive##UI").append(std::to_string(i)).c_str(), &canvas->_uiElements.at(i)._isActive);
 				if (ImGui::Button(std::string("X##").append(std::to_string(i)).c_str()))
 				{
 					canvas->RemoveUI(i);
@@ -1373,7 +1381,10 @@ void InspectorWindow::EmitterComp(Entity& ent)
 				});
 
 			ImGui::InputFloat("Duration Time", &emit->_durationPerCycle);
-			ImGui::InputFloat("Emission Rate", &emit->_emissionRate);
+			if (ImGui::InputScalar("Emission Rate", ImGuiDataType_U32, &emit->_emissionOverTime))
+			{
+				emit->_emissionRate = 1.0f / emit->_emissionOverTime;
+			}
 
 			if (ImGui::InputScalar("Max Particles", ImGuiDataType_U32, &emit->_maxParticles))
 			{
@@ -1382,9 +1393,15 @@ void InspectorWindow::EmitterComp(Entity& ent)
 
 			if (emit->_type == SPHERE)
 			{
+				ImGui::InputFloat("Radius", &emit->_radius);
+			}
+
+			else if (emit->_type == CONE)
+			{
 				ImGui::InputFloat("Angle", &emit->_spawnAngle);
 				ImGui::InputFloat("Radius", &emit->_radius);
 			}
+
 			if (ImGui::TreeNode("Particle Size"))
 			{
 				ImGui::Checkbox("Random Size", &emit->_randomizeSize);
@@ -1526,6 +1543,7 @@ void InspectorWindow::EmitterComp(Entity& ent)
 
 void InspectorWindow::CameraComp(Entity& ent)
 {
+	ent;
 }
 
 void InspectorWindow::CScriptComp(Entity& ent)
@@ -2193,17 +2211,18 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 			float* camView = glm::value_ptr(cmMat);
 			// Matches the most closely to the actual camera
 			// If gizmos don't match, change this?
-			float fov = 44.5f;
+			_fov = NS_GRAPHICS::CameraSystem::GetInstance().GetFOV();
+
 			//Perspective(fov, io.DisplaySize.x / io.DisplaySize.y, 1.0f, 1000.f, cameraProjection);
 			float* cameraProjection;
 			if (windowSize.x && windowSize.y)
 			{
-				glm::mat4 persp = glm::perspective(glm::radians(fov), (float)windowSize.x / (float)windowSize.y, 1.0f, 1000.0f);
+				glm::mat4 persp = glm::perspective(glm::radians(_fov), (float)windowSize.x / (float)windowSize.y, 1.0f, 1000.0f);
 				cameraProjection = glm::value_ptr(persp);
 			}
 			else
 			{
-				glm::mat4 persp = glm::perspective(glm::radians(fov), 1280.0f / 720.0f, 1.0f, 1000.0f);
+				glm::mat4 persp = glm::perspective(glm::radians(_fov), 1280.0f / 720.0f, 1.0f, 1000.0f);
 				cameraProjection = glm::value_ptr(persp);
 			}
 
@@ -2216,6 +2235,20 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 				{
 					_lastPos_Start = true;
 					_lastPos_ELP = { trans_comp, trans_comp->GetModelMatrix() };
+
+					_allOtherLastPos_ELP.clear();
+
+					std::map<int, bool>& SelectedEntities = LE_ECHELPER->SelectedEntities();
+
+					for (std::map<int, bool>::iterator iter = SelectedEntities.begin(); iter != SelectedEntities.end(); ++iter)
+					{
+						if (iter->second && iter->first != trans_comp->objId)
+						{
+							TransformComponent* otherSelects = G_ECMANAGER->getEntity(iter->first).getComponent<TransformComponent>();
+							ENTITY_LAST_POS otherPos = { otherSelects, otherSelects->GetModelMatrix() };
+							_allOtherLastPos_ELP.push_back(otherPos);
+						}
+					}
 				}
 
 				// Sets object to new position
@@ -2225,6 +2258,27 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 				trans_comp->_position = glm::make_vec3(trans);
 				trans_comp->_rotation = glm::make_vec3(rot);
 				trans_comp->_scale = glm::make_vec3(scale);
+
+				ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(_lastPos_ELP._newPos), trans, rot, scale);
+
+				// Gets the movement vector from original
+				glm::vec3 moveVector = trans_comp->_position - glm::make_vec3(trans);
+				glm::vec3 rotateVector = trans_comp->_rotation - glm::make_vec3(rot);
+				glm::vec3 scaleVector = trans_comp->_scale - glm::make_vec3(scale);
+
+				// Sets all objects back to original and moves it based on difference from current to original locations
+				for (int i = 0; i < _allOtherLastPos_ELP.size(); ++i)
+				{
+					ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(_allOtherLastPos_ELP[i]._newPos), trans, rot, scale);
+
+					_allOtherLastPos_ELP[i]._transComp->_position = glm::make_vec3(trans);
+					_allOtherLastPos_ELP[i]._transComp->_rotation = glm::make_vec3(rot);
+					_allOtherLastPos_ELP[i]._transComp->_scale = glm::make_vec3(scale);
+
+					_allOtherLastPos_ELP[i]._transComp->_position += moveVector;
+					_allOtherLastPos_ELP[i]._transComp->_rotation += rotateVector;
+					_allOtherLastPos_ELP[i]._transComp->_scale += scaleVector;
+				}
 			}
 			else
 			{
@@ -2245,24 +2299,19 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 
 					// Runs command to move object to new position from old position
 					_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
-
-
-					glm::vec3 vecMove = trans_comp->_position - glm::make_vec3(trans);
 					
-					std::map<int, bool>& SelectedEntities = LE_ECHELPER->SelectedEntities();
-					for (std::map<int, bool>::iterator iter = SelectedEntities.begin(); iter != SelectedEntities.end(); ++iter)
+					for (int i = 0; i < _allOtherLastPos_ELP.size(); ++i)
 					{
-						if (iter->second && iter->first != trans_comp->objId)
-						{
-							TransformComponent* otherSelects = G_ECMANAGER->getEntity(iter->first).getComponent<TransformComponent>();
-							glm::vec3 oldOthers = otherSelects->_position;
-							otherSelects->_position += vecMove;
-							glm::mat4 othersObj = otherSelects->GetModelMatrix();
-							otherSelects->_position = oldOthers;
-							ENTITY_LAST_POS otherObj{ otherSelects , othersObj };
-							std::any otherPos = otherObj;
-							_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), otherPos);
-						}
+						ENTITY_LAST_POS otherObj{ _allOtherLastPos_ELP[i]._transComp , _allOtherLastPos_ELP[i]._transComp->GetModelMatrix() };
+						std::any otherPos = otherObj;
+
+						ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(_allOtherLastPos_ELP[i]._newPos), trans, rot, scale);
+
+						_allOtherLastPos_ELP[i]._transComp->_position = glm::make_vec3(trans);
+						_allOtherLastPos_ELP[i]._transComp->_rotation = glm::make_vec3(rot);
+						_allOtherLastPos_ELP[i]._transComp->_scale = glm::make_vec3(scale);
+
+						_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), otherPos);
 					}
 				}
 				else if (_lastEnter)

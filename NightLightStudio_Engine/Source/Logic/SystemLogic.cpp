@@ -109,43 +109,61 @@ namespace NS_LOGIC
         {
           std::string tempVar(var_name);
           tempVar += MyScript->objId;
-          if (var_typeid == MONO_TYPE_BOOLEAN)
-          {
-            tempVar += "bool";
-            bool val = std::any_cast<bool>(ScriptValues[tempVar]);
-            MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
-          }
-          else if (var_typeid == MONO_TYPE_I4)
-          {
-            tempVar += "int";
-            int val = std::any_cast<int>(ScriptValues[tempVar]);
-            MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
-          }
-          else if (var_typeid == MONO_TYPE_U4)
-          {
-            tempVar += "unsigned";
-            unsigned val = std::any_cast<unsigned>(ScriptValues[tempVar]);
-            MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
-          }
-          else if (var_typeid == MONO_TYPE_R4)
-          {
-            tempVar += "float";
-            float val = std::any_cast<float>(ScriptValues[tempVar]);
-            MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
-          }
-          else if (var_typeid == MONO_TYPE_R8)
-          {
-            tempVar += "double";
-            double val = std::any_cast<double>(ScriptValues[tempVar]);
-            MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
-          }
-          else if (var_typeid == MONO_TYPE_STRING)
-          {
-            tempVar += "string";
-            std::string val = std::any_cast<std::string>(ScriptValues[tempVar]);
-            if(!val.empty())
-              MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, *MonoWrapper::ToMonoString(val));
-          }
+            if (var_typeid == MONO_TYPE_BOOLEAN)
+            {
+              tempVar += "bool";
+              if (ScriptValues.find(tempVar) != ScriptValues.end())
+              {
+                bool val = std::any_cast<bool>(ScriptValues[tempVar]);
+                MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+              }
+            }
+            else if (var_typeid == MONO_TYPE_I4)
+            {
+              tempVar += "int";
+              if (ScriptValues.find(tempVar) != ScriptValues.end())
+              {
+                int val = std::any_cast<int>(ScriptValues[tempVar]);
+                MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+              }
+            }
+            else if (var_typeid == MONO_TYPE_U4)
+            {
+              tempVar += "unsigned";
+              if (ScriptValues.find(tempVar) != ScriptValues.end())
+              {
+                unsigned val = std::any_cast<unsigned>(ScriptValues[tempVar]);
+                MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+              }
+            }
+            else if (var_typeid == MONO_TYPE_R4)
+            {
+              tempVar += "float";
+              if (ScriptValues.find(tempVar) != ScriptValues.end())
+              {
+                float val = std::any_cast<float>(ScriptValues[tempVar]);
+                MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+              }
+            }
+            else if (var_typeid == MONO_TYPE_R8)
+            {
+              tempVar += "double";
+              if (ScriptValues.find(tempVar) != ScriptValues.end())
+              {
+                double val = std::any_cast<double>(ScriptValues[tempVar]);
+                MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, val);
+              }
+            }
+            else if (var_typeid == MONO_TYPE_STRING)
+            {
+              tempVar += "string";
+              if (ScriptValues.find(tempVar) != ScriptValues.end())
+              {
+                std::string val = std::any_cast<std::string>(ScriptValues[tempVar]);
+                if (!val.empty())
+                  MonoWrapper::SetObjectFieldValue(MyScript->_MonoData._pInstance, var_name, *MonoWrapper::ToMonoString(val));
+              }
+            }
         }
         // Move to next field
         field = mono_class_get_fields(klass, &iter);

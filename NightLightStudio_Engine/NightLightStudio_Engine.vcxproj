@@ -144,7 +144,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Include\rapidjson;$(SolutionDir)Include\FMOD\inc;$(SolutionDir)Include\Assimp;$(SolutionDir)Include\mono\include\mono-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -317,10 +317,12 @@
     <ClInclude Include="Source\Window\WndUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Ai\AiGraph.cpp" />
     <ClCompile Include="Source\Ai\AiManager.cpp" />
     <ClCompile Include="Source\Ai\WayPointManager.cpp" />
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
     <ClCompile Include="Source\Component\ComponentEmitter.cpp" />
+    <ClCompile Include="Source\Component\ComponentNavigator.cpp" />
     <ClCompile Include="Source\Component\ComponentWayPoint.cpp" />
     <ClCompile Include="Source\Debug\DebugDiagnostic.cpp" />
     <ClCompile Include="Source\Debug\DebugToStream.cpp" />

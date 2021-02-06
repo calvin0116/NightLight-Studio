@@ -13,6 +13,7 @@ ComponentEmitter::ComponentEmitter()
 
 ComponentEmitter::ComponentEmitter(const int& emitterID)
 	: _isActive{ true }
+	, _emitterID{ emitterID }
 {
 	strcpy_s(ser_name, "EmitterComponent");
 }
@@ -90,6 +91,10 @@ void ComponentEmitter::Read(Value& val)
 		{
 			emitSys._emitters[_emitterID]->_type = EmitterShapeType::SPHERE;
 		}
+		else if (emitterType == "CONE")
+		{
+			emitSys._emitters[_emitterID]->_type = EmitterShapeType::CONE;
+		}
 	}
 
 	if (val.FindMember("DurationPerCycle") == val.MemberEnd())
@@ -99,11 +104,12 @@ void ComponentEmitter::Read(Value& val)
 		emitSys._emitters[_emitterID]->_durationPerCycle = val["DurationPerCycle"].GetFloat();
 	}
 
-	if (val.FindMember("EmissionRate") == val.MemberEnd())
+	if (val.FindMember("EmissionRateOverTime") == val.MemberEnd())
 		std::cout << "No emission data has been found" << std::endl;
 	else
 	{
-		emitSys._emitters[_emitterID]->_emissionRate = val["EmissionRate"].GetFloat();
+		emitSys._emitters[_emitterID]->_emissionOverTime = val["EmissionRateOverTime"].GetUint();
+		emitSys._emitters[_emitterID]->_emissionRate = 1 / emitSys._emitters[_emitterID]->_emissionOverTime;
 	}
 
 	if (val.FindMember("MaxParticle") == val.MemberEnd())
@@ -368,12 +374,15 @@ Value ComponentEmitter::Write()
 	case EmitterShapeType::SPHERE:
 		NS_SERIALISER::ChangeData(&val, "EmitterType", rapidjson::StringRef("SPHERE"));		//custom enum
 		break;
+	case EmitterShapeType::CONE:
+		NS_SERIALISER::ChangeData(&val, "EmitterType", rapidjson::StringRef("CONE"));		//custom enum
+		break;
 	default:
 		break;
 	}
 
 	NS_SERIALISER::ChangeData(&val, "DurationPerCycle", emitSys._emitters[_emitterID]->_durationPerCycle);
-	NS_SERIALISER::ChangeData(&val, "EmissionRate", emitSys._emitters[_emitterID]->_emissionRate);
+	NS_SERIALISER::ChangeData(&val, "EmissionRateOverTime", emitSys._emitters[_emitterID]->_emissionOverTime);
 
 	NS_SERIALISER::ChangeData(&val, "MaxParticle", emitSys._emitters[_emitterID]->_maxParticles);
 
@@ -450,4 +459,12 @@ Value ComponentEmitter::Write()
 	NS_SERIALISER::ChangeData(&val, "Velocity", vel);
 
 	return val;
+}
+
+ComponentEmitter* ComponentEmitter::Clone()
+{
+	ComponentEmitter* newcomp = new ComponentEmitter();
+	*newcomp = *this;
+	_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
+	return newcomp;
 }

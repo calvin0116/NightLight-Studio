@@ -299,18 +299,18 @@ namespace NS_GRAPHICS
 
 		_cameras.push_back(newCam);
 
-		return _cameras.size() - 1;
+		return (int)_cameras.size() - 1;
 	}
-
+	/*
 	Camera& CameraSystem::GetSceneCamera(const int& cameraID)
 	{
 		if (cameraID >= 0 && cameraID < _cameras.size())
 			return _cameras[cameraID];
 
-		Camera dummyCam;
+		//Camera dummyCam;
 
-		return dummyCam;
-	}
+		//return dummyCam;
+	}*/
 
 	Camera& CameraSystem::GetCurrentCamera()
 	{

@@ -6,7 +6,7 @@
 
 enum EmitterShapeType
 {
-	SPHERE, //ONLY THIS FOR NOW
+	SPHERE,
 	CONE,
 	TOTAL_SHAPE
 };
@@ -17,7 +17,7 @@ class Emitter
 {
 public:
 	std::vector<Particle> _particles;
-	int _numAlive;
+	unsigned _numAlive;
 	unsigned _lastUsed;
 	float _emitterTime;
 	float _timePassed;
@@ -30,12 +30,14 @@ public:
 	EmitterShapeType _type;
 	float _durationPerCycle;
 	float _emissionRate;
+	unsigned _emissionOverTime;
 	unsigned _maxParticles;
 
 	float _burstTime;
 	float _burstRate;
 	unsigned _burstAmount;
 
+	glm::vec3 _coneDir;
 	float _spawnAngle;
 	float _radius;
 
@@ -98,6 +100,8 @@ public:
 
 	// Generates a random unit vector3
 	glm::vec3 RandomVec3();
+	// Generates a random unit vector3 in a cone
+	glm::vec3 RandomConeVec3(float degree, glm::vec3 dir);
 
 	//Prepares buffer
 	void InitBuffer();
