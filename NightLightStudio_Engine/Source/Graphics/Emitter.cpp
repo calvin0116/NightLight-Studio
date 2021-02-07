@@ -329,14 +329,22 @@ void Emitter::ResetParticle(size_t index)
 				spawnPos = _emitterPosition;
 			}
 			glm::vec3 randVec = RandomConeVec3(_spawnAngle,_coneDir);
+
 			glm::quat Quaternion(glm::radians(_emitterRotation));
 			glm::mat4 Rotate = glm::mat4_cast(Quaternion);
+			glm::vec3 newDir = glm::vec3(Rotate * glm::vec4(_coneDir,1.0f));
 			randVec = Rotate * glm::vec4(randVec, 1.0f);
-			spawnPos += (randVec * _radius) - (_coneDir * _radius);
+			randVec = glm::normalize(randVec);
+
+			float heightOfCone = _radius / std::tanf(_spawnAngle);
+			float heightOfVector = glm::dot(randVec * heightOfCone, newDir);
+
+			spawnPos += (randVec * heightOfCone) - (newDir * heightOfVector);
+			//spawnPos += (randVec * _radius) - (_coneDir * _radius);
 			_particles[index]._position = spawnPos;
 
 			//Unit Length Direction
-			_particles[index]._velocity = glm::normalize(randVec);
+			_particles[index]._velocity = randVec;
 
 			//Randomize speed
 			if (_randomizeSpeed)
