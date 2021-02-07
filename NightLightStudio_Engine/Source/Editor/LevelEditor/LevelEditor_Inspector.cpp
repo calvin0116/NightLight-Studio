@@ -640,6 +640,9 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				graphics_comp->SetRenderType(RENDERTYPE::TEXTURED);
 
 			ImGui::Checkbox("IsActive##Graphic", &graphics_comp->_isActive);
+			ImGui::Checkbox("Emission##Graphic", &graphics_comp->_renderEmission);
+
+			ImGui::ColorEdit3("Emission Color##Graphics", glm::value_ptr(graphics_comp->_pbrData._emissive));
 
 			std::string mod = graphics_comp->_modelFileName.toString();
 			std::string tex = graphics_comp->_albedoFileName.toString();
