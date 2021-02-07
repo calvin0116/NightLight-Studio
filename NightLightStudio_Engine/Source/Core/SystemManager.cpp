@@ -75,7 +75,7 @@ inline ENGINE_API void MySystemManager::GameInit() {
 #endif
 }
 
-void MySystemManager::FixedUpdate()
+void MySystemManager::FixedUpdate(float dt)
 {
 #ifdef _EDITOR
 	int i = 0;
@@ -97,7 +97,7 @@ void MySystemManager::FixedUpdate()
 		//auto t1 = std::chrono::high_resolution_clock::now();
 #endif
 
-		my_sys.second->FixedUpdate();
+		my_sys.second->FixedUpdate(dt);
 
 #ifdef _EDITOR
 

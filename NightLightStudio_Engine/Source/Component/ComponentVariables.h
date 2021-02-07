@@ -7,7 +7,7 @@
 typedef struct ComponentVariables : public ISerializable //: public IComponent
 {
     LocalVector<int> int_list;
-    LocalVector<LocalString<125>> string_list;
+    LocalVector<LocalString<DEF_STR_SIZE>> string_list;
     LocalVector<float> float_list;
 
 

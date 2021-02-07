@@ -297,8 +297,9 @@ namespace NS_COLLISION
 
 	}
 
-	void CollisionSystem::FixedUpdate()
+	void CollisionSystem::FixedUpdate(float dt)
 	{
+		dt;
 		// //test line col
 		//NlMath::Vec3 ray1Origin(-100.0f, 0.0f, 0.0f);
 		//NlMath::Vec3 ray1End(100.0f, 0.0f, 0.0f);
@@ -339,7 +340,7 @@ namespace NS_COLLISION
 				comCol->isCollide = false;
 			}
 		}
-
+		
 		if (!_isPlaying)
 		{
 			// Creating an object of CSVReader
@@ -351,7 +352,7 @@ namespace NS_COLLISION
 			colResolver.clear();
 			return;
 		}
-
+		
 		// clear collision events
 		//colResolver.clear();
 

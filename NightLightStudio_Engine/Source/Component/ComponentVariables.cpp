@@ -59,7 +59,7 @@ inline Value ComponentVariables::Write()
 	NS_SERIALISER::ChangeData(&val, "IntList", int_list_val);
 
 	Value string_list_val(rapidjson::kArrayType);
-	for (LocalString<125>& s : string_list)
+	for (LocalString<DEF_STR_SIZE>& s : string_list)
 		string_list_val.PushBack(rapidjson::StringRef(s.c_str()), global_alloc);
 	NS_SERIALISER::ChangeData(&val, "StringList", string_list_val);
 

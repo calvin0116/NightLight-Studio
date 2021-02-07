@@ -1577,6 +1577,12 @@ void InspectorWindow::EmitterComp(Entity& ent)
 				emitter->Stop();
 			}
 		}
+		if (!_notRemove)
+		{
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<EmitterComponent>()->Write(), typeid(EmitterComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
+		}
 
 		ImGui::Separator();
 	}
@@ -1764,7 +1770,7 @@ void InspectorWindow::VariableComp(Entity& ent)
 
 			int str_index = 1;
 
-			for (LocalString<125>& str : comp_var->string_list) //[path, name]
+			for (LocalString<DEF_STR_SIZE>& str : comp_var->string_list) //[path, name]
 			{
 				std::string p = "String_" + std::to_string(str_index);
 				
@@ -1911,7 +1917,7 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 			}
 			int str_index = 1;
 
-			for (LocalString<125> & str : wpm_comp->way_point_list) //[path, name]
+			for (LocalString<DEF_STR_SIZE> & str : wpm_comp->way_point_list) //[path, name]
 			{
 				std::string p = "Waypoint_" + std::to_string(str_index);
 

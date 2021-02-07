@@ -1,8 +1,9 @@
 #pragma once
 
 #include <string>
+#define DEF_STR_SIZE 156
 
-template<size_t N = 125>
+template<size_t N = DEF_STR_SIZE>
 class LocalString
 {
 	char stringData[N];
