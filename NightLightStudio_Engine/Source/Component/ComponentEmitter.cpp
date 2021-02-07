@@ -6,7 +6,7 @@
 #pragma warning( disable : 26812 )
 
 ComponentEmitter::ComponentEmitter()
-	: _isActive{ true }
+	: _isActive{ true }, _emitterID{ -1 }
 {
 	strcpy_s(ser_name, "EmitterComponent");
 }
