@@ -1577,6 +1577,12 @@ void InspectorWindow::EmitterComp(Entity& ent)
 				emitter->Stop();
 			}
 		}
+		if (!_notRemove)
+		{
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<EmitterComponent>()->Write(), typeid(EmitterComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
+		}
 
 		ImGui::Separator();
 	}
