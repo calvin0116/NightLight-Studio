@@ -50,6 +50,317 @@ void ComponentEmitter::Stop()
 	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->Stop();
 }
 
+EmitterShapeType ComponentEmitter::GetShapeType()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_type;
+}
+
+void ComponentEmitter::SetShapeType(EmitterShapeType shape)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_type = shape;
+}
+
+float ComponentEmitter::GetDuration()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_durationPerCycle;
+}
+
+void ComponentEmitter::SetDuration(float duration)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_durationPerCycle = duration;
+}
+
+unsigned ComponentEmitter::GetEmissionRate()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionOverTime;
+}
+
+void ComponentEmitter::SetEmissionRate(unsigned emission)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionOverTime = emission;
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionRate = 1 / NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionOverTime;
+}
+
+unsigned ComponentEmitter::GetMaxParticle()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxParticles;
+}
+
+void ComponentEmitter::SetMaxParticle(unsigned max)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxParticles = max;
+}
+
+float ComponentEmitter::GetBurstRate()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_burstRate;
+}
+
+void ComponentEmitter::SetBurstRate(float burst)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_burstRate = burst;
+}
+
+unsigned ComponentEmitter::GetBurstAmount()
+{
+	return 	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_burstAmount;
+}
+
+void ComponentEmitter::SetBurstAmount(unsigned amount)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_burstAmount = amount;
+}
+
+float ComponentEmitter::GetAngle()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_spawnAngle;
+}
+
+void ComponentEmitter::SetAngle(float angle)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_spawnAngle = angle;
+}
+
+float ComponentEmitter::GetRadius()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_radius;
+}
+
+void ComponentEmitter::SetRadius(float radius)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_radius = radius;
+}
+
+bool ComponentEmitter::GetRandomizeSize()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_randomizeSize;
+}
+
+void ComponentEmitter::SetRandomizeSize(bool size)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_randomizeSize = size;
+}
+
+float ComponentEmitter::GetMinParticleSize()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_minParticleSize;
+}
+
+void ComponentEmitter::SetMinParticleSize(float min)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_minParticleSize = min;
+}
+
+float ComponentEmitter::GetMaxParticleSize()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxParticleSize;
+}
+
+void ComponentEmitter::SetMaxParticleSize(float max)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxParticleSize = max;
+}
+
+bool ComponentEmitter::GetRandomizeSpeed()
+{
+	return  NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_randomizeSpeed;
+}
+
+void ComponentEmitter::SetRandomizeSpeed(bool speed)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_randomizeSpeed = speed;
+}
+
+float ComponentEmitter::GetMinParticleSpeed()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_minParticleSpeed;
+}
+
+void ComponentEmitter::SetMinParticleSpeed(float min)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_minParticleSpeed = min;
+}
+
+float ComponentEmitter::GetMaxParticleSpeed()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxParticleSpeed;
+}
+
+void ComponentEmitter::SetMaxParticleSpeed(float max)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxParticleSpeed = max;
+}
+
+bool ComponentEmitter::GetRandomizeLife()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_randomizeLifespan;
+}
+
+void ComponentEmitter::SetRandomizeLife(bool life)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_randomizeLifespan = life;
+}
+
+float ComponentEmitter::GetMinParticleLife()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_minLifespan;
+}
+
+void ComponentEmitter::SetMinParticleLife(float min)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_minLifespan = min;
+}
+
+float ComponentEmitter::GetMaxParticleLife()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxLifespan;
+}
+
+void ComponentEmitter::SetMaxParticleLife(float max)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxLifespan = max;
+}
+
+bool ComponentEmitter::GetPrewarm()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_preWarm;
+}
+
+void ComponentEmitter::SetPrewarm(bool prewarm)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_preWarm = prewarm;
+}
+
+bool ComponentEmitter::GetBurst()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_burst;
+}
+
+void ComponentEmitter::SetBurst(bool burst)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_burst = burst;
+}
+
+bool ComponentEmitter::GetLoop()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_loop;
+}
+
+void ComponentEmitter::SetLoop(bool loop)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_loop = loop;
+}
+
+bool ComponentEmitter::GetFollow()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_follow;
+}
+
+void ComponentEmitter::SetFollow(bool follow)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_follow = follow;
+}
+
+bool ComponentEmitter::GetFade()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_fade;
+}
+
+void ComponentEmitter::SetFade(bool fade)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_fade = fade;
+}
+
+bool ComponentEmitter::GetVelocityOverTime()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_velocityOverTime;
+}
+
+void ComponentEmitter::SetVelocityOverTime(bool vel)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_velocityOverTime = vel;
+}
+
+bool ComponentEmitter::GetSizeOverTime()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_sizeOverTime;
+}
+
+void ComponentEmitter::SetSizeOverTime(bool size)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_sizeOverTime = size;
+}
+
+bool ComponentEmitter::GetSpeedOverTime()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_speedOverTime;
+}
+
+void ComponentEmitter::SetSpeedOverTime(bool speed)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_speedOverTime = speed;
+}
+
+bool ComponentEmitter::GetColourOverTime()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourOverTime;
+}
+
+void ComponentEmitter::SetColourOverTime(bool colour)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourOverTime = colour;
+}
+
+glm::vec4 ComponentEmitter::GetColourA()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourA;
+}
+
+void ComponentEmitter::SetColourA(glm::vec4 colour)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourA = colour;
+}
+
+glm::vec4 ComponentEmitter::GetColourB()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourB;
+}
+
+void ComponentEmitter::SetColourB(glm::vec4 colour)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourB = colour;
+}
+
+glm::vec4 ComponentEmitter::GetColourStart()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourStart;
+}
+
+void ComponentEmitter::SetColourStart(glm::vec4 colour)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourStart = colour;
+}
+
+glm::vec4 ComponentEmitter::GetColourEnd()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourEnd;
+}
+
+void ComponentEmitter::SetColourEnd(glm::vec4 colour)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourEnd = colour;
+}
+
+glm::vec3 ComponentEmitter::GetVelocity()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_velocity;
+}
+
+void ComponentEmitter::SetVelocity(glm::vec3 velocity)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_velocity = velocity;
+}
+
 ComponentEmitter::~ComponentEmitter()
 {
 }
