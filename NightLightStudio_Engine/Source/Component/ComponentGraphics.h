@@ -27,10 +27,13 @@ struct PBRMaterialData
 	float _metallic; // from 0.f to 1.f
 	float _roughness;
 
+	glm::vec3 _emissive; // Used to simulate glow effect, unaffected by other light sources
+
 	PBRMaterialData()
 		: _albedo{ 1.0f, 1.0f, 1.0f },
 		_metallic{ 1.0f },
-		_roughness{ 0.5f }{}
+		_roughness{ 0.5f },
+		_emissive{ 1.0f, 1.0f, 1.0f } {}
 };
 
 enum class RENDERTYPE
@@ -48,6 +51,8 @@ public:
 	RENDERTYPE _renderType = RENDERTYPE::SOLID;
 
 	bool _isActive; // Temporarily set to true at beginning // Expose
+
+	bool _renderEmission; // Set to true if emissive material should be used instead
 
 	//Serializing doesnt really save IDS? i think might have to add in a file name as well
 	//int MeshID; // value is -1 if no mesh is assigned
@@ -98,6 +103,18 @@ public:
 	int GetModelID(); // Help expose Alex
 
 	void SetRenderType(const RENDERTYPE& rendertype);
+
+	// Activate or deactivate emissive material
+	void ActivateEmissive(const bool& set);
+
+	// Check if emission is activated, return true if activated
+	bool CheckEmissiveActivation() const;
+
+	// Sets emissive color
+	void SetEmissive(const glm::vec3& rgb);
+
+	// Get rgb for emission
+	glm::vec3 GetEmissive() const;
 
 	void AddModel(std::string filename);              // Expose
 	void AddAlbedoTexture(std::string filename);      // Expose

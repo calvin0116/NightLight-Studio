@@ -7,6 +7,7 @@
 
 ComponentGraphics::ComponentGraphics()
 	: _isActive{ true },
+	_renderEmission{ false },
 	_modelID{ -1 }, _albedoFileName{}, _albedoID{ NULL },
 	_normalFileName{}, _normalID{ NULL },
 	_metallicFileName{}, _metallicID{ NULL },
@@ -42,6 +43,26 @@ int ComponentGraphics::GetModelID()
 void ComponentGraphics::SetRenderType(const RENDERTYPE& rendertype)
 {
 	_renderType = rendertype;
+}
+
+void ComponentGraphics::ActivateEmissive(const bool& set)
+{
+	_renderEmission = set;
+}
+
+bool ComponentGraphics::CheckEmissiveActivation() const
+{
+	return _renderEmission;
+}
+
+void ComponentGraphics::SetEmissive(const glm::vec3& rgb)
+{
+	_pbrData._emissive = rgb;
+}
+
+glm::vec3 ComponentGraphics::GetEmissive() const
+{
+	return _pbrData._emissive;
 }
 
 void ComponentGraphics::AddModel(std::string filename)
@@ -208,6 +229,24 @@ inline void ComponentGraphics::Read(Value& val)
 		std::cout << "No active data has been found" << std::endl;
 	else
 		_isActive= val["isActive"].GetBool();
+
+	if (val.FindMember("renderEmission") == val.MemberEnd())
+		std::cout << "No emission activeness data has been found" << std::endl;
+	else
+		_renderEmission = val["renderEmission"].GetBool();
+
+
+	if (val.FindMember("Emissive") == val.MemberEnd())
+		std::cout << "No Emissive data has been found" << std::endl;
+	else
+	{
+		auto emissive = val["Emissive"].GetArray();
+
+		_pbrData._emissive.x = emissive[0].GetFloat();
+		_pbrData._emissive.y = emissive[1].GetFloat();
+		_pbrData._emissive.z = emissive[2].GetFloat();
+	}
+
 
 	if (val.FindMember("Model") == val.MemberEnd())
 		std::cout << "No Model file data has been found" << std::endl;
@@ -392,6 +431,15 @@ inline Value ComponentGraphics::Write()
 	Value val(rapidjson::kObjectType);
 
 	NS_SERIALISER::ChangeData(&val, "isActive", _isActive);		//Bool
+	NS_SERIALISER::ChangeData(&val, "renderEmission", _renderEmission);		//Bool
+
+	Value emissive(rapidjson::kArrayType);
+	emissive.PushBack(_pbrData._emissive.x, global_alloc);
+	emissive.PushBack(_pbrData._emissive.y, global_alloc);
+	emissive.PushBack(_pbrData._emissive.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "Emissive", emissive);
+
 	NS_SERIALISER::ChangeData(&val, "Model", rapidjson::StringRef(_modelFileName.c_str()));
 	NS_SERIALISER::ChangeData(&val, "Albedo", rapidjson::StringRef(_albedoFileName.c_str()));
 	NS_SERIALISER::ChangeData(&val, "Normal", rapidjson::StringRef(_normalFileName.c_str()));
