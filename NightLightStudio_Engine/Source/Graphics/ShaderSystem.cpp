@@ -251,7 +251,7 @@ namespace NS_GRAPHICS
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.frag")); //PBR_TEXTURED_NONORMALMAP 6
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.frag")); //PBR_TEXTURED_ANIMATED_NONORMALMAP 7
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/Emissive.vert"), std::string("../NightLightStudio_Game/Shaders/Emissive.frag")); //EMISSIVE 8
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/Emissive_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/Emissive_Animated.frag")); //EMISSION_ANIMATED 9
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/Emissive_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/Emissive_Animated.frag")); //EMISSIVE_ANIMATED 9
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui.vert"), std::string("../NightLightStudio_Game/Shaders/ui.frag")); //UI_Screenspace 10
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui_world.vert"), std::string("../NightLightStudio_Game/Shaders/ui_world.frag")); //UI_WorldSpace 11
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/particle.vert"), std::string("../NightLightStudio_Game/Shaders/particle.frag")); //Particle 12
