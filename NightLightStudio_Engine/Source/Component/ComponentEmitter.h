@@ -3,6 +3,7 @@
 #include "..\glm\glm.hpp"
 #include "..\\..\\ISerializable.h"
 #include "LocalString.h"
+#include "..\Graphics\Emitter.h"
 
 typedef class ComponentEmitter : public ISerializable//: public IComponent
 {
