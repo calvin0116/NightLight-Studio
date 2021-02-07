@@ -384,6 +384,12 @@ namespace NS_GRAPHICS
 		shaderSystem->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
 		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
 
+		shaderSystem->StartProgram(ShaderSystem::EMISSIVE);
+		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
+
+		shaderSystem->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
+		glUniform1f(shaderSystem->GetGammaLocation(), _gamma);
+
 		shaderSystem->StopProgram();
 	}
 	float LightSystem::GetGamma() const

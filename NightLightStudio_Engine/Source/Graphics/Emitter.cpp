@@ -7,6 +7,7 @@
 #include "../glm/vec2.hpp"
 #include "../Window/WndSystem.h"
 #include "../Window/WndUtils.h"
+#include <cmath>
 #pragma warning( disable : 26812 )
 
 float Emitter::RandFloat()
@@ -19,7 +20,7 @@ Emitter::Emitter():
 	_particles{}, _numAlive{ 0 }, _lastUsed{ 0 }, _emitterTime{ 0.0f }, _timePassed{ 0.0f }, _emitterPosition{}, _emitterRotation{},//Main particle data
 	_type{ EmitterShapeType::SPHERE }, _durationPerCycle{ 5.0f }, _emissionRate{ 1.0f }, _maxParticles{ 100 },//Main particle data
 	_burstTime{ 0.0f }, _burstRate{ 1.0f }, _burstAmount{ 20 },//Main particle data
-	_spawnAngle{ 30.0f }, _radius{ 100.0f }, //For cone and sphere
+	_coneDir{ 0.0f,0.0f,1.0f }, _spawnAngle{ 30.0f }, _radius{ 100.0f }, //For cone and sphere
 	_randomizeSize{ false }, _minParticleSize{ 10 }, _maxParticleSize{ 100 }, //Particle Size
 	_randomizeSpeed{ false }, _minParticleSpeed{ 10 }, _maxParticleSpeed{ 100 }, //Particle Speed
 	_randomizeLifespan{ false }, _minLifespan{ 1.0f }, _maxLifespan{ 5.0f }, //Particle Lifespan
@@ -52,11 +53,18 @@ void Emitter::InitAllParticles(bool prewarm)
 		return;
 	}
 
+	size_t maxParticles = _emissionOverTime * _durationPerCycle;
+
+	if (maxParticles >= _maxParticles)
+	{
+		maxParticles = _maxParticles;
+	}
+
 	switch (_type)
 	{
 		case SPHERE:
 		{
-			for (size_t i = 0; i < _maxParticles; ++i)
+			for (size_t i = 0; i < maxParticles; ++i)
 			{
 				//Randomize spawning location within sprite boundary
 				glm::vec3 spawnPos = glm::vec3(0.0f);
@@ -132,6 +140,90 @@ void Emitter::InitAllParticles(bool prewarm)
 				++_numAlive;
 			}
 		}
+		break;
+
+		case CONE:
+		{
+			for (size_t i = 0; i < maxParticles; ++i)
+			{
+				//Randomize spawning location within sprite boundary
+				glm::vec3 spawnPos = glm::vec3(0.0f);
+				if (!_follow)
+				{
+					spawnPos = _emitterPosition;
+				}
+				glm::vec3 randVec = RandomConeVec3(_spawnAngle, _coneDir);
+				glm::quat Quaternion(glm::radians(_emitterRotation));
+				glm::mat4 Rotate = glm::mat4_cast(Quaternion);
+				randVec = Rotate * glm::vec4(randVec,1.0f);
+				spawnPos += (randVec * _radius) - (_coneDir * _radius);
+				_particles[i]._position = spawnPos;
+
+				//Unit Length Direction
+				_particles[i]._velocity = glm::normalize(randVec);
+
+				//Randomize speed
+				if (_randomizeSpeed)
+				{
+					_particles[i]._speed = (RandFloat() * (_maxParticleSpeed - _minParticleSpeed)) + _minParticleSpeed;
+				}
+				else
+				{
+					_particles[i]._speed = _maxParticleSpeed;
+				}
+
+				//Randomize lifespan
+				if (_randomizeLifespan)
+				{
+					_particles[i]._timeAlive = 0.0f;
+					_particles[i]._lifespan = ((_maxLifespan - _minLifespan) * RandFloat()) + _minLifespan;
+				}
+				else
+				{
+					_particles[i]._timeAlive = 0.0f;
+					_particles[i]._lifespan = _maxLifespan;
+				}
+
+				if (_colourOverTime)
+				{
+					//Set starting and ending colour
+					_particles[i]._colourStart = _colourStart;
+					_particles[i]._colourEnd = _colourEnd;
+				}
+				else if (_randomizeColour)
+				{
+					//Either A or B
+					_particles[i]._colourEnd = RandFloat() > 0.5f ? _colourB : _colourA;
+				}
+				else
+				{
+					_particles[i]._colourEnd = _colourB;
+				}
+
+				//Randomize size
+				if (_randomizeSize)
+				{
+					_particles[i]._size = ((_maxParticleSize - _minParticleSize) * RandFloat()) + _minParticleSize;
+				}
+				else
+				{
+					_particles[i]._size = _maxParticleSize;
+				}
+
+				if (prewarm)
+				{
+					_particles[i]._timeAlive = RandFloat() * _particles[i]._lifespan;
+					_particles[i]._position += _particles[i]._velocity * _particles[i]._speed * _particles[i]._timeAlive;
+				}
+
+				//Remember to set it alive
+				_particles[i]._alive = true;
+
+				//Increase alive count
+				++_numAlive;
+			}
+		}
+		break;
 	}
 }
 
@@ -226,6 +318,89 @@ void Emitter::ResetParticle(size_t index)
 			//Increase alive count
 			++_numAlive;
 		}
+		break;
+
+		case CONE:
+		{
+			//Randomize spawning location within sprite boundary
+			glm::vec3 spawnPos = glm::vec3(0.0f);
+			if (!_follow)
+			{
+				spawnPos = _emitterPosition;
+			}
+			glm::vec3 randVec = RandomConeVec3(_spawnAngle,_coneDir);
+
+			glm::quat Quaternion(glm::radians(_emitterRotation));
+			glm::mat4 Rotate = glm::mat4_cast(Quaternion);
+			glm::vec3 newDir = glm::vec3(Rotate * glm::vec4(_coneDir,1.0f));
+			randVec = Rotate * glm::vec4(randVec, 1.0f);
+			randVec = glm::normalize(randVec);
+
+			float heightOfCone = _radius / std::tanf(_spawnAngle);
+			float heightOfVector = glm::dot(randVec * heightOfCone, newDir);
+
+			spawnPos += (randVec * heightOfCone) - (newDir * heightOfVector);
+			//spawnPos += (randVec * _radius) - (_coneDir * _radius);
+			_particles[index]._position = spawnPos;
+
+			//Unit Length Direction
+			_particles[index]._velocity = randVec;
+
+			//Randomize speed
+			if (_randomizeSpeed)
+			{
+				_particles[index]._speed = (RandFloat() * (_maxParticleSpeed - _minParticleSpeed)) + _minParticleSpeed;
+			}
+			else
+			{
+				_particles[index]._speed = _maxParticleSpeed;
+			}
+
+			//Randomize lifespan
+			if (_randomizeLifespan)
+			{
+				_particles[index]._timeAlive = 0.0f;
+				_particles[index]._lifespan = ((_maxLifespan - _minLifespan) * RandFloat()) + _minLifespan;
+			}
+			else
+			{
+				_particles[index]._timeAlive = 0.0f;
+				_particles[index]._lifespan = _maxLifespan;
+			}
+
+			if (_colourOverTime)
+			{
+				//Set starting and ending colour
+				_particles[index]._colourStart = _colourStart;
+				_particles[index]._colourEnd = _colourEnd;
+			}
+			else if (_randomizeColour)
+			{
+				//Either A or B
+				_particles[index]._colourEnd = RandFloat() > 0.5f ? _colourB : _colourA;
+			}
+			else
+			{
+				_particles[index]._colourEnd = _colourB;
+			}
+
+			//Randomize size
+			if (_randomizeSize)
+			{
+				_particles[index]._size = ((_maxParticleSize - _minParticleSize) * RandFloat()) + _minParticleSize;
+			}
+			else
+			{
+				_particles[index]._size = _maxParticleSize;
+			}
+
+			//Remember to set it alive
+			_particles[index]._alive = true;
+
+			//Increase alive count
+			++_numAlive;
+		}
+		break;
 	}
 }
 
@@ -289,6 +464,87 @@ glm::vec3 Emitter::RandomVec3()
 	float z = r * cos(phi);
 
 	return glm::vec3(x, y, z);
+	//return glm::vec3();
+}
+
+glm::vec3 Emitter::RandomConeVec3(float degree, glm::vec3 dir)
+{
+	glm::vec3 ortho1{}, ortho2{};
+
+	float angleInRadian = degree * PI / 180.0f;
+
+	ortho1 = glm::cross(dir, glm::vec3(1.0f, 0.0f, 0.0f));
+	ortho2 = glm::cross(dir, ortho1);
+
+	float phi = 2 * (RandFloat() * PI) - PI;
+	//float phi = (RandFloat() * 2 * PI);
+	float theta = RandFloat() * angleInRadian;
+	//x=sin theta (cosphiu+sinphiv)+costhetaa .
+	//float z = 0.0f;
+	//z = (RandFloat() * angleInRadian);
+	//float theta = std::acosf(z);
+	glm::vec3 randVector;
+	randVector = std::sinf(theta) * (std::cosf(phi) * ortho1 + std::sinf(phi) * ortho2) + std::cosf(theta)*dir;
+	randVector = glm::normalize(randVector);
+	return randVector;
+
+	//function v = GetRandomVectorInsideCone(coneDir, coneAngleDegree)
+	//glm::vec3 normDir = glm::normalize(dir);
+	//glm::vec3 v{};
+
+	//float ang = degree + 1;
+	//while (ang > degree)
+	//{
+	//	v = { RandFloat(), RandFloat(), RandFloat() };
+	//	v = v + normDir;
+	//	v = glm::normalize(v);
+	//	ang = glm::atan(glm::length(glm::cross(v, normDir)), glm::dot(v, normDir)) * 180 / PI;
+	//}
+
+	//return v;
+
+	////float N = 10000;
+	//float coneAngleRadian = degree * PI / 180;
+
+	//glm::vec3 v{};
+
+	//float z = (RandFloat() * 9999 + 1) * (1 - cos(coneAngleRadian)) + cos(coneAngleRadian);
+	//float phi = (RandFloat() * 9999 + 1) * (float)(2.0f * PI);
+	//float x = sqrt(1 - (z*z)) * cosf(phi);
+	//float y = sqrt(1 - (z*z)) * sinf(phi);
+	//v.x = x;
+	//v.y = y;
+	//v.z = z;
+
+	//% Generate points on the spherical cap around the north pole[1].
+	//	% [1] See https ://math.stackexchange.com/a/205589/81266
+	//z = RNG.rand(1, N) * (1 - cos(coneAngle)) + cos(coneAngle);
+	//phi = RNG.rand(1, N) * 2 * pi;
+	//x = sqrt(1 - z. ^ 2).*cos(phi);
+	////y = sqrt(1 - z. ^ 2).*sin(phi);
+	//if (dir == glm::vec3{ 0.0f,0.0f,1.0f })
+	//{
+	//	v = glm::normalize(v);
+	//	return v;
+	//}
+
+	//% If the spherical cap is centered around the north pole, we're done.
+	//	if all(coneDir(:) == [0; 0; 1])
+	//		r = [x; y; z];
+	//return;
+	//end
+
+	//	% Find the rotation axis `u`and rotation angle `rot`[1]
+	//	u = normc(cross([0; 0; 1], normc(coneDir)));
+	//	rot = acos(dot(normc(coneDir), [0; 0; 1]));
+
+	//	% Convert rotation axisand angle to 3x3 rotation matrix[2]
+	//		% [2] See https ://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
+	//	crossMatrix = @(x, y, z)[0 - z y; z 0 - x; -y x 0];
+	//	R = cos(rot) * eye(3) + sin(rot) * crossMatrix(u(1), u(2), u(3)) + (1 - cos(rot)) * (u * u');
+
+	//		% Rotate[x; y; z] from north pole to `coneDir`.
+	//		r = R * [x; y; z];
 	//return glm::vec3();
 }
 

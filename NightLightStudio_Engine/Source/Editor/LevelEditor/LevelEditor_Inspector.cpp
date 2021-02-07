@@ -50,6 +50,44 @@ void InspectorWindow::Start()
 		setPos,
 		setPos);
 
+	// Set up Command to run to move objects
+	COMMAND setMultiplePos =
+		[](std::any pos)
+	{
+		std::vector<ENTITY_LAST_POS> obj = std::any_cast<std::vector<ENTITY_LAST_POS>>(pos);
+
+		std::vector<ENTITY_LAST_POS> returnObj;
+
+		for (int i = 0; i < obj.size(); ++i)
+		{
+			glm::mat4 newPos = obj[i]._newPos;
+			TransformComponent* trans_comp = obj[i]._transComp;
+			glm::mat4 lastPos = {};
+
+			if (trans_comp != NULL)
+			{
+				lastPos = trans_comp->GetModelMatrix();
+
+				float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
+				ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(newPos), trans, rot, scale);
+
+				trans_comp->_position = glm::make_vec3(trans);
+				trans_comp->_rotation = glm::make_vec3(rot);
+				trans_comp->_scale = glm::make_vec3(scale);
+
+				ENTITY_LAST_POS anotherObj{ obj[i]._transComp, lastPos };
+
+				returnObj.push_back(anotherObj);
+			}
+		}
+
+		return returnObj;
+	};
+
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_SET_MULTIPLE_ENTITY_POSITION"),
+		setMultiplePos,
+		setMultiplePos);
+
 	COMMAND createComp =
 		[](std::any comp)
 	{
@@ -602,6 +640,9 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				graphics_comp->SetRenderType(RENDERTYPE::TEXTURED);
 
 			ImGui::Checkbox("IsActive##Graphic", &graphics_comp->_isActive);
+			ImGui::Checkbox("Emission##Graphic", &graphics_comp->_renderEmission);
+
+			ImGui::ColorEdit3("Emission Color##Graphics", glm::value_ptr(graphics_comp->_pbrData._emissive));
 
 			std::string mod = graphics_comp->_modelFileName.toString();
 			std::string tex = graphics_comp->_albedoFileName.toString();
@@ -1381,7 +1422,10 @@ void InspectorWindow::EmitterComp(Entity& ent)
 				});
 
 			ImGui::InputFloat("Duration Time", &emit->_durationPerCycle);
-			ImGui::InputFloat("Emission Rate", &emit->_emissionRate);
+			if (ImGui::InputScalar("Emission Rate", ImGuiDataType_U32, &emit->_emissionOverTime))
+			{
+				emit->_emissionRate = 1.0f / emit->_emissionOverTime;
+			}
 
 			if (ImGui::InputScalar("Max Particles", ImGuiDataType_U32, &emit->_maxParticles))
 			{
@@ -1390,9 +1434,15 @@ void InspectorWindow::EmitterComp(Entity& ent)
 
 			if (emit->_type == SPHERE)
 			{
+				ImGui::InputFloat("Radius", &emit->_radius);
+			}
+
+			else if (emit->_type == CONE)
+			{
 				ImGui::InputFloat("Angle", &emit->_spawnAngle);
 				ImGui::InputFloat("Radius", &emit->_radius);
 			}
+
 			if (ImGui::TreeNode("Particle Size"))
 			{
 				ImGui::Checkbox("Random Size", &emit->_randomizeSize);
@@ -2279,7 +2329,6 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 					_lastPos_Start = false;
 					// New position for the object
 					ENTITY_LAST_POS newObj{ trans_comp , matObj };
-					std::any curPos = newObj;
 
 					// Reset object back to original position
 					float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
@@ -2288,13 +2337,14 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 					trans_comp->_rotation = glm::make_vec3(rot);
 					trans_comp->_scale = glm::make_vec3(scale);
 
-					// Runs command to move object to new position from old position
-					_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
-					
+					// Adds to vector
+					std::vector<ENTITY_LAST_POS> multiplePosObjs;
+					multiplePosObjs.push_back(newObj);
+
+					// Checks if there are other objects to move as well
 					for (int i = 0; i < _allOtherLastPos_ELP.size(); ++i)
 					{
 						ENTITY_LAST_POS otherObj{ _allOtherLastPos_ELP[i]._transComp , _allOtherLastPos_ELP[i]._transComp->GetModelMatrix() };
-						std::any otherPos = otherObj;
 
 						ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(_allOtherLastPos_ELP[i]._newPos), trans, rot, scale);
 
@@ -2302,8 +2352,24 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 						_allOtherLastPos_ELP[i]._transComp->_rotation = glm::make_vec3(rot);
 						_allOtherLastPos_ELP[i]._transComp->_scale = glm::make_vec3(scale);
 
-						_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), otherPos);
+						multiplePosObjs.push_back(otherObj);
+						// _levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), otherPos);
 					}
+
+					// If multiple objects to move, run all
+					if (multiplePosObjs.size() > 1)
+					{
+						std::any curMultiplePos = multiplePosObjs;
+						_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_MULTIPLE_ENTITY_POSITION"), curMultiplePos);
+					}
+					// Run only single object otherwise
+					else
+					{
+						std::any curPos = newObj;
+						// Runs command to move object to new position from old position
+						_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
+					}
+
 				}
 				else if (_lastEnter)
 				{

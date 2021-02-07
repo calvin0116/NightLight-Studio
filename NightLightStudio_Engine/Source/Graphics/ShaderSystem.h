@@ -36,6 +36,8 @@ namespace NS_GRAPHICS
 
 			GLint _roughnessControl;
 			GLint _metallicControl;
+
+			GLint _emissive;
 		};
 
 		ShaderSystem();
@@ -82,6 +84,8 @@ namespace NS_GRAPHICS
 			PBR_TEXTURED_ANIMATED,
 			PBR_TEXTURED_NONORMALMAP,
 			PBR_TEXTURED_ANIMATED_NONORMALMAP,
+			EMISSIVE,
+			EMISSIVE_ANIMATED,
 			UI_SCREENSPACE,
 			UI_WORLDSPACE,
 			PARTICLE,
@@ -133,5 +137,7 @@ namespace NS_GRAPHICS
 		GLint GetRoughnessControlLocation() const;
 
 		GLint GetMetallicControlLocation() const;
+
+		GLint GetEmissiveLocation() const;
 	};
 }
