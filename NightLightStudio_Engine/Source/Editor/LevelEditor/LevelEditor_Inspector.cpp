@@ -1714,7 +1714,7 @@ void InspectorWindow::VariableComp(Entity& ent)
 
 			int str_index = 1;
 
-			for (LocalString<125>& str : comp_var->string_list) //[path, name]
+			for (LocalString<DEF_STR_SIZE>& str : comp_var->string_list) //[path, name]
 			{
 				std::string p = "String_" + std::to_string(str_index);
 				
@@ -1861,7 +1861,7 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 			}
 			int str_index = 1;
 
-			for (LocalString<125> & str : wpm_comp->way_point_list) //[path, name]
+			for (LocalString<DEF_STR_SIZE> & str : wpm_comp->way_point_list) //[path, name]
 			{
 				std::string p = "Waypoint_" + std::to_string(str_index);
 
