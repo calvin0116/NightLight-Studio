@@ -181,6 +181,28 @@ void HierarchyInspector::Init()
 	ImGui::SetWindowSize(ImVec2(640, 320), ImGuiCond_FirstUseEver);
 
 	selected_index = -1;
+
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("HIERARCHY_MOVE_UP", SystemInput_ns::IKEY_UP, "UP", SystemInput_ns::OnPress,
+		[this]()
+		{
+			int selectedEntity = LE_ECHELPER->GetSelectedEntityID();
+			if (selectedEntity != -1)
+			{
+				if (selectedEntity > 1000000)
+					LE_ECHELPER->SelectEntity(selectedEntity - 1, false);
+			}
+		});
+
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("HIERARCHY_MOVE_DOWN", SystemInput_ns::IKEY_DOWN, "DOWN", SystemInput_ns::OnPress,
+		[this]()
+		{
+			int selectedEntity = LE_ECHELPER->GetSelectedEntityID();
+			if (selectedEntity != -1)
+			{
+				if (G_ECMANAGER->getEntity(selectedEntity + 1).getComponent<TransformComponent>())
+					LE_ECHELPER->SelectEntity(selectedEntity + 1, false);
+			}
+		});
 }
 
 void HierarchyInspector::Run()
