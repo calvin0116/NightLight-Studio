@@ -55,7 +55,7 @@ void NS_GRAPHICS::EmitterSystem::Update()
 				continue;
 			}
 
-			UpdateEmitter(emitter, DELTA_T->real_dt * DT_SCALE);
+			UpdateEmitter(emitter, DELTA_T->real_dt);
 			Render(emitter);
 
 			itr++;
