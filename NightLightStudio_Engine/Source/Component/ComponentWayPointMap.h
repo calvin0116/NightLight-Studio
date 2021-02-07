@@ -12,7 +12,7 @@ typedef class ComponentWayPointMap : public ISerializable //: public IComponent
 	LocalVector<NS_AI::Edge*,256> cur_edge;
 	float rad_for_detect = 25.0f;		//Default radius detection
 public:
-	LocalVector<LocalString<125>> way_point_list;	//Standard way point using entity to plot
+	LocalVector<LocalString<DEF_STR_SIZE>> way_point_list;	//Standard way point using entity to plot
 
 
 	ComponentWayPointMap()
@@ -38,7 +38,7 @@ public:
 	void InitPath()
 	{
 		ClearCurPath();
-		for (LocalString<125> & wp_str : way_point_list)
+		for (LocalString<DEF_STR_SIZE> & wp_str : way_point_list)
 		{
 			if (wp_str.empty())
 				continue;
@@ -87,7 +87,7 @@ public:
 		Value val(rapidjson::kObjectType);
 
 		Value string_list_val(rapidjson::kArrayType);
-		for (LocalString<125> & s : way_point_list)
+		for (LocalString<DEF_STR_SIZE> & s : way_point_list)
 			string_list_val.PushBack(rapidjson::StringRef(s.c_str()), global_alloc);
 		NS_SERIALISER::ChangeData(&val, "way_point_list", string_list_val);
 		NS_SERIALISER::ChangeData(&val, "radius_for_detection", rad_for_detect);

@@ -33,7 +33,8 @@ public:
 	std::chrono::system_clock::time_point stepTime;
 	float real_dt;
 	float accumulatedTime;
-	int currentNumberOfSteps;
+	int cur_step = 0;
+	int prev_step = 0;
 	float oneSecond;
 	float fpsCounter = 0.0f;
 	float fps;
@@ -51,7 +52,10 @@ public:
 	void end();
 
 	void Exit();
+
 	void SetFpsLimit(float f);
+	void DelayFrame();
+
 	int GetCurrNumberOfSteps();
 };
 

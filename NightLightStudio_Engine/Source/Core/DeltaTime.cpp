@@ -1,7 +1,7 @@
 
 #include "DeltaTime.h"
 #include  <iostream>
-
+#include <thread>
 //DeltaTime delta_t;
 
 void DeltaTime::load()
@@ -12,7 +12,7 @@ void DeltaTime::load()
 	oneSecond = 0;
 	fpsLimit = -1;
 	frameDelay = -1;
-	SetFpsLimit(120);
+	SetFpsLimit(30);
 	timeLastRound = timeThisRound = std::chrono::system_clock::now();
 	real_dt = (float)(timeThisRound - timeLastRound).count() / 10000000;
 	accumulatedTime = 0;
@@ -54,7 +54,7 @@ void DeltaTime::start()
 	dt = fixed_dt;
 	//accumulatedTime = fixed_dt;
 	*/
-	currentNumberOfSteps = 0;
+	cur_step = 0;
 
 	std::swap(timeLastRound, timeThisRound);
 	stepTime = timeThisRound = std::chrono::system_clock::now();
@@ -66,7 +66,7 @@ void DeltaTime::start()
 
 	if (accumulatedTime >= fixed_dt)
 	{
-		currentNumberOfSteps += static_cast<int>(accumulatedTime / fixed_dt);
+		cur_step += static_cast<int>(accumulatedTime / fixed_dt);
 		accumulatedTime = fmod(accumulatedTime, fixed_dt);//this will save the exact
 	}
 
@@ -82,6 +82,8 @@ void DeltaTime::start()
 		oneSecond = 0;
 		fpsCounter = 0;
 	}
+
+	DelayFrame();
 }
 
 void DeltaTime::end()
@@ -114,6 +116,15 @@ void DeltaTime::SetFpsLimit(float f)
 	//frameDelay = 1000.0 / (fpsLimit);
 }
 
+void DeltaTime::DelayFrame()
+{
+	auto now = std::chrono::system_clock::now();
+	float currentDt = (float)(now - timeLastRound).count();
+	std::chrono::duration<float, std::milli> delta_ms(frameDelay - currentDt);
+	std::chrono::time_point end = now + std::chrono::duration_cast<std::chrono::milliseconds>(delta_ms);
+	std::this_thread::sleep_until(end);
+}
+
 int DeltaTime::GetCurrNumberOfSteps()
 {
 	std::chrono::system_clock::time_point currTime = std::chrono::system_clock::now();
@@ -121,9 +132,19 @@ int DeltaTime::GetCurrNumberOfSteps()
 
 	if (accumulatedTime >= fixed_dt)
 	{
-		currentNumberOfSteps += static_cast<int>(accumulatedTime / fixed_dt);
+		cur_step += static_cast<int>(accumulatedTime / fixed_dt);
 		accumulatedTime = fmod(accumulatedTime, fixed_dt);//this will save the exact
 		stepTime = currTime;
 	}
-	return currentNumberOfSteps;
+
+	if (cur_step > 5)
+		cur_step = 5;
+
+	if (prev_step > 4)
+		cur_step = 1;
+
+	prev_step = cur_step;
+
+	return cur_step;
 }
+

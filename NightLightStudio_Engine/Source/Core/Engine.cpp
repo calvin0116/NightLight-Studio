@@ -20,7 +20,7 @@ void FluffyUnicornEngine::Init(HINSTANCE& hInstance)
 
 void FluffyUnicornEngine::Run()
 {
-	int prev_step = 0;
+
 
 	//=====System layer====//
     DELTA_T->load();
@@ -49,13 +49,8 @@ void FluffyUnicornEngine::Run()
 				if (step > 1)
 					dt_for_fix = DELTA_T->fixed_dt;
 				
-				if (step > 5)
-					step = 5;
 
-				if (prev_step > 4)
-					step = 1;
-
-				std::cout << DELTA_T->real_dt <<","<< step<< std::endl;
+				//std::cout << DELTA_T->real_dt <<","<< step<< std::endl;
 				for (int i = 0; i < step; ++i)
 				{
 					//DELTA_T->accumulatedTime -= DELTA_T->fixed_dt;
@@ -78,7 +73,7 @@ void FluffyUnicornEngine::Run()
 					}
 				}
 
-				prev_step = step;
+
 				//DELTA_T->end();
 			}
 		}

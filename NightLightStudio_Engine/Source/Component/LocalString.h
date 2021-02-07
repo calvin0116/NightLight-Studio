@@ -1,8 +1,9 @@
 #pragma once
 
 #include <string>
+#define DEF_STR_SIZE 156
 
-template<size_t N = 125>
+template<size_t N = DEF_STR_SIZE>
 class LocalString
 {
 	char stringData[N];
@@ -19,7 +20,7 @@ private:
 		//return rhs.size() > (N - 1);
 
 		memcpy(stringData, rhs.c_str(), N - 1);
-		//stringData[N - 2] = 0; // nani
+		stringData[N - 2] = 0; // nani
 		return rhs.size() > (N - 1);
 	}
 	void copyFromLocalString(const LocalString& rhs)

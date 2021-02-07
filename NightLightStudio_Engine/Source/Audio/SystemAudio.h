@@ -94,7 +94,7 @@ public:
 
   void MyGameInit();
 
-  void FixedUpdate(float dt) override {};
+  void FixedUpdate(float dt) override { dt; };
   void Update() override;
 
 	void Free();
