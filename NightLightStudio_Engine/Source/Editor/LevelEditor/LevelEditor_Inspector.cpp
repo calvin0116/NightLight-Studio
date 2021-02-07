@@ -640,6 +640,9 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				graphics_comp->SetRenderType(RENDERTYPE::TEXTURED);
 
 			ImGui::Checkbox("IsActive##Graphic", &graphics_comp->_isActive);
+			ImGui::Checkbox("Emission##Graphic", &graphics_comp->_renderEmission);
+
+			ImGui::ColorEdit3("Emission Color##Graphics", glm::value_ptr(graphics_comp->_pbrData._emissive));
 
 			std::string mod = graphics_comp->_modelFileName.toString();
 			std::string tex = graphics_comp->_albedoFileName.toString();
@@ -1761,7 +1764,7 @@ void InspectorWindow::VariableComp(Entity& ent)
 
 			int str_index = 1;
 
-			for (LocalString<125>& str : comp_var->string_list) //[path, name]
+			for (LocalString<DEF_STR_SIZE>& str : comp_var->string_list) //[path, name]
 			{
 				std::string p = "String_" + std::to_string(str_index);
 				
@@ -1908,7 +1911,7 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 			}
 			int str_index = 1;
 
-			for (LocalString<125> & str : wpm_comp->way_point_list) //[path, name]
+			for (LocalString<DEF_STR_SIZE> & str : wpm_comp->way_point_list) //[path, name]
 			{
 				std::string p = "Waypoint_" + std::to_string(str_index);
 

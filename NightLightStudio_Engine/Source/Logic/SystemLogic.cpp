@@ -410,8 +410,9 @@ namespace NS_LOGIC
 #endif
   }
 
-  void SystemLogic::FixedUpdate()
+  void SystemLogic::FixedUpdate(float dt)
   {
+      dt;
     if (!_isPlaying || !_Inited)
       return;
 #ifdef CS_ENV

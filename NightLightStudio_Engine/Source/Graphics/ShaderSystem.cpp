@@ -94,14 +94,17 @@ namespace NS_GRAPHICS
 				continue;
 			}
 
-			if ((i >= ShaderType::PBR) && (i <= ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP))
+			if ((i >= ShaderType::PBR) && (i <= ShaderType::EMISSIVE_ANIMATED))
 			{
 				StartProgram(i);
 
 				p_uniformLocations[i]._gamma = glGetUniformLocation(GetCurrentProgramHandle(), "Gamma");
 				p_uniformLocations[i]._alpha = glGetUniformLocation(GetCurrentProgramHandle(), "Alpha");
 
-				if (i == ShaderType::PBR_ANIMATED || i == ShaderType::PBR_TEXTURED_ANIMATED || i == ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP)
+				if (i == ShaderType::EMISSIVE || i == ShaderType::EMISSIVE_ANIMATED)
+					p_uniformLocations[i]._emissive = glGetUniformLocation(GetCurrentProgramHandle(), "emissive");
+
+				if (i == ShaderType::PBR_ANIMATED || i == ShaderType::PBR_TEXTURED_ANIMATED || i == ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP || i == ShaderType::EMISSIVE_ANIMATED)
 					p_uniformLocations[i]._jointsMatrix = glGetUniformLocation(GetCurrentProgramHandle(), "jointsMat");
 
 				
@@ -247,10 +250,12 @@ namespace NS_GRAPHICS
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated.frag")); //PBR_TEXTURED_ANIMATED 5
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.frag")); //PBR_TEXTURED_NONORMALMAP 6
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.frag")); //PBR_TEXTURED_ANIMATED_NONORMALMAP 7
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui.vert"), std::string("../NightLightStudio_Game/Shaders/ui.frag")); //UI_Screenspace 8
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui_world.vert"), std::string("../NightLightStudio_Game/Shaders/ui_world.frag")); //UI_WorldSpace 9
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/particle.vert"), std::string("../NightLightStudio_Game/Shaders/particle.frag")); //Particle 10
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_LightingPass.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_LightingPass.frag")); // PBR_LIGHTPASS 11
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/Emissive.vert"), std::string("../NightLightStudio_Game/Shaders/Emissive.frag")); //EMISSIVE 8
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/Emissive_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/Emissive_Animated.frag")); //EMISSION_ANIMATED 9
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui.vert"), std::string("../NightLightStudio_Game/Shaders/ui.frag")); //UI_Screenspace 10
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui_world.vert"), std::string("../NightLightStudio_Game/Shaders/ui_world.frag")); //UI_WorldSpace 11
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/particle.vert"), std::string("../NightLightStudio_Game/Shaders/particle.frag")); //Particle 12
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_LightingPass.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_LightingPass.frag")); // PBR_LIGHTPASS 13
 		//LoadShader("../NightLightStudio_Game/Shaders/","../NightLightStudio_Game/Shaders/");
 		//LoadShader("","");
 
@@ -347,6 +352,13 @@ namespace NS_GRAPHICS
 			return GL_INVALID_VALUE;
 
 		return p_uniformLocations[programIDIndex]._metallicControl;
+	}
+	GLint ShaderSystem::GetEmissiveLocation() const
+	{
+		if (programIDIndex == -1)
+			return GL_INVALID_VALUE;
+
+		return p_uniformLocations[programIDIndex]._emissive;
 	}
 	void ShaderSystem::SetTextureLocations()
 	{

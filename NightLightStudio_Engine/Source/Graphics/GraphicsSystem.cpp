@@ -904,20 +904,47 @@ namespace NS_GRAPHICS
 			{
 				if (model->_isAnimated)
 				{
-					shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
+					// Check if emission material is activated
+					if (graphicsComp->CheckEmissiveActivation())
+					{
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
+						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+
+					}
+					else
+					{
+						shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
+
+						// Get uniforms done only if non-emissive shaders are activated
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+						glUniform1f(shaderManager->GetRoughnessLocation(), graphicsComp->_pbrData._roughness);
+						glUniform1f(shaderManager->GetMetallicLocation(), graphicsComp->_pbrData._metallic);
+					}
 				}
 				else
 				{
-					shaderManager->StartProgram(ShaderSystem::PBR); // solid program
+					if (graphicsComp->CheckEmissiveActivation())
+					{
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
+						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+					}
+					else
+					{
+						shaderManager->StartProgram(ShaderSystem::PBR); // solid program
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+						glUniform1f(shaderManager->GetRoughnessLocation(), graphicsComp->_pbrData._roughness);
+						glUniform1f(shaderManager->GetMetallicLocation(), graphicsComp->_pbrData._metallic);
+					}
 				}
 
 				// Update alpha
 				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
 
 				// Update model and uniform for material
-				glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
-				glUniform1f(shaderManager->GetRoughnessLocation(), graphicsComp->_pbrData._roughness);
-				glUniform1f(shaderManager->GetMetallicLocation(), graphicsComp->_pbrData._metallic);
+				//glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+				//glUniform1f(shaderManager->GetRoughnessLocation(), graphicsComp->_pbrData._roughness);
+				//glUniform1f(shaderManager->GetMetallicLocation(), graphicsComp->_pbrData._metallic);
 
 				if (model->_isAnimated)
 				{
@@ -949,44 +976,110 @@ namespace NS_GRAPHICS
 			{
 				if (model->_isAnimated)
 				{
-					// If normal map does not exist
-					if(!graphicsComp->_normalID)
-						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
+					// Check if emission material is activated
+					if (graphicsComp->CheckEmissiveActivation())
+					{
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
+						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+					}
 					else
-						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
-					//glm::mat4 identity(1.0f);
-					//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
+					{
+						// If normal map does not exist
+						if (!graphicsComp->_normalID)
+							shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
+						else
+							shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
+						//glm::mat4 identity(1.0f);
+						//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
+
+						// Get uniforms done only if non-emissive shaders are activated
+						// Roughness Control
+						glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+
+						// Metallic Control
+						glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+
+						// Bind textures
+						// bind diffuse map
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+
+						// bind metallic map
+						textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+
+						// bind roughness map
+						textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+
+						// bind ao map
+						textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+
+						// bind normal map
+						textureManager->BindNormalTexture(graphicsComp->_normalID);
+					}
 				}
 				else
 				{
-					if(!graphicsComp->_normalID)
-						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
+					// Check if emission material is activated
+					if (graphicsComp->CheckEmissiveActivation())
+					{
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
+						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+					}
 					else
-						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
+					{
+						if (!graphicsComp->_normalID)
+							shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
+						else
+							shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
+
+						// Get uniforms done only if non-emissive shaders are activated
+						// Roughness Control
+						glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+
+						// Metallic Control
+						glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+
+						// Bind textures
+						// bind diffuse map
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+
+						// bind metallic map
+						textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+
+						// bind roughness map
+						textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+
+						// bind ao map
+						textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+
+						// bind normal map
+						textureManager->BindNormalTexture(graphicsComp->_normalID);
+					}
 				}
 				
 				// Update alpha
 				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
 
-				// Roughness Control
-				glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
-				glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+				//// Roughness Control
+				//glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
 
-				// Bind textures
-				// bind diffuse map
-				textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+				//// Metallic Control
+				//glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
 
-				// bind metallic map
-				textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+				//// Bind textures
+				//// bind diffuse map
+				//textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 
-				// bind roughness map
-				textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+				//// bind metallic map
+				//textureManager->BindMetallicTexture(graphicsComp->_metallicID);
 
-				// bind ao map
-				textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+				//// bind roughness map
+				//textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
 
-				// bind normal map
-				textureManager->BindNormalTexture(graphicsComp->_normalID);
+				//// bind ao map
+				//textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+
+				//// bind normal map
+				//textureManager->BindNormalTexture(graphicsComp->_normalID);
 
 				if (model->_isAnimated)
 				{
@@ -1070,20 +1163,46 @@ namespace NS_GRAPHICS
 			{
 				if (model->_isAnimated)
 				{
-					shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
+					// Check if emission material is activated
+					if (graphicsComp->CheckEmissiveActivation())
+					{
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
+						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+					}
+					else
+					{
+						shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
+
+						// Get uniforms done only if non-emissive shaders are activated
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+						glUniform1f(shaderManager->GetRoughnessLocation(), graphicsComp->_pbrData._roughness);
+						glUniform1f(shaderManager->GetMetallicLocation(), graphicsComp->_pbrData._metallic);
+					}
 				}
 				else
 				{
-					shaderManager->StartProgram(ShaderSystem::PBR); // solid program
+					if (graphicsComp->CheckEmissiveActivation())
+					{
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
+						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+					}
+					else
+					{
+						shaderManager->StartProgram(ShaderSystem::PBR); // solid program
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+						glUniform1f(shaderManager->GetRoughnessLocation(), graphicsComp->_pbrData._roughness);
+						glUniform1f(shaderManager->GetMetallicLocation(), graphicsComp->_pbrData._metallic);
+					}
 				}
 
 				// Update alpha
 				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
 
-				// Update model and uniform for material
-				glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
-				glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
-				glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+				//// Update model and uniform for material
+				//glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+				//glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+				//glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
 
 				if (model->_isAnimated)
 				{
@@ -1115,44 +1234,108 @@ namespace NS_GRAPHICS
 			{
 				if (model->_isAnimated)
 				{
-					// If normal map does not exist
-					if (!graphicsComp->_normalID)
-						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
+					// Check if emission material is activated
+					if (graphicsComp->CheckEmissiveActivation())
+					{
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
+						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+					}
 					else
-						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
-					//glm::mat4 identity(1.0f);
-					//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
+					{
+						// If normal map does not exist
+						if (!graphicsComp->_normalID)
+							shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
+						else
+							shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
+						//glm::mat4 identity(1.0f);
+						//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
+
+						// Get uniforms done only if non-emissive shaders are activated
+						// Roughness Control
+						glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+
+						// Metallic Control
+						glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+
+						// Bind textures
+						// bind diffuse map
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+
+						// bind metallic map
+						textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+
+						// bind roughness map
+						textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+
+						// bind ao map
+						textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+
+						// bind normal map
+						textureManager->BindNormalTexture(graphicsComp->_normalID);
+					}
 				}
 				else
 				{
-					if (!graphicsComp->_normalID)
-						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
+					// Check if emission material is activated
+					if (graphicsComp->CheckEmissiveActivation())
+					{
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
+						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+					}
 					else
-						shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
+					{
+						if (!graphicsComp->_normalID)
+							shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
+						else
+							shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
+
+						// Get uniforms done only if non-emissive shaders are activated
+						// Roughness Control
+						glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+
+						// Metallic Control
+						glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+
+						// Bind textures
+						// bind diffuse map
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+
+						// bind metallic map
+						textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+
+						// bind roughness map
+						textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+
+						// bind ao map
+						textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+
+						// bind normal map
+						textureManager->BindNormalTexture(graphicsComp->_normalID);
+					}
 				}
 
 				// Update alpha
 				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
 
-				// Roughness Control
-				glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
-				glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+				//// Roughness Control
+				//glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+				//glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
 
-				// Bind textures
-				// bind diffuse map
-				textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+				//// Bind textures
+				//// bind diffuse map
+				//textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 
-				// bind metallic map
-				textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+				//// bind metallic map
+				//textureManager->BindMetallicTexture(graphicsComp->_metallicID);
 
-				// bind roughness map
-				textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+				//// bind roughness map
+				//textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
 
-				// bind ao map
-				textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+				//// bind ao map
+				//textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
 
-				// bind normal map
-				textureManager->BindNormalTexture(graphicsComp->_normalID);
+				//// bind normal map
+				//textureManager->BindNormalTexture(graphicsComp->_normalID);
 
 				if (model->_isAnimated)
 				{

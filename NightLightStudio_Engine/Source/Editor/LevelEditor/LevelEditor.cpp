@@ -55,6 +55,8 @@ void LevelEditor::Init(HWND window)
                     NS_GRAPHICS::CameraSystem::GetInstance().SavePosition();
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_1);
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
+
+                    DELTA_T->load();
                    
                 }
                 else
@@ -64,6 +66,8 @@ void LevelEditor::Init(HWND window)
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_2);
 
                     NS_GRAPHICS::CameraSystem::GetInstance().MoveToSavedPosition();
+
+                    DELTA_T->load();
                 }
             }
 

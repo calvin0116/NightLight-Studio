@@ -64,7 +64,7 @@ namespace NS_LOGIC
     void GameLateInit();
 
     void Update() override;
-    void FixedUpdate() override;
+    void FixedUpdate(float dt) override;
 
     void Free() override;
     void Exit() override;
