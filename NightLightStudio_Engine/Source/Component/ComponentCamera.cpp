@@ -20,8 +20,7 @@
 
 ComponentCamera::ComponentCamera() : _isActive(true), _Offset(0.0f, 0.0f, 0.0f), _orientation(0.0f, 0.0f, 0.0f, 0.0f), _lerp(false), _followTgt(false), _tgt(""),
 _rotation_sensitivity(1000.0f), _drag_sensitivity(200.0f), _zoom_sensitivity(50.0f),
-_yaw(0.0f), _pitch(0.0f), _roll(0.0f),
-
+_yaw(0.0f), _pitch(0.0f), _roll(0.0f)
 {
 	strcpy_s(ser_name, "CameraComponent");
 }
