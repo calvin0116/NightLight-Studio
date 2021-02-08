@@ -223,7 +223,8 @@ namespace Unicorn
         }
         Camera.SetFOV(currentFOV);
 
-        Vector3 ofs = new Vector3(0.0f, 200.0f, 10.0f);
+        //Vector3 ofs = new Vector3(0.0f, 200.0f, 10.0f);
+        Vector3 ofs = new Vector3(-15.0f, 130.0f, -30.0f);
         tgtPos = Lerp(GetTgtFromID(tgtID) + ofs);
       }
 
