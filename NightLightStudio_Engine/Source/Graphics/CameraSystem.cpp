@@ -42,16 +42,16 @@ namespace NS_GRAPHICS
 		_camera.SetZoomSensitivity(CONFIG_DATA->GetConfigData()._zoomSensitivity);
 
 		//Not working properly
-		//glm::vec3 newPos = glm::vec3(CONFIG_DATA->GetConfigData()._lastCamPosX, CONFIG_DATA->GetConfigData()._lastCamPosY, CONFIG_DATA->GetConfigData()._lastCamPosZ);
-		//_camera.SetCameraPosition(newPos);
+		glm::vec3 newPos = glm::vec3(CONFIG_DATA->GetConfigData()._lastCamPosX, CONFIG_DATA->GetConfigData()._lastCamPosY, CONFIG_DATA->GetConfigData()._lastCamPosZ);
+		_camera.SetCameraPosition(newPos);
 
-		//_camera.SetCameraPitch(CONFIG_DATA->GetConfigData()._lastCamPitch);
-		//_camera.SetCameraYaw(CONFIG_DATA->GetConfigData()._lastCamYaw);
-		// Initialize all required cameras(if any)
-		// Currently only one test camera, thus no initialization required
+		_camera.SetCameraPitch(CONFIG_DATA->GetConfigData()._lastCamPitch);
+		_camera.SetCameraYaw(CONFIG_DATA->GetConfigData()._lastCamYaw);
+		//Initialize all required cameras(if any)
+		//Currently only one test camera, thus no initialization required
 
-		// Register keys required
-		// Move camera based on axis vectors
+		 //Register keys required
+		 //Move camera based on axis vectors
 		
 		//Needed for alt key checking in input system
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("ALT_REGISTER", SystemInput_ns::IKEY_ALT);
@@ -193,10 +193,7 @@ namespace NS_GRAPHICS
 
 	void CameraSystem::Update()
 	{
-
-
-
-		// Call to activate all keys
+    // Call to activate all keys
 		//SYS_INPUT->GetSystemKeyPress().ALL_THE_KEYS();
 
 		// Only update the camera vectors if changes to rotation occurred
