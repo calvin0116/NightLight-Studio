@@ -796,7 +796,7 @@ namespace NS_GRAPHICS
 #ifdef DRAW_DEBUG_GRID
 		debugManager->Render(); // Render opaque objects first, in this case, our grid is most definitely opaque
 #endif
-
+		// Extra "queue" for blended objects
 		std::vector<ComponentGraphics*> _blended;
 
 		//while(compItr != compitrEnd)
@@ -907,8 +907,13 @@ namespace NS_GRAPHICS
 					// Check if emission material is activated
 					if (graphicsComp->CheckEmissiveActivation())
 					{
+						// Deactivate backface culling
+
 						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
 
 					}
 					else
@@ -927,6 +932,9 @@ namespace NS_GRAPHICS
 					{
 						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
 					}
 					else
 					{
@@ -979,8 +987,11 @@ namespace NS_GRAPHICS
 					// Check if emission material is activated
 					if (graphicsComp->CheckEmissiveActivation())
 					{
-						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED_TEXTURED);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 					}
 					else
 					{
@@ -1021,8 +1032,11 @@ namespace NS_GRAPHICS
 					// Check if emission material is activated
 					if (graphicsComp->CheckEmissiveActivation())
 					{
-						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_TEXTURED);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 					}
 					else
 					{
@@ -1113,7 +1127,7 @@ namespace NS_GRAPHICS
 			//++compItr;
 		}
 
-
+		// Iterators for alpha blending objects
 		auto blendedItr = _blended.begin();
 		auto blendedItrEnd = _blended.end();
 
@@ -1168,6 +1182,9 @@ namespace NS_GRAPHICS
 					{
 						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
 					}
 					else
 					{
@@ -1185,6 +1202,9 @@ namespace NS_GRAPHICS
 					{
 						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
 					}
 					else
 					{
@@ -1237,8 +1257,11 @@ namespace NS_GRAPHICS
 					// Check if emission material is activated
 					if (graphicsComp->CheckEmissiveActivation())
 					{
-						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED_TEXTURED);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 					}
 					else
 					{
@@ -1279,8 +1302,11 @@ namespace NS_GRAPHICS
 					// Check if emission material is activated
 					if (graphicsComp->CheckEmissiveActivation())
 					{
-						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_TEXTURED);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 					}
 					else
 					{

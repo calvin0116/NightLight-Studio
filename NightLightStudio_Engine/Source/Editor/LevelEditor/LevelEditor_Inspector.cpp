@@ -644,6 +644,11 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 
 			ImGui::ColorEdit3("Emission Color##Graphics", glm::value_ptr(graphics_comp->_pbrData._emissive));
 
+			float emissive_intensity = graphics_comp->GetEmissiveIntensity() * 100.f;
+
+			if (ImGui::DragFloat("Emissive Intensity", &emissive_intensity, 0.1f, 0.1f, 100.f))
+				graphics_comp->SetEmissiveIntensity(emissive_intensity/100.f);
+
 			std::string mod = graphics_comp->_modelFileName.toString();
 			std::string tex = graphics_comp->_albedoFileName.toString();
 			std::string normal = graphics_comp->_normalFileName.toString();

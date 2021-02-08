@@ -65,6 +65,23 @@ glm::vec3 ComponentGraphics::GetEmissive() const
 	return _pbrData._emissive;
 }
 
+void ComponentGraphics::SetEmissiveIntensity(const float& intensity)
+{
+	if (intensity > 1.f)
+	{
+		// prevent negative value
+		_pbrData._emissiveIntensity = 0.1f;
+		return;
+	}
+
+	_pbrData._emissiveIntensity = 1.f - intensity;
+}
+
+float ComponentGraphics::GetEmissiveIntensity() const
+{
+	return 1.f - _pbrData._emissiveIntensity;
+}
+
 void ComponentGraphics::AddModel(std::string filename)
 {
 	if (_modelFileName.toString() != filename && !filename.empty())
@@ -245,6 +262,13 @@ inline void ComponentGraphics::Read(Value& val)
 		_pbrData._emissive.x = emissive[0].GetFloat();
 		_pbrData._emissive.y = emissive[1].GetFloat();
 		_pbrData._emissive.z = emissive[2].GetFloat();
+	}
+
+	if (val.FindMember("emissiveIntensity") == val.MemberEnd())
+		std::cout << "No emissiveIntensity data has been found" << std::endl;
+	else
+	{
+		_pbrData._emissiveIntensity = val["emissiveIntensity"].GetFloat();
 	}
 
 
@@ -432,6 +456,8 @@ inline Value ComponentGraphics::Write()
 
 	NS_SERIALISER::ChangeData(&val, "isActive", _isActive);		//Bool
 	NS_SERIALISER::ChangeData(&val, "renderEmission", _renderEmission);		//Bool
+
+	NS_SERIALISER::ChangeData(&val, "emissiveIntensity", _pbrData._emissiveIntensity);
 
 	Value emissive(rapidjson::kArrayType);
 	emissive.PushBack(_pbrData._emissive.x, global_alloc);

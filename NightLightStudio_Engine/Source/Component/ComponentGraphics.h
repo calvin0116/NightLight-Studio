@@ -23,17 +23,19 @@ struct MaterialData
 
 struct PBRMaterialData
 {
-	glm::vec3 _albedo;  // Base color
-	float _metallic; // from 0.f to 1.f
+	glm::vec3 _albedo;			// Base color
+	float _metallic;			// from 0.f to 1.f
 	float _roughness;
 
-	glm::vec3 _emissive; // Used to simulate glow effect, unaffected by other light sources
+	glm::vec3 _emissive;		// Used to simulate glow effect, unaffected by other light sources
+	float _emissiveIntensity;	// Used to control emissive ratio to diffuse ratio, currently, the lower the value, the higher the intensity, idk why, i gotta check the math again
 
 	PBRMaterialData()
 		: _albedo{ 1.0f, 1.0f, 1.0f },
 		_metallic{ 1.0f },
 		_roughness{ 0.5f },
-		_emissive{ 1.0f, 1.0f, 1.0f } {}
+		_emissive{ 1.0f, 1.0f, 1.0f },
+		_emissiveIntensity{ 1.f } {}
 };
 
 enum class RENDERTYPE
@@ -115,6 +117,14 @@ public:
 
 	// Get rgb for emission
 	glm::vec3 GetEmissive() const;
+
+	// Set emissive to diffuse ratio
+	// Currently, the lower the value, the higher the intensity, idk why, i gotta check the math again
+	void SetEmissiveIntensity(const float& intensity);
+
+	// Get emissive to diffuse ratio
+	// Currently, the lower the value, the higher the intensity, idk why, i gotta check the math again
+	float GetEmissiveIntensity() const;
 
 	void AddModel(std::string filename);              // Expose
 	void AddAlbedoTexture(std::string filename);      // Expose
