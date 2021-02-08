@@ -7,7 +7,7 @@ void AnimationController::Update(float dt)
 {
 	if (_play)
 	{
-		_dt += dt;
+		_dt += dt * _animMultiplier;
 
 		if (_dt >= _endAnimTime)
 		{

@@ -1344,6 +1344,8 @@ void InspectorWindow::AnimationComp(Entity& ent)
 				++it2;
 			}
 
+			ImGui::InputFloat("Animation Speed##anim", &NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_animMultiplier);
+
 			if (ImGui::Button("Preview Animation"))
 			{
 				anim->PlayAnimation(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim,
