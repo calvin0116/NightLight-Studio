@@ -104,7 +104,7 @@ private:
 	void AddSelectedComps(Entity& ent);
 
 	void ComponentLayout(Entity& ent);
-	bool EditTransform(const float* cameraView, float* cameraProjection, float* matrix);
+	bool EditTransform(const float* cameraView, float* cameraProjection, glm::mat4& matrix);
 	void TransformGizmo(TransformComponent* comp);
 public:
 	InspectorWindow()

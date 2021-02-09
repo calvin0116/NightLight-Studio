@@ -19,6 +19,10 @@
 
 #include "../../Graphics/CameraSystem.h"
 
+// Matrix transform and quaternions for rotation
+#include "../../glm/gtc/matrix_transform.hpp"
+#include "../../glm/gtc/quaternion.hpp"
+
 void InspectorWindow::Start()
 {
 	// Set up Command to run to move objects
@@ -2190,7 +2194,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 	}
 }
 
-bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjection, float* matrix)
+bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjection, glm::mat4& matrix)
 {
 	if (ImGui::RadioButton("Translate", _mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
 		_mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
@@ -2202,7 +2206,7 @@ bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjec
 		_mCurrentGizmoOperation = ImGuizmo::SCALE;
 
 	float matrixTranslation[3], matrixRotation[3], matrixScale[3];
-	ImGuizmo::DecomposeMatrixToComponents(matrix, matrixTranslation, matrixRotation, matrixScale);
+	ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(matrix), matrixTranslation, matrixRotation, matrixScale);
 
 	if (ImGui::InputFloat3("Translation##TRANSLATION", matrixTranslation, 3, ImGuiInputTextFlags_EnterReturnsTrue))
 	{
@@ -2217,7 +2221,18 @@ bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjec
 		_lastEnter = true;
 	}
 
-	ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, matrix);
+	//ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, matrix);
+
+	// Manually calculate matrix based on values
+	glm::mat4 Translate = glm::translate(glm::mat4(1.f), glm::make_vec3(matrixTranslation));
+
+	// Perform rotation using Quarternions
+	glm::quat Quaternion(glm::radians(glm::make_vec3(matrixRotation)));
+	glm::mat4 Rotate = glm::mat4_cast(Quaternion);
+
+	glm::mat4 Scale = glm::scale(glm::mat4(1.f), glm::make_vec3(matrixScale));
+
+	matrix = Translate * Rotate * Scale;
 
 	if (_mCurrentGizmoOperation != ImGuizmo::SCALE)
 	{
@@ -2228,7 +2243,7 @@ bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjec
 			_mCurrentGizmoMode = ImGuizmo::LOCAL;
 	}
 
-	ImGui::Checkbox("", &_useSnap);
+	ImGui::Checkbox("##USESNAP", &_useSnap);
 	ImGui::SameLine();
 
 	float* snapPtr = nullptr;
@@ -2251,7 +2266,7 @@ bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjec
 
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-	return ImGuizmo::Manipulate(cameraView, cameraProjection, _mCurrentGizmoOperation, _mCurrentGizmoMode, matrix, NULL, _useSnap ? snapPtr : NULL, NULL, NULL);
+	return ImGuizmo::Manipulate(cameraView, cameraProjection, _mCurrentGizmoOperation, _mCurrentGizmoMode, glm::value_ptr(matrix), NULL, _useSnap ? snapPtr : NULL, NULL, NULL);
 }
 
 void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
@@ -2282,7 +2297,7 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 
 			glm::mat4 matObj = trans_comp->GetModelMatrix();
 			ImGuizmo::SetID(0);
-			if (EditTransform(camView, cameraProjection, glm::value_ptr(matObj)))
+			if (EditTransform(camView, cameraProjection, matObj))
 			{
 				// Checks FIRST frame of manipulation only
 				if (!_lastPos_Start)
