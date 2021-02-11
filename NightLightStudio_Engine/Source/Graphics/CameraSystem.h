@@ -3,6 +3,10 @@
 #include "Camera.h"
 #include "..\Core\DeltaTime.h"
 #include <vector>
+// For messaging/event
+#include "../Messaging/SystemReceiver.h"
+#include "../Messaging/Messages/MessageApplicationExit.h"
+#include "../Messaging/Messages/MessageTogglePlay.h"
 
 namespace NS_GRAPHICS
 {
@@ -53,6 +57,8 @@ namespace NS_GRAPHICS
 		bool canThridPersonCamRotate;
 		// can the cam zoom?
 		bool canThridPersonCamZoom;
+    // check if gamestate is playing to use gameplay camera
+    bool _isPlaying;
 
 		float theThridPersonCamPitch;
 		float theThridPersonCamYaw;
@@ -61,6 +67,8 @@ namespace NS_GRAPHICS
 		float savedPitch;
 		float savedYaw;
 
+    // For receiving event/messages
+    SystemMessaging::SystemReceiver r;
 	public:
 		// Unique Singleton instance
 		static CameraSystem& GetInstance()
@@ -69,19 +77,16 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
+    // Used in Graphics System
 		void Init();
-
 		void Update();
-
 		bool CheckUpdate();
-
 		void AckUpdate();
 
-		// Editor camera functions
 		glm::mat4 GetViewMatrix();
-
 		glm::vec3 GetCurrentCameraPosition();
 
+    // Set camera sensitivity etc
 		void SetRotationSensitivity(const float& sensitivity);
 		void SetDragSensitivity(const float& sensitivity);
 		void SetZoomSensitivity(const float& sensitivity);
@@ -154,8 +159,11 @@ namespace NS_GRAPHICS
 		// set pitch and yaw                                       //Expose
 		void SetThridPersonCamPitchAndYaw(float pitch, float yaw); //Expose
 
-
+    // For editor cam. Obsolete. Please remove somehow.
 		void SavePosition();
 		void MoveToSavedPosition();
+
+    // For gameplay cam
+    void HandleTogglePlay(MessageTogglePlay& msg);
 	};
 }

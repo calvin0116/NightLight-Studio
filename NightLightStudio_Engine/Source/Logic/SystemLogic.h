@@ -44,7 +44,7 @@ namespace NS_LOGIC
     
     // For receiving event/message
     SystemMessaging::SystemReceiver r;
-
+    // For script saving/loading
     void SaveValues();
     void LoadValues();
   public:

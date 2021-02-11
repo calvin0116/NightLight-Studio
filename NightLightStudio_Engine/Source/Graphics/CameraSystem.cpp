@@ -342,16 +342,6 @@ namespace NS_GRAPHICS
 			//Mouse relative velocity
 			glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
 
-			// this can limit motion - me was testing
-			//if (mousePos.x >  0.05f)
-			//	mousePos.x =  0.05f;
-			//if (mousePos.y >  0.05f)
-			//	mousePos.y =  0.05f;
-			//if (mousePos.x < -0.05f)
-			//	mousePos.x = -0.05f;
-			//if (mousePos.y < -0.05f)
-			//	mousePos.y = -0.05f;
-
 			// Rotation for left and right
 			_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
 
@@ -365,26 +355,9 @@ namespace NS_GRAPHICS
 				offsetted = NS_GRAPHICS::MIN_PITCH;
 
 			_camera.SetCameraPitch(offsetted);
-
-			//std::cout << _camera.GetYaw() << ", " << _camera.GetPitch() << std::endl;
-			//std::cout << mousePos.x << ", " << mousePos.y << std::endl;
 		}
 		else
 		{
-			//glm::vec3 viewVec = _camera.GetFront();
-			//_camera.SetCameraYaw(atan2(viewVec.x, viewVec.z));
-
-			//float offsetted = asin(-viewVec.y);
-
-			//if (offsetted > NS_GRAPHICS::MAX_PITCH)
-			//	offsetted = NS_GRAPHICS::MAX_PITCH;
-
-			//if (offsetted < NS_GRAPHICS::MIN_PITCH)
-			//	offsetted = NS_GRAPHICS::MIN_PITCH;
-
-			//_camera.SetCameraPitch(offsetted);
-
-
 			if (theThridPersonCamPitch > NS_GRAPHICS::MAX_PITCH)
 				theThridPersonCamPitch = NS_GRAPHICS::MAX_PITCH;
 
@@ -522,22 +495,30 @@ namespace NS_GRAPHICS
 
 	void CameraSystem::SavePosition()
 	{
-		savedTgt = tgt;
-		savedPitch = _camera.GetPitch();
-		savedYaw = _camera.GetYaw();
+		//savedTgt = tgt;
+		//savedPitch = _camera.GetPitch();
+		//savedYaw = _camera.GetYaw();
 	}
 
 	void CameraSystem::MoveToSavedPosition()
 	{
-		tgt = savedTgt;
+		//tgt = savedTgt;
 
-		theThridPersonCamPitch = savedPitch;
-		theThridPersonCamYaw = savedYaw;
+		//theThridPersonCamPitch = savedPitch;
+		//theThridPersonCamYaw = savedYaw;
 
-		_camera.SetCameraPitch(theThridPersonCamPitch);
-		_camera.SetCameraYaw(theThridPersonCamYaw);
+		//_camera.SetCameraPitch(theThridPersonCamPitch);
+		//_camera.SetCameraYaw(theThridPersonCamYaw);
 
-		SetUseThridPersonCam(false);
+		//SetUseThridPersonCam(false);
 	}
 
+  // For gameplay cam
+  void CameraSystem::HandleTogglePlay(MessageTogglePlay& msg)
+  {
+    if (msg.GetID() != "TogglePlay")
+      return;
+    _isPlaying = msg.isPlaying;
+
+  }
 }
