@@ -297,6 +297,7 @@
     <ClInclude Include="Source\Mono\Binding\Components\ComponentAnimationBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentCanvasBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentColliderBind.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentEmitterBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentGraphicsBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentLightBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentNavigatorBind.h" />
@@ -421,6 +422,7 @@
     <ClCompile Include="Source\Mono\Binding\Components\ComponentAnimationBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentCanvasBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentColliderBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentEmitterBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentGraphicsBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentLightBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentNavigatorBind.cpp" />

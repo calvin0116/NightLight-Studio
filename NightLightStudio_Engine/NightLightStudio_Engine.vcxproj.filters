@@ -424,6 +424,7 @@
     <ClCompile Include="Source\Ai\WayPointManager.cpp" />
     <ClCompile Include="Source\Component\ComponentNavigator.cpp" />
     <ClCompile Include="Source\Ai\AiGraph.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentEmitterBind.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -829,6 +830,7 @@
       <Filter>Source Files\AI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\Emitter.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentEmitterBind.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
