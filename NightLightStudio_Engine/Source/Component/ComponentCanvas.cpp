@@ -51,6 +51,12 @@ UI_Element& ComponentCanvas::FindUIByName(std::string name)
 	return *(_uiElements.begin());
 }
 
+UI_Element& ComponentCanvas::operator[](size_t index)
+{
+	// TODO: insert return statement here
+	return _uiElements.at(index);
+}
+
 void ComponentCanvas::Read(Value& val)
 {
 	if (val.FindMember("isActive") == val.MemberEnd())

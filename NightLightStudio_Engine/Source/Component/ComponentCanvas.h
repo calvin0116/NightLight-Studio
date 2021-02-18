@@ -62,6 +62,7 @@ public:
 	// Destructor, destroy all OpenGL objects via graphics system
 	~ComponentCanvas();
 
+	//EXPOSE THIS
 	void AddUI();								
 	void RemoveUI(size_t index);
 	void Sort();
@@ -69,6 +70,9 @@ public:
 	//To Expose
 	UI_Element& FindUI(size_t index);
 	UI_Element& FindUIByName(std::string name);
+
+	//Extra function expose up to u
+	UI_Element& operator[](size_t index);
 
 	//read and write function for initialization from saved files
 	void	Read(Value&);

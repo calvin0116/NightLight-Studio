@@ -1301,6 +1301,13 @@ void InspectorWindow::CanvasComp(Entity& ent)
 
 			ImGui::SameLine();
 
+			if (ImGui::Button("Sort"))
+			{
+				canvas->Sort();
+			}
+
+			ImGui::SameLine();
+
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 		}
 
