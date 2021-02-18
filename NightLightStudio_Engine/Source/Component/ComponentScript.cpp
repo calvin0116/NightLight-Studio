@@ -128,31 +128,26 @@ inline void ComponentScript::Read(Value& val)
             else if (var_typeid == MONO_TYPE_STRING) // string
             {
               ////std::cout << "String" << std::endl;
-              MonoString* monoString = MonoWrapper::GetObjectFieldValue<MonoString*>(_MonoData._pInstance, var_name);
+              //MonoString* monoString = MonoWrapper::GetObjectFieldValue<MonoString*>(_MonoData._pInstance, var_name);
 
               /**** For saving/getting ID ****/
-              int i = 0;
-              for (; i < _savedCount; ++i)
+              //int i = 0;
+              //for (; i < _savedCount; ++i)
+              //{
+              //  // Found ID
+              //  std::string tempVar(var_name);
+              //  std::string tempSaved(_SavedID[i]);
+              //  if (tempVar == tempSaved)
+              //    break;
+              //}
+              std::string tempVar(var_name);
+              tempVar += "string";
+              if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
+                std::cout << "No script string data has been found" << std::endl;
+              else
               {
-                // Found ID
-                std::string tempVar(var_name);
-                std::string tempSaved(_SavedID[i]);
-                if (tempVar == tempSaved)
-                  break;
-              }
-
-              if (monoString != nullptr && _savedCount != 0)
-              {
-                std::string tempVar(var_name);
-                tempVar += "string";
-                if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
-                  std::cout << "No script string data has been found" << std::endl;
-                else
-                {
-                  _SavedID[i] = val[tempVar.c_str()].GetString();
-                  monoString = MonoWrapper::ToMonoString(_SavedID[i]);
-                  MonoWrapper::SetObjectFieldValue(_MonoData._pInstance, var_name, *monoString);
-                }
+                MonoString* monoString = MonoWrapper::ToMonoString(val[tempVar.c_str()].GetString());
+                MonoWrapper::SetObjectFieldValue(_MonoData._pInstance, var_name, *monoString);
               }
             }
             else
@@ -181,7 +176,7 @@ inline Value ComponentScript::Write() {
     MonoClass*      klass = MonoWrapper::GetMonoClass(_MonoData._pInstance);
     void*           iter = NULL;
     MonoClassField* field = mono_class_get_fields(klass, &iter);
-
+    int tempC = 0;
     while (field)
     {
       // Name of variables
@@ -232,31 +227,33 @@ inline Value ComponentScript::Write() {
         else if (var_typeid == MONO_TYPE_STRING) // string
         {
           //std::cout << "String" << std::endl;
-          MonoString* monoString = MonoWrapper::GetObjectFieldValue<MonoString*>(_MonoData._pInstance, var_name);
+          //MonoString* monoString = MonoWrapper::GetObjectFieldValue<MonoString*>(_MonoData._pInstance, var_name);
           //std::string toWrite;
           /**** For saving/getting ID ****/
-          int i = 0;
+          //int i = 0;
           std::string tempVar(var_name);
           tempVar += "string";
-          for (; i < _savedCount; ++i)
-          {
-            // Found ID
-            std::string tempSaved(_SavedID[i]);
-            if (tempVar == tempSaved)
-              break;
-          }
-          if (i == _savedCount)
-          {
-            _SavedID[i] = tempVar;
-            ++_savedCount;
-          }
+          //for (; i < _savedCount; ++i)
+          //{
+          //  // Found ID
+          //  std::string tempSaved(_SavedID[i]);
+          //  if (tempVar == tempSaved)
+          //    break;
+          //}
+          //if (i == _savedCount)
+          //{
+          //  _SavedID[i] = tempVar;
+          //  ++_savedCount;
+          //}
           /************************/
           //std::string& saved = _SavedStrings[i];
+          MonoString* monoString = MonoWrapper::GetObjectFieldValue<MonoString*>(_MonoData._pInstance, var_name);
           if (monoString != nullptr)
-          {
-            _SavedStrings[i] = MonoWrapper::ToString(monoString);
-            NS_SERIALISER::ChangeData(&val, tempVar.c_str(), rapidjson::StringRef(_SavedStrings[i].c_str()));		//String
-          }
+            _SavedStrings[tempC] = MonoWrapper::ToString(monoString);
+          else
+            _SavedStrings[tempC] = "";
+          NS_SERIALISER::ChangeData(&val, tempVar.c_str(), rapidjson::StringRef(_SavedStrings[tempC].c_str()));		//String
+          ++tempC;
         }
         else
         {

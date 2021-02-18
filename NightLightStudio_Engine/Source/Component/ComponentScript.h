@@ -20,9 +20,11 @@ public:
   data             _MonoData;         // Mono Data
 
   // For inspector of C# script
-  int              _savedCount;       // How many strings currently
-  LocalString<256> _SavedID[10];      // Saved IDs of string up to 10 max.
-  LocalString<256> _SavedStrings[10]; // Saved values of string
+  //int              _savedCount;       // How many strings currently
+  //LocalString<256> _SavedID[10];      // Saved IDs of string up to 10 max.
+  LocalString<512> _SavedStrings[10]; // Saved values of string
+  //LocalString<512> _SavedString[10]; // Saved values of string
+  //LocalString<512> _SavedString1; // Saved values of string
 
   ComponentScript();
 	~ComponentScript();
