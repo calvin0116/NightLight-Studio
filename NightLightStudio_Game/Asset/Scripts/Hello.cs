@@ -7,7 +7,9 @@ namespace Unicorn
   public class Hello : UniBehaviour
   {
     public int test = 0;
-    public string test2 = "AyeAyeAye!";
+    public string test2 = "";
+    public string test3 = "";
+    public string test4;
 
     public override void Init()
     {
@@ -25,8 +27,7 @@ namespace Unicorn
     {
       if(Input.GetKeyPress(VK.IKEY_SPACE))
       {
-        Print(test2);
-        Console.WriteLine(test2);
+        SetNextScene(test2);
       }
     }
 
