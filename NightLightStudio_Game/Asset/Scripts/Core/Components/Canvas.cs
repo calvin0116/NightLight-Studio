@@ -16,6 +16,21 @@ namespace Unicorn
       set { set_IsActive_Internal(native_handle, value); }
     }
 
+    public void AddUI()
+    {
+      AddUI_Internal(this.native_handle);
+    }
+
+    public void RemoveUI(uint index)
+    {
+      RemoveUI_Internal(this.native_handle, index);
+    }
+
+    public void Sort()
+    {
+      SortUI_Internal(this.native_handle);
+    }
+
     public UIElement FindUI(uint index)
     {
       return FindUI_Internal(this.native_handle, index);
