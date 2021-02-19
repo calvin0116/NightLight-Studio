@@ -260,7 +260,7 @@ void AssetInspector::Run()
                         std::transform(fileType.begin(), fileType.end(), fileType.begin(),
                             [](unsigned char c)
                             { return (char)std::tolower(c); });
-                        if (fileType == "tga" || fileType == "png" || fileType == "jpeg")
+                        if (fileType == "tga" || fileType == "png" || fileType == "jpeg" || fileType == "dds")
                         {
                             draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(0, 0, 255));
                         }

@@ -7,6 +7,8 @@
 #include "../Component/ComponentTransform.h"
 #include "../Component/ComponentCanvas.h"
 
+#include "../Input/SystemInput.h"
+
 #define MAX_PARTICLE 2000
 
 NS_GRAPHICS::EmitterSystem::EmitterSystem() :

@@ -279,6 +279,14 @@ void LevelEditor::LE_MainMenuBar()
             // Do not remove this
             ImGui::EndMenu();
         }
+
+        if (ImGui::BeginMenu("Graphics Settings##GRAPHICS"))
+        {
+            ImGui::Checkbox("Enable Canvas Drawing ##canvas", &NS_GRAPHICS::UISystem::GetInstance()._uiDrawing);
+
+            // Do not remove this
+            ImGui::EndMenu();
+        }
         ImGui::Text("FPS: %f" , ImGui::GetIO().Framerate);
 
         ImGui::EndMenuBar();

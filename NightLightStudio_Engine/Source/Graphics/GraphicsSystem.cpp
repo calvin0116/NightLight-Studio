@@ -74,8 +74,12 @@ namespace NS_GRAPHICS
 
 		Render();
 
-		uiManager->Update();
+		//Updates emitter
+		//Renders particle in its own manager
 		emitterManager->Update();
+		//UI Draws Last
+		//Renders UI in its own manager
+		uiManager->Update();
 
 		//std::cout << "Time current passed: " << _testTimeElapsed << std::endl;
 	}

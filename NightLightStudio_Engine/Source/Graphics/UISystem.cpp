@@ -6,6 +6,8 @@
 #include "../Component/ComponentTransform.h"
 #include "../Component/ComponentCanvas.h"
 
+#include "../Input/SystemInput.h"
+
 //Based on localvector on ui canvas
 #define MAX_INSTANCE_NUMBER 32
 
@@ -116,6 +118,15 @@ void NS_GRAPHICS::UISystem::Init()
 	_textureManager = &TextureManager::GetInstance();
 	_shaderSystem = &ShaderSystem::GetInstance();
 
+	//Set up event to hide particle drawing
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TOGGLE_UI_DRAW", SystemInput_ns::IKEY_9, "TOGGLE_UI_DRAW", SystemInput_ns::OnPress, [this]()
+		{
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+			{
+				_uiDrawing = !_uiDrawing;
+			}
+		});
+
 	// test using current perspective matrix
 	//SetUIMatrix(NS_WINDOW::SYS_WINDOW->GetResolutionWidth(), NS_WINDOW::SYS_WINDOW->GetResolutionHeight());
 }
@@ -154,6 +165,14 @@ void NS_GRAPHICS::UISystem::RenderUI()
 				continue;
 			}
 
+			if (canvas->_canvasType == SCREEN_SPACE)
+			{
+
+			}
+			else
+			{
+
+			}
 			glm::mat4 ModelMatrix = canvas->_uiElements.at(i).GetModelMatrix();
 
 			//For now ui only got picture

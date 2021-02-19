@@ -1251,7 +1251,16 @@ void InspectorWindow::CanvasComp(Entity& ent)
 				canvas->_uiElements.at(i)._position;
 				canvas->_uiElements.at(i)._size;
 
-				ImGui::InputFloat3(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._position), 3);
+				if (canvas->_canvasType == SCREEN_SPACE)
+				{
+					ImGui::InputFloat2(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._position), 3);
+					ImGui::InputFloat(std::string("Layer Order##").append(std::to_string(i)).c_str(), &canvas->_uiElements.at(i)._position.z,1);
+				}
+				else
+				{
+					ImGui::InputFloat3(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._position), 3);
+
+				}
 				ImGui::InputFloat2(std::string("UISize##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._size), 3);
 
 				_levelEditor->LE_AddInputText(std::string("UIName##").append(std::to_string(i)).c_str(), uiName, 500, ImGuiInputTextFlags_EnterReturnsTrue,

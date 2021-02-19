@@ -18,8 +18,6 @@
 #include "Emitter.h"
 #include "..\Component\ComponentEmitter.h"
 
-#include "../Input/SystemInput.h"
-
 #define DEFAULT_MAX_EMITTER 128
 
 namespace NS_GRAPHICS
@@ -35,6 +33,8 @@ namespace NS_GRAPHICS
             static EmitterSystem instance;
             return instance;
         }
+
+        bool _particleDrawing;
 
         void Init();
         void Update();
@@ -52,9 +52,6 @@ namespace NS_GRAPHICS
         size_t GetFreeIndex();
 
     private:
-
-        bool _particleDrawing;
-
         //// Referenced object for instancing
         //GLuint _vao;
         //GLuint _vbo;

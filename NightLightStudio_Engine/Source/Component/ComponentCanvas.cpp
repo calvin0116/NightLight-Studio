@@ -5,7 +5,7 @@
 #include "../Input/SystemInput.h"
 #include "../Window/WndSystem.h"
 
-ComponentCanvas::ComponentCanvas() : _isActive{ true }
+ComponentCanvas::ComponentCanvas() : _isActive{ true }, _canvasType{ SCREEN_SPACE }
 {
 	strcpy_s(ser_name, "CanvasComponent");
 }
