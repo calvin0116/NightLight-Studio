@@ -16,193 +16,193 @@ namespace Unicorn
       set { set_IsActive_Internal(native_handle, value); }
     }
 
-    public int ID
+    public int id
     {
       get { return get_EmitterID_Internal(native_handle); }
       set { set_EmitterID_Internal(native_handle, value); }
     }
 
-    public int ShapeType
+    public int shapeType
     {
       get { return get_ShapeType_Internal(native_handle); }
       set { set_ShapeType_Internal(native_handle, value); }
     }
 
-    public float Duration
+    public float duration
     {
       get { return get_Duration_Internal(native_handle); }
       set { set_Duration_Internal(native_handle, value); }
     }
 
-    public uint EmitRate
+    public uint emitRate
     {
       get { return get_EmitRate_Internal(native_handle); }
       set { set_EmitRate_Internal(native_handle, value); }
     }
 
-    public uint MaxParticles
+    public uint maxParticles
     {
       get { return get_MaxParticle_Internal(native_handle); }
       set { set_MaxParticle_Internal(native_handle, value); }
     }
 
-    public float BurstRate
+    public float burstRate
     {
       get { return get_BurstRate_Internal(native_handle); }
       set { set_BurstRate_Internal(native_handle, value); }
     }
 
-    public uint BurstAmount
+    public uint burstAmount
     {
       get { return get_BurstAmount_Internal(native_handle); }
       set { set_BurstAmount_Internal(native_handle, value); }
     }
 
-    public float Angle
+    public float angle
     {
       get { return get_Angle_Internal(native_handle); }
       set { set_Angle_Internal(native_handle, value); }
     }
 
-    public float Radius
+    public float radius
     {
       get { return get_Radius_Internal(native_handle); }
       set { set_Radius_Internal(native_handle, value); }
     }
 
-    public bool RandomizeSize
+    public bool randomizeSize
     {
       get { return get_RandomizeSize_Internal(native_handle); }
       set { set_RandomizeSize_Internal(native_handle, value); }
     }
 
-    public float MinParticleSize
+    public float minParticleSize
     {
       get { return get_MinParticleSize_Internal(native_handle); }
       set { set_MinParticleSize_Internal(native_handle, value); }
     }
 
-    public float MaxParticleSize
+    public float maxParticleSize
     {
       get { return get_MaxParticleSize_Internal(native_handle); }
       set { set_MaxParticleSize_Internal(native_handle, value); }
     }
 
-    public bool RandomizeSpeed
+    public bool randomizeSpeed
     {
       get { return get_RandomizeSpeed_Internal(native_handle); }
       set { set_RandomizeSpeed_Internal(native_handle, value); }
     }
 
-    public float MinParticleSpeed
+    public float minParticleSpeed
     {
       get { return get_MinParticleSpeed_Internal(native_handle); }
       set { set_MinParticleSpeed_Internal(native_handle, value); }
     }
 
-    public float MaxParticleSpeed
+    public float maxParticleSpeed
     {
       get { return get_MaxParticleSpeed_Internal(native_handle); }
       set { set_MaxParticleSpeed_Internal(native_handle, value); }
     }
 
-    public bool RandomizeLife
+    public bool randomizeLife
     {
       get { return get_RandomizeLife_Internal(native_handle); }
       set { set_RandomizeLife_Internal(native_handle, value); }
     }
 
-    public float MinParticleLife
+    public float minParticleLife
     {
       get { return get_MinParticleLife_Internal(native_handle); }
       set { set_MinParticleLife_Internal(native_handle, value); }
     }
 
-    public float MaxParticleLife
+    public float maxParticleLife
     {
       get { return get_MaxParticleLife_Internal(native_handle); }
       set { set_MaxParticleLife_Internal(native_handle, value); }
     }
 
-    public bool Prewarm
+    public bool prewarm
     {
       get { return get_Prewarm_Internal(native_handle); }
       set { set_Prewarm_Internal(native_handle, value); }
     }
 
-    public bool Burst
+    public bool burst
     {
       get { return get_Burst_Internal(native_handle); }
       set { set_Burst_Internal(native_handle, value); }
     }
 
-    public bool Loop
+    public bool loop
     {
       get { return get_Loop_Internal(native_handle); }
       set { set_Loop_Internal(native_handle, value); }
     }
 
-    public bool Follow
+    public bool follow
     {
       get { return get_Follow_Internal(native_handle); }
       set { set_Follow_Internal(native_handle, value); }
     }
 
-    public bool Fade
+    public bool fade
     {
       get { return get_Fade_Internal(native_handle); }
       set { set_Fade_Internal(native_handle, value); }
     }
 
-    public bool VelocityOverTime
+    public bool velocityOverTime
     {
       get { return get_VelocityOverTime_Internal(native_handle); }
       set { set_VelocityOverTime_Internal(native_handle, value); }
     }
 
-    public bool SizeOverTime
+    public bool sizeOverTime
     {
       get { return get_SizeOverTime_Internal(native_handle); }
       set { set_SizeOverTime_Internal(native_handle, value); }
     }
 
-    public bool SpeedOverTime
+    public bool speedOverTime
     {
       get { return get_SpeedOverTime_Internal(native_handle); }
       set { set_SpeedOverTime_Internal(native_handle, value); }
     }
 
-    public bool ColourOverTime
+    public bool colourOverTime
     {
       get { return get_ColourOverTime_Internal(native_handle); }
       set { set_ColourOverTime_Internal(native_handle, value); }
     }
 
-    public Vector4 ColourA
+    public Vector4 colourA
     {
       get { return get_ColourA_Internal(native_handle); }
       set { set_ColourA_Internal(native_handle, value); }
     }
 
-    public Vector4 ColourB
+    public Vector4 colourB
     {
       get { return get_ColourB_Internal(native_handle); }
       set { set_ColourB_Internal(native_handle, value); }
     }
 
-    public Vector4 ColourStart
+    public Vector4 colourStart
     {
       get { return get_ColourStart_Internal(native_handle); }
       set { set_ColourStart_Internal(native_handle, value); }
     }
 
-    public Vector4 ColourEnd
+    public Vector4 colourEnd
     {
       get { return get_ColourEnd_Internal(native_handle); }
       set { set_ColourEnd_Internal(native_handle, value); }
     }
 
-    public Vector3 Velocity
+    public Vector3 velocity
     {
       get { return get_Velocity_Internal(native_handle); }
       set { set_Velocity_Internal(native_handle, value); }
