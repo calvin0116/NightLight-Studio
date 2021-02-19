@@ -18,7 +18,7 @@ float Emitter::RandFloat()
 
 Emitter::Emitter():
 	_particles{}, _numAlive{ 0 }, _lastUsed{ 0 }, _emitterTime{ 0.0f }, _timePassed{ 0.0f }, _emitterPosition{}, _emitterRotation{},//Main particle data
-	_type{ EmitterShapeType::SPHERE }, _durationPerCycle{ 5.0f }, _emissionRate{ 1.0f }, _maxParticles{ 100 },//Main particle data
+	_type{ EmitterShapeType::SPHERE }, _durationPerCycle{ 5.0f }, _emissionRate{ 0.0f }, _maxParticles{ 100 },//Main particle data
 	_burstTime{ 0.0f }, _burstRate{ 1.0f }, _burstAmount{ 20 },//Main particle data
 	_coneDir{ 0.0f,0.0f,1.0f }, _spawnAngle{ 30.0f }, _radius{ 100.0f }, //For cone and sphere
 	_randomizeSize{ false }, _minParticleSize{ 10 }, _maxParticleSize{ 100 }, //Particle Size

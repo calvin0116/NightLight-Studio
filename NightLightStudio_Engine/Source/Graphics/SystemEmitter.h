@@ -18,6 +18,8 @@
 #include "Emitter.h"
 #include "..\Component\ComponentEmitter.h"
 
+#include "../Input/SystemInput.h"
+
 #define DEFAULT_MAX_EMITTER 128
 
 namespace NS_GRAPHICS

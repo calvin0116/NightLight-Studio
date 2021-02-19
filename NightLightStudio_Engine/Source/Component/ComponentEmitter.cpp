@@ -77,8 +77,16 @@ unsigned ComponentEmitter::GetEmissionRate()
 
 void ComponentEmitter::SetEmissionRate(unsigned emission)
 {
-	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionOverTime = emission;
-	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionRate = 1 / NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionOverTime;
+	if (emission <= 0)
+	{
+		NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionOverTime = 0;
+		NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionRate = 0.0f;
+	}
+	else
+	{
+		NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionOverTime = emission;
+		NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionRate = 1.0f / NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionOverTime;
+	}	
 }
 
 unsigned ComponentEmitter::GetMaxParticle()
@@ -367,11 +375,10 @@ ComponentEmitter::~ComponentEmitter()
 
 void ComponentEmitter::Read(Value& val)
 {
-	_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
-
+	//If doesn't exist
 	if (_emitterID < 0)
 	{
-		return;
+		_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
 	}
 
 	NS_GRAPHICS::EmitterSystem& emitSys = NS_GRAPHICS::EmitterSystem::GetInstance();
@@ -420,7 +427,15 @@ void ComponentEmitter::Read(Value& val)
 	else
 	{
 		emitSys._emitters[_emitterID]->_emissionOverTime = val["EmissionRateOverTime"].GetUint();
-		emitSys._emitters[_emitterID]->_emissionRate = 1 / emitSys._emitters[_emitterID]->_emissionOverTime;
+
+		if (emitSys._emitters[_emitterID]->_emissionOverTime == 0)
+		{
+			emitSys._emitters[_emitterID]->_emissionRate = 0.0f;
+		}
+		else
+		{
+			emitSys._emitters[_emitterID]->_emissionRate = 1.0f / emitSys._emitters[_emitterID]->_emissionOverTime;
+		}
 	}
 
 	if (val.FindMember("MaxParticle") == val.MemberEnd())

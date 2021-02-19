@@ -181,7 +181,7 @@ void InspectorWindow::Start()
 		{
 			entComp._ent.AttachComponent<EmitterComponent>();
 			entComp._ent.getComponent<EmitterComponent>()->Read(*entComp._rjDoc);
-			entComp._ent.getComponent<EmitterComponent>()->_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
+			//entComp._ent.getComponent<EmitterComponent>()->_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
 		}
 
 		return comp;

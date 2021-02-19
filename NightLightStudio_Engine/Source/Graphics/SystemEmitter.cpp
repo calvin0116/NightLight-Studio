@@ -19,6 +19,7 @@ NS_GRAPHICS::EmitterSystem::EmitterSystem() :
 
 NS_GRAPHICS::EmitterSystem::~EmitterSystem()
 {
+	//clean up
 	for (auto& emitter : _emitters)
 	{
 		delete emitter;
@@ -27,15 +28,26 @@ NS_GRAPHICS::EmitterSystem::~EmitterSystem()
 
 void NS_GRAPHICS::EmitterSystem::Init()
 {
+	//Seed the rng
 	srand(static_cast <unsigned> (time(0)));
 
 	_textureManager = &TextureManager::GetInstance();
 	_shaderSystem = &ShaderSystem::GetInstance();
 	_cameraSystem = &CameraSystem::GetInstance();
+
+	//Set up event to hide particle drawing
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TOGGLE_PARTICLE_DRAW", SystemInput_ns::IKEY_0, "TOGGLE_PARTICLE_DRAW", SystemInput_ns::OnPress, [this]()
+	{
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+		{
+			_particleDrawing = !_particleDrawing;
+		}
+	});
 }
 
 void NS_GRAPHICS::EmitterSystem::Update()
 {
+	//Draw only if particle is enabled
 	if (_particleDrawing)
 	{
 		_shaderSystem->StartProgram(ShaderSystem::PARTICLE);
@@ -139,12 +151,14 @@ void NS_GRAPHICS::EmitterSystem::UpdateEmitter(ComponentEmitter* emitter, float 
 		//Duration still within time passed or it is looping
 		else
 		{
-			if (_emitters[emitter->_emitterID]->_emitterTime >= _emitters[emitter->_emitterID]->_emissionRate)
+			if (_emitters[emitter->_emitterID]->_emissionOverTime > 0)
 			{
-				_emitters[emitter->_emitterID]->_emitterTime = 0.0f;
-				_emitters[emitter->_emitterID]->RespawnParticle();
+				if (_emitters[emitter->_emitterID]->_emitterTime >= _emitters[emitter->_emitterID]->_emissionRate)
+				{
+					_emitters[emitter->_emitterID]->_emitterTime = 0.0f;
+					_emitters[emitter->_emitterID]->RespawnParticle();
+				}
 			}
-
 
 			if (_emitters[emitter->_emitterID]->_burst)
 			{
