@@ -11,6 +11,13 @@ namespace ComponentCanvasBind
     MonoWrapper::BindClassFunction(set_IsActive_Internal, "set_IsActive_Internal",
       "Canvas");
 
+    MonoWrapper::BindClassFunction(AddUI_Internal, "AddUI_Internal",
+      "Canvas");
+    MonoWrapper::BindClassFunction(RemoveUI_Internal, "RemoveUI_Internal",
+      "Canvas");
+    MonoWrapper::BindClassFunction(csSortUI_Internal, "SortUI_Internal",
+      "Canvas");
+
     MonoWrapper::BindClassFunction(FindUI_Internal, "FindUI_Internal",
       "Canvas");
     MonoWrapper::BindClassFunction(FindUIByName_Internal, "FindUIByName_Internal",
@@ -25,6 +32,21 @@ namespace ComponentCanvasBind
   void set_IsActive_Internal(ComponentCanvas* col, bool val)
   {
     col->_isActive = val;
+  }
+  
+  void AddUI_Internal(ComponentCanvas* com)
+  {
+    com->AddUI();
+  }
+
+  void RemoveUI_Internal(ComponentCanvas* com, unsigned int index)
+  {
+    com->RemoveUI(index);
+  }
+
+  void csSortUI_Internal(ComponentCanvas* com)
+  {
+    com->Sort();
   }
 
   MonoObject* FindUI_Internal(ComponentCanvas* col, unsigned int index)

@@ -33,6 +33,15 @@ namespace Unicorn
     public extern static void set_IsActive_Internal(IntPtr native_handle, bool val);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void AddUI_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void RemoveUI_Internal(IntPtr native_handle, uint index);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void SortUI_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static UIElement FindUI_Internal(IntPtr native_handle, uint index);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
