@@ -29,6 +29,7 @@ namespace ECSBind
   MonoObject* GetNavigator(int id);
   MonoObject* GetAnimation(int id);
   MonoObject* GetCanvas(int id);
+  MonoObject* GetEmitter(int id);
   MonoObject* GetVariables(int id); // Use this for now until reflection is out
 
   void BindECS();

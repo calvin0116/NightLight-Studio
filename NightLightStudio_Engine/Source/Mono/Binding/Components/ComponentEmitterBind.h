@@ -4,15 +4,13 @@
 
 namespace ComponentEmitterBind
 {
+  void BindComponentEmitter();
+
   bool get_isActive_Internal(EmitterComponent* emt);
   void set_isActive_Internal(EmitterComponent* emt, bool val);
 
   int get_EmitterID_Internal(EmitterComponent* emt);
   void set_EmitterID_Internal(EmitterComponent* emt, int val);
-
-  void cs_AddTexture_Internal(EmitterComponent* emt, MonoString* val);
-  void cs_Play_Internal(EmitterComponent* emt);
-  void cs_Stop_Internal(EmitterComponent* emt);
 
   int get_ShapeType_Internal(EmitterComponent* emt);
   void set_ShapeType_Internal(EmitterComponent* emt, int val);
@@ -102,10 +100,15 @@ namespace ComponentEmitterBind
   void set_ColourB_Internal(EmitterComponent* emt, MonoObject* val);
 
   MonoObject* get_ColourStart_Internal(EmitterComponent* emt);
+  void set_ColourStart_Internal(EmitterComponent* emt, MonoObject* val);
+
+  MonoObject* get_ColourEnd_Internal(EmitterComponent* emt);
   void set_ColourEnd_Internal(EmitterComponent* emt, MonoObject* val);
 
   MonoObject* get_Velocity_Internal(EmitterComponent* emt);
   void set_Velocity_Internal(EmitterComponent* emt, MonoObject* val);
 
-  void BindComponentEmitter();
+  void cs_AddTexture_Internal(EmitterComponent* emt, MonoString* val);
+  void cs_Play_Internal(EmitterComponent* emt);
+  void cs_Stop_Internal(EmitterComponent* emt);
 }

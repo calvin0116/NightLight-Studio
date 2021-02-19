@@ -35,6 +35,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(GetNavigator, "GetNavigator", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetAnimation, "GetAnimation", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetCanvas, "GetCanvas", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetEmitter, "GetEmitter", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetVariables, "GetVariables", "UniBehaviour");
   }
   // For debugging in C#
@@ -243,6 +244,18 @@ namespace ECSBind
     if (CheckCompGet(cnvs, "GetCanvas()", id))
       return nullptr;
     MonoWrapper::SetNativeHandle(monoObj, cnvs);
+
+    return monoObj;
+  }
+
+  MonoObject* GetEmitter(int id)
+  {
+    MonoObject* monoObj = MonoWrapper::ConstructObject("Emitter");
+    Entity en = G_ECMANAGER->getEntity(id);
+    EmitterComponent* emt = en.getComponent<EmitterComponent>();
+    if (CheckCompGet(emt, "GetEmitter()", id))
+      return nullptr;
+    MonoWrapper::SetNativeHandle(monoObj, emt);
 
     return monoObj;
   }
