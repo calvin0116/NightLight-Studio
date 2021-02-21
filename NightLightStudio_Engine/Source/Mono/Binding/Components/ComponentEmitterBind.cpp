@@ -6,111 +6,111 @@ namespace ComponentEmitterBind
 {
   void BindComponentEmitter()
   {
-    MonoWrapper::BindClassFunction(get_isActive_Internal, "get_xAxis_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_isActive_Internal, "set_xAxis_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_isActive_Internal, "get_xAxis_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_isActive_Internal, "set_xAxis_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_EmitterID_Internal, "get_EmitterID_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_EmitterID_Internal, "set_EmitterID_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_EmitterID_Internal, "get_EmitterID_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_EmitterID_Internal, "set_EmitterID_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_ShapeType_Internal, "get_ShapeType_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_ShapeType_Internal, "set_ShapeType_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_ShapeType_Internal, "get_ShapeType_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_ShapeType_Internal, "set_ShapeType_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_Duration_Internal, "get_Duration_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_Duration_Internal, "set_Duration_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_Duration_Internal, "get_Duration_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_Duration_Internal, "set_Duration_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_EmitRate_Internal, "get_EmitRate_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_EmitRate_Internal, "set_EmitRate_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_EmitRate_Internal, "get_EmitRate_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_EmitRate_Internal, "set_EmitRate_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_MaxParticle_Internal, "get_MaxParticle_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_MaxParticle_Internal, "set_MaxParticle_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_MaxParticle_Internal, "get_MaxParticle_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_MaxParticle_Internal, "set_MaxParticle_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_BurstRate_Internal, "get_BurstRate_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_BurstRate_Internal, "set_BurstRate_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_BurstRate_Internal, "get_BurstRate_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_BurstRate_Internal, "set_BurstRate_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_BurstAmount_Internal, "get_BurstAmount_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_BurstAmount_Internal, "set_BurstAmount_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_BurstAmount_Internal, "get_BurstAmount_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_BurstAmount_Internal, "set_BurstAmount_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_Angle_Internal, "get_Angle_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_Angle_Internal, "set_Angle_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_Angle_Internal, "get_Angle_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_Angle_Internal, "set_Angle_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_Radius_Internal, "get_Radius_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_Radius_Internal, "set_Radius_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_Radius_Internal, "get_Radius_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_Radius_Internal, "set_Radius_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_RandomizeSize_Internal, "get_RandomizeSize_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_RandomizeSize_Internal, "set_RandomizeSize_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_RandomizeSize_Internal, "get_RandomizeSize_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_RandomizeSize_Internal, "set_RandomizeSize_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_MinParticleSize_Internal, "get_MinParticleSize_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_MinParticleSize_Internal, "set_MinParticleSize_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_MinParticleSize_Internal, "get_MinParticleSize_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_MinParticleSize_Internal, "set_MinParticleSize_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_MaxParticleSize_Internal, "get_MaxParticleSize_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_MaxParticleSize_Internal, "set_MaxParticleSize_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_MaxParticleSize_Internal, "get_MaxParticleSize_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_MaxParticleSize_Internal, "set_MaxParticleSize_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_RandomizeSpeed_Internal, "get_RandomizeSpeed_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_RandomizeSpeed_Internal, "set_RandomizeSpeed_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_RandomizeSpeed_Internal, "get_RandomizeSpeed_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_RandomizeSpeed_Internal, "set_RandomizeSpeed_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_MinParticleSpeed_Internal, "get_MinParticleSpeed_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_MinParticleSpeed_Internal, "set_MinParticleSpeed_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_MinParticleSpeed_Internal, "get_MinParticleSpeed_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_MinParticleSpeed_Internal, "set_MinParticleSpeed_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_MinParticleSpeed_Internal, "get_MinParticleSpeed_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_MinParticleSpeed_Internal, "set_MinParticleSpeed_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_MinParticleSpeed_Internal, "get_MinParticleSpeed_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_MinParticleSpeed_Internal, "set_MinParticleSpeed_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_MaxParticleSpeed_Internal, "get_MaxParticleSpeed_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_MaxParticleSpeed_Internal, "set_MaxParticleSpeed_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_MaxParticleSpeed_Internal, "get_MaxParticleSpeed_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_MaxParticleSpeed_Internal, "set_MaxParticleSpeed_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_RandomizeLife_Internal, "get_RandomizeLife_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_RandomizeLife_Internal, "set_RandomizeLife_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_RandomizeLife_Internal, "get_RandomizeLife_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_RandomizeLife_Internal, "set_RandomizeLife_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_MinParticleLife_Internal, "get_MinParticleLife_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_MinParticleLife_Internal, "set_MinParticleLife_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_MinParticleLife_Internal, "get_MinParticleLife_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_MinParticleLife_Internal, "set_MinParticleLife_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_MaxParticleLife_Internal, "get_MaxParticleLife_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_MaxParticleLife_Internal, "set_MaxParticleLife_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_MaxParticleLife_Internal, "get_MaxParticleLife_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_MaxParticleLife_Internal, "set_MaxParticleLife_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_Prewarm_Internal, "get_Prewarm_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_Prewarm_Internal, "set_Prewarm_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_Prewarm_Internal, "get_Prewarm_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_Prewarm_Internal, "set_Prewarm_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_Burst_Internal, "get_Burst_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_Burst_Internal, "set_Burst_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_Burst_Internal, "get_Burst_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_Burst_Internal, "set_Burst_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_Loop_Internal, "get_Loop_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_Loop_Internal, "set_Loop_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_Loop_Internal, "get_Loop_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_Loop_Internal, "set_Loop_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_Follow_Internal, "get_Follow_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_Follow_Internal, "set_Follow_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_Follow_Internal, "get_Follow_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_Follow_Internal, "set_Follow_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_Fade_Internal, "get_Fade_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_Fade_Internal, "set_Fade_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_Fade_Internal, "get_Fade_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_Fade_Internal, "set_Fade_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_VelocityOverTime_Internal, "get_VelocityOverTime_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_VelocityOverTime_Internal, "set_VelocityOverTime_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_VelocityOverTime_Internal, "get_VelocityOverTime_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_VelocityOverTime_Internal, "set_VelocityOverTime_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_SizeOverTime_Internal, "get_SizeOverTime_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_SizeOverTime_Internal, "set_SizeOverTime_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_SizeOverTime_Internal, "get_SizeOverTime_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_SizeOverTime_Internal, "set_SizeOverTime_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_SpeedOverTime_Internal, "get_SpeedOverTime_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_SpeedOverTime_Internal, "set_SpeedOverTime_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_SpeedOverTime_Internal, "get_SpeedOverTime_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_SpeedOverTime_Internal, "set_SpeedOverTime_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_ColourOverTime_Internal, "get_ColourOverTime_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_ColourOverTime_Internal, "set_ColourOverTime_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_ColourOverTime_Internal, "get_ColourOverTime_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_ColourOverTime_Internal, "set_ColourOverTime_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_ColourA_Internal, "get_ColourA_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_ColourA_Internal, "set_ColourA_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_ColourA_Internal, "get_ColourA_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_ColourA_Internal, "set_ColourA_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_ColourB_Internal, "get_ColourB_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_ColourB_Internal, "set_ColourB_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_ColourB_Internal, "get_ColourB_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_ColourB_Internal, "set_ColourB_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_ColourStart_Internal, "get_ColourStart_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_ColourStart_Internal, "set_ColourStart_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_ColourStart_Internal, "get_ColourStart_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_ColourStart_Internal, "set_ColourStart_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_ColourEnd_Internal, "get_ColourEnd_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_ColourEnd_Internal, "set_ColourEnd_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_ColourEnd_Internal, "get_ColourEnd_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_ColourEnd_Internal, "set_ColourEnd_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(get_Velocity_Internal, "get_Velocity_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(set_Velocity_Internal, "set_Velocity_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(get_Velocity_Internal, "get_Velocity_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_Velocity_Internal, "set_Velocity_Internal", "Emitter");
 
-    MonoWrapper::BindClassFunction(cs_AddTexture_Internal, "cs_AddTexture_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(cs_Play_Internal, "cs_Play_Internal", "Vector4");
-    MonoWrapper::BindClassFunction(cs_Stop_Internal, "cs_Stop_Internal", "Vector4");
+    MonoWrapper::BindClassFunction(cs_AddTexture_Internal, "cs_AddTexture_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(cs_Play_Internal, "cs_Play_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(cs_Stop_Internal, "cs_Stop_Internal", "Emitter");
   }
 
   bool get_isActive_Internal(EmitterComponent* emt)
