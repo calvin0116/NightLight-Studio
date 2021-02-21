@@ -6,8 +6,8 @@ namespace ComponentEmitterBind
 {
   void BindComponentEmitter()
   {
-    MonoWrapper::BindClassFunction(get_isActive_Internal, "get_xAxis_Internal", "Emitter");
-    MonoWrapper::BindClassFunction(set_isActive_Internal, "set_xAxis_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(get_isActive_Internal, "get_isActive_Internal", "Emitter");
+    MonoWrapper::BindClassFunction(set_isActive_Internal, "set_isActive_Internal", "Emitter");
 
     MonoWrapper::BindClassFunction(get_EmitterID_Internal, "get_EmitterID_Internal", "Emitter");
     MonoWrapper::BindClassFunction(set_EmitterID_Internal, "set_EmitterID_Internal", "Emitter");

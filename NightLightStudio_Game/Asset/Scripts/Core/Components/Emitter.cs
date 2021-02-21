@@ -12,8 +12,8 @@ namespace Unicorn
 
     public bool isActive
     {
-      get { return get_IsActive_Internal(native_handle); }
-      set { set_IsActive_Internal(native_handle, value); }
+      get { return get_isActive_Internal(native_handle); }
+      set { set_isActive_Internal(native_handle, value); }
     }
 
     public int id
@@ -224,9 +224,9 @@ namespace Unicorn
     }
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static bool get_IsActive_Internal(IntPtr native_handle);
+    public extern static bool get_isActive_Internal(IntPtr native_handle);
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static void set_IsActive_Internal(IntPtr native_handle, bool val);
+    public extern static void set_isActive_Internal(IntPtr native_handle, bool val);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static int get_EmitterID_Internal(IntPtr native_handle);
