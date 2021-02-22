@@ -1244,7 +1244,9 @@ void InspectorWindow::CanvasComp(Entity& ent)
 			size_t uiCount = canvas->_uiElements.size();
 			for (size_t i = 0; i < uiCount; ++i)
 			{
-				ImGui::Checkbox(std::string("IsActive##UI").append(std::to_string(i)).c_str(), &canvas->_uiElements.at(i)._isActive);
+				UI_Element& ui = canvas->_uiElements.at(i);
+
+				ImGui::Checkbox(std::string("IsActive##UI").append(std::to_string(i)).c_str(), &ui._isActive);
 				if (ImGui::Button(std::string("X##").append(std::to_string(i)).c_str()))
 				{
 					canvas->RemoveUI(i);
@@ -1252,37 +1254,37 @@ void InspectorWindow::CanvasComp(Entity& ent)
 
 				ImGui::SameLine();
 
-				std::string tex = canvas->_uiElements.at(i)._fileName.toString();
-				std::string uiName = canvas->_uiElements.at(i)._uiName.toString();
-				canvas->_uiElements.at(i)._position;
-				canvas->_uiElements.at(i)._size;
+				std::string tex = ui._fileName.toString();
+				std::string uiName = ui._uiName.toString();
+				//canvas->_uiElements.at(i)._position;
+				//canvas->_uiElements.at(i)._size;
 
 				if (canvas->_canvasType == SCREEN_SPACE)
 				{
-					ImGui::InputFloat2(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._position), 3);
-					ImGui::InputFloat(std::string("Layer Order##").append(std::to_string(i)).c_str(), &canvas->_uiElements.at(i)._position.z,1);
+					ImGui::InputFloat2(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._position), 3);
+					ImGui::InputFloat(std::string("Layer Order##").append(std::to_string(i)).c_str(), &ui._position.z,1);
 				}
 				else if (canvas->_canvasType == WORLD_SPACE)
 				{
-					ImGui::InputFloat3(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._position), 3);
+					ImGui::InputFloat3(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._position), 3);
 
 				}
-				ImGui::InputFloat2(std::string("UISize##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._size), 3);
+				ImGui::InputFloat2(std::string("UISize##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._size), 3);
 
 				_levelEditor->LE_AddInputText(std::string("UIName##").append(std::to_string(i)).c_str(), uiName, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-					[&uiName, &canvas, &i]()
+					[&uiName, &ui, &i]()
 					{
-						canvas->_uiElements.at(i)._uiName = uiName;
+						ui._uiName = uiName;
 					});
 
 				_levelEditor->LE_AddInputText(std::string("Image##").append(std::to_string(i)).c_str(), tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-					[&tex, &canvas, &i]()
+					[&tex, &ui, &i]()
 					{
-						canvas->_uiElements.at(i).AddTexture(tex);
-						canvas->_uiElements.at(i)._fileName = tex;
+						ui.AddTexture(tex);
+						ui._fileName = tex;
 					});
 				_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
-					[this, &tex, &canvas, &i](std::string* str)
+					[this, &tex, &ui, &i](std::string* str)
 					{
 						std::string data = *str;
 						std::transform(data.begin(), data.end(), data.begin(),
@@ -1298,13 +1300,52 @@ void InspectorWindow::CanvasComp(Entity& ent)
 								data.erase(0, 1);
 							}
 							tex = data;
-							canvas->_uiElements.at(i).AddTexture(tex);
-							canvas->_uiElements.at(i)._fileName = tex;
+							ui.AddTexture(tex);
+							ui._fileName = tex;
 						}
 					});
 
+				ImGui::Checkbox(std::string("Animatable##").append(std::to_string(i)).c_str(), &ui._isAnimated);
 
-				ImGui::ColorEdit4(std::string("Colour##Canvas").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._colour));
+				if (ui._isAnimated)
+				{
+					ImGui::InputScalar(std::string("Row##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._row);
+					ImGui::InputScalar(std::string("Column##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._column);
+					ImGui::InputScalar(std::string("Total Frame##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._totalFrame);
+
+					if (ImGui::InputScalar(std::string("Frames per second##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._framesPerSecond))
+					{
+						if (ui._framesPerSecond == 0)
+						{
+							ui._animationRate = 0.0f;
+						}
+						else
+						{
+							ui._animationRate = 1.0f / ui._framesPerSecond;
+						}
+					}
+					
+					ImGui::Checkbox(std::string("Play##").append(std::to_string(i)).c_str(), &ui._play);
+					ImGui::Checkbox(std::string("Loop##").append(std::to_string(i)).c_str(), &ui._loop);
+
+					if (ImGui::Button("Test Animation##"))
+					{
+						ui.PlayAnimation(ui._loop);
+					}
+					
+					//For debug
+					if (ImGui::Button("Next Frame##"))
+					{
+						ui._currentFrame++;
+
+						if (ui._currentFrame >= ui._totalFrame)
+						{
+							ui._currentFrame = 0;
+						}
+					}
+				}
+
+				ImGui::ColorEdit4(std::string("Colour##Canvas").append(std::to_string(i)).c_str(), glm::value_ptr(ui._colour));
 
 				ImGui::Separator();
 			}
@@ -1454,93 +1495,93 @@ void InspectorWindow::EmitterComp(Entity& ent)
 					}
 				});
 
-			ImGui::InputFloat("Duration Time", &emit->_durationPerCycle);
-			if (ImGui::InputScalar("Emission Rate", ImGuiDataType_U32, &emit->_emissionOverTime))
+			ImGui::InputFloat("Duration Time##Emitter", &emit->_durationPerCycle);
+			if (ImGui::InputScalar("Emission Rate##Emitter", ImGuiDataType_U32, &emit->_emissionOverTime))
 			{
 				emit->_emissionRate = 1.0f / emit->_emissionOverTime;
 			}
 
-			if (ImGui::InputScalar("Max Particles", ImGuiDataType_U32, &emit->_maxParticles))
+			if (ImGui::InputScalar("Max Particles##Emitter", ImGuiDataType_U32, &emit->_maxParticles))
 			{
 				emit->UpdateSize();
 			}
 
 			if (emit->_type == SPHERE)
 			{
-				ImGui::InputFloat("Radius", &emit->_radius);
+				ImGui::InputFloat("Radius##Emitter", &emit->_radius);
 			}
 
 			else if (emit->_type == CONE)
 			{
-				ImGui::InputFloat("Angle", &emit->_spawnAngle);
-				ImGui::InputFloat("Radius", &emit->_radius);
+				ImGui::InputFloat("Angle##Emitter", &emit->_spawnAngle);
+				ImGui::InputFloat("Radius##Emitter", &emit->_radius);
 			}
 
-			if (ImGui::TreeNode("Particle Size"))
+			if (ImGui::TreeNode("Particle Size##Emitter"))
 			{
-				ImGui::Checkbox("Random Size", &emit->_randomizeSize);
+				ImGui::Checkbox("Random Size##Emitter", &emit->_randomizeSize);
 				if (emit->_randomizeSize)
 				{
-					ImGui::InputFloat("Minimum Size", &emit->_minParticleSize);
-					ImGui::InputFloat("Maximum Size", &emit->_maxParticleSize);
+					ImGui::InputFloat("Minimum Size##Emitter", &emit->_minParticleSize);
+					ImGui::InputFloat("Maximum Size##Emitter", &emit->_maxParticleSize);
 				}
 				else
 				{
-					ImGui::InputFloat("Size", &emit->_maxParticleSize);
+					ImGui::InputFloat("Size##Emitter", &emit->_maxParticleSize);
 				}
 				ImGui::TreePop();
 			}
 
 
-			if (ImGui::TreeNode("Particle Speed"))
+			if (ImGui::TreeNode("Particle Speed##Emitter"))
 			{
-				ImGui::Checkbox("Random Speed", &emit->_randomizeSpeed);
+				ImGui::Checkbox("Random Speed##Emitter", &emit->_randomizeSpeed);
 				if (emit->_randomizeSpeed)
 				{
-					ImGui::InputFloat("Minimum Speed", &emit->_minParticleSpeed);
-					ImGui::InputFloat("Maximum Speed", &emit->_maxParticleSpeed);
+					ImGui::InputFloat("Minimum Speed##Emitter", &emit->_minParticleSpeed);
+					ImGui::InputFloat("Maximum Speed##Emitter", &emit->_maxParticleSpeed);
 				}
 				else
 				{
-					ImGui::InputFloat("Speed", &emit->_maxParticleSpeed);
+					ImGui::InputFloat("Speed##Emitter", &emit->_maxParticleSpeed);
 				}
 				ImGui::TreePop();
 			}
 
-			if (ImGui::TreeNode("Particle Lifespan"))
+			if (ImGui::TreeNode("Particle Lifespan##Emitter"))
 			{
-				ImGui::Checkbox("Random LifeSpan", &emit->_randomizeLifespan);
+				ImGui::Checkbox("Random LifeSpan##Emitter", &emit->_randomizeLifespan);
 				if (emit->_randomizeLifespan)
 				{
-					ImGui::InputFloat("Minimum LifeSpan", &emit->_minLifespan);
-					ImGui::InputFloat("Maximum LifeSpan", &emit->_maxLifespan);
+					ImGui::InputFloat("Minimum LifeSpan##Emitter", &emit->_minLifespan);
+					ImGui::InputFloat("Maximum LifeSpan##Emitter", &emit->_maxLifespan);
 				}
 				else
 				{
-					ImGui::InputFloat("LifeSpan", &emit->_maxLifespan);
+					ImGui::InputFloat("LifeSpan##Emitter", &emit->_maxLifespan);
 				}
 				ImGui::TreePop();
 			}
 
 			if (!emit->_colourOverTime)
 			{
-				if (ImGui::TreeNode("Particle Colour"))
+				if (ImGui::TreeNode("Particle Colour##Emitter"))
 				{
-					ImGui::Checkbox("Random Colour", &emit->_randomizeColour);
+					ImGui::Checkbox("Random Colour##Emitter", &emit->_randomizeColour);
 					if (emit->_randomizeColour)
 					{
 						float colourA[4] = { emit->_colourA.x, emit->_colourA.y, emit->_colourA.z, emit->_colourA.w };
-						ImGui::ColorEdit4("Colour Range Low", colourA);
+						ImGui::ColorEdit4("Colour Range Low##Emitter", colourA);
 						emit->_colourA = { colourA[0], colourA[1], colourA[2], colourA[3] };
 			
 						float colourB[4] = { emit->_colourB.x, emit->_colourB.y, emit->_colourB.z, emit->_colourB.w };
-						ImGui::ColorEdit4("Colour Range High", colourB);
+						ImGui::ColorEdit4("Colour Range High##Emitter", colourB);
 						emit->_colourB = { colourB[0], colourB[1], colourB[2], colourB[3] };
 					}
 					else
 					{
 						float colour[4] = { emit->_colourB.x, emit->_colourB.y, emit->_colourB.z, emit->_colourB.w };
-						ImGui::ColorEdit4("Colour", colour);
+						ImGui::ColorEdit4("Colour##Emitter", colour);
 						emit->_colourB = { colour[0], colour[1], colour[2], colour[3] };
 					}
 					ImGui::TreePop();
@@ -1552,8 +1593,8 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			ImGui::Checkbox("Burst##", &emit->_burst);
 			if (emit->_burst)
 			{
-				ImGui::InputFloat("Burst Rate", &emit->_burstRate);
-				ImGui::InputScalar("Burst Amount", ImGuiDataType_U32, &emit->_burstAmount);
+				ImGui::InputFloat("Burst Rate##Emitter", &emit->_burstRate);
+				ImGui::InputScalar("Burst Amount##Emitter", ImGuiDataType_U32, &emit->_burstAmount);
 			}
 
 			ImGui::Checkbox("Play##Particle", &emit->_play);
@@ -1564,7 +1605,7 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			//	ImGui::Checkbox("Reverse", &emit->_reverse);
 			//}
 
-			if (ImGui::Checkbox("Follow", &emit->_follow))
+			if (ImGui::Checkbox("Follow##Emitter", &emit->_follow))
 			{
 				if (emit->_play)
 				{
@@ -1572,40 +1613,40 @@ void InspectorWindow::EmitterComp(Entity& ent)
 					emitter->Play();
 				}
 			}
-			ImGui::Checkbox("Fade", &emit->_fade);
+			ImGui::Checkbox("Fade##Emitter", &emit->_fade);
 
-			if (ImGui::TreeNode("Special Behaviour"))
+			if (ImGui::TreeNode("Special Behaviour##Emitter"))
 			{
-				ImGui::Checkbox("Velocity over time", &emit->_velocityOverTime);
+				ImGui::Checkbox("Velocity over time##Emitter", &emit->_velocityOverTime);
 				if (emit->_velocityOverTime)
 				{
-					ImGui::InputFloat("X", &emit->_velocity.x);
-					ImGui::InputFloat("Y", &emit->_velocity.y);
+					ImGui::InputFloat("X##Emitter", &emit->_velocity.x);
+					ImGui::InputFloat("Y##Emitter", &emit->_velocity.y);
 				}
 
-				ImGui::Checkbox("Size over time", &emit->_sizeOverTime);
-				ImGui::Checkbox("Speed over time", &emit->_speedOverTime);
-				ImGui::Checkbox("Colour over time", &emit->_colourOverTime);
+				ImGui::Checkbox("Size over time##Emitter", &emit->_sizeOverTime);
+				ImGui::Checkbox("Speed over time##Emitter", &emit->_speedOverTime);
+				ImGui::Checkbox("Colour over time##Emitter", &emit->_colourOverTime);
 				if (emit->_colourOverTime)
 				{
 					float colourStart[4] = { emit->_colourStart.x, emit->_colourStart.y, emit->_colourStart.z, emit->_colourStart.w };
-					ImGui::ColorEdit4("Colour Start", colourStart);
+					ImGui::ColorEdit4("Colour Start##Emitter", colourStart);
 					emit->_colourStart = { colourStart[0], colourStart[1], colourStart[2], colourStart[3] };
 
 					float colourEnd[4] = { emit->_colourEnd.x, emit->_colourEnd.y, emit->_colourEnd.z, emit->_colourEnd.w };
-					ImGui::ColorEdit4("Colour End", colourEnd);
+					ImGui::ColorEdit4("Colour End##Emitter", colourEnd);
 					emit->_colourEnd = { colourEnd[0], colourEnd[1], colourEnd[2], colourEnd[3] };
 				}
 
 				ImGui::TreePop();
 			}
 
-			if (ImGui::Button("Preview Particle"))
+			if (ImGui::Button("Preview Particle##Emitter"))
 			{
 				emitter->Play();
 			}
 
-			if (ImGui::Button("Stop Particle"))
+			if (ImGui::Button("Stop Particle##Emitter"))
 			{
 				emitter->Stop();
 			}
