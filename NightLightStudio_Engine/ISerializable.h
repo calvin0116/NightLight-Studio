@@ -8,7 +8,9 @@ struct ISerializable
 	char			ser_name[126];
 
 	// meta data
-	int objId;
+	int objId = -1;
+	//int objT = -1;
+	bool isActive = true;
 
 
 

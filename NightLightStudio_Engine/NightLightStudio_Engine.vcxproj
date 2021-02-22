@@ -182,6 +182,7 @@
     <ClInclude Include="Source\Component\ComponentCScript.h" />
     <ClInclude Include="Source\Component\ComponentEmitter.h" />
     <ClInclude Include="Source\Core\TagHandler.h" />
+    <ClInclude Include="Source\Component\ComponentResolver.h" />
     <ClInclude Include="Source\Debug\DebugDiagnostic.h" />
     <ClInclude Include="Source\Debug\DebugToStream.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h" />
@@ -326,6 +327,7 @@
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
     <ClCompile Include="Source\Component\ComponentEmitter.cpp" />
     <ClCompile Include="Source\Component\ComponentNavigator.cpp" />
+    <ClCompile Include="Source\Component\ComponentResolver.cpp" />
     <ClCompile Include="Source\Component\ComponentWayPoint.cpp" />
     <ClCompile Include="Source\Debug\DebugDiagnostic.cpp" />
     <ClCompile Include="Source\Debug\DebugToStream.cpp" />
