@@ -23,6 +23,8 @@
 #include "../../glm/gtc/matrix_transform.hpp"
 #include "../../glm/gtc/quaternion.hpp"
 
+#include "../../Core/TagHandler.h"
+
 void InspectorWindow::Start()
 {
 	// Set up Command to run to move objects
@@ -415,7 +417,10 @@ void InspectorWindow::TransformComp(Entity& ent)
 	if (trans_comp != NULL)
 	{
 		ImGui::NewLine();
-    ImGui::InputInt("Tag", &(trans_comp->_tag));
+		if (ImGui::InputInt("Tag", &(trans_comp->_tag), 1, 100 ,ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			TAG_HANDLER->InsertTagToUsed(trans_comp->_tag);
+		}
     ImGui::NewLine();
     std::string enam = trans_comp->_entityName.toString();
 		_levelEditor->LE_AddInputText("Entity Name", enam, 500, ImGuiInputTextFlags_EnterReturnsTrue,

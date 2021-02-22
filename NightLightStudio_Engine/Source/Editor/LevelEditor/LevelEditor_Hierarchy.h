@@ -20,7 +20,7 @@ private:
 	const float _zoomDist = 100.0f;
 public :
 	HierarchyInspector()
-		: selected_index{}, _allowCopy{ true }, _scrollBottom{ false }, _hieState{ HS_SORTBYTAG }
+		: selected_index{}, _allowCopy{ true }, _scrollBottom{ false }, _hieState{ HS_NORMAL }
 	{};
 	~HierarchyInspector() {};
 

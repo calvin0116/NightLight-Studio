@@ -276,7 +276,7 @@ void HierarchyInspector::Run()
 			for (const int i : TAG_HANDLER->GetTagUsed())
 			{
 				std::string header_with_index = "Tag " + std::to_string(i);
-				if (ImGui::CollapsingHeader(header_with_index.c_str()))
+				if (ImGui::CollapsingHeader(header_with_index.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 				{
 					for (Entity ent : G_ECMANAGER->getEntityContainer())
 					{
