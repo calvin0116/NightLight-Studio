@@ -426,6 +426,9 @@
     <ClCompile Include="Source\Ai\AiGraph.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentEmitterBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\CustomTypes\Vector4Bind.cpp" />
+    <ClCompile Include="Source\Component\ComponentResolver.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -833,6 +836,9 @@
     <ClInclude Include="Source\Graphics\Emitter.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentEmitterBind.h" />
     <ClInclude Include="Source\Mono\Binding\CustomTypes\Vector4Bind.h" />
+    <ClInclude Include="Source\Component\ComponentResolver.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
