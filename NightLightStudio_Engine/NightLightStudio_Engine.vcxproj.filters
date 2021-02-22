@@ -838,6 +838,7 @@
     <ClInclude Include="Source\Mono\Binding\CustomTypes\Vector4Bind.h" />
     <ClInclude Include="Source\Core\TagHandler.h">
       <Filter>Source Files\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Component\ComponentResolver.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
