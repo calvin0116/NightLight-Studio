@@ -9,6 +9,7 @@
 #include "..//Component/Components.h"
 #include "../Messaging/SystemBroadcaster.h"
 
+#include "TagHandler.h"
 
 #define DOTEST 1
 
@@ -181,3 +182,9 @@ inline ENGINE_API void MySystemManager::GameExit() {
 			my_sys.second->GameExit();
 	Systems[S_PRIORITY::SP_SCENEMANAGER]->GameExit();
 }
+
+inline ENGINE_API void MySystemManager::Exit() {
+	for (auto my_sys : Systems) my_sys.second->Exit();
+	TAG_HANDLER->DestroyInstance();
+	DestroyInstance();
+};

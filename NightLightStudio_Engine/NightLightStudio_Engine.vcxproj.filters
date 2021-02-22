@@ -833,6 +833,9 @@
     <ClInclude Include="Source\Graphics\Emitter.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentEmitterBind.h" />
     <ClInclude Include="Source\Mono\Binding\CustomTypes\Vector4Bind.h" />
+    <ClInclude Include="Source\Core\TagHandler.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
