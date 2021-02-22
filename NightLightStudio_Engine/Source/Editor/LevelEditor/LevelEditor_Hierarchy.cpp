@@ -8,7 +8,7 @@
 #include "../../Input/SystemInput.h"
 #include "../../Graphics/CameraSystem.h"
 #include "LevelEditor_Inspector.h"
-
+#include "../../Core/TagHandler.h"
 
 inline size_t findCaseInsensitive(std::string data, std::string toSearch, size_t pos = 0)
 {
@@ -203,6 +203,8 @@ void HierarchyInspector::Init()
 					LE_ECHELPER->SelectEntity(selectedEntity + 1, false);
 			}
 		});
+
+	_sortType = (int)_hieState;
 }
 
 void HierarchyInspector::Run()
@@ -220,148 +222,73 @@ void HierarchyInspector::Run()
 		G_ECMANAGER->BuildEntity().AttachComponent(tran);
 
 	}
+
+	ImGui::SameLine();
+	
+	if (ImGui::Button("Delete Entity"))
+	{
+		if (!ImGui::IsAnyItemFocused())
+			for (Entity ent : G_ECMANAGER->getEntityContainer())
+				if (LE_ECHELPER->SelectedEntities()[ent.getId()])
+				{
+					ComponentLight* lightcomp = ent.getComponent<LightComponent>();
+
+					if (lightcomp)
+					{
+						lightcomp->SetType(NS_GRAPHICS::Lights::INVALID_TYPE);
+					}
+
+					G_ECMANAGER->FreeEntity(ent.getId());
+					break;
+				}
+	}
+	
+
+	if (_levelEditor->LE_AddCombo("##SORTBY", _sortType,
+		{
+			"No Sorting",
+			"Sort by tag",
+		})
+		)
+	{
+		_hieState = (HIER_STATE)_sortType;
+	}
 	// List box
 	_levelEditor->LE_AddInputText("Search", _search, 256, 0);
 
 	// Entity list
 	static int index_selected = -1;
 	int n = 1;
-
-	for (Entity ent : G_ECMANAGER->getEntityContainer())
-	{
-		// For searching
-		std::string ent_name = G_ECMANAGER->EntityName[ent.getId()];
-		//Check if entity is related to the search string inserted
-		if (_search != "" && findCaseInsensitive(ent_name, _search) == std::string::npos)
+	
+	switch (_hieState)
+	{ 
+		case HS_NORMAL:
 		{
-			++n;
-			continue;
+			for (Entity ent : G_ECMANAGER->getEntityContainer())
+			{
+				EntityFunction(ent, n);
+				++n;
+			}
+			break;
 		}
-
-		// Print out entity
-		//char buf[100];
-		//sprintf_s(buf, "%i. %s", n, ent_name.c_str());
-
-		//e.g 1. name -> for ease to read and different naming in level editor selection
-		std::string name_with_index = std::to_string(n)+ ". " + ent_name;
-
-		//If more then one child, get the child
-		if (ent.getNumChildren() > 0)
+		case HS_SORTBYTAG:
 		{
-			//~~!Prep for entity with children
-			_levelEditor->LE_AddTreeNodes(ent_name,
-				[]()
-				{
-
-				});
-			/*
-			if (ImGui::TreeNode(buf))
+			for (const int i : TAG_HANDLER->GetTagUsed())
 			{
-				//~~!!Get child to be printed out as selectable
-				ImGui::TreePop();
+				std::string header_with_index = "Tag " + std::to_string(i);
+				if (ImGui::CollapsingHeader(header_with_index.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+				{
+					for (Entity ent : G_ECMANAGER->getEntityContainer())
+					{
+						EntityFunction(ent, n, i);
+						++n;
+					}
+				}
 			}
-			*/
+			break;
 		}
-		else //if (!ent.isChild) print those not a child
-		{
-			_levelEditor->LE_AddSelectable(name_with_index, LE_ECHELPER->SelectedEntities()[ent.getId()],
-				[&ent, this]()
-				{
-					bool multi = false;
-					if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
-					{
-						multi = true;
-					}
-					if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_SHIFT))
-					{
-						// Selects all objects between smallest to selected object
-						multi = true;
-						int smallest = 0;
-						std::map<int, bool> map = LE_ECHELPER->SelectedEntities();
-						for (std::map<int, bool>::iterator i = map.begin(); i != map.end(); ++i)
-						{
-							if (i->second)
-							{
-								smallest = i->first;
-								break;
-							}
-						}
-						for (int i = smallest + 1; i < ent.getId(); ++i)
-						{
-							LE_ECHELPER->SelectEntity(i, multi);
-						}
-					}
-
-					// Select if Deselected
-					if (!LE_ECHELPER->SelectedEntities()[ent.getId()])
-						LE_ECHELPER->SelectEntity(ent.getId(), multi);
-					else
-					{
-						// If Selected, Deselect if different
-						if (LE_ECHELPER->GetSelectedEntityID() != ent.getId())
-						{
-							LE_ECHELPER->DeSelectEntity(ent.getId());
-						}
-						else
-						{
-							// Change to another object to deselect if there is another that exists
-							// if no other object, ignore
-							int anotherID = -1;
-							std::map<int, bool> anotherMap = LE_ECHELPER->SelectedEntities();
-							for (std::map<int, bool>::iterator j = anotherMap.begin(); j != anotherMap.end(); ++j)
-							{
-								if (j->second)
-								{
-									anotherID = j->first;
-									break;
-								}
-							}
-							if (anotherID != -1)
-							{
-								LE_ECHELPER->DeSelectEntity(ent.getId());
-								LE_ECHELPER->SelectEntity(anotherID, multi);
-							}
-
-						}
-					}
-					std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
-
-					if (ImGui::IsMouseDoubleClicked(0))
-					{
-						TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
-						if (trans_comp != NULL)
-						{
-							NS_GRAPHICS::Camera& cam = NS_GRAPHICS::CameraSystem::GetInstance().GetCamera();
-							glm::vec3 camFront = cam.GetFront();
-							camFront *= glm::vec3{ _zoomDist, _zoomDist, _zoomDist };
-							cam.SetCameraPosition(trans_comp->_position - camFront);
-							NS_GRAPHICS::CameraSystem::GetInstance().ForceUpdate();
-						}
-					}
-				}, ImGuiSelectableFlags_AllowDoubleClick);
-
-			// Drag and Drop the entity's pointer
-			_levelEditor->LE_AddDragDropSource("HIERARCHY_ENTITY_OBJECT", &ent,
-				[&]()
-				{
-					_levelEditor->LE_AddText(ent_name);
-				});
-			/*
-			if (ImGui::Selectable(buf, LE_ECHELPER->SelectedEntities()[ent.getId()]))
-			{
-				LE_ECHELPER->SelectEntity(ent.getId());
-				std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
-			}
-			else
-			{
-				//std::cout << ent.first << ". not selected: " << LE_ECHELPER->SelectedEntity()[ent.first] << std::endl;
-			}
-			*/
-		}
-
-		++n;
 	}
-
+	
 	if (_scrollBottom)
 	{
 		ImGui::SetScrollHere(1.0f);
@@ -388,6 +315,149 @@ void HierarchyInspector::InitBeforeRun()
 		++n;
 	}
 #endif // _EDITOR
+
+}
+
+void HierarchyInspector::EntityFunction(Entity& ent, int& index, int tag_of_ent)
+{
+	// For searching
+	std::string ent_name = G_ECMANAGER->EntityName[ent.getId()];
+	//Check if entity is related to the search string inserted
+	if (_search != "" && 
+		findCaseInsensitive(ent_name, _search) == std::string::npos 
+		)
+	{
+		return;
+		//++n;
+		//continue;
+	}
+
+	if (tag_of_ent != -1 &&
+		ent.getComponent<TransformComponent>()->_tag != tag_of_ent)
+	{
+		return;
+	}
+	
+	// Print out entity
+	//char buf[100];
+	//sprintf_s(buf, "%i. %s", n, ent_name.c_str());
+
+	//e.g 1. name -> for ease to read and different naming in level editor selection
+	std::string name_with_index = ent_name + "##" +std::to_string(index) ; //+". "
+
+	//If more then one child, get the child
+	if (ent.getNumChildren() > 0)
+	{
+		//~~!Prep for entity with children
+		_levelEditor->LE_AddTreeNodes(ent_name,
+			[]()
+			{
+
+			});
+		/*
+		if (ImGui::TreeNode(buf))
+		{
+			//~~!!Get child to be printed out as selectable
+			ImGui::TreePop();
+		}
+		*/
+	}
+	else //if (!ent.isChild) print those not a child
+	{
+		_levelEditor->LE_AddSelectable(name_with_index, LE_ECHELPER->SelectedEntities()[ent.getId()],
+			[&ent, this]()
+			{
+				bool multi = false;
+				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+				{
+					multi = true;
+				}
+				if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_SHIFT))
+				{
+					// Selects all objects between smallest to selected object
+					multi = true;
+					int smallest = 0;
+					std::map<int, bool> map = LE_ECHELPER->SelectedEntities();
+					for (std::map<int, bool>::iterator i = map.begin(); i != map.end(); ++i)
+					{
+						if (i->second)
+						{
+							smallest = i->first;
+							break;
+						}
+					}
+					for (int i = smallest + 1; i < ent.getId(); ++i)
+					{
+						LE_ECHELPER->SelectEntity(i, multi);
+					}
+				}
+
+				// Select if Deselected
+				if (!LE_ECHELPER->SelectedEntities()[ent.getId()])
+					LE_ECHELPER->SelectEntity(ent.getId(), multi);
+				else
+				{
+					// If Selected, Deselect if different
+					if (LE_ECHELPER->GetSelectedEntityID() != ent.getId())
+					{
+						LE_ECHELPER->DeSelectEntity(ent.getId());
+					}
+					else
+					{
+						// Change to another object to deselect if there is another that exists
+						// if no other object, ignore
+						int anotherID = -1;
+						std::map<int, bool> anotherMap = LE_ECHELPER->SelectedEntities();
+						for (std::map<int, bool>::iterator j = anotherMap.begin(); j != anotherMap.end(); ++j)
+						{
+							if (j->second)
+							{
+								anotherID = j->first;
+								break;
+							}
+						}
+						if (anotherID != -1)
+						{
+							LE_ECHELPER->DeSelectEntity(ent.getId());
+							LE_ECHELPER->SelectEntity(anotherID, multi);
+						}
+
+					}
+				}
+				std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
+
+				if (ImGui::IsMouseDoubleClicked(0))
+				{
+					TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+					if (trans_comp != NULL)
+					{
+						NS_GRAPHICS::Camera& cam = NS_GRAPHICS::CameraSystem::GetInstance().GetCamera();
+						glm::vec3 camFront = cam.GetFront();
+						camFront *= glm::vec3{ _zoomDist, _zoomDist, _zoomDist };
+						cam.SetCameraPosition(trans_comp->_position - camFront);
+						NS_GRAPHICS::CameraSystem::GetInstance().ForceUpdate();
+					}
+				}
+			}, ImGuiSelectableFlags_AllowDoubleClick);
+
+		// Drag and Drop the entity's pointer
+		_levelEditor->LE_AddDragDropSource("HIERARCHY_ENTITY_OBJECT", &ent,
+			[&]()
+			{
+				_levelEditor->LE_AddText(ent_name);
+			});
+		/*
+		if (ImGui::Selectable(buf, LE_ECHELPER->SelectedEntities()[ent.getId()]))
+		{
+			LE_ECHELPER->SelectEntity(ent.getId());
+			std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
+		}
+		else
+		{
+			//std::cout << ent.first << ". not selected: " << LE_ECHELPER->SelectedEntity()[ent.first] << std::endl;
+		}
+		*/
+	}
 
 }
 
