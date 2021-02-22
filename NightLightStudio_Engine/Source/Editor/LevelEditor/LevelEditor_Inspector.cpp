@@ -1952,7 +1952,14 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 				_levelEditor->LE_AddInputText(p, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
 					[&str, &s_name, &wpm_comp, &str_index]()
 					{
-						WayPointComponent* wpc = G_ECMANAGER->getEntityUsingEntName(str).getComponent<WayPointComponent>();
+						Entity ent = G_ECMANAGER->getEntityUsingEntName(s_name);
+						if(ent.getId() == -1 )
+						{
+							std::cout << "No entity has been found" << std::endl;
+							return;
+						}
+
+						WayPointComponent* wpc = ent.getComponent<WayPointComponent>();
 						if (wpc != nullptr) {
 							wpm_comp->GetPath().at(str_index-1) = wpc;
 							str = s_name.c_str();
