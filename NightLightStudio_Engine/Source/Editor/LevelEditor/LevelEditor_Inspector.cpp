@@ -1235,6 +1235,12 @@ void InspectorWindow::CanvasComp(Entity& ent)
 		{
 			ImGui::Checkbox("IsActive##Canvas", &canvas->_isActive);
 
+			_levelEditor->LE_AddCombo("Canvas Type", (int&)canvas->_canvasType,
+				{ 
+					"Screen", 
+					"World"
+				});
+
 			size_t uiCount = canvas->_uiElements.size();
 			for (size_t i = 0; i < uiCount; ++i)
 			{
@@ -1256,7 +1262,7 @@ void InspectorWindow::CanvasComp(Entity& ent)
 					ImGui::InputFloat2(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._position), 3);
 					ImGui::InputFloat(std::string("Layer Order##").append(std::to_string(i)).c_str(), &canvas->_uiElements.at(i)._position.z,1);
 				}
-				else
+				else if (canvas->_canvasType == WORLD_SPACE)
 				{
 					ImGui::InputFloat3(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._position), 3);
 

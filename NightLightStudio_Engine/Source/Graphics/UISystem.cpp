@@ -167,31 +167,67 @@ void NS_GRAPHICS::UISystem::RenderUI()
 
 			if (canvas->_canvasType == SCREEN_SPACE)
 			{
+				glm::mat4 ModelMatrix = canvas->_uiElements.at(i).GetModelMatrix();
 
+				//For now ui only got picture
+				_shaderSystem->StartProgram(ShaderSystem::ShaderType::UI_SCREENSPACE); // textured program
+				glBindVertexArray(_vao);
+
+				// Update model and uniform for material
+				glUniform4fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "colour"), 1, &canvas->_uiElements.at(i)._colour[0]);
+
+				glBindBuffer(GL_ARRAY_BUFFER, _mmbo);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+				// Bind textures
+				// bind diffuse map
+				_textureManager->BindAlbedoTexture(canvas->_uiElements.at(i)._imageID);
+
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+				_shaderSystem->StopProgram();
 			}
-			else
+			else if (canvas->_canvasType == WORLD_SPACE)
 			{
+				//glm::mat4 ModelMatrix = canvas->_uiElements.at(i).GetModelMatrix();
+				glm::mat4 ModelMatrix(1.0f);
 
+				Entity entity = G_ECMANAGER->getEntity(canvas);
+				ComponentTransform* trans = entity.getComponent<ComponentTransform>();
+
+				glm::vec3 pos = canvas->_uiElements.at(i)._position;
+				pos += trans->_position;
+				glm::mat4 Translate = glm::translate(glm::mat4(1.f), pos);
+
+				glm::vec2 size = canvas->_uiElements.at(i)._size;
+				size.x *= trans->_scale.x;
+				size.y *= trans->_scale.y;
+				glm::mat4 Scale = glm::scale(glm::mat4(1.f), glm::vec3(size, 1.0f));
+
+				glm::quat Quaternion(glm::radians(trans->_rotation));
+				glm::mat4 Rotate = glm::mat4_cast(Quaternion);
+
+				ModelMatrix = Translate * Rotate * Scale;	
+
+				_shaderSystem->StartProgram(ShaderSystem::ShaderType::UI_WORLDSPACE); // textured program
+
+				glBindVertexArray(_vao);
+
+				// Update model and uniform for material
+				glUniform4fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "colour"), 1, &canvas->_uiElements.at(i)._colour[0]);
+
+				glBindBuffer(GL_ARRAY_BUFFER, _mmbo);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+				// Bind textures
+				// bind diffuse map
+				_textureManager->BindAlbedoTexture(canvas->_uiElements.at(i)._imageID);
+
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+				_shaderSystem->StopProgram();
 			}
-			glm::mat4 ModelMatrix = canvas->_uiElements.at(i).GetModelMatrix();
-
-			//For now ui only got picture
-			_shaderSystem->StartProgram(ShaderSystem::ShaderType::UI_SCREENSPACE); // textured program
-			glBindVertexArray(_vao);
-
-			// Update model and uniform for material
-			glUniform4fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "colour"), 1, &canvas->_uiElements.at(i)._colour[0]);
-
-			glBindBuffer(GL_ARRAY_BUFFER, _mmbo);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-			// Bind textures
-			// bind diffuse map
-			_textureManager->BindAlbedoTexture(canvas->_uiElements.at(i)._imageID);
-
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-			_shaderSystem->StopProgram();
+			
 		}
 
 		itr++;
