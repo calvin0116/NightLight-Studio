@@ -1907,7 +1907,12 @@ void InspectorWindow::NavComp(Entity& ent)
 				[&s_name, &nav_comp]()
 				{
 					//str = s_name.c_str();
-					nav_comp->cur_wp_path = G_ECMANAGER->getEntityUsingEntName(s_name).getComponent<WayPointMapComponent>();
+					Entity ent = G_ECMANAGER->getEntityUsingEntName(s_name);
+					
+					if(ent.getId()!= -1)
+						nav_comp->cur_wp_path = ent.getComponent<WayPointMapComponent>();
+					else
+						nav_comp->cur_wp_path = nullptr;
 				});
 			_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
 				[this, &s_name,&nav_comp](Entity* entptr)
