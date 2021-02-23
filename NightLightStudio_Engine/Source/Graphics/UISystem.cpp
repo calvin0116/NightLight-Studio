@@ -215,9 +215,18 @@ void NS_GRAPHICS::UISystem::RenderUI()
 				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
 				//Should work
-				glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxRow"), ui._row);
-				glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxColumn"), ui._column);
-				glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "currentFrame"), ui._currentFrame);
+				if (ui._isAnimated)
+				{
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxRow"), ui._row);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxColumn"), ui._column);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "currentFrame"), ui._currentFrame);
+				}
+				else
+				{
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxRow"), 1);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxColumn"), 1);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "currentFrame"), 0);
+				}
 
 				// Bind textures
 				// bind diffuse map
@@ -258,6 +267,20 @@ void NS_GRAPHICS::UISystem::RenderUI()
 
 				glBindBuffer(GL_ARRAY_BUFFER, _mmbo);
 				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+				//Should work
+				if (ui._isAnimated)
+				{
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxRow"), ui._row);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxColumn"), ui._column);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "currentFrame"), ui._currentFrame);
+				}
+				else
+				{
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxRow"), 1);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxColumn"), 1);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "currentFrame"), 0);
+				}
 
 				// Bind textures
 				// bind diffuse map
