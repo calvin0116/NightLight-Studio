@@ -156,42 +156,141 @@ void NS_GRAPHICS::UISystem::RenderUI()
 		size_t uiAmount = canvas->_uiElements.size();
 		for (size_t i = 0; i < uiAmount; ++i)
 		{
-			if (!canvas->_uiElements.at(i)._isActive)
+			UI_Element& ui = canvas->_uiElements.at(i);
+
+			//Skips not active and no texture
+			if (!ui._isActive)
 			{
 				continue;
 			}
-			if (!canvas->_uiElements.at(i)._imageID)
+			if (!ui._imageID)
 			{
 				continue;
+			}
+
+			//Only if is animated
+			if (ui._isAnimated)
+			{
+				//Updates UI
+				if (ui._play)
+				{
+					//Updates time
+					ui._timePassed += DELTA_T->real_dt;
+
+					//Animation rate depends on fps
+					if (ui._timePassed >= ui._animationRate)
+					{
+						ui._timePassed = 0.0f;
+
+						++ui._currentFrame;
+						
+						if (ui._currentFrame >= ui._totalFrame)
+						{
+							if (ui._loop)
+							{
+								ui._currentFrame = 0;
+							}
+							else
+							{
+								ui._play = false;
+								ui._currentFrame = 0;
+							}
+						}
+					}
+				}
 			}
 
 			if (canvas->_canvasType == SCREEN_SPACE)
 			{
+				glm::mat4 ModelMatrix = ui.GetModelMatrix();
 
+				//For now ui only got picture
+				_shaderSystem->StartProgram(ShaderSystem::ShaderType::UI_SCREENSPACE); // textured program
+				glBindVertexArray(_vao);
+
+				// Update model and uniform for material
+				glUniform4fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "colour"), 1, &ui._colour[0]);
+
+				glBindBuffer(GL_ARRAY_BUFFER, _mmbo);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+				//Should work
+				if (ui._isAnimated)
+				{
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxRow"), ui._row);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxColumn"), ui._column);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "currentFrame"), ui._currentFrame);
+				}
+				else
+				{
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxRow"), 1);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxColumn"), 1);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "currentFrame"), 0);
+				}
+
+				// Bind textures
+				// bind diffuse map
+				_textureManager->BindAlbedoTexture(ui._imageID);
+
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+				_shaderSystem->StopProgram();
 			}
-			else
+			else if (canvas->_canvasType == WORLD_SPACE)
 			{
+				//glm::mat4 ModelMatrix = canvas->_uiElements.at(i).GetModelMatrix();
+				glm::mat4 ModelMatrix(1.0f);
 
+				Entity entity = G_ECMANAGER->getEntity(canvas);
+				ComponentTransform* trans = entity.getComponent<ComponentTransform>();
+
+				glm::vec3 pos = ui._position;
+				pos += trans->_position;
+				glm::mat4 Translate = glm::translate(glm::mat4(1.f), pos);
+
+				glm::vec2 size = ui._size;
+				size.x *= trans->_scale.x;
+				size.y *= trans->_scale.y;
+				glm::mat4 Scale = glm::scale(glm::mat4(1.f), glm::vec3(size, 1.0f));
+
+				glm::quat Quaternion(glm::radians(trans->_rotation));
+				glm::mat4 Rotate = glm::mat4_cast(Quaternion);
+
+				ModelMatrix = Translate * Rotate * Scale;	
+
+				_shaderSystem->StartProgram(ShaderSystem::ShaderType::UI_WORLDSPACE); // textured program
+
+				glBindVertexArray(_vao);
+
+				// Update model and uniform for material
+				glUniform4fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "colour"), 1, &ui._colour[0]);
+
+				glBindBuffer(GL_ARRAY_BUFFER, _mmbo);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+				//Should work
+				if (ui._isAnimated)
+				{
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxRow"), ui._row);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxColumn"), ui._column);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "currentFrame"), ui._currentFrame);
+				}
+				else
+				{
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxRow"), 1);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxColumn"), 1);
+					glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "currentFrame"), 0);
+				}
+
+				// Bind textures
+				// bind diffuse map
+				_textureManager->BindAlbedoTexture(ui._imageID);
+
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+				_shaderSystem->StopProgram();
 			}
-			glm::mat4 ModelMatrix = canvas->_uiElements.at(i).GetModelMatrix();
-
-			//For now ui only got picture
-			_shaderSystem->StartProgram(ShaderSystem::ShaderType::UI_SCREENSPACE); // textured program
-			glBindVertexArray(_vao);
-
-			// Update model and uniform for material
-			glUniform4fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "colour"), 1, &canvas->_uiElements.at(i)._colour[0]);
-
-			glBindBuffer(GL_ARRAY_BUFFER, _mmbo);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-			// Bind textures
-			// bind diffuse map
-			_textureManager->BindAlbedoTexture(canvas->_uiElements.at(i)._imageID);
-
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-			_shaderSystem->StopProgram();
+			
 		}
 
 		itr++;

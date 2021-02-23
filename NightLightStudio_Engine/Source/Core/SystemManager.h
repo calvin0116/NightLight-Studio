@@ -48,12 +48,10 @@ public:
 
 	//Memory deallocation phase without dependancy
 	ENGINE_API void Free() {
-		for (auto my_sys : Systems) my_sys.second->Free(); };
-	//Memory deallocation phase without dependancy
-	ENGINE_API void Exit() { 
-		for (auto my_sys : Systems) my_sys.second->Exit();
-		DestroyInstance();
+		for (auto my_sys : Systems) my_sys.second->Free();
 	};
+	//Memory deallocation phase without dependancy
+	ENGINE_API void Exit();
 
 	//== Helper function
 	//Getting system

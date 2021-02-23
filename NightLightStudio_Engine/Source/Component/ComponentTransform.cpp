@@ -3,6 +3,7 @@
 #include "../../glm/gtc/quaternion.hpp"
 
 #include "Components.h"
+#include "../Core/TagHandler.h"
 //#include "../IO/Json/Parser.h"
 
 
@@ -42,7 +43,10 @@ void ComponentTransform::Read(Value& val)
 	if (val.FindMember("Tag") == val.MemberEnd())
 		std::cout << "No Tag data has been found" << std::endl;
 	else
+	{
 		_tag = val["Tag"].GetInt();
+		TAG_HANDLER->InsertTagToUsed(_tag);
+	}
 
 	//Error checking for json data
 	if (val.FindMember("Position") == val.MemberEnd())
@@ -100,7 +104,9 @@ Value ComponentTransform::Write()
 	Value val(rapidjson::kObjectType);
 
 	NS_SERIALISER::ChangeData(&val, "EntityName", rapidjson::StringRef(_entityName.c_str())); // Entity Name
-  NS_SERIALISER::ChangeData(&val, "Tag", _tag);
+  
+	NS_SERIALISER::ChangeData(&val, "Tag", _tag);
+
 
   Value tn_list_val(rapidjson::kArrayType);
   for (int& tn : _tagNames)
