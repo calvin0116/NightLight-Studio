@@ -33,4 +33,15 @@ namespace Unicorn
 		GAMEPAD_SHARE = 0x0020,
 		GAMEPAD_OPTIONS = 0x0010,
 	};
+
+	// Bits used to check current state of key press
+	enum CTRLTrigger : uint
+	{
+		OnCTRLDefault = 0,
+		OnCTRLPress = 0x01,
+		OnCTRLHold = 0x02,
+		OnCTRLRelease = 0x04,
+		OnCTRLDelay = 0x08
+	};
+
 }
