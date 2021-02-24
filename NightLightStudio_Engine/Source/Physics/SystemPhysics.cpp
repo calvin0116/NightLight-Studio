@@ -5,6 +5,9 @@
 #include "../Component/ComponentRigidBody.h"
 #include "../Input/SystemInput.h"
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 //#define USEVEL 0
 //#define USEVEL 1
 #define EPSILON std::numeric_limits<float>::epsilon()
@@ -402,6 +405,10 @@ namespace NS_PHYSICS
 
 
 		//return true;
+
+		// Tracy
+		ZoneScoped
+
 	}
 
 

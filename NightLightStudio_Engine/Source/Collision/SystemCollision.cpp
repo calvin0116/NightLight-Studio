@@ -12,6 +12,9 @@
 
 #include "CollisionDebugLines.h"
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 #undef max
 #undef min
 #include <algorithm> // std max
@@ -489,6 +492,9 @@ namespace NS_COLLISION
 		}
     //resolve collision here
     colResolver.resolveCollision();
+
+	// Tracy
+	ZoneScoped
 
 	}
 	void CollisionSystem::GameExit()

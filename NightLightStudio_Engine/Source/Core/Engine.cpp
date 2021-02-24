@@ -11,6 +11,9 @@
 
 #include "../Editor/LevelEditor/LevelEditor_ECHelper.h"
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 void FluffyUnicornEngine::Init(HINSTANCE& hInstance)
 {
 	//System Start Up / Load up
@@ -45,11 +48,9 @@ void FluffyUnicornEngine::Run()
 				//while (DELTA_T->accumulatedTime >= DELTA_T->fixed_dt)
 				float dt_for_fix = DELTA_T->real_dt;
 
-				
 				if (step > 1)
 					dt_for_fix = DELTA_T->fixed_dt;
 				
-
 				//std::cout << DELTA_T->real_dt <<","<< step<< std::endl;
 				for (int i = 0; i < step; ++i)
 				{
@@ -75,6 +76,7 @@ void FluffyUnicornEngine::Run()
 
 
 				//DELTA_T->end();
+				FrameMark
 			}
 		}
 		SYS_MAN->GameExit();

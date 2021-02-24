@@ -14,6 +14,9 @@
 
 #include <algorithm> // std::sort
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #define new DEBUG_NEW
@@ -82,6 +85,9 @@ namespace NS_GRAPHICS
 		uiManager->Update();
 
 		//std::cout << "Time current passed: " << _testTimeElapsed << std::endl;
+
+		// Tracy
+		ZoneScoped
 	}
 
 	void GraphicsSystem::Free()

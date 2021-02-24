@@ -17,6 +17,9 @@
 #include "..\..\Messaging\Messages\MessageTogglePlay.h"
 #include "..\..\Graphics\GraphicsSystem.h"
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 LevelEditor::LevelEditor() : _window{ nullptr }, _showGrid{ true }
 //, _runEngine{ false }
 {
@@ -143,6 +146,9 @@ bool LevelEditor::Update(float)
     // Rendering
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    // Tracy
+    ZoneScoped
 
     return false;
 }

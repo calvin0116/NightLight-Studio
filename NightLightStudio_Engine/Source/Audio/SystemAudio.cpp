@@ -1,6 +1,9 @@
 #include "SystemAudio.h"
 #include "../Component/Components.h" // G_ECMANAGER
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 const float SystemAudio::s_UNITS_PER_METER = 100.0f;
 const int listenerTag = 1000;
 const float minDist = 0.5f;
@@ -316,6 +319,9 @@ void SystemAudio::Update()
     // Set position
     _channels[i]->set3DAttributes(&_fmodPos, nullptr);
   }
+
+  // Tracy
+  ZoneScoped
 }
 
 void SystemAudio::Free()

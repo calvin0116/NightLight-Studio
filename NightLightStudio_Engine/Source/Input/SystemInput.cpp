@@ -3,6 +3,9 @@
 #include "../Window/WndSystem.h"
 #include <iostream>
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 using namespace SystemInput_ns;
 
 SystemInput::SystemInput()
@@ -28,6 +31,9 @@ void SystemInput::Update()
 	_siKeyPress.Update();
 	_siCtrler.Update();
 	_siMousePos.Update();
+
+	// Tracy
+	ZoneScoped
 }
 
 void SystemInput::Free()

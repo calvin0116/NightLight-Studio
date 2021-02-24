@@ -8,6 +8,9 @@
 // Scene change
 #include "../Core/SceneManager.h"
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 namespace NS_LOGIC
 {
   // Variable to decide whether to run function
@@ -408,6 +411,9 @@ namespace NS_LOGIC
       MonoWrapper::InvokeMethod(MyUpdate, MyScript->_MonoData._pInstance);
     }
 #endif
+
+    // Tracy
+    ZoneScoped
   }
 
   void SystemLogic::FixedUpdate(float dt)
@@ -428,6 +434,9 @@ namespace NS_LOGIC
       MonoWrapper::InvokeMethod(MyFixedUpdate, MyScript->_MonoData._pInstance);
     }
 #endif
+
+    // Tracy
+    ZoneScoped
   }
 
   void SystemLogic::GameGameExit()

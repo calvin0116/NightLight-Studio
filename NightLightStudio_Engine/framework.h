@@ -23,7 +23,6 @@
 #include <string>
 #include <fstream>
 
-
 using std::vector;
 using std::string;
 using std::cout;

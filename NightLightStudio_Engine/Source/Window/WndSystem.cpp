@@ -29,6 +29,9 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 #include "../Core/SceneManager.h"
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 namespace NS_WINDOW
 {
 
@@ -144,6 +147,9 @@ namespace NS_WINDOW
 			SwapBuffers(hDevContext);
 
 		//return true; // Return error msg for breaking out of update loop
+
+		// Tracy
+		ZoneScoped
 	}
 
 	// Frees the resources used by the System

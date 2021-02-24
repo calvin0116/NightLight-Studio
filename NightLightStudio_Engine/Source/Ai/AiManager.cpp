@@ -2,6 +2,10 @@
 #include "../Physics/SystemPhysics.h"
 #include "../IO/Json/Config.h"
 #include "../Core/DeltaTime.h" 
+
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 inline void NS_AI::AiManager::HandleMsg(MessageTogglePlay& mst)
 {
 	if (mst.GetID() == "BeforePlay")
@@ -92,7 +96,8 @@ inline void NS_AI::AiManager::Update()
 		++itr;
 	}
 
-
+	// Tracy
+	ZoneScoped
 }
 
 inline void NS_AI::AiManager::WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)

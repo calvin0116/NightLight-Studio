@@ -8,6 +8,9 @@
 #include <filesystem>
 #include <typeinfo>
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 #undef GetObject
 
 namespace fs = std::filesystem;
@@ -102,6 +105,9 @@ namespace NS_SCENE
 		{
 			SaveScene();
 		}
+
+		// Tracy
+		ZoneScoped
 	}
 
 	SCENE_CHANGE SceneManager::CheckChangeScene()
