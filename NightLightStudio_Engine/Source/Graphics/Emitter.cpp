@@ -25,14 +25,16 @@ Emitter::Emitter():
 	_randomizeSpeed{ false }, _minParticleSpeed{ 10 }, _maxParticleSpeed{ 100 }, //Particle Speed
 	_randomizeLifespan{ false }, _minLifespan{ 1.0f }, _maxLifespan{ 5.0f }, //Particle Lifespan
 	_play{ false }, _preWarm{ false }, _burst{ false }, _loop{ false }, _reverse{ false }, _follow{ false }, _fade{ false },//System Booleans
+	_isAnimated{ false }, _loopAnimation{ false }, //spritesheet booleans
 	_velocityOverTime{ false }, _sizeOverTime{ false }, _speedOverTime{ false }, _colourOverTime{ false },  //Type Booleans
 	_randomizeColour{ false }, _colourA{ 1.0f,1.0f,1.0f,1.0f }, _colourB{ 1.0f,1.0f,1.0f,1.0f },
 	_colourStart{ 1.0f,1.0f,1.0f,1.0f }, _colourEnd{ 1.0f,1.0f,1.0f,1.0f }, _velocity{ 0.0f,0.0f,0.0f }, //Data if boolean is true
-	_vao{ 0 }, _vbo{ 0 }, _ebo{ 0 }, _posBuffer{ 0 }, _colBuffer{ 0 }, _particlesPosition{}, _particlesColour{}
+	_vao{ 0 }, _vbo{ 0 }, _uvbo{ 0 }, _ebo{ 0 }, _posBuffer{ 0 }, _colBuffer{ 0 }, _animationBuffer{ 0 }, _particlesPosition{}, _particlesColour{}
 {
 	_particles.resize(_maxParticles);
 	_particlesPosition.resize(_maxParticles, glm::vec4());
 	_particlesColour.resize(_maxParticles, glm::vec4(1.0f,1.0f,1.0f,1.0f));
+	_particleFrame.resize(_maxParticles, 0);
 }
 
 Emitter::~Emitter()
@@ -133,6 +135,9 @@ void Emitter::InitAllParticles(bool prewarm)
 					_particles[i]._position += _particles[i]._velocity * _particles[i]._speed * _particles[i]._timeAlive;
 				}
 
+				_particles[i]._currentFrame = 0;
+				_particles[i]._animationTime = 0.0f;
+
 				//Remember to set it alive
 				_particles[i]._alive = true;
 
@@ -215,6 +220,9 @@ void Emitter::InitAllParticles(bool prewarm)
 					_particles[i]._timeAlive = RandFloat() * _particles[i]._lifespan;
 					_particles[i]._position += _particles[i]._velocity * _particles[i]._speed * _particles[i]._timeAlive;
 				}
+
+				_particles[i]._currentFrame = 0;
+				_particles[i]._animationTime = 0.0f;
 
 				//Remember to set it alive
 				_particles[i]._alive = true;
@@ -312,6 +320,9 @@ void Emitter::ResetParticle(size_t index)
 				_particles[index]._size = _maxParticleSize;
 			}
 
+			_particles[index]._currentFrame = 0;
+			_particles[index]._animationTime = 0.0f;
+
 			//Remember to set it alive
 			_particles[index]._alive = true;
 
@@ -393,6 +404,9 @@ void Emitter::ResetParticle(size_t index)
 			{
 				_particles[index]._size = _maxParticleSize;
 			}
+
+			_particles[index]._currentFrame = 0;
+			_particles[index]._animationTime = 0.0f;
 
 			//Remember to set it alive
 			_particles[index]._alive = true;
@@ -582,6 +596,7 @@ void Emitter::InitBuffer()
 	glGenBuffers(1, &_ebo);
 	glGenBuffers(1, &_posBuffer);
 	glGenBuffers(1, &_colBuffer);
+	glGenBuffers(1, &_animationBuffer);
 
 	//Fixed Won't change
 	glBindVertexArray(_vao);
@@ -604,6 +619,12 @@ void Emitter::InitBuffer()
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(2);
 
+	//// animation
+	glBindBuffer(GL_ARRAY_BUFFER, _animationBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(unsigned) * _maxParticles, NULL, GL_STREAM_DRAW);
+	glVertexAttribIPointer(3, 1, GL_UNSIGNED_INT, 0, (void*)0);
+	glEnableVertexAttribArray(3);
+
 	// Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
@@ -611,6 +632,7 @@ void Emitter::InitBuffer()
 	glVertexAttribDivisor(0, 0);
 	glVertexAttribDivisor(1, 1);
 	glVertexAttribDivisor(2, 1);
+	glVertexAttribDivisor(3, 1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -631,8 +653,14 @@ void Emitter::UpdateBuffer()
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(2);
 
+	glBindBuffer(GL_ARRAY_BUFFER, _animationBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(unsigned) * _maxParticles, NULL, GL_STREAM_DRAW);
+	glVertexAttribIPointer(3, 1, GL_UNSIGNED_INT, 0, (void*)0);
+	glEnableVertexAttribArray(3);
+
 	glVertexAttribDivisor(1, 1);
 	glVertexAttribDivisor(2, 1);
+	glVertexAttribDivisor(3, 1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -648,6 +676,7 @@ void Emitter::UpdateSize()
 	_particles.resize(_maxParticles);
 	_particlesPosition.resize(_maxParticles, glm::vec4());
 	_particlesColour.resize(_maxParticles, glm::vec4(1.0f,1.0f,1.0f,1.0f));
+	_particleFrame.resize(_maxParticles, 0);
 
 	UpdateBuffer();
 }
@@ -673,6 +702,18 @@ void Emitter::Play()
 	if (_preWarm)
 	{
 		PreWarmParticles();
+	}
+
+	if (_isAnimated)
+	{
+		if (_framesPerSecond == 0)
+		{
+			_animationRate = 0.0f;
+		}
+		else
+		{
+			_animationRate = 1.0f / _framesPerSecond;
+		}
 	}
 }
 

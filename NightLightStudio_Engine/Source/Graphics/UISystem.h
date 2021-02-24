@@ -36,6 +36,7 @@ namespace NS_GRAPHICS
         }
 
         bool _uiDrawing;
+        bool _isPlaying;
 
         void Init();
         void Update();

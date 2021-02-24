@@ -4,6 +4,7 @@
 #include "../Graphics/UISystem.h"
 #include "../Input/SystemInput.h"
 #include "../Window/WndSystem.h"
+#pragma warning( disable : 26812 )
 
 ComponentCanvas::ComponentCanvas() : _isActive{ true }, _canvasType{ SCREEN_SPACE }
 {
@@ -147,6 +148,23 @@ void ComponentCanvas::Read(Value& val)
 			toPush._totalFrame = val[totalFrame.c_str()].GetUint();
 		}
 
+		std::string fps = std::string("FramesPerSecond").append(std::to_string(i));
+		if (val.FindMember(fps.c_str()) == val.MemberEnd())
+			std::cout << "No fps data has been found" << std::endl;
+		else
+		{
+			toPush._framesPerSecond = val[fps.c_str()].GetUint();
+
+			if (toPush._framesPerSecond == 0)
+			{
+				toPush._animationRate = 0.0f;
+			}
+			else
+			{
+				toPush._animationRate = 1.0f / toPush._framesPerSecond;
+			}
+		}
+
 		std::string play = std::string("Play").append(std::to_string(i));
 		if (val.FindMember(play.c_str()) == val.MemberEnd())
 			std::cout << "No play data has been found" << std::endl;
@@ -233,6 +251,7 @@ Value ComponentCanvas::Write()
 		NS_SERIALISER::ChangeData(&val, std::string("Row").append(std::to_string(i)), _uiElements.at(i)._row);
 		NS_SERIALISER::ChangeData(&val, std::string("Column").append(std::to_string(i)), _uiElements.at(i)._column);
 		NS_SERIALISER::ChangeData(&val, std::string("TotalFrame").append(std::to_string(i)), _uiElements.at(i)._totalFrame);
+		NS_SERIALISER::ChangeData(&val, std::string("FramesPerSecond").append(std::to_string(i)), _uiElements.at(i)._framesPerSecond);
 
 		NS_SERIALISER::ChangeData(&val, std::string("Play").append(std::to_string(i)), _uiElements.at(i)._play);
 		NS_SERIALISER::ChangeData(&val, std::string("Loop").append(std::to_string(i)), _uiElements.at(i)._loop);

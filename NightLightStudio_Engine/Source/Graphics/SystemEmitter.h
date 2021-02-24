@@ -35,6 +35,7 @@ namespace NS_GRAPHICS
         }
 
         bool _particleDrawing;
+        bool _isPlaying;
 
         void Init();
         void Update();

@@ -22,6 +22,13 @@ public:
 	float _emitterTime;
 	float _timePassed;
 
+	//For Spritesheet
+	unsigned _row = 1;
+	unsigned _column = 1;
+	unsigned _totalFrame = 1;
+	unsigned _framesPerSecond = 1;
+	float _animationRate = 1.0f;
+
 	//Emitter transform variables
 	glm::vec3 _emitterPosition;
 	glm::vec3 _emitterRotation;
@@ -60,6 +67,11 @@ public:
 	bool _reverse;
 	bool _follow;
 	bool _fade;
+	bool _isAnimated;
+	bool _loopAnimation;
+
+	//debug
+	bool _pause;
 
 	bool _velocityOverTime;
 	bool _sizeOverTime;
@@ -78,11 +90,14 @@ public:
 	unsigned _vao;
 	unsigned _vbo;
 	unsigned _ebo;
+	unsigned _uvbo;
 	unsigned _posBuffer;
 	unsigned _colBuffer;
+	unsigned _animationBuffer;
 
 	std::vector<glm::vec4> _particlesPosition;
 	std::vector<glm::vec4> _particlesColour;
+	std::vector<unsigned> _particleFrame;
 
 	Emitter();
 	~Emitter();

@@ -460,6 +460,43 @@ void ComponentEmitter::Read(Value& val)
 		emitSys._emitters[_emitterID]->_burstAmount = val["BurstAmount"].GetUint();
 	}
 
+	if (val.FindMember("Row") == val.MemberEnd())
+		std::cout << "No Row data has been found" << std::endl;
+	else
+	{
+		emitSys._emitters[_emitterID]->_row = val["Row"].GetUint();
+	}
+
+	if (val.FindMember("Column") == val.MemberEnd())
+		std::cout << "No Column data has been found" << std::endl;
+	else
+	{
+		emitSys._emitters[_emitterID]->_column = val["Column"].GetUint();
+	}
+
+	if (val.FindMember("TotalFrame") == val.MemberEnd())
+		std::cout << "No TotalFrame data has been found" << std::endl;
+	else
+	{
+		emitSys._emitters[_emitterID]->_totalFrame = val["TotalFrame"].GetUint();
+	}
+
+	if (val.FindMember("FramesPerSecond") == val.MemberEnd())
+		std::cout << "No FramesPerSecond data has been found" << std::endl;
+	else
+	{
+		emitSys._emitters[_emitterID]->_framesPerSecond = val["FramesPerSecond"].GetUint();
+
+		if (emitSys._emitters[_emitterID]->_framesPerSecond == 0)
+		{
+			emitSys._emitters[_emitterID]->_animationRate = 0.0f;
+		}
+		else
+		{
+			emitSys._emitters[_emitterID]->_animationRate = 1.0f / emitSys._emitters[_emitterID]->_framesPerSecond;
+		}
+	}
+
 	if (val.FindMember("Angle") == val.MemberEnd())
 		std::cout << "No angle data has been found" << std::endl;
 	else
@@ -584,6 +621,20 @@ void ComponentEmitter::Read(Value& val)
 	else
 	{
 		emitSys._emitters[_emitterID]->_fade = val["Fade"].GetBool();
+	}
+
+	if (val.FindMember("Animated") == val.MemberEnd())
+		std::cout << "No Animated data has been found" << std::endl;
+	else
+	{
+		emitSys._emitters[_emitterID]->_isAnimated = val["Animated"].GetBool();
+	}
+
+	if (val.FindMember("LoopAnimation") == val.MemberEnd())
+		std::cout << "No LoopAnimation data has been found" << std::endl;
+	else
+	{
+		emitSys._emitters[_emitterID]->_loopAnimation = val["LoopAnimation"].GetBool();
 	}
 
 	if (val.FindMember("VelocityOverTime") == val.MemberEnd())
@@ -715,6 +766,11 @@ Value ComponentEmitter::Write()
 	NS_SERIALISER::ChangeData(&val, "BurstRate", emitSys._emitters[_emitterID]->_burstRate);
 	NS_SERIALISER::ChangeData(&val, "BurstAmount", emitSys._emitters[_emitterID]->_burstAmount);
 
+	NS_SERIALISER::ChangeData(&val, "Row", emitSys._emitters[_emitterID]->_row);
+	NS_SERIALISER::ChangeData(&val, "Column", emitSys._emitters[_emitterID]->_column);
+	NS_SERIALISER::ChangeData(&val, "TotalFrame", emitSys._emitters[_emitterID]->_totalFrame);
+	NS_SERIALISER::ChangeData(&val, "FramesPerSecond", emitSys._emitters[_emitterID]->_framesPerSecond);
+
 	NS_SERIALISER::ChangeData(&val, "Angle", emitSys._emitters[_emitterID]->_spawnAngle);
 	NS_SERIALISER::ChangeData(&val, "Radius", emitSys._emitters[_emitterID]->_radius);
 
@@ -737,6 +793,8 @@ Value ComponentEmitter::Write()
 	NS_SERIALISER::ChangeData(&val, "Reverse", emitSys._emitters[_emitterID]->_reverse);
 	NS_SERIALISER::ChangeData(&val, "Follow", emitSys._emitters[_emitterID]->_follow);
 	NS_SERIALISER::ChangeData(&val, "Fade", emitSys._emitters[_emitterID]->_fade);
+	NS_SERIALISER::ChangeData(&val, "Animated", emitSys._emitters[_emitterID]->_isAnimated);
+	NS_SERIALISER::ChangeData(&val, "LoopAnimation", emitSys._emitters[_emitterID]->_loopAnimation);
 
 	NS_SERIALISER::ChangeData(&val, "VelocityOverTime", emitSys._emitters[_emitterID]->_velocityOverTime);
 	NS_SERIALISER::ChangeData(&val, "SizeOverTime", emitSys._emitters[_emitterID]->_sizeOverTime);

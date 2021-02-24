@@ -1578,7 +1578,7 @@ void InspectorWindow::EmitterComp(Entity& ent)
 						float colourA[4] = { emit->_colourA.x, emit->_colourA.y, emit->_colourA.z, emit->_colourA.w };
 						ImGui::ColorEdit4("Colour Range Low##Emitter", colourA);
 						emit->_colourA = { colourA[0], colourA[1], colourA[2], colourA[3] };
-			
+
 						float colourB[4] = { emit->_colourB.x, emit->_colourB.y, emit->_colourB.z, emit->_colourB.w };
 						ImGui::ColorEdit4("Colour Range High##Emitter", colourB);
 						emit->_colourB = { colourB[0], colourB[1], colourB[2], colourB[3] };
@@ -1590,6 +1590,28 @@ void InspectorWindow::EmitterComp(Entity& ent)
 						emit->_colourB = { colour[0], colour[1], colour[2], colour[3] };
 					}
 					ImGui::TreePop();
+				}
+			}
+
+			ImGui::Checkbox("Animatable##Emitter", &emit->_isAnimated);
+
+			if (emit->_isAnimated)
+			{
+				ImGui::Checkbox("Loop Animation##Emitter", &emit->_loopAnimation);
+				ImGui::InputScalar("Row##Emitter", ImGuiDataType_U32, &emit->_row);
+				ImGui::InputScalar("Column##Emitter", ImGuiDataType_U32, &emit->_column);
+				ImGui::InputScalar("Total Frame##Emitter", ImGuiDataType_U32, &emit->_totalFrame);
+
+				if (ImGui::InputScalar("Frames per second##Emitter", ImGuiDataType_U32, &emit->_framesPerSecond))
+				{
+					if (emit->_framesPerSecond == 0)
+					{
+						emit->_animationRate = 0.0f;
+					}
+					else
+					{
+						emit->_animationRate = 1.0f / emit->_framesPerSecond;
+					}
 				}
 			}
 
@@ -1654,6 +1676,25 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			if (ImGui::Button("Stop Particle##Emitter"))
 			{
 				emitter->Stop();
+			}
+
+			if (ImGui::Button("Pause Particle##Emitter"))
+			{
+				emit->_pause = !emit->_pause;
+			}
+
+			//For debug
+			if (ImGui::Button("Next Frame##"))
+			{
+				for (size_t index = 0;  index < emit->_particles.size(); ++index)
+				{
+					emit->_particles[index]._currentFrame++;
+
+					if (emit->_particles[index]._currentFrame >= emit->_totalFrame)
+					{
+						emit->_particles[index]._currentFrame = 0;
+					}
+				}
 			}
 		}
 		if (!_notRemove)

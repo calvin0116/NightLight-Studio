@@ -13,6 +13,7 @@
 
 NS_GRAPHICS::UISystem::UISystem():
 	_uiDrawing{ true },
+	_isPlaying{ false },
 	_vao{ 0 },
 	_vbo{ 0 },
 	_ebo{ 0 },
@@ -133,7 +134,7 @@ void NS_GRAPHICS::UISystem::Init()
 
 void NS_GRAPHICS::UISystem::Update()
 {
-	if (_uiDrawing)
+	if (_uiDrawing || _isPlaying)
 	{
 		RenderUI();
 	}
