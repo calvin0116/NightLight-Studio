@@ -151,7 +151,8 @@ bool LevelEditor::Update(float)
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     // Tracy
-    ZoneScoped
+    // Zone color: Dark Blue
+    ZoneScopedNC("Editor", 0x291ef7);
 
     return false;
 }

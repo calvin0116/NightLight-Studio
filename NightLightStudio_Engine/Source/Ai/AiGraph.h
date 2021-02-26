@@ -2,6 +2,10 @@
 #include "../Collision/CollisionMathLib.h"
 
 #include <unordered_map>
+
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 namespace NS_AI
 {
 	struct WayPoint;
@@ -113,7 +117,9 @@ namespace NS_AI
 			else if (wp2 == other_wp)
 				return wp1;
 
-			std::cout << "Edges with Missing Way Point" << std::endl;
+			//std::cout << "Edges with Missing Way Point" << std::endl;
+			TracyMessageL("AI::Next Way Point: Edges with Missing Way Point");
+
 			throw(1);
 			return nullptr;
 		};
