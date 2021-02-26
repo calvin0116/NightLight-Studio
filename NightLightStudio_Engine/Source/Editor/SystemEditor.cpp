@@ -17,9 +17,19 @@ void SystemEditor::Init()
 	_editor.Init(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
 }
 
+void SystemEditor::GameInit()
+{
+	_editor.GameInit();
+}
+
 void SystemEditor::Update()
 {
 	_editor.Update();
+}
+
+void SystemEditor::GameExit()
+{
+	_editor.GameExit();
 }
 
 void SystemEditor::Exit()

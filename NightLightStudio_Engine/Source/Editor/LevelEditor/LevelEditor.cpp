@@ -104,6 +104,10 @@ void LevelEditor::Init(HWND window)
     LE_ConfigLoad();
 }
 
+void LevelEditor::GameInit()
+{
+}
+
 bool LevelEditor::Update(float)
 {
     // Start the Dear ImGui frame
@@ -152,6 +156,13 @@ bool LevelEditor::Update(float)
     ZoneScopedNC("Editor", 0x291ef7);
 
     return false;
+}
+
+void LevelEditor::GameExit()
+{
+    for (auto& i : _editorWind)
+        if (i._ptr)
+            i._ptr->GameExit();
 }
 
 void LevelEditor::Exit()

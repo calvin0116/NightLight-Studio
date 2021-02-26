@@ -968,7 +968,7 @@ namespace NS_GRAPHICS
 				if (model->_isAnimated)
 				{
 					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-					for (auto& mesh : model->_animatedMeshes)
+					for (auto& mesh : model->_meshes)
 					{
 						glBindVertexArray(mesh->VAO);
 						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
@@ -1109,7 +1109,7 @@ namespace NS_GRAPHICS
 				if (model->_isAnimated)
 				{
 					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-					for (auto& mesh : model->_animatedMeshes)
+					for (auto& mesh : model->_meshes)
 					{
 						glBindVertexArray(mesh->VAO);
 
@@ -1238,7 +1238,7 @@ namespace NS_GRAPHICS
 				if (model->_isAnimated)
 				{
 					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-					for (auto& mesh : model->_animatedMeshes)
+					for (auto& mesh : model->_meshes)
 					{
 						glBindVertexArray(mesh->VAO);
 						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
@@ -1377,7 +1377,7 @@ namespace NS_GRAPHICS
 				if (model->_isAnimated)
 				{
 					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-					for (auto& mesh : model->_animatedMeshes)
+					for (auto& mesh : model->_meshes)
 					{
 						glBindVertexArray(mesh->VAO);
 
