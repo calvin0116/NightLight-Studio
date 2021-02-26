@@ -6,6 +6,8 @@
 #include "../IO/Json/Config.h"
 
 #include "GraphicsSystem.h"
+// Camera comp
+#include "../Component/ComponentCamera.h"
 
 #define TESTMOVETARGET 1
 
@@ -24,7 +26,7 @@ namespace NS_GRAPHICS
 		savedTgt(0.0f, 0.0f, 0.0f),
 		savedPitch(0.0f),
 		savedYaw(0.0f),
-		_activeSceneCamera{ false },
+		//_activeSceneCamera{ false },
 		theThridPersonCamPitch{ 0.f },
 		theThridPersonCamYaw{ 0.f }
 	{
@@ -189,6 +191,9 @@ namespace NS_GRAPHICS
 					CONFIG_DATA->GetConfigData()._lastCamYaw = _camera.GetYaw();
 				}
 			});
+
+		// For messaging/event system
+		r.AttachHandler("TogglePlay", &CameraSystem::HandleTogglePlay, this);
 	}
 
 	void CameraSystem::Update()
@@ -258,13 +263,13 @@ namespace NS_GRAPHICS
 
   void CameraSystem::SetFOV(const float& fov)
   {
-    GetCurrentCamera().SetCameraFOV(fov);
+    _camera.SetCameraFOV(fov);
     GraphicsSystem::GetInstance()->SetProjectionMatrix(fov);
   }
 
 	float CameraSystem::GetFOV()
 	{
-		return GetCurrentCamera().GetCameraFOV();
+		return _camera.GetCameraFOV();
 	}
 
 	const float& CameraSystem::GetRotationSensitivity()
@@ -282,25 +287,24 @@ namespace NS_GRAPHICS
 		return _camera.GetZoomSensitivity();
 	}
 
-	void CameraSystem::SetCurrentCamera(const int& cameraID)
-	{
-		_sceneCameraID = cameraID;
-	}
+	//void CameraSystem::SetCurrentCamera(const int& cameraID)
+	//{
+	//	_sceneCameraID = cameraID;
+	//}
 
-	int CameraSystem::CreateCamera(const glm::vec3& position, const glm::vec3& target, const float& pitch, const float& yaw)
-	{
-		Camera newCam;
+	//int CameraSystem::CreateCamera(const glm::vec3& position, const glm::vec3& target, const float& pitch, const float& yaw)
+	//{
+	//	Camera newCam;
 
-		newCam.SetCameraPosition(position);
-		newCam.SetCameraPitch(pitch);
-		newCam.SetCameraYaw(yaw);
-		newCam.SetCameraTarget(target);
+	//	newCam.SetCameraPosition(position);
+	//	newCam.SetCameraPitch(pitch);
+	//	newCam.SetCameraYaw(yaw);
+	//	newCam.SetCameraTarget(target);
 
+	//	_cameras.push_back(newCam);
 
-		_cameras.push_back(newCam);
-
-		return (int)_cameras.size() - 1;
-	}
+	//	return (int)_cameras.size() - 1;
+	//}
 	/*
 	Camera& CameraSystem::GetSceneCamera(const int& cameraID)
 	{
@@ -312,13 +316,13 @@ namespace NS_GRAPHICS
 		//return dummyCam;
 	}*/
 
-	Camera& CameraSystem::GetCurrentCamera()
-	{
-		if (!_activeSceneCamera)
-			return _camera; // Editor Camera
-		else
-			return _cameras[_sceneCameraID];
-	}
+	//Camera& CameraSystem::GetCurrentCamera()
+	//{
+	//	if (!_activeSceneCamera)
+	//		return _camera; // Editor Camera
+	//	else
+	//		return _cameras[_sceneCameraID];
+	//}
 
 	Camera& CameraSystem::GetCamera()
 	{
@@ -520,27 +524,62 @@ namespace NS_GRAPHICS
 		theThridPersonCamPitch = pitch;
 
 		theThridPersonCamYaw = yaw;
-
 	}
 
-	void CameraSystem::SavePosition()
+	//void CameraSystem::SavePosition()
+	//{
+	//	savedTgt = tgt;
+	//	savedPitch = _camera.GetPitch();
+	//	savedYaw = _camera.GetYaw();
+	//}
+
+	//void CameraSystem::MoveToSavedPosition()
+	//{
+	//	tgt = savedTgt;
+
+	//	theThridPersonCamPitch = savedPitch;
+	//	theThridPersonCamYaw = savedYaw;
+
+	//	_camera.SetCameraPitch(theThridPersonCamPitch);
+	//	_camera.SetCameraYaw(theThridPersonCamYaw);
+
+	//	SetUseThridPersonCam(false);
+	//}
+
+	void CameraSystem::HandleTogglePlay(MessageTogglePlay& msg)
 	{
-		savedTgt = tgt;
-		savedPitch = _camera.GetPitch();
-		savedYaw = _camera.GetYaw();
+		// Handle msg here. Only Before Play MSG
+		if (msg.GetID() != "TogglePlay")
+			return;
+		_isPlaying = msg.isPlaying;
+		std::cout << "Camera Playing!" << std::endl;
+		if (_isPlaying && _Inited == false)
+		{
+			_Inited = true;
+			//MyGameInit();
+			_editorCam = _camera;
+			auto itr1 = G_ECMANAGER->begin<ComponentCamera>();
+			auto itrEnd1 = G_ECMANAGER->end<ComponentCamera>();
+			for (; itr1 != itrEnd1; ++itr1)
+			{
+				ComponentCamera* myComp = G_ECMANAGER->getComponent<ComponentCamera>(itr1);
+				 //Only 1 active camera during gameplay.
+				if (myComp->_isActive)
+				{
+					_camera = myComp->_data;
+					//std::cout << "Camera changed!" << std::endl;
+					Update();
+					break;
+				}
+			}
+		}
+		else if (!_isPlaying)
+		{
+			//ReleaseSounds();
+			_Inited = false;
+			_camera = _editorCam;
+			//std::cout << "Camera reverted!" << std::endl;
+			Update();
+		}
 	}
-
-	void CameraSystem::MoveToSavedPosition()
-	{
-		tgt = savedTgt;
-
-		theThridPersonCamPitch = savedPitch;
-		theThridPersonCamYaw = savedYaw;
-
-		_camera.SetCameraPitch(theThridPersonCamPitch);
-		_camera.SetCameraYaw(theThridPersonCamYaw);
-
-		SetUseThridPersonCam(false);
-	}
-
 }

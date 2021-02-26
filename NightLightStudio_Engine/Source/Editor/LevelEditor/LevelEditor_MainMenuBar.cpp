@@ -165,7 +165,7 @@ void LevelEditor::LE_MainMenuBar()
                     NS_GRAPHICS::UISystem::GetInstance()._isPlaying = true;
                     NS_GRAPHICS::EmitterSystem::GetInstance()._isPlaying = true;
                     MessageTogglePlay isPlaying_1(_runEngine, "BeforePlay");
-                    NS_GRAPHICS::CameraSystem::GetInstance().SavePosition();
+                    //NS_GRAPHICS::CameraSystem::GetInstance().SavePosition();
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_1);
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
 
@@ -177,7 +177,7 @@ void LevelEditor::LE_MainMenuBar()
                     MessageTogglePlay isPlaying_2(_runEngine, "AfterPlay");
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_2);
-                    NS_GRAPHICS::CameraSystem::GetInstance().MoveToSavedPosition();
+                    //NS_GRAPHICS::CameraSystem::GetInstance().MoveToSavedPosition();
                 }
                 DELTA_T->load();
             });

@@ -20,6 +20,7 @@ namespace NS_GRAPHICS
 
 	class Camera
 	{
+	public:
     float cameraFOV = 45.f;
 
 		// World/Global Up Vector

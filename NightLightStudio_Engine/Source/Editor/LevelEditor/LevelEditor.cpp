@@ -55,12 +55,11 @@ void LevelEditor::Init(HWND window)
                 if (_runEngine)
                 {
                     MessageTogglePlay isPlaying_1(_runEngine, "BeforePlay");
-                    NS_GRAPHICS::CameraSystem::GetInstance().SavePosition();
+                    //NS_GRAPHICS::CameraSystem::GetInstance().SavePosition();
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_1);
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
 
-                    DELTA_T->load();
-                   
+                    DELTA_T->load();                   
                 }
                 else
                 {
@@ -68,7 +67,7 @@ void LevelEditor::Init(HWND window)
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_2);
 
-                    NS_GRAPHICS::CameraSystem::GetInstance().MoveToSavedPosition();
+                    //NS_GRAPHICS::CameraSystem::GetInstance().MoveToSavedPosition();
 
                     DELTA_T->load();
                 }

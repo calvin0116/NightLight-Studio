@@ -136,6 +136,17 @@ void setTypeResolver<ComponentEmitter>(int set)
 	ComponentEmitter_ind = set;
 }
 
+template<>
+int typeResolver<ComponentCamera>()
+{
+	return ComponentCamera_ind;
+}
+template<>
+void setTypeResolver<ComponentCamera>(int set)
+{
+	ComponentEmitter_ind = set;
+}
+
 
 template<>
 int typeResolver<ComponentPlayerStats>()
