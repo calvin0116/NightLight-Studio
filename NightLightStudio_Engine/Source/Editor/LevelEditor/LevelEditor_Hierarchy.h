@@ -85,5 +85,6 @@ public :
 
 	void CopyObjects();
 	void DeleteObjects();
+	void ReadIntoCompVec(Entity ent, ENTITY_COMP_DATA* data);
 };
 

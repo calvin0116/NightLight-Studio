@@ -257,6 +257,7 @@ void HierarchyInspector::Start()
 			}
 
 			G_ECMANAGER->EntityName[ent.getId()] = i.first;
+			LE_ECHELPER->SelectEntity(ent.getId(), true);
 			entVec.push_back(ent);
 		}		
 
@@ -266,6 +267,10 @@ void HierarchyInspector::Start()
 	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("HIERARCHY_DELETE_OBJECTS"),
 		deleteCurObj,
 		revertPrevObj);
+
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("HIERARCHY_COPY_OBJECTS"),
+		revertPrevObj,
+		deleteCurObj);
 
 	// Ctrl-Copy object selected
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COPY_OBJECT", SystemInput_ns::IKEY_CTRL, "IDET", SystemInput_ns::OnHold,
@@ -667,61 +672,79 @@ void HierarchyInspector::CopyObjects()
 
 	if (copyObj && _allowCopy)
 	{
-		Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
-		TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
-		if (trans_comp != NULL)
-		{
-			std::string newName;
-			newName = G_ECMANAGER->EntityName[ent.getId()];
-			if (newName == "")
-				newName = "Entity_";
-			else
-			{
-				// Really annoying name check to determine what number to append to the name
-				int num = 1;
-				bool reset = false;
+		std::vector<std::pair<std::string, ENTITY_COMP_DATA>> _allCopiedObjs;
 
-				std::string actualName = newName;
-				int digits = 0;
-				for (int i = (int)actualName.size() - 1; i >= 0; --i)
+		for (std::pair<int, bool> selEnt : LE_ECHELPER->SelectedEntities())
+		{
+			if (selEnt.second)
+			{
+				Entity ent = G_ECMANAGER->getEntity(selEnt.first);
+				TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+				if (trans_comp != NULL)
 				{
-					if (isdigit(actualName[i]))
-						digits++;
+					std::string newName;
+					newName = G_ECMANAGER->EntityName[ent.getId()];
+					if (newName == "")
+						newName = "Entity_";
 					else
 					{
-						if (actualName[i] == '_')
-						{
-							reset = true;
-							actualName = actualName.substr(0, actualName.size() - digits - 1);
-							break;
-						}
-						else
-						{
-							newName.append("_1");
-							break;
-						}
-					}
-				}
+						// Really annoying name check to determine what number to append to the name
+						int num = 1;
+						bool reset = false;
 
-				while (reset)
-				{
-					reset = false;
-					std::string tempName = actualName;
-					tempName.append("_" + std::to_string(num));
-					for (auto entsName : G_ECMANAGER->EntityName)
-					{
-						if (entsName.second.rfind(tempName) != std::string::npos)
+						std::string actualName = newName;
+						int digits = 0;
+						for (int i = (int)actualName.size() - 1; i >= 0; --i)
 						{
-							num++;
-							reset = true;
+							if (isdigit(actualName[i]))
+								digits++;
+							else
+							{
+								if (actualName[i] == '_')
+								{
+									reset = true;
+									actualName = actualName.substr(0, actualName.size() - digits - 1);
+									break;
+								}
+								else
+								{
+									newName.append("_1");
+									break;
+								}
+							}
+						}
+
+						while (reset)
+						{
+							reset = false;
+							std::string tempName = actualName;
+							tempName.append("_" + std::to_string(num));
+							for (auto entsName : G_ECMANAGER->EntityName)
+							{
+								if (entsName.second.rfind(tempName) != std::string::npos)
+								{
+									num++;
+									reset = true;
+								}
+							}
+							if (!reset)
+								newName = tempName;
 						}
 					}
-					if (!reset)
-						newName = tempName;
+
+					ENTITY_COMP_DATA compData;
+					ReadIntoCompVec(ent, &compData);
+
+					_allCopiedObjs.push_back(std::make_pair(newName, compData));
+
 				}
 			}
 
+		
+
 			// Causes memory leaks currently (Probably Graphics Side)
+			
+			/*
 			Entity newEnt = ent.Copy(G_ECMANAGER, newName);
 			bool multi = false;
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
@@ -730,9 +753,15 @@ void HierarchyInspector::CopyObjects()
 			}
 
 			LE_ECHELPER->SelectEntity(newEnt.getId(), multi);
-
-			_scrollBottom = true;
+			*/
+			
+			
 		}
+
+
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("HIERARCHY_COPY_OBJECTS"), std::any(_allCopiedObjs));
+
+		_scrollBottom = true;
 	}
 
 	_allowCopy = aCopy;
@@ -762,6 +791,98 @@ void HierarchyInspector::DeleteObjects()
 		}
 
 		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("HIERARCHY_DELETE_OBJECTS"), std::any(entVec));
+	}
+}
+
+void HierarchyInspector::ReadIntoCompVec(Entity ent, ENTITY_COMP_DATA* data)
+{
+	ENTITY_COMP_DATA& compData = *data;
+	if (ent.getComponent<ComponentTransform>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<ComponentTransform>()->Write());
+		compData.insert(std::make_pair(typeid(ComponentTransform).hash_code(), comp));
+	}
+	if (ent.getComponent<ComponentLoadAudio>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<ComponentLoadAudio>()->Write());
+		compData.insert(std::make_pair(typeid(ComponentLoadAudio).hash_code(), comp));
+	}
+	if (ent.getComponent<ComponentGraphics>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<ComponentGraphics>()->Write());
+		compData.insert(std::make_pair(typeid(ComponentGraphics).hash_code(), comp));
+	}
+	if (ent.getComponent<ColliderComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<ColliderComponent>()->Write());
+		compData.insert(std::make_pair(typeid(ColliderComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<RigidBody>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<RigidBody>()->Write());
+		compData.insert(std::make_pair(typeid(RigidBody).hash_code(), comp));
+	}
+	if (ent.getComponent<LightComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<LightComponent>()->Write());
+		//ent.getComponent<LightComponent>()->SetType(NS_GRAPHICS::Lights::INVALID_TYPE);
+		compData.insert(std::make_pair(typeid(LightComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<ScriptComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<ScriptComponent>()->Write());
+		compData.insert(std::make_pair(typeid(ScriptComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<CanvasComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<CanvasComponent>()->Write());
+		compData.insert(std::make_pair(typeid(CanvasComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<CScriptComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<CScriptComponent>()->Write());
+		compData.insert(std::make_pair(typeid(CScriptComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<PlayerStatsComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<PlayerStatsComponent>()->Write());
+		compData.insert(std::make_pair(typeid(PlayerStatsComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<CauldronStatsComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<CauldronStatsComponent>()->Write());
+		compData.insert(std::make_pair(typeid(CauldronStatsComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<VariablesComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<VariablesComponent>()->Write());
+		compData.insert(std::make_pair(typeid(VariablesComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<NavComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<NavComponent>()->Write());
+		compData.insert(std::make_pair(typeid(NavComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<AnimationComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<AnimationComponent>()->Write());
+		compData.insert(std::make_pair(typeid(AnimationComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<WayPointMapComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<WayPointMapComponent>()->Write());
+		compData.insert(std::make_pair(typeid(WayPointMapComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<WayPointComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<WayPointComponent>()->Write());
+		compData.insert(std::make_pair(typeid(WayPointComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<EmitterComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<EmitterComponent>()->Write());
+		//NS_GRAPHICS::EmitterSystem::GetInstance().RemoveEmitterByID(ent.getComponent<EmitterComponent>()->_emitterID);
+		compData.insert(std::make_pair(typeid(EmitterComponent).hash_code(), comp));
 	}
 }
 
