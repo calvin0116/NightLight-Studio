@@ -1743,7 +1743,7 @@ void InspectorWindow::CameraComp(Entity& ent)
 	NS_GRAPHICS::Camera& cam = camComp->_data;
 	if (ImGui::CollapsingHeader("Camera component", &_notRemove))
 	{
-		ImGui::Checkbox("IsActive##Camera", &camComp->isActive);
+		ImGui::Checkbox("IsActive##Camera", &camComp->_isActive);
 		ImGui::InputFloat("FOV", &(cam.cameraFOV));
 		if (ImGui::CollapsingHeader("Sensitivity", &_notRemove))
 		{
