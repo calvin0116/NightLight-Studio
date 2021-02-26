@@ -407,7 +407,8 @@ namespace NS_PHYSICS
 		//return true;
 
 		// Tracy
-		ZoneScoped
+		// Zone Color: Light Blue
+		ZoneScopedNC("Physics", 0xa5cffa);
 
 	}
 

@@ -74,6 +74,8 @@ private:
 	ENTITY_LAST_POS _lastPos_ELP;
 	std::vector<ENTITY_LAST_POS> _allOtherLastPos_ELP;
 
+	glm::mat4 _transformItemActive;
+
 	int _itemType;
 
 	bool _notRemove;

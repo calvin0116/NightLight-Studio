@@ -494,7 +494,8 @@ namespace NS_COLLISION
     colResolver.resolveCollision();
 
 	// Tracy
-	ZoneScoped
+	// Zone Color: Cyan
+	ZoneScopedNC("Collision", 0x1ffbff);
 
 	}
 	void CollisionSystem::GameExit()

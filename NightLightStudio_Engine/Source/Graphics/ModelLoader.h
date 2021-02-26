@@ -24,12 +24,12 @@ namespace NS_GRAPHICS
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		void ProcessNode(aiNode* node, const aiScene* scene, Model*& model);
 		Mesh* ProcessMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model);
-		AnimatedMesh* ProcessAnimatedMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model);
+		Mesh* ProcessAnimatedMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model);
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// Needed for animations
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		void ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, AnimatedMesh* animatedMesh);
+		void ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, Mesh* animatedMesh);
 		bool CreateSkeletal(Joint& joint, aiNode* node, const aiScene* scene, Model*& model);
 		void ProcessAnimation(aiNode* node, const aiScene* scene, Model*& model);
 		void FillNode(Node& ourNode, aiNode* node, const aiScene* scene, Model*& model);
