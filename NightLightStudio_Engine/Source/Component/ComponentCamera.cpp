@@ -36,12 +36,18 @@ void ComponentCamera::SetCurrentCamera()
 inline void ComponentCamera::Read(Value& val)
 {
 	if (val.FindMember("isActive") == val.MemberEnd())
-		std::cout << "No active data has been found" << std::endl;
+	{
+		//std::cout << "No active data has been found" << std::endl;
+		TracyMessageL("ComponentCamera: No active data has been found");
+	}
 	else
 		_isActive = val["isActive"].GetBool();
 
 	if (val.FindMember("FlagType") == val.MemberEnd())
-		std::cout << "No active data has been found" << std::endl;
+	{
+		//std::cout << "No flagtype data has been found" << std::endl;
+		TracyMessageL("ComponentCamera: No flagtype data has been found");
+	}
 	else
 	{
 		std::string flagType = val["FlagType"].GetString();
@@ -55,7 +61,10 @@ inline void ComponentCamera::Read(Value& val)
 		}
 
 		if (val.FindMember("BackgroundColour") == val.MemberEnd())
-			std::cout << "No colour data has been found" << std::endl;
+		{
+			//std::cout << "No background colour data has been found" << std::endl;
+			TracyMessageL("ComponentCamera: No background colour data has been found");
+		}
 		else
 		{
 			auto pos = val["BackgroundColour"].GetArray();
@@ -67,56 +76,80 @@ inline void ComponentCamera::Read(Value& val)
 	}
 
 	if (val.FindMember("FieldOfView") == val.MemberEnd())
-		std::cout << "No fov data has been found" << std::endl;
+	{
+		//std::cout << "No fov data has been found" << std::endl;
+		TracyMessageL("ComponentCamera: No fov data has been found");
+	}
 	else
 	{
 		_fov = val["FieldOfView"].GetFloat();
 	}
 
 	if (val.FindMember("NearPlane") == val.MemberEnd())
-		std::cout << "No near plane data has been found" << std::endl;
+	{
+		//std::cout << "No near plane data has been found" << std::endl;
+		TracyMessageL("ComponentCamera: No near plane data has been found");
+	}
 	else
 	{
 		_near = val["NearPlane"].GetFloat();
 	}
 
 	if (val.FindMember("FarPlane") == val.MemberEnd())
-		std::cout << "No far plane data has been found" << std::endl;
+	{
+		//std::cout << "No far plane data has been found" << std::endl;
+		TracyMessageL("ComponentCamera: No far plane data has been found");
+	}
 	else
 	{
 		_far = val["FarPlane"].GetFloat();
 	}
 
 	if (val.FindMember("XOffset") == val.MemberEnd())
-		std::cout << "No x offset data has been found" << std::endl;
+	{
+		//std::cout << "No x offset data has been found" << std::endl;
+		TracyMessageL("ComponentCamera: No x offset data has been found");
+	}
 	else
 	{
 		_x = val["XOffset"].GetFloat();
 	}
 
 	if (val.FindMember("YOffset") == val.MemberEnd())
-		std::cout << "No y offset data has been found" << std::endl;
+	{
+		//std::cout << "No y offset data has been found" << std::endl;
+		TracyMessageL("ComponentCamera: No y offset data has been found");
+	}
 	else
 	{
 		_y = val["YOffset"].GetFloat();
 	}
 
 	if (val.FindMember("Width") == val.MemberEnd())
-		std::cout << "No width data has been found" << std::endl;
+	{
+		//std::cout << "No width data has been found" << std::endl;
+		TracyMessageL("ComponentCamera: No width data has been found");
+	}
 	else
 	{
 		_w = val["Width"].GetFloat();
 	}
 
 	if (val.FindMember("Height") == val.MemberEnd())
-		std::cout << "No height data has been found" << std::endl;
+	{
+		//std::cout << "No height data has been found" << std::endl;
+		TracyMessageL("ComponentCamera: No Height data has been found");
+	}
 	else
 	{
 		_h = val["Height"].GetFloat();
 	}
 
 	if (val.FindMember("Depth") == val.MemberEnd())
-		std::cout << "No depth data has been found" << std::endl;
+	{
+		//std::cout << "No depth data has been found" << std::endl;
+		TracyMessageL("ComponentCamera: No depth data has been found");
+	}
 	else
 	{
 		_depth = val["Depth"].GetInt();

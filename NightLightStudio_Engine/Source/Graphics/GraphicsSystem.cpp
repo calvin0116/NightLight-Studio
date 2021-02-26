@@ -87,7 +87,8 @@ namespace NS_GRAPHICS
 		//std::cout << "Time current passed: " << _testTimeElapsed << std::endl;
 
 		// Tracy
-		ZoneScoped
+		// Zone Color: Yellow
+		ZoneScopedNC("Graphics", 0xf5ef45);
 	}
 
 	void GraphicsSystem::Free()

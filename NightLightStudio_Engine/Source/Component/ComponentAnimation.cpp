@@ -78,31 +78,47 @@ unsigned ComponentAnimation::GetAnimController()
 inline void ComponentAnimation::Read(Value& val)
 {
 	if (val.FindMember("isActive") == val.MemberEnd())
-		std::cout << "No active data has been found" << std::endl;
+	{
+		//std::cout << "No active data has been found" << std::endl;
+		TracyMessageL("ComponentAnimation: No active data has been found");
+	}
 	else
 		_isActive = val["isActive"].GetBool();
 
 	_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
 
 	if (val.FindMember("Play") == val.MemberEnd())
-		std::cout << "No play data has been found" << std::endl;
+	{
+		//std::cout << "No play data has been found" << std::endl;
+		TracyMessageL("ComponentAnimation: No play data has been found");
+	}
 	else
 		NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play = val["Play"].GetBool();
 
 	if (val.FindMember("Loop") == val.MemberEnd())
-		std::cout << "No loop data has been found" << std::endl;
+	{
+		//std::cout << "No loop data has been found" << std::endl;
+		TracyMessageL("ComponentAnimation: No loop data has been found");
+	}
 	else
 		NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_loop = val["Loop"].GetBool();
 
 	std::string currentAnim;
 	if (val.FindMember("CurrentAnimation") == val.MemberEnd())
-		std::cout << "No anim data has been found" << std::endl;
+	{
+		//std::cout << "No anim data has been found" << std::endl;
+		TracyMessageL("ComponentAnimation: No anim data has been found");
+	}
+		
 	else
 		currentAnim = val["CurrentAnimation"].GetString();
 
 	std::string defaultAnim;
 	if (val.FindMember("DefaultAnimation") == val.MemberEnd())
-		std::cout << "No anim data has been found" << std::endl;
+	{
+		//std::cout << "No anim data has been found" << std::endl;
+		TracyMessageL("ComponentAnimation: No anim data has been found");
+	}
 	else
 		defaultAnim = val["DefaultAnimation"].GetString();
 
