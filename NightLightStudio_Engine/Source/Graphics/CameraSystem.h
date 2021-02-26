@@ -3,6 +3,9 @@
 #include "Camera.h"
 #include "..\Core\DeltaTime.h"
 #include <vector>
+// For messaging/event
+#include "../Messaging/SystemReceiver.h"
+#include "../Messaging/Messages/MessageTogglePlay.h"
 
 namespace NS_GRAPHICS
 {
@@ -14,15 +17,16 @@ namespace NS_GRAPHICS
 		~CameraSystem();
 
 		// Currently only 1 camera
-		// Editor camera
+		// Main camera
 		Camera _camera;
+		Camera _editorCam;
 
 		// Vector of cameras, used to cycle through scene cameras
-		std::vector<Camera> _cameras;
+		//std::vector<Camera> _cameras;
 
 		// Check if scene camera is active, if any
 		// Editor camera will be used by default if no scene camera is available
-		bool _activeSceneCamera = false;
+		//bool _activeSceneCamera = false;
 
 		// Camera ID for selected active scene camera
 		int _sceneCameraID = -1;
@@ -60,7 +64,10 @@ namespace NS_GRAPHICS
 		glm::vec3 savedTgt;
 		float savedPitch;
 		float savedYaw;
-
+		// For receiving event/message
+		SystemMessaging::SystemReceiver r;
+		bool _isPlaying;
+		bool _Inited = false;
 	public:
 		// Unique Singleton instance
 		static CameraSystem& GetInstance()
@@ -97,18 +104,18 @@ namespace NS_GRAPHICS
 		////////////////////////////////////////////
 		
 		// Set current active camera
-		void SetCurrentCamera(const int& cameraID);
+		//void SetCurrentCamera(const int& cameraID);
 		
 		// Create camera based on provided parameters
-		int CreateCamera(const glm::vec3& position = glm::vec3(0.f,0.f,0.f), const glm::vec3& target = glm::vec3(0.f, 0.f, 0.f),
-						const float& pitch = 0.f, const float& yaw = 0.f);
+		//int CreateCamera(const glm::vec3& position = glm::vec3(0.f,0.f,0.f), const glm::vec3& target = glm::vec3(0.f, 0.f, 0.f),
+						//const float& pitch = 0.f, const float& yaw = 0.f);
 
 		// Getter for specified scene camera camera, used to access its properties
 		// If no camera exists, return dummy camera
 		//Camera& GetSceneCamera(const int& cameraID);
 
 		// Returns current active camera, regardless of editor or game camera
-		Camera& GetCurrentCamera();
+		//Camera& GetCurrentCamera();
 
 		////////////////////////////////////////////
 
@@ -154,8 +161,9 @@ namespace NS_GRAPHICS
 		// set pitch and yaw                                       //Expose
 		void SetThridPersonCamPitchAndYaw(float pitch, float yaw); //Expose
 
+		//void SavePosition();
+		//void MoveToSavedPosition();
 
-		void SavePosition();
-		void MoveToSavedPosition();
+		void HandleTogglePlay(MessageTogglePlay&);
 	};
 }

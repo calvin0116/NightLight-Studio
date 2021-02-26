@@ -11,6 +11,8 @@
 #include "../../../Editor/SystemEditor.h"
 // RayCast
 #include "../../../Collision/SystemCollision.h"
+// Tracy
+#include "../tracy-master/Tracy.hpp"
 
 //#define CSDebug
 
@@ -82,7 +84,8 @@ namespace ECSBind
 
   void Print(MonoString* text)
   {
-    ED_OUT(MonoWrapper::ToString(text));
+    TracyMessage(MonoWrapper::ToString(text).c_str(), MonoWrapper::ToString(text).size());
+    //ED_OUT(MonoWrapper::ToString(text));
   }
 
   int RayCastIntersect(MonoObject* origin, MonoObject* endPos, MonoObject* intersect, int pos)

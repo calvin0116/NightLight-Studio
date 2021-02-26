@@ -185,6 +185,11 @@ void InspectorWindow::Start()
 			entComp._ent.getComponent<EmitterComponent>()->Read(*entComp._rjDoc);
 			//entComp._ent.getComponent<EmitterComponent>()->_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
 		}
+		else if (t == typeid(CameraComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<CameraComponent>();
+			entComp._ent.getComponent<CameraComponent>()->Read(*entComp._rjDoc);
+		}
 
 		return comp;
 	};
@@ -282,6 +287,11 @@ void InspectorWindow::Start()
 			entComp.Copy(entComp._ent.getComponent<EmitterComponent>()->Write());
 			NS_GRAPHICS::EmitterSystem::GetInstance().RemoveEmitterByID(entComp._ent.getComponent<EmitterComponent>()->_emitterID);
 			entComp._ent.RemoveComponent<EmitterComponent>();
+		}
+		else if (t == typeid(CameraComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<CameraComponent>()->Write());
+			entComp._ent.RemoveComponent<CameraComponent>();
 		}
 
 		return std::any(entComp);
@@ -1219,6 +1229,7 @@ void InspectorWindow::ScriptComp(Entity& ent)
 			});
 
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+//<<<<<<< Updated upstream
 				[this, &Script_comp, &tex](std::string* str)
 				{
 					std::string data = *str;
@@ -1233,6 +1244,17 @@ void InspectorWindow::ScriptComp(Entity& ent)
 						name.erase(name.end() - 3, name.end());
 						Script_comp->_ScriptName = name;
 					}
+/*
+				[this, &Script_comp](std::string* str)
+				{
+					fs::path script_path= *str;
+
+					if (script_path.extension() == ".cs")
+					{
+						Script_comp->_ScriptName = script_path.stem().string();
+					}
+					*/
+
 				});
 		}
 
@@ -1727,7 +1749,101 @@ void InspectorWindow::EmitterComp(Entity& ent)
 
 void InspectorWindow::CameraComp(Entity& ent)
 {
-	ent;
+	CameraComponent* camComp = ent.getComponent<CameraComponent>();
+	if (camComp == nullptr)
+		return;
+	NS_GRAPHICS::Camera& cam = camComp->_data;
+	if (ImGui::CollapsingHeader("Camera component", &_notRemove))
+	{
+		ImGui::Checkbox("IsActive##Camera", &camComp->_isActive);
+		ImGui::InputFloat("FOV", &(cam.cameraFOV));
+		if (ImGui::CollapsingHeader("Sensitivity", &_notRemove))
+		{
+			ImGui::InputFloat("Rotate", &(cam._rotation_sensitivity));
+			ImGui::InputFloat("Drag", &(cam._drag_sensitivity));
+			ImGui::InputFloat("Zoom", &(cam._zoom_sensitivity));
+			ImGui::NewLine();
+		}
+		ImGui::InputFloat("Yaw", &(cam.cameraYaw));
+		ImGui::InputFloat("Pitch", &(cam.cameraPitch));
+		//ImGui::InputFloat3("Target", glm::value_ptr(cam.cameraTarget), 3);
+		//ImGui::InputFloat3("Position", glm::value_ptr(cam.cameraPos), 3);
+		//ImGui::InputFloat3("Position", glm::value_ptr(cam.cameraPos), 3);
+	}
+	if (!_notRemove)
+	{
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<CameraComponent>()->Write(), typeid(CameraComponent).hash_code() };
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+		_notRemove = true;
+	}
+	ImGui::Separator();
+	/*if (camComp != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Animation component", &_notRemove))
+		{
+			ImGui::Checkbox("IsActive##Animation", &anim->_isActive);
+
+			ImGui::Text("Current Animation: ");
+			auto it = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
+			while (it != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
+			{
+				bool currAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim == *it;
+				if (ImGui::Selectable(it->c_str(), &currAnim))
+				{
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim = it->c_str();
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play = false;
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_dt = 0.0f;
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = "";
+				}
+				++it;
+			}
+
+			ImGui::Separator();
+			ImGui::Text("Default Animation: ");
+			auto it2 = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
+			while (it2 != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
+			{
+				bool defaultAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim == *it2;
+				if (ImGui::Selectable(std::string(it2->c_str()).append("##defaultAnim").c_str(), &defaultAnim))
+				{
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = it2->c_str();
+				}
+				++it2;
+			}
+
+			ImGui::InputFloat("Animation Speed##anim", &NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_animMultiplier);
+
+			if (ImGui::Button("Preview Animation"))
+			{
+				anim->PlayAnimation(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim,
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_loop);
+			}
+
+			if (NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play)
+			{
+				if (ImGui::Button("Pause Animation"))
+				{
+					anim->PauseAnimation();
+				}
+			}
+			else
+			{
+				if (ImGui::Button("Resume Animation"))
+				{
+					anim->ResumeAnimation();
+				}
+			}
+
+			if (ImGui::Button("Stop Animation"))
+			{
+				anim->StopAnimation();
+			}
+
+			ImGui::Checkbox("Loop", &NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_loop);
+		}
+
+		ImGui::Separator();
+	}*/
 }
 
 void InspectorWindow::CScriptComp(Entity& ent)
@@ -1916,6 +2032,19 @@ void InspectorWindow::VariableComp(Entity& ent)
 					[&str, &s_name]()
 					{
 						str = s_name.c_str();
+					});
+
+				_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+					[this, &str](std::string* _str)
+					{
+						str = *_str;
+					});
+
+				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
+					[this, &str](Entity* entptr)
+					{
+						str = G_ECMANAGER->EntityName[entptr->getId()];
+
 					});
 				str_index++;
 			}
@@ -2144,7 +2273,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  Graphics",
 			"  Light   ",
 			"  Collider",
-			"  CScript",
+			"  CScript(removed)",
 			"  C#Script",
 			"  Canvas",
 			"  PlayerStats",
@@ -2153,7 +2282,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  NavComp",
 			"  WayPointPath",
 			"  WayPointComp",
-			"  Emitter"
+			"  Emitter",
+			"  Camera"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -2225,6 +2355,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 		}
 		
 		//case 11: -> ------
+		/*
 		case 6: // CScript
 		{
 			if (!ent.getComponent<CScriptComponent>())
@@ -2236,7 +2367,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 
 			}
 			break;
-		}
+		}*/
 		case 7: // C#Script
 		{
 		  if (!ent.getComponent<ScriptComponent>())
@@ -2319,6 +2450,15 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			if (!ent.getComponent<EmitterComponent>())
 			{
 				ENTITY_COMP_DOC comp{ ent, EmitterComponent().Write(), typeid(EmitterComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		case 16: // Camera
+		{
+			if (!ent.getComponent<CameraComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, CameraComponent().Write(), typeid(CameraComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;
