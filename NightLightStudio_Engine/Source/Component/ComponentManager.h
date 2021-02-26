@@ -875,12 +875,6 @@ public:
 				//objId -= compSetMgr->compSet->idIndexModifier;
 				if (objId - compSetMgr->compSet->idIndexModifier >= IDRANGE_RT)
 				{
-					int con = typeResolver<T>();
-					if (con != -1)
-					{
-						return reinterpret_cast<T*>(getComponent(con));
-					}
-
 					auto find = compSetMgr->compSet->hashConIdMapChilds.find(tinf.hash_code());
 					if (find == compSetMgr->compSet->hashConIdMapChilds.end())
 						throw; // gg
@@ -889,6 +883,12 @@ public:
 				}
 				else
 				{
+					int con = typeResolver<T>();
+					if (con != -1)
+					{
+						return reinterpret_cast<T*>(getComponent(con));
+					}
+
 					auto find = compSetMgr->compSet->hashConIdMap.find(tinf.hash_code());
 					if (find == compSetMgr->compSet->hashConIdMap.end())
 						throw; // gg

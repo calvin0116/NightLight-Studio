@@ -80,6 +80,42 @@ namespace NS_COLLISION
 		//
 		////
 
+		////
+		// snap thingy
+		NlMath::Vec3 currentSnapVec;
+
+	private:
+		const int DIMENSIONS = 3;
+		enum class DIRECTION
+		{
+			X_DIRECTION = 0,
+			Y_DIRECTION = 1,
+			Z_DIRECTION = 2,
+			YDOWN_DIRECTION = 3
+		};
+	public:
+
+#define SNAP_X 1
+#define SNAP_Y 2
+#define SNAP_Z 4
+#define SNAP_D 8
+
+		bool Snap_AABB_AABB_Detect(Entity entity, float distance, int directions, int lod, bool isDrawDebug);
+
+		bool Snap_AABB_AABB_Do(Entity entity, float distance, int directions, int lod, bool isDrawDebug);
+
+	private:
+		bool Snap_To_AABB(Entity entity, float distance, DIRECTION direction, NlMath::Vec3& snapVec, int lod, bool isDrawDebug);
+		bool Snap_FourCast(
+			NlMath::Vec3 vecA, NlMath::Vec3 vecB,
+			NlMath::Vec3 vecC, NlMath::Vec3 vecD,
+			float distance, NlMath::Vec3 castDir,
+			NlMath::Vec3& snapVec,
+			int lod, bool isDrawDebug);
+
+		//
+		////
+
 	private:
 
 		// test var
