@@ -106,7 +106,8 @@ namespace NS_GRAPHICS
 		if (!NS_WINDOW::SYS_WINDOW->HasInit())
 		{
 #ifdef _DEBUG
-			std::cout << "ERROR: Window System not initialized before Graphics System, please check WndSystem initialization." << std::endl;
+			TracyMessageL("GraphicsSystem::Init: ERROR: Window System not initialized before Graphics System, please check WndSystem initialization.");
+			//std::cout << "ERROR: Window System not initialized before Graphics System, please check WndSystem initialization." << std::endl;
 #endif
 			return;
 		}
@@ -199,7 +200,8 @@ namespace NS_GRAPHICS
 
 #ifdef _DEBUG
 		if (!checkFBO)
-			std::cout << "ERROR: Unable to load frame buffer object (FN: NS_GRAPHICS::GraphicsSystem::InitFrameBuffers()" << std::endl;
+			TracyMessageL("GraphicsSystem::Init: ERROR: Unable to load frame buffer object (FN: NS_GRAPHICS::GraphicsSystem::InitFrameBuffers()");
+			//std::cout << "ERROR: Unable to load frame buffer object (FN: NS_GRAPHICS::GraphicsSystem::InitFrameBuffers()" << std::endl;
 #endif
 		InitScreenQuad();
 #endif
@@ -1564,7 +1566,8 @@ namespace NS_GRAPHICS
 		if (graphicsComp == nullptr)
 		{
 #ifdef _DEBUG
-			std::cout << "ERROR: Graphics component does not exist in given entity, failed to change mesh color" << std::endl;
+			TracyMessageL("ERROR: Graphics component does not exist in given entity, failed to change mesh color");
+			//std::cout << "ERROR: Graphics component does not exist in given entity, failed to change mesh color" << std::endl;
 #endif
 			return;
 		}

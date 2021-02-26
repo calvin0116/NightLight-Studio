@@ -10,6 +10,7 @@ Brief Description :
 #include "../../framework.h"
 #include "../Core/Singleton.h"
 #include "Parser.h"
+#include "../tracy-master/Tracy.hpp"
 
 //Namespace io....
 
@@ -71,9 +72,11 @@ public:
 
 	ENGINE_API void Load()
 	{
-		std::cout << "Parser::StartUp" << std::endl;
+		TracyMessageL("Parser::Load: StartUp");
+		//std::cout << "Parser::StartUp" << std::endl;
 		parser.Load();
-		std::cout << "Parser::Loading of data" << std::endl;
+		TracyMessageL("Parser::Load: Loading of data");
+		//std::cout << "Parser::Loading of data" << std::endl;
 		Value& wind_val = parser["window"];
 
 		config_d.height = wind_val["height"].GetInt();

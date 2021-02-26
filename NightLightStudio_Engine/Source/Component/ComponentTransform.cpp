@@ -36,12 +36,18 @@ glm::mat4 ComponentTransform::GetModelMatrix()
 void ComponentTransform::Read(Value& val)
 {
 	if (val.FindMember("EntityName") == val.MemberEnd())
-		std::cout << "No EntityName data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentTransform::Read: No EntityName data has been found");
+		//std::cout << "No EntityName data has been found" << std::endl;
+	}
 	else
 		_entityName = val["EntityName"].GetString();
 
 	if (val.FindMember("Tag") == val.MemberEnd())
-		std::cout << "No Tag data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentTransform::Read: No Tag data has been found");
+		//std::cout << "No Tag data has been found" << std::endl;
+	}
 	else
 	{
 		_tag = val["Tag"].GetInt();
@@ -50,7 +56,10 @@ void ComponentTransform::Read(Value& val)
 
 	//Error checking for json data
 	if (val.FindMember("Position") == val.MemberEnd())
-		std::cout << "No position data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentTransform::Read: No Tag data has been found");
+		//std::cout << "No Tag data has been found" << std::endl;
+	}
 	else
 	{
 		auto pos = val["Position"].GetArray();
@@ -62,7 +71,10 @@ void ComponentTransform::Read(Value& val)
 	_phyposition = _position;
 
 	if (val.FindMember("Scale") == val.MemberEnd())
-		std::cout << "No Scale data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentTransform::Read: No Scale data has been found");
+		//std::cout << "No Scale data has been found" << std::endl;
+	}
 	else
 	{
 		auto scale = val["Scale"].GetArray();
@@ -73,7 +85,10 @@ void ComponentTransform::Read(Value& val)
 	}
 
 	if (val.FindMember("Rotate") == val.MemberEnd())
-		std::cout << "No Rotate data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentTransform::Read: No Rotate data has been found");
+		//std::cout << "No Rotate data has been found" << std::endl;
+	}
 	else
 	{
 		auto rotate = val["Rotate"].GetArray();
@@ -84,7 +99,10 @@ void ComponentTransform::Read(Value& val)
 	}
 
 	if (val.FindMember("tagNames") == val.MemberEnd())
-		std::cout << "No tagNames data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentTransform::Read: No tagNames data has been found");
+		//std::cout << "No tagNames data has been found" << std::endl;
+	}
 	else
 	{
 		auto tn_list_val = val["tagNames"].GetArray();

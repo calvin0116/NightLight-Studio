@@ -384,12 +384,18 @@ void ComponentEmitter::Read(Value& val)
 	NS_GRAPHICS::EmitterSystem& emitSys = NS_GRAPHICS::EmitterSystem::GetInstance();
 
 	if (val.FindMember("isActive") == val.MemberEnd())
-		std::cout << "No active data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No active data has been found");
+		//std::cout << "No active data has been found" << std::endl;
+	}
 	else
 		_isActive = val["isActive"].GetBool();
 
 	if (val.FindMember("Image") == val.MemberEnd())
-		std::cout << "No Texture file data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Texture file data has been found");
+		//std::cout << "No Texture file data has been found" << std::endl;
+	}
 	else
 	{
 		std::string image = val["Image"].GetString();
@@ -401,7 +407,10 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("EmitterType") == val.MemberEnd())
-		std::cout << "No active data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No active data has been found");
+		//std::cout << "No active data has been found" << std::endl;
+	}
 	else
 	{
 		std::string emitterType = val["EmitterType"].GetString();
@@ -416,14 +425,20 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("DurationPerCycle") == val.MemberEnd())
-		std::cout << "No duration data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No duration data has been found");
+		//std::cout << "No duration data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_durationPerCycle = val["DurationPerCycle"].GetFloat();
 	}
 
 	if (val.FindMember("EmissionRateOverTime") == val.MemberEnd())
-		std::cout << "No emission data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No emission data has been found");
+		//std::cout << "No emission data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_emissionOverTime = val["EmissionRateOverTime"].GetUint();
@@ -439,7 +454,10 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("MaxParticle") == val.MemberEnd())
-		std::cout << "No particle data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No particle data has been found");
+		//std::cout << "No particle data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_maxParticles = val["MaxParticle"].GetUint();
@@ -447,42 +465,60 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("BurstRate") == val.MemberEnd())
-		std::cout << "No BurstRate data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No BurstRate data has been found");
+		//std::cout << "No BurstRate data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_burstRate = val["BurstRate"].GetFloat();
 	}
 
 	if (val.FindMember("BurstAmount") == val.MemberEnd())
-		std::cout << "No BurstAmount data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No BurstAmount data has been found");
+		//std::cout << "No BurstAmount data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_burstAmount = val["BurstAmount"].GetUint();
 	}
 
 	if (val.FindMember("Row") == val.MemberEnd())
-		std::cout << "No Row data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Row data has been found");
+		//std::cout << "No Row data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_row = val["Row"].GetUint();
 	}
 
 	if (val.FindMember("Column") == val.MemberEnd())
-		std::cout << "No Column data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Column data has been found");
+		//std::cout << "No Column data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_column = val["Column"].GetUint();
 	}
 
 	if (val.FindMember("TotalFrame") == val.MemberEnd())
-		std::cout << "No TotalFrame data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No TotalFrame data has been found");
+		//std::cout << "No TotalFrame data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_totalFrame = val["TotalFrame"].GetUint();
 	}
 
 	if (val.FindMember("FramesPerSecond") == val.MemberEnd())
-		std::cout << "No FramesPerSecond data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No FramesPerSecond data has been found");
+		//std::cout << "No FramesPerSecond data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_framesPerSecond = val["FramesPerSecond"].GetUint();
@@ -498,182 +534,260 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("Angle") == val.MemberEnd())
-		std::cout << "No angle data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No angle data has been found");
+		//std::cout << "No angle data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_spawnAngle = val["Angle"].GetFloat();
 	}
 
 	if (val.FindMember("Radius") == val.MemberEnd())
-		std::cout << "No radius data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No radius data has been found");
+		//std::cout << "No radius data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_radius = val["Radius"].GetFloat();
 	}
 
 	if (val.FindMember("RandomizeSize") == val.MemberEnd())
-		std::cout << "No RandomizeSize data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No RandomizeSize data has been found");
+		//std::cout << "No RandomizeSize data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_randomizeSize = val["RandomizeSize"].GetBool();
 	}
 
 	if (val.FindMember("MinimumSize") == val.MemberEnd())
-		std::cout << "No MinimumSize data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No MinimumSize data has been found");
+		//std::cout << "No MinimumSize data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_minParticleSize = val["MinimumSize"].GetFloat();
 	}
 
 	if (val.FindMember("MaximumSize") == val.MemberEnd())
-		std::cout << "No MaximumSize data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No MaximumSize data has been found");
+		//std::cout << "No MaximumSize data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_maxParticleSize = val["MaximumSize"].GetFloat();
 	}
 
 	if (val.FindMember("RandomizeSpeed") == val.MemberEnd())
-		std::cout << "No RandomizeSize data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No RandomizeSize data has been found");
+		//std::cout << "No RandomizeSize data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_randomizeSpeed = val["RandomizeSpeed"].GetBool();
 	}
 
 	if (val.FindMember("MinimumSpeed") == val.MemberEnd())
-		std::cout << "No MinimumSize data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No MinimumSize data has been found");
+		//std::cout << "No MinimumSize data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_minParticleSpeed = val["MinimumSpeed"].GetFloat();
 	}
 
 	if (val.FindMember("MaximumSpeed") == val.MemberEnd())
-		std::cout << "No MaximumSize data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No MaximumSize data has been found");
+		//std::cout << "No MaximumSize data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_maxParticleSpeed = val["MaximumSpeed"].GetFloat();
 	}
 
 	if (val.FindMember("RandomizeLife") == val.MemberEnd())
-		std::cout << "No RandomizeLife data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No RandomizeLife data has been found");
+		//std::cout << "No RandomizeLife data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_randomizeLifespan = val["RandomizeLife"].GetBool();
 	}
 
 	if (val.FindMember("MinimumLife") == val.MemberEnd())
-		std::cout << "No MinimumLife data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No MinimumLife data has been found");
+		//std::cout << "No MinimumLife data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_minLifespan = val["MinimumLife"].GetFloat();
 	}
 
 	if (val.FindMember("MaximumLife") == val.MemberEnd())
-		std::cout << "No MaximumLife data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No MaximumLife data has been found");
+		//std::cout << "No MaximumLife data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_maxLifespan = val["MaximumLife"].GetFloat();
 	}
 
 	if (val.FindMember("Play") == val.MemberEnd())
-		std::cout << "No Play data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Play data has been found");
+		//std::cout << "No Play data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_play = val["Play"].GetBool();
 	}
 
 	if (val.FindMember("PreWarm") == val.MemberEnd())
-		std::cout << "No PreWarm data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No PreWarm data has been found");
+		//std::cout << "No PreWarm data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_preWarm = val["PreWarm"].GetBool();
 	}
 
 	if (val.FindMember("Burst") == val.MemberEnd())
-		std::cout << "No Burst data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Burst data has been found");
+		//std::cout << "No Burst data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_burst = val["Burst"].GetBool();
 	}
 
 	if (val.FindMember("Loop") == val.MemberEnd())
-		std::cout << "No Loop data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Loop data has been found");
+		//std::cout << "No Loop data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_loop = val["Loop"].GetBool();
 	}
 
 	if (val.FindMember("Reverse") == val.MemberEnd())
-		std::cout << "No Reverse data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Reverse data has been found");
+		//std::cout << "No Reverse data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_reverse = val["Reverse"].GetBool();
 	}
 
 	if (val.FindMember("Follow") == val.MemberEnd())
-		std::cout << "No Follow data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Follow data has been found");
+		//std::cout << "No Follow data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_follow = val["Follow"].GetBool();
 	}
 
 	if (val.FindMember("Fade") == val.MemberEnd())
-		std::cout << "No Fade data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Fade data has been found");
+		//std::cout << "No Fade data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_fade = val["Fade"].GetBool();
 	}
 
 	if (val.FindMember("Animated") == val.MemberEnd())
-		std::cout << "No Animated data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Animated data has been found");
+		//std::cout << "No Animated data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_isAnimated = val["Animated"].GetBool();
 	}
 
 	if (val.FindMember("LoopAnimation") == val.MemberEnd())
-		std::cout << "No LoopAnimation data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No LoopAnimation data has been found");
+		//std::cout << "No LoopAnimation data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_loopAnimation = val["LoopAnimation"].GetBool();
 	}
 
 	if (val.FindMember("VelocityOverTime") == val.MemberEnd())
-		std::cout << "No VelocityOverTime data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No VelocityOverTime data has been found");
+		//std::cout << "No VelocityOverTime data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_velocityOverTime = val["VelocityOverTime"].GetBool();
 	}
 
 	if (val.FindMember("SizeOverTime") == val.MemberEnd())
-		std::cout << "No SizeOverTime data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No SizeOverTime data has been found");
+		//std::cout << "No SizeOverTime data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_sizeOverTime = val["SizeOverTime"].GetBool();
 	}
 
 	if (val.FindMember("SpeedOverTime") == val.MemberEnd())
-		std::cout << "No SpeedOverTime data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No SpeedOverTime data has been found");
+		//std::cout << "No SpeedOverTime data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_speedOverTime = val["SpeedOverTime"].GetBool();
 	}
 
 	if (val.FindMember("ColourOverTime") == val.MemberEnd())
-		std::cout << "No ColourOverTime data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No ColourOverTime data has been found");
+		//std::cout << "No ColourOverTime data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_colourOverTime = val["ColourOverTime"].GetBool();
 	}
 
 	if (val.FindMember("RandomizeColour") == val.MemberEnd())
-		std::cout << "No RandomizeColour data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No RandomizeColour data has been found");
+		//std::cout << "No RandomizeColour data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_randomizeColour = val["RandomizeColour"].GetBool();
 	}
 
 	if (val.FindMember("ColourA") == val.MemberEnd())
-		std::cout << "No ColourA data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No ColourA data has been found");
+		//std::cout << "No ColourA data has been found" << std::endl;
+	}
 	else
 	{
 		auto col = val["ColourA"].GetArray();
@@ -685,7 +799,10 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("ColourB") == val.MemberEnd())
-		std::cout << "No ColourB data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No ColourB data has been found");
+		//std::cout << "No ColourB data has been found" << std::endl;
+	}
 	else
 	{
 		auto col = val["ColourB"].GetArray();
@@ -697,7 +814,10 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("ColourStart") == val.MemberEnd())
-		std::cout << "No ColourStart data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No ColourStart data has been found");
+		//std::cout << "No ColourStart data has been found" << std::endl;
+	}
 	else
 	{
 		auto col = val["ColourStart"].GetArray();
@@ -709,7 +829,10 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("ColourEnd") == val.MemberEnd())
-		std::cout << "No ColourEnd data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No ColourEnd data has been found");
+		//std::cout << "No ColourEnd data has been found" << std::endl;
+	}
 	else
 	{
 		auto col = val["ColourEnd"].GetArray();
@@ -721,7 +844,10 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("Velocity") == val.MemberEnd())
-		std::cout << "No Velocity data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Velocity data has been found");
+		//std::cout << "No Velocity data has been found" << std::endl;
+	}
 	else
 	{
 		auto vel = val["Velocity"].GetArray();

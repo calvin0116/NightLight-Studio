@@ -237,8 +237,8 @@ void SystemAudio::MyGameInit()
   for (; itr != itrEnd; ++itr)
   {
     //std::cout << G_ECMANAGER->getObjId(itr) << std::endl;
-    TracyMessageL("System Audio Game Init Obj ID:");
-    TracyMessageL(std::to_string(G_ECMANAGER->getObjId(itr)).c_str());
+    TracyMessageL("SystemAudio::My Game Init: System Audio Game Init Obj ID:");
+    TracyMessageL(std::string("SystemAudio::My Game Init: ").append(std::to_string(G_ECMANAGER->getObjId(itr))).c_str());
 
     // Load the following audios from load audio component
     ComponentLoadAudio* myComp = G_ECMANAGER->getComponent<ComponentLoadAudio>(itr);

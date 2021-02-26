@@ -9,6 +9,7 @@
 // Camera comp
 #include "../Component/ComponentCamera.h"
 
+#include "../tracy-master/Tracy.hpp"
 #define TESTMOVETARGET 1
 
 namespace NS_GRAPHICS
@@ -552,7 +553,8 @@ namespace NS_GRAPHICS
 		if (msg.GetID() != "TogglePlay")
 			return;
 		_isPlaying = msg.isPlaying;
-		std::cout << "Camera Playing!" << std::endl;
+		TracyMessageL("CameraSystem::HandleTogglePlay: Camera Playing!");
+		//std::cout << "Camera Playing!" << std::endl;
 		if (_isPlaying && _Inited == false)
 		{
 			_Inited = true;

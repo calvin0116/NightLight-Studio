@@ -1,4 +1,5 @@
 #include "TextureLoader.h"
+#include "../tracy-master/Tracy.hpp"
 #pragma warning(disable:4244)
 #pragma warning(disable:4996)
 #pragma warning(disable:6029)
@@ -47,7 +48,8 @@ namespace NS_GRAPHICS
 
 	bool TextureLoader::LoadDDSImage(const std::string& file)
 	{
-		std::cout << "Loading DDS Images " << file << std::endl;
+		TracyMessageL(std::string("TextureLoader::LoadDDSImage: Loading DDS Images " + file).c_str());
+		//std::cout << "Loading DDS Images " << file << std::endl;
 		DDSImageData* image;
 
 		image = LoadDDSImageData(file);
@@ -215,7 +217,8 @@ namespace NS_GRAPHICS
 
 	bool TextureLoader::LoadHDR(const std::string& file)
 	{
-		std::cout << "Loading HDR : " << file << std::endl;
+		TracyMessageL(std::string("TextureLoader::LoadHDR: Loading HDR : " + file).c_str());
+		//std::cout << "Loading HDR : " << file << std::endl;
 		int width, height, nrComp;
 		float* data = stbi_loadf(file.c_str(), &width, &height, &nrComp, 0);
 
@@ -811,7 +814,8 @@ namespace NS_GRAPHICS
 	bool TextureLoader::LoadOtherImage(const std::string& file, const std::string& newFile, bool sRGB)
 	{
 		(void)newFile;
-		std::cout << "Loading Other Images " << file << std::endl;
+		TracyMessageL(std::string("TextureLoader::LoadOtherImage: Loading Other Images " + file).c_str());
+		//std::cout << "Loading Other Images " << file << std::endl;
 		int width, height, channel;
 		unsigned char* textureData = SOIL_load_image(file.c_str(), &width, &height, &channel, SOIL_LOAD_AUTO);
 
@@ -852,7 +856,8 @@ namespace NS_GRAPHICS
 		{
 			//Debug_LogToFile("Resources/Logs/Generate_texture.txt", "Texture loading failed");
 			//CDEBUG_ASSERT(textureData, std::string("Failed to load texture: ").append(file).c_str());
-			std::cout << "Failed to load texture: " << SOIL_last_result() << std::endl;
+			TracyMessageL(std::string("TextureLoader::LoadOtherImage: Failed to load texture: ").append(SOIL_last_result()).c_str());
+			//std::cout << "Failed to load texture: " << SOIL_last_result() << std::endl;
 			SOIL_free_image_data(textureData);
 			return false;
 		}

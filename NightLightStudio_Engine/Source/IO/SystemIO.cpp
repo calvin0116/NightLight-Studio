@@ -6,7 +6,8 @@
 
 void SystemIO::Load()
 {
-	std::cout << "SystemIO::Load" << std::endl;
+	TracyMessageL("SystemIO::Load");
+	//std::cout << "SystemIO::Load" << std::endl;
 	//G_GSM.getScn(); // get the current scene
 	//G_GSM.setScn(1); // set the nxt scene
 
@@ -15,7 +16,8 @@ void SystemIO::Load()
 
 void SystemIO::Init()
 {
-	std::cout << "SystemIO::OnFirstStart" << std::endl;
+	TracyMessageL("SystemIO::Init");
+	//std::cout << "SystemIO::OnFirstStart" << std::endl;
 	CONFIG_DATA->Init();
 }
 

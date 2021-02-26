@@ -369,12 +369,6 @@
     <ClCompile Include="Source\Mono\Binding\CustomTypes\UIElementBind.cpp">
       <Filter>Source Files\Mono\Binding\CustomTypes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Debug\DebugDiagnostic.cpp">
-      <Filter>Source Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Debug\DebugToStream.cpp">
-      <Filter>Source Files\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.cpp">
       <Filter>Source Files\Editor\LevelEditor\Asset Inspector</Filter>
     </ClCompile>
@@ -790,12 +784,6 @@
     </ClInclude>
     <ClInclude Include="Source\Mono\Binding\CustomTypes\UIElementBind.h">
       <Filter>Source Files\Mono\Binding\CustomTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Debug\DebugDiagnostic.h">
-      <Filter>Source Files\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Debug\DebugToStream.h">
-      <Filter>Source Files\Debug</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.h">
       <Filter>Source Files\Editor\LevelEditor\Asset Inspector</Filter>

@@ -4,6 +4,7 @@
 #include <string>
 #include <../glm/gtx/quaternion.hpp>
 #include <set>
+#include "../tracy-master/Tracy.hpp"
 
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -17,7 +18,8 @@ namespace NS_GRAPHICS
 	ModelLoader::ModelLoader() :
 		_modelManager{ &ModelManager::GetInstance() }
 	{
-		std::cout << "Model Loader Created" << std::endl;
+		TracyMessageL("ModelLoader::ModelLoader: Model Loader Created");
+		//std::cout << "Model Loader Created" << std::endl;
 	}
 
 	ModelLoader::~ModelLoader()
@@ -116,7 +118,8 @@ namespace NS_GRAPHICS
 		for (unsigned int i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			std::cout << "Loading " << mesh->mName.C_Str() << std::endl;
+			TracyMessageL(std::string("ModelLoader::ProcessNode: Loading ").append(mesh->mName.C_Str()).c_str());
+			//std::cout << "Loading " << mesh->mName.C_Str() << std::endl;
 			
 			if (model->_isAnimated)
 			{
@@ -432,7 +435,8 @@ namespace NS_GRAPHICS
 
 	bool ModelLoader::LoadFBX(Model*& model)
 	{
-		std::cout << "Loading FBX..." << std::endl;
+		TracyMessageL("ModelLoader::LoadFBX: Loading FBX...");
+		//std::cout << "Loading FBX..." << std::endl;
 
 		Assimp::Importer import;
 		const aiScene* scene = import.ReadFile(model->_fileName, aiProcess_Triangulate | 
@@ -443,7 +447,8 @@ namespace NS_GRAPHICS
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			cout << "Load Failed. Reason: " << import.GetErrorString() << endl;
+			TracyMessageL(std::string("ModelLoader::LoadFBX: Load Failed. Reason: ").append(import.GetErrorString()).c_str());
+			//std::cout << "Load Failed. Reason: " << import.GetErrorString() << std::endl;
 			return false;
 		}
 
@@ -563,14 +568,16 @@ namespace NS_GRAPHICS
 
 		if (!meshFile.is_open())
 		{
-			std::cout << "Fail to opened model file" << std::endl;
+			TracyMessageL("ModelLoader::LoadCustomMesh: Fail to opened model file");
+			//std::cout << "Fail to opened model file" << std::endl;
 			return false;
 		}
 
 		std::string input;
 		while (std::getline(meshFile, input))
 		{
-			std::cout << "Reading Variables" << std::endl;
+			TracyMessageL("ModelLoader::LoadCustomMesh: Reading Variables");
+			//std::cout << "Reading Variables" << std::endl;
 
 			//Reads vertex data
 			if (input.find("VERTEX") != std::string::npos)

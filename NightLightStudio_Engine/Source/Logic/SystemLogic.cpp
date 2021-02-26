@@ -694,7 +694,8 @@ namespace NS_LOGIC
     // Handle msg here.
     if (msg.GetID() != "TogglePlay")
       return;
-    std::cout << "Toggle Play" << std::endl;
+    TracyMessageL("SystemLogic::HandleTogglePlay: Toggle Play");
+    //std::cout << "Toggle Play" << std::endl;
     _isPlaying = msg.isPlaying;
     if (!_isPlaying && _Inited)
     {

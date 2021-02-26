@@ -3,6 +3,7 @@
 #include <sstream>
 #include "../Window/WndSystem.h"
 #include "../glm/gtc/matrix_transform.hpp"
+#include "../tracy-master/Tracy.hpp"
 
 namespace NS_GRAPHICS
 {
@@ -53,7 +54,8 @@ namespace NS_GRAPHICS
 		}
 		catch (std::ifstream::failure& e)
 		{
-			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << e.what() << std::endl;
+			TracyMessageL(std::string("ShaderSystem::LoadShader: ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ").append(e.what()).c_str());
+			//std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << e.what() << std::endl;
 		}
 
 		files.emplace_back(ss_vert_data.str(), ss_frag_data.str());
@@ -176,11 +178,15 @@ namespace NS_GRAPHICS
 
 			if (glErr != GL_NO_ERROR)
 			{
+				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: Creation of Shader Program Handler failed for Shader no. ")
+					.append(std::to_string(i) + ". Please check GLSL source.").c_str());
+				/*
 				std::cout
 					<< "Creation of Shader Program Handler failed for Shader no. "
 					<< i
 					<< ". Please check GLSL source."
 					<< std::endl;
+					*/
 			}
 
 			GLint VShader_Compiled = 0;
@@ -196,7 +202,8 @@ namespace NS_GRAPHICS
 			{
 				GLchar infoLog[512];
 				glGetShaderInfoLog(sVertexID, 512, NULL, infoLog);
-				std::cout << infoLog << std::endl;
+				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog).c_str());
+				//std::cout << infoLog << std::endl;
 			}
 
 			GLint FShader_Compiled = 0;
@@ -212,7 +219,8 @@ namespace NS_GRAPHICS
 			{
 				GLchar infoLog[512];
 				glGetShaderInfoLog(sFragmentID, 512, NULL, infoLog);
-				std::cout << infoLog << std::endl;
+				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog).c_str());
+				//std::cout << infoLog << std::endl;
 			}
 
 			glAttachShader(program_handler, sVertexID);
@@ -226,11 +234,13 @@ namespace NS_GRAPHICS
 			{
 				GLchar infoLog[512];
 				glGetProgramInfoLog(program_handler, 512, NULL, infoLog);
-				std::cout << infoLog << std::endl;
+				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog).c_str());
+				//std::cout << infoLog << std::endl;
 			}
 			else
 			{
-				std::cout << "Shader Program successfully linked!" << std::endl;
+				TracyMessageL("ShaderSystem::CompileLoadedShaders: Shader Program successfully linked!");
+				//std::cout << "Shader Program successfully linked!" << std::endl;
 			}
 
 			// Detach and delete shaders to free up memory

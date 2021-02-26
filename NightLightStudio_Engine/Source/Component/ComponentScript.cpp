@@ -1,5 +1,6 @@
 #include "ComponentScript.h"
 #include "../Mono/MonoWrapper.h"
+#include "../tracy-master/Tracy.hpp"
 
 //#include "Components.h"   // inherit required functions
 
@@ -19,18 +20,27 @@ inline void ComponentScript::Read(Value& val)
 { 
 	for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
 	{
-    if (val.FindMember("isActive") == val.MemberEnd())
-      std::cout << "No isActive data has been found" << std::endl;
+        if (val.FindMember("isActive") == val.MemberEnd())
+        {
+            TracyMessageL("ComponentScript::Read: No isActive data has been found");
+           //std::cout << "No isActive data has been found" << std::endl;
+        }
     else
       _isActive = val["isActive"].GetBool();
 
-    if (val.FindMember("isRunning") == val.MemberEnd())
-      std::cout << "No isRunning data has been found" << std::endl;
+        if (val.FindMember("isRunning") == val.MemberEnd())
+        {
+            TracyMessageL("ComponentScript::Read: No isRunning data has been found");
+            //std::cout << "No isRunning data has been found" << std::endl;
+        }
     else
       _isRunning = val["isRunning"].GetBool();
      
-    if (val.FindMember("ScriptName") == val.MemberEnd())
-      std::cout << "No ScriptName data has been found" << std::endl;
+        if (val.FindMember("ScriptName") == val.MemberEnd())
+        {
+            TracyMessageL("ComponentScript::Read: No ScriptName data has been found");
+            //std::cout << "No ScriptName data has been found" << std::endl;
+        }
     else
       _ScriptName = val["ScriptName"].GetString();
     
@@ -67,7 +77,10 @@ inline void ComponentScript::Read(Value& val)
               std::string tempVar(var_name);
               tempVar += "bool";
               if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
-                std::cout << "No script bool data has been found" << std::endl;
+              {
+                  TracyMessageL("ComponentScript::Read: No script bool data has been found");
+                  //std::cout << "No script bool data has been found" << std::endl;
+              }
               else
               {
                 bool monoVal = val[tempVar.c_str()].GetBool();
@@ -79,7 +92,10 @@ inline void ComponentScript::Read(Value& val)
               std::string tempVar(var_name);
               tempVar += "int";
               if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
-                std::cout << "No script int data has been found" << std::endl;
+              {
+                  TracyMessageL("ComponentScript::Read: No script int data has been found");
+                  //std::cout << "No script int data has been found" << std::endl;
+              }
               else
               {
                 int monoVal = val[tempVar.c_str()].GetInt();
@@ -92,7 +108,10 @@ inline void ComponentScript::Read(Value& val)
               std::string tempVar(var_name);
               tempVar += "unsigned";
               if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
-                std::cout << "No script unsigned data has been found" << std::endl;
+              {
+                  TracyMessageL("ComponentScript::Read: No script unsigned data has been found");
+                  //std::cout << "No script unsigned data has been found" << std::endl;
+              }
               else
               {
                 unsigned monoVal = val[tempVar.c_str()].GetUint();
@@ -105,7 +124,10 @@ inline void ComponentScript::Read(Value& val)
               std::string tempVar(var_name);
               tempVar += "float";
               if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
-                std::cout << "No script float data has been found" << std::endl;
+              {
+                  TracyMessageL("ComponentScript::Read: No script float data has been found");
+                  //std::cout << "No script float data has been found" << std::endl;
+              }
               else
               {
                 float monoVal = val[tempVar.c_str()].GetFloat();
@@ -118,7 +140,10 @@ inline void ComponentScript::Read(Value& val)
               std::string tempVar(var_name);
               tempVar += "double";
               if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
-                std::cout << "No script double data has been found" << std::endl;
+              {
+                  TracyMessageL("ComponentScript::Read: No script double data has been found");
+                  //std::cout << "No script double data has been found" << std::endl;
+              }
               else
               {
                 double monoVal = val[tempVar.c_str()].GetDouble();
@@ -143,7 +168,10 @@ inline void ComponentScript::Read(Value& val)
               std::string tempVar(var_name);
               tempVar += "string";
               if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
-                std::cout << "No script string data has been found" << std::endl;
+              {
+                  TracyMessageL("ComponentScript::Read: No script string data has been found");
+                  //std::cout << "No script string data has been found" << std::endl;
+              }
               else
               {
                 MonoString* monoString = MonoWrapper::ToMonoString(val[tempVar.c_str()].GetString());
@@ -152,7 +180,8 @@ inline void ComponentScript::Read(Value& val)
             }
             else
             {
-              std::cout << "Unsupported type!" << std::endl;
+            TracyMessageL("ComponentScript::Read: Unsupported type!");
+              //std::cout << "Unsupported type!" << std::endl;
             }
           }
           // Move to next field
@@ -257,7 +286,8 @@ inline Value ComponentScript::Write() {
         }
         else
         {
-          std::cout << "Unsupported type!" << std::endl;
+            TracyMessageL("ComponentScript::Write: Unsupported type!");
+          //std::cout << "Unsupported type!" << std::endl;
         }
       }
       // Move to next field

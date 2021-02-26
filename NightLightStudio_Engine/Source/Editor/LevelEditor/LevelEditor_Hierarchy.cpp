@@ -610,7 +610,9 @@ void HierarchyInspector::EntityFunction(Entity& ent, int& index, int tag_of_ent)
 
 					}
 				}
-				std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
+
+				TracyMessageL(std::string("HierarchyInspector::EntityFunction: " + std::to_string(ent.getId()) + ". has been selected: " + std::to_string(LE_ECHELPER->SelectedEntities()[ent.getId()])).c_str());
+				//std::cout << ent.getId() << ". has been selected: " << LE_ECHELPER->SelectedEntities()[ent.getId()] << std::endl;
 
 				if (ImGui::IsMouseDoubleClicked(0))
 				{

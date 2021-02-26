@@ -143,7 +143,10 @@ void ComponentLight::SetCutOff(const float& cutoff)
 void ComponentLight::Read(Value& val)
 {
 	if (val.FindMember("LightType") == val.MemberEnd())
-		std::cout << "No active data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentLight::Read: No active data has been found");
+		//std::cout << "No active data has been found" << std::endl;
+	}
 	else
 	{
 		std::string lightName = val["LightType"].GetString();
@@ -162,13 +165,19 @@ void ComponentLight::Read(Value& val)
 	}
 
 	if (val.FindMember("isActive") == val.MemberEnd())
-		std::cout << "No active data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentLight::Read: No active data has been found");
+		//std::cout << "No active data has been found" << std::endl;
+	}
 	else
 		SetActive(val["isActive"].GetBool());
 
 	//Error checking for json data
 	if (val.FindMember("Diffuse") == val.MemberEnd())
-		std::cout << "No Diffuse data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentLight::Read: No Diffuse data has been found");
+		//std::cout << "No Diffuse data has been found" << std::endl;
+	}
 	else
 	{
 		auto diffuse = val["Diffuse"].GetArray();
@@ -179,28 +188,40 @@ void ComponentLight::Read(Value& val)
 	}
 
 	if (val.FindMember("Intensity") == val.MemberEnd())
-		std::cout << "No Intensity data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentLight::Read: No Intensity data has been found");
+		//std::cout << "No Intensity data has been found" << std::endl;
+	}
 	else
 	{
 		_intensity = val["Intensity"].GetFloat();
 	}
 
 	if (val.FindMember("Radius") == val.MemberEnd())
-		std::cout << "No Radius data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentLight::Read: No Radius data has been found");
+		//std::cout << "No Radius data has been found" << std::endl;
+	}
 	else
 	{
 		_radius = val["Radius"].GetFloat();
 	}
 
 	if (val.FindMember("CutOff") == val.MemberEnd())
-		std::cout << "No CutOff data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentLight::Read: No CutOff data has been found");
+		//std::cout << "No CutOff data has been found" << std::endl;
+	}
 	else
 	{
 		_cutOff = val["CutOff"].GetFloat();
 	}
 
 	if (val.FindMember("OuterCutOff") == val.MemberEnd())
-		std::cout << "No OuterCutOff data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentLight::Read: No OuterCutOff data has been found");
+		//std::cout << "No OuterCutOff data has been found" << std::endl;
+	}
 	else
 	{
 		_outerCutOff = val["OuterCutOff"].GetFloat();

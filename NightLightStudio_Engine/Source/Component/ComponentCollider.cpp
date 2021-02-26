@@ -151,7 +151,10 @@ void ComponentCollider::Read(Value& val)
 {
 	//get collider type
 	if (val.FindMember("colliderType") == val.MemberEnd())
-		std::cout << "No active data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentCollider::Read: No active data has been found");
+		//std::cout << "No active data has been found" << std::endl;
+	}
 	else
 	{
 		std::string colliderName = val["colliderType"].GetString();
@@ -182,13 +185,19 @@ void ComponentCollider::Read(Value& val)
 		}
     // Set is collidable
     if (val.FindMember("isCollidable") == val.MemberEnd())
-      std::cout << "No isCollidable data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentCollider::Read: No isCollidable data has been found");
+		//std::cout << "No isCollidable data has been found" << std::endl;
+	}
     else
       isCollidable = val["isCollidable"].GetBool();
 	}
 
 	if (val.FindMember("tag") == val.MemberEnd())
-		std::cout << "No mass data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentCollider::Read: No mass data has been found");
+		//std::cout << "No mass data has been found" << std::endl;
+	}
 	else
 	{
 		colliderTag = val["tag"].GetInt();
@@ -196,7 +205,10 @@ void ComponentCollider::Read(Value& val)
 
 
 	if (val.FindMember("Center") == val.MemberEnd())
-		std::cout << "No Center data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentCollider::Read: ComponentCollider::Read: No Center data has been found");
+		//std::cout << "No Center data has been found" << std::endl;
+	}
 	else
 	{
 		auto f = val["Center"].GetArray();
@@ -207,7 +219,10 @@ void ComponentCollider::Read(Value& val)
 	}
 
 	if (val.FindMember("Extend") == val.MemberEnd())
-		std::cout << "No Extend data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentCollider::Read: No Extend data has been found");
+		//std::cout << "No Extend data has been found" << std::endl;
+	}
 	else
 	{
 		auto f = val["Extend"].GetArray();
@@ -218,7 +233,10 @@ void ComponentCollider::Read(Value& val)
 	}
 
 	if (val.FindMember("Rotation") == val.MemberEnd())
-		std::cout << "No Rotation data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentCollider::Read: No Rotation data has been found");
+		//std::cout << "No Rotation data has been found" << std::endl;
+	}
 	else
 	{
 		auto f = val["Rotation"].GetArray();

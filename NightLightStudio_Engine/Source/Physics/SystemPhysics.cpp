@@ -429,8 +429,9 @@ namespace NS_PHYSICS
 	void PhysicsSystem::HandleTogglePlay(MessageTogglePlay& msg)
 	{
 		// Handle msg here.
-		std::cout << "Hello from physics!" << std::endl;
-		std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
+		//std::cout << "Hello from physics!" << std::endl;
+		TracyMessageL(std::string("PhysicsSystem::HandleTogglePlay: TogglePlay value: ").append(msg.isPlaying?"true" : "false").c_str());
+		//std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
 
 		_isPlaying = msg.isPlaying;
 		//if (!_isPlaying)

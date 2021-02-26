@@ -5,6 +5,7 @@
 #include "../../ISerializable.h"
 #include "../Core/SceneManager.h"
 #include <filesystem>
+#include "../tracy-master/Tracy.hpp"
 namespace fs = std::filesystem;
 
 namespace Prefab_Function {
@@ -30,7 +31,8 @@ namespace Prefab_Function {
 		}
 		else
 		{
-			std::cout << "Prefab has no name, cannot load" << std::endl;
+			TracyMessageL("Prefab_Function::PrefabReadAndCreate: Prefab has no name, cannot load");
+			//std::cout << "Prefab has no name, cannot load" << std::endl;
 			return -1;
 		}
 	
@@ -45,7 +47,8 @@ namespace Prefab_Function {
 		struct stat buffer;
 		if (stat(prefab_parser.GetFilePath().c_str(), &buffer) != 0)
 		{
-			std::cout << "file does not exist, creating file....." << std::endl;
+			TracyMessageL("Prefab_Function::WritePrefab: file does not exist, creating file.....");
+			//std::cout << "file does not exist, creating file....." << std::endl;
 			//Creates file
 			std::ofstream MyFile(prefab_parser.GetFilePath().c_str());
 
@@ -68,7 +71,8 @@ namespace Prefab_Function {
 			else
 			{
 				const std::type_info& tinf = typeid(*comp);
-				std::cout << "Wrong data given from component: " << tinf.name() << std::endl;
+				TracyMessageL(std::string("Prefab_Function::WritePrefab: Wrong data given from component: ").append(tinf.name()).c_str());
+				//std::cout << "Wrong data given from component: " << tinf.name() << std::endl;
 			}
 
 		}
@@ -83,7 +87,8 @@ namespace Prefab_Function {
 		fs::path cur_path_name = file;
 
 		std::string file_without_ext = cur_path_name.parent_path().string() +"/"+ cur_path_name.stem().string();
-		cout << file_without_ext << std::endl;
+		TracyMessageL(std::string("PrefabInstances::CreatePrefabInstance: " + file_without_ext).c_str());
+		//std::cout << file_without_ext << std::endl;
 		//Save and delete temp prefab
 		if (isActive)
 		{

@@ -19,7 +19,8 @@ void SystemInput::Load()
 
 void SystemInput::Init()
 {
-	std::cout << "System::Input::Init" << std::endl;
+	TracyMessageL("SystemInput::Init");
+	//std::cout << "System::Input::Init" << std::endl;
 	_siKeyPress.SetWindow(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
 	_siCtrler.SetWindow(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
 	_siMousePos.SetWindow(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());

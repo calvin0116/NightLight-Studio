@@ -376,7 +376,8 @@ namespace NS_WINDOW
 		if (!InitWindow())
 		{
 			//bool WindowHasInit = false;
-			std::cout << "CLIENT WINDOW INITIALIZATION FAILED" << std::endl;
+			TracyMessageL("WndSystem::Init: CLIENT WINDOW INITIALIZATION FAILED");
+			//std::cout << "CLIENT WINDOW INITIALIZATION FAILED" << std::endl;
 			hasInit = false;
 			return;
 		}
@@ -385,7 +386,8 @@ namespace NS_WINDOW
 		if (!InitGL())
 		{
 			//bool DummyGLHasInit = false;
-			std::cout << "GL INITIALIZATION FAILED" << std::endl;
+			TracyMessageL("WndSystem::Init: GL INITIALIZATION FAILED");
+			//std::cout << "GL INITIALIZATION FAILED" << std::endl;
 			hasInit = false;
 			return;
 		}

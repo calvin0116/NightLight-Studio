@@ -33,7 +33,8 @@ namespace NS_SERIALISER
 
         if (!in)
         {
-            cout << "Error: Failed to open file in: " + filepath << endl;
+            TracyMessageL(std::string("Parser::Load:: Error: Failed to open file in: " + filepath).c_str());
+            //std::cout << "Error: Failed to open file in: " + filepath << std::endl;
         }
         // dont skip on whitespace
         std::noskipws(in);
@@ -53,7 +54,8 @@ namespace NS_SERIALISER
 
     void Parser::PrintDataList()
     {
-        cout << "Printing through doc:" << std::endl;
+        TracyMessageL("Parser::PrintDataList: Printing through doc:");
+        //std::cout << "Printing through doc:" << std::endl;
         for (Value::ConstMemberIterator itr = doc.MemberBegin(); itr != doc.MemberEnd(); ++itr)
         {
             PrintData(itr, (Value&)doc);
@@ -99,7 +101,8 @@ namespace NS_SERIALISER
                     //See if variable name is the same
                     if (mem_name == itr2->name.GetString())
                     {
-                        std::cout << "Member found" << std::endl;
+                        TracyMessageL("Parser::CheckForMember: Member found");
+                        //std::cout << "Member found" << std::endl;
                         return true;
                     }
                 }
@@ -143,36 +146,50 @@ namespace NS_SERIALISER
     {
         D_TYPE data_type = DetermineType(itr);
 
-        if (data_type != D_TYPE::D_ARRAY)
-            std::cout << "    ";
+        std::string outStr;
 
-        std::cout << itr->name.GetString() << " : ";
+        if (data_type != D_TYPE::D_ARRAY)
+        {
+            outStr.append("    ");
+            //std::cout << "    ";
+        }
+
+        outStr.append(itr->name.GetString()).append(" : ");
+        //std::cout << itr->name.GetString() << " : ";
 
         switch (data_type)
         {
         case D_TYPE::D_BOOL:
-            std::cout << itr->value.GetBool() << '\n';
+            outStr.append(itr->value.GetBool()? "true" : "false") += '\n';
+            //std::cout << itr->value.GetBool() << '\n';
             break;
         case D_TYPE::D_FLOAT:
-            std::cout << itr->value.GetFloat() << '\n';
+            outStr.append(std::to_string(itr->value.GetFloat())) += '\n';
+            //std::cout << itr->value.GetFloat() << '\n';
             break;
         case D_TYPE::D_INT:
-            std::cout << itr->value.GetFloat() << '\n';
+            outStr.append(std::to_string(itr->value.GetFloat())) += '\n';
+            //std::cout << itr->value.GetFloat() << '\n';
             break;
         case D_TYPE::D_STRING:
-            std::cout << itr->value.GetString() << '\n';
+            outStr.append(itr->value.GetString()) += '\n';
+            //std::cout << itr->value.GetString() << '\n';
             break;
         case D_TYPE::D_ARRAY:
         {
-            std::cout << "{\n";
+            outStr.append("{\n");
+            //std::cout << "{\n";
             for (Value::ConstMemberIterator itr2 = val[itr->name.GetString()].MemberBegin(); itr2 != val[itr->name.GetString()].MemberEnd(); ++itr2)
             {
                 PrintData(itr2, val[itr->name.GetString()]);
             }
-            cout << "}" << endl;
+            outStr.append("}");
+            //std::cout << "}" << std::endl;
             break;
         }
         }
+
+        TracyMessageL(std::string("Parser::PrintData: " + outStr).c_str());
     }
 
 

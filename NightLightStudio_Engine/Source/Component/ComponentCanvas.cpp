@@ -66,7 +66,7 @@ void ComponentCanvas::Read(Value& val)
 	if (val.FindMember("isActive") == val.MemberEnd())
 	{
 		//std::cout << "No active data has been found" << std::endl;
-		TracyMessageL("ComponentCanvas: No active data has been found");
+		TracyMessageL("ComponentCanvas::Read: No active data has been found");
 	}
 	else
 		_isActive = val["isActive"].GetBool();
@@ -76,7 +76,7 @@ void ComponentCanvas::Read(Value& val)
 	if (val.FindMember("NumOfUIElement") == val.MemberEnd())
 	{
 		//std::cout << "No UI element quantity data has been found" << std::endl;
-		TracyMessageL("ComponentCanvas: No UI element quantity data has been found");
+		TracyMessageL("ComponentCanvas::Read: No UI element quantity data has been found");
 	}
 	else
 		loopCount = val["NumOfUIElement"].GetInt();
@@ -84,7 +84,7 @@ void ComponentCanvas::Read(Value& val)
 	if (val.FindMember("CanvasType") == val.MemberEnd())
 	{
 		//std::cout << "No CanvasType data has been found" << std::endl;
-		TracyMessageL("ComponentCanvas: No CanvasType data has been found");
+		TracyMessageL("ComponentCanvas::Read: No CanvasType data has been found");
 	}
 	else
 	{
@@ -110,7 +110,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(uiName.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No ui name data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No UI name data has been found");
+			TracyMessageL("ComponentCanvas::Read: No UI name data has been found");
 		}
 		else
 			toPush._uiName = val[uiName.c_str()].GetString();
@@ -119,7 +119,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(spriteName.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No sprite data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No sprite data has been found");
+			TracyMessageL("ComponentCanvas::Read: No sprite data has been found");
 		}
 		else
 		{
@@ -131,7 +131,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(uiActive.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No UI Active data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No UI Active data has been found");
+			TracyMessageL("ComponentCanvas::Read: No UI Active data has been found");
 		}	
 		else
 		{
@@ -142,7 +142,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(animated.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No Animated data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No Animated data has been found");
+			TracyMessageL("ComponentCanvas::Read: No Animated data has been found");
 		}
 		else
 		{
@@ -153,7 +153,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(row.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No row data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No row data has been found");
+			TracyMessageL("ComponentCanvas::Read: No row data has been found");
 		}
 		else
 		{
@@ -164,7 +164,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(column.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No column data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No column data has been found");
+			TracyMessageL("ComponentCanvas::Read: No column data has been found");
 		}
 		else
 		{
@@ -175,7 +175,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(totalFrame.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No totalFrame data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No totalFrame data has been found");
+			TracyMessageL("ComponentCanvas::Read: No totalFrame data has been found");
 		}
 		else
 		{
@@ -186,7 +186,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(fps.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No fps data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No fps data has been found");                                                                             
+			TracyMessageL("ComponentCanvas::Read: No fps data has been found");                                                                             
 		}
 		else
 		{
@@ -206,7 +206,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(play.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No play data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No play data has been found");
+			TracyMessageL("ComponentCanvas::Read: No play data has been found");
 		}
 		else
 		{
@@ -217,7 +217,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(loop.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No loop data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No loop data has been found");
+			TracyMessageL("ComponentCanvas::Read: No loop data has been found");
 		}
 		else
 		{
@@ -228,7 +228,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(position.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No position data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No position data has been found");
+			TracyMessageL("ComponentCanvas::Read: No position data has been found");
 		}
 		else
 		{
@@ -243,7 +243,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(uvName.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No uv data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No UV data has been found");
+			TracyMessageL("ComponentCanvas::Read: No UV data has been found");
 		}
 		else
 		{
@@ -257,7 +257,7 @@ void ComponentCanvas::Read(Value& val)
 		if (val.FindMember(col.c_str()) == val.MemberEnd())
 		{
 			//std::cout << "No colour data has been found" << std::endl;
-			TracyMessageL("ComponentCanvas: No colour data has been found");
+			TracyMessageL("ComponentCanvas::Read: No colour data has been found");
 		}
 		else
 		{

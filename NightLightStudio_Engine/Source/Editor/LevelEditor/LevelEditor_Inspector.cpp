@@ -350,7 +350,8 @@ void InspectorWindow::Run()
 		}
 		else
 		{
-			std::cout << "No set manager is allocated" << std::endl;
+			TracyMessageL("InspectorWindow::Run: No set manager is allocated");
+			//std::cout << "No set manager is allocated" << std::endl;
 		}
 		Entity 	ent = g_ecman->getEntity(id);
 		// Entity name
@@ -2174,7 +2175,8 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 						Entity ent = G_ECMANAGER->getEntityUsingEntName(s_name);
 						if(ent.getId() == -1 )
 						{
-							std::cout << "No entity has been found" << std::endl;
+							TracyMessageL("InspectorWindow::WayPointPathComp: No entity has been found");
+							//std::cout << "No entity has been found" << std::endl;
 							return;
 						}
 
@@ -2185,7 +2187,8 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 						}
 						else
 						{
-							std::cout << "No entity with waypoint component found" << std::endl;
+							TracyMessageL("InspectorWindow::WayPointPathComp: No entity with waypoint component found");
+							//std::cout << "No entity with waypoint component found" << std::endl;
 						}
 					});
 				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
