@@ -17,15 +17,18 @@ namespace Unicorn
     RigidBody playerRB;
     Variables playerVar;
     Graphics playerCharModel;
-    Transform playerPos;
+    Collider playerCol;
+    Transform playerTrans;
     Animation anim;
+    Emitter playerEmt;
     AudioManager script_AM;
+    Generator script_G;
+    ScriptMoth script_M;
 
     /// <summary>
     /// ////////////////Place holder Variables
     public static bool flying = false;
     public Vector3 FormalPos;
-    public static float mothTime = 0.0f; // time to change state
     /// ////////////////
     /// </summary>
 
@@ -50,7 +53,7 @@ namespace Unicorn
     public static float EnergyGain = 1.0f;
     bool canMove;
     // Animation
-    bool idle = true;
+    //bool idle = true;
     bool played = false;
     bool switching = false;
 
@@ -69,18 +72,23 @@ namespace Unicorn
     public State NextState = State.Human;
     State PreviousState;
     //Vector3 inVec;
+    //for Morth AI
+    Vector3 flyDir = new Vector3(0.0f, 0.0f, 0.0f);
+    Vector3 morthPos = new Vector3(0.0f, 0.0f, 0.0f);
     // accumulated dt
     private float accumulatedDt = 0.0f;
     float moth_currentSpeed;
 
     //Variables
     string humanModePath;
-    string mothModePath;
+    //string mothModePath;
     int raycastID = 0;
     int raycastID2 = 0;
     bool rayCastHit = false;
     bool rayCastHit2 = false;
-
+    bool hitMorth = false;
+    bool hitGenerator = false;
+    //bool exitMoth = false;
     // Audio
     int aMID;
     bool isPlaying;
@@ -90,6 +98,9 @@ namespace Unicorn
 	public bool isDead = false;
 	public float health = 20.0f;
 
+    // User Experiences 
+    float fb_Timer;
+    public bool activating;
 
     public override void Init()
     {
@@ -103,9 +114,11 @@ namespace Unicorn
 
       playerRB = GetRigidBody(id);
       playerCharModel = GetGraphics(id);
+      playerCol = GetCollider(id);
       playerVar = GetVariables(id);
-      playerPos = GetTransform(id);
+      playerTrans = GetTransform(id);
       anim = GetAnimation(id);
+      playerEmt = GetEmitter(id);
 
       // Get scripts
       camScript = GetScript(GameObjectFind("PlayerCamera"));
@@ -119,7 +132,7 @@ namespace Unicorn
       maxHumnSpd = playerVar.GetFloat(4);
 
       humanModePath = playerVar.GetString(0);
-      mothModePath = playerVar.GetString(1);
+      //mothModePath = playerVar.GetString(1);
 
       curEnergy = maxEnergy;
       moveForce = humnForce;
@@ -139,150 +152,33 @@ namespace Unicorn
     public override void Update()
     {
 
-      Vector3 camPos = camTrans.GetPosition();
-      Vector3 camDir = Camera.GetViewVector();
+      Raycasting();
 
-      raycastID = RayCast(camPos + camDir * 400, camPos + camDir * 1000, 1);
-      raycastID2 = RayCast(camPos + camDir * 400, camPos + camDir * 1000, 2);
-      RayTest(camPos + camPos * 400, camPos + camDir * 1000);
+        if (Input.GetKeyPress(VK.IMOUSE_RBUTTON) && hitGenerator)
+        {
+          hitGenerator = false;
+          activating = true;
+          anim.Play("Pray", false, 10f, 30f);
 
-      if (raycastID != -1)
+        }
+        if (Input.GetKeyUp(VK.IMOUSE_RBUTTON))
+        {
+          activating = false;
+        }
+
+      if (activating)
       {
-        Collider col = GetCollider(raycastID);
-        //Console.WriteLine(col.tag);
-        //generator
-        if (col.tag == 2)
+        fb_Timer += DT();
+        if (fb_Timer > 1.3f)
         {
-          //generator Script
-          Generator tmp = GetScript(raycastID);
-          //RigidBody rigid = GetRigidBody(raycastID);
-          Transform trans = GetTransform(raycastID);
-          Vector3 pos = trans.GetPosition();
-          trans.SetPosition(new Vector3(pos.x, pos.y + 1, pos.z));
-
-          rayCastHit = true;
-          //Console.WriteLine(tmp.name);
-          if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
-          {
-            tmp.activate = true;
-            //Console.WriteLine("generator activate");
-          }
-          if (Input.GetKeyUp(VK.IMOUSE_RBUTTON))
-          {
-            tmp.activate = false;
-            //Console.WriteLine("generator deactivate");
-          }
-
+          script_G.activate = true;
+          activating = false;
         }
-        //Fan
-        else if (col.tag == 3)
-        {
-          //Fan Script
-          FanBehaviour tmp = GetScript(raycastID);
-          Transform trans = GetTransform(raycastID);
-          Vector3 pos = trans.GetPosition();
-          trans.SetPosition(new Vector3(pos.x, pos.y + 1, pos.z));
-
-          rayCastHit = true;
-          //Console.WriteLine(tmp.name);
-          if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
-          {
-            tmp.activate = true;
-            //Console.WriteLine("fan activate");
-          }
-          if (Input.GetKeyUp(VK.IMOUSE_RBUTTON))
-          {
-            tmp.activate = false;
-            //Console.WriteLine("fan deactivate");
-          }
-        }
-        else
-        {
-          //floatTime = 5;
-          rayCastHit = false;
-          //non possessable woth collider
-          //Transform tmp1 = GetTransform(raycastID);
-          //Console.WriteLine("haha");
-          //Console.WriteLine(tmp1.name);
-        }
-
-
 
       }
-      else
+      else 
       {
-        //ray hits nth
-        rayCastHit = false;
-        //Console.WriteLine("hahahahah");
-      }
-      if (raycastID2 != -1)
-      {
-        Collider col = GetCollider(raycastID2);
-        //Console.WriteLine(col.tag);
-        //generator
-        if (col.tag == 2)
-        {
-          //generator Script
-          Generator tmp = GetScript(raycastID2);
-          //RigidBody rigid = GetRigidBody(raycastID);
-          Transform trans = GetTransform(raycastID2);
-          Vector3 pos = trans.GetPosition();
-          trans.SetPosition(new Vector3(pos.x, pos.y + 1, pos.z));
-
-          rayCastHit2 = true;
-          //Console.WriteLine(tmp.name);
-          if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
-          {
-            tmp.activate = true;
-            //Console.WriteLine("generator activate");
-          }
-          if (Input.GetKeyUp(VK.IMOUSE_RBUTTON))
-          {
-            tmp.activate = false;
-            //Console.WriteLine("generator deactivate");
-          }
-
-        }
-        //Fan
-        else if (col.tag == 3)
-        {
-          //Fan Script
-          FanBehaviour tmp = GetScript(raycastID2);
-          Transform trans = GetTransform(raycastID2);
-          Vector3 pos = trans.GetPosition();
-          trans.SetPosition(new Vector3(pos.x, pos.y + 1, pos.z));
-
-          rayCastHit2 = true;
-          //Console.WriteLine(tmp.name);
-          if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
-          {
-            tmp.activate = true;
-            //Console.WriteLine("fan activate");
-          }
-          if (Input.GetKeyUp(VK.IMOUSE_RBUTTON))
-          {
-            tmp.activate = false;
-            //Console.WriteLine("fan deactivate");
-          }
-        }
-        else
-        {
-          //floatTime = 5;
-          rayCastHit2 = false;
-          //non possessable woth collider
-          //Transform tmp1 = GetTransform(raycastID);
-          //Console.WriteLine("haha");
-          //Console.WriteLine(tmp1.name);
-        }
-
-
-
-      }
-      else
-      {
-        //ray hits nth
-        rayCastHit2 = false;
-        //Console.WriteLine("hahahahah");
+        fb_Timer = 0;
       }
 
 
@@ -306,41 +202,18 @@ namespace Unicorn
         }
       }
 
-
-      if (switching == true)
-      {
-        //playerCharModel.AddModel(mothModePath);
-        // switching = false;
-        //  anim.Play("Idle1", true);
-
-        //if (anim.IsFinished("Switch1"))
-        //{
-        //  //
-
-        //  canMove = true;
-        //  NextState = State.Moth;
-        //  // playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 100, playerPosVect.z));
-        //  switching = false;
-
-        //}
-
-      }
-
-
       ManualStateControl();
+
       AutoStateControl();
+
       CheckChangeState();
 
-      if (Input.GetKeyPress(VK.IMOUSE_LBUTTON))
+      //Print(exitMoth.ToString());
+
+      if (health <= 0.0f)
       {
-        Console.WriteLine(curEnergy);
+        isDead = true;
       }
-	  
-	if(health <= 0.0f)
-	  {
-		isDead = true;
-	  }
-      //Console.WriteLine(GetTransform(IDisposab);
 
     }
     public override void FixedUpdate()
@@ -349,27 +222,150 @@ namespace Unicorn
 
     public override void OnCollisionEnter(int other)
     {
-      //Transform tag
-      // tag 1 = Possessable
-      //
-      Transform otherTransform = GetTransform(other);
+        Collider otherCol = GetCollider(other);
 
-      if (otherTransform.tag == 1)
-      {
-        // Always use next state to change state.
-        // CurrentState = State.Possessed;
+        if (otherCol.tag == 5 && CurrentState == State.Moth /*&& exitMoth*/)
+        {
+            NextState = State.Human;
+            //exitMoth = false;
+        }
 
-        //canMove = false;
-      }
+    }
+
+    public override void OnCollisionExit(int other)
+    {
+    
     }
 
     public override void OnTriggerEnter(int other)
     {
+        Collider otherCol = GetCollider(other);
+
+        if (otherCol.tag == 5 && CurrentState == State.Moth /*&& exitMoth*/)
+        {
+            NextState = State.Human;
+            //exitMoth = false;
+        }
+
     }
 
-    public override void Exit()
+        public override void Exit()
     {
     }
+
+    public void Raycasting()
+    {
+      Vector3 camPos = camTrans.GetPosition();
+      Vector3 camDir = Camera.GetViewVector();
+
+      raycastID = RayCast(camPos + camDir * 400, camPos + camDir * 1000, 1);
+      raycastID2 = RayCast(camPos + camDir * 400, camPos + camDir * 1000, 2);
+      //RayTest(camPos + camPos * 400, camPos + camDir * 1000);
+
+    
+      if (raycastID != -1)
+      {
+        Collider col = GetCollider(raycastID);
+        //Console.WriteLine(col.tag);
+        //generator
+        if (col.tag == 2)
+        {
+          //generator Script
+          script_G = GetScript(raycastID); ;
+          Transform trans = GetTransform(raycastID);
+          Vector3 pos = trans.GetPosition();
+          trans.SetPosition(new Vector3(pos.x, pos.y + fb_Timer * 1.5f, pos.z));
+          hitGenerator = true;
+          rayCastHit = true;
+
+        }
+        else if (col.tag == 3)
+        {
+          //morth Script
+          Transform trans = GetTransform(raycastID);
+          script_M = GetScript(raycastID);
+          //Transform trans = GetTransform(raycastID);
+          if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
+          {
+            script_M.PauseAI();
+            hitMorth = true;
+            morthPos = trans.GetPosition();
+          }
+          
+
+          //Console.WriteLine("hit");
+          rayCastHit = true;
+
+        }
+        else
+        {
+         
+          rayCastHit = false;
+        }
+
+
+      }
+      else
+      {
+        //ray hits nth
+        rayCastHit = false;
+        //Console.WriteLine("hahahahah");
+      }
+
+     
+      if (raycastID2 != -1)
+      {
+     
+        Collider col = GetCollider(raycastID2);
+        //
+        //generator
+        if (col.tag == 2)
+        {
+          
+          //generator Script
+          script_G = GetScript(raycastID2);
+          //RigidBody rigid = GetRigidBody(raycastID);
+          Transform trans = GetTransform(raycastID2);
+          Vector3 pos = trans.GetPosition();
+          trans.SetPosition(new Vector3(pos.x, pos.y + fb_Timer * 1.5f, pos.z));
+          hitGenerator = true;
+          rayCastHit2 = true;
+        }
+        else if (col.tag == 3)
+        {
+          //morth Script
+          script_M = GetScript(raycastID2);
+          Transform trans = GetTransform(raycastID2);
+          
+          
+          if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
+          {
+            script_M.PauseAI();
+            morthPos = trans.GetPosition();
+             hitMorth = true;
+          }
+
+
+          rayCastHit2 = true;
+
+        }
+        else
+        {
+          
+          rayCastHit2 = false;
+
+        }
+
+      }
+      else
+      {
+        //ray hits nth
+        rayCastHit2 = false;
+        //Console.WriteLine("hahahahah");
+      }
+
+    }
+
 
     // Player functions
     public void Move()
@@ -459,7 +455,7 @@ namespace Unicorn
           Vector3 rotation = Camera.GetViewVector();
 
           float r = (float)Math.Sqrt(rotation.x * rotation.x + rotation.z * rotation.z);
-          float t = (float)(Math.Atan(rotation.y / r) / Math.PI * 180);
+          //float t = (float)(Math.Atan(rotation.y / r) / Math.PI * 180);
           float p = (float)(Math.Acos(rotation.z / r) / Math.PI * 180);
 
           // t = t + 90;
@@ -536,8 +532,11 @@ namespace Unicorn
               anim.Stop();
 
             }
-
-            anim.Play("Idle_2", true, -1f, 10f);
+            if (!activating)
+            {
+              anim.Play("Idle_2", true, -1f, 10f);
+            }
+            
             Audio.Stop(chnl);
             isPlaying = false;
           }
@@ -546,38 +545,8 @@ namespace Unicorn
 
       else if (CurrentState == State.Moth)
       {
-        Vector3 rotation = Camera.GetViewVector();
-
-        float r = (float)Math.Sqrt(rotation.x * rotation.x + rotation.z * rotation.z);
-        float t = (float)(Math.Atan(rotation.y / r) / Math.PI * 180);
-        float p = (float)(Math.Acos(rotation.z / r) / Math.PI * 180);
-
-        t = t + 90;
-        if (rotation.x < 0)
-        {
-          //rotation = new Vector3(0, -p, 0);
-          rotation = new Vector3(-t, -p, 0);
-        }
-        else
-        {
-          //rotation = new Vector3(0, p, 0);
-          rotation = new Vector3(-t, p, 0);
-        }
-
-
-
-        //p = p - 90;
-
-        rotation.y += 90;
-       // rotation.x += 90;
-
-
-        GetTransform(id).SetRotation(rotation);
-
-
-        //GetTransform(id).SetRotation(Camera.GetXZViewVector() + new Vector3(-90.0f, 0.0f, 90.0f));
+        //remove force
         playerRB.SetForce(new Vector3(0.0f, 0.0f, 0.0f));
-
 
         if(moth_currentSpeed <= mothSpeed)
         {
@@ -587,8 +556,7 @@ namespace Unicorn
         {
           moth_currentSpeed = mothSpeed;
         }
-
-        playerRB.SetVel(fwd * moth_currentSpeed);
+        playerRB.SetVel(flyDir * moth_currentSpeed);
         playerRB.SetAccel(new Vector3(0.0f, 0.0f, 0.0f));
       }
     }
@@ -596,46 +564,58 @@ namespace Unicorn
     public void ManualStateControl()
     {
       // Manual change
-      if (Input.GetKeyPress(VK.IMOUSE_RBUTTON) && !rayCastHit && !rayCastHit2)
+      if (Input.GetKeyPress(VK.IMOUSE_RBUTTON))
       {
-
+        
         if (played == false)
         {
           switch (CurrentState)
           {
             case State.Human:
-              // Only can change to moth if enough energy
-              switching = true;
-              canMove = false;
 
-              // Run an animation (no loop)
-              if ( curEnergy >= EnergyTreshold )
-              {
-                //anim.Stop();
+              if (hitMorth)
+              { 
+                
 
-                played = true;
+                // Only can change to moth if raycast hit
+                switching = true;
+                canMove = false;
 
-                if (isPlaying == false)
+                // Run an animation (no loop)
+                if (curEnergy >= EnergyTreshold)
                 {
-                  script_AM.PlaySFX(2);
-                  isPlaying = true;
+                  //anim.Stop();
+
+                  played = true;
+
+                  if (isPlaying == false)
+                  {
+                    script_AM.PlaySFX(2);
+                    isPlaying = true;
+                  }
+
+                  anim.Play("Pray", false, 10f, 30f);
                 }
 
-                anim.Play("Pray", false, 10f, 30f);
+
+                isPlaying = false;
+                // Prep for state change
+                
+                NextState = State.Moth;
               }
 
-
-              isPlaying = false;
-              // Prep for state change
-              NextState = State.Moth;
               // Shouldn't have logic here. This function is for setting next state only.
               //Transform p_Target = GetTransform(id);
               //spawnPoint = p_Target.GetPosition();
               break;
 
             case State.Moth:
-              canMove = false;
-              NextState = State.Human;
+
+              hitMorth = false;
+              canMove = true;
+                            CastToGround();
+              //NextState = State.Human;
+
 
 
 
@@ -674,17 +654,15 @@ namespace Unicorn
       //    curEnergy = maxEnergy;
       //}
 
-      if (flying)
+      if (CurrentState == State.Moth)
       {
-        mothTime += RealDT();
-        if (mothTime >= 2.0f)
-        {
-          NextState = State.Human;
-          mothTime = 0;
-
-
-
-        }
+        playerCol.isCollidable = false;
+        playerEmt.Play();
+      }
+      if (CurrentState == State.Human)
+      {
+        playerCol.isCollidable = true;
+        playerEmt.Stop();
       }
     }
 
@@ -714,9 +692,9 @@ namespace Unicorn
           switch (CurrentState)
           {
             case State.Human:
-              mothTime = 999;
               moveForce = humnForce;
-              playerCharModel.AddModel(humanModePath);
+              playerCharModel.isActive = true;
+              //playerCharModel.AddModel(humanModePath);
               camScript.tgtID = id;
 
               canMove = true;
@@ -728,11 +706,11 @@ namespace Unicorn
                 Transform p_Target2 = GetTransform(id);
                 p_Target2.SetPosition(spawnPoint);
               }
-
+                            CastToGround();
               if (flying)
               {
                 flying = false;
-                playerPos.SetPosition(FormalPos);
+                //playerTrans.SetPosition(FormalPos);
                 //Camera.SetFOV(200);
               }
               playerRB.isGravity = true;
@@ -740,32 +718,34 @@ namespace Unicorn
 
             case State.Moth:
 
+             
               camScript.useOffset = false;
-              //moveForce = mothForce;
-              //Set to Moth spawn Eyelevel//// not working
-              playerPos = GetTransform(id);
-              Vector3 playerPosVect = playerPos.GetPosition(); // Set eye level of player
+              //Set to Moth spawn Eyelevel
+              playerTrans = GetTransform(id);
+              Vector3 playerPosVect = playerTrans.GetPosition(); // Set eye level of player
               FormalPos = playerPosVect;
               flying = true;
-              mothTime = 0;
               moth_currentSpeed = 1;
+              
               //Vector3 eyelevel =  new Vector3(0.0f, 10.0f, 0.0f);
-              // playerPos.SetPosition(eyelevel);
+              // playerTrans.SetPosition(eyelevel);
               //Console.WriteLine("PlayerPos be4");
               //Console.WriteLine(playerPosVect.x);
               //Console.WriteLine(playerPosVect.y);
               //Console.WriteLine(playerPosVect.z);
               //Console.WriteLine("---------");
-              playerPos.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 100f , playerPosVect.z));
-              //playerPos.SetRotation(new Vector3(90.0f, -90.0f, 180.0f));
-              //Console.WriteLine("PlayerPos aft");
-              //Console.WriteLine(playerPosVect.x);
-              //Console.WriteLine(playerPosVect.y);
-              //Console.WriteLine(playerPosVect.z);
-              //Console.WriteLine("---------");
-
+              playerTrans.SetPosition(new Vector3(playerPosVect.x, playerPosVect.y + 100f , playerPosVect.z));
+                            //playerTrans.SetRotation(new Vector3(90.0f, -90.0f, 180.0f));
+                            //Console.WriteLine("PlayerPos aft");
+                            //Console.WriteLine(playerPosVect.x);
+                            //Console.WriteLine(playerPosVect.y);
+                            //Console.WriteLine(playerPosVect.z);
+                            //Console.WriteLine("---------");
+                            
+              Vector3 newDir = morthPos - playerTrans.GetPosition();
+              flyDir = newDir.normalized;
               //anim.Stop();
-              playerCharModel.AddModel(mothModePath);
+              playerCharModel.isActive = false;
               playerRB.isGravity = false;
 
               canMove = true;
@@ -794,6 +774,37 @@ namespace Unicorn
     public Vector3 ForwardVector()
     {
       return Vector3.Cross(Camera.GetUpVector(), Camera.GetRightVector());
+    }
+
+
+    public void CastToGround()
+    {
+        //exitMoth = true;
+        Vector3 castDir = new Vector3(0.0f, -1.0f, 0.0f);
+        flyDir = castDir;
+        //playerRB.isGravity = true;
+        script_M.activate = false;
+        ////player position
+        //Vector3 playerPos = playerTrans.GetPosition();
+        ////cast to ground vector
+        //
+        ////get position for ground object
+        //int Id = RayCast(playerPos, playerPos + castDir * 2000, 2);
+
+        //if (Id != -1)
+        //{
+
+        //    //Transform groundTrans = GetTransform(Id);
+        //    //Vector3 groundPos = groundTrans.GetPosition();
+        //    //Vector3 newdir = playerPos - groundPos;
+
+        //}
+        //else
+        //{
+
+        //}
+
+
     }
   }
 }

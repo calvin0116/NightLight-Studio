@@ -6,16 +6,15 @@ namespace Unicorn
 {
   public class Hello : UniBehaviour
   {
-    public Emitter emt;
+    public int test = 0;
+    public string test2 = "AyeAyeAye!";
 
     public override void Init()
     {
-      //emt = GetEmitter(id);
     }
 
     public override void LateInit()
     {
-      //Print(emt.ID.ToString());
     }
 
     public override void Update()
@@ -24,16 +23,21 @@ namespace Unicorn
     }
     public override void FixedUpdate()
     {
+      if(Input.GetKeyPress(VK.IKEY_SPACE))
+      {
+        Print(test2);
+        Console.WriteLine(test2);
+      }
     }
 
-    public override void OnCollisionEnter(int other) {  }
-    public override void OnCollisionStay(int other) {  }
-    public override void OnCollisionExit(int other) {  }
+    public override void OnCollisionEnter(int other) { Console.WriteLine("Collision Enter!"); }
+    public override void OnCollisionStay(int other) { Console.WriteLine("Collision Stay!"); }
+    public override void OnCollisionExit(int other) { Console.WriteLine("Collision Exit!"); }
 
-    public override void OnTriggerEnter(int other) {  }
-    public override void OnTriggerStay(int other) {  }
-    public override void OnTriggerExit(int other) {  }
+    public override void OnTriggerEnter(int other) { Console.WriteLine("Trigger Enter!"); }
+    public override void OnTriggerStay(int other) { Console.WriteLine("Trigger Stay!"); }
+    public override void OnTriggerExit(int other) { Console.WriteLine("Trigger Exit!"); }
 
-    public override void Exit() {  }
+    public override void Exit() { Console.WriteLine("Exit from C#"); }
   }
 }
