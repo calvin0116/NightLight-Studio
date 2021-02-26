@@ -97,7 +97,8 @@ inline void NS_AI::AiManager::Update()
 	}
 
 	// Tracy
-	ZoneScoped
+	// Zone color: Orange
+	ZoneScopedNC("AI", 0xff8f26);
 }
 
 inline void NS_AI::AiManager::WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)
@@ -195,7 +196,8 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 						}
 					}
 				}*/
-				std::cout << "Going to next wp" << std::endl;
+				//std::cout << "Going to next wp" << std::endl;
+				TracyMessageL("AiManager::NavBehavior: Going to next wp");
 				rb->velocity = 0.0f;
 			}
 			else

@@ -14,7 +14,7 @@ namespace Unicorn
     // Other entity's components
     public int player_ID;
     ScriptPlayer script_Player;
-
+    
     // Player Stats, default values
     public static float enemyForce = 100000.0f;  // Move force while human
     public static float maxEnemySpd = 500.0f;
@@ -44,7 +44,7 @@ namespace Unicorn
     float decisionTimer;
     bool thinking;
     bool possessed;
-    bool activate;
+        public bool activate;
 
 
     public override void Init()
@@ -140,6 +140,12 @@ namespace Unicorn
 
     public override void OnCollisionEnter(int other)
     {
+
+    }
+
+    public override void OnTriggerEnter(int other)
+    {
+
       //Transform tag
       // tag 1 = Possessable
       // 
@@ -159,6 +165,7 @@ namespace Unicorn
           Audio.PlayOnce("13");
           activate = true;
           ScriptPlayer.flying = false;
+          enemyNavigator.isPaused = false;
 
           // possessed = true;
 
@@ -166,15 +173,6 @@ namespace Unicorn
 
       }
 
-
-
-
-
-
-    }
-
-    public override void OnTriggerEnter(int other)
-    {
     }
 
     public override void Exit()
@@ -257,6 +255,7 @@ namespace Unicorn
 
       //======================//
       //====Update phase=====//
+      //Console.WriteLine(enemyNavigator.isPaused);
       if (isIdling || isPaused)   //Stop movement if idle/pause
         return;
       if (isPatroling)
@@ -330,6 +329,9 @@ namespace Unicorn
     {
 
     }
-
+    public void PauseAI()
+    {
+      enemyNavigator.isPaused = true;
+    }
   }
 }

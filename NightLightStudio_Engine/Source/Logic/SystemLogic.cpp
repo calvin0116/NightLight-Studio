@@ -413,7 +413,8 @@ namespace NS_LOGIC
 #endif
 
     // Tracy
-    ZoneScoped
+    // Zone Color: Light Pink
+    ZoneScopedNC("Logic: Update", 0xfaa5e2);
   }
 
   void SystemLogic::FixedUpdate(float dt)
@@ -436,7 +437,8 @@ namespace NS_LOGIC
 #endif
 
     // Tracy
-    ZoneScoped
+    // Zone Color: Pink
+    ZoneScopedNC("Logic: Fixed Update", 0xff24c1);
   }
 
   void SystemLogic::GameGameExit()

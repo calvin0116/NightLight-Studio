@@ -9,32 +9,33 @@ namespace Unicorn
   {
     // Variables
     public bool activate = false;
+     bool toggleOn;
     public int player_ID;
     public int cam_ID;
     public int output_ID;
+    public int output_ID2;
     public int p_CamPos;
     public int p_SpawnPos;
     bool isActive;
     public bool isWaypoint;
     bool isOn;
     bool isLamp;
-    bool toggleOn;
-
+  
+    int myType;
 
     //Required Components
     Variables ObjVariables;
     // Rigidbody
 
     //Variable Component Values
-    public static string possessionCamPos;
-    public static string possessionSpawnPos;
     public static string output;
+    public static string output2;
     public static int type;
 
     // Getting Script
     ScriptPlayer script_Player;
     LampBehaviour script_Lamp;
-    FanBehaviour script_Fan;
+    ShutterBehaviour script_Shutter;
     //ScriptCamera script_Cam;
 
     public override void Init()
@@ -45,17 +46,16 @@ namespace Unicorn
       ObjVariables = GetVariables(id);
       isActive = true;
 
-     possessionCamPos = ObjVariables.GetString(0);
-     possessionSpawnPos = ObjVariables.GetString(1);
-     output = ObjVariables.GetString(2);
-     type = ObjVariables.GetInt(0);
      
+     output = ObjVariables.GetString(0);
+     output2 = ObjVariables.GetString(1);
+     type = ObjVariables.GetInt(0);
 
-      p_CamPos = GameObjectFind(possessionCamPos);
-      p_SpawnPos = GameObjectFind(possessionSpawnPos);
+      // Print(type.ToString());
+      myType = type;
       output_ID = GameObjectFind(output);
 
-      
+      output_ID2 = GameObjectFind(output2);
 
 
 
@@ -66,17 +66,21 @@ namespace Unicorn
     {
       script_Player = GetScript(player_ID);
 
+      //Print(type.ToString());
 
-      if (type == 0)
+      if (myType == 0)
       {
-        script_Fan = GetScript(output_ID);
+       // Print("Dual mode ........");
+        script_Lamp = GetScript(output_ID);
+        script_Shutter = GetScript(output_ID2);
+       // SwitchOnFunction();
       }
 
       else
       {
         script_Lamp = GetScript(output_ID);
       }
-
+    
       //activate = true;
 
     }
@@ -87,6 +91,10 @@ namespace Unicorn
       if (activate == true)
       {
         //Set Player State to possessionstate
+
+
+
+
 
         if (isOn == false)
         {
@@ -193,12 +201,29 @@ namespace Unicorn
 
     public void SwitchOnFunction()
     {
-      
-      if (type == 0)
+      //Print(toggleOn.ToString());
+
+      if (myType == 0)
       {
-        script_Fan.SwitchOnFunction();
-        isOn = true;
+
+        if (toggleOn == false)
+        {
+
+          script_Lamp.SwitchOnFunction();
+          script_Shutter.SwitchOffFunction();
+          toggleOn = true;
+        }
+        else
+        {
+
+          script_Lamp.SwitchOffFunction();
+          script_Shutter.SwitchOnFunction();
+          toggleOn = false;
+        }
+
         activate = false;
+
+
       }
 
       else
@@ -227,11 +252,26 @@ namespace Unicorn
     {
 
      
-      if (type == 0)
+      if (myType == 0)
       {
-        script_Fan.SwitchOffFunction();
-        isOn = false;
+       
+
+        if (toggleOn == false)
+        {
+          script_Lamp.SwitchOnFunction();
+          script_Shutter.SwitchOffFunction();
+          toggleOn = true;
+        }
+        else
+        {
+          script_Lamp.SwitchOffFunction();
+          script_Shutter.SwitchOnFunction();
+          toggleOn = true;
+        }
         activate = false;
+
+
+
       }
 
       else

@@ -236,7 +236,10 @@ void SystemAudio::MyGameInit()
   auto itrEnd = G_ECMANAGER->end<ComponentLoadAudio>();
   for (; itr != itrEnd; ++itr)
   {
-    std::cout << G_ECMANAGER->getObjId(itr) << std::endl;
+    //std::cout << G_ECMANAGER->getObjId(itr) << std::endl;
+    TracyMessageL("System Audio Game Init Obj ID:");
+    TracyMessageL(std::to_string(G_ECMANAGER->getObjId(itr)).c_str());
+
     // Load the following audios from load audio component
     ComponentLoadAudio* myComp = G_ECMANAGER->getComponent<ComponentLoadAudio>(itr);
     for (const auto& [path, name] : myComp->_sounds)
@@ -321,7 +324,8 @@ void SystemAudio::Update()
   }
 
   // Tracy
-  ZoneScoped
+  // Zone Color: Green
+  ZoneScopedNC("Audio", 0x1df52f);
 }
 
 void SystemAudio::Free()
