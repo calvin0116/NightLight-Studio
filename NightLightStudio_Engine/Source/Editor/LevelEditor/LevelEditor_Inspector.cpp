@@ -1217,6 +1217,23 @@ void InspectorWindow::ScriptComp(Entity& ent)
 			{
 				Script_comp->_ScriptName = tex;
 			});
+
+			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+				[this, &Script_comp, &tex](std::string* str)
+				{
+					std::string data = *str;
+					std::transform(data.begin(), data.end(), data.begin(),
+						[](unsigned char c)
+						{ return (char)std::tolower(c); });
+
+					std::string fileType = LE_GetFileType(data);
+					if (fileType == "cs")
+					{
+						std::string name = LE_GetFilename(*str);
+						name.erase(name.end() - 3, name.end());
+						Script_comp->_ScriptName = name;
+					}
+				});
 		}
 
 		if (!_notRemove)
