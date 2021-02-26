@@ -25,119 +25,17 @@ void HierarchyInspector::Start()
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COPY_OBJECT", SystemInput_ns::IKEY_CTRL, "IDET", SystemInput_ns::OnHold,
 		[this]()
 		{
-			bool copyObj = false;
-			bool aCopy = _allowCopy;
-			if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_C))
-			{
-				// If any item is focused, no copy
-				if (!ImGui::IsAnyItemFocused())
-					if (LE_ECHELPER->GetSelectedEntityID() != -1)
-						copyObj = true;
-			}
-			// CTRL - MOVE GIZMO
-			else
-			{
-				if (LE_ECHELPER->GetSelectedEntityID() != -1)
-					if (_allowCopy && _levelEditor->LE_AccessWindowFunc("Inspector", &InspectorWindow::GetIfGizmoManipulate))
-					{
-						copyObj = true;
-						aCopy = false;
-					}
-				
-			}
-
-			if (copyObj && _allowCopy)
-			{
-				Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
-				TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
-				if (trans_comp != NULL)
-				{
-					std::string newName;
-					newName = G_ECMANAGER->EntityName[ent.getId()];
-					if (newName == "")
-						newName = "Entity_";
-					else
-					{
-						// Really annoying name check to determine what number to append to the name
-						int num = 1;
-						bool reset = false;
-
-						std::string actualName = newName;
-						int digits = 0;
-						for (int i = (int)actualName.size() - 1; i >= 0; --i)
-						{
-							if (isdigit(actualName[i]))
-								digits++;
-							else
-							{
-								if (actualName[i] == '_')
-								{
-									reset = true;
-									actualName = actualName.substr(0, actualName.size() - digits - 1);
-									break;
-								}
-								else
-								{
-									newName.append("_1");
-									break;
-								}
-							}
-						}
-
-						while (reset)
-						{
-							reset = false;
-							std::string tempName = actualName;
-							tempName.append("_" + std::to_string(num));
-							for (auto entsName : G_ECMANAGER->EntityName)
-							{
-								if (entsName.second.rfind(tempName) != std::string::npos)
-								{
-									num++;
-									reset = true;
-								}
-							}
-							if (!reset)
-								newName = tempName;
-						}
-					}
-
-					// Causes memory leaks currently (Probably Graphics Side)
-					Entity newEnt = ent.Copy(G_ECMANAGER, newName);
-					bool multi = false;
-					if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
-					{
-						multi = true;
-					}
-
-					LE_ECHELPER->SelectEntity(newEnt.getId(), multi);
-
-					_scrollBottom = true;
-				}
-			}
-
-			_allowCopy = aCopy;
+			
 		});
 
 	// Delete Object
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("DELETE_OBJECT", SystemInput_ns::IKEY_CTRL, "DELETE", SystemInput_ns::OnHold,
-		[]()
+		[this]()
 		{
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_DELETE))
-				if (!ImGui::IsAnyItemFocused())
-					for (Entity ent : G_ECMANAGER->getEntityContainer())
-						if (LE_ECHELPER->SelectedEntities()[ent.getId()])
-						{
-							ComponentLight* lightcomp = ent.getComponent<LightComponent>();
-
-							if (lightcomp)
-							{
-								lightcomp->SetType(NS_GRAPHICS::Lights::INVALID_TYPE);
-							}
-
-							G_ECMANAGER->FreeEntity(ent.getId());
-							break;
-						}
+			{
+				DeleteObjects();
+			}
 		});
 
 	// PRESS F TO FOCUS ON SELECTED ITEM
@@ -495,6 +393,123 @@ void HierarchyInspector::EntityFunction(Entity& ent, int& index, int tag_of_ent)
 		*/
 	}
 
+}
+
+void HierarchyInspector::CopyObjects()
+{
+	bool copyObj = false;
+	bool aCopy = _allowCopy;
+	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IKEY_C))
+	{
+		// If any item is focused, no copy
+		if (!ImGui::IsAnyItemFocused())
+			if (LE_ECHELPER->GetSelectedEntityID() != -1)
+				copyObj = true;
+	}
+	// CTRL - MOVE GIZMO
+	else
+	{
+		if (LE_ECHELPER->GetSelectedEntityID() != -1)
+			if (_allowCopy && _levelEditor->LE_AccessWindowFunc("Inspector", &InspectorWindow::GetIfGizmoManipulate))
+			{
+				copyObj = true;
+				aCopy = false;
+			}
+
+	}
+
+	if (copyObj && _allowCopy)
+	{
+		Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
+		TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+		if (trans_comp != NULL)
+		{
+			std::string newName;
+			newName = G_ECMANAGER->EntityName[ent.getId()];
+			if (newName == "")
+				newName = "Entity_";
+			else
+			{
+				// Really annoying name check to determine what number to append to the name
+				int num = 1;
+				bool reset = false;
+
+				std::string actualName = newName;
+				int digits = 0;
+				for (int i = (int)actualName.size() - 1; i >= 0; --i)
+				{
+					if (isdigit(actualName[i]))
+						digits++;
+					else
+					{
+						if (actualName[i] == '_')
+						{
+							reset = true;
+							actualName = actualName.substr(0, actualName.size() - digits - 1);
+							break;
+						}
+						else
+						{
+							newName.append("_1");
+							break;
+						}
+					}
+				}
+
+				while (reset)
+				{
+					reset = false;
+					std::string tempName = actualName;
+					tempName.append("_" + std::to_string(num));
+					for (auto entsName : G_ECMANAGER->EntityName)
+					{
+						if (entsName.second.rfind(tempName) != std::string::npos)
+						{
+							num++;
+							reset = true;
+						}
+					}
+					if (!reset)
+						newName = tempName;
+				}
+			}
+
+			// Causes memory leaks currently (Probably Graphics Side)
+			Entity newEnt = ent.Copy(G_ECMANAGER, newName);
+			bool multi = false;
+			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+			{
+				multi = true;
+			}
+
+			LE_ECHELPER->SelectEntity(newEnt.getId(), multi);
+
+			_scrollBottom = true;
+		}
+	}
+
+	_allowCopy = aCopy;
+}
+
+void HierarchyInspector::DeleteObjects()
+{
+	if (!ImGui::IsAnyItemFocused())
+	{
+		for (Entity ent : G_ECMANAGER->getEntityContainer())
+		{
+			if (LE_ECHELPER->SelectedEntities()[ent.getId()])
+			{
+				ComponentLight* lightcomp = ent.getComponent<LightComponent>();
+
+				if (lightcomp)
+				{
+					lightcomp->SetType(NS_GRAPHICS::Lights::INVALID_TYPE);
+				}
+
+				G_ECMANAGER->FreeEntity(ent.getId());
+			}
+		}
+	}
 }
 
 

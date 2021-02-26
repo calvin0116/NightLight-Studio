@@ -40,5 +40,8 @@ public :
 	void SortByTag();
 
 	void EntityFunction(Entity& ent, int& index, int tag_of_ent = -1);
+
+	void CopyObjects();
+	void DeleteObjects();
 };
 
