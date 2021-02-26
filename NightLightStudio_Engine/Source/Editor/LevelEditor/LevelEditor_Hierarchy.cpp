@@ -10,6 +10,10 @@
 #include "LevelEditor_Inspector.h"
 #include "../../Core/TagHandler.h"
 
+#include "LevelEditor_Console.h"
+
+#include "../../Graphics/SystemEmitter.h"
+
 inline size_t findCaseInsensitive(std::string data, std::string toSearch, size_t pos = 0)
 {
 	std::transform(data.begin(), data.end(), data.begin(), [](unsigned char c) {return (unsigned char)::tolower(c); });
@@ -20,6 +24,253 @@ inline size_t findCaseInsensitive(std::string data, std::string toSearch, size_t
 void HierarchyInspector::Start()
 {
 	InitBeforeRun();
+
+	// Set up Command to run to move objects
+	COMMAND createNewObj =
+		[this](std::any obj)
+	{
+		TransformComponent tran;
+		Entity ent = G_ECMANAGER->BuildEntity().AttachComponent(tran);
+		LE_ECHELPER->SelectEntity(ent.getId());
+		_scrollBottom = true;
+		return std::any(ent);
+	};
+
+	COMMAND deleteNewObj =
+		[this](std::any obj)
+	{
+		Entity ent = std::any_cast<Entity>(obj);
+		G_ECMANAGER->FreeEntity(ent.getId());
+		return std::any();
+	};
+
+	//_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
+
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("HIERARCHY_CREATE_OBJECT"),
+		createNewObj,
+		deleteNewObj);
+
+	// Set up Command to run to move objects
+	COMMAND deleteCurObj =
+		[this](std::any obj)
+	{
+		std::vector<Entity> entVec = std::any_cast<std::vector<Entity>>(obj);
+		std::vector<std::pair<std::string, ENTITY_COMP_DATA>> compDataVec;
+
+		for (Entity ent : entVec)
+		{
+			ENTITY_COMP_DATA compData;
+			if (ent.getComponent<ComponentTransform>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<ComponentTransform>()->Write() );
+				compData.insert(std::make_pair(typeid(ComponentTransform).hash_code(), comp));
+			}
+			if (ent.getComponent<ComponentLoadAudio>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<ComponentLoadAudio>()->Write() );
+				compData.insert(std::make_pair(typeid(ComponentLoadAudio).hash_code(), comp));
+			}
+			if (ent.getComponent<ComponentGraphics>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<ComponentGraphics>()->Write() );
+				compData.insert(std::make_pair(typeid(ComponentGraphics).hash_code(), comp));
+			}
+			if (ent.getComponent<ColliderComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<ColliderComponent>()->Write() );
+				compData.insert(std::make_pair(typeid(ColliderComponent).hash_code(), comp));
+			}
+			if (ent.getComponent<RigidBody>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<RigidBody>()->Write() );
+				compData.insert(std::make_pair(typeid(RigidBody).hash_code(), comp));
+			}
+			if (ent.getComponent<LightComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<LightComponent>()->Write() );
+				ent.getComponent<LightComponent>()->SetType(NS_GRAPHICS::Lights::INVALID_TYPE);
+				compData.insert(std::make_pair(typeid(LightComponent).hash_code(), comp));
+			}
+			if (ent.getComponent<ScriptComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<ScriptComponent>()->Write() );
+				compData.insert(std::make_pair(typeid(ScriptComponent).hash_code(), comp));
+			}
+			if (ent.getComponent<CanvasComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<CanvasComponent>()->Write() );
+				compData.insert(std::make_pair(typeid(CanvasComponent).hash_code(), comp));
+			}
+			if (ent.getComponent<CScriptComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<CScriptComponent>()->Write() );
+				compData.insert(std::make_pair(typeid(CScriptComponent).hash_code(), comp));
+			}
+			if (ent.getComponent<PlayerStatsComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<PlayerStatsComponent>()->Write() );
+				compData.insert(std::make_pair(typeid(PlayerStatsComponent).hash_code(), comp));
+			}
+			if (ent.getComponent<CauldronStatsComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<CauldronStatsComponent>()->Write() );
+				compData.insert(std::make_pair(typeid(CauldronStatsComponent).hash_code(), comp));
+			}
+			if (ent.getComponent<VariablesComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<VariablesComponent>()->Write() );
+				compData.insert(std::make_pair(typeid(VariablesComponent).hash_code(), comp));
+			}
+			if (ent.getComponent<NavComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<NavComponent>()->Write() );
+				compData.insert(std::make_pair(typeid(NavComponent).hash_code(), comp));
+			}
+			if (ent.getComponent<AnimationComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<AnimationComponent>()->Write() );
+				compData.insert(std::make_pair(typeid(AnimationComponent).hash_code(), comp));
+			}
+			if (ent.getComponent<WayPointMapComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<WayPointMapComponent>()->Write() );
+				compData.insert(std::make_pair(typeid(WayPointMapComponent).hash_code(), comp));
+			}
+			if (ent.getComponent<WayPointComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<WayPointComponent>()->Write() );
+				compData.insert(std::make_pair(typeid(WayPointComponent).hash_code(), comp));
+			}
+			if (ent.getComponent<EmitterComponent>())
+			{
+				ENTITY_COMP_INFO comp( ent.getComponent<EmitterComponent>()->Write() );
+				NS_GRAPHICS::EmitterSystem::GetInstance().RemoveEmitterByID(ent.getComponent<EmitterComponent>()->_emitterID);
+				compData.insert(std::make_pair(typeid(EmitterComponent).hash_code(), comp));
+			}
+			compDataVec.push_back(std::make_pair(G_ECMANAGER->EntityName[ent.getId()], compData));
+
+			G_ECMANAGER->FreeEntity(ent.getId());
+		}
+		//ENTITY_COMP_INFO comp{ ComponentLoadAudio().Write(),typeid(ComponentLoadAudio).hash_code() };
+
+		return std::any(compDataVec);
+	};
+
+	COMMAND revertPrevObj =
+		[this](std::any obj)
+	{
+		std::vector<Entity> entVec;
+		std::vector<std::pair<std::string, ENTITY_COMP_DATA>> compData = std::any_cast<std::vector<std::pair<std::string, ENTITY_COMP_DATA>>>(obj);
+
+		for (const std::pair<std::string, ENTITY_COMP_DATA>& i : compData)
+		{
+			Entity ent = G_ECMANAGER->BuildEntity();
+			for (std::pair<size_t, ENTITY_COMP_INFO> j : i.second)
+			{
+				if (j.first == typeid(ComponentTransform).hash_code())
+				{
+					ent.AttachComponent<ComponentTransform>();
+					ent.getComponent<ComponentTransform>()->Read(*j.second._rjDoc);
+
+					G_ECMANAGER->EntityName[ent.getId()] = ent.getComponent<ComponentTransform>()->_entityName;
+				}
+				if (j.first == typeid(ComponentLoadAudio).hash_code())
+				{
+					ent.AttachComponent<ComponentLoadAudio>();
+					ent.getComponent<ComponentLoadAudio>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(ComponentGraphics).hash_code())
+				{
+					ent.AttachComponent<ComponentGraphics>();
+					ent.getComponent<ComponentGraphics>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(ColliderComponent).hash_code())
+				{
+					ent.AttachComponent<ColliderComponent>();
+					ent.getComponent<ColliderComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(RigidBody).hash_code())
+				{
+					ent.AttachComponent<RigidBody>();
+					ent.getComponent<RigidBody>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(LightComponent).hash_code())
+				{
+					ent.AttachComponent<LightComponent>();
+					ent.getComponent<LightComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(ScriptComponent).hash_code())
+				{
+					ent.AttachComponent<ScriptComponent>();
+					ent.getComponent<ScriptComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(CanvasComponent).hash_code())
+				{
+					ent.AttachComponent<CanvasComponent>();
+					ent.getComponent<CanvasComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(CScriptComponent).hash_code())
+				{
+					ent.AttachComponent<CScriptComponent>();
+					ent.getComponent<CScriptComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(PlayerStatsComponent).hash_code())
+				{
+					ent.AttachComponent<PlayerStatsComponent>();
+					ent.getComponent<PlayerStatsComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(CauldronStatsComponent).hash_code())
+				{
+					ent.AttachComponent<CauldronStatsComponent>();
+					ent.getComponent<CauldronStatsComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(VariablesComponent).hash_code())
+				{
+					ent.AttachComponent<VariablesComponent>();
+					ent.getComponent<VariablesComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(NavComponent).hash_code())
+				{
+					ent.AttachComponent<NavComponent>();
+					ent.getComponent<NavComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(AnimationComponent).hash_code())
+				{
+					ent.AttachComponent<AnimationComponent>();
+					ent.getComponent<AnimationComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(WayPointMapComponent).hash_code())
+				{
+					ent.AttachComponent<WayPointMapComponent>();
+					ent.getComponent<WayPointMapComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(WayPointComponent).hash_code())
+				{
+					ent.AttachComponent<WayPointComponent>();
+					ent.getComponent<WayPointComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(EmitterComponent).hash_code())
+				{
+					ent.AttachComponent<EmitterComponent>();
+					ent.getComponent<EmitterComponent>()->Read(*j.second._rjDoc);
+				}
+			}
+
+			G_ECMANAGER->EntityName[ent.getId()] = i.first;
+			LE_ECHELPER->SelectEntity(ent.getId(), true);
+			entVec.push_back(ent);
+		}		
+
+		return std::any(entVec);
+	};
+
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("HIERARCHY_DELETE_OBJECTS"),
+		deleteCurObj,
+		revertPrevObj);
+
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("HIERARCHY_COPY_OBJECTS"),
+		revertPrevObj,
+		deleteCurObj);
 
 	// Ctrl-Copy object selected
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COPY_OBJECT", SystemInput_ns::IKEY_CTRL, "IDET", SystemInput_ns::OnHold,
@@ -116,29 +367,17 @@ void HierarchyInspector::Run()
 	if (ImGui::Button("Add Entity"))
 	{
 		//Add entity with default having a transform component
-		TransformComponent tran;
-		G_ECMANAGER->BuildEntity().AttachComponent(tran);
-
+		//TransformComponent tran;
+		//G_ECMANAGER->BuildEntity().AttachComponent(tran);
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("HIERARCHY_CREATE_OBJECT"), std::any());
+		
 	}
 
 	ImGui::SameLine();
 	
 	if (ImGui::Button("Delete Entity"))
 	{
-		if (!ImGui::IsAnyItemFocused())
-			for (Entity ent : G_ECMANAGER->getEntityContainer())
-				if (LE_ECHELPER->SelectedEntities()[ent.getId()])
-				{
-					ComponentLight* lightcomp = ent.getComponent<LightComponent>();
-
-					if (lightcomp)
-					{
-						lightcomp->SetType(NS_GRAPHICS::Lights::INVALID_TYPE);
-					}
-
-					G_ECMANAGER->FreeEntity(ent.getId());
-					break;
-				}
+		DeleteObjects();
 	}
 
 	if (_levelEditor->LE_AddCombo("##SORTBY", _sortType,
@@ -176,53 +415,58 @@ void HierarchyInspector::Run()
 	// List box
 	_levelEditor->LE_AddInputText("Search", _search, 256, 0);
 
-	// Entity list
-	static int index_selected = -1;
-	int n = 1;
 	
-	switch (_hieState)
-	{ 
-		case HS_NORMAL:
+	_levelEditor->LE_AddChildWindow("##HIERARCHY_CHILD_WINDOW", ImVec2(0, 0), 
+		[this]() 
 		{
-			for (Entity ent : G_ECMANAGER->getEntityContainer())
+			// Entity list
+			static int index_selected = -1;
+			int n = 1;
+
+			switch (_hieState)
 			{
-				EntityFunction(ent, n);
-				++n;
-			}
-			break;
-		}
-		case HS_SORTBYTAG:
-		{
-			for (const int i : TAG_HANDLER->GetTagUsed())
+			case HS_NORMAL:
 			{
-				std::string header_with_index = "Tag " + std::to_string(i);
-				if (ImGui::CollapsingHeader(header_with_index.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+				for (Entity ent : G_ECMANAGER->getEntityContainer())
 				{
-					for (Entity ent : G_ECMANAGER->getEntityContainer())
+					EntityFunction(ent, n);
+					++n;
+				}
+				break;
+			}
+			case HS_SORTBYTAG:
+			{
+				for (const int i : TAG_HANDLER->GetTagUsed())
+				{
+					std::string header_with_index = "Tag " + std::to_string(i);
+					if (ImGui::CollapsingHeader(header_with_index.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{
-						EntityFunction(ent, n, i);
-						++n;
+						for (Entity ent : G_ECMANAGER->getEntityContainer())
+						{
+							EntityFunction(ent, n, i);
+							++n;
+						}
 					}
 				}
+				break;
 			}
-			break;
-		}
-		case HS_SORTBYALPHA:
-		{
-			for (Entity& ent : ent_list_to_display)
+			case HS_SORTBYALPHA:
 			{
-				EntityFunction(ent, n);
-				++n;
+				for (Entity& ent : ent_list_to_display)
+				{
+					EntityFunction(ent, n);
+					++n;
+				}
+				break;
 			}
-			break;
-		}
-	}
-	
-	if (_scrollBottom)
-	{
-		ImGui::SetScrollHere(1.0f);
-		_scrollBottom = false;
-	}
+			}
+
+			if (_scrollBottom)
+			{
+				ImGui::SetScrollY(ImGui::GetWindowHeight());
+				_scrollBottom = false;
+			}
+		}, true);	
 }
 
 void HierarchyInspector::GameExit()
@@ -428,61 +672,79 @@ void HierarchyInspector::CopyObjects()
 
 	if (copyObj && _allowCopy)
 	{
-		Entity ent = G_ECMANAGER->getEntity(LE_ECHELPER->GetSelectedEntityID());
-		TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
-		if (trans_comp != NULL)
-		{
-			std::string newName;
-			newName = G_ECMANAGER->EntityName[ent.getId()];
-			if (newName == "")
-				newName = "Entity_";
-			else
-			{
-				// Really annoying name check to determine what number to append to the name
-				int num = 1;
-				bool reset = false;
+		std::vector<std::pair<std::string, ENTITY_COMP_DATA>> _allCopiedObjs;
 
-				std::string actualName = newName;
-				int digits = 0;
-				for (int i = (int)actualName.size() - 1; i >= 0; --i)
+		for (std::pair<int, bool> selEnt : LE_ECHELPER->SelectedEntities())
+		{
+			if (selEnt.second)
+			{
+				Entity ent = G_ECMANAGER->getEntity(selEnt.first);
+				TransformComponent* trans_comp = ent.getComponent<TransformComponent>();
+				if (trans_comp != NULL)
 				{
-					if (isdigit(actualName[i]))
-						digits++;
+					std::string newName;
+					newName = G_ECMANAGER->EntityName[ent.getId()];
+					if (newName == "")
+						newName = "Entity_";
 					else
 					{
-						if (actualName[i] == '_')
-						{
-							reset = true;
-							actualName = actualName.substr(0, actualName.size() - digits - 1);
-							break;
-						}
-						else
-						{
-							newName.append("_1");
-							break;
-						}
-					}
-				}
+						// Really annoying name check to determine what number to append to the name
+						int num = 1;
+						bool reset = false;
 
-				while (reset)
-				{
-					reset = false;
-					std::string tempName = actualName;
-					tempName.append("_" + std::to_string(num));
-					for (auto entsName : G_ECMANAGER->EntityName)
-					{
-						if (entsName.second.rfind(tempName) != std::string::npos)
+						std::string actualName = newName;
+						int digits = 0;
+						for (int i = (int)actualName.size() - 1; i >= 0; --i)
 						{
-							num++;
-							reset = true;
+							if (isdigit(actualName[i]))
+								digits++;
+							else
+							{
+								if (actualName[i] == '_')
+								{
+									reset = true;
+									actualName = actualName.substr(0, actualName.size() - digits - 1);
+									break;
+								}
+								else
+								{
+									newName.append("_1");
+									break;
+								}
+							}
+						}
+
+						while (reset)
+						{
+							reset = false;
+							std::string tempName = actualName;
+							tempName.append("_" + std::to_string(num));
+							for (auto entsName : G_ECMANAGER->EntityName)
+							{
+								if (entsName.second.rfind(tempName) != std::string::npos)
+								{
+									num++;
+									reset = true;
+								}
+							}
+							if (!reset)
+								newName = tempName;
 						}
 					}
-					if (!reset)
-						newName = tempName;
+
+					ENTITY_COMP_DATA compData;
+					ReadIntoCompVec(ent, &compData);
+
+					_allCopiedObjs.push_back(std::make_pair(newName, compData));
+
 				}
 			}
 
+		
+
 			// Causes memory leaks currently (Probably Graphics Side)
+			
+			/*
 			Entity newEnt = ent.Copy(G_ECMANAGER, newName);
 			bool multi = false;
 			if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
@@ -491,9 +753,15 @@ void HierarchyInspector::CopyObjects()
 			}
 
 			LE_ECHELPER->SelectEntity(newEnt.getId(), multi);
-
-			_scrollBottom = true;
+			*/
+			
+			
 		}
+
+
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("HIERARCHY_COPY_OBJECTS"), std::any(_allCopiedObjs));
+
+		_scrollBottom = true;
 	}
 
 	_allowCopy = aCopy;
@@ -503,10 +771,12 @@ void HierarchyInspector::DeleteObjects()
 {
 	if (!ImGui::IsAnyItemFocused())
 	{
+		std::vector<Entity> entVec;
 		for (Entity ent : G_ECMANAGER->getEntityContainer())
 		{
 			if (LE_ECHELPER->SelectedEntities()[ent.getId()])
 			{
+				/*
 				ComponentLight* lightcomp = ent.getComponent<LightComponent>();
 
 				if (lightcomp)
@@ -515,8 +785,104 @@ void HierarchyInspector::DeleteObjects()
 				}
 
 				G_ECMANAGER->FreeEntity(ent.getId());
+				*/
+				entVec.push_back(ent);
 			}
 		}
+
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("HIERARCHY_DELETE_OBJECTS"), std::any(entVec));
+	}
+}
+
+void HierarchyInspector::ReadIntoCompVec(Entity ent, ENTITY_COMP_DATA* data)
+{
+	ENTITY_COMP_DATA& compData = *data;
+	if (ent.getComponent<ComponentTransform>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<ComponentTransform>()->Write());
+		compData.insert(std::make_pair(typeid(ComponentTransform).hash_code(), comp));
+	}
+	if (ent.getComponent<ComponentLoadAudio>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<ComponentLoadAudio>()->Write());
+		compData.insert(std::make_pair(typeid(ComponentLoadAudio).hash_code(), comp));
+	}
+	if (ent.getComponent<ComponentGraphics>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<ComponentGraphics>()->Write());
+		compData.insert(std::make_pair(typeid(ComponentGraphics).hash_code(), comp));
+	}
+	if (ent.getComponent<ColliderComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<ColliderComponent>()->Write());
+		compData.insert(std::make_pair(typeid(ColliderComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<RigidBody>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<RigidBody>()->Write());
+		compData.insert(std::make_pair(typeid(RigidBody).hash_code(), comp));
+	}
+	if (ent.getComponent<LightComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<LightComponent>()->Write());
+		//ent.getComponent<LightComponent>()->SetType(NS_GRAPHICS::Lights::INVALID_TYPE);
+		compData.insert(std::make_pair(typeid(LightComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<ScriptComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<ScriptComponent>()->Write());
+		compData.insert(std::make_pair(typeid(ScriptComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<CanvasComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<CanvasComponent>()->Write());
+		compData.insert(std::make_pair(typeid(CanvasComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<CScriptComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<CScriptComponent>()->Write());
+		compData.insert(std::make_pair(typeid(CScriptComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<PlayerStatsComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<PlayerStatsComponent>()->Write());
+		compData.insert(std::make_pair(typeid(PlayerStatsComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<CauldronStatsComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<CauldronStatsComponent>()->Write());
+		compData.insert(std::make_pair(typeid(CauldronStatsComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<VariablesComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<VariablesComponent>()->Write());
+		compData.insert(std::make_pair(typeid(VariablesComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<NavComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<NavComponent>()->Write());
+		compData.insert(std::make_pair(typeid(NavComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<AnimationComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<AnimationComponent>()->Write());
+		compData.insert(std::make_pair(typeid(AnimationComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<WayPointMapComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<WayPointMapComponent>()->Write());
+		compData.insert(std::make_pair(typeid(WayPointMapComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<WayPointComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<WayPointComponent>()->Write());
+		compData.insert(std::make_pair(typeid(WayPointComponent).hash_code(), comp));
+	}
+	if (ent.getComponent<EmitterComponent>())
+	{
+		ENTITY_COMP_INFO comp(ent.getComponent<EmitterComponent>()->Write());
+		//NS_GRAPHICS::EmitterSystem::GetInstance().RemoveEmitterByID(ent.getComponent<EmitterComponent>()->_emitterID);
+		compData.insert(std::make_pair(typeid(EmitterComponent).hash_code(), comp));
 	}
 }
 

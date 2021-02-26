@@ -25,13 +25,35 @@ namespace NS_GRAPHICS
 			glm::vec3 _tangent;
 		};
 
+		struct SkinData
+		{
+			glm::ivec4 _boneID;
+			glm::vec4 _boneWeights;
+
+			void AddBoneData(int boneID, float boneWeight)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					if (_boneWeights[i] == 0.0f)
+					{
+						_boneID[i] = boneID;
+						_boneWeights[i] = boneWeight;
+						return;
+					}
+				}
+			}
+		};
+
 		//Vertex Data might not be needed
 		std::vector<VertexData> _vertexDatas;
+		std::vector<SkinData> _skinDatas;
 		std::vector<unsigned> _indices;
 
 		GLuint VAO = NULL;
 		GLuint VBO = NULL;
 		GLuint EBO = NULL;
+
+		GLuint BoneBO = NULL;
 		
 		GLuint ModelMatrixBO = NULL;
 
@@ -59,21 +81,9 @@ namespace NS_GRAPHICS
 			glm::vec2 _uv;
 			glm::vec3 _normals;
 			glm::vec3 _tangent;
-			glm::ivec4 _boneID;
-			glm::vec4 _boneWeights;
 
-			void AddBoneData(int boneID, float boneWeight)
-			{
-				for (int i = 0; i < 4; ++i)
-				{
-					if (_boneWeights[i] == 0.0f)
-					{
-						_boneID[i] = boneID;
-						_boneWeights[i] = boneWeight;
-						return;
-					}
-				}
-			}
+
+
 		};
 
 		//Vertex Data might not be needed
