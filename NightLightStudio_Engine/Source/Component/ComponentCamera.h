@@ -16,7 +16,7 @@ typedef class ComponentCamera : public ISerializable //: public IComponent
 public:
 	// Temporarily make them public for easy access
 
-	bool _isActive; // Temporarily set to true at beginning
+	bool _isActive;
 	NS_GRAPHICS::Camera _data;
 	//// value is -1 if no camera is assigned
 	//int _cameraID;

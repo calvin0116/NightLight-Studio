@@ -20,7 +20,7 @@ private:
 		//return rhs.size() > (N - 1);
 
 		memcpy(stringData, rhs.c_str(), N - 1);
-		stringData[N - 2] = 0; // nani
+		stringData[N - 1] = 0; // nani
 		return rhs.size() > (N - 1);
 	}
 	void copyFromLocalString(const LocalString& rhs)

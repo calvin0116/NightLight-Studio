@@ -3,7 +3,7 @@
 #include "ComponentManager.h"
 
 ComponentCamera::ComponentCamera()
-	: _isActive{ true }, _data()/*_cameraID{ -1 }, _flag{ COLOUR },
+	: _isActive{ false }, _data()/*_cameraID{ -1 }, _flag{ COLOUR },
 	_colour{ 0.5f,0.5f,0.5f }, _fov{ 45.0f }, _near{ 1.0f }, _far{ 50000.0f },
 	_x{}, _y{}, _w{}, _h{}, _depth{ 0 }*/
 {
