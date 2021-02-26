@@ -22,6 +22,48 @@ private:
 
 	//Used for displaying list in alphabetical order
 	std::vector<Entity> ent_list_to_display;
+
+	struct ENTITY_COMP_INFO
+	{
+		std::shared_ptr<Document> _rjDoc;
+		ENTITY_COMP_INFO(Value&& val) : _rjDoc{ std::make_shared<Document>() }
+		{
+			Copy(std::move(val));
+		}
+		~ENTITY_COMP_INFO() {}
+
+		void Copy(Value&& val)
+		{
+			if (_rjDoc->IsObject())
+			{
+				_rjDoc->RemoveAllMembers();
+			}
+			_rjDoc->CopyFrom(val, _rjDoc->GetAllocator(), true);
+		}
+
+		ENTITY_COMP_INFO(const ENTITY_COMP_INFO& ecd) : _rjDoc{ std::make_shared<Document>() }
+		{
+			if (_rjDoc->IsObject())
+			{
+				_rjDoc->RemoveAllMembers();
+			}
+			_rjDoc->CopyFrom(*ecd._rjDoc, _rjDoc->GetAllocator(), true);
+		}
+
+		std::string StringOut()
+		{
+			rapidjson::StringBuffer buffer;
+
+			buffer.Clear();
+
+			rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+			(*_rjDoc).Accept(writer);
+
+			return std::string(buffer.GetString());
+		}
+	};
+	typedef std::map <size_t, ENTITY_COMP_INFO> ENTITY_COMP_DATA;
+
 public :
 	HierarchyInspector()
 		: selected_index{}, _allowCopy{ true }, _scrollBottom{ false }, _hieState{ HS_NORMAL }
