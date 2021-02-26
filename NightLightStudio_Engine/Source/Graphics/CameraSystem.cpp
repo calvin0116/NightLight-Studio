@@ -567,7 +567,7 @@ namespace NS_GRAPHICS
 				if (myComp->_isActive)
 				{
 					_camera = myComp->_data;
-					std::cout << "Camera changed!" << std::endl;
+					//std::cout << "Camera changed!" << std::endl;
 					Update();
 					break;
 				}
@@ -578,7 +578,7 @@ namespace NS_GRAPHICS
 			//ReleaseSounds();
 			_Inited = false;
 			_camera = _editorCam;
-			std::cout << "Camera reverted!" << std::endl;
+			//std::cout << "Camera reverted!" << std::endl;
 			Update();
 		}
 	}
