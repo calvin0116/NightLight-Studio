@@ -426,6 +426,7 @@
     <ClCompile Include="..\Include\tracy-master\TracyClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\AssetsMananger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -833,6 +834,8 @@
     <ClInclude Include="Source\Component\ComponentResolver.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\AssetInfo.h" />
+    <ClInclude Include="Source\Core\AssetsMananger.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
