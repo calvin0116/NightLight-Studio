@@ -24,92 +24,92 @@ namespace NS_GRAPHICS
 	{
 	}
 
-	//Debug Function
-	void MaxInfluencePerVertex(const aiMesh* mesh)
-	{
-		std::vector<int> counts;
-		std::vector<float> weights;
-		counts.resize(mesh->mNumVertices);
-		weights.resize(mesh->mNumVertices);
-		for (unsigned i = 0; i < mesh->mNumBones; i++) {
-			const aiBone* bone = mesh->mBones[i];
-			for (unsigned j = 0; j < bone->mNumWeights; j++) {
-				const aiVertexWeight* weight = &bone->mWeights[j];
-				counts[weight->mVertexId]++;
-				weights[weight->mVertexId] += weight->mWeight;
-			}
-		}
-		int max = 0;
-		int index = 0;
-		for (unsigned i = 0; i < mesh->mNumVertices; i++) {
-			if (max < counts[i])
-			{
-				max = counts[i];
-				index = i;
-			}
-		}
+	////Debug Function
+	//void MaxInfluencePerVertex(const aiMesh* mesh)
+	//{
+	//	std::vector<int> counts;
+	//	std::vector<float> weights;
+	//	counts.resize(mesh->mNumVertices);
+	//	weights.resize(mesh->mNumVertices);
+	//	for (unsigned i = 0; i < mesh->mNumBones; i++) {
+	//		const aiBone* bone = mesh->mBones[i];
+	//		for (unsigned j = 0; j < bone->mNumWeights; j++) {
+	//			const aiVertexWeight* weight = &bone->mWeights[j];
+	//			counts[weight->mVertexId]++;
+	//			weights[weight->mVertexId] += weight->mWeight;
+	//		}
+	//	}
+	//	int max = 0;
+	//	int index = 0;
+	//	for (unsigned i = 0; i < mesh->mNumVertices; i++) {
+	//		if (max < counts[i])
+	//		{
+	//			max = counts[i];
+	//			index = i;
+	//		}
+	//	}
 
-		std::cout << "Max Bone Influence Per Vertex : " << max << std::endl;
-		std::cout << "Total Weights at max bone influence index: " << weights[index] << std::endl;
-	}
+	//	std::cout << "Max Bone Influence Per Vertex : " << max << std::endl;
+	//	std::cout << "Total Weights at max bone influence index: " << weights[index] << std::endl;
+	//}
 
-	//Debug Function
-	void SeeAllSkeleton(aiNode* node, const aiScene* scene, Model*& model)
-	{
-		for (unsigned int i = 0; i < node->mNumMeshes; i++)
-		{
-			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+	////Debug Function
+	//void SeeAllSkeleton(aiNode* node, const aiScene* scene, Model*& model)
+	//{
+	//	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	//	{
+	//		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 
-			std::cout << "Mesh Name: " << mesh->mName.C_Str() << std::endl;
-			std::cout << "Node Name: " << node->mName.C_Str() << std::endl;
+	//		std::cout << "Mesh Name: " << mesh->mName.C_Str() << std::endl;
+	//		std::cout << "Node Name: " << node->mName.C_Str() << std::endl;
 
-			for (unsigned int j = 0; j < mesh->mNumBones; j++)
-			{
-				std::cout << "Bone " << j << ": " << mesh->mBones[j]->mName.C_Str() << std::endl;
-				Joint joint;
+	//		for (unsigned int j = 0; j < mesh->mNumBones; j++)
+	//		{
+	//			std::cout << "Bone " << j << ": " << mesh->mBones[j]->mName.C_Str() << std::endl;
+	//			Joint joint;
 
-				joint._boneID = j;
-				joint._boneName = mesh->mBones[j]->mName.C_Str();
-			}
-		}
-		for (unsigned int i = 0; i < node->mNumChildren; i++)
-		{
-			SeeAllSkeleton(node->mChildren[i], scene, model);
-		}
-	}
+	//			joint._boneID = j;
+	//			joint._boneName = mesh->mBones[j]->mName.C_Str();
+	//		}
+	//	}
+	//	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	//	{
+	//		SeeAllSkeleton(node->mChildren[i], scene, model);
+	//	}
+	//}
 
-	//Debug Function
-	void SeeAllAnimation(aiNode* node, const aiScene* scene)
-	{
-		UNREFERENCED_PARAMETER(node);
+	////Debug Function
+	//void SeeAllAnimation(aiNode* node, const aiScene* scene)
+	//{
+	//	UNREFERENCED_PARAMETER(node);
 
-		for (unsigned int i = 0; i < scene->mNumAnimations; i++)
-		{
-			std::cout << "Animation " << i << ": " << scene->mAnimations[i]->mName.C_Str() << std::endl;
-			for (unsigned int x = 0; x < scene->mAnimations[i]->mNumChannels; x++)
-			{
-				std::cout << "Animation Affecting bones " << scene->mAnimations[i]->mChannels[x]->mNodeName.C_Str() << std::endl;
-				for (unsigned int y = 0; y < scene->mAnimations[i]->mChannels[x]->mNumPositionKeys; y++)
-				{
-					std::cout << "Frame time:  " << scene->mAnimations[i]->mChannels[x]->mPositionKeys[y].mTime << std::endl;
-				}
-			}
-		}
-	}
+	//	for (unsigned int i = 0; i < scene->mNumAnimations; i++)
+	//	{
+	//		std::cout << "Animation " << i << ": " << scene->mAnimations[i]->mName.C_Str() << std::endl;
+	//		for (unsigned int x = 0; x < scene->mAnimations[i]->mNumChannels; x++)
+	//		{
+	//			std::cout << "Animation Affecting bones " << scene->mAnimations[i]->mChannels[x]->mNodeName.C_Str() << std::endl;
+	//			for (unsigned int y = 0; y < scene->mAnimations[i]->mChannels[x]->mNumPositionKeys; y++)
+	//			{
+	//				std::cout << "Frame time:  " << scene->mAnimations[i]->mChannels[x]->mPositionKeys[y].mTime << std::endl;
+	//			}
+	//		}
+	//	}
+	//}
 
-	//Debug Function
-	void SeeAllNode(aiNode* node, const aiScene* scene)
-	{
-		if (node->mParent)
-		{
-			std::cout << "Parented to : " << node->mParent->mName.C_Str() << std::endl;
-		}
-		std::cout << "	Node : " << node->mName.C_Str() << std::endl;
-		for (unsigned int i = 0; i < node->mNumChildren; i++)
-		{
-			SeeAllNode(node->mChildren[i], scene);
-		}
-	}
+	////Debug Function
+	//void SeeAllNode(aiNode* node, const aiScene* scene)
+	//{
+	//	if (node->mParent)
+	//	{
+	//		std::cout << "Parented to : " << node->mParent->mName.C_Str() << std::endl;
+	//	}
+	//	std::cout << "	Node : " << node->mName.C_Str() << std::endl;
+	//	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	//	{
+	//		SeeAllNode(node->mChildren[i], scene);
+	//	}
+	//}
 
 	void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene, Model*& model)
 	{
@@ -120,7 +120,7 @@ namespace NS_GRAPHICS
 			
 			if (model->_isAnimated)
 			{
-				model->_animatedMeshes.push_back(ProcessAnimatedMesh(node, mesh, scene, model));
+				model->_meshes.push_back(ProcessAnimatedMesh(node, mesh, scene, model));
 			}
 			else
 			{
@@ -188,16 +188,17 @@ namespace NS_GRAPHICS
 		return newMesh;
 	}
 
-	AnimatedMesh* ModelLoader::ProcessAnimatedMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model)
+	Mesh* ModelLoader::ProcessAnimatedMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model)
 	{
 		//MaxInfluencePerVertex(mesh);
-		AnimatedMesh* newAnimatedMesh = new AnimatedMesh();
+		Mesh* newAnimatedMesh = new Mesh();
 		newAnimatedMesh->_nodeName = mesh->mName.C_Str();
 		newAnimatedMesh->_vertexDatas.reserve((size_t)mesh->mNumVertices);
 
 		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 		{
-			AnimatedMesh::VertexData vertexData{};
+			Mesh::VertexData vertexData{};
+			Mesh::SkinData skinData{};
 
 			vertexData._position.x = mesh->mVertices[i].x;
 			vertexData._position.y = mesh->mVertices[i].y;
@@ -226,10 +227,11 @@ namespace NS_GRAPHICS
 			}
 
 			//Explicitly zero out all
-			vertexData._boneID = glm::ivec4(0);
-			vertexData._boneWeights = glm::vec4(0.0f);
+			skinData._boneID = glm::ivec4(0);
+			skinData._boneWeights = glm::vec4(0.0f);
 
 			newAnimatedMesh->_vertexDatas.push_back(vertexData);
+			newAnimatedMesh->_skinDatas.push_back(skinData);
 		}
 
 		ProcessBone(node, mesh, scene, model, newAnimatedMesh);
@@ -247,7 +249,7 @@ namespace NS_GRAPHICS
 		return newAnimatedMesh;
 	}
 
-	void ModelLoader::ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, AnimatedMesh* animatedMesh)
+	void ModelLoader::ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, Mesh* animatedMesh)
 	{
 		UNREFERENCED_PARAMETER(scene);
 		UNREFERENCED_PARAMETER(node);
@@ -277,7 +279,7 @@ namespace NS_GRAPHICS
 				unsigned vertexID = mesh->mBones[i]->mWeights[j].mVertexId;
 				float weight = mesh->mBones[i]->mWeights[j].mWeight;
 
-				animatedMesh->_vertexDatas[vertexID].AddBoneData(boneID, weight);
+				animatedMesh->_skinDatas[vertexID].AddBoneData(boneID, weight);
 			}
 		}
 	}
@@ -448,7 +450,7 @@ namespace NS_GRAPHICS
 		if (scene->HasAnimations())
 		{
 			model->_isAnimated = true;
-			model->_animatedMeshes.reserve(scene->mNumMeshes);
+			model->_meshes.reserve(scene->mNumMeshes);
 
 			AssimpToGLM(scene->mRootNode->mTransformation, model->_globalInverseTransform);
 			model->_globalInverseTransform = glm::inverse(model->_globalInverseTransform);
@@ -658,13 +660,13 @@ namespace NS_GRAPHICS
 
 		if (model->_isAnimated)
 		{
-			auto meshIterator = model->_animatedMeshes.begin();
-			auto meshIteratorEnd = model->_animatedMeshes.end();
+			//auto meshIterator = model->_animatedMeshes.begin();
+			//auto meshIteratorEnd = model->_animatedMeshes.end();
 
-			while (meshIterator != meshIteratorEnd)
+			/*while (meshIterator != meshIteratorEnd)
 			{
 				++meshIterator;
-			}
+			}*/
 		}
 		else
 		{

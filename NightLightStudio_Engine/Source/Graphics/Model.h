@@ -33,7 +33,7 @@ namespace NS_GRAPHICS
 		std::vector<Mesh*> _meshes;
 
 		//For animated meshes
-		std::vector<AnimatedMesh*> _animatedMeshes;
+		//std::vector<AnimatedMesh*> _animatedMeshes;
 
 		bool _isAnimated = false;
 

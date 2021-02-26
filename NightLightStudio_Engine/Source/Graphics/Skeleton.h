@@ -29,7 +29,6 @@ namespace NS_GRAPHICS
 		std::map<std::string, std::pair<unsigned, glm::mat4>> _boneMapping;
 		unsigned _boneCount = 0;
 
-
 		Skeleton() = default;
 		~Skeleton() = default;
 	};
