@@ -234,12 +234,16 @@ void main(void)
         vec3 L = normalize(sLights[k].position.xyz - fragPos); // light vector
         vec3 H = normalize(V + L); // Halfway-bisecting vector
         float distance = length(sLights[k].position.xyz - fragPos);
-        float attenuation = 1.f / (distance * distance); // inverse squared
+        //float attenuation = 1.f / (distance * distance); // inverse squared
 
-        float theta = dot(L, normalize(-sLights[k].direction.xyz)); 
+        float theta = dot(L, normalize(-sLights[k].direction.xyz));
+
+        float attenuation = smoothstep(theta, -radians(sLights[k].cutOff), distance); // where 100.f is the radius
+
         float epsilon = sLights[k].cutOff - sLights[k].outerCutOff;
 
-        float intensity = clamp((theta - sLights[k].outerCutOff) / epsilon, 0.f, 1.f);
+        //float intensity = clamp((theta - sLights[k].outerCutOff) / epsilon, 0.f, 1.f);
+        float intensity = min(pow((theta - sLights[k].outerCutOff) / epsilon, 6.f), 1.f);
 
         vec3 radiance = (sLights[k].diffuse.xyz * sLights[k].intensity)
                         * attenuation * intensity; // diffuse used in place of color

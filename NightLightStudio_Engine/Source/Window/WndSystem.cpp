@@ -149,7 +149,8 @@ namespace NS_WINDOW
 		//return true; // Return error msg for breaking out of update loop
 
 		// Tracy
-		ZoneScoped
+		// Zone Color: Peach
+		ZoneScopedNC("Window", 0xfabaa5);
 	}
 
 	// Frees the resources used by the System

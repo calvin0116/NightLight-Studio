@@ -33,7 +33,8 @@ void SystemInput::Update()
 	_siMousePos.Update();
 
 	// Tracy
-	ZoneScoped
+	// Zone Color: Purple
+	ZoneScopedNC("Input", 0xd724ff);
 }
 
 void SystemInput::Free()

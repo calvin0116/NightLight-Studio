@@ -74,6 +74,8 @@ private:
 	ENTITY_LAST_POS _lastPos_ELP;
 	std::vector<ENTITY_LAST_POS> _allOtherLastPos_ELP;
 
+	glm::mat4 _transformItemActive;
+
 	int _itemType;
 
 	bool _notRemove;
@@ -95,11 +97,10 @@ private:
   void CScriptComp(Entity& ent);
   void PlayerStatsComp(Entity& ent);
   void CauldronStatsComp(Entity& ent);
-	  void VariableComp(Entity& ent);
-	  void NavComp(Entity& ent);
-	  void WayPointPathComp(Entity& ent);
-	  void WayPointComp(Entity& ent);
-
+	void VariableComp(Entity& ent);
+	void NavComp(Entity& ent);
+	void WayPointPathComp(Entity& ent);
+	void WayPointComp(Entity& ent);
 
 	void AddSelectedComps(Entity& ent);
 

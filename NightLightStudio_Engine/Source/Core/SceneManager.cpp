@@ -107,7 +107,8 @@ namespace NS_SCENE
 		}
 
 		// Tracy
-		ZoneScoped
+		// Zone Color: Red
+		ZoneScopedNC("Scene Manager", 0xff1f2a);
 	}
 
 	SCENE_CHANGE SceneManager::CheckChangeScene()

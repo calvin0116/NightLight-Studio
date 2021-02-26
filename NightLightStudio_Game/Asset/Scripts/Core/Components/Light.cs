@@ -30,12 +30,6 @@ namespace Unicorn
       set { set_Intensity_Internal(this.native_handle, value); }
     }
 
-    public float attenuation
-    {
-      get { return get_Attenuation_Internal(this.native_handle); }
-      set { set_Attenuation_Internal(this.native_handle, value); }
-    }
-
     public float inCutOff
     {
       get { return get_inCutOff_Internal(this.native_handle); }
@@ -48,14 +42,20 @@ namespace Unicorn
       set { set_outCutOff_Internal(this.native_handle, value); }
     }
 
-    public Vector3 GetAmbient()
+    public float radius
     {
-      return get_Ambient_Internal(native_handle);
+      get { return get_Radius_Internal(this.native_handle); }
+      set { set_Radius_Internal(this.native_handle, value); }
     }
 
-    public void SetAmbient(Vector3 val)
+    public Vector3 GetColor()
     {
-      set_Ambient_Internal(native_handle, val);
+      return get_Color_Internal(native_handle);
+    }
+
+    public void SetColor(Vector3 val)
+    {
+      set_Color_Internal(native_handle, val);
     }
 
     public Vector3 GetDiffuse()
@@ -98,13 +98,6 @@ namespace Unicorn
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void set_Intensity_Internal(IntPtr native_handle, float val);
 
-    // Getter/Setter for Intensity
-    [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static float get_Attenuation_Internal(IntPtr native_handle);
-
-    [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static void set_Attenuation_Internal(IntPtr native_handle, float val);
-
     // Getter/Setter for InnerCutoff
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static float get_inCutOff_Internal(IntPtr native_handle);
@@ -118,13 +111,20 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void set_outCutOff_Internal(IntPtr native_handle, float val);
-    
-    // Getter/Setter for Ambient
+
+    // Getter/Setter for OuterCutoff
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static Vector3 get_Ambient_Internal(IntPtr native_handle);
+    public extern static float get_Radius_Internal(IntPtr native_handle);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static void set_Ambient_Internal(IntPtr native_handle, Vector3 val);
+    public extern static void set_Radius_Internal(IntPtr native_handle, float val);
+
+    // Getter/Setter for Ambient
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 get_Color_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_Color_Internal(IntPtr native_handle, Vector3 val);
 
     // Getter/Setter for Diffuse
     [MethodImpl(MethodImplOptions.InternalCall)]
