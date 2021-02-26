@@ -334,7 +334,15 @@ void HierarchyInspector::EntityFunction(Entity& ent, int& index, int tag_of_ent)
 					// If Selected, Deselect if different
 					if (LE_ECHELPER->GetSelectedEntityID() != ent.getId())
 					{
-						LE_ECHELPER->DeSelectEntity(ent.getId());
+						if (multi)
+						{
+							LE_ECHELPER->DeSelectEntity(ent.getId());
+						}
+						else
+						{
+							LE_ECHELPER->SelectEntity(ent.getId());
+						}
+						
 					}
 					else
 					{
