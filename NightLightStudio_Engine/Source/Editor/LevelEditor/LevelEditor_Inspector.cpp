@@ -2329,17 +2329,55 @@ bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjec
 	float matrixTranslation[3], matrixRotation[3], matrixScale[3];
 	ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(matrix), matrixTranslation, matrixRotation, matrixScale);
 
-	if (ImGui::InputFloat3("Translation##TRANSLATION", matrixTranslation, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+	bool activated = false;
+	bool deactivated = false;
+
+	if (ImGui::InputFloat3("Translation##TRANSLATION", matrixTranslation, 3))
+	{
+		//_lastEnter = true;
+	}
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		deactivated = true;
+	}
+	else if (ImGui::IsItemActivated())
+	{
+		activated = true;
+	}
+	
+	if (ImGui::InputFloat3("Rotation##ROTATION", matrixRotation, 3))
+	{
+		//_lastEnter = true;
+	}
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		deactivated = true;
+	}
+	else if (ImGui::IsItemActivated())
+	{
+		activated = true;
+	}
+
+	if (ImGui::InputFloat3("Scale##SCALE", matrixScale, 3))
+	{
+		//_lastEnter = true;
+	}
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		deactivated = true;
+	}
+	else if (ImGui::IsItemActivated())
+	{
+		activated = true;
+	}
+
+	if (deactivated)
 	{
 		_lastEnter = true;
 	}
-	if (ImGui::InputFloat3("Rotation##ROTATION", matrixRotation, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+	else if (activated)
 	{
-		_lastEnter = true;
-	}
-	if (ImGui::InputFloat3("Scale##SCALE", matrixScale, 3, ImGuiInputTextFlags_EnterReturnsTrue))
-	{
-		_lastEnter = true;
+		_transformItemActive = matrix;
 	}
 
 	//ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, matrix);
@@ -2523,12 +2561,19 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 				else if (_lastEnter)
 				{
 					_lastEnter = false;
-
 					ENTITY_LAST_POS newObj{ trans_comp , matObj };
 					std::any curPos = newObj;
 
+					float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
+					ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(_transformItemActive), trans, rot, scale);
+					trans_comp->_position = glm::make_vec3(trans);
+					trans_comp->_rotation = glm::make_vec3(rot);
+					trans_comp->_scale = glm::make_vec3(scale);
+
 					// Runs command to move object to new position from old position
 					_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
+
+					_transformItemActive = matObj;
 				}
 				else
 				{
