@@ -25,7 +25,7 @@ void HierarchyInspector::Start()
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("COPY_OBJECT", SystemInput_ns::IKEY_CTRL, "IDET", SystemInput_ns::OnHold,
 		[this]()
 		{
-			
+			CopyObjects();
 		});
 
 	// Delete Object
