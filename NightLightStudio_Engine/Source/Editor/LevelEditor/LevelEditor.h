@@ -35,6 +35,8 @@ public:
 	virtual void Init() {}
 	// Runs the Window. Main functions found here.
 	virtual void Run() {}
+	// Runs During Changing of Scene
+	virtual void GameExit() {}
 	// Exits the Window Loop. Runs after Run() and ImGui::End();
 	virtual void Exit() {}
 	// Ends the Window - Runs once on destruction only.
@@ -100,8 +102,10 @@ public:
 	// Run Once
 	void Init(HWND window); // Replace window with handle or something
 
+	void GameInit();
 	// Run Every Frame
 	bool Update(float dt = 0);
+	void GameExit();
 
 	// Run Once
 	void Exit();

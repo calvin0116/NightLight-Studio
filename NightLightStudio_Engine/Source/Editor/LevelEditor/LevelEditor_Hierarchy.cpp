@@ -242,16 +242,38 @@ void HierarchyInspector::Run()
 					break;
 				}
 	}
-	
 
 	if (_levelEditor->LE_AddCombo("##SORTBY", _sortType,
 		{
 			"No Sorting",
 			"Sort by tag",
+			"Sort by alphabetic order"
 		})
 		)
 	{
 		_hieState = (HIER_STATE)_sortType;
+		switch (_hieState)
+		{
+			case HS_SORTBYALPHA:
+			{
+				ent_list_to_display.clear();
+				for (Entity ent : G_ECMANAGER->getEntityContainer())
+				{
+					ent_list_to_display.push_back(ent);
+				}
+
+				std::sort(ent_list_to_display.begin(), ent_list_to_display.end(),
+					[](Entity& ent_1, Entity& ent_2)
+					{
+						std::string name_1 = G_ECMANAGER->EntityName[ent_1.getId()];
+						std::string name_2 = G_ECMANAGER->EntityName[ent_2.getId()];
+						return name_1 < name_2;
+					}
+				);
+
+				break;
+			}
+		}
 	}
 	// List box
 	_levelEditor->LE_AddInputText("Search", _search, 256, 0);
@@ -287,6 +309,15 @@ void HierarchyInspector::Run()
 			}
 			break;
 		}
+		case HS_SORTBYALPHA:
+		{
+			for (Entity& ent : ent_list_to_display)
+			{
+				EntityFunction(ent, n);
+				++n;
+			}
+			break;
+		}
 	}
 	
 	if (_scrollBottom)
@@ -294,6 +325,11 @@ void HierarchyInspector::Run()
 		ImGui::SetScrollHere(1.0f);
 		_scrollBottom = false;
 	}
+}
+
+void HierarchyInspector::GameExit()
+{
+	ent_list_to_display.clear();
 }
 
 void HierarchyInspector::Exit()
