@@ -1243,6 +1243,7 @@ void InspectorWindow::ScriptComp(Entity& ent)
 						std::string name = LE_GetFilename(*str);
 						name.erase(name.end() - 3, name.end());
 						Script_comp->_ScriptName = name;
+					}
 /*
 				[this, &Script_comp](std::string* str)
 				{
@@ -1253,6 +1254,7 @@ void InspectorWindow::ScriptComp(Entity& ent)
 						Script_comp->_ScriptName = script_path.stem().string();
 					}
 					*/
+
 				});
 		}
 
