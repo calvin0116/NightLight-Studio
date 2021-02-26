@@ -117,6 +117,10 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<EmitterComponent>(Comp_list, entity, component_name, g_ecman);
             }
+            else if (component_name == "CameraComponent")
+            {
+              CreateAndWriteComp<CameraComponent>(Comp_list, entity, component_name, g_ecman);
+            }
         }
     }
 
@@ -231,6 +235,10 @@ namespace NS_SERIALISER {
             else if (component_name == "EmitterComponent")
             {
                 ReadComp<EmitterComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "CameraComponent")
+            {
+              ReadComp<CameraComponent>(Comp_list, entity, component_name);
             }
         }
     }

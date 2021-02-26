@@ -11,6 +11,7 @@
 #include "ComponentCollider.h"
 #include "ComponentTransform.h"
 #include "ComponentGraphics.h"
+#include "ComponentCamera.h"
 #include "ComponentRigidBody.h"
 #include "ComponentScript.h"
 #include "ComponentLight.h"

@@ -1346,6 +1346,7 @@ void ComponentManager::ComponentCreation()
 		comsetFac.AddComponentContainer<ComponentCanvas>();
 		comsetFac.AddComponentContainer<ComponentAnimation>();
 		comsetFac.AddComponentContainer<ComponentEmitter>();
+		comsetFac.AddComponentContainer<ComponentCamera>();
 		
 		comsetFac.AddComponentContainer<ComponentPlayerStats>();
 		comsetFac.AddComponentContainer<ComponentCauldronStats>();
