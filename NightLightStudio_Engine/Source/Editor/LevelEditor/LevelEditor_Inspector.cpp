@@ -1219,6 +1219,7 @@ void InspectorWindow::ScriptComp(Entity& ent)
 			});
 
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+//<<<<<<< Updated upstream
 				[this, &Script_comp, &tex](std::string* str)
 				{
 					std::string data = *str;
@@ -1232,7 +1233,16 @@ void InspectorWindow::ScriptComp(Entity& ent)
 						std::string name = LE_GetFilename(*str);
 						name.erase(name.end() - 3, name.end());
 						Script_comp->_ScriptName = name;
+/*
+				[this, &Script_comp](std::string* str)
+				{
+					fs::path script_path= *str;
+
+					if (script_path.extension() == ".cs")
+					{
+						Script_comp->_ScriptName = script_path.stem().string();
 					}
+					*/
 				});
 		}
 
@@ -1917,6 +1927,19 @@ void InspectorWindow::VariableComp(Entity& ent)
 					{
 						str = s_name.c_str();
 					});
+
+				_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+					[this, &str](std::string* _str)
+					{
+						str = *_str;
+					});
+
+				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
+					[this, &str](Entity* entptr)
+					{
+						str = G_ECMANAGER->EntityName[entptr->getId()];
+
+					});
 				str_index++;
 			}
 
@@ -2144,7 +2167,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  Graphics",
 			"  Light   ",
 			"  Collider",
-			"  CScript",
+			"  CScript(removed)",
 			"  C#Script",
 			"  Canvas",
 			"  PlayerStats",
@@ -2225,6 +2248,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 		}
 		
 		//case 11: -> ------
+		/*
 		case 6: // CScript
 		{
 			if (!ent.getComponent<CScriptComponent>())
@@ -2236,7 +2260,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 
 			}
 			break;
-		}
+		}*/
 		case 7: // C#Script
 		{
 		  if (!ent.getComponent<ScriptComponent>())
