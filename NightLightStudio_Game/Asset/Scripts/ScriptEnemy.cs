@@ -141,8 +141,8 @@ namespace Unicorn
 
       }
       //=================//
-
-
+		//Console.WriteLine("Cur waypoint:" + enemyNavigator.DistFromCurWp());
+		//Console.WriteLine("Prev waypoint:" + enemyNavigator.DistFromPrevWp());
     }
     public void Control()
     {

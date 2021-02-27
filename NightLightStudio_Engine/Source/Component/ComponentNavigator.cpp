@@ -4,13 +4,13 @@
 float ComponentNavigator::DistFromCurPathWP()
 {
 	TransformComponent* trans_comp = G_ECMANAGER->getEntity(this).getComponent<TransformComponent>();
-	return static_cast<float>((GetCurPathWp()->GetPos() - trans_comp->_position).length());
+	return glm::distance(GetCurPathWp()->GetPos(),trans_comp->_position);
 }
 
 float ComponentNavigator::DistFromPrevPathWP()
 {
 	TransformComponent* trans_comp = G_ECMANAGER->getEntity(this).getComponent<TransformComponent>();
-	return static_cast<float>((GetPrevPathWp()->GetPos() - trans_comp->_position).length());
+	return  glm::distance(GetPrevPathWp()->GetPos(), trans_comp->_position);
 }
 
 inline void ComponentNavigator::GoToClosestWP()
@@ -23,7 +23,7 @@ inline void ComponentNavigator::GoToClosestWP()
 	{
 		auto wp = this->GetCurPath().at(i);
 
-		float dist = static_cast<float>((wp->GetPos() - trans_comp->_position).length());
+		float dist = glm::distance(wp->GetPos(), trans_comp->_position);
 		if (dist < closest_wp.second)
 		{
 			closest_wp.first = i;
