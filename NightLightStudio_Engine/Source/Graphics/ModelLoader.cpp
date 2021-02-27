@@ -683,7 +683,7 @@ namespace NS_GRAPHICS
 
 		while (meshIterator != meshIteratorEnd)
 		{
-			SaveMeshVertex(modelFile, *meshIterator);
+			SaveMeshVertex(modelFile, *meshIterator, model->_isAnimated);
 			++meshIterator;
 		}
 
