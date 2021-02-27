@@ -144,7 +144,7 @@ int typeResolver<ComponentCamera>()
 template<>
 void setTypeResolver<ComponentCamera>(int set)
 {
-	ComponentEmitter_ind = set;
+	ComponentCamera_ind = set;
 }
 
 
