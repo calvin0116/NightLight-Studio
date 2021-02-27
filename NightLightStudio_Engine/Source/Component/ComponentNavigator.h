@@ -115,6 +115,9 @@ public:
 		return cur_wp_path->GetPath().at(path_indexes.at(prev_route_wp_index).first);
 	}
 
+	float DistFromCurPathWP();
+	float DistFromPrevPathWP();
+
 	//LocalVector<int>
 	bool MoreThenOneWPActive()
 	{
@@ -202,7 +205,7 @@ public:
 		*newcomp = *this;
 		return newcomp;
 	}
-	//================ Getter / Setter ========================//
+
 	void InitPath()
 	{
 		Entity ent = G_ECMANAGER->getEntity(this);
@@ -240,7 +243,9 @@ public:
 			break;
 		}
 		case WPP_CUSTOM:	//Inserted beforehand
-		{}
+		{
+			break;
+		}
 		}
 		//SetNextWp(this);
 	}
@@ -314,9 +319,9 @@ public:
 		//3. Find route to way point if being blocked
 	}
 
-	void FindClosestWP();
+	void GoToClosestWP();
 
-
+	//================ Getter / Setter ========================//
 	void SetSpeed(float spd)
 	{
 		speed = spd;
@@ -351,7 +356,7 @@ public:
 		return cur_wp_path->GetPath();
 	}
 
-	void TurnOffCurWayointPoint()
+	void TurnOffCurWayPoint()
 	{
 		path_indexes.at(cur_path_wp_index).second = false;
 	}
