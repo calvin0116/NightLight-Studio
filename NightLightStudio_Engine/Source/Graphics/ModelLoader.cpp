@@ -693,10 +693,10 @@ namespace NS_GRAPHICS
 			{
 				SaveAnimation(animationFile, anim.second);
 			}
-		}
 
-		Joint* root = &model->_rootBone->_rootJoint;
-		SaveSkeletal(skeletonFile, root);
+			Joint* root = &model->_rootBone->_rootJoint;
+			SaveSkeletal(skeletonFile, root);
+		}
 
 		if (model->_isAnimated)
 		{
