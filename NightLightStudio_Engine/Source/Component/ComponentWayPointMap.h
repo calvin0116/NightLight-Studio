@@ -43,6 +43,7 @@ public:
 			if (wp_str.empty())
 				continue;
 			Entity ent = G_ECMANAGER->getEntityUsingEntName(wp_str);
+			if(ent.getId() != -1)
 			cur_path.push_back(ent.getComponent<WayPointComponent>());
 		}
 	}

@@ -91,26 +91,26 @@ public:
 
 	WayPointComponent* GetCurPathWp()
 	{
-		if (cur_wp_path->GetPath().size() == 0)
+		if (cur_wp_path == nullptr || cur_wp_path->GetPath().size() == 0)
 			return nullptr;
 		return cur_wp_path->GetPath().at(path_indexes.at(cur_path_wp_index).first);
 	}
 	WayPointComponent* GetPrevPathWp()
 	{
-		if (cur_wp_path->GetPath().size() == 0)
+		if (cur_wp_path == nullptr || cur_wp_path->GetPath().size() == 0)
 			return nullptr;
 		return cur_wp_path->GetPath().at(path_indexes.at(prev_path_wp_index).first);
 	}
 
 	WayPointComponent* GetCurWalkingWp()
 	{
-		if (cur_wp_path->GetPath().size() == 0)
+		if (cur_wp_path == nullptr || cur_wp_path->GetPath().size() == 0)
 			return nullptr;
 		return cur_wp_path->GetPath().at(path_indexes.at(cur_route_wp_index).first);
 	}
 	WayPointComponent* GetPrevWalkingWp()
 	{
-		if (cur_wp_path->GetPath().size() == 0)
+		if (cur_wp_path == nullptr || cur_wp_path->GetPath().size() == 0)
 			return nullptr;
 		return cur_wp_path->GetPath().at(path_indexes.at(prev_route_wp_index).first);
 	}
