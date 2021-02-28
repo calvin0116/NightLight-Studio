@@ -11,6 +11,8 @@ namespace NS_GRAPHICS
 	//Local Path For Custom Graphics Files
 	static std::string s_LocalPathName = "Asset\\Model\\";
 	static std::string s_ModelFileType = ".model";
+	static std::string s_AnimationFileType = ".animation";
+	static std::string s_SkeletonFileType = ".skeleton";
 	const unsigned MAX_BONE_COUNT = 100;
 	const unsigned MAX_BONE_INFLUENCE = 4;
 

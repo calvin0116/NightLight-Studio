@@ -45,14 +45,19 @@ namespace NS_GRAPHICS
 		/// Loading & Saving Helper Functions
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		bool LoadFBX(Model*& model);
-		bool LoadCustomMesh(Model*& model);
-		bool SaveCustomMesh(Model*& model);
 
-		void SaveMeshVertex(std::ofstream& file, Mesh*& mesh);
-		void SaveAnimatedMeshVertex(std::ofstream& file, Mesh*& mesh);
+		bool LoadCustomModel(Model*& model);
+		bool SaveCustomModel(const std::string& name,Model*& model);
 
+		void SaveMeshVertex(std::ofstream& file, Mesh*& mesh, bool animated = false);
 		void LoadMeshVertex(std::ifstream& file, Mesh*& mesh);
-		void LoadAnimatedMeshVertex(std::ifstream& file, Mesh*& mesh);
+
+		void SaveSkeletal(std::ofstream& file, Joint*& joint);
+		void LoadSkeletal(std::ifstream& file, Joint*& joint);
+
+		void SaveAnimation(std::ofstream& file, Animation*& anim);
+		void LoadAnimation(std::ifstream& file, Animation*& anim);
+
 
 		//Just for debugging
 		void DebugToFile(const std::string& fileName);

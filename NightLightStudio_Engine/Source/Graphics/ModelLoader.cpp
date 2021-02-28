@@ -522,18 +522,18 @@ namespace NS_GRAPHICS
 		//Loads the correct function based on extension
 		if (fileName.find(s_ModelFileType) != std::string::npos)
 		{
-			if (!LoadCustomMesh(model))
+			if (!LoadCustomModel(model))
 			{
 				delete model;
 				return;
 			}
 
 			//If different pathing, saves another copy in our own asset folder
-			if (model->_fileName != searchString)
+			/*if (model->_fileName != searchString)
 			{
 				model->_fileName = s_LocalPathName + name + s_ModelFileType;
-				SaveCustomMesh(model);
-			}
+				SaveCustomModel(std::string(s_LocalPathName + name),model);
+			}*/
 		}
 		else
 		{
@@ -544,6 +544,9 @@ namespace NS_GRAPHICS
 			}
 
 			//model->_fileName = s_LocalPathName + name + s_ModelFileType;
+
+			std::string saveFileName = s_LocalPathName + name;
+			SaveCustomModel(saveFileName, model);
 			//SaveCustomMesh(model);
 		}
 
@@ -556,7 +559,7 @@ namespace NS_GRAPHICS
 
 		//TODO Saving custom mesh
 	}
-	bool ModelLoader::LoadCustomMesh(Model*& model)
+	bool ModelLoader::LoadCustomModel(Model*& model)
 	{
 		if (model->_fileName[0] == '\\')
 		{
@@ -568,7 +571,7 @@ namespace NS_GRAPHICS
 
 		if (!meshFile.is_open())
 		{
-			TracyMessageL("ModelLoader::LoadCustomMesh: Fail to opened model file");
+			TracyMessageL("ModelLoader::LoadCustomMesh: Fail to open model file");
 			//std::cout << "Fail to opened model file" << std::endl;
 			return false;
 		}
@@ -649,54 +652,66 @@ namespace NS_GRAPHICS
 		meshFile.close();
 		return true;
 	}
-	bool ModelLoader::SaveCustomMesh(Model*& model)
+	bool ModelLoader::SaveCustomModel(const std::string& fileName, Model*& model)
 	{
 		//Gets rid of warning for now
-		std::ofstream meshFile;
-		meshFile.open(model->_fileName.c_str());
-
+		std::ofstream modelFile;
+		modelFile.open(fileName + s_ModelFileType);
+		std::ofstream animationFile;
+		std::ofstream skeletonFile;
 		
+		//Sets up header info
 		if (model->_isAnimated)
 		{
-			meshFile << "IsAnimated 1,";
+			animationFile.open(fileName + s_AnimationFileType);
+			skeletonFile.open(fileName + s_SkeletonFileType);
+
+			modelFile << "IsAnimated 1,";
+			modelFile << fileName + s_AnimationFileType + ",";
+			modelFile << fileName + s_SkeletonFileType + "\n";
+			modelFile << model->_meshes.size() + "\n";
+			modelFile << model->_animations.size() + "\n";
 		}
 		else
 		{
-			meshFile << "IsAnimated 0,";
+			modelFile << "IsAnimated 0\n";
+			modelFile << model->_meshes.size() + "\n";
+		}
+
+		auto meshIterator = model->_meshes.begin();
+		auto meshIteratorEnd = model->_meshes.end();
+
+		while (meshIterator != meshIteratorEnd)
+		{
+			SaveMeshVertex(modelFile, *meshIterator, model->_isAnimated);
+			++meshIterator;
 		}
 
 		if (model->_isAnimated)
 		{
-			//auto meshIterator = model->_animatedMeshes.begin();
-			//auto meshIteratorEnd = model->_animatedMeshes.end();
-
-			/*while (meshIterator != meshIteratorEnd)
+			for (auto anim : model->_animations)
 			{
-				++meshIterator;
-			}*/
-		}
-		else
-		{
-			auto meshIterator = model->_meshes.begin();
-			auto meshIteratorEnd = model->_meshes.end();
-
-			while (meshIterator != meshIteratorEnd)
-			{
-				SaveMeshVertex(meshFile, *meshIterator);
-				meshFile << "END\n";
-				++meshIterator;
+				SaveAnimation(animationFile, anim.second);
 			}
 		}
 
-		meshFile.close();
+		Joint* root = &model->_rootBone->_rootJoint;
+		SaveSkeletal(skeletonFile, root);
+
+		if (model->_isAnimated)
+		{
+			skeletonFile.close();
+			animationFile.close();
+		}
+		modelFile.close();
 		return true;
 	}
-	void ModelLoader::SaveMeshVertex(std::ofstream& file, Mesh*& mesh)
+	void ModelLoader::SaveMeshVertex(std::ofstream& file, Mesh*& mesh, bool animated)
 	{
-		file << "VERTEX " << mesh->_vertexDatas.size() << "\n";
-		file << mesh->_nodeName << "\n";
-
 		size_t vertexCount = mesh->_vertexDatas.size();
+
+		file << "VERTEX " << vertexCount << "\n";
+		//file << mesh->_nodeName << "\n";
 		for (size_t i = 0; i < vertexCount; ++i)
 		{
 			file << "v: " << mesh->_vertexDatas[i]._position.x << ","
@@ -712,9 +727,26 @@ namespace NS_GRAPHICS
 				<< mesh->_vertexDatas[i]._normals.y << ","
 				<< mesh->_vertexDatas[i]._normals.z
 				<< "\n";
-		}
 
-		file << mesh->_indices.size() << " index ";
+			file << "t: " << mesh->_vertexDatas[i]._tangent.x << ","
+				<< mesh->_vertexDatas[i]._tangent.y << ","
+				<< mesh->_vertexDatas[i]._tangent.z
+				<< "\n";
+
+			if (animated)
+			{
+				file << "id: " << mesh->_skinDatas[i]._boneID.x << ","
+					<< mesh->_skinDatas[i]._boneID.y << ","
+					<< mesh->_skinDatas[i]._boneID.z << ","
+					<< mesh->_skinDatas[i]._boneID.w << "\n";
+
+				file << "weights: " << mesh->_skinDatas[i]._boneWeights.x << ","
+					<< mesh->_skinDatas[i]._boneWeights.y << ","
+					<< mesh->_skinDatas[i]._boneWeights.z << ","
+					<< mesh->_skinDatas[i]._boneWeights.w << "\n";
+			}
+		}
+		file << "INDICES " << mesh->_indices.size() << "\n";
 		int nextLineCount = 0;
 		for (auto& indices : mesh->_indices)
 		{
@@ -728,6 +760,100 @@ namespace NS_GRAPHICS
 			}
 		}
 	}
+	//void ModelLoader::LoadMeshVertex(std::ifstream& file, Mesh*& mesh)
+	//{
+	//}
+	void ModelLoader::SaveSkeletal(std::ofstream& file, Joint*& joint)
+	{
+		file << joint->_boneID << "," << joint->_boneName << "\n";
+		
+		file << joint->_boneTransformOffset[0][0] << ","
+			<< joint->_boneTransformOffset[0][1] << ","
+			<< joint->_boneTransformOffset[0][2] << ","
+			<< joint->_boneTransformOffset[0][3] << ","
+			<< joint->_boneTransformOffset[1][0] << ","
+			<< joint->_boneTransformOffset[1][1] << ","
+			<< joint->_boneTransformOffset[1][2] << ","
+			<< joint->_boneTransformOffset[1][3] << ","
+			<< joint->_boneTransformOffset[2][0] << ","
+			<< joint->_boneTransformOffset[2][1] << ","
+			<< joint->_boneTransformOffset[2][2] << ","
+			<< joint->_boneTransformOffset[2][3] << ","
+			<< joint->_boneTransformOffset[3][0] << ","
+			<< joint->_boneTransformOffset[3][1] << ","
+			<< joint->_boneTransformOffset[3][2] << ","
+			<< joint->_boneTransformOffset[3][3]
+			<< "\n";
+
+		file << joint->_boneTransform[0][0] << ","
+			<< joint->_boneTransform[0][1] << ","
+			<< joint->_boneTransform[0][2] << ","
+			<< joint->_boneTransform[0][3] << ","
+			<< joint->_boneTransform[1][0] << ","
+			<< joint->_boneTransform[1][1] << ","
+			<< joint->_boneTransform[1][2] << ","
+			<< joint->_boneTransform[1][3] << ","
+			<< joint->_boneTransform[2][0] << ","
+			<< joint->_boneTransform[2][1] << ","
+			<< joint->_boneTransform[2][2] << ","
+			<< joint->_boneTransform[2][3] << ","
+			<< joint->_boneTransform[3][0] << ","
+			<< joint->_boneTransform[3][1] << ","
+			<< joint->_boneTransform[3][2] << ","
+			<< joint->_boneTransform[3][3]
+			<< "\n";
+
+		file << joint->_childrenJoints.size() << "\n";
+
+		for (size_t boneIndex = 0; boneIndex < joint->_childrenJoints.size(); ++boneIndex)
+		{
+			Joint* childJoint = &joint->_childrenJoints[boneIndex];
+			SaveSkeletal(file, childJoint);
+		}
+	}
+	//void ModelLoader::LoadSkeletal(std::ifstream& file, Joint*& joint)
+	//{
+	//}
+	void ModelLoader::SaveAnimation(std::ofstream& file, Animation*& anim)
+	{
+		file << anim->_animName << "," << anim->_time << "\n";
+
+		for (auto frame : anim->_frames)
+		{
+			file << frame.first << "\n";
+
+			//Position & Time
+			size_t posSize = frame.second._position.size();
+			for (size_t posIndex = 0;posIndex < posSize;++posIndex)
+			{
+				file << frame.second._posTime[posIndex] << ","
+					<< frame.second._position[posIndex].x << ","
+					<< frame.second._position[posIndex].y << ","
+					<< frame.second._position[posIndex].z << "\n";	
+			}
+
+			size_t scaleSize = frame.second._scale.size();
+			for (size_t scaleIndex = 0; scaleIndex < scaleSize; ++scaleIndex)
+			{
+				file << frame.second._scaleTime[scaleIndex] << ","
+					<< frame.second._scale[scaleIndex].x << ","
+					<< frame.second._scale[scaleIndex].y << ","
+					<< frame.second._scale[scaleIndex].z << "\n";
+			}
+
+			size_t rotSize = frame.second._rotation.size();
+			for (size_t rotIndex = 0; rotIndex < rotSize; ++rotIndex)
+			{
+				file << frame.second._rotateTime[rotIndex] << ","
+					<< frame.second._rotation[rotIndex].x << ","
+					<< frame.second._rotation[rotIndex].y << ","
+					<< frame.second._rotation[rotIndex].z << "\n";
+			}
+		}
+	}
+	//void ModelLoader::LoadAnimation(std::ifstream& file, Animation*& anim)
+	//{
+	//}
 	void ModelLoader::DebugToFile(const std::string& fileName)
 	{
 		std::string name = fileName;

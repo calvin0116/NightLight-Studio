@@ -55,6 +55,14 @@ namespace Unicorn
        GoToNextWp_Internal(native_handle);
     }
 
+    public float DistFromCurWp()
+    {
+      return getDistFromCurPathWP_Internal(native_handle);
+    }
+    public float DistFromPrevWp()
+    {
+      return getDistFromPrevPathWP_Internal(native_handle);
+    }
     // Getter/Setter for speed
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static float get_Speed_Internal(IntPtr native_handle);
@@ -94,6 +102,11 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Vector3 get_Dir_Internal(IntPtr native_handle);
-    }
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float getDistFromCurPathWP_Internal(IntPtr native_handle);
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float getDistFromPrevPathWP_Internal(IntPtr native_handle);
+  }
 }
 

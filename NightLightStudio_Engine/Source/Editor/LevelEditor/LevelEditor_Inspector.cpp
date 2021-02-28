@@ -2090,6 +2090,8 @@ void InspectorWindow::NavComp(Entity& ent)
 
 			if (nav_comp->cur_wp_path != nullptr)
 				s_name = G_ECMANAGER->EntityName[G_ECMANAGER->getEntity(nav_comp->cur_wp_path).getId()];
+			else
+				s_name = nav_comp->wp_path_ent_name;
 
 			_levelEditor->LE_AddInputText("WayPointPath", s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&s_name, &nav_comp]()

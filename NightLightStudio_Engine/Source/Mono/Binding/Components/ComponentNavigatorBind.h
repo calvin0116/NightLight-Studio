@@ -16,10 +16,13 @@ namespace ComponentNavigatorBind
   int get_NavState_Internal(NavComponent* trans);
   void set_NavState_Internal(NavComponent* trans, int val);
 
+  //Way point functions
   void toggle_WayPointActive_Internal(NavComponent* nav, int val, bool act);
-
   bool MoreThenOneWPActive_Internal(NavComponent* nav);
   void GoToNextWp_Internal(NavComponent* nav);
+
+  float getDistFromCurPathWP_Internal(NavComponent* nav);
+  float getDistFromPrevPathWP_Internal(NavComponent* nav);
 
   MonoObject* get_Dir_Internal(NavComponent* nav);
 

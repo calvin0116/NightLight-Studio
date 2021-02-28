@@ -135,7 +135,7 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 	float dt = (float)(timeThisRound - timeLastRound).count() / 10000000.0f;
 
 	//Check if there is way point
-	if (!navComp->isFollowing)
+	if (!navComp->isFollowing || navComp->GetCurWalkingWp() == nullptr)
 	{
 		return;
 	}
@@ -165,6 +165,7 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 		return;
 	}
 	
+
 	//Determine next way point and whether to move towards it out not
 	glm::vec3 wp_pos = navComp->GetCurWalkingWp()->GetPos();
 	//wp_pos.y = 0.0f;
@@ -180,22 +181,6 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 			{
 				navComp->SetNextWp(nullptr);//Set next way point to be the target for navigation
 				navComp->dir = glm::normalize(navComp->dir);
-				/*
-				for (Entity& ent : Obstacle_list)
-				{
-					AABBCollider* obs_aabb = &ent.getComponent<ColliderComponent>()->collider.aabb;
-					TransformComponent* trans_aabb = ent.getComponent<TransformComponent>();
-					/*
-					//If obstacle in the way between way point
-					if (NlMath::RayToAABB(*obs_aabb, navTrans->_position, trans_aabb->_position))
-					{
-						NlMath::Vec3 points[] = {
-							trans_aabb->_position +
-
-
-						}
-					}
-				}*/
 				//std::cout << "Going to next wp" << std::endl;
 				TracyMessageL("AiManager::NavBehavior: Going to next wp");
 				rb->velocity = 0.0f;
