@@ -215,8 +215,23 @@ public:
 		if (cur_wp_path == nullptr)
 		{
 			if (!wp_path_ent_name.empty())
-				cur_wp_path = G_ECMANAGER->getEntityUsingEntName((std::string)wp_path_ent_name).getComponent<WayPointMapComponent>();
+			{
+				Entity path_ent = G_ECMANAGER->getEntityUsingEntName((std::string)wp_path_ent_name);
+				if (path_ent.getId() != -1)
+					cur_wp_path = path_ent.getComponent<WayPointMapComponent>();
+				else
+				{
+					TracyMessageL("ComponentNavigator::InitPath : No entity have been found");
+					return;
+				}
+			}
 			else
+			{
+				TracyMessageL("ComponentNavigator::InitPath : No entity name have been found");
+				return;
+			}
+			//if way point path entity does not exist
+			if (cur_wp_path == nullptr)
 				return;
 		}
 

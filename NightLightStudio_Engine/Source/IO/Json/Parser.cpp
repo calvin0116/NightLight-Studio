@@ -9,11 +9,11 @@ namespace NS_SERIALISER
     Parser::Parser(std::string name_, std::string path_, std::string type_)
     {
         name = name_;
-        path = path_ + "/";
+        folderpath = path_ + "/";
 
         alloc = &doc.GetAllocator();
 
-        filepath = path + name + type_;
+        fullfilepath = folderpath + name + type_;
     }
 
     Parser::~Parser()
@@ -29,11 +29,11 @@ namespace NS_SERIALISER
 
 
         //Read in the data from the file
-        std::ifstream in(filepath, std::ios::binary);
+        std::ifstream in(fullfilepath, std::ios::binary);
 
         if (!in)
         {
-            TracyMessageL(std::string("Parser::Load:: Error: Failed to open file in: " + filepath).c_str());
+            TracyMessageL(std::string("Parser::Load:: Error: Failed to open file in: " + fullfilepath).c_str());
             //std::cout << "Error: Failed to open file in: " + filepath << std::endl;
         }
         // dont skip on whitespace
@@ -71,12 +71,12 @@ namespace NS_SERIALISER
 
     std::string Parser::GetPath()
     {
-        return path;
+        return folderpath;
     }
 
     std::string Parser::GetFilePath()
     {
-        return filepath;
+        return fullfilepath;
     }
 
     Document& Parser::GetDoc()
@@ -196,7 +196,7 @@ namespace NS_SERIALISER
 
     void Parser::Save()
     {
-        std::ofstream ofs(filepath);
+        std::ofstream ofs(fullfilepath);
         OStreamWrapper osw(ofs);
 
         //StringBuffer buffer(doc);
