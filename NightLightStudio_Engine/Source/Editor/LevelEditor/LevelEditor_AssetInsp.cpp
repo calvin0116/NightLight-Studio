@@ -268,7 +268,7 @@ void AssetInspector::Run()
                         {
                             draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(0, 255, 0));
                         }
-                        else if (fileType == "fbx")
+                        else if (fileType == "fbx" || fileType == "model")
                         {
                             draw_list->AddRectFilled({ p0.x + 20.0f, p0.y }, { p1.x - 20.0f, p1.y - 40.0f }, ImColor(225, 0, 255));
                         }
