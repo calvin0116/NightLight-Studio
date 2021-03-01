@@ -12,6 +12,8 @@ struct Particle
 	float _size;
 	float _speed;
 	float _cameraDistance;
+	float _animationTime;
+	unsigned _currentFrame;
 	bool _alive;
 
 	Particle();

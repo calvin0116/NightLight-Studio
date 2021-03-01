@@ -27,17 +27,38 @@ struct UI_Element
 	glm::vec4 _colour = { 1.0f, 1.0f, 1.0f, 1.0f };		// Expose
 
 	bool _isActive = true; // Expose
+	bool _isAnimated = false; //Expose
+
+	//Should be exposed?
+	unsigned _row = 1;
+	unsigned _column = 1;
+	unsigned _totalFrame = 1;
+	//Frame per second is given in unsigned like 60 fps
+	//Which means animationRate should be 1s/60frames;
+	unsigned _framesPerSecond = 1;
+
+	//Not exposed Internal Usage
+	unsigned _currentFrame = 0;
+	float _animationRate = 1.0f;
+	float _timePassed = 0.0f;
+
+	//Should be exposed?
+	bool _play;
+	bool _loop;
 
 	LocalString<256> _fileName;
 	unsigned _imageID;
 
 	glm::mat4 GetModelMatrix();
 	void AddTexture(std::string filename); // Expose
+	void PlayAnimation(bool loop = false); // Expose
+	void StopAnimation();
 
 	//Expose this
 	//bool OnClick();
 	//Works only on screen space
 	bool OnClick() const;
+	bool OnHover() const;
 
 	bool operator<(const UI_Element& rhs);
 };
@@ -62,6 +83,7 @@ public:
 	// Destructor, destroy all OpenGL objects via graphics system
 	~ComponentCanvas();
 
+	//EXPOSE THIS
 	void AddUI();								
 	void RemoveUI(size_t index);
 	void Sort();
@@ -69,6 +91,9 @@ public:
 	//To Expose
 	UI_Element& FindUI(size_t index);
 	UI_Element& FindUIByName(std::string name);
+
+	//Extra function expose up to u
+	UI_Element& operator[](size_t index);
 
 	//read and write function for initialization from saved files
 	void	Read(Value&);

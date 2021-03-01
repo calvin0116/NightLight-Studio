@@ -1,6 +1,7 @@
 #include "ModelManager.h"
 #include "../glm/mat4x4.hpp"
 #include "ModelLoader.h"
+#include "../tracy-master/Tracy.hpp"
 
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -59,7 +60,7 @@ namespace NS_GRAPHICS
 			if (check->second->_isAnimated)
 			{
 				Model* model = new Model();
-				size_t meshSize = check->second->_animatedMeshes.size();
+				size_t meshSize = check->second->_meshes.size();
 				model->_isAnimated = check->second->_isAnimated;
 				model->_rootBone = new Skeleton();
 				model->_rootBone->_boneMapping = check->second->_rootBone->_boneMapping;
@@ -72,44 +73,48 @@ namespace NS_GRAPHICS
 				//MAYBE REMOVED NOT THE BEST WAY TO DO THIS
 				for (size_t meshIndex = 0; meshIndex != meshSize; ++meshIndex)
 				{
-					AnimatedMesh* mesh = new AnimatedMesh();
+					Mesh* mesh = new Mesh();
 
-					mesh->_vertexDatas = check->second->_animatedMeshes[meshIndex]->_vertexDatas;
-					mesh->_indices = check->second->_animatedMeshes[meshIndex]->_indices;
+					mesh->_vertexDatas = check->second->_meshes[meshIndex]->_vertexDatas;
+					mesh->_skinDatas = check->second->_meshes[meshIndex]->_skinDatas;
+					mesh->_indices = check->second->_meshes[meshIndex]->_indices;
 
 					glGenVertexArrays(1, &mesh->VAO);
 					glGenBuffers(1, &mesh->VBO);
 					glGenBuffers(1, &mesh->EBO);
 					glGenBuffers(1, &mesh->ModelMatrixBO);
+					glGenBuffers(1, &mesh->BoneBO);
 
 					glBindVertexArray(mesh->VAO);
 
 					// vertex data attribute
 					glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
-					glBufferData(GL_ARRAY_BUFFER, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData) * mesh->_vertexDatas.size(), &mesh->_vertexDatas[0], GL_STATIC_DRAW);
+					glBufferData(GL_ARRAY_BUFFER, sizeof(NS_GRAPHICS::Mesh::VertexData) * mesh->_vertexDatas.size(), &mesh->_vertexDatas[0], GL_STATIC_DRAW);
 					// position
-					glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData), 
+					glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData), 
 						(void*)0);  // 0
 					glEnableVertexAttribArray(0);
 					// uv attribute
-					glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData), 
+					glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData),
 						(void*)sizeof(glm::vec3)); // pos
 					glEnableVertexAttribArray(1);
 					// normals attribute
-					glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData), 
+					glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData),
 						(void*)(sizeof(glm::vec3) + sizeof(glm::vec2))); // pos + uv
 					glEnableVertexAttribArray(2);
 					// tangent attribute
-					glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData), 
+					glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::VertexData),
 						(void*)(sizeof(glm::vec3) + sizeof(glm::vec2) + sizeof(glm::vec3))); // pos + uv + norm
 					glEnableVertexAttribArray(3);
+
+					// skin data attribute
+					glBindBuffer(GL_ARRAY_BUFFER, mesh->BoneBO);
+					glBufferData(GL_ARRAY_BUFFER, sizeof(NS_GRAPHICS::Mesh::SkinData) * mesh->_skinDatas.size(), &mesh->_skinDatas[0], GL_STATIC_DRAW);
 					// bone id
-					glVertexAttribIPointer(4, 4, GL_INT, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData), 
-						(void*)(sizeof(glm::vec3) + sizeof(glm::vec2) + sizeof(glm::vec3) + sizeof(glm::vec3))); // pos + uv + norm + tangent
+					glVertexAttribIPointer(4, 4, GL_INT, sizeof(NS_GRAPHICS::Mesh::SkinData),(void*)0);
 					glEnableVertexAttribArray(4);
 					// bone weight
-					glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::AnimatedMesh::VertexData), 
-						(void*)(sizeof(glm::vec3) + sizeof(glm::vec2) + sizeof(glm::vec3) + sizeof(glm::vec3) + sizeof(glm::ivec4))); // pos + uv + norm + tangent + boneID
+					glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(NS_GRAPHICS::Mesh::SkinData),(void*)(sizeof(glm::ivec4))); //boneID
 					glEnableVertexAttribArray(5);
 
 					// Indices
@@ -137,7 +142,7 @@ namespace NS_GRAPHICS
 					glBindBuffer(GL_ARRAY_BUFFER, 0);
 					glBindVertexArray(0);
 
-					model->_animatedMeshes.push_back(mesh);
+					model->_meshes.push_back(mesh);
 				}
 
 				for (auto& anim: check->second->_animations)
@@ -152,6 +157,7 @@ namespace NS_GRAPHICS
 
 				return AddModel(model);
 			}
+			//Non animated
 			else
 			{
 				// For non animated models, we can perform instancing by setting reference model
@@ -164,6 +170,7 @@ namespace NS_GRAPHICS
 				//MAYBE REMOVED NOT THE BEST WAY TO DO THIS
 				for (size_t meshIndex = 0; meshIndex != meshSize; ++meshIndex)
 				{
+					//Unintialized model
 					if (check->second->_meshes[meshIndex]->VAO == 0)
 					{
 						glGenVertexArrays(1, &check->second->_meshes[meshIndex]->VAO);
@@ -226,7 +233,8 @@ namespace NS_GRAPHICS
 
 		// Invalid key given
 #ifdef _DEBUG
-		std::cout << "ERROR: INVALID MODEL KEY GIVEN, PLEASE LOAD MODEL OR CHECK KEY" << std::endl;
+		TracyMessageL("ModelManager::AddModel: ERROR: INVALID MODEL KEY GIVEN, PLEASE LOAD MODEL OR CHECK KEY");
+		//std::cout << "ERROR: INVALID MODEL KEY GIVEN, PLEASE LOAD MODEL OR CHECK KEY" << std::endl;
 #endif
 		return -1;
 	}
@@ -240,7 +248,7 @@ namespace NS_GRAPHICS
 
 		if (_models[index]->_isAnimated)
 		{
-			for (auto& mesh : _models[index]->_animatedMeshes)
+			for (auto& mesh : _models[index]->_meshes)
 			{
 				glDeleteBuffers(1, &mesh->VBO);
 				glDeleteBuffers(1, &mesh->ModelMatrixBO);
@@ -308,7 +316,7 @@ namespace NS_GRAPHICS
 			{
 				if (m->_isAnimated)
 				{
-					for (auto& mesh : m->_animatedMeshes)
+					for (auto& mesh : m->_meshes)
 					{
 						glDeleteBuffers(1, &mesh->VBO);
 						glDeleteBuffers(1, &mesh->ModelMatrixBO);
@@ -333,7 +341,7 @@ namespace NS_GRAPHICS
 		{
 			if (n.second->_isAnimated)
 			{
-				for (auto& del : n.second->_animatedMeshes)
+				for (auto& del : n.second->_meshes)
 				{
 					glDeleteBuffers(1, &del->VBO);
 					glDeleteBuffers(1, &del->ModelMatrixBO);

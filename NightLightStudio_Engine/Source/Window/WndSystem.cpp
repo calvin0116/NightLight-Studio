@@ -29,6 +29,9 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 #include "../Core/SceneManager.h"
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 namespace NS_WINDOW
 {
 
@@ -144,6 +147,10 @@ namespace NS_WINDOW
 			SwapBuffers(hDevContext);
 
 		//return true; // Return error msg for breaking out of update loop
+
+		// Tracy
+		// Zone Color: Peach
+		ZoneScopedNC("Window", 0xfabaa5);
 	}
 
 	// Frees the resources used by the System
@@ -369,7 +376,8 @@ namespace NS_WINDOW
 		if (!InitWindow())
 		{
 			//bool WindowHasInit = false;
-			std::cout << "CLIENT WINDOW INITIALIZATION FAILED" << std::endl;
+			TracyMessageL("WndSystem::Init: CLIENT WINDOW INITIALIZATION FAILED");
+			//std::cout << "CLIENT WINDOW INITIALIZATION FAILED" << std::endl;
 			hasInit = false;
 			return;
 		}
@@ -378,7 +386,8 @@ namespace NS_WINDOW
 		if (!InitGL())
 		{
 			//bool DummyGLHasInit = false;
-			std::cout << "GL INITIALIZATION FAILED" << std::endl;
+			TracyMessageL("WndSystem::Init: GL INITIALIZATION FAILED");
+			//std::cout << "GL INITIALIZATION FAILED" << std::endl;
 			hasInit = false;
 			return;
 		}

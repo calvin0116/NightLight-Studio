@@ -39,7 +39,7 @@ public:
 	//ENGINE_API void LateInit() { for (auto my_sys : Systems) my_sys.second->LateInit(); }
 
 	//== Game / System running loop
-	ENGINE_API void FixedUpdate();
+	ENGINE_API void FixedUpdate(float dt);
 	ENGINE_API void Update();
 
 
@@ -48,12 +48,10 @@ public:
 
 	//Memory deallocation phase without dependancy
 	ENGINE_API void Free() {
-		for (auto my_sys : Systems) my_sys.second->Free(); };
-	//Memory deallocation phase without dependancy
-	ENGINE_API void Exit() { 
-		for (auto my_sys : Systems) my_sys.second->Exit();
-		DestroyInstance();
+		for (auto my_sys : Systems) my_sys.second->Free();
 	};
+	//Memory deallocation phase without dependancy
+	ENGINE_API void Exit();
 
 	//== Helper function
 	//Getting system

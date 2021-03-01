@@ -7,10 +7,13 @@
 #include "../Component/ComponentTransform.h"
 #include "../Component/ComponentCanvas.h"
 
+#include "../Input/SystemInput.h"
+
 #define MAX_PARTICLE 2000
 
 NS_GRAPHICS::EmitterSystem::EmitterSystem() :
 	_particleDrawing{ true },
+	_isPlaying{ false },
 	_textureManager{ nullptr },
 	_shaderSystem{ nullptr },
 	_cameraSystem{ nullptr }
@@ -19,6 +22,7 @@ NS_GRAPHICS::EmitterSystem::EmitterSystem() :
 
 NS_GRAPHICS::EmitterSystem::~EmitterSystem()
 {
+	//clean up
 	for (auto& emitter : _emitters)
 	{
 		delete emitter;
@@ -27,16 +31,27 @@ NS_GRAPHICS::EmitterSystem::~EmitterSystem()
 
 void NS_GRAPHICS::EmitterSystem::Init()
 {
+	//Seed the rng
 	srand(static_cast <unsigned> (time(0)));
 
 	_textureManager = &TextureManager::GetInstance();
 	_shaderSystem = &ShaderSystem::GetInstance();
 	_cameraSystem = &CameraSystem::GetInstance();
+
+	//Set up event to hide particle drawing
+	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TOGGLE_PARTICLE_DRAW", SystemInput_ns::IKEY_0, "TOGGLE_PARTICLE_DRAW", SystemInput_ns::OnPress, [this]()
+	{
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_CTRL))
+		{
+			_particleDrawing = !_particleDrawing;
+		}
+	});
 }
 
 void NS_GRAPHICS::EmitterSystem::Update()
 {
-	if (_particleDrawing)
+	//Draw only if particle is enabled
+	if (_particleDrawing || _isPlaying)
 	{
 		_shaderSystem->StartProgram(ShaderSystem::PARTICLE);
 
@@ -55,7 +70,7 @@ void NS_GRAPHICS::EmitterSystem::Update()
 				continue;
 			}
 
-			UpdateEmitter(emitter, DELTA_T->real_dt * DT_SCALE);
+			UpdateEmitter(emitter, DELTA_T->real_dt);
 			Render(emitter);
 
 			itr++;
@@ -69,6 +84,10 @@ void NS_GRAPHICS::EmitterSystem::Update()
 
 void NS_GRAPHICS::EmitterSystem::UpdateEmitter(ComponentEmitter* emitter, float dt)
 {
+	if (_emitters[emitter->_emitterID]->_pause)
+	{
+		return;
+	}
 	if (_emitters[emitter->_emitterID]->_play)
 	{
 		//Update the emitter time
@@ -119,6 +138,34 @@ void NS_GRAPHICS::EmitterSystem::UpdateEmitter(ComponentEmitter* emitter, float 
 
 			_emitters[emitter->_emitterID]->_particles[i]._timeAlive += dt;
 
+			//Only if is animated
+			if (_emitters[emitter->_emitterID]->_isAnimated)
+			{
+				_emitters[emitter->_emitterID]->_particles[i]._animationTime += dt;
+
+				//Animation rate depends on fps
+				if (_emitters[emitter->_emitterID]->_particles[i]._animationTime >= _emitters[emitter->_emitterID]->_animationRate)
+				{
+					_emitters[emitter->_emitterID]->_particles[i]._animationTime = 0.0f;
+
+					++_emitters[emitter->_emitterID]->_particles[i]._currentFrame;
+
+					//Checks if incremented frame is already out of frame
+					if (_emitters[emitter->_emitterID]->_particles[i]._currentFrame >= _emitters[emitter->_emitterID]->_totalFrame)
+					{
+						if (_emitters[emitter->_emitterID]->_loopAnimation)
+						{
+							_emitters[emitter->_emitterID]->_particles[i]._currentFrame = 0;
+						}
+						else
+						{
+							//Stays at last frame
+							--_emitters[emitter->_emitterID]->_particles[i]._currentFrame;
+						}
+					}
+				}
+			}
+
 			//Particle should be dead
 			if (_emitters[emitter->_emitterID]->_particles[i]._timeAlive >= _emitters[emitter->_emitterID]->_particles[i]._lifespan)
 			{
@@ -139,12 +186,14 @@ void NS_GRAPHICS::EmitterSystem::UpdateEmitter(ComponentEmitter* emitter, float 
 		//Duration still within time passed or it is looping
 		else
 		{
-			if (_emitters[emitter->_emitterID]->_emitterTime >= _emitters[emitter->_emitterID]->_emissionRate)
+			if (_emitters[emitter->_emitterID]->_emissionOverTime > 0)
 			{
-				_emitters[emitter->_emitterID]->_emitterTime = 0.0f;
-				_emitters[emitter->_emitterID]->RespawnParticle();
+				if (_emitters[emitter->_emitterID]->_emitterTime >= _emitters[emitter->_emitterID]->_emissionRate)
+				{
+					_emitters[emitter->_emitterID]->_emitterTime = 0.0f;
+					_emitters[emitter->_emitterID]->RespawnParticle();
+				}
 			}
-
 
 			if (_emitters[emitter->_emitterID]->_burst)
 			{
@@ -174,7 +223,7 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 		if (_emitters[emitter->_emitterID]->_particles[i]._alive) 
 		{
 			glm::vec3 pos;
-			float scale;
+			float scale = 1.0f;
 
 			float aliveRatio = _emitters[emitter->_emitterID]->_particles[i]._timeAlive / _emitters[emitter->_emitterID]->_particles[i]._lifespan;
 			_emitters[emitter->_emitterID]->_particles[i]._cameraDistance = glm::length2(_emitters[emitter->_emitterID]->_particles[i]._position - camPos);
@@ -219,6 +268,15 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 
 			_emitters[emitter->_emitterID]->_particlesColour[toDraw] = currColor;
 
+			if (_emitters[emitter->_emitterID]->_isAnimated)
+			{
+				_emitters[emitter->_emitterID]->_particleFrame[toDraw] = _emitters[emitter->_emitterID]->_particles[i]._currentFrame;
+			}
+			else
+			{
+				_emitters[emitter->_emitterID]->_particleFrame[toDraw] = 0;
+			}
+
 			toDraw++;
 		}
 		else
@@ -238,10 +296,24 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 	glBindBuffer(GL_ARRAY_BUFFER, _emitters[emitter->_emitterID]->_colBuffer);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::vec4) * toDraw, &_emitters[emitter->_emitterID]->_particlesColour[0]);
 
+	glBindBuffer(GL_ARRAY_BUFFER, _emitters[emitter->_emitterID]->_animationBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(unsigned) * toDraw, &_emitters[emitter->_emitterID]->_particleFrame[0]);
+
 	glm::vec3 camRight = glm::vec3(viewMat[0][0], viewMat[1][0], viewMat[2][0]);
 	glm::vec3 camUp = glm::vec3(viewMat[0][1], viewMat[1][1], viewMat[2][1]);
 	glUniform3fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "camera_right"), 1, &camRight[0]);
 	glUniform3fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "camera_up"), 1, &camUp[0]);
+
+	if (_emitters[emitter->_emitterID]->_isAnimated)
+	{
+		glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxRow"), _emitters[emitter->_emitterID]->_row);
+		glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxColumn"), _emitters[emitter->_emitterID]->_column);
+	}
+	else
+	{
+		glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxRow"), 1);
+		glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxColumn"), 1);
+	}
 
 	_textureManager->BindAlbedoTexture(emitter->_imageID);
 	glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, toDraw);

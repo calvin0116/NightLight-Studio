@@ -1,4 +1,5 @@
 #include "Parser.h"
+#include "../tracy-master/Tracy.hpp"
 namespace NS_SERIALISER {
 	template<typename d_type>
 	inline void Parser::ChangeData(std::string d_name, d_type data)
@@ -13,7 +14,8 @@ namespace NS_SERIALISER {
 				{
 					doc[itr->name][itr2->name] = data;
 
-					std::cout << "Data changed" << std::endl;
+					TracyMessageL("Parser::ChangeData: Data changed");
+					//std::cout << "Data changed" << std::endl;
 					//PrintCurrentData();
 					return;
 
@@ -21,7 +23,8 @@ namespace NS_SERIALISER {
 			}
 		}
 		//If no data change
-		std::cout << "Unknown name taken" << std::endl;
+		TracyMessageL("Parser::ChangeData: Unknown name taken");
+		//std::cout << "Unknown name taken" << std::endl;
 	}
 /*
 	inline void ChangeData(Value* val, std::string d_name, Value& data)

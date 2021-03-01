@@ -14,6 +14,9 @@
 
 #include <algorithm> // std::sort
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #define new DEBUG_NEW
@@ -74,10 +77,18 @@ namespace NS_GRAPHICS
 
 		Render();
 
-		uiManager->Update();
+		//Updates emitter
+		//Renders particle in its own manager
 		emitterManager->Update();
+		//UI Draws Last
+		//Renders UI in its own manager
+		uiManager->Update();
 
 		//std::cout << "Time current passed: " << _testTimeElapsed << std::endl;
+
+		// Tracy
+		// Zone Color: Yellow
+		ZoneScopedNC("Graphics", 0xf5ef45);
 	}
 
 	void GraphicsSystem::Free()
@@ -95,7 +106,8 @@ namespace NS_GRAPHICS
 		if (!NS_WINDOW::SYS_WINDOW->HasInit())
 		{
 #ifdef _DEBUG
-			std::cout << "ERROR: Window System not initialized before Graphics System, please check WndSystem initialization." << std::endl;
+			TracyMessageL("GraphicsSystem::Init: ERROR: Window System not initialized before Graphics System, please check WndSystem initialization.");
+			//std::cout << "ERROR: Window System not initialized before Graphics System, please check WndSystem initialization." << std::endl;
 #endif
 			return;
 		}
@@ -188,7 +200,8 @@ namespace NS_GRAPHICS
 
 #ifdef _DEBUG
 		if (!checkFBO)
-			std::cout << "ERROR: Unable to load frame buffer object (FN: NS_GRAPHICS::GraphicsSystem::InitFrameBuffers()" << std::endl;
+			TracyMessageL("GraphicsSystem::Init: ERROR: Unable to load frame buffer object (FN: NS_GRAPHICS::GraphicsSystem::InitFrameBuffers()");
+			//std::cout << "ERROR: Unable to load frame buffer object (FN: NS_GRAPHICS::GraphicsSystem::InitFrameBuffers()" << std::endl;
 #endif
 		InitScreenQuad();
 #endif
@@ -796,7 +809,7 @@ namespace NS_GRAPHICS
 #ifdef DRAW_DEBUG_GRID
 		debugManager->Render(); // Render opaque objects first, in this case, our grid is most definitely opaque
 #endif
-
+		// Extra "queue" for blended objects
 		std::vector<ComponentGraphics*> _blended;
 
 		//while(compItr != compitrEnd)
@@ -907,8 +920,13 @@ namespace NS_GRAPHICS
 					// Check if emission material is activated
 					if (graphicsComp->CheckEmissiveActivation())
 					{
+						// Deactivate backface culling
+
 						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
 
 					}
 					else
@@ -927,6 +945,9 @@ namespace NS_GRAPHICS
 					{
 						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
 					}
 					else
 					{
@@ -949,7 +970,7 @@ namespace NS_GRAPHICS
 				if (model->_isAnimated)
 				{
 					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-					for (auto& mesh : model->_animatedMeshes)
+					for (auto& mesh : model->_meshes)
 					{
 						glBindVertexArray(mesh->VAO);
 						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
@@ -979,8 +1000,11 @@ namespace NS_GRAPHICS
 					// Check if emission material is activated
 					if (graphicsComp->CheckEmissiveActivation())
 					{
-						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED_TEXTURED);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 					}
 					else
 					{
@@ -1021,8 +1045,11 @@ namespace NS_GRAPHICS
 					// Check if emission material is activated
 					if (graphicsComp->CheckEmissiveActivation())
 					{
-						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_TEXTURED);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 					}
 					else
 					{
@@ -1084,7 +1111,7 @@ namespace NS_GRAPHICS
 				if (model->_isAnimated)
 				{
 					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-					for (auto& mesh : model->_animatedMeshes)
+					for (auto& mesh : model->_meshes)
 					{
 						glBindVertexArray(mesh->VAO);
 
@@ -1113,7 +1140,7 @@ namespace NS_GRAPHICS
 			//++compItr;
 		}
 
-
+		// Iterators for alpha blending objects
 		auto blendedItr = _blended.begin();
 		auto blendedItrEnd = _blended.end();
 
@@ -1168,6 +1195,9 @@ namespace NS_GRAPHICS
 					{
 						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
 					}
 					else
 					{
@@ -1185,6 +1215,9 @@ namespace NS_GRAPHICS
 					{
 						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
 					}
 					else
 					{
@@ -1207,7 +1240,7 @@ namespace NS_GRAPHICS
 				if (model->_isAnimated)
 				{
 					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-					for (auto& mesh : model->_animatedMeshes)
+					for (auto& mesh : model->_meshes)
 					{
 						glBindVertexArray(mesh->VAO);
 						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
@@ -1237,8 +1270,11 @@ namespace NS_GRAPHICS
 					// Check if emission material is activated
 					if (graphicsComp->CheckEmissiveActivation())
 					{
-						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED_TEXTURED);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 					}
 					else
 					{
@@ -1279,8 +1315,11 @@ namespace NS_GRAPHICS
 					// Check if emission material is activated
 					if (graphicsComp->CheckEmissiveActivation())
 					{
-						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_TEXTURED);
 						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
 					}
 					else
 					{
@@ -1340,7 +1379,7 @@ namespace NS_GRAPHICS
 				if (model->_isAnimated)
 				{
 					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-					for (auto& mesh : model->_animatedMeshes)
+					for (auto& mesh : model->_meshes)
 					{
 						glBindVertexArray(mesh->VAO);
 
@@ -1527,7 +1566,8 @@ namespace NS_GRAPHICS
 		if (graphicsComp == nullptr)
 		{
 #ifdef _DEBUG
-			std::cout << "ERROR: Graphics component does not exist in given entity, failed to change mesh color" << std::endl;
+			TracyMessageL("ERROR: Graphics component does not exist in given entity, failed to change mesh color");
+			//std::cout << "ERROR: Graphics component does not exist in given entity, failed to change mesh color" << std::endl;
 #endif
 			return;
 		}

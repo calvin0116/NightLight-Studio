@@ -34,6 +34,9 @@ namespace NS_GRAPHICS
             return instance;
         }
 
+        bool _particleDrawing;
+        bool _isPlaying;
+
         void Init();
         void Update();
         void UpdateEmitter(ComponentEmitter* emitter, float dt);
@@ -50,9 +53,6 @@ namespace NS_GRAPHICS
         size_t GetFreeIndex();
 
     private:
-
-        bool _particleDrawing;
-
         //// Referenced object for instancing
         //GLuint _vao;
         //GLuint _vbo;

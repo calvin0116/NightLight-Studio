@@ -10,23 +10,17 @@ namespace ComponentLightBind
   float get_Intensity_Internal(ComponentLight* trans);
   void set_Intensity_Internal(ComponentLight* trans, float val);
 
-  float get_Attenuation_Internal(ComponentLight* trans);
-  void set_Attenuation_Internal(ComponentLight* trans, float val);
-
   float get_inCutOff_Internal(ComponentLight* trans);
   void set_inCutOff_Internal(ComponentLight* trans, float val);
 
   float get_outCutOff_Internal(ComponentLight* trans);
   void set_outCutOff_Internal(ComponentLight* trans, float val);
 
-  MonoObject* get_Ambient_Internal(ComponentLight* trans);
-  void set_Ambient_Internal(ComponentLight* trans, MonoObject* val);
+  float get_Radius_Internal(const ComponentLight* trans);
+  void set_Radius_Internal(ComponentLight* trans, float val);
 
-  MonoObject* get_Diffuse_Internal(ComponentLight* trans);
-  void set_Diffuse_Internal(ComponentLight* trans, MonoObject* val);
-
-  MonoObject* get_Specular_Internal(ComponentLight* trans);
-  void set_Specular_Internal(ComponentLight* trans, MonoObject* val);
+  MonoObject* get_Color_Internal(ComponentLight* trans);
+  void set_Color_Internal(ComponentLight* trans, MonoObject* val);
 
   void ChangeLightType_Internal(ComponentLight* trans, NS_GRAPHICS::Lights val);
 

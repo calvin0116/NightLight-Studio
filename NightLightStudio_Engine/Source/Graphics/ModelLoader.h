@@ -24,12 +24,12 @@ namespace NS_GRAPHICS
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		void ProcessNode(aiNode* node, const aiScene* scene, Model*& model);
 		Mesh* ProcessMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model);
-		AnimatedMesh* ProcessAnimatedMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model);
+		Mesh* ProcessAnimatedMesh(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model);
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// Needed for animations
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		void ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, AnimatedMesh* animatedMesh);
+		void ProcessBone(aiNode* node, aiMesh* mesh, const aiScene* scene, Model*& model, Mesh* animatedMesh);
 		bool CreateSkeletal(Joint& joint, aiNode* node, const aiScene* scene, Model*& model);
 		void ProcessAnimation(aiNode* node, const aiScene* scene, Model*& model);
 		void FillNode(Node& ourNode, aiNode* node, const aiScene* scene, Model*& model);
@@ -45,14 +45,19 @@ namespace NS_GRAPHICS
 		/// Loading & Saving Helper Functions
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		bool LoadFBX(Model*& model);
-		bool LoadCustomMesh(Model*& model);
-		bool SaveCustomMesh(Model*& model);
 
-		void SaveMeshVertex(std::ofstream& file, Mesh*& mesh);
-		void SaveAnimatedMeshVertex(std::ofstream& file, Mesh*& mesh);
+		bool LoadCustomModel(Model*& model);
+		bool SaveCustomModel(const std::string& name,Model*& model);
 
+		void SaveMeshVertex(std::ofstream& file, Mesh*& mesh, bool animated = false);
 		void LoadMeshVertex(std::ifstream& file, Mesh*& mesh);
-		void LoadAnimatedMeshVertex(std::ifstream& file, Mesh*& mesh);
+
+		void SaveSkeletal(std::ofstream& file, Joint*& joint);
+		void LoadSkeletal(std::ifstream& file, Joint*& joint);
+
+		void SaveAnimation(std::ofstream& file, Animation*& anim);
+		void LoadAnimation(std::ifstream& file, Animation*& anim);
+
 
 		//Just for debugging
 		void DebugToFile(const std::string& fileName);

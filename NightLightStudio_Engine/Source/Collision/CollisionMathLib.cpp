@@ -1617,6 +1617,8 @@ namespace NlMath
             {
                 // intersect is beyond the end
 
+                //intersect = rayEnd; // ?
+
                 return false;
             }
             return true;

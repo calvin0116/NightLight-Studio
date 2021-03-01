@@ -196,7 +196,7 @@ public:
 
 	//typedef std::vector<int> vecT;
 	typedef LocalVector<int, 100> vecT;
-
+	/*
 	int testMyVector()
 	{
 		std::cout << "Hello World!\n";
@@ -243,5 +243,5 @@ public:
 
 		return 0;
 	}
-
+	*/
 };

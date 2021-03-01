@@ -79,7 +79,8 @@ void LevelEditor::LE_MainMenuBar()
                     };
                     // Gets the RELATIVE File Path to Open from
                     std::string fileToOpen = WindowsOpenFileBox(_window, rgSpec, 1);
-                    std::cout << fileToOpen << std::endl;
+                    TracyMessageL(std::string("LevelEditor::LE_MainMenuBar: ").append(fileToOpen).c_str());
+                    //std::cout << fileToOpen << std::endl;
                     if (fileToOpen != "")
                         NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(fileToOpen);
                 },
@@ -98,7 +99,8 @@ void LevelEditor::LE_MainMenuBar()
                     };
                     // Gets the RELATIVE File Path to Save to
                     std::string fileToSaveTo = WindowsSaveFileBox(_window, rgSpec, 1);
-                    std::cout << fileToSaveTo << std::endl;
+                    TracyMessageL(std::string("LevelEditor::LE_MainMenuBar: ").append(fileToSaveTo).c_str());
+                    //std::cout << fileToSaveTo << std::endl;
                     if (fileToSaveTo != "")
                         NS_SCENE::SYS_SCENE_MANAGER->SaveScene(fileToSaveTo);
                 }
@@ -162,19 +164,24 @@ void LevelEditor::LE_MainMenuBar()
                 MessageTogglePlay isPlaying(_runEngine, "TogglePlay");
                 if (_runEngine)
                 {
+                    NS_GRAPHICS::UISystem::GetInstance()._isPlaying = true;
+                    NS_GRAPHICS::EmitterSystem::GetInstance()._isPlaying = true;
                     MessageTogglePlay isPlaying_1(_runEngine, "BeforePlay");
-                    NS_GRAPHICS::CameraSystem::GetInstance().SavePosition();
+                    //NS_GRAPHICS::CameraSystem::GetInstance().SavePosition();
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_1);
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
 
                 }
                 else
                 {
+                    NS_GRAPHICS::UISystem::GetInstance()._isPlaying = false;
+                    NS_GRAPHICS::EmitterSystem::GetInstance()._isPlaying = false;
                     MessageTogglePlay isPlaying_2(_runEngine, "AfterPlay");
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_2);
-                    NS_GRAPHICS::CameraSystem::GetInstance().MoveToSavedPosition();
+                    //NS_GRAPHICS::CameraSystem::GetInstance().MoveToSavedPosition();
                 }
+                DELTA_T->load();
             });
 
         ImGui::EndMenuBar();
@@ -275,10 +282,18 @@ void LevelEditor::LE_MainMenuBar()
                 CONFIG_DATA->GetConfigData().gamma = gamma;
             }
 
+            // Do not remove this
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Graphics Settings##GRAPHICS"))
+        {
+            ImGui::Checkbox("Enable Canvas Drawing ##canvas", &NS_GRAPHICS::UISystem::GetInstance()._uiDrawing);
 
             // Do not remove this
             ImGui::EndMenu();
         }
+        ImGui::Text("FPS: %f" , ImGui::GetIO().Framerate);
 
         ImGui::EndMenuBar();
     }

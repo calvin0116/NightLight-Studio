@@ -2,6 +2,7 @@
 #include "..\\..\\ISerializable.h"
 #include "..\glm\glm.hpp"
 #include "../Graphics/CameraSystem.h"
+#include "../Graphics/Camera.h"
 
 enum CAMERA_FLAG
 {
@@ -15,51 +16,51 @@ typedef class ComponentCamera : public ISerializable //: public IComponent
 public:
 	// Temporarily make them public for easy access
 
-	bool _isActive; // Temporarily set to true at beginning
+	bool _isActive;
+	NS_GRAPHICS::Camera _data;
+	//// value is -1 if no camera is assigned
+	//int _cameraID;
 
-	// value is -1 if no camera is assigned
-	int _cameraID;
+	//// View variables
+	//// Camera Vectors & Position(Point)
+	//glm::vec3 cameraPos;
+	//glm::quat m_orientation;
+	//glm::vec3 cameraTarget; // Not currently in use for multi camera
 
-	// View variables
-	// Camera Vectors & Position(Point)
-	glm::vec3 cameraPos;
-	glm::quat m_orientation;
-	glm::vec3 cameraTarget; // Not currently in use for multi camera
+	//// Dictates how fast the camera will move
+	//float _rotation_sensitivity = 1000.f;
+	//float _drag_sensitivity = 200.f;
+	//float _zoom_sensitivity = 50.f;
 
-	// Dictates how fast the camera will move
-	float _rotation_sensitivity = 1000.f;
-	float _drag_sensitivity = 200.f;
-	float _zoom_sensitivity = 50.f;
+	//// Variables for camera rotation
+	//// Given in radians
+	//float yaw;	// x-axis rotation (Rotation about y axis vector)
+	//float pitch;  // y-axis rotation (Rotation about x axis vector)
+	//float roll;   // z-axis rotation (Rotation about z axis vector)
 
-	// Variables for camera rotation
-	// Given in radians
-	float yaw;	// x-axis rotation (Rotation about y axis vector)
-	float pitch;  // y-axis rotation (Rotation about x axis vector)
-	float roll;   // z-axis rotation (Rotation about z axis vector)
+	////Camera Variables
+	//CAMERA_FLAG _flag;
+	//glm::vec3 _colour;
+	//float _fov;
 
-	//Camera Variables
-	CAMERA_FLAG _flag;
-	glm::vec3 _colour;
-	float _fov;
+	////Clipping Plane
+	//float _near;
+	//float _far;
 
-	//Clipping Plane
-	float _near;
-	float _far;
+	////Viewport
+	//float _x;
+	//float _y;
+	//float _w;
+	//float _h;
 
-	//Viewport
-	float _x;
-	float _y;
-	float _w;
-	float _h;
-
-	//Draw order
-	int _depth;
+	////Draw order
+	//int _depth;
 
 	// Default constructor
 	ComponentCamera();
 
-	// Parametrized constructor 
-	ComponentCamera(const int& cameraID);
+	//// Parametrized constructor 
+	//ComponentCamera(const int& cameraID);
 
 	// Destructor, destroy all OpenGL objects via graphics system
 	~ComponentCamera();
@@ -70,7 +71,7 @@ public:
 	// Editor camera will still take precedence if editor is active
 	// utilizes _isActive
 	// Note that camera will be created here if no existing camera id is connected
-	void SetCurrentCamera();
+	//void SetCurrentCamera();
 
 	////////////////////////////////////////
 

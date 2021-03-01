@@ -17,6 +17,9 @@
 #include "..\..\Messaging\Messages\MessageTogglePlay.h"
 #include "..\..\Graphics\GraphicsSystem.h"
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 LevelEditor::LevelEditor() : _window{ nullptr }, _showGrid{ true }
 //, _runEngine{ false }
 {
@@ -51,19 +54,26 @@ void LevelEditor::Init(HWND window)
                 //MessageTogglePlay isPlaying(_runEngine);
                 if (_runEngine)
                 {
+                    NS_GRAPHICS::UISystem::GetInstance()._isPlaying = true;
+                    NS_GRAPHICS::EmitterSystem::GetInstance()._isPlaying = true;
                     MessageTogglePlay isPlaying_1(_runEngine, "BeforePlay");
-                    NS_GRAPHICS::CameraSystem::GetInstance().SavePosition();
+                    //NS_GRAPHICS::CameraSystem::GetInstance().SavePosition();
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_1);
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
-                   
+
+                    DELTA_T->load();                   
                 }
                 else
                 {
+                    NS_GRAPHICS::UISystem::GetInstance()._isPlaying = false;
+                    NS_GRAPHICS::EmitterSystem::GetInstance()._isPlaying = false;
                     MessageTogglePlay isPlaying_2(_runEngine, "AfterPlay");
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_2);
 
-                    NS_GRAPHICS::CameraSystem::GetInstance().MoveToSavedPosition();
+                    //NS_GRAPHICS::CameraSystem::GetInstance().MoveToSavedPosition();
+
+                    DELTA_T->load();
                 }
             }
 
@@ -95,6 +105,10 @@ void LevelEditor::Init(HWND window)
             i._ptr->Start();
 
     LE_ConfigLoad();
+}
+
+void LevelEditor::GameInit()
+{
 }
 
 bool LevelEditor::Update(float)
@@ -140,7 +154,18 @@ bool LevelEditor::Update(float)
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+    // Tracy
+    // Zone color: Dark Blue
+    ZoneScopedNC("Editor", 0x291ef7);
+
     return false;
+}
+
+void LevelEditor::GameExit()
+{
+    for (auto& i : _editorWind)
+        if (i._ptr)
+            i._ptr->GameExit();
 }
 
 void LevelEditor::Exit()

@@ -3,6 +3,7 @@
 #include <sstream>
 #include "../Window/WndSystem.h"
 #include "../glm/gtc/matrix_transform.hpp"
+#include "../tracy-master/Tracy.hpp"
 
 namespace NS_GRAPHICS
 {
@@ -53,7 +54,8 @@ namespace NS_GRAPHICS
 		}
 		catch (std::ifstream::failure& e)
 		{
-			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << e.what() << std::endl;
+			TracyMessageL(std::string("ShaderSystem::LoadShader: ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ").append(e.what()).c_str());
+			//std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << e.what() << std::endl;
 		}
 
 		files.emplace_back(ss_vert_data.str(), ss_frag_data.str());
@@ -94,28 +96,46 @@ namespace NS_GRAPHICS
 				continue;
 			}
 
-			if ((i >= ShaderType::PBR) && (i <= ShaderType::EMISSIVE_ANIMATED))
+			if ((i >= ShaderType::PBR) && (i <= ShaderType::EMISSIVE_ANIMATED_TEXTURED))
 			{
 				StartProgram(i);
 
+				// General PBR uniforms
 				p_uniformLocations[i]._gamma = glGetUniformLocation(GetCurrentProgramHandle(), "Gamma");
 				p_uniformLocations[i]._alpha = glGetUniformLocation(GetCurrentProgramHandle(), "Alpha");
 
-				if (i == ShaderType::EMISSIVE || i == ShaderType::EMISSIVE_ANIMATED)
+				// All emissive shaders
+				if ((i >= ShaderType::EMISSIVE) && (i <= ShaderType::EMISSIVE_ANIMATED_TEXTURED))
+				{
 					p_uniformLocations[i]._emissive = glGetUniformLocation(GetCurrentProgramHandle(), "emissive");
-
-				if (i == ShaderType::PBR_ANIMATED || i == ShaderType::PBR_TEXTURED_ANIMATED || i == ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP || i == ShaderType::EMISSIVE_ANIMATED)
+					p_uniformLocations[i]._emissiveIntensity = glGetUniformLocation(GetCurrentProgramHandle(), "emissiveIntensity");
+				}
+					
+				// All animated shaders
+				if (i == ShaderType::PBR_ANIMATED
+					|| i == ShaderType::PBR_TEXTURED_ANIMATED
+					|| i == ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP
+					|| i == ShaderType::EMISSIVE_ANIMATED
+					|| i == ShaderType::EMISSIVE_ANIMATED_TEXTURED)
+				{
 					p_uniformLocations[i]._jointsMatrix = glGetUniformLocation(GetCurrentProgramHandle(), "jointsMat");
-
+				}
 				
-				if (i == ShaderType::PBR || i == ShaderType::PBR_ANIMATED)
+				// All shaders which use albedo material(not albedo texture)
+				if (i == ShaderType::PBR || i == ShaderType::PBR_ANIMATED || i == ShaderType::EMISSIVE || i == ShaderType::EMISSIVE_ANIMATED)
 				{
 					p_uniformLocations[i]._albedo = glGetUniformLocation(GetCurrentProgramHandle(), "Albedo");
-					p_uniformLocations[i]._roughness = glGetUniformLocation(GetCurrentProgramHandle(), "Roughness");
-					p_uniformLocations[i]._metallic = glGetUniformLocation(GetCurrentProgramHandle(), "Metallic");
+
+					// Non-textured PBR uniforms
+					if (i == ShaderType::PBR || i == ShaderType::PBR_ANIMATED)
+					{
+						p_uniformLocations[i]._roughness = glGetUniformLocation(GetCurrentProgramHandle(), "Roughness");
+						p_uniformLocations[i]._metallic = glGetUniformLocation(GetCurrentProgramHandle(), "Metallic");
+					}
 				}
 				else
 				{
+					// Textured PBR uniforms
 					p_uniformLocations[i]._metallicControl = glGetUniformLocation(GetCurrentProgramHandle(), "RoughnessControl");
 					p_uniformLocations[i]._roughnessControl = glGetUniformLocation(GetCurrentProgramHandle(), "MetallicControl");
 				}
@@ -158,11 +178,15 @@ namespace NS_GRAPHICS
 
 			if (glErr != GL_NO_ERROR)
 			{
+				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: Creation of Shader Program Handler failed for Shader no. ")
+					.append(std::to_string(i) + ". Please check GLSL source.").c_str());
+				/*
 				std::cout
 					<< "Creation of Shader Program Handler failed for Shader no. "
 					<< i
 					<< ". Please check GLSL source."
 					<< std::endl;
+					*/
 			}
 
 			GLint VShader_Compiled = 0;
@@ -178,7 +202,8 @@ namespace NS_GRAPHICS
 			{
 				GLchar infoLog[512];
 				glGetShaderInfoLog(sVertexID, 512, NULL, infoLog);
-				std::cout << infoLog << std::endl;
+				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog).c_str());
+				//std::cout << infoLog << std::endl;
 			}
 
 			GLint FShader_Compiled = 0;
@@ -194,7 +219,8 @@ namespace NS_GRAPHICS
 			{
 				GLchar infoLog[512];
 				glGetShaderInfoLog(sFragmentID, 512, NULL, infoLog);
-				std::cout << infoLog << std::endl;
+				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog).c_str());
+				//std::cout << infoLog << std::endl;
 			}
 
 			glAttachShader(program_handler, sVertexID);
@@ -208,11 +234,13 @@ namespace NS_GRAPHICS
 			{
 				GLchar infoLog[512];
 				glGetProgramInfoLog(program_handler, 512, NULL, infoLog);
-				std::cout << infoLog << std::endl;
+				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog).c_str());
+				//std::cout << infoLog << std::endl;
 			}
 			else
 			{
-				std::cout << "Shader Program successfully linked!" << std::endl;
+				TracyMessageL("ShaderSystem::CompileLoadedShaders: Shader Program successfully linked!");
+				//std::cout << "Shader Program successfully linked!" << std::endl;
 			}
 
 			// Detach and delete shaders to free up memory
@@ -251,11 +279,13 @@ namespace NS_GRAPHICS
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.frag")); //PBR_TEXTURED_NONORMALMAP 6
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.frag")); //PBR_TEXTURED_ANIMATED_NONORMALMAP 7
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/Emissive.vert"), std::string("../NightLightStudio_Game/Shaders/Emissive.frag")); //EMISSIVE 8
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/Emissive_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/Emissive_Animated.frag")); //EMISSION_ANIMATED 9
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui.vert"), std::string("../NightLightStudio_Game/Shaders/ui.frag")); //UI_Screenspace 10
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui_world.vert"), std::string("../NightLightStudio_Game/Shaders/ui_world.frag")); //UI_WorldSpace 11
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/particle.vert"), std::string("../NightLightStudio_Game/Shaders/particle.frag")); //Particle 12
-		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_LightingPass.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_LightingPass.frag")); // PBR_LIGHTPASS 13
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/Emissive_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/Emissive_Animated.frag")); //EMISSIVE_ANIMATED 9
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/Emissive_Textured.vert"), std::string("../NightLightStudio_Game/Shaders/Emissive_Textured.frag")); //EMISSIVE_TEXTURED 10
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/Emissive_Animated_Textured.vert"), std::string("../NightLightStudio_Game/Shaders/Emissive_Animated_Textured.frag")); //EMISSIVE_ANIMATED_TEXTURED 11
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui.vert"), std::string("../NightLightStudio_Game/Shaders/ui.frag")); //UI_Screenspace 12
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui_world.vert"), std::string("../NightLightStudio_Game/Shaders/ui_world.frag")); //UI_WorldSpace 13
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/particle.vert"), std::string("../NightLightStudio_Game/Shaders/particle.frag")); //Particle 14
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_LightingPass.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_LightingPass.frag")); // PBR_LIGHTPASS 15
 		//LoadShader("../NightLightStudio_Game/Shaders/","../NightLightStudio_Game/Shaders/");
 		//LoadShader("","");
 
@@ -360,6 +390,13 @@ namespace NS_GRAPHICS
 
 		return p_uniformLocations[programIDIndex]._emissive;
 	}
+	GLint ShaderSystem::GetEmissiveIntensityLocation() const
+	{
+		if (programIDIndex == -1)
+			return GL_INVALID_VALUE;
+
+		return p_uniformLocations[programIDIndex]._emissiveIntensity;
+	}
 	void ShaderSystem::SetTextureLocations()
 	{
 		// Setup uniform values for PBR texture shader
@@ -393,6 +430,14 @@ namespace NS_GRAPHICS
 			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
 			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
 			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
+			StopProgram();
+
+			StartProgram(ShaderSystem::EMISSIVE_TEXTURED);
+			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
+			StopProgram();
+
+			StartProgram(ShaderSystem::EMISSIVE_ANIMATED_TEXTURED);
+			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
 			StopProgram();
 
 			//StartProgram(ShaderSystem::PBR_LIGHTPASS);

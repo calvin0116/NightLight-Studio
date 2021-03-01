@@ -35,6 +35,9 @@ namespace NS_GRAPHICS
             return instance;
         }
 
+        bool _uiDrawing;
+        bool _isPlaying;
+
         void Init();
         void Update();
         void RenderUI();
@@ -42,9 +45,6 @@ namespace NS_GRAPHICS
         unsigned LoadTexture(std::string filename);
 
     private:
-
-        bool _uiDrawing;
-
         // Referenced object for instancing
         GLuint _vao;
         GLuint _vbo;

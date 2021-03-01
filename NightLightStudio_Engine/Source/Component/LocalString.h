@@ -1,8 +1,9 @@
 #pragma once
 
 #include <string>
+#define DEF_STR_SIZE 256
 
-template<size_t N = 125>
+template<size_t N = DEF_STR_SIZE>
 class LocalString
 {
 	char stringData[N];
@@ -11,16 +12,16 @@ private:
 	// helper fn
 	bool copyFromString(const std::string& rhs)
 	{
-		//size_t sz = rhs.size() < N - 1 ? rhs.size() : N - 1;
-		//memcpy(stringData, rhs.c_str(), sz);
+		size_t sz = rhs.size() < N - 1 ? rhs.size() : N - 1;
+		memcpy(stringData, rhs.c_str(), sz);
 
-		//sz = rhs.size() + 1 < N - 1 ? rhs.size() + 1 : N - 1;
-		//stringData[sz] = 0; // nani
-		//return rhs.size() > (N - 1);
-
-		memcpy(stringData, rhs.c_str(), N - 1);
-		stringData[N - 2] = 0; // nani
+		sz = rhs.size() + 1 < N - 1 ? rhs.size() + 1 : N - 1;
+		stringData[sz-1] = 0; // nani
 		return rhs.size() > (N - 1);
+
+		//memcpy(stringData, rhs.c_str(), N - 1);
+		//stringData[N - 2] = 0; // nani
+		//return rhs.size() > (N - 1);
 	}
 	void copyFromLocalString(const LocalString& rhs)
 	{

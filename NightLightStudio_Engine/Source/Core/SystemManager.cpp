@@ -9,6 +9,8 @@
 #include "..//Component/Components.h"
 #include "../Messaging/SystemBroadcaster.h"
 
+#include "TagHandler.h"
+#include "AssetsMananger.h"
 
 #define DOTEST 1
 
@@ -31,7 +33,7 @@ void MySystemManager::StartUp(HINSTANCE& hInstance)
 	Systems[S_PRIORITY::SP_COLLISION] = NS_COLLISION::SYS_COLLISION;
 	Systems[S_PRIORITY::SP_LOGIC] = NS_LOGIC::SYS_LOGIC;
 	Systems[S_PRIORITY::SP_AI] = NS_AI::SYS_AI;
-	
+	Systems[S_PRIORITY::SP_ASSETSMAN] = SYS_ASSETSMANAGER;
 #ifdef _EDITOR
 	Systems[S_PRIORITY::SP_EDITOR] = SYS_EDITOR;
 #endif
@@ -75,7 +77,7 @@ inline ENGINE_API void MySystemManager::GameInit() {
 #endif
 }
 
-void MySystemManager::FixedUpdate()
+void MySystemManager::FixedUpdate(float dt)
 {
 #ifdef _EDITOR
 	int i = 0;
@@ -97,7 +99,7 @@ void MySystemManager::FixedUpdate()
 		//auto t1 = std::chrono::high_resolution_clock::now();
 #endif
 
-		my_sys.second->FixedUpdate();
+		my_sys.second->FixedUpdate(dt);
 
 #ifdef _EDITOR
 
@@ -181,3 +183,9 @@ inline ENGINE_API void MySystemManager::GameExit() {
 			my_sys.second->GameExit();
 	Systems[S_PRIORITY::SP_SCENEMANAGER]->GameExit();
 }
+
+inline ENGINE_API void MySystemManager::Exit() {
+	for (auto my_sys : Systems) my_sys.second->Exit();
+	TAG_HANDLER->DestroyInstance();
+	DestroyInstance();
+};

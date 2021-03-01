@@ -37,6 +37,12 @@ namespace ComponentNavigatorBind
 
     MonoWrapper::BindClassFunction(get_Dir_Internal, "get_Dir_Internal",
         "Navigator");
+
+    MonoWrapper::BindClassFunction(getDistFromCurPathWP_Internal, "getDistFromCurPathWP_Internal",
+        "Navigator");
+    MonoWrapper::BindClassFunction(getDistFromPrevPathWP_Internal, "getDistFromPrevPathWP_Internal",
+        "Navigator");
+
   }
 
   float get_Speed_Internal(NavComponent* nav)
@@ -89,6 +95,16 @@ namespace ComponentNavigatorBind
   {
       nav->DecideOnNextWp();
   }
+  float getDistFromCurPathWP_Internal(NavComponent* nav)
+  {
+      return nav->DistFromCurPathWP();
+  }
+
+  float getDistFromPrevPathWP_Internal(NavComponent* nav)
+  {
+      return nav->DistFromPrevPathWP();
+  }
+
   MonoObject* get_Dir_Internal(NavComponent* nav)
   {
       MonoObject* monoVec = MonoWrapper::ConstructObject("Vector3");

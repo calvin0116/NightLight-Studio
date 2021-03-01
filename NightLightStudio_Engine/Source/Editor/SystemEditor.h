@@ -23,7 +23,9 @@ public:
 
 	ENGINE_API void Init() override;
 
+	ENGINE_API void GameInit() override;
 	ENGINE_API void Update() override;
+	ENGINE_API void GameExit() override;
 
 	ENGINE_API void Exit() override;
 

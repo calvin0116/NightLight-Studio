@@ -1,5 +1,5 @@
 #include "ComponentLoadAudio.h"
-
+#include "../tracy-master/Tracy.hpp"
 //#include "Components.h"   // inherit required functions
 
 ComponentLoadAudio::ComponentLoadAudio()
@@ -15,7 +15,10 @@ ComponentLoadAudio::~ComponentLoadAudio()
 void	ComponentLoadAudio::Read(Value& val)
 {
   if (val.FindMember("ListOfSound") == val.MemberEnd())
-    std::cout << "No Force data has been found" << std::endl;
+  {
+      TracyMessageL("ComponentLoadAudio::Read: No Force data has been found");
+      //std::cout << "No Force data has been found" << std::endl;
+  }
   else
   {
       if (val["ListOfSound"].IsObject())

@@ -3,6 +3,9 @@
 #include "../Window/WndSystem.h"
 #include <iostream>
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 using namespace SystemInput_ns;
 
 SystemInput::SystemInput()
@@ -16,7 +19,8 @@ void SystemInput::Load()
 
 void SystemInput::Init()
 {
-	std::cout << "System::Input::Init" << std::endl;
+	TracyMessageL("SystemInput::Init");
+	//std::cout << "System::Input::Init" << std::endl;
 	_siKeyPress.SetWindow(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
 	_siCtrler.SetWindow(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
 	_siMousePos.SetWindow(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
@@ -28,6 +32,10 @@ void SystemInput::Update()
 	_siKeyPress.Update();
 	_siCtrler.Update();
 	_siMousePos.Update();
+
+	// Tracy
+	// Zone Color: Purple
+	ZoneScopedNC("Input", 0xd724ff);
 }
 
 void SystemInput::Free()

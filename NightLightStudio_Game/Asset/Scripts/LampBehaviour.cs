@@ -58,12 +58,16 @@ namespace Unicorn
 
       ai_ID = GameObjectFind(mothAIName);
 
-      if(lightSourceName != null)
+      if(lightSourceName != "")
       {
         light_ID = GameObjectFind(lightSourceName);
         lightSource = GetLight(light_ID);
+       // Print(light_ID.ToString());
       }
-   
+      else
+      {
+        
+      }
 
 
 
@@ -77,12 +81,13 @@ namespace Unicorn
 
       if (isWaypoint == true)
       {
-
         
+
         script_Moth.ActivateWP(wayPointID);
 
         if (lightSource != null)
         {
+
           lightSource.isActive = true;
         }
 
@@ -91,7 +96,7 @@ namespace Unicorn
       else
       {
 
-        
+
         script_Moth.DeactivateWP(wayPointID);
         isOn = false;
 
@@ -141,14 +146,25 @@ namespace Unicorn
 
     public void SwitchOnFunction()
     {
+
+      if (light_ID != -1)
+      {
+        
+        lightSource.isActive = true;
+      }
+      
+
+      //if (lightSourceName != "")
+      //{
+      //  Print("I Got Light......");
+      //  lightSource.isActive = true;
+      //}
+
       Audio.PlayOnce("9");
       isWaypoint = true;
       script_Moth.ActivateWP(wayPointID);
 
-      if (lightSource != null)
-      {
-        lightSource.isActive = true;
-      }
+     
      
       isOn = true;
       
@@ -162,11 +178,11 @@ namespace Unicorn
       script_Moth.DeactivateWP(wayPointID);
       isOn = false;
 
-      if (lightSource != null)
+      if (light_ID != -1)
       {
         lightSource.isActive = false;
       }
-      
+
     }
 
 

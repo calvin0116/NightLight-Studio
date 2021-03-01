@@ -229,7 +229,7 @@ namespace Unicorn
     
     public override int GetHashCode()
     {
-      return 0;
+      return 3;
     }
 
     [MethodImpl(MethodImplOptions.InternalCall)]

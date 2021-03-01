@@ -36,35 +36,50 @@ ComponentRigidBody::~ComponentRigidBody()
 inline void ComponentRigidBody::Read(Value& val) 
 { 
 	if (val.FindMember("isStatic") == val.MemberEnd())
-		std::cout << "No Force data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentRigidBody::Read: No Force data has been found");
+		//std::cout << "No Force data has been found" << std::endl;
+	}
 	else
 	{
 		isStatic = val["isStatic"].GetBool();
 	}
 
 	if (val.FindMember("isGravity") == val.MemberEnd())
-		std::cout << "No gravitay data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentRigidBody::Read: No gravity data has been found");
+		//std::cout << "No gravity data has been found" << std::endl;
+	}
 	else
 	{
 		isGravity = val["isGravity"].GetBool();
 	}
 
 	if (val.FindMember("mass") == val.MemberEnd())
-		std::cout << "No mass data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentRigidBody::Read: No mass data has been found");
+		//std::cout << "No mass data has been found" << std::endl;
+	}
 	else
 	{
 		mass = val["mass"].GetFloat();
 	}
 	
 	if (val.FindMember("friction") == val.MemberEnd())
-		std::cout << "No mass friction has been found" << std::endl;
+	{
+		TracyMessageL("ComponentRigidBody::Read: No mass friction has been found");
+		//std::cout << "No mass friction has been found" << std::endl;
+	}
 	else
 	{
 		friction = val["friction"].GetFloat();
 	}
 
 	if (val.FindMember("Force") == val.MemberEnd())
-		std::cout << "No Force data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentRigidBody::Read: No Force data has been found");
+		//std::cout << "No Force data has been found" << std::endl;
+	}
 	else
 	{
 		auto f = val["Force"].GetArray();
@@ -75,7 +90,10 @@ inline void ComponentRigidBody::Read(Value& val)
 	}
 
 	if (val.FindMember("Accelaration") == val.MemberEnd())
-		std::cout << "No Force data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentRigidBody::Read: No Force data has been found");
+		//std::cout << "No Force data has been found" << std::endl;
+	}
 	else
 	{
 		auto ac = val["Accelaration"].GetArray();

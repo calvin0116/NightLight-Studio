@@ -6,7 +6,7 @@
 #pragma warning( disable : 26812 )
 
 ComponentEmitter::ComponentEmitter()
-	: _isActive{ true }
+	: _isActive{ true }, _emitterID{ -1 }
 {
 	strcpy_s(ser_name, "EmitterComponent");
 }
@@ -50,28 +50,352 @@ void ComponentEmitter::Stop()
 	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->Stop();
 }
 
+EmitterShapeType ComponentEmitter::GetShapeType()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_type;
+}
+
+void ComponentEmitter::SetShapeType(EmitterShapeType shape)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_type = shape;
+}
+
+float ComponentEmitter::GetDuration()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_durationPerCycle;
+}
+
+void ComponentEmitter::SetDuration(float duration)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_durationPerCycle = duration;
+}
+
+unsigned ComponentEmitter::GetEmissionRate()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionOverTime;
+}
+
+void ComponentEmitter::SetEmissionRate(unsigned emission)
+{
+	if (emission <= 0)
+	{
+		NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionOverTime = 0;
+		NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionRate = 0.0f;
+	}
+	else
+	{
+		NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionOverTime = emission;
+		NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionRate = 1.0f / NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_emissionOverTime;
+	}	
+}
+
+unsigned ComponentEmitter::GetMaxParticle()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxParticles;
+}
+
+void ComponentEmitter::SetMaxParticle(unsigned max)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxParticles = max;
+}
+
+float ComponentEmitter::GetBurstRate()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_burstRate;
+}
+
+void ComponentEmitter::SetBurstRate(float burst)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_burstRate = burst;
+}
+
+unsigned ComponentEmitter::GetBurstAmount()
+{
+	return 	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_burstAmount;
+}
+
+void ComponentEmitter::SetBurstAmount(unsigned amount)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_burstAmount = amount;
+}
+
+float ComponentEmitter::GetAngle()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_spawnAngle;
+}
+
+void ComponentEmitter::SetAngle(float angle)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_spawnAngle = angle;
+}
+
+float ComponentEmitter::GetRadius()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_radius;
+}
+
+void ComponentEmitter::SetRadius(float radius)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_radius = radius;
+}
+
+bool ComponentEmitter::GetRandomizeSize()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_randomizeSize;
+}
+
+void ComponentEmitter::SetRandomizeSize(bool size)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_randomizeSize = size;
+}
+
+float ComponentEmitter::GetMinParticleSize()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_minParticleSize;
+}
+
+void ComponentEmitter::SetMinParticleSize(float min)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_minParticleSize = min;
+}
+
+float ComponentEmitter::GetMaxParticleSize()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxParticleSize;
+}
+
+void ComponentEmitter::SetMaxParticleSize(float max)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxParticleSize = max;
+}
+
+bool ComponentEmitter::GetRandomizeSpeed()
+{
+	return  NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_randomizeSpeed;
+}
+
+void ComponentEmitter::SetRandomizeSpeed(bool speed)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_randomizeSpeed = speed;
+}
+
+float ComponentEmitter::GetMinParticleSpeed()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_minParticleSpeed;
+}
+
+void ComponentEmitter::SetMinParticleSpeed(float min)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_minParticleSpeed = min;
+}
+
+float ComponentEmitter::GetMaxParticleSpeed()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxParticleSpeed;
+}
+
+void ComponentEmitter::SetMaxParticleSpeed(float max)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxParticleSpeed = max;
+}
+
+bool ComponentEmitter::GetRandomizeLife()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_randomizeLifespan;
+}
+
+void ComponentEmitter::SetRandomizeLife(bool life)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_randomizeLifespan = life;
+}
+
+float ComponentEmitter::GetMinParticleLife()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_minLifespan;
+}
+
+void ComponentEmitter::SetMinParticleLife(float min)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_minLifespan = min;
+}
+
+float ComponentEmitter::GetMaxParticleLife()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxLifespan;
+}
+
+void ComponentEmitter::SetMaxParticleLife(float max)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_maxLifespan = max;
+}
+
+bool ComponentEmitter::GetPrewarm()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_preWarm;
+}
+
+void ComponentEmitter::SetPrewarm(bool prewarm)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_preWarm = prewarm;
+}
+
+bool ComponentEmitter::GetBurst()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_burst;
+}
+
+void ComponentEmitter::SetBurst(bool burst)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_burst = burst;
+}
+
+bool ComponentEmitter::GetLoop()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_loop;
+}
+
+void ComponentEmitter::SetLoop(bool loop)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_loop = loop;
+}
+
+bool ComponentEmitter::GetFollow()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_follow;
+}
+
+void ComponentEmitter::SetFollow(bool follow)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_follow = follow;
+}
+
+bool ComponentEmitter::GetFade()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_fade;
+}
+
+void ComponentEmitter::SetFade(bool fade)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_fade = fade;
+}
+
+bool ComponentEmitter::GetVelocityOverTime()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_velocityOverTime;
+}
+
+void ComponentEmitter::SetVelocityOverTime(bool vel)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_velocityOverTime = vel;
+}
+
+bool ComponentEmitter::GetSizeOverTime()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_sizeOverTime;
+}
+
+void ComponentEmitter::SetSizeOverTime(bool size)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_sizeOverTime = size;
+}
+
+bool ComponentEmitter::GetSpeedOverTime()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_speedOverTime;
+}
+
+void ComponentEmitter::SetSpeedOverTime(bool speed)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_speedOverTime = speed;
+}
+
+bool ComponentEmitter::GetColourOverTime()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourOverTime;
+}
+
+void ComponentEmitter::SetColourOverTime(bool colour)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourOverTime = colour;
+}
+
+glm::vec4 ComponentEmitter::GetColourA()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourA;
+}
+
+void ComponentEmitter::SetColourA(glm::vec4 colour)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourA = colour;
+}
+
+glm::vec4 ComponentEmitter::GetColourB()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourB;
+}
+
+void ComponentEmitter::SetColourB(glm::vec4 colour)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourB = colour;
+}
+
+glm::vec4 ComponentEmitter::GetColourStart()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourStart;
+}
+
+void ComponentEmitter::SetColourStart(glm::vec4 colour)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourStart = colour;
+}
+
+glm::vec4 ComponentEmitter::GetColourEnd()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourEnd;
+}
+
+void ComponentEmitter::SetColourEnd(glm::vec4 colour)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_colourEnd = colour;
+}
+
+glm::vec3 ComponentEmitter::GetVelocity()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_velocity;
+}
+
+void ComponentEmitter::SetVelocity(glm::vec3 velocity)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_velocity = velocity;
+}
+
 ComponentEmitter::~ComponentEmitter()
 {
 }
 
 void ComponentEmitter::Read(Value& val)
 {
-	_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
-
+	//If doesn't exist
 	if (_emitterID < 0)
 	{
-		return;
+		_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
 	}
 
 	NS_GRAPHICS::EmitterSystem& emitSys = NS_GRAPHICS::EmitterSystem::GetInstance();
 
 	if (val.FindMember("isActive") == val.MemberEnd())
-		std::cout << "No active data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No active data has been found");
+		//std::cout << "No active data has been found" << std::endl;
+	}
 	else
 		_isActive = val["isActive"].GetBool();
 
 	if (val.FindMember("Image") == val.MemberEnd())
-		std::cout << "No Texture file data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Texture file data has been found");
+		//std::cout << "No Texture file data has been found" << std::endl;
+	}
 	else
 	{
 		std::string image = val["Image"].GetString();
@@ -83,7 +407,10 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("EmitterType") == val.MemberEnd())
-		std::cout << "No active data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No active data has been found");
+		//std::cout << "No active data has been found" << std::endl;
+	}
 	else
 	{
 		std::string emitterType = val["EmitterType"].GetString();
@@ -98,22 +425,39 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("DurationPerCycle") == val.MemberEnd())
-		std::cout << "No duration data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No duration data has been found");
+		//std::cout << "No duration data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_durationPerCycle = val["DurationPerCycle"].GetFloat();
 	}
 
 	if (val.FindMember("EmissionRateOverTime") == val.MemberEnd())
-		std::cout << "No emission data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No emission data has been found");
+		//std::cout << "No emission data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_emissionOverTime = val["EmissionRateOverTime"].GetUint();
-		emitSys._emitters[_emitterID]->_emissionRate = 1 / emitSys._emitters[_emitterID]->_emissionOverTime;
+
+		if (emitSys._emitters[_emitterID]->_emissionOverTime == 0)
+		{
+			emitSys._emitters[_emitterID]->_emissionRate = 0.0f;
+		}
+		else
+		{
+			emitSys._emitters[_emitterID]->_emissionRate = 1.0f / emitSys._emitters[_emitterID]->_emissionOverTime;
+		}
 	}
 
 	if (val.FindMember("MaxParticle") == val.MemberEnd())
-		std::cout << "No particle data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No particle data has been found");
+		//std::cout << "No particle data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_maxParticles = val["MaxParticle"].GetUint();
@@ -121,182 +465,329 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("BurstRate") == val.MemberEnd())
-		std::cout << "No BurstRate data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No BurstRate data has been found");
+		//std::cout << "No BurstRate data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_burstRate = val["BurstRate"].GetFloat();
 	}
 
 	if (val.FindMember("BurstAmount") == val.MemberEnd())
-		std::cout << "No BurstAmount data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No BurstAmount data has been found");
+		//std::cout << "No BurstAmount data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_burstAmount = val["BurstAmount"].GetUint();
 	}
 
+	if (val.FindMember("Row") == val.MemberEnd())
+	{
+		TracyMessageL("ComponentEmitter::Read: No Row data has been found");
+		//std::cout << "No Row data has been found" << std::endl;
+	}
+	else
+	{
+		emitSys._emitters[_emitterID]->_row = val["Row"].GetUint();
+	}
+
+	if (val.FindMember("Column") == val.MemberEnd())
+	{
+		TracyMessageL("ComponentEmitter::Read: No Column data has been found");
+		//std::cout << "No Column data has been found" << std::endl;
+	}
+	else
+	{
+		emitSys._emitters[_emitterID]->_column = val["Column"].GetUint();
+	}
+
+	if (val.FindMember("TotalFrame") == val.MemberEnd())
+	{
+		TracyMessageL("ComponentEmitter::Read: No TotalFrame data has been found");
+		//std::cout << "No TotalFrame data has been found" << std::endl;
+	}
+	else
+	{
+		emitSys._emitters[_emitterID]->_totalFrame = val["TotalFrame"].GetUint();
+	}
+
+	if (val.FindMember("FramesPerSecond") == val.MemberEnd())
+	{
+		TracyMessageL("ComponentEmitter::Read: No FramesPerSecond data has been found");
+		//std::cout << "No FramesPerSecond data has been found" << std::endl;
+	}
+	else
+	{
+		emitSys._emitters[_emitterID]->_framesPerSecond = val["FramesPerSecond"].GetUint();
+
+		if (emitSys._emitters[_emitterID]->_framesPerSecond == 0)
+		{
+			emitSys._emitters[_emitterID]->_animationRate = 0.0f;
+		}
+		else
+		{
+			emitSys._emitters[_emitterID]->_animationRate = 1.0f / emitSys._emitters[_emitterID]->_framesPerSecond;
+		}
+	}
+
 	if (val.FindMember("Angle") == val.MemberEnd())
-		std::cout << "No angle data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No angle data has been found");
+		//std::cout << "No angle data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_spawnAngle = val["Angle"].GetFloat();
 	}
 
 	if (val.FindMember("Radius") == val.MemberEnd())
-		std::cout << "No radius data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No radius data has been found");
+		//std::cout << "No radius data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_radius = val["Radius"].GetFloat();
 	}
 
 	if (val.FindMember("RandomizeSize") == val.MemberEnd())
-		std::cout << "No RandomizeSize data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No RandomizeSize data has been found");
+		//std::cout << "No RandomizeSize data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_randomizeSize = val["RandomizeSize"].GetBool();
 	}
 
 	if (val.FindMember("MinimumSize") == val.MemberEnd())
-		std::cout << "No MinimumSize data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No MinimumSize data has been found");
+		//std::cout << "No MinimumSize data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_minParticleSize = val["MinimumSize"].GetFloat();
 	}
 
 	if (val.FindMember("MaximumSize") == val.MemberEnd())
-		std::cout << "No MaximumSize data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No MaximumSize data has been found");
+		//std::cout << "No MaximumSize data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_maxParticleSize = val["MaximumSize"].GetFloat();
 	}
 
 	if (val.FindMember("RandomizeSpeed") == val.MemberEnd())
-		std::cout << "No RandomizeSize data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No RandomizeSize data has been found");
+		//std::cout << "No RandomizeSize data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_randomizeSpeed = val["RandomizeSpeed"].GetBool();
 	}
 
 	if (val.FindMember("MinimumSpeed") == val.MemberEnd())
-		std::cout << "No MinimumSize data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No MinimumSize data has been found");
+		//std::cout << "No MinimumSize data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_minParticleSpeed = val["MinimumSpeed"].GetFloat();
 	}
 
 	if (val.FindMember("MaximumSpeed") == val.MemberEnd())
-		std::cout << "No MaximumSize data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No MaximumSize data has been found");
+		//std::cout << "No MaximumSize data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_maxParticleSpeed = val["MaximumSpeed"].GetFloat();
 	}
 
 	if (val.FindMember("RandomizeLife") == val.MemberEnd())
-		std::cout << "No RandomizeLife data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No RandomizeLife data has been found");
+		//std::cout << "No RandomizeLife data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_randomizeLifespan = val["RandomizeLife"].GetBool();
 	}
 
 	if (val.FindMember("MinimumLife") == val.MemberEnd())
-		std::cout << "No MinimumLife data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No MinimumLife data has been found");
+		//std::cout << "No MinimumLife data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_minLifespan = val["MinimumLife"].GetFloat();
 	}
 
 	if (val.FindMember("MaximumLife") == val.MemberEnd())
-		std::cout << "No MaximumLife data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No MaximumLife data has been found");
+		//std::cout << "No MaximumLife data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_maxLifespan = val["MaximumLife"].GetFloat();
 	}
 
 	if (val.FindMember("Play") == val.MemberEnd())
-		std::cout << "No Play data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Play data has been found");
+		//std::cout << "No Play data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_play = val["Play"].GetBool();
 	}
 
 	if (val.FindMember("PreWarm") == val.MemberEnd())
-		std::cout << "No PreWarm data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No PreWarm data has been found");
+		//std::cout << "No PreWarm data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_preWarm = val["PreWarm"].GetBool();
 	}
 
 	if (val.FindMember("Burst") == val.MemberEnd())
-		std::cout << "No Burst data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Burst data has been found");
+		//std::cout << "No Burst data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_burst = val["Burst"].GetBool();
 	}
 
 	if (val.FindMember("Loop") == val.MemberEnd())
-		std::cout << "No Loop data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Loop data has been found");
+		//std::cout << "No Loop data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_loop = val["Loop"].GetBool();
 	}
 
 	if (val.FindMember("Reverse") == val.MemberEnd())
-		std::cout << "No Reverse data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Reverse data has been found");
+		//std::cout << "No Reverse data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_reverse = val["Reverse"].GetBool();
 	}
 
 	if (val.FindMember("Follow") == val.MemberEnd())
-		std::cout << "No Follow data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Follow data has been found");
+		//std::cout << "No Follow data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_follow = val["Follow"].GetBool();
 	}
 
 	if (val.FindMember("Fade") == val.MemberEnd())
-		std::cout << "No Fade data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Fade data has been found");
+		//std::cout << "No Fade data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_fade = val["Fade"].GetBool();
 	}
 
+	if (val.FindMember("Animated") == val.MemberEnd())
+	{
+		TracyMessageL("ComponentEmitter::Read: No Animated data has been found");
+		//std::cout << "No Animated data has been found" << std::endl;
+	}
+	else
+	{
+		emitSys._emitters[_emitterID]->_isAnimated = val["Animated"].GetBool();
+	}
+
+	if (val.FindMember("LoopAnimation") == val.MemberEnd())
+	{
+		TracyMessageL("ComponentEmitter::Read: No LoopAnimation data has been found");
+		//std::cout << "No LoopAnimation data has been found" << std::endl;
+	}
+	else
+	{
+		emitSys._emitters[_emitterID]->_loopAnimation = val["LoopAnimation"].GetBool();
+	}
+
 	if (val.FindMember("VelocityOverTime") == val.MemberEnd())
-		std::cout << "No VelocityOverTime data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No VelocityOverTime data has been found");
+		//std::cout << "No VelocityOverTime data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_velocityOverTime = val["VelocityOverTime"].GetBool();
 	}
 
 	if (val.FindMember("SizeOverTime") == val.MemberEnd())
-		std::cout << "No SizeOverTime data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No SizeOverTime data has been found");
+		//std::cout << "No SizeOverTime data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_sizeOverTime = val["SizeOverTime"].GetBool();
 	}
 
 	if (val.FindMember("SpeedOverTime") == val.MemberEnd())
-		std::cout << "No SpeedOverTime data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No SpeedOverTime data has been found");
+		//std::cout << "No SpeedOverTime data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_speedOverTime = val["SpeedOverTime"].GetBool();
 	}
 
 	if (val.FindMember("ColourOverTime") == val.MemberEnd())
-		std::cout << "No ColourOverTime data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No ColourOverTime data has been found");
+		//std::cout << "No ColourOverTime data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_colourOverTime = val["ColourOverTime"].GetBool();
 	}
 
 	if (val.FindMember("RandomizeColour") == val.MemberEnd())
-		std::cout << "No RandomizeColour data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No RandomizeColour data has been found");
+		//std::cout << "No RandomizeColour data has been found" << std::endl;
+	}
 	else
 	{
 		emitSys._emitters[_emitterID]->_randomizeColour = val["RandomizeColour"].GetBool();
 	}
 
 	if (val.FindMember("ColourA") == val.MemberEnd())
-		std::cout << "No ColourA data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No ColourA data has been found");
+		//std::cout << "No ColourA data has been found" << std::endl;
+	}
 	else
 	{
 		auto col = val["ColourA"].GetArray();
@@ -308,7 +799,10 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("ColourB") == val.MemberEnd())
-		std::cout << "No ColourB data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No ColourB data has been found");
+		//std::cout << "No ColourB data has been found" << std::endl;
+	}
 	else
 	{
 		auto col = val["ColourB"].GetArray();
@@ -320,7 +814,10 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("ColourStart") == val.MemberEnd())
-		std::cout << "No ColourStart data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No ColourStart data has been found");
+		//std::cout << "No ColourStart data has been found" << std::endl;
+	}
 	else
 	{
 		auto col = val["ColourStart"].GetArray();
@@ -332,7 +829,10 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("ColourEnd") == val.MemberEnd())
-		std::cout << "No ColourEnd data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No ColourEnd data has been found");
+		//std::cout << "No ColourEnd data has been found" << std::endl;
+	}
 	else
 	{
 		auto col = val["ColourEnd"].GetArray();
@@ -344,7 +844,10 @@ void ComponentEmitter::Read(Value& val)
 	}
 
 	if (val.FindMember("Velocity") == val.MemberEnd())
-		std::cout << "No Velocity data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentEmitter::Read: No Velocity data has been found");
+		//std::cout << "No Velocity data has been found" << std::endl;
+	}
 	else
 	{
 		auto vel = val["Velocity"].GetArray();
@@ -389,6 +892,11 @@ Value ComponentEmitter::Write()
 	NS_SERIALISER::ChangeData(&val, "BurstRate", emitSys._emitters[_emitterID]->_burstRate);
 	NS_SERIALISER::ChangeData(&val, "BurstAmount", emitSys._emitters[_emitterID]->_burstAmount);
 
+	NS_SERIALISER::ChangeData(&val, "Row", emitSys._emitters[_emitterID]->_row);
+	NS_SERIALISER::ChangeData(&val, "Column", emitSys._emitters[_emitterID]->_column);
+	NS_SERIALISER::ChangeData(&val, "TotalFrame", emitSys._emitters[_emitterID]->_totalFrame);
+	NS_SERIALISER::ChangeData(&val, "FramesPerSecond", emitSys._emitters[_emitterID]->_framesPerSecond);
+
 	NS_SERIALISER::ChangeData(&val, "Angle", emitSys._emitters[_emitterID]->_spawnAngle);
 	NS_SERIALISER::ChangeData(&val, "Radius", emitSys._emitters[_emitterID]->_radius);
 
@@ -411,6 +919,8 @@ Value ComponentEmitter::Write()
 	NS_SERIALISER::ChangeData(&val, "Reverse", emitSys._emitters[_emitterID]->_reverse);
 	NS_SERIALISER::ChangeData(&val, "Follow", emitSys._emitters[_emitterID]->_follow);
 	NS_SERIALISER::ChangeData(&val, "Fade", emitSys._emitters[_emitterID]->_fade);
+	NS_SERIALISER::ChangeData(&val, "Animated", emitSys._emitters[_emitterID]->_isAnimated);
+	NS_SERIALISER::ChangeData(&val, "LoopAnimation", emitSys._emitters[_emitterID]->_loopAnimation);
 
 	NS_SERIALISER::ChangeData(&val, "VelocityOverTime", emitSys._emitters[_emitterID]->_velocityOverTime);
 	NS_SERIALISER::ChangeData(&val, "SizeOverTime", emitSys._emitters[_emitterID]->_sizeOverTime);

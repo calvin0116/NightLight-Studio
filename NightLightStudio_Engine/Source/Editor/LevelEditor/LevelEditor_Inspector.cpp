@@ -19,6 +19,12 @@
 
 #include "../../Graphics/CameraSystem.h"
 
+// Matrix transform and quaternions for rotation
+#include "../../glm/gtc/matrix_transform.hpp"
+#include "../../glm/gtc/quaternion.hpp"
+
+#include "../../Core/TagHandler.h"
+
 void InspectorWindow::Start()
 {
 	// Set up Command to run to move objects
@@ -177,7 +183,12 @@ void InspectorWindow::Start()
 		{
 			entComp._ent.AttachComponent<EmitterComponent>();
 			entComp._ent.getComponent<EmitterComponent>()->Read(*entComp._rjDoc);
-			entComp._ent.getComponent<EmitterComponent>()->_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
+			//entComp._ent.getComponent<EmitterComponent>()->_emitterID = NS_GRAPHICS::EmitterSystem::GetInstance().AddEmitter();
+		}
+		else if (t == typeid(CameraComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<CameraComponent>();
+			entComp._ent.getComponent<CameraComponent>()->Read(*entComp._rjDoc);
 		}
 
 		return comp;
@@ -277,6 +288,11 @@ void InspectorWindow::Start()
 			NS_GRAPHICS::EmitterSystem::GetInstance().RemoveEmitterByID(entComp._ent.getComponent<EmitterComponent>()->_emitterID);
 			entComp._ent.RemoveComponent<EmitterComponent>();
 		}
+		else if (t == typeid(CameraComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<CameraComponent>()->Write());
+			entComp._ent.RemoveComponent<CameraComponent>();
+		}
 
 		return std::any(entComp);
 	};
@@ -334,7 +350,8 @@ void InspectorWindow::Run()
 		}
 		else
 		{
-			std::cout << "No set manager is allocated" << std::endl;
+			TracyMessageL("InspectorWindow::Run: No set manager is allocated");
+			//std::cout << "No set manager is allocated" << std::endl;
 		}
 		Entity 	ent = g_ecman->getEntity(id);
 		// Entity name
@@ -411,7 +428,10 @@ void InspectorWindow::TransformComp(Entity& ent)
 	if (trans_comp != NULL)
 	{
 		ImGui::NewLine();
-    ImGui::InputInt("Tag", &(trans_comp->_tag));
+		if (ImGui::InputInt("Tag", &(trans_comp->_tag), 1, 100 ,ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			TAG_HANDLER->InsertTagToUsed(trans_comp->_tag);
+		}
     ImGui::NewLine();
     std::string enam = trans_comp->_entityName.toString();
 		_levelEditor->LE_AddInputText("Entity Name", enam, 500, ImGuiInputTextFlags_EnterReturnsTrue,
@@ -643,6 +663,11 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 			ImGui::Checkbox("Emission##Graphic", &graphics_comp->_renderEmission);
 
 			ImGui::ColorEdit3("Emission Color##Graphics", glm::value_ptr(graphics_comp->_pbrData._emissive));
+
+			float emissive_intensity = graphics_comp->GetEmissiveIntensity() * 100.f;
+
+			if (ImGui::DragFloat("Emissive Intensity", &emissive_intensity, 0.1f, 0.1f, 100.f))
+				graphics_comp->SetEmissiveIntensity(emissive_intensity/100.f);
 
 			std::string mod = graphics_comp->_modelFileName.toString();
 			std::string tex = graphics_comp->_albedoFileName.toString();
@@ -1203,6 +1228,35 @@ void InspectorWindow::ScriptComp(Entity& ent)
 			{
 				Script_comp->_ScriptName = tex;
 			});
+
+			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+//<<<<<<< Updated upstream
+				[this, &Script_comp, &tex](std::string* str)
+				{
+					std::string data = *str;
+					std::transform(data.begin(), data.end(), data.begin(),
+						[](unsigned char c)
+						{ return (char)std::tolower(c); });
+
+					std::string fileType = LE_GetFileType(data);
+					if (fileType == "cs")
+					{
+						std::string name = LE_GetFilename(*str);
+						name.erase(name.end() - 3, name.end());
+						Script_comp->_ScriptName = name;
+					}
+/*
+				[this, &Script_comp](std::string* str)
+				{
+					fs::path script_path= *str;
+
+					if (script_path.extension() == ".cs")
+					{
+						Script_comp->_ScriptName = script_path.stem().string();
+					}
+					*/
+
+				});
 		}
 
 		if (!_notRemove)
@@ -1226,10 +1280,18 @@ void InspectorWindow::CanvasComp(Entity& ent)
 		{
 			ImGui::Checkbox("IsActive##Canvas", &canvas->_isActive);
 
+			_levelEditor->LE_AddCombo("Canvas Type", (int&)canvas->_canvasType,
+				{ 
+					"Screen", 
+					"World"
+				});
+
 			size_t uiCount = canvas->_uiElements.size();
 			for (size_t i = 0; i < uiCount; ++i)
 			{
-				ImGui::Checkbox(std::string("IsActive##UI").append(std::to_string(i)).c_str(), &canvas->_uiElements.at(i)._isActive);
+				UI_Element& ui = canvas->_uiElements.at(i);
+
+				ImGui::Checkbox(std::string("IsActive##UI").append(std::to_string(i)).c_str(), &ui._isActive);
 				if (ImGui::Button(std::string("X##").append(std::to_string(i)).c_str()))
 				{
 					canvas->RemoveUI(i);
@@ -1237,28 +1299,37 @@ void InspectorWindow::CanvasComp(Entity& ent)
 
 				ImGui::SameLine();
 
-				std::string tex = canvas->_uiElements.at(i)._fileName.toString();
-				std::string uiName = canvas->_uiElements.at(i)._uiName.toString();
-				canvas->_uiElements.at(i)._position;
-				canvas->_uiElements.at(i)._size;
+				std::string tex = ui._fileName.toString();
+				std::string uiName = ui._uiName.toString();
+				//canvas->_uiElements.at(i)._position;
+				//canvas->_uiElements.at(i)._size;
 
-				ImGui::InputFloat3(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._position), 3);
-				ImGui::InputFloat2(std::string("UISize##").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._size), 3);
+				if (canvas->_canvasType == SCREEN_SPACE)
+				{
+					ImGui::InputFloat2(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._position), 3);
+					ImGui::InputFloat(std::string("Layer Order##").append(std::to_string(i)).c_str(), &ui._position.z,1);
+				}
+				else if (canvas->_canvasType == WORLD_SPACE)
+				{
+					ImGui::InputFloat3(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._position), 3);
+
+				}
+				ImGui::InputFloat2(std::string("UISize##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._size), 3);
 
 				_levelEditor->LE_AddInputText(std::string("UIName##").append(std::to_string(i)).c_str(), uiName, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-					[&uiName, &canvas, &i]()
+					[&uiName, &ui, &i]()
 					{
-						canvas->_uiElements.at(i)._uiName = uiName;
+						ui._uiName = uiName;
 					});
 
 				_levelEditor->LE_AddInputText(std::string("Image##").append(std::to_string(i)).c_str(), tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-					[&tex, &canvas, &i]()
+					[&tex, &ui, &i]()
 					{
-						canvas->_uiElements.at(i).AddTexture(tex);
-						canvas->_uiElements.at(i)._fileName = tex;
+						ui.AddTexture(tex);
+						ui._fileName = tex;
 					});
 				_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
-					[this, &tex, &canvas, &i](std::string* str)
+					[this, &tex, &ui, &i](std::string* str)
 					{
 						std::string data = *str;
 						std::transform(data.begin(), data.end(), data.begin(),
@@ -1274,13 +1345,52 @@ void InspectorWindow::CanvasComp(Entity& ent)
 								data.erase(0, 1);
 							}
 							tex = data;
-							canvas->_uiElements.at(i).AddTexture(tex);
-							canvas->_uiElements.at(i)._fileName = tex;
+							ui.AddTexture(tex);
+							ui._fileName = tex;
 						}
 					});
 
+				ImGui::Checkbox(std::string("Animatable##").append(std::to_string(i)).c_str(), &ui._isAnimated);
 
-				ImGui::ColorEdit4(std::string("Colour##Canvas").append(std::to_string(i)).c_str(), glm::value_ptr(canvas->_uiElements.at(i)._colour));
+				if (ui._isAnimated)
+				{
+					ImGui::InputScalar(std::string("Row##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._row);
+					ImGui::InputScalar(std::string("Column##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._column);
+					ImGui::InputScalar(std::string("Total Frame##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._totalFrame);
+
+					if (ImGui::InputScalar(std::string("Frames per second##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._framesPerSecond))
+					{
+						if (ui._framesPerSecond == 0)
+						{
+							ui._animationRate = 0.0f;
+						}
+						else
+						{
+							ui._animationRate = 1.0f / ui._framesPerSecond;
+						}
+					}
+					
+					ImGui::Checkbox(std::string("Play##").append(std::to_string(i)).c_str(), &ui._play);
+					ImGui::Checkbox(std::string("Loop##").append(std::to_string(i)).c_str(), &ui._loop);
+
+					if (ImGui::Button("Test Animation##"))
+					{
+						ui.PlayAnimation(ui._loop);
+					}
+					
+					//For debug
+					if (ImGui::Button("Next Frame##"))
+					{
+						ui._currentFrame++;
+
+						if (ui._currentFrame >= ui._totalFrame)
+						{
+							ui._currentFrame = 0;
+						}
+					}
+				}
+
+				ImGui::ColorEdit4(std::string("Colour##Canvas").append(std::to_string(i)).c_str(), glm::value_ptr(ui._colour));
 
 				ImGui::Separator();
 			}
@@ -1288,6 +1398,13 @@ void InspectorWindow::CanvasComp(Entity& ent)
 			if (ImGui::Button("Add UI"))
 			{
 				canvas->AddUI();
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Sort"))
+			{
+				canvas->Sort();
 			}
 
 			ImGui::SameLine();
@@ -1343,6 +1460,8 @@ void InspectorWindow::AnimationComp(Entity& ent)
 				}
 				++it2;
 			}
+
+			ImGui::InputFloat("Animation Speed##anim", &NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_animMultiplier);
 
 			if (ImGui::Button("Preview Animation"))
 			{
@@ -1421,96 +1540,118 @@ void InspectorWindow::EmitterComp(Entity& ent)
 					}
 				});
 
-			ImGui::InputFloat("Duration Time", &emit->_durationPerCycle);
-			if (ImGui::InputScalar("Emission Rate", ImGuiDataType_U32, &emit->_emissionOverTime))
+			ImGui::InputFloat("Duration Time##Emitter", &emit->_durationPerCycle);
+			if (ImGui::InputScalar("Emission Rate##Emitter", ImGuiDataType_U32, &emit->_emissionOverTime))
 			{
 				emit->_emissionRate = 1.0f / emit->_emissionOverTime;
 			}
 
-			if (ImGui::InputScalar("Max Particles", ImGuiDataType_U32, &emit->_maxParticles))
+			if (ImGui::InputScalar("Max Particles##Emitter", ImGuiDataType_U32, &emit->_maxParticles))
 			{
 				emit->UpdateSize();
 			}
 
 			if (emit->_type == SPHERE)
 			{
-				ImGui::InputFloat("Radius", &emit->_radius);
+				ImGui::InputFloat("Radius##Emitter", &emit->_radius);
 			}
 
 			else if (emit->_type == CONE)
 			{
-				ImGui::InputFloat("Angle", &emit->_spawnAngle);
-				ImGui::InputFloat("Radius", &emit->_radius);
+				ImGui::InputFloat("Angle##Emitter", &emit->_spawnAngle);
+				ImGui::InputFloat("Radius##Emitter", &emit->_radius);
 			}
 
-			if (ImGui::TreeNode("Particle Size"))
+			if (ImGui::TreeNode("Particle Size##Emitter"))
 			{
-				ImGui::Checkbox("Random Size", &emit->_randomizeSize);
+				ImGui::Checkbox("Random Size##Emitter", &emit->_randomizeSize);
 				if (emit->_randomizeSize)
 				{
-					ImGui::InputFloat("Minimum Size", &emit->_minParticleSize);
-					ImGui::InputFloat("Maximum Size", &emit->_maxParticleSize);
+					ImGui::InputFloat("Minimum Size##Emitter", &emit->_minParticleSize);
+					ImGui::InputFloat("Maximum Size##Emitter", &emit->_maxParticleSize);
 				}
 				else
 				{
-					ImGui::InputFloat("Size", &emit->_maxParticleSize);
+					ImGui::InputFloat("Size##Emitter", &emit->_maxParticleSize);
 				}
 				ImGui::TreePop();
 			}
 
 
-			if (ImGui::TreeNode("Particle Speed"))
+			if (ImGui::TreeNode("Particle Speed##Emitter"))
 			{
-				ImGui::Checkbox("Random Speed", &emit->_randomizeSpeed);
+				ImGui::Checkbox("Random Speed##Emitter", &emit->_randomizeSpeed);
 				if (emit->_randomizeSpeed)
 				{
-					ImGui::InputFloat("Minimum Speed", &emit->_minParticleSpeed);
-					ImGui::InputFloat("Maximum Speed", &emit->_maxParticleSpeed);
+					ImGui::InputFloat("Minimum Speed##Emitter", &emit->_minParticleSpeed);
+					ImGui::InputFloat("Maximum Speed##Emitter", &emit->_maxParticleSpeed);
 				}
 				else
 				{
-					ImGui::InputFloat("Speed", &emit->_maxParticleSpeed);
+					ImGui::InputFloat("Speed##Emitter", &emit->_maxParticleSpeed);
 				}
 				ImGui::TreePop();
 			}
 
-			if (ImGui::TreeNode("Particle Lifespan"))
+			if (ImGui::TreeNode("Particle Lifespan##Emitter"))
 			{
-				ImGui::Checkbox("Random LifeSpan", &emit->_randomizeLifespan);
+				ImGui::Checkbox("Random LifeSpan##Emitter", &emit->_randomizeLifespan);
 				if (emit->_randomizeLifespan)
 				{
-					ImGui::InputFloat("Minimum LifeSpan", &emit->_minLifespan);
-					ImGui::InputFloat("Maximum LifeSpan", &emit->_maxLifespan);
+					ImGui::InputFloat("Minimum LifeSpan##Emitter", &emit->_minLifespan);
+					ImGui::InputFloat("Maximum LifeSpan##Emitter", &emit->_maxLifespan);
 				}
 				else
 				{
-					ImGui::InputFloat("LifeSpan", &emit->_maxLifespan);
+					ImGui::InputFloat("LifeSpan##Emitter", &emit->_maxLifespan);
 				}
 				ImGui::TreePop();
 			}
 
 			if (!emit->_colourOverTime)
 			{
-				if (ImGui::TreeNode("Particle Colour"))
+				if (ImGui::TreeNode("Particle Colour##Emitter"))
 				{
-					ImGui::Checkbox("Random Colour", &emit->_randomizeColour);
+					ImGui::Checkbox("Random Colour##Emitter", &emit->_randomizeColour);
 					if (emit->_randomizeColour)
 					{
 						float colourA[4] = { emit->_colourA.x, emit->_colourA.y, emit->_colourA.z, emit->_colourA.w };
-						ImGui::ColorEdit4("Colour Range Low", colourA);
+						ImGui::ColorEdit4("Colour Range Low##Emitter", colourA);
 						emit->_colourA = { colourA[0], colourA[1], colourA[2], colourA[3] };
-			
+
 						float colourB[4] = { emit->_colourB.x, emit->_colourB.y, emit->_colourB.z, emit->_colourB.w };
-						ImGui::ColorEdit4("Colour Range High", colourB);
+						ImGui::ColorEdit4("Colour Range High##Emitter", colourB);
 						emit->_colourB = { colourB[0], colourB[1], colourB[2], colourB[3] };
 					}
 					else
 					{
 						float colour[4] = { emit->_colourB.x, emit->_colourB.y, emit->_colourB.z, emit->_colourB.w };
-						ImGui::ColorEdit4("Colour", colour);
+						ImGui::ColorEdit4("Colour##Emitter", colour);
 						emit->_colourB = { colour[0], colour[1], colour[2], colour[3] };
 					}
 					ImGui::TreePop();
+				}
+			}
+
+			ImGui::Checkbox("Animatable##Emitter", &emit->_isAnimated);
+
+			if (emit->_isAnimated)
+			{
+				ImGui::Checkbox("Loop Animation##Emitter", &emit->_loopAnimation);
+				ImGui::InputScalar("Row##Emitter", ImGuiDataType_U32, &emit->_row);
+				ImGui::InputScalar("Column##Emitter", ImGuiDataType_U32, &emit->_column);
+				ImGui::InputScalar("Total Frame##Emitter", ImGuiDataType_U32, &emit->_totalFrame);
+
+				if (ImGui::InputScalar("Frames per second##Emitter", ImGuiDataType_U32, &emit->_framesPerSecond))
+				{
+					if (emit->_framesPerSecond == 0)
+					{
+						emit->_animationRate = 0.0f;
+					}
+					else
+					{
+						emit->_animationRate = 1.0f / emit->_framesPerSecond;
+					}
 				}
 			}
 
@@ -1519,8 +1660,8 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			ImGui::Checkbox("Burst##", &emit->_burst);
 			if (emit->_burst)
 			{
-				ImGui::InputFloat("Burst Rate", &emit->_burstRate);
-				ImGui::InputScalar("Burst Amount", ImGuiDataType_U32, &emit->_burstAmount);
+				ImGui::InputFloat("Burst Rate##Emitter", &emit->_burstRate);
+				ImGui::InputScalar("Burst Amount##Emitter", ImGuiDataType_U32, &emit->_burstAmount);
 			}
 
 			ImGui::Checkbox("Play##Particle", &emit->_play);
@@ -1531,7 +1672,7 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			//	ImGui::Checkbox("Reverse", &emit->_reverse);
 			//}
 
-			if (ImGui::Checkbox("Follow", &emit->_follow))
+			if (ImGui::Checkbox("Follow##Emitter", &emit->_follow))
 			{
 				if (emit->_play)
 				{
@@ -1539,43 +1680,68 @@ void InspectorWindow::EmitterComp(Entity& ent)
 					emitter->Play();
 				}
 			}
-			ImGui::Checkbox("Fade", &emit->_fade);
+			ImGui::Checkbox("Fade##Emitter", &emit->_fade);
 
-			if (ImGui::TreeNode("Special Behaviour"))
+			if (ImGui::TreeNode("Special Behaviour##Emitter"))
 			{
-				ImGui::Checkbox("Velocity over time", &emit->_velocityOverTime);
+				ImGui::Checkbox("Velocity over time##Emitter", &emit->_velocityOverTime);
 				if (emit->_velocityOverTime)
 				{
-					ImGui::InputFloat("X", &emit->_velocity.x);
-					ImGui::InputFloat("Y", &emit->_velocity.y);
+					ImGui::InputFloat("X##Emitter", &emit->_velocity.x);
+					ImGui::InputFloat("Y##Emitter", &emit->_velocity.y);
 				}
 
-				ImGui::Checkbox("Size over time", &emit->_sizeOverTime);
-				ImGui::Checkbox("Speed over time", &emit->_speedOverTime);
-				ImGui::Checkbox("Colour over time", &emit->_colourOverTime);
+				ImGui::Checkbox("Size over time##Emitter", &emit->_sizeOverTime);
+				ImGui::Checkbox("Speed over time##Emitter", &emit->_speedOverTime);
+				ImGui::Checkbox("Colour over time##Emitter", &emit->_colourOverTime);
 				if (emit->_colourOverTime)
 				{
 					float colourStart[4] = { emit->_colourStart.x, emit->_colourStart.y, emit->_colourStart.z, emit->_colourStart.w };
-					ImGui::ColorEdit4("Colour Start", colourStart);
+					ImGui::ColorEdit4("Colour Start##Emitter", colourStart);
 					emit->_colourStart = { colourStart[0], colourStart[1], colourStart[2], colourStart[3] };
 
 					float colourEnd[4] = { emit->_colourEnd.x, emit->_colourEnd.y, emit->_colourEnd.z, emit->_colourEnd.w };
-					ImGui::ColorEdit4("Colour End", colourEnd);
+					ImGui::ColorEdit4("Colour End##Emitter", colourEnd);
 					emit->_colourEnd = { colourEnd[0], colourEnd[1], colourEnd[2], colourEnd[3] };
 				}
 
 				ImGui::TreePop();
 			}
 
-			if (ImGui::Button("Preview Particle"))
+			if (ImGui::Button("Preview Particle##Emitter"))
 			{
 				emitter->Play();
 			}
 
-			if (ImGui::Button("Stop Particle"))
+			if (ImGui::Button("Stop Particle##Emitter"))
 			{
 				emitter->Stop();
 			}
+
+			if (ImGui::Button("Pause Particle##Emitter"))
+			{
+				emit->_pause = !emit->_pause;
+			}
+
+			//For debug
+			if (ImGui::Button("Next Frame##"))
+			{
+				for (size_t index = 0;  index < emit->_particles.size(); ++index)
+				{
+					emit->_particles[index]._currentFrame++;
+
+					if (emit->_particles[index]._currentFrame >= emit->_totalFrame)
+					{
+						emit->_particles[index]._currentFrame = 0;
+					}
+				}
+			}
+		}
+		if (!_notRemove)
+		{
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<EmitterComponent>()->Write(), typeid(EmitterComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
 		}
 
 		ImGui::Separator();
@@ -1584,7 +1750,101 @@ void InspectorWindow::EmitterComp(Entity& ent)
 
 void InspectorWindow::CameraComp(Entity& ent)
 {
-	ent;
+	CameraComponent* camComp = ent.getComponent<CameraComponent>();
+	if (camComp == nullptr)
+		return;
+	NS_GRAPHICS::Camera& cam = camComp->_data;
+	if (ImGui::CollapsingHeader("Camera component", &_notRemove))
+	{
+		ImGui::Checkbox("IsActive##Camera", &camComp->_isActive);
+		ImGui::InputFloat("FOV", &(cam.cameraFOV));
+		if (ImGui::CollapsingHeader("Sensitivity", &_notRemove))
+		{
+			ImGui::InputFloat("Rotate", &(cam._rotation_sensitivity));
+			ImGui::InputFloat("Drag", &(cam._drag_sensitivity));
+			ImGui::InputFloat("Zoom", &(cam._zoom_sensitivity));
+			ImGui::NewLine();
+		}
+		ImGui::InputFloat("Yaw", &(cam.cameraYaw));
+		ImGui::InputFloat("Pitch", &(cam.cameraPitch));
+		//ImGui::InputFloat3("Target", glm::value_ptr(cam.cameraTarget), 3);
+		//ImGui::InputFloat3("Position", glm::value_ptr(cam.cameraPos), 3);
+		//ImGui::InputFloat3("Position", glm::value_ptr(cam.cameraPos), 3);
+	}
+	if (!_notRemove)
+	{
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<CameraComponent>()->Write(), typeid(CameraComponent).hash_code() };
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+		_notRemove = true;
+	}
+	ImGui::Separator();
+	/*if (camComp != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Animation component", &_notRemove))
+		{
+			ImGui::Checkbox("IsActive##Animation", &anim->_isActive);
+
+			ImGui::Text("Current Animation: ");
+			auto it = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
+			while (it != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
+			{
+				bool currAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim == *it;
+				if (ImGui::Selectable(it->c_str(), &currAnim))
+				{
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim = it->c_str();
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play = false;
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_dt = 0.0f;
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = "";
+				}
+				++it;
+			}
+
+			ImGui::Separator();
+			ImGui::Text("Default Animation: ");
+			auto it2 = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
+			while (it2 != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
+			{
+				bool defaultAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim == *it2;
+				if (ImGui::Selectable(std::string(it2->c_str()).append("##defaultAnim").c_str(), &defaultAnim))
+				{
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = it2->c_str();
+				}
+				++it2;
+			}
+
+			ImGui::InputFloat("Animation Speed##anim", &NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_animMultiplier);
+
+			if (ImGui::Button("Preview Animation"))
+			{
+				anim->PlayAnimation(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim,
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_loop);
+			}
+
+			if (NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play)
+			{
+				if (ImGui::Button("Pause Animation"))
+				{
+					anim->PauseAnimation();
+				}
+			}
+			else
+			{
+				if (ImGui::Button("Resume Animation"))
+				{
+					anim->ResumeAnimation();
+				}
+			}
+
+			if (ImGui::Button("Stop Animation"))
+			{
+				anim->StopAnimation();
+			}
+
+			ImGui::Checkbox("Loop", &NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_loop);
+		}
+
+		ImGui::Separator();
+	}*/
 }
 
 void InspectorWindow::CScriptComp(Entity& ent)
@@ -1764,7 +2024,7 @@ void InspectorWindow::VariableComp(Entity& ent)
 
 			int str_index = 1;
 
-			for (LocalString<125>& str : comp_var->string_list) //[path, name]
+			for (LocalString<DEF_STR_SIZE>& str : comp_var->string_list) //[path, name]
 			{
 				std::string p = "String_" + std::to_string(str_index);
 				
@@ -1773,6 +2033,19 @@ void InspectorWindow::VariableComp(Entity& ent)
 					[&str, &s_name]()
 					{
 						str = s_name.c_str();
+					});
+
+				_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+					[this, &str](std::string* _str)
+					{
+						str = *_str;
+					});
+
+				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
+					[this, &str](Entity* entptr)
+					{
+						str = G_ECMANAGER->EntityName[entptr->getId()];
+
 					});
 				str_index++;
 			}
@@ -1817,12 +2090,19 @@ void InspectorWindow::NavComp(Entity& ent)
 
 			if (nav_comp->cur_wp_path != nullptr)
 				s_name = G_ECMANAGER->EntityName[G_ECMANAGER->getEntity(nav_comp->cur_wp_path).getId()];
+			else
+				s_name = nav_comp->wp_path_ent_name;
 
 			_levelEditor->LE_AddInputText("WayPointPath", s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&s_name, &nav_comp]()
 				{
 					//str = s_name.c_str();
-					nav_comp->cur_wp_path = G_ECMANAGER->getEntityUsingEntName(s_name).getComponent<WayPointMapComponent>();
+					Entity ent = G_ECMANAGER->getEntityUsingEntName(s_name);
+					
+					if(ent.getId()!= -1)
+						nav_comp->cur_wp_path = ent.getComponent<WayPointMapComponent>();
+					else
+						nav_comp->cur_wp_path = nullptr;
 				});
 			_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
 				[this, &s_name,&nav_comp](Entity* entptr)
@@ -1911,7 +2191,7 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 			}
 			int str_index = 1;
 
-			for (LocalString<125> & str : wpm_comp->way_point_list) //[path, name]
+			for (LocalString<DEF_STR_SIZE> & str : wpm_comp->way_point_list) //[path, name]
 			{
 				std::string p = "Waypoint_" + std::to_string(str_index);
 
@@ -1919,14 +2199,24 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 				_levelEditor->LE_AddInputText(p, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
 					[&str, &s_name, &wpm_comp, &str_index]()
 					{
-						WayPointComponent* wpc = G_ECMANAGER->getEntityUsingEntName(str).getComponent<WayPointComponent>();
+						Entity ent = G_ECMANAGER->getEntityUsingEntName(s_name);						
+						if(ent.getId() == -1 )
+						{
+							str = "";
+							TracyMessageL("InspectorWindow::WayPointPathComp: No entity has been found");
+							//std::cout << "No entity has been found" << std::endl;
+							return;
+						}
+
+						WayPointComponent* wpc = ent.getComponent<WayPointComponent>();
 						if (wpc != nullptr) {
 							wpm_comp->GetPath().at(str_index-1) = wpc;
 							str = s_name.c_str();
 						}
 						else
 						{
-							std::cout << "No entity with waypoint component found" << std::endl;
+							TracyMessageL("InspectorWindow::WayPointPathComp: No entity with waypoint component found");
+							//std::cout << "No entity with waypoint component found" << std::endl;
 						}
 					});
 				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
@@ -1989,7 +2279,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  Graphics",
 			"  Light   ",
 			"  Collider",
-			"  CScript",
+			"  CScript(removed)",
 			"  C#Script",
 			"  Canvas",
 			"  PlayerStats",
@@ -1998,7 +2288,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  NavComp",
 			"  WayPointPath",
 			"  WayPointComp",
-			"  Emitter"
+			"  Emitter",
+			"  Camera"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -2070,6 +2361,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 		}
 		
 		//case 11: -> ------
+		/*
 		case 6: // CScript
 		{
 			if (!ent.getComponent<CScriptComponent>())
@@ -2081,7 +2373,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 
 			}
 			break;
-		}
+		}*/
 		case 7: // C#Script
 		{
 		  if (!ent.getComponent<ScriptComponent>())
@@ -2168,6 +2460,15 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
+		case 16: // Camera
+		{
+			if (!ent.getComponent<CameraComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, CameraComponent().Write(), typeid(CameraComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
 
 		}
 		//if (next_lol == nullptr)
@@ -2177,7 +2478,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 	}
 }
 
-bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjection, float* matrix)
+bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjection, glm::mat4& matrix)
 {
 	if (ImGui::RadioButton("Translate", _mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
 		_mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
@@ -2189,22 +2490,71 @@ bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjec
 		_mCurrentGizmoOperation = ImGuizmo::SCALE;
 
 	float matrixTranslation[3], matrixRotation[3], matrixScale[3];
-	ImGuizmo::DecomposeMatrixToComponents(matrix, matrixTranslation, matrixRotation, matrixScale);
+	ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(matrix), matrixTranslation, matrixRotation, matrixScale);
 
-	if (ImGui::InputFloat3("Translation##TRANSLATION", matrixTranslation, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+	bool activated = false;
+	bool deactivated = false;
+
+	if (ImGui::InputFloat3("Translation##TRANSLATION", matrixTranslation, 3))
 	{
-		_lastEnter = true;
+		//_lastEnter = true;
 	}
-	if (ImGui::InputFloat3("Rotation##ROTATION", matrixRotation, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		_lastEnter = true;
+		deactivated = true;
 	}
-	if (ImGui::InputFloat3("Scale##SCALE", matrixScale, 3, ImGuiInputTextFlags_EnterReturnsTrue))
+	else if (ImGui::IsItemActivated())
 	{
-		_lastEnter = true;
+		activated = true;
+	}
+	
+	if (ImGui::InputFloat3("Rotation##ROTATION", matrixRotation, 3))
+	{
+		//_lastEnter = true;
+	}
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		deactivated = true;
+	}
+	else if (ImGui::IsItemActivated())
+	{
+		activated = true;
 	}
 
-	ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, matrix);
+	if (ImGui::InputFloat3("Scale##SCALE", matrixScale, 3))
+	{
+		//_lastEnter = true;
+	}
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		deactivated = true;
+	}
+	else if (ImGui::IsItemActivated())
+	{
+		activated = true;
+	}
+
+	if (deactivated)
+	{
+		_lastEnter = true;
+	}
+	else if (activated)
+	{
+		_transformItemActive = matrix;
+	}
+
+	//ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, matrix);
+
+	// Manually calculate matrix based on values
+	glm::mat4 Translate = glm::translate(glm::mat4(1.f), glm::make_vec3(matrixTranslation));
+
+	// Perform rotation using Quarternions
+	glm::quat Quaternion(glm::radians(glm::make_vec3(matrixRotation)));
+	glm::mat4 Rotate = glm::mat4_cast(Quaternion);
+
+	glm::mat4 Scale = glm::scale(glm::mat4(1.f), glm::make_vec3(matrixScale));
+
+	matrix = Translate * Rotate * Scale;
 
 	if (_mCurrentGizmoOperation != ImGuizmo::SCALE)
 	{
@@ -2215,7 +2565,7 @@ bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjec
 			_mCurrentGizmoMode = ImGuizmo::LOCAL;
 	}
 
-	ImGui::Checkbox("", &_useSnap);
+	ImGui::Checkbox("##USESNAP", &_useSnap);
 	ImGui::SameLine();
 
 	float* snapPtr = nullptr;
@@ -2238,7 +2588,7 @@ bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjec
 
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-	return ImGuizmo::Manipulate(cameraView, cameraProjection, _mCurrentGizmoOperation, _mCurrentGizmoMode, matrix, NULL, _useSnap ? snapPtr : NULL, NULL, NULL);
+	return ImGuizmo::Manipulate(cameraView, cameraProjection, _mCurrentGizmoOperation, _mCurrentGizmoMode, glm::value_ptr(matrix), NULL, _useSnap ? snapPtr : NULL, NULL, NULL);
 }
 
 void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
@@ -2269,7 +2619,7 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 
 			glm::mat4 matObj = trans_comp->GetModelMatrix();
 			ImGuizmo::SetID(0);
-			if (EditTransform(camView, cameraProjection, glm::value_ptr(matObj)))
+			if (EditTransform(camView, cameraProjection, matObj))
 			{
 				// Checks FIRST frame of manipulation only
 				if (!_lastPos_Start)
@@ -2374,12 +2724,19 @@ void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)
 				else if (_lastEnter)
 				{
 					_lastEnter = false;
-
 					ENTITY_LAST_POS newObj{ trans_comp , matObj };
 					std::any curPos = newObj;
 
+					float trans[3] = { 0,0,0 }, rot[3] = { 0,0,0 }, scale[3] = { 0,0,0 };
+					ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(_transformItemActive), trans, rot, scale);
+					trans_comp->_position = glm::make_vec3(trans);
+					trans_comp->_rotation = glm::make_vec3(rot);
+					trans_comp->_scale = glm::make_vec3(scale);
+
 					// Runs command to move object to new position from old position
 					_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_SET_ENTITY_POSITION"), curPos);
+
+					_transformItemActive = matObj;
 				}
 				else
 				{

@@ -117,6 +117,10 @@ namespace NS_SERIALISER {
             {
                 CreateAndWriteComp<EmitterComponent>(Comp_list, entity, component_name, g_ecman);
             }
+            else if (component_name == "CameraComponent")
+            {
+              CreateAndWriteComp<CameraComponent>(Comp_list, entity, component_name, g_ecman);
+            }
         }
     }
 
@@ -124,7 +128,8 @@ namespace NS_SERIALISER {
     {
         for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
         {
-            std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
+            TracyMessageL(std::string("NS_SERIALISER::EntityListCreation: Entity Name: ").append(itr->name.GetString()).c_str());
+            //std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
             Entity ent_handle = g_ecman->BuildEntity(itr->name.GetString());		//Build entity
 
             Value& Component_list = Ent_list[itr->name.GetString()];					//Get component list
@@ -141,9 +146,11 @@ namespace NS_SERIALISER {
     {
         for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
         {
-            std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
+            TracyMessageL(std::string("NS_SERIALISER::EntityListInit: Entity Name: ").append(itr->name.GetString()).c_str());
+            //std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
             Entity ent_handle = G_ECMANAGER->getEntityUsingEntName(itr->name.GetString());		//Build entity
-            std::cout << "Entity ID: " << ent_handle.getId() << std::endl;
+            TracyMessageL(std::string("NS_SERIALISER::EntityListInit: Entity ID: ").append(std::to_string(ent_handle.getId())).c_str());
+            //std::cout << "Entity ID: " << ent_handle.getId() << std::endl;
 
             Value& Component_list = Ent_list[itr->name.GetString()];					//Get component list
 
@@ -231,6 +238,10 @@ namespace NS_SERIALISER {
             else if (component_name == "EmitterComponent")
             {
                 ReadComp<EmitterComponent>(Comp_list, entity, component_name);
+            }
+            else if (component_name == "CameraComponent")
+            {
+              ReadComp<CameraComponent>(Comp_list, entity, component_name);
             }
         }
     }

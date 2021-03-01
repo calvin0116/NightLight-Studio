@@ -11,6 +11,8 @@
 #include "../../../Editor/SystemEditor.h"
 // RayCast
 #include "../../../Collision/SystemCollision.h"
+// Tracy
+#include "../tracy-master/Tracy.hpp"
 
 //#define CSDebug
 
@@ -35,6 +37,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(GetNavigator, "GetNavigator", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetAnimation, "GetAnimation", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetCanvas, "GetCanvas", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetEmitter, "GetEmitter", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetVariables, "GetVariables", "UniBehaviour");
   }
   // For debugging in C#
@@ -66,12 +69,12 @@ namespace ECSBind
   // Delta Time
   float dt()
   {
-    return DELTA_T->dt;
+      return DELTA_T->fixed_dt;
   }
 
   float realDt()
   {
-    return DELTA_T->dt / CLOCKS_PER_SEC;
+      return DELTA_T->real_dt;// DELTA_T->real_dt;// / CLOCKS_PER_SEC;
   }
 
   void SetNextScene(MonoString* scene_name)
@@ -81,7 +84,8 @@ namespace ECSBind
 
   void Print(MonoString* text)
   {
-    ED_OUT(MonoWrapper::ToString(text));
+    TracyMessage(MonoWrapper::ToString(text).c_str(), MonoWrapper::ToString(text).size());
+    //ED_OUT(MonoWrapper::ToString(text));
   }
 
   int RayCastIntersect(MonoObject* origin, MonoObject* endPos, MonoObject* intersect, int pos)
@@ -243,6 +247,18 @@ namespace ECSBind
     if (CheckCompGet(cnvs, "GetCanvas()", id))
       return nullptr;
     MonoWrapper::SetNativeHandle(monoObj, cnvs);
+
+    return monoObj;
+  }
+
+  MonoObject* GetEmitter(int id)
+  {
+    MonoObject* monoObj = MonoWrapper::ConstructObject("Emitter");
+    Entity en = G_ECMANAGER->getEntity(id);
+    EmitterComponent* emt = en.getComponent<EmitterComponent>();
+    if (CheckCompGet(emt, "GetEmitter()", id))
+      return nullptr;
+    MonoWrapper::SetNativeHandle(monoObj, emt);
 
     return monoObj;
   }

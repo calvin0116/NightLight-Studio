@@ -13,12 +13,21 @@ NS_GRAPHICS::AnimationSystem::~AnimationSystem()
 
 void NS_GRAPHICS::AnimationSystem::Update()
 {
-	for (auto& anim : _animControllers)
+	auto itr = G_ECMANAGER->begin<ComponentAnimation>();
+	auto itrEnd = G_ECMANAGER->end<ComponentAnimation>();
+	while (itr != itrEnd)
 	{
-		if (anim)
+		ComponentAnimation* anim = reinterpret_cast<ComponentAnimation*>(*itr);
+		
+		if (anim->_isActive)
 		{
-			anim->Update(DELTA_T->real_dt * DT_SCALE);
+			if (_animControllers[anim->_controllerID])
+			{
+				_animControllers[anim->_controllerID]->Update(DELTA_T->real_dt);// * DT_SCALE);
+			}
 		}
+
+		itr++;
 	}
 }
 

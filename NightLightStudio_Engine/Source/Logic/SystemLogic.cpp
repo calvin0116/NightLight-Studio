@@ -8,6 +8,9 @@
 // Scene change
 #include "../Core/SceneManager.h"
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 namespace NS_LOGIC
 {
   // Variable to decide whether to run function
@@ -408,10 +411,15 @@ namespace NS_LOGIC
       MonoWrapper::InvokeMethod(MyUpdate, MyScript->_MonoData._pInstance);
     }
 #endif
+
+    // Tracy
+    // Zone Color: Light Pink
+    ZoneScopedNC("Logic: Update", 0xfaa5e2);
   }
 
-  void SystemLogic::FixedUpdate()
+  void SystemLogic::FixedUpdate(float dt)
   {
+      dt;
     if (!_isPlaying || !_Inited)
       return;
 #ifdef CS_ENV
@@ -427,6 +435,10 @@ namespace NS_LOGIC
       MonoWrapper::InvokeMethod(MyFixedUpdate, MyScript->_MonoData._pInstance);
     }
 #endif
+
+    // Tracy
+    // Zone Color: Pink
+    ZoneScopedNC("Logic: Fixed Update", 0xff24c1);
   }
 
   void SystemLogic::GameGameExit()
@@ -682,7 +694,8 @@ namespace NS_LOGIC
     // Handle msg here.
     if (msg.GetID() != "TogglePlay")
       return;
-    std::cout << "Toggle Play" << std::endl;
+    TracyMessageL("SystemLogic::HandleTogglePlay: Toggle Play");
+    //std::cout << "Toggle Play" << std::endl;
     _isPlaying = msg.isPlaying;
     if (!_isPlaying && _Inited)
     {

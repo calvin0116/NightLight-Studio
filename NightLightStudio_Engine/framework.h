@@ -23,11 +23,10 @@
 #include <string>
 #include <fstream>
 
-
 using std::vector;
 using std::string;
-using std::cout;
-using std::endl;
+//using std::cout;
+//using std::endl;
 
 //Json file path
 const std::string json_path = "../NightLightStudio_Game/JsonFile/";

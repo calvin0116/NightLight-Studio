@@ -12,6 +12,9 @@
 
 #include "CollisionDebugLines.h"
 
+// Tracy
+#include "../tracy-master/Tracy.hpp"
+
 #undef max
 #undef min
 #include <algorithm> // std max
@@ -32,7 +35,7 @@ namespace NS_COLLISION
 {
 	static int test_count = 0;
 
-	CollisionSystem::CollisionSystem() : MeshLod(0), doDrawLineMesh(false), compTtest0(nullptr), compRtest0(nullptr), entityTest0(nullptr, -1)
+	CollisionSystem::CollisionSystem() : MeshLod(0), doDrawLineMesh(false), compTtest0(nullptr), compRtest0(nullptr), entityTest0(nullptr, -1), currentSnapVec(0.0f, 0.0f, 0.0f)
 	{
 	}
 	void CollisionSystem::Load()
@@ -250,6 +253,18 @@ namespace NS_COLLISION
 #endif
 		//////////////////////////////////////////////////////////////////////////////////////
 
+
+		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("LALALA", SystemInput_ns::IKEY_M, "M", SystemInput_ns::OnPress, [this]()
+		//	{
+		//		auto gete = G_ECMANAGER->begin<ComponentCollider>();
+		//		++gete;
+		//		ComponentCollider* ccol = G_ECMANAGER->getComponent<ComponentCollider>(gete);
+		//		Entity ee = G_ECMANAGER->getEntity(ccol);
+
+		//		Snap_AABB_AABB_Do(ee, 50.0f, SNAP_X /*| SNAP_Y | SNAP_Z | SNAP_D*/, 3, true);
+
+		//	});
+
 	}
 
 	void CollisionSystem::GameLoad()
@@ -297,7 +312,7 @@ namespace NS_COLLISION
 
 	}
 
-	void CollisionSystem::FixedUpdate()
+	void CollisionSystem::FixedUpdate(float)
 	{
 		// //test line col
 		//NlMath::Vec3 ray1Origin(-100.0f, 0.0f, 0.0f);
@@ -311,6 +326,25 @@ namespace NS_COLLISION
 		//NlMath::Vec3 ray3Origin(-100.0f, 100.0f, -100.0f);
 		//NlMath::Vec3 ray3End(100.0f, 200.0f, 100.0f);
 		//Test_Ray(ray3Origin, ray3End);
+
+		//Snap_FourCast(
+		//	NlMath::Vec3(0.0f, 0.0f, 0.0f),
+		//	NlMath::Vec3(100.0f, 0.0f, 0.0f),
+		//	NlMath::Vec3(0.0f, 0.0f, 100.0f),
+		//	NlMath::Vec3(100.0f, 0.0f, 100.0f),
+		//	100.0f,
+		//	NlMath::Vec3(0.0f, -1.0f, 0.0f),
+		//	4, true
+		//);
+
+
+		//auto gete = G_ECMANAGER->begin<ComponentCollider>();
+		//++gete;
+		//ComponentCollider* ccol = G_ECMANAGER->getComponent<ComponentCollider>(gete);
+		//Entity ee = G_ECMANAGER->getEntity(ccol);
+
+		//Snap_AABB_AABB_Detect(ee, 50.0f, SNAP_X /*| SNAP_Y | SNAP_Z | SNAP_D*/, 3, true);
+
 
 		//draw debug mesh
 		if (true) // lmao was this prev -> if (doDrawLineMesh) <- caused a bug xD
@@ -339,7 +373,7 @@ namespace NS_COLLISION
 				comCol->isCollide = false;
 			}
 		}
-
+		
 		if (!_isPlaying)
 		{
 			// Creating an object of CSVReader
@@ -351,7 +385,7 @@ namespace NS_COLLISION
 			colResolver.clear();
 			return;
 		}
-
+		
 		// clear collision events
 		//colResolver.clear();
 
@@ -488,6 +522,10 @@ namespace NS_COLLISION
 		}
     //resolve collision here
     colResolver.resolveCollision();
+
+	// Tracy
+	// Zone Color: Cyan
+	ZoneScopedNC("Collision", 0x1ffbff);
 
 	}
 	void CollisionSystem::GameExit()
@@ -1440,6 +1478,414 @@ namespace NS_COLLISION
 		NS_GRAPHICS::SYS_GRAPHICS->DrawLine(pointA, pointB, color);
 	}
 
+	bool CollisionSystem::Snap_AABB_AABB_Detect(Entity entity, float distance, int directions, int lod, bool isDrawDebug)
+	{
+
+		NlMath::Vec3 snapVec[4];
+		snapVec[0].x = distance;
+		snapVec[1].x = distance;
+		snapVec[2].x = distance;
+		snapVec[3].x = distance;
+
+		NlMath::Vec3 finSnapVec(distance, 0.0f, 0.0f);
+
+		bool doesIntersect = false;
+
+		if(directions & SNAP_D)
+			if (Snap_To_AABB(entity, distance, DIRECTION::YDOWN_DIRECTION, snapVec[0], lod, isDrawDebug))
+			{
+				doesIntersect = true;
+			}
+
+		if(directions & SNAP_Y)
+			if (Snap_To_AABB(entity, distance, DIRECTION::Y_DIRECTION, snapVec[1], lod, isDrawDebug) )
+			{
+				doesIntersect = true;
+			}
+
+		if(directions & SNAP_X)
+			if (Snap_To_AABB(entity, distance, DIRECTION::X_DIRECTION, snapVec[2], lod, isDrawDebug) )
+			{
+				doesIntersect = true;
+			}
+
+		if(directions & SNAP_Z)
+			if (Snap_To_AABB(entity, distance, DIRECTION::Z_DIRECTION, snapVec[3], lod, isDrawDebug) )
+			{
+				doesIntersect = true;
+			}
+
+		for (int i = 0; i < 4; ++i)
+		{
+			if (finSnapVec.sqrtlength() > snapVec[i].sqrtlength())
+			{
+				finSnapVec = snapVec[i];
+			}
+		}
+
+		currentSnapVec = finSnapVec;
+
+		return doesIntersect;
+	}
+
+	bool CollisionSystem::Snap_AABB_AABB_Do(Entity entity, float distance, int directions, int lod, bool isDrawDebug)
+	{
+		if (Snap_AABB_AABB_Detect(entity, distance, directions, lod, isDrawDebug))
+		{
+
+			ComponentTransform* ct = entity.getComponent<ComponentTransform>();
+
+			if (ct)
+			{
+				ct->_position += glm::vec3(currentSnapVec.x, currentSnapVec.y, currentSnapVec.z);
+
+				return true;
+			}
+
+		}
+
+		return false;
+	}
+
+	bool CollisionSystem::Snap_To_AABB(Entity entity, float distance, DIRECTION direction, NlMath::Vec3& snapVec, int lod, bool isDrawDebug)
+	{
+		//ComponentTransform* ct = entity.getComponent<ComponentTransform>();
+
+		ComponentCollider* cc = entity.getComponent<ComponentCollider>();
+
+		COLLIDERS col = cc->GetColliderT();
+		if (col != COLLIDERS::AABB)
+			return false; // this is for aabb
+
+		AABBCollider* abc = &(cc->collider.aabb);
+
+		//float max = abc->vecMax[(int)direction];
+		//float min = abc->vecMin[(int)direction];
+
+		//                MAX
+		//      C--------D
+		//    /        / |
+		//  /        /   |
+		// A--------B    |
+		// |        |    |
+		// |        |    /
+		// |        |  /
+		// |________|/
+		// MIN
+
+		// all 8 vertices
+		//NlMath::Vec3 topA = NlMath::Vec3(abc->vecMin.x, abc->vecMax.y, abc->vecMin.z);
+		//NlMath::Vec3 topB = NlMath::Vec3(abc->vecMax.x, abc->vecMax.y, abc->vecMin.z);
+		//NlMath::Vec3 topC = NlMath::Vec3(abc->vecMin.x, abc->vecMax.y, abc->vecMax.z);
+		//NlMath::Vec3 topD = NlMath::Vec3(abc->vecMax.x, abc->vecMax.y, abc->vecMax.z);
+
+		//NlMath::Vec3 botA = NlMath::Vec3(abc->vecMin.x, abc->vecMin.y, abc->vecMin.z);
+		//NlMath::Vec3 botB = NlMath::Vec3(abc->vecMax.x, abc->vecMin.y, abc->vecMin.z);
+		//NlMath::Vec3 botC = NlMath::Vec3(abc->vecMin.x, abc->vecMin.y, abc->vecMax.z);
+		//NlMath::Vec3 botD = NlMath::Vec3(abc->vecMax.x, abc->vecMin.y, abc->vecMax.z);
+
+		NlMath::Vec3 levertices[8];
+
+		levertices[0] = NlMath::Vec3(abc->vecMin.x, abc->vecMax.y, abc->vecMin.z);
+		levertices[1] = NlMath::Vec3(abc->vecMax.x, abc->vecMax.y, abc->vecMin.z);
+		levertices[2] = NlMath::Vec3(abc->vecMin.x, abc->vecMax.y, abc->vecMax.z);
+		levertices[3] = NlMath::Vec3(abc->vecMax.x, abc->vecMax.y, abc->vecMax.z);
+		levertices[4] = NlMath::Vec3(abc->vecMin.x, abc->vecMin.y, abc->vecMin.z);
+		levertices[5] = NlMath::Vec3(abc->vecMax.x, abc->vecMin.y, abc->vecMin.z);
+		levertices[6] = NlMath::Vec3(abc->vecMin.x, abc->vecMin.y, abc->vecMax.z);
+		levertices[7] = NlMath::Vec3(abc->vecMax.x, abc->vecMin.y, abc->vecMax.z);
+
+		NlMath::Vec3 castDir(0.0f, 0.0f, 0.0f);
+		if((int)direction > 2)
+			castDir[1] = 1.0f;
+		else
+			castDir[(int)direction] = 1.0f;
+
+		//NlMath::Vec3 intersect;
+		//int iid;
+
+		bool doesIntersect = false;
+		NlMath::Vec3 s1 = castDir * distance;
+		NlMath::Vec3 s2 = castDir * distance;
+
+		switch (direction)
+		{
+		case DIRECTION::X_DIRECTION:
+			if (Snap_FourCast(
+				levertices[1],
+				levertices[3],
+				levertices[5],
+				levertices[7],
+				distance,
+				castDir, s1,
+				lod, isDrawDebug
+			))
+			{
+				doesIntersect = true;
+			}
+			if(Snap_FourCast(
+				levertices[0],
+				levertices[2],
+				levertices[4],
+				levertices[6],
+				distance,
+				-castDir, s2,
+				lod, isDrawDebug
+			))
+			{
+				doesIntersect = true;
+			}
+
+
+			break;
+		case DIRECTION::Y_DIRECTION:
+			if (Snap_FourCast(
+				levertices[0],
+				levertices[1],
+				levertices[2],
+				levertices[3],
+				distance,
+				castDir, s1,
+				lod, isDrawDebug
+			))
+			{
+				doesIntersect = true;
+			}
+			if (Snap_FourCast(
+				levertices[4],
+				levertices[5],
+				levertices[6],
+				levertices[7],
+				distance,
+				-castDir, s1,
+				lod, isDrawDebug
+			))
+			{
+				doesIntersect = true;
+			}
+			break;
+		case DIRECTION::Z_DIRECTION:
+			if (Snap_FourCast(
+				levertices[2],
+				levertices[3],
+				levertices[6],
+				levertices[7],
+				distance,
+				castDir, s1,
+				lod, isDrawDebug
+			))
+			{
+				doesIntersect = true;
+			}
+			if (Snap_FourCast(
+				levertices[0],
+				levertices[1],
+				levertices[4],
+				levertices[5],
+				distance,
+				-castDir, s2,
+				lod, isDrawDebug
+			))
+			{
+				doesIntersect = true;
+			}
+			break;
+		case DIRECTION::YDOWN_DIRECTION:
+			if (Snap_FourCast(
+				levertices[4],
+				levertices[5],
+				levertices[6],
+				levertices[7],
+				distance,
+				-castDir, s1,
+				lod, isDrawDebug
+			))
+			{
+				doesIntersect = true;
+			}
+
+			break;
+		default:
+			throw;
+			// return;
+		}
+
+		if (s1.sqrtlength() > s2.sqrtlength())
+		{
+			snapVec = s2;
+		}
+		else
+		{
+			snapVec = s1;
+		}
+
+		return doesIntersect;
+	}
+
+	bool CollisionSystem::Snap_FourCast(
+		NlMath::Vec3 vecA, NlMath::Vec3 vecB, 
+		NlMath::Vec3 vecC, NlMath::Vec3 vecD, 
+		float distance, NlMath::Vec3 castDir, 
+		NlMath::Vec3& snapVec,
+		int lod, bool isDrawDebug)
+	{
+		vecA -= castDir * std::numeric_limits<float>::epsilon();
+		vecB -= castDir * std::numeric_limits<float>::epsilon();
+		vecC -= castDir * std::numeric_limits<float>::epsilon();
+		vecD -= castDir * std::numeric_limits<float>::epsilon();
+
+		NlMath::Vec3 vecMinMax = vecD - vecA;
+
+		NlMath::Vec3 vecVert = vecC - vecA;
+
+		NlMath::Vec3 vecHori = vecD - vecC;
+
+		NlMath::Vec3 vecVertSteps = vecVert / (float)lod;
+
+		NlMath::Vec3 vecHoriSteps = vecHori / (float)lod;
+
+		NlMath::Vec3 vecCurrentV = vecA;
+		NlMath::Vec3 vecCurrentH = vecA;
+
+		NlMath::Vec3 castVec = castDir * distance;
+
+		NlMath::Vec3 intersect;
+
+		float curLen = distance * distance;
+
+		for (int v = 0; v < lod + 1; ++v)
+		{
+			vecCurrentH = vecCurrentV;
+			for (int h = 0; h < lod + 1; ++h)
+			{
+				NlMath::Vec3 its;
+				int iid;
+
+				iid = Check_RayCollision(vecCurrentH, vecCurrentH + castVec, its, 2);
+				//iid = Check_RayCollision(vecCurrentH, vecCurrentH + castVec, its);
+
+
+				if (iid != -1)
+				{
+					// hit sth
+
+					NlMath::Vec3 raytoits = its - vecCurrentH;
+					float itsLen = raytoits.sqrtlength();
+					if (itsLen < curLen)
+					{
+						curLen = itsLen;
+						intersect = its;
+					}
+
+					if (isDrawDebug)
+					{
+						NS_GRAPHICS::SYS_GRAPHICS->DrawLine(vecCurrentH, vecCurrentH + castVec, glm::vec3(0.0f, 1.0f, 1.0f));
+
+						Draw3DCross(its, 3.0f, glm::vec3(0.0f, 1.0f, 1.0f));
+					}
+
+				}
+				else if(isDrawDebug)
+				{
+					NS_GRAPHICS::SYS_GRAPHICS->DrawLine(vecCurrentH, vecCurrentH + castVec, glm::vec3(0.0f, 0.0f, 1.0f));
+				}
+
+				vecCurrentH += vecHoriSteps;
+			}
+			vecCurrentV += vecVertSteps;
+		}
+
+		curLen = sqrt(curLen);
+		snapVec = castDir * distance;
+
+		if (curLen < distance)
+		{
+			// col occ
+			snapVec = castDir * curLen;
+
+			if (isDrawDebug)
+			{
+				Draw3DCross(intersect, 5.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+				NS_GRAPHICS::SYS_GRAPHICS->DrawLine(vecA, vecA + snapVec, glm::vec3(1.0f, 1.0f, 1.0f));
+			}
+
+			return true;
+
+		}
+
+		return false;
+
+		//for (int i = 0; i < DIMENSIONS; ++i)
+		//{
+
+		//}
+
+		//  LOD 1
+		//   vecC                                  vecD
+		//     X---------------------------------->X
+		//     ^        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     X---------------------------------->X
+		//  vecA                                  vecB
+
+		//  LOD 2
+		//   vecC                                  vecD
+		//     X---------------->X---------------->X
+		//     ^        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     X---------------->X---------------->X
+		//     ^        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     X---------------->X---------------->X
+		//  vecA                                  vecB
+
+		// LOD 4
+		//   vecC                                  vecD
+		//     X------->X------->X------->X------->X
+		//     ^        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     X------->X------->X------->X------->X
+		//     ^        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     X------->X------->X------->X------->X
+		//     ^        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     X------->X------->X------->X------->X
+		//     ^        .        .        .        .
+		//     |        .        .        .        .
+		//     |        .        .        .        .
+		//     X------->X------->X------->X------->X
+		//  vecA                                  vecB
+
+	}
+
 
 	void CollisionSystem::DrawLineMesh(ComponentTransform* comTrans, ComponentCollider* comCol, int lod, glm::vec3 color)
 	{
@@ -1514,10 +1960,12 @@ namespace NS_COLLISION
 			NS_COLDEBUGTEST::TransformMesh(mesh, comCol->center + comTrans->_phyposition, comTrans->_rotation, colscale);
 		}
 
-		
-
-
 		NS_COLDEBUGTEST::DrawMesh(mesh, color, lod);
 
 	}
+
+
+
+
+
 }

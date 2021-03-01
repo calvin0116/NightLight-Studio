@@ -65,6 +65,23 @@ glm::vec3 ComponentGraphics::GetEmissive() const
 	return _pbrData._emissive;
 }
 
+void ComponentGraphics::SetEmissiveIntensity(const float& intensity)
+{
+	if (intensity > 1.f)
+	{
+		// prevent negative value
+		_pbrData._emissiveIntensity = 0.1f;
+		return;
+	}
+
+	_pbrData._emissiveIntensity = 1.f - intensity;
+}
+
+float ComponentGraphics::GetEmissiveIntensity() const
+{
+	return 1.f - _pbrData._emissiveIntensity;
+}
+
 void ComponentGraphics::AddModel(std::string filename)
 {
 	if (_modelFileName.toString() != filename && !filename.empty())
@@ -226,18 +243,27 @@ ComponentGraphics::~ComponentGraphics()
 inline void ComponentGraphics::Read(Value& val) 
 { 
 	if (val.FindMember("isActive") == val.MemberEnd())
-		std::cout << "No active data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No active data has been found");
+		//std::cout << "No active data has been found" << std::endl;
+	}
 	else
 		_isActive= val["isActive"].GetBool();
 
 	if (val.FindMember("renderEmission") == val.MemberEnd())
-		std::cout << "No emission activeness data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No emission activeness data has been found");
+		//std::cout << "No emission activeness data has been found" << std::endl;
+	}
 	else
 		_renderEmission = val["renderEmission"].GetBool();
 
 
 	if (val.FindMember("Emissive") == val.MemberEnd())
-		std::cout << "No Emissive data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No Emissive data has been found");
+		//std::cout << "No Emissive data has been found" << std::endl;
+	}
 	else
 	{
 		auto emissive = val["Emissive"].GetArray();
@@ -247,9 +273,22 @@ inline void ComponentGraphics::Read(Value& val)
 		_pbrData._emissive.z = emissive[2].GetFloat();
 	}
 
+	if (val.FindMember("emissiveIntensity") == val.MemberEnd())
+	{
+		TracyMessageL("ComponentGraphics::Read: No emissiveIntensity data has been found");
+		//std::cout << "No emissiveIntensity data has been found" << std::endl;
+	}
+	else
+	{
+		_pbrData._emissiveIntensity = val["emissiveIntensity"].GetFloat();
+	}
+
 
 	if (val.FindMember("Model") == val.MemberEnd())
-		std::cout << "No Model file data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No Model file data has been found");
+		//std::cout << "No Model file data has been found" << std::endl;
+	}
 	else
 	{
 		_modelFileName = val["Model"].GetString();
@@ -280,7 +319,10 @@ inline void ComponentGraphics::Read(Value& val)
 	}
 
 	if (val.FindMember("Albedo") == val.MemberEnd())
-		std::cout << "No Texture file data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No Texture file data has been found");
+		//std::cout << "No Texture file data has been found" << std::endl;
+	}
 	else
 	{
 		std::string albedo = val["Albedo"].GetString();
@@ -292,7 +334,10 @@ inline void ComponentGraphics::Read(Value& val)
 	}
 
 	if (val.FindMember("Normal") == val.MemberEnd())
-		std::cout << "No Normal file data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No Normal file data has been found");
+		//std::cout << "No Normal file data has been found" << std::endl;
+	}
 	else
 	{
 		std::string normal = val["Normal"].GetString();
@@ -304,7 +349,10 @@ inline void ComponentGraphics::Read(Value& val)
 	}
 
 	if (val.FindMember("Metallic") == val.MemberEnd())
-		std::cout << "No Metallic file data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No Metallic file data has been found");
+		//std::cout << "No Metallic file data has been found" << std::endl;
+	}
 	else
 	{
 		std::string metallic = val["Metallic"].GetString();
@@ -316,7 +364,10 @@ inline void ComponentGraphics::Read(Value& val)
 	}
 
 	if (val.FindMember("Roughness") == val.MemberEnd())
-		std::cout << "No Roughness file data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No Roughness file data has been found");
+		//std::cout << "No Roughness file data has been found" << std::endl;
+	}
 	else
 	{
 		std::string roughness = val["Roughness"].GetString();
@@ -328,7 +379,10 @@ inline void ComponentGraphics::Read(Value& val)
 	}
 
 	if (val.FindMember("AmbientOcclusion") == val.MemberEnd())
-		std::cout << "No AmbientOcclusion file data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No AmbientOcclusion file data has been found");
+		//std::cout << "No AmbientOcclusion file data has been found" << std::endl;
+	}
 	else
 	{
 		std::string ao = val["AmbientOcclusion"].GetString();
@@ -340,7 +394,10 @@ inline void ComponentGraphics::Read(Value& val)
 	}
 
 	if (val.FindMember("Specular") == val.MemberEnd())
-		std::cout << "No Specular file data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No Specular file data has been found");
+		//std::cout << "No Specular file data has been found" << std::endl;
+	}
 	else
 	{
 		std::string specular = val["Specular"].GetString();
@@ -353,7 +410,10 @@ inline void ComponentGraphics::Read(Value& val)
 
 	//Error checking for json data
 	if (val.FindMember("DiffuseMat") == val.MemberEnd())
-		std::cout << "No Diffuse data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No Diffuse data has been found");
+		//std::cout << "No Diffuse data has been found" << std::endl;
+	}
 	else
 	{
 		auto pos = val["DiffuseMat"].GetArray();
@@ -364,7 +424,10 @@ inline void ComponentGraphics::Read(Value& val)
 	}
 
 	if (val.FindMember("AmbientMat") == val.MemberEnd())
-		std::cout << "No Ambient data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No Ambient data has been found");
+		//std::cout << "No Ambient data has been found" << std::endl;
+	}
 	else
 	{
 		auto scale = val["AmbientMat"].GetArray();
@@ -375,7 +438,10 @@ inline void ComponentGraphics::Read(Value& val)
 	}
 
 	if (val.FindMember("SpecularMat") == val.MemberEnd())
-		std::cout << "No Specular data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No Specular data has been found");
+		//std::cout << "No Specular data has been found" << std::endl;
+	}
 	else
 	{
 		auto rotate = val["SpecularMat"].GetArray();
@@ -386,7 +452,10 @@ inline void ComponentGraphics::Read(Value& val)
 	}
 
 	if (val.FindMember("ShininessMat") == val.MemberEnd())
-		std::cout << "No Shininess data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No Shininess data has been found");
+		//std::cout << "No Shininess data has been found" << std::endl;
+	}
 	else
 	{
 		_materialData._shininess = val["ShininessMat"].GetFloat();
@@ -394,7 +463,10 @@ inline void ComponentGraphics::Read(Value& val)
 	
 	// PBR data
 	if (val.FindMember("AlbedoMat") == val.MemberEnd())
-		std::cout << "No AlbedoMat data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No AlbedoMat data has been found");
+		//std::cout << "No AlbedoMat data has been found" << std::endl;
+	}
 	else
 	{
 		auto albedo = val["AlbedoMat"].GetArray();
@@ -405,21 +477,30 @@ inline void ComponentGraphics::Read(Value& val)
 	}
 
 	if (val.FindMember("MetallicMat") == val.MemberEnd())
-		std::cout << "No MetallicMat data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No MetallicMat data has been found");
+		//std::cout << "No MetallicMat data has been found" << std::endl;
+	}
 	else
 	{
 		_pbrData._metallic = val["MetallicMat"].GetFloat();
 	}
 
 	if (val.FindMember("RoughnessMat") == val.MemberEnd())
-		std::cout << "No RoughnessMat data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No RoughnessMat data has been found");
+		//std::cout << "No RoughnessMat data has been found" << std::endl;
+	}
 	else
 	{
 		_pbrData._roughness = val["RoughnessMat"].GetFloat();
 	}
 
 	if (val.FindMember("Alpha") == val.MemberEnd())
-		std::cout << "No Alpha data has been found" << std::endl;
+	{
+		TracyMessageL("ComponentGraphics::Read: No Alpha data has been found");
+		//std::cout << "No Alpha data has been found" << std::endl;
+	}
 	else
 	{
 		_alpha = val["Alpha"].GetFloat();
@@ -432,6 +513,8 @@ inline Value ComponentGraphics::Write()
 
 	NS_SERIALISER::ChangeData(&val, "isActive", _isActive);		//Bool
 	NS_SERIALISER::ChangeData(&val, "renderEmission", _renderEmission);		//Bool
+
+	NS_SERIALISER::ChangeData(&val, "emissiveIntensity", _pbrData._emissiveIntensity);
 
 	Value emissive(rapidjson::kArrayType);
 	emissive.PushBack(_pbrData._emissive.x, global_alloc);

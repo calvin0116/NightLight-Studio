@@ -11,10 +11,19 @@
 
 #include "LocalVector.h"
 
+//#include "..\..\\ISerializable.h"
+//
+//#include "..//Component/Components.h"
+
+#include "ComponentResolver.h"
+
+
 
 
 struct ISerializable;
+
 //class ComponentTransform;
+
 
 namespace NS_COMPONENT
 {
@@ -208,6 +217,11 @@ enum COMPONENTSETNAMES
 //								struct ComponentData
 //
 
+
+
+
+
+
 class ComponentManager : public MySystem, public Singleton<ComponentManager>
 {
 	friend Singleton<ComponentManager>;
@@ -330,6 +344,8 @@ public:
 
 			// insert to type,id map
 			compSet->hashConIdMap.insert(std::make_pair(tinf.hash_code(), newid));
+
+			setTypeResolver<T>(newid);
 
 			// create container for child
 			newid = AddComponentContainer(set);
@@ -567,11 +583,17 @@ public:
 			int con = -1;
 			if (itr.itrCurrState == Iterator::IteratorState::ITR_ROOT)
 			{
-				auto find = compSet->hashConIdMap.find(tinf.hash_code());
-				if (find == compSet->hashConIdMap.end())
-					throw; // gg
-				con = (*find).second;
-				if (itr.containerId == (*find).second)
+				con = typeResolver<T>();
+
+				if (con == -1)
+				{
+					auto find = compSet->hashConIdMap.find(tinf.hash_code());
+					if (find == compSet->hashConIdMap.end())
+						throw; // gg
+					con = (*find).second;
+				}
+
+				if (itr.containerId == con)
 				{
 					return reinterpret_cast<T*>(*itr); // faster no lookup
 				}
@@ -863,6 +885,12 @@ public:
 				}
 				else
 				{
+					int con = typeResolver<T>();
+					if (con != -1)
+					{
+						return reinterpret_cast<T*>(getComponent(con));
+					}
+
 					auto find = compSetMgr->compSet->hashConIdMap.find(tinf.hash_code());
 					if (find == compSetMgr->compSet->hashConIdMap.end())
 						throw; // gg

@@ -109,11 +109,13 @@ namespace Unicorn
     float originalFov;
     float mothFov;
     float currentFOV;
-
+    Vector3 tgtPos;
 
     // Scripts
     ScriptPlayer script_player;
     public bool useOffset = true;
+
+  
 
     public override void Init()
     {
@@ -143,6 +145,7 @@ namespace Unicorn
       //Camera.SetFOV(originalFov);
 
       currentFOV = originalFov+1;
+      
       Camera.SetFOV(originalFov);
       mothFov = originalFov / 1.5f;
 
@@ -161,9 +164,10 @@ namespace Unicorn
       Vector3 camPos = Camera.GetPosition();
       camTrans.SetPosition(camPos);
 
-      Vector3 tgtPos;
-     
-      
+
+
+
+
       
       if (script_player.CurrentState == ScriptPlayer.State.Moth)
       {
@@ -172,7 +176,7 @@ namespace Unicorn
         {
           if (currentFOV > mothFov)
           {
-            currentFOV -= 2;
+            currentFOV -= DT() * 2f;
           }
 
           else
@@ -186,7 +190,7 @@ namespace Unicorn
         {
           if (currentFOV > mothFov*1.5f)
           {
-            currentFOV -= 2;
+            currentFOV -= DT() * 2f;
           }
 
           else
@@ -212,16 +216,26 @@ namespace Unicorn
       else
       {
 
-        if (currentFOV < originalFov)
-        {
-          currentFOV += 2;
-        }
 
+        if (script_player.activating)
+        {
+          currentFOV -= DT()*7f;
+          Camera.SetFOV(currentFOV);
+        }
         else
         {
-          currentFOV = originalFov;
+          if (currentFOV < originalFov)
+          {
+            currentFOV += DT() * 100f;
+          }
+
+          else
+          {
+            currentFOV = originalFov;
+          }
+
+          Camera.SetFOV(currentFOV);
         }
-        Camera.SetFOV(currentFOV);
 
         Vector3 ofs = new Vector3(0.0f, 200.0f, 10.0f);
         tgtPos = Lerp(GetTgtFromID(tgtID) + ofs);
@@ -244,17 +258,17 @@ namespace Unicorn
 
       if (isCollide)
       {
-        offZ_current = offZ_lerp.Lerp(offZ_min, RealDT());
+        offZ_current = offZ_lerp.Lerp(offZ_min, DT());
       }
       else
       {
         if (script_player.CurrentState == ScriptPlayer.State.Moth)
         {
-          offZ_current = offZ_lerp.Lerp(offZ / 2, RealDT());
+          offZ_current = offZ_lerp.Lerp(offZ / 2, DT());
         }
         else
         {
-          offZ_current = offZ_lerp.Lerp(offZ, RealDT());
+          offZ_current = offZ_lerp.Lerp(offZ, DT());
         }
       }
       //Console.WriteLine("offZ_current" + offZ_current);
@@ -323,17 +337,17 @@ namespace Unicorn
       if (Math.Abs(dir.x) > Threshold)
       {
         float speed = dir.x / Time.x;
-        oldTgtPos.x = oldTgtPos.x + (speed * RealDT());
+        oldTgtPos.x = oldTgtPos.x + (speed * DT());
       }
       if (Math.Abs(dir.y) > Threshold)
       {
         float speed = dir.y / Time.y;
-        oldTgtPos.y = oldTgtPos.y + (speed * RealDT());
+        oldTgtPos.y = oldTgtPos.y + (speed * DT());
       }
       if (Math.Abs(dir.z) > Threshold)
       {
         float speed = dir.z / Time.z;
-        oldTgtPos.z = oldTgtPos.z + (speed * RealDT());
+        oldTgtPos.z = oldTgtPos.z + (speed * DT());
       }
       return oldTgtPos;
 

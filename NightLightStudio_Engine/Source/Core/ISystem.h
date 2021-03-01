@@ -13,7 +13,7 @@ public:
 	virtual void GameLoad() {};		//Loading of game assert per game / scene
 	virtual void GameInit() {};		//Initialise of data for current scence
 
-	virtual void FixedUpdate() {}; //used mostly Physics / events that needs to happen even when delta time is huge
+	virtual void FixedUpdate(float dt) { dt; }; //used mostly Physics / events that needs to happen even when delta time is huge
 	virtual void Update() { };
 
 	//Unload for normal resources, Late unload depended system (e.g. graphics)

@@ -1346,6 +1346,7 @@ void ComponentManager::ComponentContainerCreation()
 		comsetFac.AddComponentContainer<ComponentCanvas>();
 		comsetFac.AddComponentContainer<ComponentAnimation>();
 		comsetFac.AddComponentContainer<ComponentEmitter>();
+		comsetFac.AddComponentContainer<ComponentCamera>();
 		
 		comsetFac.AddComponentContainer<ComponentPlayerStats>();
 		comsetFac.AddComponentContainer<ComponentCauldronStats>();
@@ -1964,7 +1965,7 @@ void ComponentManager::TestComponents()
 void ComponentManager::Init()
 {
 
-
+	/*
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// me test stuff
 	{
@@ -1981,9 +1982,9 @@ void ComponentManager::Init()
 	}
 	// me test stuff END
 	///////////////////////////////////////////////////////////////////////////////////////////////
-
+	
 	TestComponents();
-
+	*/
 	//Clear();
 }
 

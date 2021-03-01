@@ -22,7 +22,9 @@ enum class S_PRIORITY
 	SP_COMPONENT,
 	SP_EDITOR,
 	SP_LOGIC,
-	SP_AI
+	SP_AI,
+
+	SP_ASSETSMAN //<- Must be the last
 };
 
 class MySystem : public ISystem
