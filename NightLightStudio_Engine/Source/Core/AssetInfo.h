@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 //Assets class to be inherited
 class AssetInfo
@@ -10,7 +11,7 @@ class AssetInfo
 		
 		virtual void LoadData(std::string path)
 		{
-			_path = path;
+			path = _path ;
 			isLoaded = true;
 		};
 		

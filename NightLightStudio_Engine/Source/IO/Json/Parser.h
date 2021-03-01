@@ -4,9 +4,6 @@ Brief Description :
 				-Save and load from Json file
 				-Run time adding and changing of variables
 				-Accessing data in Json file
-			Work in progress
-				-Data check to see if it exist (only work for first layer currently)
-				-More improvement maybe needed
 **************************************************************************/
 #pragma once
 #ifndef PARSER_H
@@ -14,6 +11,7 @@ Brief Description :
 #include "..\..\..\framework.h"
 #include "JsonFunction.h"
 #include "../../Component/ComponentManager.h"
+#include "../../Core/AssetInfo.h"
 
 namespace NS_SERIALISER
 {
@@ -29,7 +27,7 @@ namespace NS_SERIALISER
 		D_INVALID
 	};
 
-	class Parser
+	class Parser : public AssetInfo
 	{
 	private:
 		//Document stuff
@@ -38,8 +36,8 @@ namespace NS_SERIALISER
 
 		//File related strings
 		std::string name;
-		std::string path;
-		std::string filepath;
+		std::string folderpath;
+		std::string fullfilepath;
 
 		//Determine type for json member
 		ENGINE_API D_TYPE DetermineType(Value::ConstMemberIterator itr);
@@ -54,6 +52,7 @@ namespace NS_SERIALISER
 		ENGINE_API void Load();		//Load from file
 		ENGINE_API void Save();		//Save to file
 
+		void LoadData(std::string path) override{};
 		//To look at the data in raw form
 		ENGINE_API void PrintDataList();
 

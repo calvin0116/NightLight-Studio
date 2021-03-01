@@ -54,6 +54,8 @@ void LevelEditor::Init(HWND window)
                 //MessageTogglePlay isPlaying(_runEngine);
                 if (_runEngine)
                 {
+                    NS_GRAPHICS::UISystem::GetInstance()._isPlaying = true;
+                    NS_GRAPHICS::EmitterSystem::GetInstance()._isPlaying = true;
                     MessageTogglePlay isPlaying_1(_runEngine, "BeforePlay");
                     //NS_GRAPHICS::CameraSystem::GetInstance().SavePosition();
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_1);
@@ -63,6 +65,8 @@ void LevelEditor::Init(HWND window)
                 }
                 else
                 {
+                    NS_GRAPHICS::UISystem::GetInstance()._isPlaying = false;
+                    NS_GRAPHICS::EmitterSystem::GetInstance()._isPlaying = false;
                     MessageTogglePlay isPlaying_2(_runEngine, "AfterPlay");
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying);
                     GLOBAL_SYSTEM_BROADCAST.ProcessMessage(isPlaying_2);

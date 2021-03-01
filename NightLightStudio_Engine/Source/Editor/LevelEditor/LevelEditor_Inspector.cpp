@@ -2199,9 +2199,10 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 				_levelEditor->LE_AddInputText(p, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
 					[&str, &s_name, &wpm_comp, &str_index]()
 					{
-						Entity ent = G_ECMANAGER->getEntityUsingEntName(s_name);
+						Entity ent = G_ECMANAGER->getEntityUsingEntName(s_name);						
 						if(ent.getId() == -1 )
 						{
+							str = "";
 							TracyMessageL("InspectorWindow::WayPointPathComp: No entity has been found");
 							//std::cout << "No entity has been found" << std::endl;
 							return;

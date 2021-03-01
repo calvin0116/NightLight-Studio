@@ -91,26 +91,26 @@ public:
 
 	WayPointComponent* GetCurPathWp()
 	{
-		if (cur_wp_path->GetPath().size() == 0)
+		if (cur_wp_path == nullptr || cur_wp_path->GetPath().size() == 0)
 			return nullptr;
 		return cur_wp_path->GetPath().at(path_indexes.at(cur_path_wp_index).first);
 	}
 	WayPointComponent* GetPrevPathWp()
 	{
-		if (cur_wp_path->GetPath().size() == 0)
+		if (cur_wp_path == nullptr || cur_wp_path->GetPath().size() == 0)
 			return nullptr;
 		return cur_wp_path->GetPath().at(path_indexes.at(prev_path_wp_index).first);
 	}
 
 	WayPointComponent* GetCurWalkingWp()
 	{
-		if (cur_wp_path->GetPath().size() == 0)
+		if (cur_wp_path == nullptr || cur_wp_path->GetPath().size() == 0)
 			return nullptr;
 		return cur_wp_path->GetPath().at(path_indexes.at(cur_route_wp_index).first);
 	}
 	WayPointComponent* GetPrevWalkingWp()
 	{
-		if (cur_wp_path->GetPath().size() == 0)
+		if (cur_wp_path == nullptr || cur_wp_path->GetPath().size() == 0)
 			return nullptr;
 		return cur_wp_path->GetPath().at(path_indexes.at(prev_route_wp_index).first);
 	}
@@ -215,8 +215,23 @@ public:
 		if (cur_wp_path == nullptr)
 		{
 			if (!wp_path_ent_name.empty())
-				cur_wp_path = G_ECMANAGER->getEntityUsingEntName((std::string)wp_path_ent_name).getComponent<WayPointMapComponent>();
+			{
+				Entity path_ent = G_ECMANAGER->getEntityUsingEntName((std::string)wp_path_ent_name);
+				if (path_ent.getId() != -1)
+					cur_wp_path = path_ent.getComponent<WayPointMapComponent>();
+				else
+				{
+					TracyMessageL("ComponentNavigator::InitPath : No entity have been found");
+					return;
+				}
+			}
 			else
+			{
+				TracyMessageL("ComponentNavigator::InitPath : No entity name have been found");
+				return;
+			}
+			//if way point path entity does not exist
+			if (cur_wp_path == nullptr)
 				return;
 		}
 

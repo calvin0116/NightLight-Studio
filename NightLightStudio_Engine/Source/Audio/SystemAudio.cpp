@@ -49,6 +49,13 @@ void SystemAudio::Stop(const int _channelID)
   _channels[_channelID]->stop();
 }
 
+void SystemAudio::SetVol(const int _channelID, float _vol)
+{
+  if (_channelID < 0 || _channelID >= s_MAX_CHANNELS)
+    return;
+  _channels[_channelID]->setVolume(_vol);
+}
+
 int SystemAudio::PlayBGM(const std::string& _name)
 {
   MyAudioMap::iterator it = _sounds.find(_name);

@@ -28,6 +28,9 @@ namespace AudioBind
     MonoWrapper::BindClassFunction(csStop, "Stop",
       "Audio");
 
+    MonoWrapper::BindClassFunction(csSetVol, "SetVol",
+      "Audio");
+
     MonoWrapper::BindClassFunction(csMuteBGM, "MuteBGM",
       "Audio");
 
@@ -85,6 +88,15 @@ namespace AudioBind
     SYS_AUDIO->Stop(_channel);
   }
 
+  void csSetVol(int _channel, float _vol)
+  {
+    if (_vol > 100.0f)
+      _vol = 100.0f;
+    else if (_vol < 0.0f)
+      _vol = 0.0f;
+    SYS_AUDIO->SetVol(_channel, _vol);
+  }
+
   void csMuteBGM(bool _mute)
   {
     SYS_AUDIO->MuteBGM(_mute);
@@ -102,16 +114,28 @@ namespace AudioBind
 
   void csSetBGMVol(float _vol)
   {
+    if (_vol > 100.0f)
+      _vol = 100.0f;
+    else if (_vol < 0.0f)
+      _vol = 0.0f;
     SYS_AUDIO->SetBGMVol(_vol);
   }
 
   void csSetSFXVol(float _vol)
   {
+    if (_vol > 100.0f)
+      _vol = 100.0f;
+    else if (_vol < 0.0f)
+      _vol = 0.0f;
     SYS_AUDIO->SetSFXVol(_vol);
   }
 
   void csSetMASTERVol(float _vol)
   {
+    if (_vol > 100.0f)
+      _vol = 100.0f;
+    else if (_vol < 0.0f)
+      _vol = 0.0f;
     SYS_AUDIO->SetMASTERVol(_vol);
   }
 

@@ -16,7 +16,7 @@ private:
 		memcpy(stringData, rhs.c_str(), sz);
 
 		sz = rhs.size() + 1 < N - 1 ? rhs.size() + 1 : N - 1;
-		stringData[sz] = 0; // nani
+		stringData[sz-1] = 0; // nani
 		return rhs.size() > (N - 1);
 
 		//memcpy(stringData, rhs.c_str(), N - 1);
