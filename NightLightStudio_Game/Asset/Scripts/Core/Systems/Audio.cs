@@ -29,6 +29,9 @@ namespace Unicorn
     public extern static void Stop(int _channel);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void SetVol(int _channel, float _vol);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void MuteBGM(bool _mute);
 
     [MethodImpl(MethodImplOptions.InternalCall)]

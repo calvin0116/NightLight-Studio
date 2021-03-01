@@ -1,2 +1,31 @@
 {
+    "Objects": {
+        "Entity_0": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "tagNames": [],
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "Hello"
+            }
+        }
+    }
 }
