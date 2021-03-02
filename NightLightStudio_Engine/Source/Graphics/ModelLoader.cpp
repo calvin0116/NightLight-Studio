@@ -5,6 +5,7 @@
 #include <../glm/gtx/quaternion.hpp>
 #include <set>
 #include "../tracy-master/Tracy.hpp"
+#include <sstream>
 
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -547,7 +548,6 @@ namespace NS_GRAPHICS
 
 			std::string saveFileName = s_LocalPathName + name;
 			SaveCustomModel(saveFileName, model);
-			//SaveCustomMesh(model);
 		}
 
 		_modelManager->AddLoadedModel(model, model->_fileName);
@@ -561,95 +561,160 @@ namespace NS_GRAPHICS
 	}
 	bool ModelLoader::LoadCustomModel(Model*& model)
 	{
+		//In case of preceding backslash causing file to be unfindable
 		if (model->_fileName[0] == '\\')
 		{
 			model->_fileName.erase(0, 1);
 		}
 		//Gets rid of warning for now
-		std::ifstream meshFile;
-		meshFile.open(model->_fileName.c_str());
+		std::ifstream modelFile;
+		modelFile.open(model->_fileName.c_str());
+		std::ifstream animationFile;
+		std::ifstream skeletonFile;
 
-		if (!meshFile.is_open())
+		size_t meshSize = 0;
+		size_t animSize = 0;
+
+		if (!modelFile.is_open())
 		{
-			TracyMessageL("ModelLoader::LoadCustomMesh: Fail to open model file");
+			TracyMessageL("ModelLoader::LoadCustomModel: Fail to open model file");
 			//std::cout << "Fail to opened model file" << std::endl;
 			return false;
 		}
 
+		//Gets header info
 		std::string input;
-		while (std::getline(meshFile, input))
+		if (!std::getline(modelFile, input))
 		{
-			TracyMessageL("ModelLoader::LoadCustomMesh: Reading Variables");
-			//std::cout << "Reading Variables" << std::endl;
+			TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+			return false;
+		}
 
-			//Reads vertex data
-			if (input.find("VERTEX") != std::string::npos)
+		if (input.find("IsAnimated") != std::string::npos)
+		{
+			model->_isAnimated = true;
+			
+			if (!std::getline(modelFile, input))
 			{
-				std::string vertexCount = input.substr(input.find(" ") + 1);
-				Mesh* newMesh = new Mesh();
-				newMesh->_vertexDatas.reserve((size_t)std::stoi(vertexCount));
-				//newMesh->_indices.reserve((size_t)std::stoi(vertexCount));
+				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				return false;
+			}
+			animationFile.open(input.c_str());
+			if (!animationFile.is_open())
+			{
+				TracyMessageL("ModelLoader::LoadCustomModel: Fail to open animation file");
+				return false;
+			}
+				
+			if (!std::getline(modelFile, input))
+			{
+				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				return false;
+			}
+			skeletonFile.open(input.c_str());
+			if (!skeletonFile.is_open())
+			{
+				TracyMessageL("ModelLoader::LoadCustomModel: Fail to open skeleton file");
+				return false;
+			}		
 
-				std::getline(meshFile, input);
-				newMesh->_nodeName = input;
+			if (!std::getline(modelFile, input))
+			{
+				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				return false;
+			}
+			try 
+			{
+				meshSize = std::stoi(input);
+				model->_meshes.reserve(meshSize);
+			}
+			catch (std::invalid_argument&) 
+			{
+				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				return false;
+			}
 
-				Mesh::VertexData vertex;
+			if (!std::getline(modelFile, input))
+			{
+				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				return false;
+			}
+			try 
+			{
+				animSize = std::stoi(input);
+			}
+			catch (std::invalid_argument&) 
+			{
+				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				return false;
+			}
+		}
+		else if (input.find("NotAnimated") != std::string::npos)
+		{
+			model->_isAnimated = false;
+			
+			if (!std::getline(modelFile, input))
+			{
+				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				return false;
+			}
+			try
+			{
+				meshSize = std::stoi(input);
+			}
+			catch (std::invalid_argument&)
+			{
+				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				return false;
+			}
+		}
+		else
+		{
+			TracyMessageL("ModelLoader::LoadCustomModel: Corrupted model file");
+			return false;
+		}
 
-				while (std::getline(meshFile, input, ' '))
+		for (size_t meshIndex = 0; meshIndex < meshSize; ++meshIndex)
+		{
+			Mesh* newMesh = new Mesh();
+			if (!LoadMeshVertex(modelFile, newMesh, model->_isAnimated))
+			{
+				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted model file");
+				return false;
+			}
+			model->_meshes.push_back(newMesh);
+		}
+
+		if (model->_isAnimated)
+		{
+			for (size_t animCount = 0; animCount < animSize; ++animCount)
+			{
+				//LoadAnimation();
+				//model->_animations.insert();
+				Animation* newAnim = new Animation();
+				if (!LoadAnimation(animationFile, newAnim))
 				{
-					if (input == "v:")
-					{		
-						std::getline(meshFile, input);
-						std::string posX = input.substr(0, input.find(","));
-						std::string nextPos = input.substr(input.find(",")+1);
-						std::string posY = nextPos.substr(0, nextPos.find(","));
-						std::string posZ = input.substr(input.rfind(",")+1);
-
-						vertex._position.x = std::stof(posX);
-						vertex._position.y = std::stof(posY);
-						vertex._position.z = std::stof(posZ);
-
-					}
-
-					else if (input == "uv:")
-					{
-						std::getline(meshFile, input);
-						std::string u = input.substr(0, input.find(","));
-						std::string v = input.substr(input.rfind(",") + 1);
-
-						vertex._uv.x = std::stof(u);
-						vertex._uv.y = std::stof(v);
-					}
-
-					else if (input == "n:")
-					{
-						std::getline(meshFile, input);
-						std::string normalX = input.substr(0, input.find(","));
-						std::string normPos = input.substr(input.find(",") + 1);
-						std::string normalY = normPos.substr(0, normPos.find(","));
-						std::string normalZ = input.substr(input.rfind(",") + 1);
-
-						vertex._normals.x = std::stof(normalX);
-						vertex._normals.y = std::stof(normalY);
-						vertex._normals.z = std::stof(normalZ);
-
-						//newMesh->_indices.push_back((unsigned short)index);
-						//index++;
-						newMesh->_vertexDatas.push_back(vertex);
-
-						//if (index >= std::stoi(vertexCount))
-						//{
-						//	break;
-						//}
-					}
+					TracyMessageL("ModelLoader::LoadCustomModel: Corrupted model file");
+					return false;
 				}
+				model->_animations[newAnim->_animName] = newAnim;
+			}
 
-				std::getline(meshFile, input);
-				model->_meshes.push_back(newMesh);
+			model->_rootBone = new Skeleton();
+			Joint* root = &model->_rootBone->_rootJoint;
+			if(!LoadSkeletal(skeletonFile, root))
+			{
+				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted model file");
+				return false;
 			}
 		}
 
-		meshFile.close();
+		if (model->_isAnimated)
+		{
+			skeletonFile.close();
+			animationFile.close();
+		}
+
 		return true;
 	}
 	bool ModelLoader::SaveCustomModel(const std::string& fileName, Model*& model)
@@ -666,16 +731,16 @@ namespace NS_GRAPHICS
 			animationFile.open(fileName + s_AnimationFileType);
 			skeletonFile.open(fileName + s_SkeletonFileType);
 
-			modelFile << "IsAnimated 1,";
-			modelFile << fileName + s_AnimationFileType + ",";
+			modelFile << "IsAnimated\n";
+			modelFile << fileName + s_AnimationFileType + "\n";
 			modelFile << fileName + s_SkeletonFileType + "\n";
-			modelFile << model->_meshes.size() + "\n";
-			modelFile << model->_animations.size() + "\n";
+			modelFile << model->_meshes.size() << "mesh\n";
+			modelFile << model->_animations.size() << "anim\n";
 		}
 		else
 		{
-			modelFile << "IsAnimated 0\n";
-			modelFile << model->_meshes.size() + "\n";
+			modelFile << "NotAnimated\n";
+			modelFile << model->_meshes.size() << "mesh" << "\n";
 		}
 
 		auto meshIterator = model->_meshes.begin();
@@ -689,6 +754,7 @@ namespace NS_GRAPHICS
 
 		if (model->_isAnimated)
 		{
+			//animationFile << model->_animations.size() << "anim\n";
 			for (auto anim : model->_animations)
 			{
 				SaveAnimation(animationFile, anim.second);
@@ -710,7 +776,7 @@ namespace NS_GRAPHICS
 	{
 		size_t vertexCount = mesh->_vertexDatas.size();
 
-		file << "VERTEX " << vertexCount << "\n";
+		file << vertexCount << "vertex" << "\n";
 		//file << mesh->_nodeName << "\n";
 		for (size_t i = 0; i < vertexCount; ++i)
 		{
@@ -746,11 +812,11 @@ namespace NS_GRAPHICS
 					<< mesh->_skinDatas[i]._boneWeights.w << "\n";
 			}
 		}
-		file << "INDICES " << mesh->_indices.size() << "\n";
+		file << mesh->_indices.size() << "indices" << "\n";
 		int nextLineCount = 0;
 		for (auto& indices : mesh->_indices)
 		{
-			file << indices << ",";
+			file << indices;
 			nextLineCount++;
 
 			if (nextLineCount == 6)
@@ -758,16 +824,320 @@ namespace NS_GRAPHICS
 				file << "\n";
 				nextLineCount = 0;
 			}
+			else
+			{
+				file << ",";
+			}
 		}
 	}
-	//void ModelLoader::LoadMeshVertex(std::ifstream& file, Mesh*& mesh)
-	//{
-	//}
+	bool ModelLoader::LoadMeshVertex(std::ifstream& file, Mesh*& mesh, bool animated)
+	{
+		UNREFERENCED_PARAMETER(mesh);
+		UNREFERENCED_PARAMETER(file);
+		UNREFERENCED_PARAMETER(animated);
+		std::string input;
+		size_t vertexCount = 0;
+
+		if (!std::getline(file, input))
+		{
+			TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+			return false;
+		}
+
+		try
+		{
+			vertexCount = std::stoi(input);
+			mesh->_vertexDatas.reserve(vertexCount);
+
+			if (animated)
+			{
+				mesh->_skinDatas.reserve(vertexCount);
+			}
+		}
+		catch (std::invalid_argument&)
+		{
+			TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+			return false;
+		}
+
+		for (size_t i = 0; i < vertexCount; ++i)
+		{
+			Mesh::VertexData newVertex{};
+			Mesh::SkinData newSkin{};
+			std::string values;
+			std::string toConvert;
+
+			//Gets position
+			if (!std::getline(file, input))
+			{
+				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+				return false;
+			}
+			values = input.substr(input.find(" ")+1);
+			std::stringstream posValues(values);
+			int posIndex = 0;
+			while (std::getline(posValues, toConvert, ','))
+			{
+				try
+				{
+					if (posIndex == 3)
+					{
+						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						return false;
+					}
+					newVertex._position[posIndex] = std::stof(toConvert);
+				}
+				catch (std::invalid_argument&)
+				{
+					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					return false;
+				}
+
+				posIndex++;
+			}
+			if (posIndex != 3)
+			{
+				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+				return false;
+			}
+
+			//Gets UV
+			if (!std::getline(file, input))
+			{
+				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+				return false;
+			}
+			values = input.substr(input.find(" ") + 1);
+			std::stringstream uvValues(values);
+			int uvIndex = 0;
+			while (std::getline(uvValues, toConvert, ','))
+			{
+				try
+				{
+					if (uvIndex == 2)
+					{
+						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						return false;
+					}
+					newVertex._uv[uvIndex] = std::stof(toConvert);
+				}
+				catch (std::invalid_argument&)
+				{
+					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					return false;
+				}
+
+				uvIndex++;
+			}
+			if (uvIndex != 2)
+			{
+				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+				return false;
+			}
+
+			//Gets normals
+			if (!std::getline(file, input))
+			{
+				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+				return false;
+			}
+			values = input.substr(input.find(" ") + 1);
+			std::stringstream normValues(values);
+			int normIndex = 0;
+			while (std::getline(normValues, toConvert, ','))
+			{
+				try
+				{
+					if (normIndex == 3)
+					{
+						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						return false;
+					}
+					newVertex._normals[normIndex] = std::stof(toConvert);
+				}
+				catch (std::invalid_argument&)
+				{
+					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					return false;
+				}
+
+				normIndex++;
+			}
+			if (normIndex != 3)
+			{
+				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+				return false;
+			}
+
+			//Gets tangents
+			if (!std::getline(file, input))
+			{
+				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+				return false;
+			}
+			values = input.substr(input.find(" ") + 1);
+			std::stringstream tanValues(values);
+			int tanIndex = 0;
+			while (std::getline(tanValues, toConvert, ','))
+			{
+				try
+				{
+					if (tanIndex == 3)
+					{
+						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						return false;
+					}
+					newVertex._tangent[tanIndex] = std::stof(toConvert);
+				}
+				catch (std::invalid_argument&)
+				{
+					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					return false;
+				}
+
+				tanIndex++;
+			}
+			if (tanIndex != 3)
+			{
+				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+				return false;
+			}
+
+			if (animated)
+			{
+				//Gets bone id
+				if (!std::getline(file, input))
+				{
+					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+					return false;
+				}
+				values = input.substr(input.find(" ") + 1);
+				std::stringstream idValues(values);
+				int idIndex = 0;
+				while (std::getline(idValues, toConvert, ','))
+				{
+					try
+					{
+						if (idIndex == 4)
+						{
+							TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+							return false;
+						}
+						newSkin._boneID[idIndex] = std::stoi(toConvert);
+					}
+					catch (std::invalid_argument&)
+					{
+						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						return false;
+					}
+
+					idIndex++;
+				}
+				if (idIndex != 4)
+				{
+					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					return false;
+				}
+
+				//Gets bone weights
+				if (!std::getline(file, input))
+				{
+					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+					return false;
+				}
+				values = input.substr(input.find(" ") + 1);
+				std::stringstream weightValues(values);
+				int weightIndex = 0;
+				while (std::getline(weightValues, toConvert, ','))
+				{
+					try
+					{
+						if (weightIndex == 4)
+						{
+							TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+							return false;
+						}
+						newSkin._boneWeights[weightIndex] = std::stof(toConvert);
+					}
+					catch (std::invalid_argument&)
+					{
+						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						return false;
+					}
+
+					weightIndex++;
+				}
+				if (weightIndex != 4)
+				{
+					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					return false;
+				}
+			}
+
+			mesh->_vertexDatas.push_back(newVertex);
+			if (animated)
+			{
+				mesh->_skinDatas.push_back(newSkin);
+			}
+		}
+
+		//Get indices count
+		if (!std::getline(file, input))
+		{
+			TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+			return false;
+		}
+		size_t indiceCount;
+		std::string index;
+		try
+		{
+			indiceCount = std::stoi(input);
+			mesh->_indices.reserve(indiceCount);
+		}
+		catch (std::invalid_argument&)
+		{
+			TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+			return false;
+		}
+		int indicesIndex = 0;
+		//Gets all indices
+		while (std::getline(file, input))
+		{
+			std::stringstream indicesValue(input);
+
+			while (std::getline(indicesValue, index, ','))
+			{
+				try
+				{
+					if (indicesIndex >= indiceCount)
+					{
+						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						return false;
+					}
+					mesh->_indices.push_back(std::stoi(index));
+					++indicesIndex;
+				}
+				catch (std::invalid_argument&)
+				{
+					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					return false;
+				}
+			}
+
+			if (mesh->_indices.size() == indiceCount)
+			{
+				break;
+			}
+		}
+
+		return true;
+	}
 	void ModelLoader::SaveSkeletal(std::ofstream& file, Joint*& joint)
 	{
-		file << joint->_boneID << "," << joint->_boneName << "\n";
+		file << joint->_boneID << "\n" << joint->_boneName << "\n";
 		
-		file << joint->_boneTransformOffset[0][0] << ","
+		file << "o"
+			<< joint->_boneTransformOffset[0][0] << ","
 			<< joint->_boneTransformOffset[0][1] << ","
 			<< joint->_boneTransformOffset[0][2] << ","
 			<< joint->_boneTransformOffset[0][3] << ","
@@ -785,7 +1155,8 @@ namespace NS_GRAPHICS
 			<< joint->_boneTransformOffset[3][3]
 			<< "\n";
 
-		file << joint->_boneTransform[0][0] << ","
+		file << "t"
+			<< joint->_boneTransform[0][0] << ","
 			<< joint->_boneTransform[0][1] << ","
 			<< joint->_boneTransform[0][2] << ","
 			<< joint->_boneTransform[0][3] << ","
@@ -811,12 +1182,146 @@ namespace NS_GRAPHICS
 			SaveSkeletal(file, childJoint);
 		}
 	}
-	//void ModelLoader::LoadSkeletal(std::ifstream& file, Joint*& joint)
-	//{
-	//}
+	bool ModelLoader::LoadSkeletal(std::ifstream& file, Joint*& joint)
+	{
+		UNREFERENCED_PARAMETER(file);
+		UNREFERENCED_PARAMETER(joint);
+
+		std::string input;
+		//Get Bone ID
+		if (!std::getline(file, input))
+		{
+			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			return false;
+		}
+		try
+		{
+			joint->_boneID = std::stoi(input);
+		}
+		catch (std::invalid_argument&)
+		{
+			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			return false;
+		}
+
+		//Get bone name
+		if (!std::getline(file, input))
+		{
+			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			return false;
+		}
+		try
+		{
+			joint->_boneName = input;
+		}
+		catch (std::invalid_argument&)
+		{
+			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			return false;
+		}
+
+		//Get transform offset
+		int to = 0;
+		if (!std::getline(file, input))
+		{
+			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			return false;
+		}
+		std::string values = input.substr(1);
+		std::stringstream transOValues(values);
+		std::string toConvert;
+		while (std::getline(transOValues, toConvert, ','))
+		{
+			try
+			{
+				if (to == 16)
+				{
+					TracyMessageL("ModelLoader::LoadSkeletal: Corrupted Model File");
+					return false;
+				}
+
+				joint->_boneTransformOffset[to/4][to%4] = std::stof(toConvert);
+
+			}
+			catch (std::invalid_argument&)
+			{
+				TracyMessageL("ModelLoader::LoadSkeletal: Corrupted Model File");
+				return false;
+			}
+
+			++to;
+		}
+		if (to != 16)
+		{
+			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted Model File");
+			return false;
+		}
+
+		//Get transform
+		int t = 0;
+		if (!std::getline(file, input))
+		{
+			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			return false;
+		}
+		values = input.substr(1);
+		std::stringstream transValues(values);
+		while (std::getline(transValues, toConvert, ','))
+		{
+			try
+			{
+				if (t == 16)
+				{
+					TracyMessageL("ModelLoader::LoadSkeletal: Corrupted Model File");
+					return false;
+				}
+				joint->_boneTransform[t / 4][t % 4] = std::stof(toConvert);
+
+			}
+			catch (std::invalid_argument&)
+			{
+				TracyMessageL("ModelLoader::LoadSkeletal: Corrupted Model File");
+				return false;
+			}
+
+			++t;
+		}
+		if (t != 16)
+		{
+			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted Model File");
+			return false;
+		}
+
+		size_t childSize = 0;
+		if (!std::getline(file, input))
+		{
+			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			return false;
+		}
+		try
+		{
+			childSize = std::stoi(input);
+		}
+		catch (std::invalid_argument&)
+		{
+			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			return false;
+		}
+
+		for (size_t childIndex = 0; childIndex < childSize; ++childIndex)
+		{
+			joint->_childrenJoints.push_back({});
+			Joint* childJoint = &joint->_childrenJoints[childIndex];
+
+			LoadSkeletal(file, childJoint);
+		}
+
+		return true;
+	}
 	void ModelLoader::SaveAnimation(std::ofstream& file, Animation*& anim)
 	{
 		file << anim->_animName << "," << anim->_time << "\n";
+		file << anim->_frames.size() << "\n";
 
 		for (auto frame : anim->_frames)
 		{
@@ -824,37 +1329,293 @@ namespace NS_GRAPHICS
 
 			//Position & Time
 			size_t posSize = frame.second._position.size();
+			file << posSize << "posFrame\n";
 			for (size_t posIndex = 0;posIndex < posSize;++posIndex)
 			{
-				file << frame.second._posTime[posIndex] << ","
+				file << "p" << frame.second._posTime[posIndex] << ","
 					<< frame.second._position[posIndex].x << ","
 					<< frame.second._position[posIndex].y << ","
 					<< frame.second._position[posIndex].z << "\n";	
 			}
 
 			size_t scaleSize = frame.second._scale.size();
+			file << scaleSize << "scaleFrame\n";
 			for (size_t scaleIndex = 0; scaleIndex < scaleSize; ++scaleIndex)
 			{
-				file << frame.second._scaleTime[scaleIndex] << ","
+				file << "s" << frame.second._scaleTime[scaleIndex] << ","
 					<< frame.second._scale[scaleIndex].x << ","
 					<< frame.second._scale[scaleIndex].y << ","
 					<< frame.second._scale[scaleIndex].z << "\n";
 			}
 
 			size_t rotSize = frame.second._rotation.size();
+			file << rotSize << "rotFrame\n";
 			for (size_t rotIndex = 0; rotIndex < rotSize; ++rotIndex)
 			{
-				file << frame.second._rotateTime[rotIndex] << ","
+				file << "r" << frame.second._rotateTime[rotIndex] << ","
 					<< frame.second._rotation[rotIndex].x << ","
 					<< frame.second._rotation[rotIndex].y << ","
-					<< frame.second._rotation[rotIndex].z << "\n";
+					<< frame.second._rotation[rotIndex].z << ","
+					<< frame.second._rotation[rotIndex].w << "\n";
 			}
 		}
 	}
-	//void ModelLoader::LoadAnimation(std::ifstream& file, Animation*& anim)
-	//{
-	//}
-	void ModelLoader::DebugToFile(const std::string& fileName)
+
+	bool ModelLoader::LoadAnimation(std::ifstream& file, Animation*& anim)
+	{
+		UNREFERENCED_PARAMETER(file);
+		UNREFERENCED_PARAMETER(anim);
+		std::string input;
+		size_t frameSize = 0;
+
+		if (!std::getline(file, input))
+		{
+			TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+			return false;
+		}
+
+		std::string animName = input.substr(0, input.find(","));
+		std::string time = input.substr(input.find(",") + 1);
+		anim->_animName = animName;
+		try
+		{
+			anim->_time = std::stod(time);
+		}
+		catch (std::invalid_argument&)
+		{
+			TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+			return false;
+		}
+	
+
+		if (!std::getline(file, input))
+		{
+			TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+			return false;
+		}
+		try
+		{
+			frameSize = std::stoi(input);
+		}
+		catch (std::invalid_argument&)
+		{
+			TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+			return false;
+		}
+
+		for (size_t frameIndex = 0; frameIndex < frameSize; ++frameIndex)
+		{
+			if (!std::getline(file, input))
+			{
+				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				return false;
+			}
+			std::string boneName = input;
+			anim->_frames[boneName] = Animation::KeyFrames{};
+
+			//Get Position
+			size_t posSize = 0;
+			if (!std::getline(file, input))
+			{
+				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				return false;
+			}
+			try
+			{
+				posSize = std::stoi(input);
+			}
+			catch (std::invalid_argument&)
+			{
+				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				return false;
+			}
+
+			for (size_t posIndex = 0; posIndex < posSize; ++posIndex)
+			{
+				int p = 0;
+				if (!std::getline(file, input))
+				{
+					TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+					return false;
+				}
+				//Skips the p
+				std::string values = input.substr(1);
+				std::stringstream posValues(values);
+				std::string toConvert;
+				glm::vec3 pos;
+				while (std::getline(posValues, toConvert, ','))
+				{
+					try
+					{
+						if (p == 4)
+						{
+							TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+							return false;
+						}
+						if (p == 0)
+						{
+							anim->_frames[boneName]._posTime.push_back(std::stod(toConvert));
+						}
+						else
+						{
+							pos[p - 1] = std::stof(toConvert);
+						}
+
+					}
+					catch (std::invalid_argument&)
+					{
+						TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+						return false;
+					}
+
+					++p;
+				}
+				if (p != 4)
+				{
+					TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+					return false;
+				}
+
+				anim->_frames[boneName]._position.push_back(pos);
+			}
+
+			//Get Scale
+			size_t scaleSize = 0;
+			if (!std::getline(file, input))
+			{
+				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				return false;
+			}
+			try
+			{
+				scaleSize = std::stoi(input);
+			}
+			catch (std::invalid_argument&)
+			{
+				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				return false;
+			}
+
+			for (size_t scaleIndex = 0; scaleIndex < scaleSize; ++scaleIndex)
+			{
+				int s = 0;
+				if (!std::getline(file, input))
+				{
+					TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+					return false;
+				}
+				//Skips the s
+				std::string values = input.substr(1);
+				std::stringstream scaleValues(values);
+				std::string toConvert;
+				glm::vec3 scale;
+				while (std::getline(scaleValues, toConvert, ','))
+				{
+					try
+					{
+						if (s == 4)
+						{
+							TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+							return false;
+						}
+						if (s == 0)
+						{
+							anim->_frames[boneName]._scaleTime.push_back(std::stod(toConvert));
+						}
+						else
+						{
+							scale[s - 1] = std::stof(toConvert);
+						}
+
+					}
+					catch (std::invalid_argument&)
+					{
+						TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+						return false;
+					}
+
+					++s;
+				}
+				if (s != 4)
+				{
+					TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+					return false;
+				}
+
+				anim->_frames[boneName]._scale.push_back(scale);
+			}
+
+			//Get Rotate
+			size_t rotSize = 0;
+			if (!std::getline(file, input))
+			{
+				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				return false;
+			}
+			try
+			{
+				rotSize = std::stoi(input);
+			}
+			catch (std::invalid_argument&)
+			{
+				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				return false;
+			}
+
+			for (size_t rotIndex = 0; rotIndex < rotSize; ++rotIndex)
+			{
+				int r = 0;
+				if (!std::getline(file, input))
+				{
+					TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+					return false;
+				}
+				//Skips the r
+				std::string values = input.substr(1);
+				std::stringstream rotValues(values);
+				std::string toConvert;
+				glm::quat rot;
+				while (std::getline(rotValues, toConvert, ','))
+				{
+					try
+					{
+						if (r == 5)
+						{
+							TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+							return false;
+						}
+						if (r == 0)
+						{
+							anim->_frames[boneName]._rotateTime.push_back(std::stod(toConvert));
+						}
+						else
+						{
+							rot[r - 1] = std::stof(toConvert);
+						}
+
+					}
+					catch (std::invalid_argument&)
+					{
+						TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+						return false;
+					}
+
+					++r;
+				}
+				if (r != 5)
+				{
+					TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+					return false;
+				}
+
+				anim->_frames[boneName]._rotation.push_back(rot);
+			}
+		}
+
+		return true;
+	}
+
+	/*void ModelLoader::DebugToFile(const std::string& fileName)
 	{
 		std::string name = fileName;
 		name.erase(name.rfind("."));
@@ -883,5 +1644,5 @@ namespace NS_GRAPHICS
 		logFile << "Total Points : " << lineCount << std::endl;
 
 		logFile.close();
-	}
+	}*/
 }
