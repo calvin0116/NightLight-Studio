@@ -487,27 +487,8 @@ namespace NS_GRAPHICS
 		}
 
 		Model* model = new Model();
+
 		model->_fileName = fileName;
-
-		//Checks for the file name
-		std::string name;
-		size_t pos = fileName.rfind("\\");
-		//Get just the string after the last path
-		if (pos != std::string::npos)
-		{
-			name = fileName.substr(pos + 1);
-		}
-		else
-		{
-			name = fileName;
-		}
-
-		pos = name.rfind(".");
-		//Trim the extension to get the file name
-		if (pos != std::string::npos)
-		{
-			name.erase(pos);
-		}
 
 		std::string searchString;
 		searchString = fileName;
@@ -544,10 +525,22 @@ namespace NS_GRAPHICS
 				return;
 			}
 
+			//Get the whole local path without the .fbx
+			std::string name;
+			size_t pos = fileName.rfind(".");
+			if (pos != std::string::npos)
+			{
+				name = fileName.substr(0, pos);
+			}
+			else
+			{
+				name = fileName;
+			}
+
 			//model->_fileName = s_LocalPathName + name + s_ModelFileType;
 
-			std::string saveFileName = s_LocalPathName + name;
-			SaveCustomModel(saveFileName, model);
+			//std::string saveFileName = s_LocalPathName + name;
+			SaveCustomModel(name, model);
 		}
 
 		_modelManager->AddLoadedModel(model, model->_fileName);
