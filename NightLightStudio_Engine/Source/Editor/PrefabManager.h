@@ -3,14 +3,7 @@
 #include "../../framework.h"
 #include "../Component/ComponentManager.h"
 
-/*
-class PrefabManager : public Singleton<PrefabManager>
-{
 
-
-
-};
-*/
 namespace Prefab_Function {
 	ENGINE_API int PrefabReadAndCreate(std::string file, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER);
 
@@ -25,6 +18,20 @@ namespace Prefab_Function {
 
 		void CreatePrefabInstance(std::string file);
 		void SavePrefab();
+	};
+
+	class PrefabManager : public Singleton<PrefabManager>
+	{
+		std::map<std::string, PrefabInstances> PrefabList;
+
+	public:
+		NS_COMPONENT::ComponentManager::ComponentSetManager::EntityHandle::EntityComponentContainer GetPrefabComp(std::string prefab_name)
+		{
+			Entity prefab_ent = G_ECMANAGER_PREFABS->getEntity(PrefabList[prefab_name].prefab_id);
+			if (prefab_ent.getId() == -1)
+				return NS_COMPONENT::ComponentManager::ComponentSetManager::EntityHandle::EntityComponentContainer(nullptr,-1);
+			return prefab_ent.getEntityComponentContainer();
+		}
 	};
 }
 

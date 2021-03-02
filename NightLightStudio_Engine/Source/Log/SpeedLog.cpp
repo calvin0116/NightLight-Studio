@@ -3,6 +3,8 @@
 // Default log
 SpeedLog SPEEDLOG; //= spdlog::basic_logger_st("log", "logs/log.txt");
 
+bool SpeedLog::_first = true;
+
 SpeedLog::SpeedLog()
 {
 }
@@ -60,13 +62,21 @@ std::shared_ptr<spdlog::logger> SpeedLog::operator->()
 {
 	if (!_log)
 	{
-		if (spdlog::get(DEFAULT_LOG_NAME))
+		if (!_first)
 		{
-			*this = spdlog::get(DEFAULT_LOG_NAME);
+			ResetLogger();
 		}
 		else
 		{
-			*this = spdlog::basic_logger_st(DEFAULT_LOG_NAME, DEFAULT_LOG_PATH);
+			_first = false;
+			// Sets up Speed Log here to prevent weird issues
+			SPEEDLOG.SetNewBasicLogger(DEFAULT_LOG_NAME, DEFAULT_LOG_PATH);
+
+			// If first used SpeedLog is NOT SPEEDLOG, then set to default
+			if (this != &SPEEDLOG)
+			{
+				ResetLogger();
+			}
 		}
 	}
 	return _log;
@@ -74,7 +84,7 @@ std::shared_ptr<spdlog::logger> SpeedLog::operator->()
 
 std::shared_ptr<spdlog::logger> SpeedLog::GetLogger()
 {
-	return _log;
+	return this->operator->();
 }
 
 std::shared_ptr<spdlog::logger> SpeedLog::ResetLogger()

@@ -166,7 +166,7 @@ class AssetsManager : public Singleton<AssetsManager>, public MySystem
 		};
 		
 	//===============Inherited Function======================//
-		void Load() override
+		void EarlyLoad()
 		{
 			fileSystem[MAIN] = fs::current_path().string() + "\\NightLightStudio_Game";
 			fileSystem[ASSET] = "\\Asset";
@@ -176,7 +176,10 @@ class AssetsManager : public Singleton<AssetsManager>, public MySystem
 			fileSystem[SCENE] = fileSystem[JSON] + "\\Scene";
 			fileSystem[SOUND] = "\\Sounds";
 
+		}
 
+		void Load() override
+		{
 			LoadAsset(); //<- can send to another thread to load
 		}
 

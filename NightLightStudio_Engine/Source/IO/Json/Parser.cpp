@@ -204,6 +204,11 @@ namespace NS_SERIALISER
         //Writer<OStreamWrapper> writer(osw);
         doc.Accept(writer);
     }
+    void Parser::LoadData(std::string path)
+    {
+        fullfilepath = path;
+        Load();
+    }
 }
 
 

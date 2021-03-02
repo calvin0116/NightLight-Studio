@@ -6,12 +6,12 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/rotating_file_sink.h>
 
-#define DEFAULT_LOG_NAME "log"
-#define DEFAULT_LOG_PATH "logs/log.txt"
-#define FLUSH_EVERY_SECONDS 3
+static const std::string DEFAULT_LOG_NAME = "log";
+static const std::string DEFAULT_LOG_PATH = "logs/log.txt";
 
 class SpeedLog
 {
+	static bool _first;
 	std::shared_ptr<spdlog::logger> _log;
 public:
 
@@ -113,11 +113,21 @@ inline void SPEEDLOG_SET_NEW_ROTATING(const std::string& name, const std::string
 	SPEEDLOG.SetNewRotatingLogger(name, path, maxSize, maxFiles);
 }
 
-inline void SPEEDLOG_ACTIVATE_FLUSH()
+/*
+// DO NOT USE IF YOU ARE NOT GOING TO SHUTDOWN
+inline void SPEEDLOG_FLUSH_EVERY(const unsigned secs)
 {
-	SPEEDLOG->flush();
+	spdlog::flush_every(std::chrono::seconds(secs));
 }
+*/
 
+// DO NOT USE UNLESS FINISHING
+/*
+inline void SPEEDLOG_SHUTDOWN_ALL()
+{
+	spdlog::shutdown();
+}
+*/
 
 template<class FormatStrings, class ...Args>
 inline void SpeedLog::operator()(const FormatStrings& fmt, Args && ...args)

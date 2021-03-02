@@ -105,10 +105,22 @@ void LevelEditor::LE_MainMenuBar()
                         NS_SCENE::SYS_SCENE_MANAGER->SaveScene(fileToSaveTo);
                 }
             });
+
+
         LE_AddMenuWithItems("Edit", 
-            { "Undo", "Redo" }, 
-            { "Ctrl-Z", "Ctrl-Y" }, 
+            { "Create Entity" , "Delete Entity" ,"Undo", "Redo" }, 
+            { "", "Ctrl-Delete" ,"Ctrl-Z", "Ctrl-Y" }, 
             { 
+                [this]()
+                {
+                    TransformComponent tran;
+                    Entity ent = G_ECMANAGER->BuildEntity().AttachComponent(tran);
+                    LE_ECHELPER->SelectEntity(ent.getId());
+                },
+                [this]()
+                {
+                    G_ECMANAGER->FreeEntity(LE_ECHELPER->GetSelectedEntityID());
+                },
                 [this]() { LE_AccessWindowFunc("Console", &ConsoleLog::UndoLastCommand); },
                 [this]() { LE_AccessWindowFunc("Console", &ConsoleLog::RedoLastCommand); }
             });

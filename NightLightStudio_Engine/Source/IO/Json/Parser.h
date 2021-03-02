@@ -52,7 +52,7 @@ namespace NS_SERIALISER
 		ENGINE_API void Load();		//Load from file
 		ENGINE_API void Save();		//Save to file
 
-		void LoadData(std::string path) override{};
+		void LoadData(std::string path) override;
 		//To look at the data in raw form
 		ENGINE_API void PrintDataList();
 
