@@ -64,18 +64,18 @@ std::shared_ptr<spdlog::logger> SpeedLog::operator->()
 	{
 		if (!_first)
 		{
-			_log = spdlog::default_logger();
+			ResetLogger();
 		}
 		else
 		{
 			_first = false;
 			// Sets up Speed Log here to prevent weird issues
-			SPEEDLOG = SetNewBasicLogger(DEFAULT_LOG_NAME, DEFAULT_LOG_PATH);
+			SPEEDLOG.SetNewBasicLogger(DEFAULT_LOG_NAME, DEFAULT_LOG_PATH);
 
 			// If first used SpeedLog is NOT SPEEDLOG, then set to default
-			if (*this != SPEEDLOG)
+			if (this != &SPEEDLOG)
 			{
-				_log = spdlog::default_logger();
+				ResetLogger();
 			}
 		}
 	}
