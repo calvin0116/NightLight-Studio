@@ -2,7 +2,7 @@
 #include "..\NightLightStudio_Engine\Source\Core\Engine.h"
 #define _CRTDBG_MAP_ALLOC  
 #include <stdlib.h>  
-#include <crtdbg.h>  
+#include <crtdbg.h> 
 
 /// FOR THOSE INTERESTED: INCLUDING THIS ON TOP OF YOUR C++ FILES WILL GIVE YOU WHERE THE MEMORY LEAK OCCURS
 /*
@@ -45,7 +45,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		freopen_s(&file, "CONOUT$", "wt", stdin);
 
 		SetConsoleTitleA("DEBUGGING CONSOLE");
-		std::cout << "Debug Console Initialized." << std::endl;
+		//std::cout << "Debug Console Initialized." << std::endl;
 
 		//Prevent closing from console window to show unnecessary mem leak
 		HWND hwnd = ::GetConsoleWindow();
@@ -61,7 +61,14 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
 	engine.Init(hInstance);
 
-	engine.Run();
+	try
+	{
+		engine.Run();
+	}
+	catch (...)
+	{
+		// Logging?
+	}
 
 	engine.Exit();
 
