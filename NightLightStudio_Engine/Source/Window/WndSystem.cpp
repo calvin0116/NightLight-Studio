@@ -31,6 +31,8 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 namespace NS_WINDOW
 {
@@ -377,6 +379,7 @@ namespace NS_WINDOW
 		{
 			//bool WindowHasInit = false;
 			TracyMessageL("WndSystem::Init: CLIENT WINDOW INITIALIZATION FAILED");
+			SPEEDLOG("WndSystem::Init: CLIENT WINDOW INITIALIZATION FAILED");
 			//std::cout << "CLIENT WINDOW INITIALIZATION FAILED" << std::endl;
 			hasInit = false;
 			return;
@@ -387,6 +390,7 @@ namespace NS_WINDOW
 		{
 			//bool DummyGLHasInit = false;
 			TracyMessageL("WndSystem::Init: GL INITIALIZATION FAILED");
+			SPEEDLOG("WndSystem::Init: GL INITIALIZATION FAILED");
 			//std::cout << "GL INITIALIZATION FAILED" << std::endl;
 			hasInit = false;
 			return;

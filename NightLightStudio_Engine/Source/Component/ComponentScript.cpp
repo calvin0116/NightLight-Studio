@@ -1,6 +1,8 @@
 #include "ComponentScript.h"
 #include "../Mono/MonoWrapper.h"
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 //#include "Components.h"   // inherit required functions
 
@@ -23,6 +25,7 @@ inline void ComponentScript::Read(Value& val)
         if (val.FindMember("isActive") == val.MemberEnd())
         {
             TracyMessageL("ComponentScript::Read: No isActive data has been found");
+            SPEEDLOG("ComponentScript::Read: No isActive data has been found");
            //std::cout << "No isActive data has been found" << std::endl;
         }
     else
@@ -31,6 +34,7 @@ inline void ComponentScript::Read(Value& val)
         if (val.FindMember("isRunning") == val.MemberEnd())
         {
             TracyMessageL("ComponentScript::Read: No isRunning data has been found");
+            SPEEDLOG("ComponentScript::Read: No isRunning data has been found");
             //std::cout << "No isRunning data has been found" << std::endl;
         }
     else
@@ -39,6 +43,7 @@ inline void ComponentScript::Read(Value& val)
         if (val.FindMember("ScriptName") == val.MemberEnd())
         {
             TracyMessageL("ComponentScript::Read: No ScriptName data has been found");
+            SPEEDLOG("ComponentScript::Read: No ScriptName data has been found");
             //std::cout << "No ScriptName data has been found" << std::endl;
         }
     else
@@ -79,6 +84,7 @@ inline void ComponentScript::Read(Value& val)
               if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
               {
                   TracyMessageL("ComponentScript::Read: No script bool data has been found");
+                  SPEEDLOG("ComponentScript::Read: No script bool data has been found");
                   //std::cout << "No script bool data has been found" << std::endl;
               }
               else
@@ -94,6 +100,7 @@ inline void ComponentScript::Read(Value& val)
               if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
               {
                   TracyMessageL("ComponentScript::Read: No script int data has been found");
+                  SPEEDLOG("ComponentScript::Read: No script int data has been found");
                   //std::cout << "No script int data has been found" << std::endl;
               }
               else
@@ -110,6 +117,7 @@ inline void ComponentScript::Read(Value& val)
               if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
               {
                   TracyMessageL("ComponentScript::Read: No script unsigned data has been found");
+                  SPEEDLOG("ComponentScript::Read: No script unsigned data has been found");
                   //std::cout << "No script unsigned data has been found" << std::endl;
               }
               else
@@ -126,6 +134,7 @@ inline void ComponentScript::Read(Value& val)
               if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
               {
                   TracyMessageL("ComponentScript::Read: No script float data has been found");
+                  SPEEDLOG("ComponentScript::Read: No script float data has been found");
                   //std::cout << "No script float data has been found" << std::endl;
               }
               else
@@ -142,6 +151,7 @@ inline void ComponentScript::Read(Value& val)
               if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
               {
                   TracyMessageL("ComponentScript::Read: No script double data has been found");
+                  SPEEDLOG("ComponentScript::Read: No script double data has been found");
                   //std::cout << "No script double data has been found" << std::endl;
               }
               else
@@ -170,6 +180,7 @@ inline void ComponentScript::Read(Value& val)
               if (val.FindMember(tempVar.c_str()) == val.MemberEnd())
               {
                   TracyMessageL("ComponentScript::Read: No script string data has been found");
+                  SPEEDLOG("ComponentScript::Read: No script string data has been found");
                   //std::cout << "No script string data has been found" << std::endl;
               }
               else
@@ -181,6 +192,7 @@ inline void ComponentScript::Read(Value& val)
             else
             {
             TracyMessageL("ComponentScript::Read: Unsupported type!");
+            SPEEDLOG("ComponentScript::Read: Unsupported type!");
               //std::cout << "Unsupported type!" << std::endl;
             }
           }
@@ -287,6 +299,7 @@ inline Value ComponentScript::Write() {
         else
         {
             TracyMessageL("ComponentScript::Write: Unsupported type!");
+            SPEEDLOG("ComponentScript::Write: Unsupported type!");
           //std::cout << "Unsupported type!" << std::endl;
         }
       }

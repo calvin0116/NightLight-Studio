@@ -38,6 +38,7 @@ void ComponentTransform::Read(Value& val)
 	if (val.FindMember("EntityName") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentTransform::Read: No EntityName data has been found");
+		SPEEDLOG("ComponentTransform::Read: No EntityName data has been found");
 		//std::cout << "No EntityName data has been found" << std::endl;
 	}
 	else
@@ -46,6 +47,7 @@ void ComponentTransform::Read(Value& val)
 	if (val.FindMember("Tag") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentTransform::Read: No Tag data has been found");
+		SPEEDLOG("ComponentTransform::Read: No Tag data has been found");
 		//std::cout << "No Tag data has been found" << std::endl;
 	}
 	else
@@ -58,6 +60,7 @@ void ComponentTransform::Read(Value& val)
 	if (val.FindMember("Position") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentTransform::Read: No Tag data has been found");
+		SPEEDLOG("ComponentTransform::Read: No Tag data has been found");
 		//std::cout << "No Tag data has been found" << std::endl;
 	}
 	else
@@ -73,6 +76,7 @@ void ComponentTransform::Read(Value& val)
 	if (val.FindMember("Scale") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentTransform::Read: No Scale data has been found");
+		SPEEDLOG("ComponentTransform::Read: No Scale data has been found");
 		//std::cout << "No Scale data has been found" << std::endl;
 	}
 	else
@@ -87,6 +91,7 @@ void ComponentTransform::Read(Value& val)
 	if (val.FindMember("Rotate") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentTransform::Read: No Rotate data has been found");
+		SPEEDLOG("ComponentTransform::Read: No Rotate data has been found");
 		//std::cout << "No Rotate data has been found" << std::endl;
 	}
 	else
@@ -101,6 +106,7 @@ void ComponentTransform::Read(Value& val)
 	if (val.FindMember("tagNames") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentTransform::Read: No tagNames data has been found");
+		SPEEDLOG("ComponentTransform::Read: No tagNames data has been found");
 		//std::cout << "No tagNames data has been found" << std::endl;
 	}
 	else

@@ -5,6 +5,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 using namespace SystemInput_ns;
 
@@ -20,6 +22,7 @@ void SystemInput::Load()
 void SystemInput::Init()
 {
 	TracyMessageL("SystemInput::Init");
+	SPEEDLOG("SystemInput::Init");
 	//std::cout << "System::Input::Init" << std::endl;
 	_siKeyPress.SetWindow(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
 	_siCtrler.SetWindow(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());

@@ -2,6 +2,8 @@
 #include "../glm/mat4x4.hpp"
 #include "ModelLoader.h"
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -234,6 +236,7 @@ namespace NS_GRAPHICS
 		// Invalid key given
 #ifdef _DEBUG
 		TracyMessageL("ModelManager::AddModel: ERROR: INVALID MODEL KEY GIVEN, PLEASE LOAD MODEL OR CHECK KEY");
+		SPEEDLOG("ModelManager::AddModel: ERROR: INVALID MODEL KEY GIVEN, PLEASE LOAD MODEL OR CHECK KEY");
 		//std::cout << "ERROR: INVALID MODEL KEY GIVEN, PLEASE LOAD MODEL OR CHECK KEY" << std::endl;
 #endif
 		return -1;

@@ -65,11 +65,19 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	{
 		engine.Run();
 	}
-	catch (...)
+	catch (std::exception e)
 	{
 		// Logging?
-		engine.Exit();
-		throw;
+		//engine.Exit();
+		//throw;
+		std::string errorMsg("Terminated due to unexpected error!\n");
+		errorMsg.append(e.what());
+		int msgboxID = MessageBox(
+			NULL,
+			errorMsg.c_str(),
+			"Unexpected Error Occurred!",
+			MB_ICONERROR | MB_OK | MB_DEFBUTTON1
+		);
 	}
 
 	engine.Exit();

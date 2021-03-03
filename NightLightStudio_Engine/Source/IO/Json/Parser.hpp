@@ -1,4 +1,7 @@
+
 #include "Parser.h"
+// SpeedLog
+#include "../../Log/SpeedLog.h"
 #include "../tracy-master/Tracy.hpp"
 namespace NS_SERIALISER {
 	template<typename d_type>
@@ -15,6 +18,7 @@ namespace NS_SERIALISER {
 					doc[itr->name][itr2->name] = data;
 
 					TracyMessageL("Parser::ChangeData: Data changed");
+					SPEEDLOG("Parser::ChangeData: Data changed");
 					//std::cout << "Data changed" << std::endl;
 					//PrintCurrentData();
 					return;
@@ -24,6 +28,7 @@ namespace NS_SERIALISER {
 		}
 		//If no data change
 		TracyMessageL("Parser::ChangeData: Unknown name taken");
+		SPEEDLOG("Parser::ChangeData: Unknown name taken");
 		//std::cout << "Unknown name taken" << std::endl;
 	}
 /*

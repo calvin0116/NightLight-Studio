@@ -10,6 +10,8 @@
 #include "../Component/ComponentCamera.h"
 
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 #define TESTMOVETARGET 1
 
 namespace NS_GRAPHICS
@@ -554,6 +556,7 @@ namespace NS_GRAPHICS
 			return;
 		_isPlaying = msg.isPlaying;
 		TracyMessageL("CameraSystem::HandleTogglePlay: Camera Playing!");
+		SPEEDLOG("CameraSystem::HandleTogglePlay: Camera Playing!");
 		//std::cout << "Camera Playing!" << std::endl;
 		if (_isPlaying && _Inited == false)
 		{

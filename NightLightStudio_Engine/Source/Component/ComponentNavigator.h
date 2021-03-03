@@ -222,12 +222,14 @@ public:
 				else
 				{
 					TracyMessageL("ComponentNavigator::InitPath : No entity have been found");
+					SPEEDLOG("ComponentNavigator::InitPath : No entity have been found");
 					return;
 				}
 			}
 			else
 			{
 				TracyMessageL("ComponentNavigator::InitPath : No entity name have been found");
+				SPEEDLOG("ComponentNavigator::InitPath : No entity name have been found");
 				return;
 			}
 			//if way point path entity does not exist

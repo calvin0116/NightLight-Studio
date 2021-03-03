@@ -16,6 +16,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -107,6 +109,7 @@ namespace NS_GRAPHICS
 		{
 #ifdef _DEBUG
 			TracyMessageL("GraphicsSystem::Init: ERROR: Window System not initialized before Graphics System, please check WndSystem initialization.");
+			SPEEDLOG("GraphicsSystem::Init: ERROR: Window System not initialized before Graphics System, please check WndSystem initialization.");
 			//std::cout << "ERROR: Window System not initialized before Graphics System, please check WndSystem initialization." << std::endl;
 #endif
 			return;
@@ -1567,6 +1570,7 @@ namespace NS_GRAPHICS
 		{
 #ifdef _DEBUG
 			TracyMessageL("ERROR: Graphics component does not exist in given entity, failed to change mesh color");
+			SPEEDLOG("ERROR: Graphics component does not exist in given entity, failed to change mesh color");
 			//std::cout << "ERROR: Graphics component does not exist in given entity, failed to change mesh color" << std::endl;
 #endif
 			return;

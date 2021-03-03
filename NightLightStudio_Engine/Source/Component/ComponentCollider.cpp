@@ -153,6 +153,7 @@ void ComponentCollider::Read(Value& val)
 	if (val.FindMember("colliderType") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentCollider::Read: No active data has been found");
+		SPEEDLOG("ComponentCollider::Read: No active data has been found");
 		//std::cout << "No active data has been found" << std::endl;
 	}
 	else
@@ -187,6 +188,7 @@ void ComponentCollider::Read(Value& val)
     if (val.FindMember("isCollidable") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentCollider::Read: No isCollidable data has been found");
+		SPEEDLOG("ComponentCollider::Read: No isCollidable data has been found");
 		//std::cout << "No isCollidable data has been found" << std::endl;
 	}
     else
@@ -196,6 +198,7 @@ void ComponentCollider::Read(Value& val)
 	if (val.FindMember("tag") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentCollider::Read: No mass data has been found");
+		SPEEDLOG("ComponentCollider::Read: No mass data has been found");
 		//std::cout << "No mass data has been found" << std::endl;
 	}
 	else
@@ -207,6 +210,7 @@ void ComponentCollider::Read(Value& val)
 	if (val.FindMember("Center") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentCollider::Read: ComponentCollider::Read: No Center data has been found");
+		SPEEDLOG("ComponentCollider::Read: ComponentCollider::Read: No Center data has been found");
 		//std::cout << "No Center data has been found" << std::endl;
 	}
 	else
@@ -221,6 +225,7 @@ void ComponentCollider::Read(Value& val)
 	if (val.FindMember("Extend") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentCollider::Read: No Extend data has been found");
+		SPEEDLOG("ComponentCollider::Read: No Extend data has been found");
 		//std::cout << "No Extend data has been found" << std::endl;
 	}
 	else
@@ -235,6 +240,7 @@ void ComponentCollider::Read(Value& val)
 	if (val.FindMember("Rotation") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentCollider::Read: No Rotation data has been found");
+		SPEEDLOG("ComponentCollider::Read: No Rotation data has been found");
 		//std::cout << "No Rotation data has been found" << std::endl;
 	}
 	else

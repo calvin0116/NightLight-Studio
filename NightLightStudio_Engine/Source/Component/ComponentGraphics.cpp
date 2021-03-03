@@ -245,6 +245,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("isActive") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No active data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No active data has been found");
 		//std::cout << "No active data has been found" << std::endl;
 	}
 	else
@@ -253,6 +254,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("renderEmission") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No emission activeness data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No emission activeness data has been found");
 		//std::cout << "No emission activeness data has been found" << std::endl;
 	}
 	else
@@ -262,6 +264,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("Emissive") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No Emissive data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No Emissive data has been found");
 		//std::cout << "No Emissive data has been found" << std::endl;
 	}
 	else
@@ -276,6 +279,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("emissiveIntensity") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No emissiveIntensity data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No emissiveIntensity data has been found");
 		//std::cout << "No emissiveIntensity data has been found" << std::endl;
 	}
 	else
@@ -287,6 +291,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("Model") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No Model file data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No Model file data has been found");
 		//std::cout << "No Model file data has been found" << std::endl;
 	}
 	else
@@ -321,6 +326,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("Albedo") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No Texture file data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No Texture file data has been found");
 		//std::cout << "No Texture file data has been found" << std::endl;
 	}
 	else
@@ -336,6 +342,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("Normal") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No Normal file data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No Normal file data has been found");
 		//std::cout << "No Normal file data has been found" << std::endl;
 	}
 	else
@@ -351,6 +358,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("Metallic") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No Metallic file data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No Metallic file data has been found");
 		//std::cout << "No Metallic file data has been found" << std::endl;
 	}
 	else
@@ -366,6 +374,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("Roughness") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No Roughness file data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No Roughness file data has been found");
 		//std::cout << "No Roughness file data has been found" << std::endl;
 	}
 	else
@@ -381,6 +390,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("AmbientOcclusion") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No AmbientOcclusion file data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No AmbientOcclusion file data has been found");
 		//std::cout << "No AmbientOcclusion file data has been found" << std::endl;
 	}
 	else
@@ -396,6 +406,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("Specular") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No Specular file data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No Specular file data has been found");
 		//std::cout << "No Specular file data has been found" << std::endl;
 	}
 	else
@@ -412,6 +423,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("DiffuseMat") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No Diffuse data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No Diffuse data has been found");
 		//std::cout << "No Diffuse data has been found" << std::endl;
 	}
 	else
@@ -426,6 +438,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("AmbientMat") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No Ambient data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No Ambient data has been found");
 		//std::cout << "No Ambient data has been found" << std::endl;
 	}
 	else
@@ -440,6 +453,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("SpecularMat") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No Specular data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No Specular data has been found");
 		//std::cout << "No Specular data has been found" << std::endl;
 	}
 	else
@@ -454,6 +468,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("ShininessMat") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No Shininess data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No Shininess data has been found");
 		//std::cout << "No Shininess data has been found" << std::endl;
 	}
 	else
@@ -465,6 +480,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("AlbedoMat") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No AlbedoMat data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No AlbedoMat data has been found");
 		//std::cout << "No AlbedoMat data has been found" << std::endl;
 	}
 	else
@@ -479,6 +495,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("MetallicMat") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No MetallicMat data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No MetallicMat data has been found");
 		//std::cout << "No MetallicMat data has been found" << std::endl;
 	}
 	else
@@ -489,6 +506,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("RoughnessMat") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No RoughnessMat data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No RoughnessMat data has been found");
 		//std::cout << "No RoughnessMat data has been found" << std::endl;
 	}
 	else
@@ -499,6 +517,7 @@ inline void ComponentGraphics::Read(Value& val)
 	if (val.FindMember("Alpha") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No Alpha data has been found");
+		SPEEDLOG("ComponentGraphics::Read: No Alpha data has been found");
 		//std::cout << "No Alpha data has been found" << std::endl;
 	}
 	else
