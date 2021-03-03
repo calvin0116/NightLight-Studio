@@ -2102,7 +2102,10 @@ void InspectorWindow::NavComp(Entity& ent)
 					if(ent.getId()!= -1)
 						nav_comp->cur_wp_path = ent.getComponent<WayPointMapComponent>();
 					else
+					{
 						nav_comp->cur_wp_path = nullptr;
+						nav_comp->wp_path_ent_name = "";
+					}
 				});
 			_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
 				[this, &s_name,&nav_comp](Entity* entptr)
@@ -2111,6 +2114,11 @@ void InspectorWindow::NavComp(Entity& ent)
 					if (nav_comp->cur_wp_path != nullptr) {
 						s_name = G_ECMANAGER->EntityName[entptr->getId()];
 						nav_comp->wp_path_ent_name = s_name;
+					}
+					else
+					{
+						nav_comp->cur_wp_path = nullptr;
+						nav_comp->wp_path_ent_name = "";
 					}
 				});
 
@@ -2122,7 +2130,7 @@ void InspectorWindow::NavComp(Entity& ent)
 			_levelEditor->LE_AddInputFloatProperty("Circling Radius", nav_comp->circuling_rad, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
 
 
-			if (!s_name.empty())
+			if (nav_comp->cur_wp_path != nullptr)
 			{
 				_levelEditor->LE_AddCombo("WayPoints to navigate", (int&)nav_comp->wp_creation_type,
 				{
