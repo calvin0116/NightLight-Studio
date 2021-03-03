@@ -57,6 +57,7 @@ public: // Suppose to be private and use messaging, but since SystemAudio is sin
   void  Pause(const int _channelID);
   void  Unpause(const int _channelID);
   void  Stop(const int _channelID);
+  void  SetVol(const int _channelID, float _vol);
   int   PlayBGM(const std::string& _name);
   void  PlayOnce(const std::string& _name);
   // Object ID = entity ID; to get transform position to follow for audio.

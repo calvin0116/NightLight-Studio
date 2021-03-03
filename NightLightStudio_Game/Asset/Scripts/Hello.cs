@@ -6,11 +6,12 @@ namespace Unicorn
 {
   public class Hello : UniBehaviour
   {
-    public int test = 0;
-    public string test2 = "AyeAyeAye!";
+    public float vol = 1.0f;
+    int chnl;
 
     public override void Init()
     {
+      chnl = Audio.PlayBGM("0");
     }
 
     public override void LateInit()
@@ -19,14 +20,23 @@ namespace Unicorn
 
     public override void Update()
     {
-
+      if (Input.GetKeyHold(VK.IKEY_V))
+      {
+        vol += 0.1f;
+        Audio.SetVol(chnl, vol);
+      }
+      if (Input.GetKeyHold(VK.IKEY_C))
+      {
+        vol -= 0.1f;
+        Audio.SetVol(chnl, vol);
+      }
     }
     public override void FixedUpdate()
     {
       if(Input.GetKeyPress(VK.IKEY_SPACE))
       {
-        Print(test2);
-        Console.WriteLine(test2);
+        vol = 1.0f;
+        Audio.SetVol(chnl, vol);
       }
     }
 

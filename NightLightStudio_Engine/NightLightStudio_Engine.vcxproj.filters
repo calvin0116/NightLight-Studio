@@ -87,6 +87,9 @@
     <Filter Include="Source Files\Editor\LevelEditor\Picking">
       <UniqueIdentifier>{bdcd9b8c-92d5-4aa1-bb8f-53459e431d6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Log">
+      <UniqueIdentifier>{8231f5b5-cca3-4395-93e3-de17e2ba69b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\Include\glm\glm.natvis" />
@@ -427,6 +430,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\AssetsMananger.cpp" />
+    <ClCompile Include="Source\Log\SpeedLog.cpp">
+      <Filter>Source Files\Log</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -836,6 +842,9 @@
     </ClInclude>
     <ClInclude Include="Source\Core\AssetInfo.h" />
     <ClInclude Include="Source\Core\AssetsMananger.h" />
+    <ClInclude Include="Source\Log\SpeedLog.h">
+      <Filter>Source Files\Log</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />

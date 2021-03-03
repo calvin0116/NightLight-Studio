@@ -99,7 +99,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>$(SolutionDir)Include\rapidjson;$(SolutionDir)Include\FMOD\inc;$(SolutionDir)Include\Assimp;$(SolutionDir)Include\mono\include\mono-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Include\SpeedLog;$(SolutionDir)Include\rapidjson;$(SolutionDir)Include\FMOD\inc;$(SolutionDir)Include\Assimp;$(SolutionDir)Include\mono\include\mono-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ShowIncludes>false</ShowIncludes>
@@ -287,6 +287,7 @@
     <ClInclude Include="Source\IO\Json\Parser.hpp" />
     <ClInclude Include="Source\IO\SystemIO.h" />
     <ClInclude Include="Source\Logic\SystemLogic.h" />
+    <ClInclude Include="Source\Log\SpeedLog.h" />
     <ClInclude Include="Source\Math\Matrix3x3.h" />
     <ClInclude Include="Source\Math\Matrix4x4.h" />
     <ClInclude Include="Source\Math\Vector.h" />
@@ -419,6 +420,7 @@
     <ClCompile Include="Source\IO\Json\Parser.cpp" />
     <ClCompile Include="Source\IO\SystemIO.cpp" />
     <ClCompile Include="Source\Logic\SystemLogic.cpp" />
+    <ClCompile Include="Source\Log\SpeedLog.cpp" />
     <ClCompile Include="Source\Math\Matrix3x3.cpp" />
     <ClCompile Include="Source\Math\Matrix4x4.cpp" />
     <ClCompile Include="Source\Math\Vector.cpp" />

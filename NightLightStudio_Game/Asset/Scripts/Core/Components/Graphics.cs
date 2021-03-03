@@ -5,6 +5,12 @@ using System.Runtime.CompilerServices;
 
 namespace Unicorn
 {
+  enum RENDERTYPE
+  {
+    SOLID = 0,
+    TEXTURED
+  }
+
   public class Graphics
   {
     // Native handle for this component
@@ -14,6 +20,33 @@ namespace Unicorn
     {
       get { return get_isActive_Internal(this.native_handle); }
       set { set_isActive_Internal(this.native_handle, value); }
+    }
+
+    public bool renderEmission
+    {
+      get { return get_renderEmission_Internal(this.native_handle); }
+      set { set_renderEmission_Internal(this.native_handle, value); }
+    }
+
+    public Vector3 GetEmissiveColor()
+    {
+      return get_EmissiveColor_Internal(this.native_handle);
+    }
+    public void SetEmissiveColor(Vector3 val)
+    {
+      set_EmissiveColor_Internal(this.native_handle, val);
+    }
+
+    public float emissiveIntensity
+    {
+      get { return get_EmissiveIntensity_Internal(this.native_handle); }
+      set { set_EmissiveIntensity_Internal(this.native_handle, value); }
+    }
+
+    public float alpha
+    {
+      get { return get_Alpha_Internal(this.native_handle); }
+      set { set_Alpha_Internal(this.native_handle, value); }
     }
 
     public void AddModel(string file)
@@ -44,14 +77,34 @@ namespace Unicorn
     {
       csAddSpecularTexture(native_handle, file);
     }
-        
-    // Getter/Setter for isActive
-    [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static bool get_isActive_Internal(IntPtr native_handle);
 
     // Getter/Setter for isActive
     [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool get_isActive_Internal(IntPtr native_handle);
+    // Getter/Setter for isActive
+    [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void set_isActive_Internal(IntPtr native_handle, bool val);
+
+    // Getter/Setter for render emission
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool get_renderEmission_Internal(IntPtr native_handle);
+    // Getter/Setter for render emission
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_renderEmission_Internal(IntPtr native_handle, bool val);
+
+    // Getter/Setter for emissive color
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 get_EmissiveColor_Internal(IntPtr native_handle);
+    // Getter/Setter for emissive color
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_EmissiveColor_Internal(IntPtr native_handle, Vector3 val);
+
+    // Getter/Setter for emission intensity
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float get_EmissiveIntensity_Internal(IntPtr native_handle);
+    // Getter/Setter for emission intensity
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_EmissiveIntensity_Internal(IntPtr native_handle, float val);
 
     // Graphics Functions
     [MethodImpl(MethodImplOptions.InternalCall)]
@@ -80,6 +133,13 @@ namespace Unicorn
     // Graphics Functions
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void csAddSpecularTexture(IntPtr native_handle, string file);
+
+    // Getter/Setter for emission intensity
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float get_Alpha_Internal(IntPtr native_handle);
+    // Getter/Setter for emission intensity
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_Alpha_Internal(IntPtr native_handle, float val);
   }
 }
 

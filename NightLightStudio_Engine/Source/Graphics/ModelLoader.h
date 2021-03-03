@@ -50,17 +50,17 @@ namespace NS_GRAPHICS
 		bool SaveCustomModel(const std::string& name,Model*& model);
 
 		void SaveMeshVertex(std::ofstream& file, Mesh*& mesh, bool animated = false);
-		void LoadMeshVertex(std::ifstream& file, Mesh*& mesh);
+		bool LoadMeshVertex(std::ifstream& file, Mesh*& mesh, bool animated = false);
 
 		void SaveSkeletal(std::ofstream& file, Joint*& joint);
-		void LoadSkeletal(std::ifstream& file, Joint*& joint);
+		bool LoadSkeletal(std::ifstream& file, Joint*& joint);
 
 		void SaveAnimation(std::ofstream& file, Animation*& anim);
-		void LoadAnimation(std::ifstream& file, Animation*& anim);
+		bool LoadAnimation(std::ifstream& file, Animation*& anim);
 
 
 		//Just for debugging
-		void DebugToFile(const std::string& fileName);
+		//void DebugToFile(const std::string& fileName);
 
 	public:
 		// Unique Singleton instance
