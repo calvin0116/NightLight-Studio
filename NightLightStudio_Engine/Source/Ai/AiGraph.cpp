@@ -98,6 +98,7 @@ inline LocalVector<int> NS_AI::AstarPathFinding(NlMath::Vector3D start_point, Nl
 	else if (start_wp == nullptr || end_wp == nullptr)
 	{
 		TracyMessageL("AiGraph::AstarPathFinding: Starting / Ending way point not found ");
+		SPEEDLOG("AiGraph::AstarPathFinding: Starting / Ending way point not found ");
 		//std::cout << "Starting / Ending way point not found " << std::endl;
 	}
 

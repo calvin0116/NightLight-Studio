@@ -5,6 +5,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 namespace NS_AI
 {
@@ -119,6 +121,7 @@ namespace NS_AI
 
 			//std::cout << "Edges with Missing Way Point" << std::endl;
 			TracyMessageL("AI::Next Way Point: Edges with Missing Way Point");
+			SPEEDLOG("AI::Next Way Point: Edges with Missing Way Point");
 
 			throw(1);
 			return nullptr;

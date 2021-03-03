@@ -13,6 +13,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 void FluffyUnicornEngine::Init(HINSTANCE& hInstance)
 {

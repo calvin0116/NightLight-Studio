@@ -351,6 +351,7 @@ void InspectorWindow::Run()
 		else
 		{
 			TracyMessageL("InspectorWindow::Run: No set manager is allocated");
+			SPEEDLOG("InspectorWindow::Run: No set manager is allocated");
 			//std::cout << "No set manager is allocated" << std::endl;
 		}
 		Entity 	ent = g_ecman->getEntity(id);
@@ -2212,6 +2213,7 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 						{
 							str = "";
 							TracyMessageL("InspectorWindow::WayPointPathComp: No entity has been found");
+							SPEEDLOG("InspectorWindow::WayPointPathComp: No entity has been found");
 							//std::cout << "No entity has been found" << std::endl;
 							return;
 						}
@@ -2224,6 +2226,7 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 						else
 						{
 							TracyMessageL("InspectorWindow::WayPointPathComp: No entity with waypoint component found");
+							SPEEDLOG("InspectorWindow::WayPointPathComp: No entity with waypoint component found");
 							//std::cout << "No entity with waypoint component found" << std::endl;
 						}
 					});

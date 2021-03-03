@@ -10,6 +10,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 namespace NS_LOGIC
 {
@@ -695,6 +697,7 @@ namespace NS_LOGIC
     if (msg.GetID() != "TogglePlay")
       return;
     TracyMessageL("SystemLogic::HandleTogglePlay: Toggle Play");
+    SPEEDLOG("SystemLogic::HandleTogglePlay: Toggle Play");
     //std::cout << "Toggle Play" << std::endl;
     _isPlaying = msg.isPlaying;
     if (!_isPlaying && _Inited)

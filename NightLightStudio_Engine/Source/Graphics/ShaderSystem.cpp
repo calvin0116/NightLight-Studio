@@ -4,6 +4,8 @@
 #include "../Window/WndSystem.h"
 #include "../glm/gtc/matrix_transform.hpp"
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 namespace NS_GRAPHICS
 {
@@ -55,6 +57,7 @@ namespace NS_GRAPHICS
 		catch (std::ifstream::failure& e)
 		{
 			TracyMessageL(std::string("ShaderSystem::LoadShader: ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ").append(e.what()).c_str());
+			SPEEDLOG(std::string("ShaderSystem::LoadShader: ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ").append(e.what()));
 			//std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << e.what() << std::endl;
 		}
 
@@ -180,6 +183,8 @@ namespace NS_GRAPHICS
 			{
 				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: Creation of Shader Program Handler failed for Shader no. ")
 					.append(std::to_string(i) + ". Please check GLSL source.").c_str());
+				SPEEDLOG(std::string("ShaderSystem::CompileLoadedShaders: Creation of Shader Program Handler failed for Shader no. ")
+					.append(std::to_string(i) + ". Please check GLSL source."));
 				/*
 				std::cout
 					<< "Creation of Shader Program Handler failed for Shader no. "
@@ -203,6 +208,7 @@ namespace NS_GRAPHICS
 				GLchar infoLog[512];
 				glGetShaderInfoLog(sVertexID, 512, NULL, infoLog);
 				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog).c_str());
+				SPEEDLOG(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog));
 				//std::cout << infoLog << std::endl;
 			}
 
@@ -220,6 +226,7 @@ namespace NS_GRAPHICS
 				GLchar infoLog[512];
 				glGetShaderInfoLog(sFragmentID, 512, NULL, infoLog);
 				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog).c_str());
+				SPEEDLOG(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog));
 				//std::cout << infoLog << std::endl;
 			}
 
@@ -235,11 +242,13 @@ namespace NS_GRAPHICS
 				GLchar infoLog[512];
 				glGetProgramInfoLog(program_handler, 512, NULL, infoLog);
 				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog).c_str());
+				SPEEDLOG(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog));
 				//std::cout << infoLog << std::endl;
 			}
 			else
 			{
 				TracyMessageL("ShaderSystem::CompileLoadedShaders: Shader Program successfully linked!");
+				SPEEDLOG("ShaderSystem::CompileLoadedShaders: Shader Program successfully linked!");
 				//std::cout << "Shader Program successfully linked!" << std::endl;
 			}
 

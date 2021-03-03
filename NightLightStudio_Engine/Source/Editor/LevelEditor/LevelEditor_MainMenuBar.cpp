@@ -80,6 +80,7 @@ void LevelEditor::LE_MainMenuBar()
                     // Gets the RELATIVE File Path to Open from
                     std::string fileToOpen = WindowsOpenFileBox(_window, rgSpec, 1);
                     TracyMessageL(std::string("LevelEditor::LE_MainMenuBar: ").append(fileToOpen).c_str());
+                    SPEEDLOG(std::string("LevelEditor::LE_MainMenuBar: ").append(fileToOpen));
                     //std::cout << fileToOpen << std::endl;
                     if (fileToOpen != "")
                         NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(fileToOpen);
@@ -100,6 +101,7 @@ void LevelEditor::LE_MainMenuBar()
                     // Gets the RELATIVE File Path to Save to
                     std::string fileToSaveTo = WindowsSaveFileBox(_window, rgSpec, 1);
                     TracyMessageL(std::string("LevelEditor::LE_MainMenuBar: ").append(fileToSaveTo).c_str());
+                    SPEEDLOG(std::string("LevelEditor::LE_MainMenuBar: ").append(fileToSaveTo));
                     //std::cout << fileToSaveTo << std::endl;
                     if (fileToSaveTo != "")
                         NS_SCENE::SYS_SCENE_MANAGER->SaveScene(fileToSaveTo);

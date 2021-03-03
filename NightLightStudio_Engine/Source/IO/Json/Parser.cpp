@@ -34,6 +34,7 @@ namespace NS_SERIALISER
         if (!in)
         {
             TracyMessageL(std::string("Parser::Load:: Error: Failed to open file in: " + fullfilepath).c_str());
+            SPEEDLOG(std::string("Parser::Load:: Error: Failed to open file in: " + fullfilepath));
             //std::cout << "Error: Failed to open file in: " + filepath << std::endl;
         }
         // dont skip on whitespace
@@ -55,6 +56,7 @@ namespace NS_SERIALISER
     void Parser::PrintDataList()
     {
         TracyMessageL("Parser::PrintDataList: Printing through doc:");
+        SPEEDLOG("Parser::PrintDataList: Printing through doc:");
         //std::cout << "Printing through doc:" << std::endl;
         for (Value::ConstMemberIterator itr = doc.MemberBegin(); itr != doc.MemberEnd(); ++itr)
         {
@@ -102,6 +104,7 @@ namespace NS_SERIALISER
                     if (mem_name == itr2->name.GetString())
                     {
                         TracyMessageL("Parser::CheckForMember: Member found");
+                        SPEEDLOG("Parser::CheckForMember: Member found");
                         //std::cout << "Member found" << std::endl;
                         return true;
                     }
@@ -190,6 +193,7 @@ namespace NS_SERIALISER
         }
 
         TracyMessageL(std::string("Parser::PrintData: " + outStr).c_str());
+        SPEEDLOG(std::string("Parser::PrintData: " + outStr).c_str());
     }
 
 

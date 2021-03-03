@@ -5,6 +5,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 inline void NS_AI::AiManager::HandleMsg(MessageTogglePlay& mst)
 {
@@ -185,6 +187,7 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 				navComp->dir = glm::normalize(navComp->dir);
 				//std::cout << "Going to next wp" << std::endl;
 				TracyMessageL("AiManager::NavBehavior: Going to next wp");
+				SPEEDLOG("AiManager::NavBehavior: Going to next wp");
 				rb->velocity = 0.0f;
 			}
 			else

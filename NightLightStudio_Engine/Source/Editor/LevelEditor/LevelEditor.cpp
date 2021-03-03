@@ -19,6 +19,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../../Log/SpeedLog.h"
 
 LevelEditor::LevelEditor() : _window{ nullptr }, _showGrid{ true }
 //, _runEngine{ false }

@@ -5,6 +5,8 @@
 #include <../glm/gtx/quaternion.hpp>
 #include <set>
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 #include <sstream>
 
 #ifdef _DEBUG
@@ -20,6 +22,7 @@ namespace NS_GRAPHICS
 		_modelManager{ &ModelManager::GetInstance() }
 	{
 		TracyMessageL("ModelLoader::ModelLoader: Model Loader Created");
+		SPEEDLOG("ModelLoader::ModelLoader: Model Loader Created");
 		//std::cout << "Model Loader Created" << std::endl;
 	}
 
@@ -120,6 +123,7 @@ namespace NS_GRAPHICS
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 			TracyMessageL(std::string("ModelLoader::ProcessNode: Loading ").append(mesh->mName.C_Str()).c_str());
+			SPEEDLOG(std::string("ModelLoader::ProcessNode: Loading ").append(mesh->mName.C_Str()));
 			//std::cout << "Loading " << mesh->mName.C_Str() << std::endl;
 			
 			if (model->_isAnimated)
@@ -437,6 +441,7 @@ namespace NS_GRAPHICS
 	bool ModelLoader::LoadFBX(Model*& model)
 	{
 		TracyMessageL("ModelLoader::LoadFBX: Loading FBX...");
+		SPEEDLOG("ModelLoader::LoadFBX: Loading FBX...");
 		//std::cout << "Loading FBX..." << std::endl;
 
 		Assimp::Importer import;
@@ -449,6 +454,7 @@ namespace NS_GRAPHICS
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
 			TracyMessageL(std::string("ModelLoader::LoadFBX: Load Failed. Reason: ").append(import.GetErrorString()).c_str());
+			SPEEDLOG(std::string("ModelLoader::LoadFBX: Load Failed. Reason: ").append(import.GetErrorString()).c_str());
 			//std::cout << "Load Failed. Reason: " << import.GetErrorString() << std::endl;
 			return false;
 		}
@@ -571,6 +577,7 @@ namespace NS_GRAPHICS
 		if (!modelFile.is_open())
 		{
 			TracyMessageL("ModelLoader::LoadCustomModel: Fail to open model file");
+			SPEEDLOG("ModelLoader::LoadCustomModel: Fail to open model file");
 			//std::cout << "Fail to opened model file" << std::endl;
 			return false;
 		}
@@ -580,6 +587,7 @@ namespace NS_GRAPHICS
 		if (!std::getline(modelFile, input))
 		{
 			TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+			SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted Model File");
 			return false;
 		}
 
@@ -590,30 +598,35 @@ namespace NS_GRAPHICS
 			if (!std::getline(modelFile, input))
 			{
 				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted Model File");
 				return false;
 			}
 			animationFile.open(input.c_str());
 			if (!animationFile.is_open())
 			{
 				TracyMessageL("ModelLoader::LoadCustomModel: Fail to open animation file");
+				SPEEDLOG("ModelLoader::LoadCustomModel: Fail to open animation file");
 				return false;
 			}
 				
 			if (!std::getline(modelFile, input))
 			{
 				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted Model File");
 				return false;
 			}
 			skeletonFile.open(input.c_str());
 			if (!skeletonFile.is_open())
 			{
 				TracyMessageL("ModelLoader::LoadCustomModel: Fail to open skeleton file");
+				SPEEDLOG("ModelLoader::LoadCustomModel: Fail to open skeleton file");
 				return false;
 			}		
 
 			if (!std::getline(modelFile, input))
 			{
 				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted Model File");
 				return false;
 			}
 			try 
@@ -624,12 +637,14 @@ namespace NS_GRAPHICS
 			catch (std::invalid_argument&) 
 			{
 				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted Model File");
 				return false;
 			}
 
 			if (!std::getline(modelFile, input))
 			{
 				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted Model File");
 				return false;
 			}
 			try 
@@ -639,6 +654,7 @@ namespace NS_GRAPHICS
 			catch (std::invalid_argument&) 
 			{
 				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted Model File");
 				return false;
 			}
 		}
@@ -649,6 +665,7 @@ namespace NS_GRAPHICS
 			if (!std::getline(modelFile, input))
 			{
 				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted Model File");
 				return false;
 			}
 			try
@@ -658,12 +675,14 @@ namespace NS_GRAPHICS
 			catch (std::invalid_argument&)
 			{
 				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted Model File");
 				return false;
 			}
 		}
 		else
 		{
 			TracyMessageL("ModelLoader::LoadCustomModel: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted model file");
 			return false;
 		}
 
@@ -673,6 +692,7 @@ namespace NS_GRAPHICS
 			if (!LoadMeshVertex(modelFile, newMesh, model->_isAnimated))
 			{
 				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted model file");
 				return false;
 			}
 			model->_meshes.push_back(newMesh);
@@ -688,6 +708,7 @@ namespace NS_GRAPHICS
 				if (!LoadAnimation(animationFile, newAnim))
 				{
 					TracyMessageL("ModelLoader::LoadCustomModel: Corrupted model file");
+					SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted model file");
 					return false;
 				}
 				model->_animations[newAnim->_animName] = newAnim;
@@ -698,6 +719,7 @@ namespace NS_GRAPHICS
 			if(!LoadSkeletal(skeletonFile, root))
 			{
 				TracyMessageL("ModelLoader::LoadCustomModel: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadCustomModel: Corrupted model file");
 				return false;
 			}
 		}
@@ -834,6 +856,7 @@ namespace NS_GRAPHICS
 		if (!std::getline(file, input))
 		{
 			TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted model file");
 			return false;
 		}
 
@@ -850,6 +873,7 @@ namespace NS_GRAPHICS
 		catch (std::invalid_argument&)
 		{
 			TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+			SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 			return false;
 		}
 
@@ -864,6 +888,7 @@ namespace NS_GRAPHICS
 			if (!std::getline(file, input))
 			{
 				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted model file");
 				return false;
 			}
 			values = input.substr(input.find(" ")+1);
@@ -876,6 +901,7 @@ namespace NS_GRAPHICS
 					if (posIndex == 3)
 					{
 						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 						return false;
 					}
 					newVertex._position[posIndex] = std::stof(toConvert);
@@ -883,6 +909,7 @@ namespace NS_GRAPHICS
 				catch (std::invalid_argument&)
 				{
 					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 					return false;
 				}
 
@@ -891,6 +918,7 @@ namespace NS_GRAPHICS
 			if (posIndex != 3)
 			{
 				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 				return false;
 			}
 
@@ -898,6 +926,7 @@ namespace NS_GRAPHICS
 			if (!std::getline(file, input))
 			{
 				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted model file");
 				return false;
 			}
 			values = input.substr(input.find(" ") + 1);
@@ -910,6 +939,7 @@ namespace NS_GRAPHICS
 					if (uvIndex == 2)
 					{
 						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 						return false;
 					}
 					newVertex._uv[uvIndex] = std::stof(toConvert);
@@ -917,6 +947,7 @@ namespace NS_GRAPHICS
 				catch (std::invalid_argument&)
 				{
 					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 					return false;
 				}
 
@@ -925,6 +956,7 @@ namespace NS_GRAPHICS
 			if (uvIndex != 2)
 			{
 				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 				return false;
 			}
 
@@ -932,6 +964,7 @@ namespace NS_GRAPHICS
 			if (!std::getline(file, input))
 			{
 				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted model file");
 				return false;
 			}
 			values = input.substr(input.find(" ") + 1);
@@ -944,6 +977,7 @@ namespace NS_GRAPHICS
 					if (normIndex == 3)
 					{
 						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 						return false;
 					}
 					newVertex._normals[normIndex] = std::stof(toConvert);
@@ -951,6 +985,7 @@ namespace NS_GRAPHICS
 				catch (std::invalid_argument&)
 				{
 					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 					return false;
 				}
 
@@ -959,6 +994,7 @@ namespace NS_GRAPHICS
 			if (normIndex != 3)
 			{
 				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 				return false;
 			}
 
@@ -966,6 +1002,7 @@ namespace NS_GRAPHICS
 			if (!std::getline(file, input))
 			{
 				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted model file");
 				return false;
 			}
 			values = input.substr(input.find(" ") + 1);
@@ -978,6 +1015,7 @@ namespace NS_GRAPHICS
 					if (tanIndex == 3)
 					{
 						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 						return false;
 					}
 					newVertex._tangent[tanIndex] = std::stof(toConvert);
@@ -985,6 +1023,7 @@ namespace NS_GRAPHICS
 				catch (std::invalid_argument&)
 				{
 					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 					return false;
 				}
 
@@ -993,6 +1032,7 @@ namespace NS_GRAPHICS
 			if (tanIndex != 3)
 			{
 				TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 				return false;
 			}
 
@@ -1002,6 +1042,7 @@ namespace NS_GRAPHICS
 				if (!std::getline(file, input))
 				{
 					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+					SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted model file");
 					return false;
 				}
 				values = input.substr(input.find(" ") + 1);
@@ -1014,6 +1055,7 @@ namespace NS_GRAPHICS
 						if (idIndex == 4)
 						{
 							TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+							SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 							return false;
 						}
 						newSkin._boneID[idIndex] = std::stoi(toConvert);
@@ -1021,6 +1063,7 @@ namespace NS_GRAPHICS
 					catch (std::invalid_argument&)
 					{
 						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 						return false;
 					}
 
@@ -1029,6 +1072,7 @@ namespace NS_GRAPHICS
 				if (idIndex != 4)
 				{
 					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 					return false;
 				}
 
@@ -1036,6 +1080,7 @@ namespace NS_GRAPHICS
 				if (!std::getline(file, input))
 				{
 					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+					SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted model file");
 					return false;
 				}
 				values = input.substr(input.find(" ") + 1);
@@ -1048,6 +1093,7 @@ namespace NS_GRAPHICS
 						if (weightIndex == 4)
 						{
 							TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+							SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 							return false;
 						}
 						newSkin._boneWeights[weightIndex] = std::stof(toConvert);
@@ -1055,6 +1101,7 @@ namespace NS_GRAPHICS
 					catch (std::invalid_argument&)
 					{
 						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 						return false;
 					}
 
@@ -1063,6 +1110,7 @@ namespace NS_GRAPHICS
 				if (weightIndex != 4)
 				{
 					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 					return false;
 				}
 			}
@@ -1078,6 +1126,7 @@ namespace NS_GRAPHICS
 		if (!std::getline(file, input))
 		{
 			TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted model file");
 			return false;
 		}
 		size_t indiceCount;
@@ -1090,6 +1139,7 @@ namespace NS_GRAPHICS
 		catch (std::invalid_argument&)
 		{
 			TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+			SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 			return false;
 		}
 		int indicesIndex = 0;
@@ -1105,6 +1155,7 @@ namespace NS_GRAPHICS
 					if (indicesIndex >= indiceCount)
 					{
 						TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+						SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 						return false;
 					}
 					mesh->_indices.push_back(std::stoi(index));
@@ -1113,6 +1164,7 @@ namespace NS_GRAPHICS
 				catch (std::invalid_argument&)
 				{
 					TracyMessageL("ModelLoader::LoadMeshVertex: Corrupted Model File");
+					SPEEDLOG("ModelLoader::LoadMeshVertex: Corrupted Model File");
 					return false;
 				}
 			}
@@ -1185,6 +1237,7 @@ namespace NS_GRAPHICS
 		if (!std::getline(file, input))
 		{
 			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted model file");
 			return false;
 		}
 		try
@@ -1194,6 +1247,7 @@ namespace NS_GRAPHICS
 		catch (std::invalid_argument&)
 		{
 			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted model file");
 			return false;
 		}
 
@@ -1201,6 +1255,7 @@ namespace NS_GRAPHICS
 		if (!std::getline(file, input))
 		{
 			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted model file");
 			return false;
 		}
 		try
@@ -1210,6 +1265,7 @@ namespace NS_GRAPHICS
 		catch (std::invalid_argument&)
 		{
 			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted model file");
 			return false;
 		}
 
@@ -1218,6 +1274,7 @@ namespace NS_GRAPHICS
 		if (!std::getline(file, input))
 		{
 			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted model file");
 			return false;
 		}
 		std::string values = input.substr(1);
@@ -1230,6 +1287,7 @@ namespace NS_GRAPHICS
 				if (to == 16)
 				{
 					TracyMessageL("ModelLoader::LoadSkeletal: Corrupted Model File");
+					SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted Model File");
 					return false;
 				}
 
@@ -1239,6 +1297,7 @@ namespace NS_GRAPHICS
 			catch (std::invalid_argument&)
 			{
 				TracyMessageL("ModelLoader::LoadSkeletal: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted Model File");
 				return false;
 			}
 
@@ -1247,6 +1306,7 @@ namespace NS_GRAPHICS
 		if (to != 16)
 		{
 			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted Model File");
+			SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted Model File");
 			return false;
 		}
 
@@ -1255,6 +1315,7 @@ namespace NS_GRAPHICS
 		if (!std::getline(file, input))
 		{
 			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted model file");
 			return false;
 		}
 		values = input.substr(1);
@@ -1266,6 +1327,7 @@ namespace NS_GRAPHICS
 				if (t == 16)
 				{
 					TracyMessageL("ModelLoader::LoadSkeletal: Corrupted Model File");
+					SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted Model File");
 					return false;
 				}
 				joint->_boneTransform[t / 4][t % 4] = std::stof(toConvert);
@@ -1274,6 +1336,7 @@ namespace NS_GRAPHICS
 			catch (std::invalid_argument&)
 			{
 				TracyMessageL("ModelLoader::LoadSkeletal: Corrupted Model File");
+				SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted Model File");
 				return false;
 			}
 
@@ -1282,6 +1345,7 @@ namespace NS_GRAPHICS
 		if (t != 16)
 		{
 			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted Model File");
+			SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted Model File");
 			return false;
 		}
 
@@ -1289,6 +1353,7 @@ namespace NS_GRAPHICS
 		if (!std::getline(file, input))
 		{
 			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted model file");
 			return false;
 		}
 		try
@@ -1298,6 +1363,7 @@ namespace NS_GRAPHICS
 		catch (std::invalid_argument&)
 		{
 			TracyMessageL("ModelLoader::LoadSkeletal: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadSkeletal: Corrupted model file");
 			return false;
 		}
 
@@ -1364,6 +1430,7 @@ namespace NS_GRAPHICS
 		if (!std::getline(file, input))
 		{
 			TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 			return false;
 		}
 
@@ -1377,6 +1444,7 @@ namespace NS_GRAPHICS
 		catch (std::invalid_argument&)
 		{
 			TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+			SPEEDLOG("ModelLoader::LoadAnimation: Corrupted Model File");
 			return false;
 		}
 	
@@ -1384,6 +1452,7 @@ namespace NS_GRAPHICS
 		if (!std::getline(file, input))
 		{
 			TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 			return false;
 		}
 		try
@@ -1393,6 +1462,7 @@ namespace NS_GRAPHICS
 		catch (std::invalid_argument&)
 		{
 			TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+			SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 			return false;
 		}
 
@@ -1401,6 +1471,7 @@ namespace NS_GRAPHICS
 			if (!std::getline(file, input))
 			{
 				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 				return false;
 			}
 			std::string boneName = input;
@@ -1411,6 +1482,7 @@ namespace NS_GRAPHICS
 			if (!std::getline(file, input))
 			{
 				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 				return false;
 			}
 			try
@@ -1420,6 +1492,7 @@ namespace NS_GRAPHICS
 			catch (std::invalid_argument&)
 			{
 				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 				return false;
 			}
 
@@ -1429,6 +1502,7 @@ namespace NS_GRAPHICS
 				if (!std::getline(file, input))
 				{
 					TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+					SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 					return false;
 				}
 				//Skips the p
@@ -1443,6 +1517,7 @@ namespace NS_GRAPHICS
 						if (p == 4)
 						{
 							TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+							SPEEDLOG("ModelLoader::LoadAnimation: Corrupted Model File");
 							return false;
 						}
 						if (p == 0)
@@ -1458,6 +1533,7 @@ namespace NS_GRAPHICS
 					catch (std::invalid_argument&)
 					{
 						TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+						SPEEDLOG("ModelLoader::LoadAnimation: Corrupted Model File");
 						return false;
 					}
 
@@ -1466,6 +1542,7 @@ namespace NS_GRAPHICS
 				if (p != 4)
 				{
 					TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+					SPEEDLOG("ModelLoader::LoadAnimation: Corrupted Model File");
 					return false;
 				}
 
@@ -1477,6 +1554,7 @@ namespace NS_GRAPHICS
 			if (!std::getline(file, input))
 			{
 				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 				return false;
 			}
 			try
@@ -1486,6 +1564,7 @@ namespace NS_GRAPHICS
 			catch (std::invalid_argument&)
 			{
 				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 				return false;
 			}
 
@@ -1495,6 +1574,7 @@ namespace NS_GRAPHICS
 				if (!std::getline(file, input))
 				{
 					TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+					SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 					return false;
 				}
 				//Skips the s
@@ -1509,6 +1589,7 @@ namespace NS_GRAPHICS
 						if (s == 4)
 						{
 							TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+							SPEEDLOG("ModelLoader::LoadAnimation: Corrupted Model File");
 							return false;
 						}
 						if (s == 0)
@@ -1524,6 +1605,7 @@ namespace NS_GRAPHICS
 					catch (std::invalid_argument&)
 					{
 						TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+						SPEEDLOG("ModelLoader::LoadAnimation: Corrupted Model File");
 						return false;
 					}
 
@@ -1532,6 +1614,7 @@ namespace NS_GRAPHICS
 				if (s != 4)
 				{
 					TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+					SPEEDLOG("ModelLoader::LoadAnimation: Corrupted Model File");
 					return false;
 				}
 
@@ -1543,6 +1626,7 @@ namespace NS_GRAPHICS
 			if (!std::getline(file, input))
 			{
 				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 				return false;
 			}
 			try
@@ -1552,6 +1636,7 @@ namespace NS_GRAPHICS
 			catch (std::invalid_argument&)
 			{
 				TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+				SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 				return false;
 			}
 
@@ -1561,6 +1646,7 @@ namespace NS_GRAPHICS
 				if (!std::getline(file, input))
 				{
 					TracyMessageL("ModelLoader::LoadAnimation: Corrupted model file");
+					SPEEDLOG("ModelLoader::LoadAnimation: Corrupted model file");
 					return false;
 				}
 				//Skips the r
@@ -1575,6 +1661,7 @@ namespace NS_GRAPHICS
 						if (r == 5)
 						{
 							TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+							SPEEDLOG("ModelLoader::LoadAnimation: Corrupted Model File");
 							return false;
 						}
 						if (r == 0)
@@ -1590,6 +1677,7 @@ namespace NS_GRAPHICS
 					catch (std::invalid_argument&)
 					{
 						TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+						SPEEDLOG("ModelLoader::LoadAnimation: Corrupted Model File");
 						return false;
 					}
 
@@ -1598,6 +1686,7 @@ namespace NS_GRAPHICS
 				if (r != 5)
 				{
 					TracyMessageL("ModelLoader::LoadAnimation: Corrupted Model File");
+					SPEEDLOG("ModelLoader::LoadAnimation: Corrupted Model File");
 					return false;
 				}
 

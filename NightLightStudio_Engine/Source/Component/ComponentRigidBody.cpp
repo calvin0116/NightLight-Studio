@@ -38,6 +38,7 @@ inline void ComponentRigidBody::Read(Value& val)
 	if (val.FindMember("isStatic") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentRigidBody::Read: No Force data has been found");
+		SPEEDLOG("ComponentRigidBody::Read: No Force data has been found");
 		//std::cout << "No Force data has been found" << std::endl;
 	}
 	else
@@ -48,6 +49,7 @@ inline void ComponentRigidBody::Read(Value& val)
 	if (val.FindMember("isGravity") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentRigidBody::Read: No gravity data has been found");
+		SPEEDLOG("ComponentRigidBody::Read: No gravity data has been found");
 		//std::cout << "No gravity data has been found" << std::endl;
 	}
 	else
@@ -58,6 +60,7 @@ inline void ComponentRigidBody::Read(Value& val)
 	if (val.FindMember("mass") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentRigidBody::Read: No mass data has been found");
+		SPEEDLOG("ComponentRigidBody::Read: No mass data has been found");
 		//std::cout << "No mass data has been found" << std::endl;
 	}
 	else
@@ -68,6 +71,7 @@ inline void ComponentRigidBody::Read(Value& val)
 	if (val.FindMember("friction") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentRigidBody::Read: No mass friction has been found");
+		SPEEDLOG("ComponentRigidBody::Read: No mass friction has been found");
 		//std::cout << "No mass friction has been found" << std::endl;
 	}
 	else
@@ -78,6 +82,7 @@ inline void ComponentRigidBody::Read(Value& val)
 	if (val.FindMember("Force") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentRigidBody::Read: No Force data has been found");
+		SPEEDLOG("ComponentRigidBody::Read: No Force data has been found");
 		//std::cout << "No Force data has been found" << std::endl;
 	}
 	else
@@ -92,6 +97,7 @@ inline void ComponentRigidBody::Read(Value& val)
 	if (val.FindMember("Accelaration") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentRigidBody::Read: No Force data has been found");
+		SPEEDLOG("ComponentRigidBody::Read: No Force data has been found");
 		//std::cout << "No Force data has been found" << std::endl;
 	}
 	else

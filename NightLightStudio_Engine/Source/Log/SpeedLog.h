@@ -1,13 +1,14 @@
 #ifndef SPEEDLOG_WRAPPER
 #define SPEEDLOG_WRAPPER
 
-#include "../../framework.h"
+#pragma warning( disable : 4244 )  // utility: conversion warning
+
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/sinks/daily_file_sink.h>
 
-static const std::string DEFAULT_LOG_NAME = "log";
-static const std::string DEFAULT_LOG_PATH = "logs/log.txt";
+#define SPEEDLOG_LOG_TO_FILE true
 
 class SpeedLog
 {
@@ -36,8 +37,9 @@ public:
 
 	std::shared_ptr<spdlog::logger> GetLogger();
 	std::shared_ptr<spdlog::logger> ResetLogger();
-	std::shared_ptr<spdlog::logger> SetNewBasicLogger(const std::string& name, const std::string& path);
-	std::shared_ptr<spdlog::logger> SetNewRotatingLogger(const std::string& name, const std::string& path, size_t maxSize, size_t maxFiles);
+	std::shared_ptr<spdlog::logger> SetNewBasicLogger(const std::string& name, const std::string& path, bool truncate = false);
+	std::shared_ptr<spdlog::logger> SetNewRotatingLogger(const std::string& name, const std::string& path, size_t maxSize, size_t maxFiles, bool rotate_on_open = false);
+	std::shared_ptr<spdlog::logger> SetNewDailyLogger(const std::string& name, const std::string& path, int hour = 0, int minute = 0, bool truncate = false);
 };
 
 extern SpeedLog SPEEDLOG;

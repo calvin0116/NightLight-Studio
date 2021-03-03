@@ -3,6 +3,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 const float SystemAudio::s_UNITS_PER_METER = 100.0f;
 const int listenerTag = 1000;
@@ -246,6 +248,9 @@ void SystemAudio::MyGameInit()
     //std::cout << G_ECMANAGER->getObjId(itr) << std::endl;
     TracyMessageL("SystemAudio::My Game Init: System Audio Game Init Obj ID:");
     TracyMessageL(std::string("SystemAudio::My Game Init: ").append(std::to_string(G_ECMANAGER->getObjId(itr))).c_str());
+
+    SPEEDLOG("SystemAudio::My Game Init: System Audio Game Init Obj ID:");
+    SPEEDLOG(std::string("SystemAudio::My Game Init: ").append(std::to_string(G_ECMANAGER->getObjId(itr))));
 
     // Load the following audios from load audio component
     ComponentLoadAudio* myComp = G_ECMANAGER->getComponent<ComponentLoadAudio>(itr);

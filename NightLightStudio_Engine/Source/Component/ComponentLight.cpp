@@ -145,6 +145,7 @@ void ComponentLight::Read(Value& val)
 	if (val.FindMember("LightType") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentLight::Read: No active data has been found");
+		SPEEDLOG("ComponentLight::Read: No active data has been found");
 		//std::cout << "No active data has been found" << std::endl;
 	}
 	else
@@ -167,6 +168,7 @@ void ComponentLight::Read(Value& val)
 	if (val.FindMember("isActive") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentLight::Read: No active data has been found");
+		SPEEDLOG("ComponentLight::Read: No active data has been found");
 		//std::cout << "No active data has been found" << std::endl;
 	}
 	else
@@ -176,6 +178,7 @@ void ComponentLight::Read(Value& val)
 	if (val.FindMember("Diffuse") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentLight::Read: No Diffuse data has been found");
+		SPEEDLOG("ComponentLight::Read: No Diffuse data has been found");
 		//std::cout << "No Diffuse data has been found" << std::endl;
 	}
 	else
@@ -190,6 +193,7 @@ void ComponentLight::Read(Value& val)
 	if (val.FindMember("Intensity") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentLight::Read: No Intensity data has been found");
+		SPEEDLOG("ComponentLight::Read: No Intensity data has been found");
 		//std::cout << "No Intensity data has been found" << std::endl;
 	}
 	else
@@ -200,6 +204,7 @@ void ComponentLight::Read(Value& val)
 	if (val.FindMember("Radius") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentLight::Read: No Radius data has been found");
+		SPEEDLOG("ComponentLight::Read: No Radius data has been found");
 		//std::cout << "No Radius data has been found" << std::endl;
 	}
 	else
@@ -210,6 +215,7 @@ void ComponentLight::Read(Value& val)
 	if (val.FindMember("CutOff") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentLight::Read: No CutOff data has been found");
+		SPEEDLOG("ComponentLight::Read: No CutOff data has been found");
 		//std::cout << "No CutOff data has been found" << std::endl;
 	}
 	else
@@ -220,6 +226,7 @@ void ComponentLight::Read(Value& val)
 	if (val.FindMember("OuterCutOff") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentLight::Read: No OuterCutOff data has been found");
+		SPEEDLOG("ComponentLight::Read: No OuterCutOff data has been found");
 		//std::cout << "No OuterCutOff data has been found" << std::endl;
 	}
 	else

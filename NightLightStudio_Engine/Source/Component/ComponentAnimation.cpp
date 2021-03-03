@@ -81,6 +81,7 @@ inline void ComponentAnimation::Read(Value& val)
 	{
 		//std::cout << "No active data has been found" << std::endl;
 		TracyMessageL("ComponentAnimation::Read: No active data has been found");
+		SPEEDLOG("ComponentAnimation::Read: No active data has been found");
 	}
 	else
 		_isActive = val["isActive"].GetBool();
@@ -91,6 +92,7 @@ inline void ComponentAnimation::Read(Value& val)
 	{
 		//std::cout << "No play data has been found" << std::endl;
 		TracyMessageL("ComponentAnimation::Read: No play data has been found");
+		SPEEDLOG("ComponentAnimation::Read: No play data has been found");
 	}
 	else
 		NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play = val["Play"].GetBool();
@@ -99,6 +101,7 @@ inline void ComponentAnimation::Read(Value& val)
 	{
 		//std::cout << "No loop data has been found" << std::endl;
 		TracyMessageL("ComponentAnimation::Read: No loop data has been found");
+		SPEEDLOG("ComponentAnimation::Read: No loop data has been found");
 	}
 	else
 		NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_loop = val["Loop"].GetBool();
@@ -108,6 +111,7 @@ inline void ComponentAnimation::Read(Value& val)
 	{
 		//std::cout << "No anim data has been found" << std::endl;
 		TracyMessageL("ComponentAnimation::Read: No anim data has been found");
+		SPEEDLOG("ComponentAnimation::Read: No anim data has been found");
 	}
 		
 	else
@@ -118,6 +122,7 @@ inline void ComponentAnimation::Read(Value& val)
 	{
 		//std::cout << "No anim data has been found" << std::endl;
 		TracyMessageL("ComponentAnimation::Read: No anim data has been found");
+		SPEEDLOG("ComponentAnimation::Read: No anim data has been found");
 	}
 	else
 		defaultAnim = val["DefaultAnimation"].GetString();

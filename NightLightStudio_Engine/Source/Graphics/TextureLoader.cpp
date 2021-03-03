@@ -1,5 +1,7 @@
 #include "TextureLoader.h"
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 #pragma warning(disable:4244)
 #pragma warning(disable:4996)
 #pragma warning(disable:6029)
@@ -49,6 +51,7 @@ namespace NS_GRAPHICS
 	bool TextureLoader::LoadDDSImage(const std::string& file)
 	{
 		TracyMessageL(std::string("TextureLoader::LoadDDSImage: Loading DDS Images " + file).c_str());
+		SPEEDLOG(std::string("TextureLoader::LoadDDSImage: Loading DDS Images " + file));
 		//std::cout << "Loading DDS Images " << file << std::endl;
 		DDSImageData* image;
 
@@ -218,6 +221,7 @@ namespace NS_GRAPHICS
 	bool TextureLoader::LoadHDR(const std::string& file)
 	{
 		TracyMessageL(std::string("TextureLoader::LoadHDR: Loading HDR : " + file).c_str());
+		SPEEDLOG(std::string("TextureLoader::LoadHDR: Loading HDR : " + file));
 		//std::cout << "Loading HDR : " << file << std::endl;
 		int width, height, nrComp;
 		float* data = stbi_loadf(file.c_str(), &width, &height, &nrComp, 0);
@@ -815,6 +819,7 @@ namespace NS_GRAPHICS
 	{
 		(void)newFile;
 		TracyMessageL(std::string("TextureLoader::LoadOtherImage: Loading Other Images " + file).c_str());
+		SPEEDLOG(std::string("TextureLoader::LoadOtherImage: Loading Other Images " + file));
 		//std::cout << "Loading Other Images " << file << std::endl;
 		int width, height, channel;
 		unsigned char* textureData = SOIL_load_image(file.c_str(), &width, &height, &channel, SOIL_LOAD_AUTO);
@@ -857,6 +862,7 @@ namespace NS_GRAPHICS
 			//Debug_LogToFile("Resources/Logs/Generate_texture.txt", "Texture loading failed");
 			//CDEBUG_ASSERT(textureData, std::string("Failed to load texture: ").append(file).c_str());
 			TracyMessageL(std::string("TextureLoader::LoadOtherImage: Failed to load texture: ").append(SOIL_last_result()).c_str());
+			SPEEDLOG(std::string("TextureLoader::LoadOtherImage: Failed to load texture: ").append(SOIL_last_result()));
 			//std::cout << "Failed to load texture: " << SOIL_last_result() << std::endl;
 			SOIL_free_image_data(textureData);
 			return false;
