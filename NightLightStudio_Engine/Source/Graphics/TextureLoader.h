@@ -138,7 +138,7 @@ namespace NS_GRAPHICS
 
 
 		//Handles other types
-		bool LoadOtherImage(const std::string& file, const std::string& newFile, bool sRGB = false);
+		bool LoadOtherImage(const std::string& file, const std::string& newFile, bool sRGB = false, bool blackAlpha = false);
 
 	public:
 		// Unique Singleton instance
@@ -148,6 +148,6 @@ namespace NS_GRAPHICS
 			return instance;
 		}
 
-		unsigned LoadTexture(const std::string& file, bool sRGB = false);
+		unsigned LoadTexture(const std::string& file, bool sRGB = false, bool blackAlpha = false);
 	};
 }

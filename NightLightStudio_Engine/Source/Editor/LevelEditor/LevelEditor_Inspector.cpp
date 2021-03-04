@@ -1540,6 +1540,7 @@ void InspectorWindow::EmitterComp(Entity& ent)
 						emitter->_image = tex;
 					}
 				});
+			ImGui::Checkbox("Black is Alpha##Emitter", &emitter->_blackIsAlpha);
 
 			ImGui::InputFloat("Duration Time##Emitter", &emit->_durationPerCycle);
 			if (ImGui::InputScalar("Emission Rate##Emitter", ImGuiDataType_U32, &emit->_emissionOverTime))
