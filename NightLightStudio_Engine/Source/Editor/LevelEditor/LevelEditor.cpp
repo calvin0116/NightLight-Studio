@@ -115,6 +115,10 @@ void LevelEditor::GameInit()
 
 bool LevelEditor::Update(float)
 {
+    // Tracy
+    // Zone color: Dark Blue
+    ZoneScopedNC("Editor", 0x291ef7);
+
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -155,10 +159,6 @@ bool LevelEditor::Update(float)
     // Rendering
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    // Tracy
-    // Zone color: Dark Blue
-    ZoneScopedNC("Editor", 0x291ef7);
 
     return false;
 }

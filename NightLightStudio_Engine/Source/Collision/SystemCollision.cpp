@@ -316,6 +316,10 @@ namespace NS_COLLISION
 
 	void CollisionSystem::FixedUpdate(float)
 	{
+		// Tracy
+		// Zone Color: Cyan
+		ZoneScopedNC("Collision", 0x1ffbff);
+
 		// //test line col
 		//NlMath::Vec3 ray1Origin(-100.0f, 0.0f, 0.0f);
 		//NlMath::Vec3 ray1End(100.0f, 0.0f, 0.0f);
@@ -524,11 +528,6 @@ namespace NS_COLLISION
 		}
     //resolve collision here
     colResolver.resolveCollision();
-
-	// Tracy
-	// Zone Color: Cyan
-	ZoneScopedNC("Collision", 0x1ffbff);
-
 	}
 	void CollisionSystem::GameExit()
 	{
