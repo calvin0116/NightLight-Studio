@@ -31,14 +31,14 @@ void SystemInput::Init()
 
 void SystemInput::Update()
 {
+	// Tracy
+	// Zone Color: Purple
+	ZoneScopedNC("Input", 0xd724ff);
+
 	//std::cout << "System::Input::Update::BIG" << std::endl;
 	_siKeyPress.Update();
 	_siCtrler.Update();
 	_siMousePos.Update();
-
-	// Tracy
-	// Zone Color: Purple
-	ZoneScopedNC("Input", 0xd724ff);
 }
 
 void SystemInput::Free()

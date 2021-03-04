@@ -15,6 +15,8 @@ public:
 	LocalString<256> _image;
 	unsigned _imageID;
 
+	bool _blackIsAlpha;
+
 	// Default constructor
 	ComponentEmitter();
 

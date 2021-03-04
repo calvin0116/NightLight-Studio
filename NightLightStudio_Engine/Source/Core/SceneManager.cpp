@@ -82,6 +82,10 @@ namespace NS_SCENE
 
 	void SceneManager::Update()
 	{
+		// Tracy
+		// Zone Color: Red
+		ZoneScopedNC("Scene Manager", 0xff1f2a);
+
 		//Exit button that uses scene
 		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ESCAPE))
 		{
@@ -113,10 +117,6 @@ namespace NS_SCENE
 		{
 			SaveScene();
 		}
-
-		// Tracy
-		// Zone Color: Red
-		ZoneScopedNC("Scene Manager", 0xff1f2a);
 	}
 
 	SCENE_CHANGE SceneManager::CheckChangeScene()

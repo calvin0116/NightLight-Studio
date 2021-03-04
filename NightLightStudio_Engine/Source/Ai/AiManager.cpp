@@ -82,6 +82,10 @@ inline void NS_AI::AiManager::GameInit()
 
 inline void NS_AI::AiManager::Update()
 {
+	// Tracy
+	// Zone color: Orange
+	ZoneScopedNC("AI", 0xff8f26);
+
 	wp_man.Update();
 
 	if (!isActive)
@@ -97,10 +101,6 @@ inline void NS_AI::AiManager::Update()
 		NavBehaviour(navComp);
 		++itr;
 	}
-
-	// Tracy
-	// Zone color: Orange
-	ZoneScopedNC("AI", 0xff8f26);
 }
 
 inline void NS_AI::AiManager::WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)
