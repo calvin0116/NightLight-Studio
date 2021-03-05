@@ -474,9 +474,16 @@ namespace NS_WINDOW
 		// Set callback for mouse scroll
 		glfwSetScrollCallback(_glfwWnd, [](GLFWwindow * window, double xoffset, double yoffset)
 		{
-				UNREFERENCED_PARAMETER(window);
-				UNREFERENCED_PARAMETER(xoffset);
+			UNREFERENCED_PARAMETER(window);
+			UNREFERENCED_PARAMETER(xoffset);
 			SYS_INPUT->GetSystemMousePos().SetScroll(static_cast<short>(yoffset));
+		});
+
+		// Set callback for resizing
+		glfwSetFramebufferSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
+		{
+			UNREFERENCED_PARAMETER(window);
+			glViewport(0, 0, width, height);
 		});
 
 		return;
