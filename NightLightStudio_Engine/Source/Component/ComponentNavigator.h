@@ -72,6 +72,7 @@ public:
 		, cur_wp_path{nullptr}
 		, wp_creation_type{WPP_STANDARD}
 		, nav_state{ NV_CIRCLING }
+		, wp_path_ent_name{""}
 		
 	{
 		strcpy_s(ser_name, "NavigatorComponent");

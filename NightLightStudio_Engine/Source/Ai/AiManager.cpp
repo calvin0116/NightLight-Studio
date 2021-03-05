@@ -167,7 +167,9 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 		return;
 	}
 	
-
+	if (navTrans == nullptr)
+		return;
+	//TracyMessageL("AiManager::NavBehavior: Why are you here alr?");
 	//Determine next way point and whether to move towards it out not
 	glm::vec3 wp_pos = navComp->GetCurWalkingWp()->GetPos();
 	//wp_pos.y = 0.0f;
