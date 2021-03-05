@@ -6,6 +6,54 @@
 #include "../imgui/imguizmo/ImGuizmo.h"
 
 #include <memory>
+#include <any>
+
+
+struct ENTITY_COMP_READ
+{
+	int _entID;
+	std::shared_ptr<Document> _rjDoc;
+
+	ENTITY_COMP_READ() : _entID{ -1 }, _rjDoc{ nullptr } {}
+	ENTITY_COMP_READ(Entity& ent, Value&& val) : _entID{ ent.getId() }, _rjDoc{ std::make_shared<Document>() }
+	{
+		Copy(std::move(val));
+	}
+	~ENTITY_COMP_READ() {}
+
+	void Copy(Value&& val)
+	{
+		if (_rjDoc->IsObject())
+		{
+			_rjDoc->RemoveAllMembers();
+		}
+		_rjDoc->CopyFrom(val, _rjDoc->GetAllocator(), true);
+	}
+
+	ENTITY_COMP_READ(const ENTITY_COMP_READ& ecd) : _entID{ ecd._entID }, _rjDoc{ std::make_shared<Document>() }
+	{
+		if (_rjDoc->IsObject())
+		{
+			_rjDoc->RemoveAllMembers();
+		}
+		if (ecd._entID != -1)
+		{
+			_rjDoc->CopyFrom(*ecd._rjDoc, _rjDoc->GetAllocator(), true);
+		}
+	}
+
+	std::string StringOut()
+	{
+		rapidjson::StringBuffer buffer;
+
+		buffer.Clear();
+
+		rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+		(*_rjDoc).Accept(writer);
+
+		return std::string(buffer.GetString());
+	}
+};
 
 class InspectorWindow : public LE_WinBase_Derived<InspectorWindow>
 {
@@ -88,6 +136,8 @@ private:
 
 	bool _notRemove;
 
+	ENTITY_COMP_READ _origComp;
+
 	// Added by YY to match current camera's fov
 	float _fov = 44.5f;
 
@@ -121,7 +171,7 @@ public:
 		: selected_index{ -1 }, _mCurrentGizmoOperation{ ImGuizmo::TRANSLATE }, _mCurrentGizmoMode{ ImGuizmo::WORLD },
 		_useSnap{ false }, _snapTrans{ 1.0f, 1.0f, 1.0f }, _lastEnter{ false }, _lastPos_Start{ false }, _lastPos_ELP{ false },
 		_itemType{ 0 }, _notRemove{ true }, _snapRotate{ 1.0f }, _snapScale{ 1.0f }, _isSnapX{ false },  _isSnapY{ false },
-		_isSnapZ{ false }, _isSnapYD{ true }, _snapDist{ 1000.0f }, _snapGap{ 1.00f }, _snapLod{ 3 }
+		_isSnapZ{ false }, _isSnapYD{ true }, _snapDist{ 1000.0f }, _snapGap{ 1.00f }, _snapLod{ 3 }, _origComp{ }
 	{};
 	~InspectorWindow() {};
 
@@ -134,3 +184,15 @@ public:
 
 	bool GetIfGizmoManipulate();
 };
+
+
+template<class ComponentType>
+inline std::any Paste_Component(std::any comp)
+{
+	ENTITY_COMP_READ entComp = std::any_cast<ENTITY_COMP_READ>(comp);
+	Entity ent = G_ECMANAGER->getEntity(entComp._entID);
+	ENTITY_COMP_READ origComp = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentType>()->Write() };
+	ent.getComponent<ComponentType>()->Read(*entComp._rjDoc);
+
+	return std::any(origComp);
+}
