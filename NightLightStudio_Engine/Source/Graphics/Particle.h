@@ -7,6 +7,7 @@ struct Particle
 	glm::vec3 _velocity;
 	glm::vec4 _colourStart;
 	glm::vec4 _colourEnd;
+	glm::vec4 _currColour;
 	float _timeAlive;
 	float _lifespan;
 	float _size;

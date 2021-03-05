@@ -213,8 +213,12 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 	{
 		return;
 	}
-	glm::mat4 viewMat = _cameraSystem->GetViewMatrix();
-	glm::vec3 camPos = glm::inverse(viewMat)[3];
+	//glm::mat4 viewMat = _cameraSystem->GetViewMatrix();
+	//glm::vec3 camPos = glm::inverse(viewMat)[3];
+	glm::vec3 camPos = CameraSystem::GetInstance().GetCamera().cameraPos;
+	glm::vec3 camRight = CameraSystem::GetInstance().GetCamera().cameraRight;
+	glm::vec3 camUp = CameraSystem::GetInstance().GetCamera().cameraUp;
+	glm::vec3 camFront = CameraSystem::GetInstance().GetCamera().cameraFront;
 	//Fills the Colour and Particle postion buffer
 	int toDraw = 0;
 	unsigned maxParticle = _emitters[emitter->_emitterID]->_maxParticles;
@@ -226,7 +230,16 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 			float scale = 1.0f;
 
 			float aliveRatio = _emitters[emitter->_emitterID]->_particles[i]._timeAlive / _emitters[emitter->_emitterID]->_particles[i]._lifespan;
-			_emitters[emitter->_emitterID]->_particles[i]._cameraDistance = glm::length2(_emitters[emitter->_emitterID]->_particles[i]._position - camPos);
+			//_emitters[emitter->_emitterID]->_particles[i]._cameraDistance = glm::length2(_emitters[emitter->_emitterID]->_particles[i]._position - camPos);
+			glm::vec3 particleVec = _emitters[emitter->_emitterID]->_particles[i]._position - camPos;
+			float dotProduct = camFront.x * particleVec.x + camFront.y * particleVec.y + camFront.z * particleVec.z;
+
+			if (dotProduct <= 0.0f)
+			{
+				_emitters[emitter->_emitterID]->_particles[i]._cameraDistance = -1.0f;
+			}
+
+			_emitters[emitter->_emitterID]->_particles[i]._cameraDistance = dotProduct;
 
 			if (_emitters[emitter->_emitterID]->_follow)
 			{
@@ -267,6 +280,7 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 			_emitters[emitter->_emitterID]->_particlesPosition[toDraw].w = scale;
 
 			_emitters[emitter->_emitterID]->_particlesColour[toDraw] = currColor;
+			_emitters[emitter->_emitterID]->_particles[i]._currColour = currColor;
 
 			if (_emitters[emitter->_emitterID]->_isAnimated)
 			{
@@ -299,8 +313,8 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 	glBindBuffer(GL_ARRAY_BUFFER, _emitters[emitter->_emitterID]->_animationBuffer);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(unsigned) * toDraw, &_emitters[emitter->_emitterID]->_particleFrame[0]);
 
-	glm::vec3 camRight = glm::vec3(viewMat[0][0], viewMat[1][0], viewMat[2][0]);
-	glm::vec3 camUp = glm::vec3(viewMat[0][1], viewMat[1][1], viewMat[2][1]);
+	//glm::vec3 camRight = glm::vec3(viewMat[0][0], viewMat[1][0], viewMat[2][0]);
+	//glm::vec3 camUp = glm::vec3(viewMat[0][1], viewMat[1][1], viewMat[2][1]);
 	glUniform3fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "camera_right"), 1, &camRight[0]);
 	glUniform3fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "camera_up"), 1, &camUp[0]);
 
@@ -314,6 +328,8 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 		glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxRow"), 1);
 		glUniform1ui(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "maxColumn"), 1);
 	}
+
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	_textureManager->BindAlbedoTexture(emitter->_imageID);
 	glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, toDraw);
