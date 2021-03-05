@@ -171,8 +171,18 @@ namespace NS_WINDOW
 			return;
 		}
 
-		glfwSwapBuffers(_glfwWnd);
-		glfwPollEvents();
+		{
+			// Cyan color
+			ZoneScopedNC("glfwSwapBuffers", 0x03f4fc);
+			glfwSwapBuffers(_glfwWnd);
+		}
+		
+		{
+			// Pink color
+			ZoneScopedNC("glfwPollEvents", 0xff00d9);
+			glfwPollEvents();
+		}
+		
 	}
 
 	// Frees the resources used by the System
