@@ -479,7 +479,7 @@ namespace NS_GRAPHICS
 				if (model->_isAnimated)
 				{
 					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-					for (auto& mesh : model->_animatedMeshes)
+					for (auto& mesh : model->_meshes)
 					{
 						glBindVertexArray(mesh->VAO);
 						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
@@ -548,7 +548,7 @@ namespace NS_GRAPHICS
 				if (model->_isAnimated)
 				{
 					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-					for (auto& mesh : model->_animatedMeshes)
+					for (auto& mesh : model->_meshes)
 					{
 						glBindVertexArray(mesh->VAO);
 
@@ -582,7 +582,7 @@ namespace NS_GRAPHICS
 		// Unbind
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Activate lighting pass shaders
 		shaderManager->StartProgram(ShaderSystem::PBR_LIGHTPASS);
@@ -610,19 +610,13 @@ namespace NS_GRAPHICS
 		// Bind GL_DRAW_FRAMEBUFFER to 0, this will set write to default framebuffer
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-#ifdef _DEBUG
 		// Setting for GIT so that it doesn't look weird
 		// Copies info(in this case, depth data)to a user-defined region of read framebuffer to user-defined region of draw framebuffer
-		glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width * 2, static_cast<int>(static_cast<float>(CONFIG_DATA->GetConfigData().height) * 1.9f), GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
-#endif
-
-#ifndef _DEBUG
-		// Setting for SVN so it doesn't look weird
-		glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-#endif
+		glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height,
+						  0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height,
+						  GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 		
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 		// Then render other non-light affected stuff as per normal
 		// In here, we try to render transparent objects
 		// Enable glBlend here and disable afterwards

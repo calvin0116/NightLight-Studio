@@ -34,6 +34,8 @@ Institute of Technology is prohibited.
 // SpeedLog
 #include "../Log/SpeedLog.h"
 
+#define APPTITLE "NightLight Studios: Rebirth"
+
 namespace NS_WINDOW
 {
 
@@ -261,6 +263,8 @@ namespace NS_WINDOW
 
 		glfwMakeContextCurrent(_glfwWnd); // If success, set the created GLFW window object's context as current
 
+		glfwSwapInterval(0);			  // Fixes fps issue(?)
+
 		hAppWnd = glfwGetWin32Window(_glfwWnd);
 
 #ifdef _DEBUG
@@ -440,7 +444,7 @@ namespace NS_WINDOW
 		// Initialize window with default values here
 		//SYS_WINDOW->SetWindowedSize(DEFAULTAPPWIDTH, DEFAULTAPPHEIGHT);
 
-		std::string s("Client");
+		std::string s(APPTITLE);
 
 		SYS_WINDOW->SetAppTitle(s);
 		
