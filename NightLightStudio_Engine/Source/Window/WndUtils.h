@@ -19,20 +19,30 @@ Institute of Technology is prohibited.
 #include "../../framework.h"
 
 // OPENGL INCLUDES
-#include "../OpenGL/glew.h" // MUST BE INCLUDED FIRST
-#include <gl/GL.h>
-#include <gl/GLU.h>
-#include "../OpenGL/glext.h"
-#include "../OpenGL/wglext.h"
+//#include "../OpenGL/glew.h" // MUST BE INCLUDED FIRST
+//#include <gl/GL.h>
+//#include <gl/GLU.h>
+//#include "../OpenGL/glext.h"
+//#include "../OpenGL/wglext.h"
+
+#define GLFW_INCLUDE_NONE
+#ifdef _WIN32
+#define GLFW_EXPOSE_NATIVE_WIN32
+#endif
+	
+#include "../GLAD/include/glad/glad.h"
+#include "../GLFW/glfw3.h"
+#include "../GLFW/glfw3native.h" // Used to get handler to window via glfwGetWin32Window(GLFWwindow* window) 
+
 
 // LINK TO LIBRARIES (JUST IN CASE)
 #pragma comment(lib, "opengl32.lib")
-#pragma comment(lib, "glew32.lib")
-#pragma comment(lib, "glu32.lib")
+//#pragma comment(lib, "glew32.lib")
+//#pragma comment(lib, "glu32.lib")
 
 // Error check for failed initialization
-inline bool OutErrorMsg(const char* msg)
-{
-	MessageBox(NULL, msg, NULL, NULL);
-	return false;
-}
+//inline bool OutErrorMsg(const char* msg)
+//{
+//	MessageBox(NULL, msg, NULL, NULL);
+//	return false;
+//}

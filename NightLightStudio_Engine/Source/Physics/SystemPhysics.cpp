@@ -7,6 +7,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 //#define USEVEL 0
 //#define USEVEL 1
@@ -48,6 +50,10 @@ namespace NS_PHYSICS
 
 	void PhysicsSystem::FixedUpdate(float dt)
 	{
+
+		// Tracy
+		// Zone Color: Light Blue
+		ZoneScopedNC("Physics", 0xa5cffa);
 
 		//TA's example
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -406,10 +412,6 @@ namespace NS_PHYSICS
 
 		//return true;
 
-		// Tracy
-		// Zone Color: Light Blue
-		ZoneScopedNC("Physics", 0xa5cffa);
-
 	}
 
 
@@ -431,6 +433,7 @@ namespace NS_PHYSICS
 		// Handle msg here.
 		//std::cout << "Hello from physics!" << std::endl;
 		TracyMessageL(std::string("PhysicsSystem::HandleTogglePlay: TogglePlay value: ").append(msg.isPlaying?"true" : "false").c_str());
+		SPEEDLOG(std::string("PhysicsSystem::HandleTogglePlay: TogglePlay value: ").append(msg.isPlaying ? "true" : "false"));
 		//std::cout << "TogglePlay value: " << msg.isPlaying << std::endl;
 
 		_isPlaying = msg.isPlaying;

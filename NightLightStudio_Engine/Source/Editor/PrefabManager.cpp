@@ -1,3 +1,5 @@
+// SpeedLog
+#include "../Log/SpeedLog.h"
 #include "PrefabManager.h"
 
 #include "../IO/Json/Parser.h"
@@ -32,6 +34,7 @@ namespace Prefab_Function {
 		else
 		{
 			TracyMessageL("Prefab_Function::PrefabReadAndCreate: Prefab has no name, cannot load");
+			SPEEDLOG("Prefab_Function::PrefabReadAndCreate: Prefab has no name, cannot load");
 			//std::cout << "Prefab has no name, cannot load" << std::endl;
 			return -1;
 		}
@@ -48,6 +51,7 @@ namespace Prefab_Function {
 		if (stat(prefab_parser.GetFilePath().c_str(), &buffer) != 0)
 		{
 			TracyMessageL("Prefab_Function::WritePrefab: file does not exist, creating file.....");
+			SPEEDLOG("Prefab_Function::WritePrefab: file does not exist, creating file.....");
 			//std::cout << "file does not exist, creating file....." << std::endl;
 			//Creates file
 			std::ofstream MyFile(prefab_parser.GetFilePath().c_str());
@@ -72,6 +76,7 @@ namespace Prefab_Function {
 			{
 				const std::type_info& tinf = typeid(*comp);
 				TracyMessageL(std::string("Prefab_Function::WritePrefab: Wrong data given from component: ").append(tinf.name()).c_str());
+				SPEEDLOG(std::string("Prefab_Function::WritePrefab: Wrong data given from component: ").append(tinf.name()));
 				//std::cout << "Wrong data given from component: " << tinf.name() << std::endl;
 			}
 
@@ -88,6 +93,7 @@ namespace Prefab_Function {
 
 		std::string file_without_ext = cur_path_name.parent_path().string() +"/"+ cur_path_name.stem().string();
 		TracyMessageL(std::string("PrefabInstances::CreatePrefabInstance: " + file_without_ext).c_str());
+		SPEEDLOG(std::string("PrefabInstances::CreatePrefabInstance: " + file_without_ext));
 		//std::cout << file_without_ext << std::endl;
 		//Save and delete temp prefab
 		if (isActive)

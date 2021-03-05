@@ -19,6 +19,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../../Log/SpeedLog.h"
 
 LevelEditor::LevelEditor() : _window{ nullptr }, _showGrid{ true }
 //, _runEngine{ false }
@@ -29,7 +31,7 @@ LevelEditor::~LevelEditor()
 {
 }
 
-void LevelEditor::Init(HWND window)
+void LevelEditor::Init(GLFWwindow* window)
 {
     // CREATE WINDOWS HERE
     //LE_CreateWindow<TestCase>("Test", false, 0);
@@ -96,8 +98,8 @@ void LevelEditor::Init(HWND window)
     //ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer bindings
-    //ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplWin32_Init(window);
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    //ImGui_ImplWin32_Init(window);
     ImGui_ImplOpenGL3_Init("#version 130");
 
     for (auto& i : _editorWind)
@@ -113,9 +115,14 @@ void LevelEditor::GameInit()
 
 bool LevelEditor::Update(float)
 {
+    // Tracy
+    // Zone color: Dark Blue
+    ZoneScopedNC("Editor", 0x291ef7);
+
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplWin32_NewFrame();
+    //ImGui_ImplWin32_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     ImGuizmo::BeginFrame();
 
@@ -154,10 +161,6 @@ bool LevelEditor::Update(float)
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    // Tracy
-    // Zone color: Dark Blue
-    ZoneScopedNC("Editor", 0x291ef7);
-
     return false;
 }
 
@@ -178,8 +181,8 @@ void LevelEditor::Exit()
 
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
-    //ImGui_ImplGlfw_Shutdown();
-    ImGui_ImplWin32_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    //ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 }
 
@@ -195,7 +198,8 @@ void LevelEditor::LE_SetWindowFlag(const std::string& name, const ImGuiWindowFla
 
 HWND LevelEditor::LE_GetWindowHandle()
 {
-    return _window;
+    //return _window;
+    return glfwGetWin32Window(_window);
 }
 
 std::vector<float>* LevelEditor::LE_GetSystemsUsage()

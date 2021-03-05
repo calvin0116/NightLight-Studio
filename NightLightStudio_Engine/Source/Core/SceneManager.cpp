@@ -10,6 +10,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 #undef GetObject
 
@@ -36,7 +38,8 @@ namespace NS_SCENE
 		current_scene = scene_parser["StartUpScene"].GetString();
 
 		//Filepath that contains the scene
-		TracyMessageL(std::string("SceneManager::Load: " + scene_parser.GetPath() + " " + scene_parser["SceneFolder"].GetString()).c_str())
+		TracyMessageL(std::string("SceneManager::Load: " + scene_parser.GetPath() + " " + scene_parser["SceneFolder"].GetString()).c_str());
+		SPEEDLOG(std::string("SceneManager::Load: " + scene_parser.GetPath() + " " + scene_parser["SceneFolder"].GetString()));
 		//std::cout << scene_parser.GetPath() << scene_parser["SceneFolder"].GetString() << std::endl;
 		//As of now is "../Resources/JsonFile/" + "Scene"
 		scenes_path = scene_parser.GetPath() + scene_parser["SceneFolder"].GetString();
@@ -55,6 +58,7 @@ namespace NS_SCENE
 			scene_list[cur_path_name.stem().string()] = new NS_SERIALISER::Parser(cur_path_name.stem().string(), cur_path_name.parent_path().string());
 			//Individual files in Scene folder
 			TracyMessageL(std::string("SceneManager::Load: ").append(cur_path_name.stem().string()).c_str());
+			SPEEDLOG(std::string("SceneManager::Load: ").append(cur_path_name.stem().string()));
 			//std::cout << cur_path_name.stem().string() << std::endl;
 
 			//Store index with string
@@ -78,6 +82,10 @@ namespace NS_SCENE
 
 	void SceneManager::Update()
 	{
+		// Tracy
+		// Zone Color: Red
+		ZoneScopedNC("Scene Manager", 0xff1f2a);
+
 		//Exit button that uses scene
 		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ESCAPE))
 		{
@@ -97,6 +105,7 @@ namespace NS_SCENE
 				scene_index = 0;
 
 			TracyMessageL(std::string("SceneManager::Update: Going next scene........: " + scene_list.size()).c_str());
+			SPEEDLOG(std::string("SceneManager::Update: Going next scene........: " + scene_list.size()));
 			//std::cout << "Going next scene........: " << scene_list.size() << std::endl;
 
 			SetNextScene(scene_indexes[scene_index]);
@@ -108,10 +117,6 @@ namespace NS_SCENE
 		{
 			SaveScene();
 		}
-
-		// Tracy
-		// Zone Color: Red
-		ZoneScopedNC("Scene Manager", 0xff1f2a);
 	}
 
 	SCENE_CHANGE SceneManager::CheckChangeScene()
@@ -149,20 +154,25 @@ namespace NS_SCENE
 		//~~!Create object using data
 		TracyMessageL("SceneManager::LoadScene: ===============================================");
 		TracyMessageL(std::string("SceneManager::LoadScene: Loading Scene: " + current_scene).c_str());
+		SPEEDLOG("SceneManager::LoadScene: ===============================================");
+		SPEEDLOG(std::string("SceneManager::LoadScene: Loading Scene: " + current_scene));
 		//std::cout << "===============================================" << std::endl;
 		//std::cout << "Loading Scene: " << current_scene << std::endl;
 		if (scene->CheckForMember("Objects"))
 		{
 			TracyMessageL("SceneManager::LoadScene: Initialising Objects.....");
+			SPEEDLOG("SceneManager::LoadScene: Initialising Objects.....");
 			//std::cout << "Initialising Objects....." << std::endl;
 			NS_SERIALISER::EntityListCreation((*scene)["Objects"]);
 		}
 		else
 		{
-			TracyMessageL("SceneManager::LoadScene: Failed to find object to initailise.....");
+			TracyMessageL("SceneManager::LoadScene: Failed to find object to initialise.....");
+			SPEEDLOG("SceneManager::LoadScene: Failed to find object to initialise.....");
 			//std::cout << "Failed to find object to initailise....." << std::endl;
 		}
 		TracyMessageL("SceneManager::LoadScene: ===============================================");
+		SPEEDLOG("SceneManager::LoadScene: ===============================================");
 		//std::cout << "===============================================" << std::endl;
 	}
 
@@ -208,6 +218,7 @@ namespace NS_SCENE
 	void SceneManager::TempSave()
 	{
 		TracyMessageL("SceneManager::TempSave: Tempsaving");
+		SPEEDLOG("SceneManager::TempSave: Tempsaving");
 		//std::cout << "Tempsaving" << std::endl;
 
 
@@ -218,6 +229,7 @@ namespace NS_SCENE
 		if (stat(scene.GetFilePath().c_str(), &buffer) != 0)
 		{
 			TracyMessageL("SceneManager::TempSave: file does not exist, creating file.....");
+			SPEEDLOG("SceneManager::TempSave: file does not exist, creating file.....");
 			//std::cout << "file does not exist, creating file....." << std::endl;
 			//Creates file
 			std::ofstream MyFile(scene.GetFilePath().c_str());
@@ -254,6 +266,7 @@ namespace NS_SCENE
 				{
 					const std::type_info& tinf = typeid(*comp);
 					TracyMessageL(std::string("SceneManager::TempSave: Wrong data given from component: ").append(tinf.name()).c_str());
+					SPEEDLOG(std::string("SceneManager::TempSave: Wrong data given from component: ").append(tinf.name()).c_str());
 					//std::cout << "Wrong data given from component: " << tinf.name() << std::endl;
 				}
 			}
@@ -274,6 +287,7 @@ namespace NS_SCENE
 	void SceneManager::TempLoad()
 	{
 		TracyMessageL("SceneManager::TempLoad: Temploading");
+		SPEEDLOG("SceneManager::TempLoad: Temploading");
 		//std::cout << "Temploading" << std::endl;
 		
 		//Reloading all entity
@@ -284,6 +298,7 @@ namespace NS_SCENE
 		if (stat(scene.GetFilePath().c_str(), &buffer) != 0)
 		{
 			TracyMessageL("SceneManager::TempLoad: file does not exist, creating file.....");
+			SPEEDLOG("SceneManager::TempLoad: file does not exist, creating file.....");
 			//std::cout << "file does not exist, creating file....." << std::endl;
 			//Creates file
 			std::ofstream MyFile(scene.GetFilePath().c_str());
@@ -299,20 +314,25 @@ namespace NS_SCENE
 			//~~!Create object using data
 			TracyMessageL("SceneManager::TempLoad: ===============================================");
 			TracyMessageL(std::string("SceneManager::TempLoad: Loading Scene: " + output_filename).c_str());
+			SPEEDLOG("SceneManager::TempLoad: ===============================================");
+			SPEEDLOG(std::string("SceneManager::TempLoad: Loading Scene: " + output_filename));
 			//std::cout << "===============================================" << std::endl;
 			//std::cout << "Loading Scene: " << output_filename << std::endl;
 			if (scene.CheckForMember("Objects"))
 			{
 				TracyMessageL("SceneManager::TempLoad: Initialising Objects.....");
+				SPEEDLOG("SceneManager::TempLoad: Initialising Objects.....");
 				//std::cout << "Initialising Objects....." << std::endl;
 				NS_SERIALISER::EntityListInit(scene["Objects"]);
 			}
 			else
 			{
-				TracyMessageL("SceneManager::TempLoad: Failed to find object to initailise.....");
+				TracyMessageL("SceneManager::TempLoad: Failed to find object to initialise.....");
+				SPEEDLOG("SceneManager::TempLoad: Failed to find object to initialise.....");
 				//std::cout << "Failed to find object to initailise....." << std::endl;
 			}
 			TracyMessageL("SceneManager::TempLoad: ===============================================");
+			SPEEDLOG("SceneManager::TempLoad: ===============================================");
 			//std::cout << "===============================================" << std::endl;
 		}
 		else
@@ -370,6 +390,7 @@ namespace NS_SCENE
 			else
 			{
 				TracyMessageL("SceneManager::LoadScene: Scene does not exist");
+				SPEEDLOG("SceneManager::LoadScene: Scene does not exist");
 				//std::cout << "Scene does not exist" << std::endl;
 			}
 		}
@@ -387,6 +408,7 @@ namespace NS_SCENE
 	void SceneManager::SaveScene(std::string path)
 	{
 		TracyMessageL("SceneManager::SaveScene: Saving scene to:");
+		SPEEDLOG("SceneManager::SaveScene: Saving scene to:");
 		//std::cout << "Saving scene to:" << std::endl;
 		//Save scene
 		NS_SERIALISER::Parser* scene;
@@ -406,6 +428,7 @@ namespace NS_SCENE
 		if (stat(scene->GetFilePath().c_str(), &buffer) != 0)
 		{
 			TracyMessageL("SceneManager::SaveScene: file does not exist, creating file.....");
+			SPEEDLOG("SceneManager::SaveScene: file does not exist, creating file.....");
 			//std::cout << "file does not exist, creating file....." << std::endl;
 			//Creates file
 			std::ofstream MyFile(scene->GetFilePath().c_str());
@@ -443,6 +466,7 @@ namespace NS_SCENE
 				{
 					const std::type_info& tinf = typeid(*comp);
 					TracyMessageL(std::string("SceneManager::SaveScene: Wrong data given from component: ").append(tinf.name()).c_str());
+					SPEEDLOG(std::string("SceneManager::SaveScene: Wrong data given from component: ").append(tinf.name()));
 					//std::cout << "Wrong data given from component: " << tinf.name() << std::endl;
 				}
 			}
@@ -459,6 +483,7 @@ namespace NS_SCENE
 		scene->Save();
 
 		TracyMessageL("SceneManager::SaveScene: Save scene success~!");
+		SPEEDLOG("SceneManager::SaveScene: Save scene success~!");
 		//std::cout << "Save scene success~!" << std::endl;
 		if (path != "")
 		{
@@ -521,6 +546,7 @@ namespace NS_SCENE
 
 		next_scene = scene_path.stem().string();
 		TracyMessageL(std::string("SceneManager::SetNextScene: Switching to: " + scene_name + ".....").c_str());
+		SPEEDLOG(std::string("SceneManager::SetNextScene: Switching to: " + scene_name + "....."));
 		//std::cout << "Switching to: " << scene_name << "....." << std::endl;
 
 		if (scene_name == EXIT_SCENCE)

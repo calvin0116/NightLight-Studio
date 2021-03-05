@@ -11,6 +11,8 @@ Brief Description :
 #include "../Core/Singleton.h"
 #include "Parser.h"
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 //Namespace io....
 
@@ -73,9 +75,11 @@ public:
 	ENGINE_API void Load()
 	{
 		TracyMessageL("Parser::Load: StartUp");
+		SPEEDLOG("Parser::Load: StartUp");
 		//std::cout << "Parser::StartUp" << std::endl;
 		parser.Load();
 		TracyMessageL("Parser::Load: Loading of data");
+		SPEEDLOG("Parser::Load: Loading of data");
 		//std::cout << "Parser::Loading of data" << std::endl;
 		Value& wind_val = parser["window"];
 

@@ -1,3 +1,5 @@
+// SpeedLog
+#include "../Log/SpeedLog.h"
 #include "ComponentLoadAudio.h"
 #include "../tracy-master/Tracy.hpp"
 //#include "Components.h"   // inherit required functions
@@ -17,6 +19,7 @@ void	ComponentLoadAudio::Read(Value& val)
   if (val.FindMember("ListOfSound") == val.MemberEnd())
   {
       TracyMessageL("ComponentLoadAudio::Read: No Force data has been found");
+      SPEEDLOG("ComponentLoadAudio::Read: No Force data has been found");
       //std::cout << "No Force data has been found" << std::endl;
   }
   else

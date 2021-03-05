@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Camera.h"
+#include "Shapes.h"
 #include "..\Core\DeltaTime.h"
 #include <vector>
 // For messaging/event
@@ -20,6 +21,7 @@ namespace NS_GRAPHICS
 		// Main camera
 		Camera _camera;
 		Camera _editorCam;
+		MyFrustum m_Frustum;
 
 		// Vector of cameras, used to cycle through scene cameras
 		//std::vector<Camera> _cameras;
@@ -163,6 +165,7 @@ namespace NS_GRAPHICS
 
 		//void SavePosition();
 		//void MoveToSavedPosition();
+		void CalculateFrustum(Camera& cam);
 
 		void HandleTogglePlay(MessageTogglePlay&);
 	};

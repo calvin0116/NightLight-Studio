@@ -59,7 +59,8 @@ public:
 
 class LevelEditor
 {
-	HWND _window;
+	//HWND _window;
+	GLFWwindow* _window = nullptr;
 
 	bool _runEngine;
 
@@ -100,7 +101,8 @@ public:
 	~LevelEditor();
 
 	// Run Once
-	void Init(HWND window); // Replace window with handle or something
+	//void Init(HWND window); // Replace window with handle or something
+	void Init(GLFWwindow* window); // Replace window with handle or something
 
 	void GameInit();
 	// Run Every Frame

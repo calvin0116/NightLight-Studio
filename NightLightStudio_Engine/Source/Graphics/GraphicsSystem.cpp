@@ -16,6 +16,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 #ifdef _DEBUG
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -46,8 +48,7 @@ namespace NS_GRAPHICS
 		_hdrID{ 0 },
 		_projectionMatrix{ glm::mat4(1.0f) },
 		_viewMatrix{ glm::mat4(1.0f) },
-		_orthoMatrix{ glm::mat4(1.0f) },
-		_testTimeElapsed{0.0f}
+		_orthoMatrix{ glm::mat4(1.0f) }
 	{
 	}
 
@@ -57,6 +58,10 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::Update()
 	{
+		// Tracy
+		// Zone Color: Yellow
+		ZoneScopedNC("Graphics", 0xf5ef45);
+
 		cameraManager->Update();
 		//0.01f ms to s
 		//_testTimeElapsed += DELTA_T->real_dt * DT_SCALE;
@@ -85,10 +90,6 @@ namespace NS_GRAPHICS
 		uiManager->Update();
 
 		//std::cout << "Time current passed: " << _testTimeElapsed << std::endl;
-
-		// Tracy
-		// Zone Color: Yellow
-		ZoneScopedNC("Graphics", 0xf5ef45);
 	}
 
 	void GraphicsSystem::Free()
@@ -107,6 +108,7 @@ namespace NS_GRAPHICS
 		{
 #ifdef _DEBUG
 			TracyMessageL("GraphicsSystem::Init: ERROR: Window System not initialized before Graphics System, please check WndSystem initialization.");
+			SPEEDLOG("GraphicsSystem::Init: ERROR: Window System not initialized before Graphics System, please check WndSystem initialization.");
 			//std::cout << "ERROR: Window System not initialized before Graphics System, please check WndSystem initialization." << std::endl;
 #endif
 			return;
@@ -1428,6 +1430,10 @@ namespace NS_GRAPHICS
 
 	void GraphicsSystem::SetProjectionMatrix(const float& fov, const float& aspect_ratio, const float& near_plane, const float& far_plane)
 	{
+		// Save values to member variables for shadow mapping
+		//_nearPlane = near_plane; // Moved to camera.h
+		//_farPlane = far_plane;
+
 		_projectionMatrix = glm::perspective(glm::radians(fov), aspect_ratio, near_plane, far_plane);
 
 		// Update only if changes are made
@@ -1567,6 +1573,7 @@ namespace NS_GRAPHICS
 		{
 #ifdef _DEBUG
 			TracyMessageL("ERROR: Graphics component does not exist in given entity, failed to change mesh color");
+			SPEEDLOG("ERROR: Graphics component does not exist in given entity, failed to change mesh color");
 			//std::cout << "ERROR: Graphics component does not exist in given entity, failed to change mesh color" << std::endl;
 #endif
 			return;

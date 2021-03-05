@@ -72,6 +72,7 @@ public:
 		, cur_wp_path{nullptr}
 		, wp_creation_type{WPP_STANDARD}
 		, nav_state{ NV_CIRCLING }
+		, wp_path_ent_name{""}
 		
 	{
 		strcpy_s(ser_name, "NavigatorComponent");
@@ -222,12 +223,14 @@ public:
 				else
 				{
 					TracyMessageL("ComponentNavigator::InitPath : No entity have been found");
+					SPEEDLOG("ComponentNavigator::InitPath : No entity have been found");
 					return;
 				}
 			}
 			else
 			{
 				TracyMessageL("ComponentNavigator::InitPath : No entity name have been found");
+				SPEEDLOG("ComponentNavigator::InitPath : No entity name have been found");
 				return;
 			}
 			//if way point path entity does not exist

@@ -25,6 +25,9 @@
 
 #include "../../Core/TagHandler.h"
 
+// Snap
+#include "../../Collision/SystemCollision.h"
+
 void InspectorWindow::Start()
 {
 	// Set up Command to run to move objects
@@ -302,6 +305,43 @@ void InspectorWindow::Start()
 	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_REMOVE_COMP"),
 		removeComp, createComp);
 
+	// PASTE COMPONENTS ==================================================================================================================
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_CAMERA"),
+		std::function(Paste_Component<CameraComponent>), std::function(Paste_Component<CameraComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_COLLIDER"),
+		std::function(Paste_Component<ColliderComponent>), std::function(Paste_Component<ColliderComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_AUDIO"),
+		std::function(Paste_Component<ComponentLoadAudio>), std::function(Paste_Component<ComponentLoadAudio>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_GRAPHICS"),
+		std::function(Paste_Component<GraphicsComponent>), std::function(Paste_Component<GraphicsComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_LIGHT"),
+		std::function(Paste_Component<LightComponent>), std::function(Paste_Component<LightComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_RIGIDBODY"),
+		std::function(Paste_Component<RigidBody>), std::function(Paste_Component<RigidBody>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_SCRIPT"),
+		std::function(Paste_Component<ScriptComponent>), std::function(Paste_Component<ScriptComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_CANVAS"),
+		std::function(Paste_Component<CanvasComponent>), std::function(Paste_Component<CanvasComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_ANIMATION"),
+		std::function(Paste_Component<AnimationComponent>), std::function(Paste_Component<AnimationComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_EMITTER"),
+		std::function(Paste_Component<EmitterComponent>), std::function(Paste_Component<EmitterComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_PLAYER"),
+		std::function(Paste_Component<PlayerStatsComponent>), std::function(Paste_Component<PlayerStatsComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_CAULDRON"),
+		std::function(Paste_Component<CauldronStatsComponent>), std::function(Paste_Component<CauldronStatsComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_VARIABLE"),
+		std::function(Paste_Component<VariablesComponent>), std::function(Paste_Component<VariablesComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_NAVIGATOR"),
+		std::function(Paste_Component<NavigatorComponent>), std::function(Paste_Component<NavigatorComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_WAYPOINTMAP"),
+		std::function(Paste_Component<WayPointMapComponent>), std::function(Paste_Component<WayPointMapComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_WAYPOINT"),
+		std::function(Paste_Component<WayPointComponent>), std::function(Paste_Component<WayPointComponent>));
+
+
+	// PASTE COMPONENTS ==================================================================================================================
+
 	// INPUTS TO CHANGE GIZMO OPERATIONS
 	SYS_INPUT->GetSystemKeyPress().CreateNewEvent("CHANGE_GIZMO_TRANSFORM_TRANSLATE", SystemInput_ns::IKEY_W, "TRANSLATE", SystemInput_ns::OnPress,
 		[this]()
@@ -351,6 +391,7 @@ void InspectorWindow::Run()
 		else
 		{
 			TracyMessageL("InspectorWindow::Run: No set manager is allocated");
+			SPEEDLOG("InspectorWindow::Run: No set manager is allocated");
 			//std::cout << "No set manager is allocated" << std::endl;
 		}
 		Entity 	ent = g_ecman->getEntity(id);
@@ -453,6 +494,8 @@ void InspectorWindow::TransformComp(Entity& ent)
 			trans_comp->_tagNames.push_back(0);
 
 	TransformGizmo(trans_comp);
+	// the snap window
+	TransformSnap(ent);
     //ImGui::NewLine();
     //int tag = trans_comp->_tag;
 		/*
@@ -472,6 +515,10 @@ void InspectorWindow::ColliderComp(Entity& ent)
 	ComponentCollider* col_comp = ent.getComponent<ComponentCollider>();
 	if (col_comp != NULL)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+		bool editedComp = false;
+
 		//~~! Need Help==//
 		//1. Check collider type that it have
 		//2. Get the right collider type
@@ -523,18 +570,35 @@ void InspectorWindow::ColliderComp(Entity& ent)
 			if (colEnum != (int)col_comp->GetColliderT())
 			{
 				col_comp->SetColliderT((COLLIDERS)colEnum);
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 			}
 
 			glm::vec3 glmVal = { col_comp->center };
 			float* glmPtr = glm::value_ptr(glmVal);
 
 			ImGui::Checkbox("IsCollidable##Collider", &col_comp->isCollidable);
-			ImGui::InputInt("Collider Tag##COLTAG", &col_comp->colliderTag);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+			ImGui::InputInt("Collider Tag##COLTAG", &col_comp->colliderTag);			
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 			if (ImGui::InputFloat3("Center##COLLIDER", glmPtr, 3))
 			{
 				col_comp->center = glm::make_vec3(glmPtr);
 			}
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 			glmVal = { col_comp->extend };
 			glmPtr = glm::value_ptr(glmVal);
@@ -544,6 +608,10 @@ void InspectorWindow::ColliderComp(Entity& ent)
 				col_comp->extend = glm::make_vec3(glmPtr);
 			}
 
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			glmVal = { col_comp->rotation };
 			glmPtr = glm::value_ptr(glmVal);
 
@@ -551,6 +619,14 @@ void InspectorWindow::ColliderComp(Entity& ent)
 			{
 				col_comp->rotation = glm::make_vec3(glmPtr);
 			}
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+			// Undo-Redo for Components
+			//_origComp = ImGui::IsItemActivated() ? ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() } : _origComp;
+			//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 		}
 
 		//Remove component
@@ -559,6 +635,25 @@ void InspectorWindow::ColliderComp(Entity& ent)
 			ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentCollider>()->Write(), typeid(ComponentCollider).hash_code() };
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
+		}
+
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				col_comp->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_COLLIDER"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
 		}
 
 		ImGui::Separator();
@@ -570,6 +665,9 @@ void InspectorWindow::AudioComp(Entity& ent)
 	ComponentLoadAudio* aud_manager = ent.getComponent<ComponentLoadAudio>();
 	if (aud_manager != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentLoadAudio>()->Write() };
+		bool editedComp = false;
 
 		if (ImGui::CollapsingHeader("Audio Manager", &_notRemove))
 		{
@@ -582,8 +680,13 @@ void InspectorWindow::AudioComp(Entity& ent)
 				strcpy_s(d.path, 512, "");
 				aud_manager->_sounds.push_back(d);
 				++i;
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 				
 			}
+
       int index = 1;
 
 			for (auto& data : aud_manager->_sounds) //[path, name]
@@ -601,6 +704,9 @@ void InspectorWindow::AudioComp(Entity& ent)
 					{
 						strcpy_s(data.name,s_name.c_str());
 					});
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 				ImGui::SameLine(0, 10);
 				std::string s_path = data.path;
@@ -610,6 +716,10 @@ void InspectorWindow::AudioComp(Entity& ent)
 					{
 						strcpy_s(data.path, s_path.c_str());
 					});
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 				_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
 					[this, &data](std::string* str)
@@ -628,6 +738,10 @@ void InspectorWindow::AudioComp(Entity& ent)
 						}
 					});
 
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			}
 		}
 
@@ -637,6 +751,25 @@ void InspectorWindow::AudioComp(Entity& ent)
 			ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentLoadAudio>()->Write(), typeid(ComponentLoadAudio).hash_code() };
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
+		}
+
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<ComponentLoadAudio>()->Write() };
+				aud_manager->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_AUDIO"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
 		}
 
 		ImGui::Separator();
@@ -660,6 +793,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				graphics_comp->SetRenderType(RENDERTYPE::TEXTURED);
 
 			ImGui::Checkbox("IsActive##Graphic", &graphics_comp->_isActive);
+
 			ImGui::Checkbox("Emission##Graphic", &graphics_comp->_renderEmission);
 
 			ImGui::ColorEdit3("Emission Color##Graphics", glm::value_ptr(graphics_comp->_pbrData._emissive));
@@ -698,6 +832,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 						}
 					}
 				});
+
 			// Drag and Drop from Asset Inspector onto Model File Name
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
 				[this, &mod, &graphics_comp, &ent](std::string* str)
@@ -737,6 +872,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				{
 					graphics_comp->AddAlbedoTexture(tex);
 				});
+
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
 				[this, &tex, &graphics_comp](std::string* str)
 				{
@@ -763,6 +899,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				{
 					graphics_comp->AddNormalTexture(normal);
 				});
+
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
 				[this, &normal, &graphics_comp](std::string* str)
 				{
@@ -788,6 +925,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				{
 					graphics_comp->AddMetallicTexture(metallic);
 				});
+
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
 				[this, &metallic, &graphics_comp](std::string* str)
 				{
@@ -813,6 +951,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				{
 					graphics_comp->AddRoughnessTexture(roughness);
 				});
+
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
 				[this, &roughness, &graphics_comp](std::string* str)
 				{
@@ -838,6 +977,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				{
 					graphics_comp->AddAOTexture(ao);
 				});
+
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
 				[this, &ao, &graphics_comp](std::string* str)
 				{
@@ -863,6 +1003,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 				{
 					graphics_comp->AddSpecularTexture(specular);
 				});
+
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
 				[this, &specular, &graphics_comp](std::string* str)
 				{
@@ -911,6 +1052,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 
 					ImGui::CloseCurrentPopup();
 				}
+
 				if (ImGui::Button("Load"))
 				{
 					COMDLG_FILTERSPEC rgSpec[] =
@@ -929,6 +1071,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 					// Do Stuff here
 					ImGui::CloseCurrentPopup();
 				}
+
 				ImGui::EndPopup();
 			}
 			/*ImGui::ColorEdit3("Diffuse##Graphics", glm::value_ptr(graphics_comp->_materialData._diffuse));
@@ -940,8 +1083,11 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 			ImGui::InputFloat("Shininess", &graphics_comp->_materialData._shininess);*/
 
 			ImGui::ColorEdit3("Color##Graphics", glm::value_ptr(graphics_comp->_pbrData._albedo));
+
 			ImGui::DragFloat("Metallic", &graphics_comp->_pbrData._metallic, 0.1f, 0.f, 1.f);
+
 			ImGui::DragFloat("Roughness", &graphics_comp->_pbrData._roughness, 0.1f, 0.f, 1.f);
+
 
 			float alpha = graphics_comp->GetAlpha();
 			if (ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.f, 1.f))
@@ -967,16 +1113,49 @@ void InspectorWindow::RigidBodyComp(Entity& ent)
 	RigidBody* rb = ent.getComponent<RigidBody>();
 	if (rb != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<RigidBody>()->Write() };
+		bool editedComp = false;
+
 		if (ImGui::CollapsingHeader("Rigid Body", &_notRemove))
 		{
 			//_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			ImGui::Checkbox("IsStatic", &rb->isStatic);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::Checkbox("IsGravity", &rb->isGravity);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputFloat("Mass", &rb->mass);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputFloat("Friction", &rb->friction);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputFloat3("Force", rb->force.m);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputFloat3("Acceleration", rb->acceleration.m);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 		}
 
@@ -986,6 +1165,25 @@ void InspectorWindow::RigidBodyComp(Entity& ent)
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			//ent.RemoveComponent<RigidBody>();
 			_notRemove = true;
+		}
+
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<RigidBody>()->Write() };
+				rb->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_RIGIDBODY"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
 		}
 
 		ImGui::Separator();
@@ -1000,6 +1198,10 @@ void InspectorWindow::LightComp(Entity& ent)
 	ComponentLight* light = ent.getComponent<ComponentLight>();
 	if (light != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentLight>()->Write() };
+		bool editedComp = false;
+
 		if (ImGui::CollapsingHeader("Light", &_notRemove))
 		{
 			// use tmp variable to store active
@@ -1008,6 +1210,10 @@ void InspectorWindow::LightComp(Entity& ent)
 
 			//ImGui::Checkbox("Is Active", &light->_isActive);
 			ImGui::Checkbox("Is Active", &active_state);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 			light->SetActive(active_state);
 
@@ -1025,6 +1231,12 @@ void InspectorWindow::LightComp(Entity& ent)
 				{
 					// Send error prompt if failed
 					ImGui::OpenPopup("There can only be one sun and so many stars uwu");
+				}
+				else
+				{
+					// Undo-Redo for Components
+					_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = true;
 				}
 			}
 
@@ -1046,6 +1258,10 @@ void InspectorWindow::LightComp(Entity& ent)
 				light->SetColor(lightColor);
 			}
 
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			if ((NS_GRAPHICS::Lights)LIGHT != NS_GRAPHICS::Lights::INVALID_TYPE)
 			{
 				float intensity = light->GetIntensity();
@@ -1055,6 +1271,10 @@ void InspectorWindow::LightComp(Entity& ent)
 						intensity = 0.f;
 					light->SetIntensity(intensity);
 				}
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 			}
 			
 			
@@ -1067,6 +1287,10 @@ void InspectorWindow::LightComp(Entity& ent)
 						radius = 0.01f;
 					light->SetRadius(radius);
 				}
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 			}
 
 			if ((NS_GRAPHICS::Lights)LIGHT == NS_GRAPHICS::Lights::SPOT)
@@ -1077,8 +1301,16 @@ void InspectorWindow::LightComp(Entity& ent)
 				if(ImGui::InputFloat("Cut off", &cutoff))
 					light->SetCutOff(cutoff);
 
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				if(ImGui::InputFloat("Outer cut off", &outercutoff))
 					light->SetOuterCutOff(outercutoff);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 			}
 		}
 
@@ -1087,6 +1319,25 @@ void InspectorWindow::LightComp(Entity& ent)
 			ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentLight>()->Write(), typeid(ComponentLight).hash_code() };
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
+		}
+
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<ComponentLight>()->Write() };
+				light->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_LIGHT"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
 		}
 
 		ImGui::Separator();
@@ -1098,9 +1349,17 @@ void InspectorWindow::ScriptComp(Entity& ent)
 	ScriptComponent* Script_comp = ent.getComponent<ScriptComponent>();
 	if (Script_comp != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ScriptComponent>()->Write() };
+		bool editedComp = false;
+
 		if (ImGui::CollapsingHeader("Script component", &_notRemove))
 		{
 			ImGui::Checkbox("IsActive##CScript", &Script_comp->_isActive);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
       MonoClass* klass = nullptr;
       void* iter = NULL;
@@ -1147,6 +1406,10 @@ void InspectorWindow::ScriptComp(Entity& ent)
             bool typeBool = MonoWrapper::GetObjectFieldValue<bool>(monoData._pInstance, var_name);
             if (ImGui::Checkbox(sName.c_str(), &typeBool))
               MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeBool);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
           }
           else if (var_typeid == MONO_TYPE_I4) // int
           {
@@ -1155,6 +1418,10 @@ void InspectorWindow::ScriptComp(Entity& ent)
             int typeInt = MonoWrapper::GetObjectFieldValue<int>(monoData._pInstance, var_name);
             if (ImGui::InputInt(sName.c_str(), &typeInt))
               MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeInt);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
           }
           else if (var_typeid == MONO_TYPE_U4) // unsigned
           {
@@ -1163,6 +1430,10 @@ void InspectorWindow::ScriptComp(Entity& ent)
             int typeUnsigned = MonoWrapper::GetObjectFieldValue<unsigned>(monoData._pInstance, var_name);
             if (ImGui::InputInt(sName.c_str(), &typeUnsigned))
               MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeUnsigned);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
           }
           else if (var_typeid == MONO_TYPE_R4) // float
           {
@@ -1171,6 +1442,10 @@ void InspectorWindow::ScriptComp(Entity& ent)
             float typeFloat = MonoWrapper::GetObjectFieldValue<float>(monoData._pInstance, var_name);
             if (ImGui::InputFloat(sName.c_str(), &typeFloat))
               MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeFloat);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
           }
           else if (var_typeid == MONO_TYPE_R8) // double
           {
@@ -1179,6 +1454,10 @@ void InspectorWindow::ScriptComp(Entity& ent)
             double typeDouble = MonoWrapper::GetObjectFieldValue<double>(monoData._pInstance, var_name);
             if (ImGui::InputDouble(sName.c_str(), &typeDouble))
               MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, typeDouble);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
           }
           else if (var_typeid == MONO_TYPE_STRING) // string
           {
@@ -1210,6 +1489,10 @@ void InspectorWindow::ScriptComp(Entity& ent)
                 monoString = MonoWrapper::ToMonoString(saved);
                 MonoWrapper::SetObjectFieldValue(monoData._pInstance, var_name, *monoString);
               });
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
           }
           else
           {
@@ -1229,9 +1512,13 @@ void InspectorWindow::ScriptComp(Entity& ent)
 				Script_comp->_ScriptName = tex;
 			});
 
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
 //<<<<<<< Updated upstream
-				[this, &Script_comp, &tex](std::string* str)
+				[this, &Script_comp, &tex, &activeRead, &editedComp](std::string* str)
 				{
 					std::string data = *str;
 					std::transform(data.begin(), data.end(), data.begin(),
@@ -1244,6 +1531,10 @@ void InspectorWindow::ScriptComp(Entity& ent)
 						std::string name = LE_GetFilename(*str);
 						name.erase(name.end() - 3, name.end());
 						Script_comp->_ScriptName = name;
+
+						// Undo-Redo for Components
+						_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = true;
 					}
 /*
 				[this, &Script_comp](std::string* str)
@@ -1267,6 +1558,25 @@ void InspectorWindow::ScriptComp(Entity& ent)
 			_notRemove = true;
 		}
 
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<ScriptComponent>()->Write() };
+				Script_comp->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_SCRIPT"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
+		}
+
 		ImGui::Separator();
 	}
 }
@@ -1276,15 +1586,28 @@ void InspectorWindow::CanvasComp(Entity& ent)
 	CanvasComponent* canvas = ent.getComponent<CanvasComponent>();
 	if (canvas != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<CanvasComponent>()->Write() };
+		bool editedComp = false;
+
 		if (ImGui::CollapsingHeader("Canvas component", &_notRemove))
 		{
 			ImGui::Checkbox("IsActive##Canvas", &canvas->_isActive);
 
-			_levelEditor->LE_AddCombo("Canvas Type", (int&)canvas->_canvasType,
-				{ 
-					"Screen", 
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+			if (_levelEditor->LE_AddCombo("Canvas Type", (int&)canvas->_canvasType,
+				{
+					"Screen",
 					"World"
-				});
+				}))
+			{
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
+			}
 
 			size_t uiCount = canvas->_uiElements.size();
 			for (size_t i = 0; i < uiCount; ++i)
@@ -1292,9 +1615,18 @@ void InspectorWindow::CanvasComp(Entity& ent)
 				UI_Element& ui = canvas->_uiElements.at(i);
 
 				ImGui::Checkbox(std::string("IsActive##UI").append(std::to_string(i)).c_str(), &ui._isActive);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				if (ImGui::Button(std::string("X##").append(std::to_string(i)).c_str()))
 				{
 					canvas->RemoveUI(i);
+
+					// Undo-Redo for Components
+					_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = true;
 				}
 
 				ImGui::SameLine();
@@ -1307,14 +1639,31 @@ void InspectorWindow::CanvasComp(Entity& ent)
 				if (canvas->_canvasType == SCREEN_SPACE)
 				{
 					ImGui::InputFloat2(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._position), 3);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 					ImGui::InputFloat(std::string("Layer Order##").append(std::to_string(i)).c_str(), &ui._position.z,1);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 				}
 				else if (canvas->_canvasType == WORLD_SPACE)
 				{
 					ImGui::InputFloat3(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._position), 3);
 
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				}
 				ImGui::InputFloat2(std::string("UISize##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._size), 3);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 				_levelEditor->LE_AddInputText(std::string("UIName##").append(std::to_string(i)).c_str(), uiName, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 					[&uiName, &ui, &i]()
@@ -1322,14 +1671,23 @@ void InspectorWindow::CanvasComp(Entity& ent)
 						ui._uiName = uiName;
 					});
 
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				_levelEditor->LE_AddInputText(std::string("Image##").append(std::to_string(i)).c_str(), tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 					[&tex, &ui, &i]()
 					{
 						ui.AddTexture(tex);
 						ui._fileName = tex;
 					});
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
-					[this, &tex, &ui, &i](std::string* str)
+					[this, &tex, &ui, &i, &activeRead, &editedComp](std::string* str)
 					{
 						std::string data = *str;
 						std::transform(data.begin(), data.end(), data.begin(),
@@ -1347,16 +1705,38 @@ void InspectorWindow::CanvasComp(Entity& ent)
 							tex = data;
 							ui.AddTexture(tex);
 							ui._fileName = tex;
+
+							// Undo-Redo for Components
+							_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+							editedComp = true;
 						}
 					});
 
 				ImGui::Checkbox(std::string("Animatable##").append(std::to_string(i)).c_str(), &ui._isAnimated);
 
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				if (ui._isAnimated)
 				{
 					ImGui::InputScalar(std::string("Row##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._row);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 					ImGui::InputScalar(std::string("Column##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._column);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 					ImGui::InputScalar(std::string("Total Frame##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._totalFrame);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 					if (ImGui::InputScalar(std::string("Frames per second##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._framesPerSecond))
 					{
@@ -1369,9 +1749,17 @@ void InspectorWindow::CanvasComp(Entity& ent)
 							ui._animationRate = 1.0f / ui._framesPerSecond;
 						}
 					}
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 					
 					ImGui::Checkbox(std::string("Play##").append(std::to_string(i)).c_str(), &ui._play);
 					ImGui::Checkbox(std::string("Loop##").append(std::to_string(i)).c_str(), &ui._loop);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 					if (ImGui::Button("Test Animation##"))
 					{
@@ -1392,12 +1780,20 @@ void InspectorWindow::CanvasComp(Entity& ent)
 
 				ImGui::ColorEdit4(std::string("Colour##Canvas").append(std::to_string(i)).c_str(), glm::value_ptr(ui._colour));
 
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				ImGui::Separator();
 			}
 
 			if (ImGui::Button("Add UI"))
 			{
 				canvas->AddUI();
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 			}
 
 			ImGui::SameLine();
@@ -1405,6 +1801,10 @@ void InspectorWindow::CanvasComp(Entity& ent)
 			if (ImGui::Button("Sort"))
 			{
 				canvas->Sort();
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 			}
 
 			ImGui::SameLine();
@@ -1418,6 +1818,25 @@ void InspectorWindow::CanvasComp(Entity& ent)
 			ENTITY_COMP_DOC comp{ ent, ent.getComponent<CanvasComponent>()->Write(), typeid(CanvasComponent).hash_code() };
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
+		}
+
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<CanvasComponent>()->Write() };
+				canvas->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_CANVAS"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
 		}
 
 		ImGui::Separator();
@@ -1501,9 +1920,17 @@ void InspectorWindow::EmitterComp(Entity& ent)
 	EmitterComponent* emitter = ent.getComponent<EmitterComponent>();
 	if (emitter != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<EmitterComponent>()->Write() };
+		bool editedComp = false;
+
 		if (ImGui::CollapsingHeader("Emitter component", &_notRemove))
 		{
 			ImGui::Checkbox("IsActive##Emitter", &emitter->_isActive);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 			std::string tex = emitter->_image;
 			Emitter* emit = NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[emitter->_emitterID];
@@ -1512,14 +1939,23 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			const char* currentEmitter = (emit->_type >= 0 && emit->_type < TOTAL_SHAPE) ? emitterType[emit->_type] : "";
 			ImGui::SliderInt("Type", (int*)&emit->_type, 0, TOTAL_SHAPE-1, currentEmitter);
 
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			_levelEditor->LE_AddInputText(std::string("Particle Image##"), tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
 				[&tex, &emitter]()
 				{
 					emitter->AddTexture(tex);
 					emitter->_image = tex;
 				});
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
-				[this, &tex, &emitter](std::string* str)
+				[this, &tex, &emitter, &activeRead, &editedComp](std::string* str)
 				{
 					std::string data = *str;
 					std::transform(data.begin(), data.end(), data.begin(),
@@ -1537,42 +1973,95 @@ void InspectorWindow::EmitterComp(Entity& ent)
 						tex = data;
 						emitter->AddTexture(tex);
 						emitter->_image = tex;
+
+						// Undo-Redo for Components
+						_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = true;
 					}
 				});
+			ImGui::Checkbox("Black is Alpha##Emitter", &emitter->_blackIsAlpha);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 			ImGui::InputFloat("Duration Time##Emitter", &emit->_durationPerCycle);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			if (ImGui::InputScalar("Emission Rate##Emitter", ImGuiDataType_U32, &emit->_emissionOverTime))
 			{
 				emit->_emissionRate = 1.0f / emit->_emissionOverTime;
 			}
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 			if (ImGui::InputScalar("Max Particles##Emitter", ImGuiDataType_U32, &emit->_maxParticles))
 			{
 				emit->UpdateSize();
 			}
 
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			if (emit->_type == SPHERE)
 			{
 				ImGui::InputFloat("Radius##Emitter", &emit->_radius);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 			}
 
 			else if (emit->_type == CONE)
 			{
 				ImGui::InputFloat("Angle##Emitter", &emit->_spawnAngle);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				ImGui::InputFloat("Radius##Emitter", &emit->_radius);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 			}
 
 			if (ImGui::TreeNode("Particle Size##Emitter"))
 			{
 				ImGui::Checkbox("Random Size##Emitter", &emit->_randomizeSize);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				if (emit->_randomizeSize)
 				{
 					ImGui::InputFloat("Minimum Size##Emitter", &emit->_minParticleSize);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 					ImGui::InputFloat("Maximum Size##Emitter", &emit->_maxParticleSize);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 				}
 				else
 				{
 					ImGui::InputFloat("Size##Emitter", &emit->_maxParticleSize);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 				}
 				ImGui::TreePop();
 			}
@@ -1581,14 +2070,33 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			if (ImGui::TreeNode("Particle Speed##Emitter"))
 			{
 				ImGui::Checkbox("Random Speed##Emitter", &emit->_randomizeSpeed);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				if (emit->_randomizeSpeed)
 				{
 					ImGui::InputFloat("Minimum Speed##Emitter", &emit->_minParticleSpeed);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 					ImGui::InputFloat("Maximum Speed##Emitter", &emit->_maxParticleSpeed);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				}
 				else
 				{
 					ImGui::InputFloat("Speed##Emitter", &emit->_maxParticleSpeed);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 				}
 				ImGui::TreePop();
 			}
@@ -1596,14 +2104,32 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			if (ImGui::TreeNode("Particle Lifespan##Emitter"))
 			{
 				ImGui::Checkbox("Random LifeSpan##Emitter", &emit->_randomizeLifespan);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				if (emit->_randomizeLifespan)
 				{
 					ImGui::InputFloat("Minimum LifeSpan##Emitter", &emit->_minLifespan);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 					ImGui::InputFloat("Maximum LifeSpan##Emitter", &emit->_maxLifespan);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 				}
 				else
 				{
 					ImGui::InputFloat("LifeSpan##Emitter", &emit->_maxLifespan);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 				}
 				ImGui::TreePop();
 			}
@@ -1613,21 +2139,38 @@ void InspectorWindow::EmitterComp(Entity& ent)
 				if (ImGui::TreeNode("Particle Colour##Emitter"))
 				{
 					ImGui::Checkbox("Random Colour##Emitter", &emit->_randomizeColour);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 					if (emit->_randomizeColour)
 					{
 						float colourA[4] = { emit->_colourA.x, emit->_colourA.y, emit->_colourA.z, emit->_colourA.w };
 						ImGui::ColorEdit4("Colour Range Low##Emitter", colourA);
 						emit->_colourA = { colourA[0], colourA[1], colourA[2], colourA[3] };
 
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 						float colourB[4] = { emit->_colourB.x, emit->_colourB.y, emit->_colourB.z, emit->_colourB.w };
 						ImGui::ColorEdit4("Colour Range High##Emitter", colourB);
 						emit->_colourB = { colourB[0], colourB[1], colourB[2], colourB[3] };
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 					}
 					else
 					{
 						float colour[4] = { emit->_colourB.x, emit->_colourB.y, emit->_colourB.z, emit->_colourB.w };
 						ImGui::ColorEdit4("Colour##Emitter", colour);
 						emit->_colourB = { colour[0], colour[1], colour[2], colour[3] };
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 					}
 					ImGui::TreePop();
 				}
@@ -1635,12 +2178,35 @@ void InspectorWindow::EmitterComp(Entity& ent)
 
 			ImGui::Checkbox("Animatable##Emitter", &emit->_isAnimated);
 
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			if (emit->_isAnimated)
 			{
 				ImGui::Checkbox("Loop Animation##Emitter", &emit->_loopAnimation);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				ImGui::InputScalar("Row##Emitter", ImGuiDataType_U32, &emit->_row);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				ImGui::InputScalar("Column##Emitter", ImGuiDataType_U32, &emit->_column);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				ImGui::InputScalar("Total Frame##Emitter", ImGuiDataType_U32, &emit->_totalFrame);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 				if (ImGui::InputScalar("Frames per second##Emitter", ImGuiDataType_U32, &emit->_framesPerSecond))
 				{
@@ -1653,18 +2219,52 @@ void InspectorWindow::EmitterComp(Entity& ent)
 						emit->_animationRate = 1.0f / emit->_framesPerSecond;
 					}
 				}
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 			}
 
 			ImGui::Checkbox("PreWarm##", &emit->_preWarm);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::Checkbox("Loop##", &emit->_loop);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::Checkbox("Burst##", &emit->_burst);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			if (emit->_burst)
 			{
 				ImGui::InputFloat("Burst Rate##Emitter", &emit->_burstRate);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				ImGui::InputScalar("Burst Amount##Emitter", ImGuiDataType_U32, &emit->_burstAmount);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			}
 
 			ImGui::Checkbox("Play##Particle", &emit->_play);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			//emitter->Play();
 
 			//if (emit->_type == CONE)
@@ -1680,29 +2280,76 @@ void InspectorWindow::EmitterComp(Entity& ent)
 					emitter->Play();
 				}
 			}
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::Checkbox("Fade##Emitter", &emit->_fade);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 			if (ImGui::TreeNode("Special Behaviour##Emitter"))
 			{
 				ImGui::Checkbox("Velocity over time##Emitter", &emit->_velocityOverTime);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				if (emit->_velocityOverTime)
 				{
 					ImGui::InputFloat("X##Emitter", &emit->_velocity.x);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 					ImGui::InputFloat("Y##Emitter", &emit->_velocity.y);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				}
 
 				ImGui::Checkbox("Size over time##Emitter", &emit->_sizeOverTime);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				ImGui::Checkbox("Speed over time##Emitter", &emit->_speedOverTime);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				ImGui::Checkbox("Colour over time##Emitter", &emit->_colourOverTime);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				if (emit->_colourOverTime)
 				{
 					float colourStart[4] = { emit->_colourStart.x, emit->_colourStart.y, emit->_colourStart.z, emit->_colourStart.w };
 					ImGui::ColorEdit4("Colour Start##Emitter", colourStart);
 					emit->_colourStart = { colourStart[0], colourStart[1], colourStart[2], colourStart[3] };
 
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 					float colourEnd[4] = { emit->_colourEnd.x, emit->_colourEnd.y, emit->_colourEnd.z, emit->_colourEnd.w };
 					ImGui::ColorEdit4("Colour End##Emitter", colourEnd);
 					emit->_colourEnd = { colourEnd[0], colourEnd[1], colourEnd[2], colourEnd[3] };
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 				}
 
 				ImGui::TreePop();
@@ -1744,6 +2391,25 @@ void InspectorWindow::EmitterComp(Entity& ent)
 			_notRemove = true;
 		}
 
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<EmitterComponent>()->Write() };
+				emitter->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_EMITTER"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
+		}
+
 		ImGui::Separator();
 	}
 }
@@ -1753,20 +2419,60 @@ void InspectorWindow::CameraComp(Entity& ent)
 	CameraComponent* camComp = ent.getComponent<CameraComponent>();
 	if (camComp == nullptr)
 		return;
+
+	// Undo-Redo for Components
+	ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<CameraComponent>()->Write() };
+	bool editedComp = false;
+
 	NS_GRAPHICS::Camera& cam = camComp->_data;
 	if (ImGui::CollapsingHeader("Camera component", &_notRemove))
 	{
 		ImGui::Checkbox("IsActive##Camera", &camComp->_isActive);
+
+		// Undo-Redo for Components
+		_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+		editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 		ImGui::InputFloat("FOV", &(cam.cameraFOV));
+
+		// Undo-Redo for Components
+		_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+		editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 		if (ImGui::CollapsingHeader("Sensitivity", &_notRemove))
 		{
 			ImGui::InputFloat("Rotate", &(cam._rotation_sensitivity));
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputFloat("Drag", &(cam._drag_sensitivity));
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputFloat("Zoom", &(cam._zoom_sensitivity));
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::NewLine();
 		}
 		ImGui::InputFloat("Yaw", &(cam.cameraYaw));
+
+		// Undo-Redo for Components
+		_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+		editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 		ImGui::InputFloat("Pitch", &(cam.cameraPitch));
+
+		// Undo-Redo for Components
+		_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+		editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 		//ImGui::InputFloat3("Target", glm::value_ptr(cam.cameraTarget), 3);
 		//ImGui::InputFloat3("Position", glm::value_ptr(cam.cameraPos), 3);
 		//ImGui::InputFloat3("Position", glm::value_ptr(cam.cameraPos), 3);
@@ -1777,6 +2483,26 @@ void InspectorWindow::CameraComp(Entity& ent)
 		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 		_notRemove = true;
 	}
+
+	if (editedComp)
+	{
+		if (_origComp._entID != -1)
+		{
+			// Undo-Redo for Components
+			//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+			//bool editedComp = false;
+
+			// Undo-Redo for Components
+			//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+			ENTITY_COMP_READ finalComp{ ent, ent.getComponent<CameraComponent>()->Write() };
+			camComp->Read(*_origComp._rjDoc);
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_CAMERA"), std::any(finalComp));
+			_origComp = ENTITY_COMP_READ{};
+		}
+	}
+
 	ImGui::Separator();
 	/*if (camComp != nullptr)
 	{
@@ -1898,18 +2624,61 @@ void InspectorWindow::PlayerStatsComp(Entity& ent)
 	PlayerStatsComponent* psc = ent.getComponent<PlayerStatsComponent>();
 	if (psc != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<PlayerStatsComponent>()->Write() };
+		bool editedComp = false;
+
 		if (ImGui::CollapsingHeader("Player Stats", &_notRemove))
 		{
 			//_levelEditor->LE_AddInputText("##GRAPHICS_1", graphics_comp->_textureFileName, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			//_levelEditor->LE_AddInputText("##GRAPHICS_2", graphics_comp->, 500, ImGuiInputTextFlags_EnterReturnsTrue);
 			ImGui::InputFloat("player_move_mag", &psc->player_move_mag);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputFloat("player_fly_mag", &psc->player_fly_mag);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputInt("player_max_energy", &psc->player_max_energy);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputInt("player_possess_energy_drain", &psc->player_possess_energy_drain);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputInt("player_moth_energy_drain", &psc->player_moth_energy_drain);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputFloat("camera_distance", &psc->camera_distance);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputFloat3("camera_offset", psc->camera_offset.m);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputFloat("player_max_speed", &psc->player_max_speed);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
 		}
 
@@ -1918,6 +2687,25 @@ void InspectorWindow::PlayerStatsComp(Entity& ent)
 			ENTITY_COMP_DOC comp{ ent, ent.getComponent<PlayerStatsComponent>()->Write(), typeid(PlayerStatsComponent).hash_code() };
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
+		}
+
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<PlayerStatsComponent>()->Write() };
+				psc->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_PLAYER"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
 		}
 
 		ImGui::Separator();
@@ -1929,6 +2717,10 @@ void InspectorWindow::CauldronStatsComp(Entity& ent)
 	CauldronStatsComponent* csc = ent.getComponent<CauldronStatsComponent>();
 	if (csc != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<CauldronStatsComponent>()->Write() };
+		bool editedComp = false;
+
 		if (ImGui::CollapsingHeader("Cauldron Stats", &_notRemove))
 		{
 			std::string talis = csc->talisman.toString();
@@ -1938,6 +2730,10 @@ void InspectorWindow::CauldronStatsComp(Entity& ent)
 					csc->talisman = talis;
 				});
 
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 
 			std::string col = csc->collider.toString();
 			_levelEditor->LE_AddInputText("collider", col, 256, ImGuiInputTextFlags_EnterReturnsTrue,
@@ -1946,8 +2742,21 @@ void InspectorWindow::CauldronStatsComp(Entity& ent)
 					csc->collider = col;
 				});
 
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputFloat("magnitude", &csc->magnitude);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			ImGui::InputFloat3("direction", csc->direction.m);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 		}
 
 		if (!_notRemove)
@@ -1955,6 +2764,25 @@ void InspectorWindow::CauldronStatsComp(Entity& ent)
 			ENTITY_COMP_DOC comp{ ent, ent.getComponent<CauldronStatsComponent>()->Write(), typeid(CauldronStatsComponent).hash_code() };
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
+		}
+
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<CauldronStatsComponent>()->Write() };
+				csc->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_CAULDRON"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
 		}
 
 		ImGui::Separator();
@@ -1966,19 +2794,29 @@ void InspectorWindow::VariableComp(Entity& ent)
 	ComponentVariables* comp_var = ent.getComponent<ComponentVariables>();
 	if (comp_var != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentVariables>()->Write() };
+		bool editedComp = false;
 
 		if (ImGui::CollapsingHeader("Variable component", &_notRemove))
 		{
-
 			if (ImGui::Button("Add Float"))
 			{
 				float fl = 0.0f;
 				comp_var->float_list.push_back(fl);
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Remove Float"))
 			{
 				comp_var->float_list.pop_back();
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 			}
 
 			int float_index = 1;
@@ -1988,17 +2826,29 @@ void InspectorWindow::VariableComp(Entity& ent)
 
 				_levelEditor->LE_AddInputFloatProperty(p, f, []() {},ImGuiInputTextFlags_EnterReturnsTrue);
 				float_index++;
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 			}
 
 			if (ImGui::Button("Add Interger"))
 			{
 				int interger = 0;
 				comp_var->int_list.push_back(interger);
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Remove Interger"))
 			{
 				comp_var->int_list.pop_back();
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 			}
 			int int_index = 1;
 
@@ -2009,17 +2859,29 @@ void InspectorWindow::VariableComp(Entity& ent)
 				std::string s_name = std::to_string(int_index);
 				_levelEditor->LE_AddInputIntProperty(p, i, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
 				int_index++;
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 			}
 
 			if (ImGui::Button("Add String"))
 			{
 				LocalString ls;
 				comp_var->string_list.push_back(ls);
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Remove String"))
 			{
 				comp_var->string_list.pop_back();
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 			}
 
 			int str_index = 1;
@@ -2035,31 +2897,62 @@ void InspectorWindow::VariableComp(Entity& ent)
 						str = s_name.c_str();
 					});
 
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
-					[this, &str](std::string* _str)
+					[this, &str, &activeRead, &editedComp](std::string* _str)
 					{
 						str = *_str;
+
+						// Undo-Redo for Components
+						_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = true;
 					});
 
 				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
-					[this, &str](Entity* entptr)
+					[this, &str, &activeRead, &editedComp](Entity* entptr)
 					{
 						str = G_ECMANAGER->EntityName[entptr->getId()];
+
+						// Undo-Redo for Components
+						_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = true;
 
 					});
 				str_index++;
 			}
 
 		}
-	}
 
-	if (!_notRemove)
-	{
-		//ent.RemoveComponent<ComponentLoadAudio>();
-		ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentVariables>()->Write(), typeid(ComponentVariables).hash_code() };
-		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
-		_notRemove = true;
-	}
+		if (!_notRemove)
+		{
+			//ent.RemoveComponent<ComponentLoadAudio>();
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<ComponentVariables>()->Write(), typeid(ComponentVariables).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
+		}
+
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<ComponentVariables>()->Write() };
+				comp_var->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_VARIABLE"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
+		}
+	}	
 
 	ImGui::Separator();
 }
@@ -2069,22 +2962,52 @@ void InspectorWindow::NavComp(Entity& ent)
 	NavComponent* nav_comp = ent.getComponent<NavComponent>();
 	if (nav_comp != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<NavComponent>()->Write() };
+		bool editedComp = false;
+
+
 		if (ImGui::CollapsingHeader("Navigator", &_notRemove))
 		{
 			_levelEditor->LE_AddInputFloatProperty("Speed", nav_comp->speed, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
-			_levelEditor->LE_AddCombo("Way Point Nav Type", (int&)nav_comp->wp_nav_type,
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+			if (_levelEditor->LE_AddCombo("Way Point Nav Type", (int&)nav_comp->wp_nav_type,
 				{
 					"To and fro",
 					"circular",
 					"random"
-				});
+				}))
+			{
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
+			}
 			//_levelEditor->LE_AddInputFloatProperty("Radius for detection", nav_comp->rad_for_detect, []() {},  ImGuiInputTextFlags_EnterReturnsTrue);
 			_levelEditor->LE_AddCheckbox("Stop at each waypoint", &nav_comp->stopAtEachWayPoint);
 
-			if(nav_comp->stopAtEachWayPoint)
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+			if (nav_comp->stopAtEachWayPoint)
+			{
 				_levelEditor->LE_AddInputFloatProperty("End time", nav_comp->endTime, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+			}
 			
 			_levelEditor->LE_AddCheckbox("Pause at start", &nav_comp->isPaused);
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			//Way point path to look at
 			std::string s_name;
 
@@ -2102,45 +3025,85 @@ void InspectorWindow::NavComp(Entity& ent)
 					if(ent.getId()!= -1)
 						nav_comp->cur_wp_path = ent.getComponent<WayPointMapComponent>();
 					else
+					{
 						nav_comp->cur_wp_path = nullptr;
+						nav_comp->wp_path_ent_name = "";
+					}
 				});
+
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 			_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
-				[this, &s_name,&nav_comp](Entity* entptr)
+				[this, &s_name,&nav_comp, &activeRead, &editedComp](Entity* entptr)
 				{
 					nav_comp->cur_wp_path = entptr->getComponent<WayPointMapComponent>();
 					if (nav_comp->cur_wp_path != nullptr) {
 						s_name = G_ECMANAGER->EntityName[entptr->getId()];
 						nav_comp->wp_path_ent_name = s_name;
 					}
+					else
+					{
+						nav_comp->cur_wp_path = nullptr;
+						nav_comp->wp_path_ent_name = "";
+					}
+
+					// Undo-Redo for Components
+					_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = true;
+
 				});
 
-			_levelEditor->LE_AddCombo("Starting Nav State", (int&)nav_comp->nav_state,
+			if (_levelEditor->LE_AddCombo("Starting Nav State", (int&)nav_comp->nav_state,
 				{
 					"Patrol",
 					"Circling around first way point"
-				});
+				}))
+			{
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
+			}
+
 			_levelEditor->LE_AddInputFloatProperty("Circling Radius", nav_comp->circuling_rad, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
 
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
-			if (!s_name.empty())
+			if (nav_comp->cur_wp_path != nullptr)
 			{
-				_levelEditor->LE_AddCombo("WayPoints to navigate", (int&)nav_comp->wp_creation_type,
+				if (_levelEditor->LE_AddCombo("WayPoints to navigate", (int&)nav_comp->wp_creation_type,
+					{
+						"Standard (1->N)",
+						"Reverse (N->1)",
+						"Custom"
+					}))
 				{
-					"Standard (1->N)",
-					"Reverse (N->1)",
-					"Custom"
-				});
+					// Undo-Redo for Components
+					_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = true;
+				}
 
 				if (nav_comp->wp_creation_type == WPP_CUSTOM)
 				{
 					if (ImGui::Button("Add WayPoint Index"))
 					{
 						nav_comp->path_indexes.push_back(std::make_pair(0,true));
+
+						// Undo-Redo for Components
+						_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = true;
 					}
 					ImGui::SameLine();
 					if (ImGui::Button("Remove WayPoint Index"))
 					{
 						nav_comp->path_indexes.pop_back();
+
+						// Undo-Redo for Components
+						_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = true;
 					}
 
 					int wp_index = 1;
@@ -2149,19 +3112,43 @@ void InspectorWindow::NavComp(Entity& ent)
 						std::string p = "WayPoint_" + std::to_string(wp_index);
 						_levelEditor->LE_AddInputIntProperty(p, i.first, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
 						wp_index++;
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 					}
 
 				}
 			}
 		}
-	}
 
-	if (!_notRemove)
-	{
-		//ent.RemoveComponent<ComponentLoadAudio>();
-		ENTITY_COMP_DOC comp{ ent, ent.getComponent<NavComponent>()->Write(), typeid(NavComponent).hash_code() };
-		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
-		_notRemove = true;
+		if (!_notRemove)
+		{
+			//ent.RemoveComponent<ComponentLoadAudio>();
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<NavComponent>()->Write(), typeid(NavComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
+		}
+
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<NavComponent>()->Write() };
+				nav_comp->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_NAVIGATOR"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
+		}
+
 	}
 }
 
@@ -2170,6 +3157,10 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 	WayPointMapComponent* wpm_comp = ent.getComponent<WayPointMapComponent>();
 	if (wpm_comp != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<WayPointMapComponent>()->Write() };
+		bool editedComp = false;
+
 		if (ImGui::CollapsingHeader("Way Point Path", &_notRemove))
 		{
 			if (ImGui::Button("Add WayPoint"))
@@ -2177,12 +3168,20 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 				LocalString ls;
 				wpm_comp->way_point_list.push_back(ls);
 				wpm_comp->GetPath().push_back(nullptr);
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Remove WayPoint"))
 			{
 				wpm_comp->way_point_list.pop_back();
 				wpm_comp->GetPath().pop_back();
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 			}
 
 			if (ImGui::Button("Update WayPoint"))
@@ -2204,6 +3203,7 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 						{
 							str = "";
 							TracyMessageL("InspectorWindow::WayPointPathComp: No entity has been found");
+							SPEEDLOG("InspectorWindow::WayPointPathComp: No entity has been found");
 							//std::cout << "No entity has been found" << std::endl;
 							return;
 						}
@@ -2216,17 +3216,27 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 						else
 						{
 							TracyMessageL("InspectorWindow::WayPointPathComp: No entity with waypoint component found");
+							SPEEDLOG("InspectorWindow::WayPointPathComp: No entity with waypoint component found");
 							//std::cout << "No entity with waypoint component found" << std::endl;
 						}
 					});
+
+				// Undo-Redo for Components
+				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 				_levelEditor->LE_AddDragDropTarget<Entity>("HIERARCHY_ENTITY_OBJECT",
-					[this, &str, &wpm_comp, &str_index](Entity* entptr)
+					[this, &str, &wpm_comp, &str_index, &activeRead, &editedComp](Entity* entptr)
 					{
 						WayPointComponent* wpc = entptr->getComponent<WayPointComponent>();
 						if (wpc != nullptr) 
 						{
 							wpm_comp->GetPath().at(str_index - 1) = wpc;
 							str = G_ECMANAGER->EntityName[entptr->getId()];
+
+							// Undo-Redo for Components
+							_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+							editedComp = true;
 						}
 
 					});
@@ -2236,14 +3246,33 @@ void InspectorWindow::WayPointPathComp(Entity& ent)
 
 
 		}
-	}
 
-	if (!_notRemove)
-	{
-		//ent.RemoveComponent<ComponentLoadAudio>();
-		ENTITY_COMP_DOC comp{ ent, ent.getComponent<WayPointMapComponent>()->Write(), typeid(WayPointMapComponent).hash_code() };
-		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
-		_notRemove = true;
+		if (!_notRemove)
+		{
+			//ent.RemoveComponent<ComponentLoadAudio>();
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<WayPointMapComponent>()->Write(), typeid(WayPointMapComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
+		}
+
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<WayPointMapComponent>()->Write() };
+				wpm_comp->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_WAYPOINTMAP"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
+		}
 	}
 }
 
@@ -2252,18 +3281,45 @@ void InspectorWindow::WayPointComp(Entity& ent)
 	WayPointComponent* wp_comp = ent.getComponent<WayPointComponent>();
 	if (wp_comp != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<WayPointComponent>()->Write() };
+		bool editedComp = false;
+
 		if (ImGui::CollapsingHeader("Way-Point Component", &_notRemove))
 		{
 			_levelEditor->LE_AddInputFloatProperty("Self-Define Cost", wp_comp->self_define_var.second, []() {}, ImGuiInputTextFlags_EnterReturnsTrue);
-		}
-	}
 
-	if (!_notRemove)
-	{
-		//ent.RemoveComponent<ComponentLoadAudio>();
-		ENTITY_COMP_DOC comp{ ent, ent.getComponent<WayPointComponent>()->Write(), typeid(WayPointComponent).hash_code() };
-		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
-		_notRemove = true;
+			// Undo-Redo for Components
+			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+		}
+
+		if (!_notRemove)
+		{
+			//ent.RemoveComponent<ComponentLoadAudio>();
+			ENTITY_COMP_DOC comp{ ent, ent.getComponent<WayPointComponent>()->Write(), typeid(WayPointComponent).hash_code() };
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+			_notRemove = true;
+		}
+
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<WayPointComponent>()->Write() };
+				wp_comp->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_WAYPOINT"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+			}
+		}
 	}
 }
 
@@ -2279,7 +3335,6 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  Graphics",
 			"  Light   ",
 			"  Collider",
-			"  CScript(removed)",
 			"  C#Script",
 			"  Canvas",
 			"  PlayerStats",
@@ -2374,7 +3429,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}*/
-		case 7: // C#Script
+		case 6: // C#Script
 		{
 		  if (!ent.getComponent<ScriptComponent>())
 		  {
@@ -2385,7 +3440,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 		  }
 		  break;
 		}
-		case 8: // Canvas
+		case 7: // Canvas
 		{
 			if (!ent.getComponent<CanvasComponent>())
 			{
@@ -2396,7 +3451,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 9: // PlayerStats
+		case 8: // PlayerStats
 		{
 			if (!ent.getComponent<PlayerStatsComponent>())
 			{
@@ -2405,7 +3460,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 10: // PlayerStats
+		case 9: // PlayerStats
 		{
 			if (!ent.getComponent<CauldronStatsComponent>())
 			{
@@ -2414,7 +3469,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 11: // ComponentVariable
+		case 10: // ComponentVariable
 		{
 			if (!ent.getComponent<ComponentVariables>())
 			{
@@ -2423,7 +3478,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 12: // ComponentNav
+		case 11: // ComponentNav
 		{
 			if (!ent.getComponent<NavComponent>())
 			{
@@ -2432,7 +3487,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 13: // WayPointPath
+		case 12: // WayPointPath
 		{
 			if (!ent.getComponent<WayPointMapComponent>())
 			{
@@ -2441,7 +3496,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 14: // WayPoint
+		case 13: // WayPoint
 		{
 			if (!ent.getComponent<WayPointComponent>())
 			{
@@ -2451,7 +3506,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			break;
 		}
 
-		case 15: // Emitter
+		case 14: // Emitter
 		{
 			if (!ent.getComponent<EmitterComponent>())
 			{
@@ -2460,7 +3515,7 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			}
 			break;
 		}
-		case 16: // Camera
+		case 15: // Camera
 		{
 			if (!ent.getComponent<CameraComponent>())
 			{
@@ -2586,9 +3641,63 @@ bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjec
 		break;
 	}
 
+
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 	return ImGuizmo::Manipulate(cameraView, cameraProjection, _mCurrentGizmoOperation, _mCurrentGizmoMode, glm::value_ptr(matrix), NULL, _useSnap ? snapPtr : NULL, NULL, NULL);
+}
+
+void InspectorWindow::TransformSnap(Entity& ent)
+{
+	_levelEditor->LE_AddChildWindow("##SnapChildWindow", ImVec2(0, 210),
+		[this, &ent]()
+		{
+			ImGui::Checkbox("Snap X direction##SNAPX", &_isSnapX);
+			ImGui::Checkbox("Snap Y direction##SNAPY", &_isSnapY);
+			ImGui::Checkbox("Snap Z direction##SNAPZ", &_isSnapZ);
+			ImGui::Checkbox("Snap downwards##SNAPYD", &_isSnapYD);
+
+			if (ImGui::InputFloat("Snap Distance##SNAPDIST", &_snapDist, 3))
+			{
+			}
+			if (ImGui::InputFloat("GAP##SNAPGAP", &_snapGap, 0.10f))
+			{
+			}
+			if (ImGui::InputInt("LOD##SNAPLOD", &_snapLod, 1))
+			{
+			}
+
+			if (ImGui::Button("Do Snap##"))
+			{
+				int directions = 0;
+
+#define SNAP_X 1
+#define SNAP_Y 2
+#define SNAP_Z 4
+#define SNAP_D 8
+
+				if (_isSnapX)
+				{
+					directions = directions | SNAP_X;
+				}
+				if (_isSnapY)
+				{
+					directions = directions | SNAP_Y;
+				}
+				if (_isSnapZ)
+				{
+					directions = directions | SNAP_Z;
+				}
+				if (_isSnapYD)
+				{
+					directions = directions | SNAP_D;
+				}
+
+				NS_COLLISION::SYS_COLLISION->Snap_AABB_AABB_Do(ent, _snapDist, _snapGap, directions, _snapLod, true);
+			}
+
+		}, true);
+
 }
 
 void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)

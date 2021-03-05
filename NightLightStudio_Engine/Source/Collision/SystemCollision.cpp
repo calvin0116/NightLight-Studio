@@ -14,6 +14,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 #undef max
 #undef min
@@ -314,6 +316,10 @@ namespace NS_COLLISION
 
 	void CollisionSystem::FixedUpdate(float)
 	{
+		// Tracy
+		// Zone Color: Cyan
+		ZoneScopedNC("Collision", 0x1ffbff);
+
 		// //test line col
 		//NlMath::Vec3 ray1Origin(-100.0f, 0.0f, 0.0f);
 		//NlMath::Vec3 ray1End(100.0f, 0.0f, 0.0f);
@@ -522,11 +528,6 @@ namespace NS_COLLISION
 		}
     //resolve collision here
     colResolver.resolveCollision();
-
-	// Tracy
-	// Zone Color: Cyan
-	ZoneScopedNC("Collision", 0x1ffbff);
-
 	}
 	void CollisionSystem::GameExit()
 	{
@@ -1528,7 +1529,7 @@ namespace NS_COLLISION
 		return doesIntersect;
 	}
 
-	bool CollisionSystem::Snap_AABB_AABB_Do(Entity entity, float distance, int directions, int lod, bool isDrawDebug)
+	bool CollisionSystem::Snap_AABB_AABB_Do(Entity entity, float distance, float gap, int directions, int lod, bool isDrawDebug)
 	{
 		if (Snap_AABB_AABB_Detect(entity, distance, directions, lod, isDrawDebug))
 		{
@@ -1537,6 +1538,18 @@ namespace NS_COLLISION
 
 			if (ct)
 			{
+				for (int i = 0; i < 3; ++i)
+				{
+					if(abs(currentSnapVec[i]) != 0.0f)
+						if (currentSnapVec[i] > 0.0f)
+						{
+							currentSnapVec[i] -= gap;
+						}
+						else
+						{
+							currentSnapVec[i] += gap;
+						}
+				}
 				ct->_position += glm::vec3(currentSnapVec.x, currentSnapVec.y, currentSnapVec.z);
 
 				return true;

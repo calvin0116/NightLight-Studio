@@ -3,6 +3,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 const float SystemAudio::s_UNITS_PER_METER = 100.0f;
 const int listenerTag = 1000;
@@ -247,6 +249,9 @@ void SystemAudio::MyGameInit()
     TracyMessageL("SystemAudio::My Game Init: System Audio Game Init Obj ID:");
     TracyMessageL(std::string("SystemAudio::My Game Init: ").append(std::to_string(G_ECMANAGER->getObjId(itr))).c_str());
 
+    SPEEDLOG("SystemAudio::My Game Init: System Audio Game Init Obj ID:");
+    SPEEDLOG(std::string("SystemAudio::My Game Init: ").append(std::to_string(G_ECMANAGER->getObjId(itr))));
+
     // Load the following audios from load audio component
     ComponentLoadAudio* myComp = G_ECMANAGER->getComponent<ComponentLoadAudio>(itr);
     for (const auto& [path, name] : myComp->_sounds)
@@ -300,6 +305,10 @@ void SystemAudio::MyGameInit()
 
 void SystemAudio::Update()
 {
+  // Tracy
+  // Zone Color: Green
+  ZoneScopedNC("Audio", 0x1df52f);
+
   // position update here
   _system->update();
   if (_listenerVecPos)
@@ -329,10 +338,6 @@ void SystemAudio::Update()
     // Set position
     _channels[i]->set3DAttributes(&_fmodPos, nullptr);
   }
-
-  // Tracy
-  // Zone Color: Green
-  ZoneScopedNC("Audio", 0x1df52f);
 }
 
 void SystemAudio::Free()

@@ -6,14 +6,14 @@
 #pragma warning( disable : 26812 )
 
 ComponentEmitter::ComponentEmitter()
-	: _isActive{ true }, _emitterID{ -1 }
+	: _isActive{ true }, _emitterID{ -1 }, _blackIsAlpha{ false }
 {
 	strcpy_s(ser_name, "EmitterComponent");
 }
 
 ComponentEmitter::ComponentEmitter(const int& emitterID)
 	: _isActive{ true }
-	, _emitterID{ emitterID }
+	, _emitterID{ emitterID }, _blackIsAlpha{ false } 
 {
 	strcpy_s(ser_name, "EmitterComponent");
 }
@@ -33,7 +33,7 @@ void ComponentEmitter::AddTexture(std::string filename)
 	if (!filename.empty() && _image.toString() != filename)
 	{
 		_image = filename;
-		_imageID = NS_GRAPHICS::EmitterSystem::GetInstance().LoadTexture(_image.toString());
+		_imageID = NS_GRAPHICS::EmitterSystem::GetInstance().LoadTexture(_image.toString(), _blackIsAlpha);
 	}
 }
 
@@ -386,6 +386,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("isActive") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No active data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No active data has been found");
 		//std::cout << "No active data has been found" << std::endl;
 	}
 	else
@@ -394,6 +395,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Image") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No Texture file data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No Texture file data has been found");
 		//std::cout << "No Texture file data has been found" << std::endl;
 	}
 	else
@@ -406,9 +408,21 @@ void ComponentEmitter::Read(Value& val)
 		}
 	}
 
+	if (val.FindMember("BlackIsAlpha") == val.MemberEnd())
+	{
+		TracyMessageL("ComponentEmitter::Read: No BlackIsAlpha data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No BlackIsAlpha data has been found");
+		//std::cout << "No Texture file data has been found" << std::endl;
+	}
+	else
+	{
+		_blackIsAlpha = val["BlackIsAlpha"].GetBool();
+	}
+
 	if (val.FindMember("EmitterType") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No active data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No active data has been found");
 		//std::cout << "No active data has been found" << std::endl;
 	}
 	else
@@ -427,6 +441,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("DurationPerCycle") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No duration data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No duration data has been found");
 		//std::cout << "No duration data has been found" << std::endl;
 	}
 	else
@@ -437,6 +452,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("EmissionRateOverTime") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No emission data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No emission data has been found");
 		//std::cout << "No emission data has been found" << std::endl;
 	}
 	else
@@ -456,6 +472,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("MaxParticle") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No particle data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No particle data has been found");
 		//std::cout << "No particle data has been found" << std::endl;
 	}
 	else
@@ -467,6 +484,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("BurstRate") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No BurstRate data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No BurstRate data has been found");
 		//std::cout << "No BurstRate data has been found" << std::endl;
 	}
 	else
@@ -477,6 +495,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("BurstAmount") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No BurstAmount data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No BurstAmount data has been found");
 		//std::cout << "No BurstAmount data has been found" << std::endl;
 	}
 	else
@@ -487,6 +506,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Row") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No Row data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No Row data has been found");
 		//std::cout << "No Row data has been found" << std::endl;
 	}
 	else
@@ -497,6 +517,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Column") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No Column data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No Column data has been found");
 		//std::cout << "No Column data has been found" << std::endl;
 	}
 	else
@@ -507,6 +528,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("TotalFrame") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No TotalFrame data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No TotalFrame data has been found");
 		//std::cout << "No TotalFrame data has been found" << std::endl;
 	}
 	else
@@ -517,6 +539,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("FramesPerSecond") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No FramesPerSecond data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No FramesPerSecond data has been found");
 		//std::cout << "No FramesPerSecond data has been found" << std::endl;
 	}
 	else
@@ -536,6 +559,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Angle") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No angle data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No angle data has been found");
 		//std::cout << "No angle data has been found" << std::endl;
 	}
 	else
@@ -546,6 +570,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Radius") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No radius data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No radius data has been found");
 		//std::cout << "No radius data has been found" << std::endl;
 	}
 	else
@@ -556,6 +581,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("RandomizeSize") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No RandomizeSize data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No RandomizeSize data has been found");
 		//std::cout << "No RandomizeSize data has been found" << std::endl;
 	}
 	else
@@ -566,6 +592,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("MinimumSize") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No MinimumSize data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No MinimumSize data has been found");
 		//std::cout << "No MinimumSize data has been found" << std::endl;
 	}
 	else
@@ -576,6 +603,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("MaximumSize") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No MaximumSize data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No MaximumSize data has been found");
 		//std::cout << "No MaximumSize data has been found" << std::endl;
 	}
 	else
@@ -586,6 +614,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("RandomizeSpeed") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No RandomizeSize data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No RandomizeSize data has been found");
 		//std::cout << "No RandomizeSize data has been found" << std::endl;
 	}
 	else
@@ -596,6 +625,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("MinimumSpeed") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No MinimumSize data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No MinimumSize data has been found");
 		//std::cout << "No MinimumSize data has been found" << std::endl;
 	}
 	else
@@ -606,6 +636,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("MaximumSpeed") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No MaximumSize data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No MaximumSize data has been found");
 		//std::cout << "No MaximumSize data has been found" << std::endl;
 	}
 	else
@@ -616,6 +647,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("RandomizeLife") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No RandomizeLife data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No RandomizeLife data has been found");
 		//std::cout << "No RandomizeLife data has been found" << std::endl;
 	}
 	else
@@ -626,6 +658,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("MinimumLife") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No MinimumLife data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No MinimumLife data has been found");
 		//std::cout << "No MinimumLife data has been found" << std::endl;
 	}
 	else
@@ -636,6 +669,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("MaximumLife") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No MaximumLife data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No MaximumLife data has been found");
 		//std::cout << "No MaximumLife data has been found" << std::endl;
 	}
 	else
@@ -646,6 +680,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Play") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No Play data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No Play data has been found");
 		//std::cout << "No Play data has been found" << std::endl;
 	}
 	else
@@ -656,6 +691,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("PreWarm") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No PreWarm data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No PreWarm data has been found");
 		//std::cout << "No PreWarm data has been found" << std::endl;
 	}
 	else
@@ -666,6 +702,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Burst") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No Burst data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No Burst data has been found");
 		//std::cout << "No Burst data has been found" << std::endl;
 	}
 	else
@@ -676,6 +713,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Loop") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No Loop data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No Loop data has been found");
 		//std::cout << "No Loop data has been found" << std::endl;
 	}
 	else
@@ -686,6 +724,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Reverse") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No Reverse data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No Reverse data has been found");
 		//std::cout << "No Reverse data has been found" << std::endl;
 	}
 	else
@@ -696,6 +735,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Follow") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No Follow data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No Follow data has been found");
 		//std::cout << "No Follow data has been found" << std::endl;
 	}
 	else
@@ -706,6 +746,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Fade") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No Fade data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No Fade data has been found");
 		//std::cout << "No Fade data has been found" << std::endl;
 	}
 	else
@@ -716,6 +757,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Animated") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No Animated data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No Animated data has been found");
 		//std::cout << "No Animated data has been found" << std::endl;
 	}
 	else
@@ -726,6 +768,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("LoopAnimation") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No LoopAnimation data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No LoopAnimation data has been found");
 		//std::cout << "No LoopAnimation data has been found" << std::endl;
 	}
 	else
@@ -736,6 +779,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("VelocityOverTime") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No VelocityOverTime data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No VelocityOverTime data has been found");
 		//std::cout << "No VelocityOverTime data has been found" << std::endl;
 	}
 	else
@@ -746,6 +790,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("SizeOverTime") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No SizeOverTime data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No SizeOverTime data has been found");
 		//std::cout << "No SizeOverTime data has been found" << std::endl;
 	}
 	else
@@ -756,6 +801,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("SpeedOverTime") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No SpeedOverTime data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No SpeedOverTime data has been found");
 		//std::cout << "No SpeedOverTime data has been found" << std::endl;
 	}
 	else
@@ -766,6 +812,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("ColourOverTime") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No ColourOverTime data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No ColourOverTime data has been found");
 		//std::cout << "No ColourOverTime data has been found" << std::endl;
 	}
 	else
@@ -776,6 +823,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("RandomizeColour") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No RandomizeColour data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No RandomizeColour data has been found");
 		//std::cout << "No RandomizeColour data has been found" << std::endl;
 	}
 	else
@@ -786,6 +834,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("ColourA") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No ColourA data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No ColourA data has been found");
 		//std::cout << "No ColourA data has been found" << std::endl;
 	}
 	else
@@ -801,6 +850,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("ColourB") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No ColourB data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No ColourB data has been found");
 		//std::cout << "No ColourB data has been found" << std::endl;
 	}
 	else
@@ -816,6 +866,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("ColourStart") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No ColourStart data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No ColourStart data has been found");
 		//std::cout << "No ColourStart data has been found" << std::endl;
 	}
 	else
@@ -831,6 +882,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("ColourEnd") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No ColourEnd data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No ColourEnd data has been found");
 		//std::cout << "No ColourEnd data has been found" << std::endl;
 	}
 	else
@@ -846,6 +898,7 @@ void ComponentEmitter::Read(Value& val)
 	if (val.FindMember("Velocity") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentEmitter::Read: No Velocity data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No Velocity data has been found");
 		//std::cout << "No Velocity data has been found" << std::endl;
 	}
 	else
@@ -871,6 +924,7 @@ Value ComponentEmitter::Write()
 	NS_SERIALISER::ChangeData(&val, "isActive", _isActive);		//Bool
 
 	NS_SERIALISER::ChangeData(&val, "Image", rapidjson::StringRef(_image.c_str()));
+	NS_SERIALISER::ChangeData(&val, "BlackIsAlpha", _blackIsAlpha);
 
 	switch (emitSys._emitters[_emitterID]->_type)
 	{

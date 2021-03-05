@@ -172,6 +172,18 @@ namespace NS_GRAPHICS
         //1 HDR PER SCENE
         unsigned _hdrID;
 
+        // Shadow Rendering Variables
+        // Depth Map used for testing shadow depth from light's perspective
+        // Size depends on client window resolution
+        GLuint _shadowDepthMapFBO = 0;
+
+        // Storage variables for near and far plane, used for shadow mapping matrix reference
+        // Affected only by SetProjectionMatrix
+        //float _nearPlane = 0.f; // Moved to camera.h
+        //float _farPlane = 0.f;
+
+        glm::mat4 lightSpaceMatrix;
+
         // Deferred Shading Variables
         GLuint _geometryBuffer = 0;
         unsigned int _rtPositionAlpha = 0;         // Position color buffer/render target
@@ -190,7 +202,7 @@ namespace NS_GRAPHICS
         // Should NOT be calculated every frame
         glm::mat4 _orthoMatrix;
 
-        float _testTimeElapsed;
+        //float _testTimeElapsed;
 
         // Screen Quad Variables (Deferred Shading)
         GLuint screenQuadVAO = 0;

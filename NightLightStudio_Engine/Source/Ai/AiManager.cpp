@@ -5,6 +5,8 @@
 
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 
 inline void NS_AI::AiManager::HandleMsg(MessageTogglePlay& mst)
 {
@@ -80,6 +82,10 @@ inline void NS_AI::AiManager::GameInit()
 
 inline void NS_AI::AiManager::Update()
 {
+	// Tracy
+	// Zone color: Orange
+	ZoneScopedNC("AI", 0xff8f26);
+
 	wp_man.Update();
 
 	if (!isActive)
@@ -95,10 +101,6 @@ inline void NS_AI::AiManager::Update()
 		NavBehaviour(navComp);
 		++itr;
 	}
-
-	// Tracy
-	// Zone color: Orange
-	ZoneScopedNC("AI", 0xff8f26);
 }
 
 inline void NS_AI::AiManager::WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position)
@@ -165,7 +167,9 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 		return;
 	}
 	
-
+	if (navTrans == nullptr)
+		return;
+	//TracyMessageL("AiManager::NavBehavior: Why are you here alr?");
 	//Determine next way point and whether to move towards it out not
 	glm::vec3 wp_pos = navComp->GetCurWalkingWp()->GetPos();
 	//wp_pos.y = 0.0f;
@@ -183,6 +187,7 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 				navComp->dir = glm::normalize(navComp->dir);
 				//std::cout << "Going to next wp" << std::endl;
 				TracyMessageL("AiManager::NavBehavior: Going to next wp");
+				SPEEDLOG("AiManager::NavBehavior: Going to next wp");
 				rb->velocity = 0.0f;
 			}
 			else

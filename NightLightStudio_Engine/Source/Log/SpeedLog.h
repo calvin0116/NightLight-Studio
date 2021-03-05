@@ -1,16 +1,20 @@
 #ifndef SPEEDLOG_WRAPPER
 #define SPEEDLOG_WRAPPER
 
-#include "../../framework.h"
+#define SPEEDLOG_ALLOW true
+
+#pragma warning( disable : 4244 )  // utility: conversion warning
+
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/sinks/daily_file_sink.h>
 
-static const std::string DEFAULT_LOG_NAME = "log";
-static const std::string DEFAULT_LOG_PATH = "logs/log.txt";
+#define SPEEDLOG_LOG_TO_FILE true
 
 class SpeedLog
 {
+#if SPEEDLOG_ALLOW
 	static bool _first;
 	std::shared_ptr<spdlog::logger> _log;
 public:
@@ -36,11 +40,47 @@ public:
 
 	std::shared_ptr<spdlog::logger> GetLogger();
 	std::shared_ptr<spdlog::logger> ResetLogger();
-	std::shared_ptr<spdlog::logger> SetNewBasicLogger(const std::string& name, const std::string& path);
-	std::shared_ptr<spdlog::logger> SetNewRotatingLogger(const std::string& name, const std::string& path, size_t maxSize, size_t maxFiles);
+	std::shared_ptr<spdlog::logger> SetNewBasicLogger(const std::string& name, const std::string& path, bool truncate = false);
+	std::shared_ptr<spdlog::logger> SetNewRotatingLogger(const std::string& name, const std::string& path, size_t maxSize, size_t maxFiles, bool rotate_on_open = false);
+	std::shared_ptr<spdlog::logger> SetNewDailyLogger(const std::string& name, const std::string& path, int hour = 0, int minute = 0, bool truncate = false);
+#else
+public:
+	SpeedLog() {}
+	~SpeedLog() {}
+
+	template<class... Args>
+	SpeedLog(Args&&...) {}
+	template<class... Args>
+	SpeedLog& operator=(Args&&...) {}
+
+	template<class... Args>
+	bool operator == (Args&&...) {}
+
+	template<class... Args>
+	bool operator != (Args&&...) {}
+
+	std::shared_ptr<spdlog::logger> operator->() { return nullptr; }
+
+	std::shared_ptr<spdlog::logger> GetLogger() { return nullptr; }
+	std::shared_ptr<spdlog::logger> ResetLogger() { return nullptr; }
+
+	template<class... Args>
+	std::shared_ptr<spdlog::logger> SetNewBasicLogger(Args&& ... args) { return nullptr; }
+
+	template<class... Args>
+	std::shared_ptr<spdlog::logger> SetNewRotatingLogger(Args&& ... args) { return nullptr; }
+
+	template<class... Args>
+	std::shared_ptr<spdlog::logger> SetNewDailyLogger(Args&& ... args) { return nullptr; }
+
+	template<class... Args>
+	void operator ()(Args&& ...) {}
+#endif
 };
 
 extern SpeedLog SPEEDLOG;
+
+#if SPEEDLOG_ALLOW
 
 template<class FormatStrings, class... Args>
 inline void SPEEDLOG_INFO(const FormatStrings& fmt, Args&& ... args)
@@ -135,5 +175,57 @@ inline void SpeedLog::operator()(const FormatStrings& fmt, Args && ...args)
 	(*this)->info(fmt, args...);
 }
 
+
+#else
+
+template<class... Args>
+inline void SPEEDLOG_INFO(Args&& ... ) {}
+
+template<class... Args>
+inline void SPEEDLOG_WARN(Args&& ... ) { }
+
+template<class... Args>
+inline void SPEEDLOG_ERROR(Args&& ... ) { }
+
+template<class... Args>
+inline void SPEEDLOG_DEBUG(Args&& ... ) { }
+
+template<class... Args>
+inline void SPEEDLOG_CRITICAL(Args&& ...) { }
+
+template<class... Args>
+inline void SPEEDLOG_TRACE(Args&& ...) { }
+
+template<class... Args>
+inline void SPEEDLOG_SETLEVEL(Args&& ...) { }
+
+template<class... Args>
+inline void SPEEDLOG_ENABLE_BACKTRACE(Args&& ...) { }
+
+inline void SPEEDLOG_DISABLE_BACKTRACE(){}
+
+inline void SPEEDLOG_DUMP_BACKTRACE(){}
+
+inline void SPEEDLOG_FLUSH(){}
+
+template<class... Args>
+inline void SPEEDLOG_SET_NEW_BASIC(Args&& ...) { }
+
+template<class... Args>
+inline void SPEEDLOG_SET_NEW_ROTATING(Args&& ...) { }
+
+/*
+// DO NOT USE IF YOU ARE NOT GOING TO SHUTDOWN
+template<class... Args>
+inline void SPEEDLOG_FLUSH_EVERY(const unsigned secs)(Args&& ... args) { sink(args...); }
+*/
+
+// DO NOT USE UNLESS FINISHING
+/*
+inline void SPEEDLOG_SHUTDOWN_ALL() {}
+*/
+
+
+#endif
 
 #endif

@@ -1,5 +1,7 @@
 #include "TextureLoader.h"
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 #pragma warning(disable:4244)
 #pragma warning(disable:4996)
 #pragma warning(disable:6029)
@@ -49,6 +51,7 @@ namespace NS_GRAPHICS
 	bool TextureLoader::LoadDDSImage(const std::string& file)
 	{
 		TracyMessageL(std::string("TextureLoader::LoadDDSImage: Loading DDS Images " + file).c_str());
+		SPEEDLOG(std::string("TextureLoader::LoadDDSImage: Loading DDS Images " + file));
 		//std::cout << "Loading DDS Images " << file << std::endl;
 		DDSImageData* image;
 
@@ -218,6 +221,7 @@ namespace NS_GRAPHICS
 	bool TextureLoader::LoadHDR(const std::string& file)
 	{
 		TracyMessageL(std::string("TextureLoader::LoadHDR: Loading HDR : " + file).c_str());
+		SPEEDLOG(std::string("TextureLoader::LoadHDR: Loading HDR : " + file));
 		//std::cout << "Loading HDR : " << file << std::endl;
 		int width, height, nrComp;
 		float* data = stbi_loadf(file.c_str(), &width, &height, &nrComp, 0);
@@ -811,10 +815,11 @@ namespace NS_GRAPHICS
 		return false;
 	}
 
-	bool TextureLoader::LoadOtherImage(const std::string& file, const std::string& newFile, bool sRGB)
+	bool TextureLoader::LoadOtherImage(const std::string& file, const std::string& newFile, bool sRGB, bool blackAlpha)
 	{
 		(void)newFile;
 		TracyMessageL(std::string("TextureLoader::LoadOtherImage: Loading Other Images " + file).c_str());
+		SPEEDLOG(std::string("TextureLoader::LoadOtherImage: Loading Other Images " + file));
 		//std::cout << "Loading Other Images " << file << std::endl;
 		int width, height, channel;
 		unsigned char* textureData = SOIL_load_image(file.c_str(), &width, &height, &channel, SOIL_LOAD_AUTO);
@@ -848,8 +853,40 @@ namespace NS_GRAPHICS
 			if (sRGB)
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
 			else
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
+			{
+				if (blackAlpha)
+				{
+					unsigned char* newTextureData = new unsigned char[width * height * 4];
+					unsigned char tolerance = 30;
 
+					int original = 0;
+					for (int i = 3; i < width * height * 4; i += 4)
+					{
+						newTextureData[i - 3] = textureData[original];
+						newTextureData[i - 2] = textureData[original+1];
+						newTextureData[i - 1] = textureData[original+2];
+
+						int avgColour = 0.333f * (newTextureData[i - 3] + newTextureData[i - 2] + newTextureData[i - 1]);
+						if (avgColour <= tolerance)
+						{
+							newTextureData[i] = 0;
+						}
+						else
+						{
+							newTextureData[i] = 255;
+						}
+
+						original += 3;
+					}
+
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, newTextureData);
+					delete[] newTextureData;
+				}
+				else
+				{
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
+				}
+			}
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 		else
@@ -857,6 +894,7 @@ namespace NS_GRAPHICS
 			//Debug_LogToFile("Resources/Logs/Generate_texture.txt", "Texture loading failed");
 			//CDEBUG_ASSERT(textureData, std::string("Failed to load texture: ").append(file).c_str());
 			TracyMessageL(std::string("TextureLoader::LoadOtherImage: Failed to load texture: ").append(SOIL_last_result()).c_str());
+			SPEEDLOG(std::string("TextureLoader::LoadOtherImage: Failed to load texture: ").append(SOIL_last_result()));
 			//std::cout << "Failed to load texture: " << SOIL_last_result() << std::endl;
 			SOIL_free_image_data(textureData);
 			return false;
@@ -870,7 +908,7 @@ namespace NS_GRAPHICS
 		return true;
 	}
 
-	unsigned TextureLoader::LoadTexture(const std::string & file, bool sRGB)
+	unsigned TextureLoader::LoadTexture(const std::string & file, bool sRGB, bool blackAlpha)
 	{
 		if (file.empty())
 		{
@@ -920,7 +958,7 @@ namespace NS_GRAPHICS
 			//newName = s_LocalTexturePathName + name + s_DDSFileFormat;
 			//finalFileName = newName;
 
-			result = LoadOtherImage(file, file, sRGB);
+			result = LoadOtherImage(file, file, sRGB, blackAlpha);
 		}
 
 		if(!result)

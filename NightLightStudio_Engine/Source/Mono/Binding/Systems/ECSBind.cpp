@@ -13,6 +13,8 @@
 #include "../../../Collision/SystemCollision.h"
 // Tracy
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../../../Log/SpeedLog.h"
 
 //#define CSDebug
 

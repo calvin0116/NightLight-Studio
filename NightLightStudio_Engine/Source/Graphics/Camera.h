@@ -22,6 +22,9 @@ namespace NS_GRAPHICS
 	{
 	public:
     float cameraFOV = 45.f;
+		float nearDist = 1.0f;
+		float farDist = 50000.f;
+		float viewRatio = 1.78f;
 
 		// World/Global Up Vector
 		glm::vec3 globalUp;

@@ -319,9 +319,9 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 	glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, toDraw);
 }
 
-unsigned NS_GRAPHICS::EmitterSystem::LoadTexture(std::string filename)
+unsigned NS_GRAPHICS::EmitterSystem::LoadTexture(std::string filename, bool blackAlpha)
 {
-	return _textureManager->GetTexture(filename);
+	return _textureManager->GetTexture(filename, false, blackAlpha);
 }
 
 unsigned NS_GRAPHICS::EmitterSystem::AddEmitter()

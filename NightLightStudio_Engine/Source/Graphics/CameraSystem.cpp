@@ -10,6 +10,8 @@
 #include "../Component/ComponentCamera.h"
 
 #include "../tracy-master/Tracy.hpp"
+// SpeedLog
+#include "../Log/SpeedLog.h"
 #define TESTMOVETARGET 1
 
 namespace NS_GRAPHICS
@@ -547,6 +549,57 @@ namespace NS_GRAPHICS
 	//	SetUseThridPersonCam(false);
 	//}
 
+	void CameraSystem::CalculateFrustum(Camera& cam)
+	{
+		// Get Normals
+		m_Frustum.Plane[MyFrustum::Near].Normal = m_Frustum.Plane[MyFrustum::Far].Normal = cam.cameraFront;
+		m_Frustum.Plane[MyFrustum::Far].Normal = m_Frustum.Plane[MyFrustum::Far].Normal = cam.cameraFront;
+		// Calculate centers
+		glm::vec3 nearCenter = cam.cameraPos - cam.cameraFront * cam.nearDist;
+		glm::vec3 farCenter = cam.cameraPos - cam.cameraFront * cam.farDist;
+
+
+
+		// Get widths and heights
+		float nearHeight = 2 * tanf(glm::radians(cam.cameraFOV) / 2) * cam.nearDist;
+		float farHeight = 2 * tanf(glm::radians(cam.cameraFOV) / 2) * cam.farDist;
+		float nearWidth = nearHeight * cam.viewRatio;
+		float farWidth = farHeight * cam.viewRatio;
+
+		// Compute corner points of near and far plane
+		glm::vec3 farTopLeft = farCenter + cam.GetCameraUp() * (farHeight * 0.5f) - cam.GetRight() * (farWidth * 0.5f);
+		glm::vec3 farTopRight = farCenter + cam.GetCameraUp() * (farHeight * 0.5f) + cam.GetRight() * (farWidth * 0.5f);
+		glm::vec3 farBottomLeft = farCenter - cam.GetCameraUp() * (farHeight * 0.5f) - cam.GetRight() * (farWidth * 0.5f);
+		glm::vec3 farBottomRight = farCenter - cam.GetCameraUp() * (farHeight * 0.5f) + cam.GetRight() * (farWidth * 0.5f);
+
+		glm::vec3 nearTopLeft = nearCenter + cam.GetCameraUp() * (nearHeight * 0.5f) - cam.GetRight() * (nearWidth * 0.5f);
+		glm::vec3 nearTopRight = nearCenter + cam.GetCameraUp() * (nearHeight * 0.5f) + cam.GetRight() * (nearWidth * 0.5f);
+		glm::vec3 nearBottomLeft = nearCenter - cam.GetCameraUp() * (nearHeight * 0.5f) - cam.GetRight() * (nearWidth * 0.5f);
+		glm::vec3 nearBottomRight = nearCenter - cam.GetCameraUp() * (nearHeight * 0.5f) + cam.GetRight() * (nearWidth * 0.5f);
+
+		glm::vec3 p0, p1, p2;
+
+		p0 = nearBottomLeft; p1 = farBottomLeft; p2 = farTopLeft;
+		m_Frustum.Plane[MyFrustum::Left].Normal = glm::normalize(glm::cross(p1 - p0, p2 - p1));
+		m_Frustum.Plane[MyFrustum::Left].Distance = glm::dot(m_Frustum.Plane[MyFrustum::Left].Normal, p0);
+		//float leftPlaneOffset = glm::dot(leftPlaneNormal, p0);
+
+		p0 = nearTopLeft; p1 = farTopLeft; p2 = farTopRight;
+		m_Frustum.Plane[MyFrustum::Top].Normal = glm::normalize(glm::cross(p1 - p0, p2 - p1));
+		m_Frustum.Plane[MyFrustum::Top].Distance = glm::dot(m_Frustum.Plane[MyFrustum::Top].Normal, p0);
+		//glm::vec3 topPlaneNormal = Dot(topPlaneNormal, p0);
+
+		p0 = nearTopRight; p1 = farTopRight; p2 = farBottomRight;
+		m_Frustum.Plane[MyFrustum::Right].Normal = glm::normalize(glm::cross(p1 - p0, p2 - p1));
+		m_Frustum.Plane[MyFrustum::Right].Distance = glm::dot(m_Frustum.Plane[MyFrustum::Right].Normal, p0);
+		//glm::vec3 rightPlaneNormal = Dot(rightPlaneNormal, p0);
+
+		p0 = nearBottomRight; p1 = farBottomRight; p2 = farBottomLeft;
+		m_Frustum.Plane[MyFrustum::Btm].Normal = glm::normalize(glm::cross(p1 - p0, p2 - p1));
+		m_Frustum.Plane[MyFrustum::Btm].Distance = glm::dot(m_Frustum.Plane[MyFrustum::Btm].Normal, p0);
+		//glm::vec3 bottomPlaneNormal = Dot(bottomPlaneNormal, p0);
+	}
+
 	void CameraSystem::HandleTogglePlay(MessageTogglePlay& msg)
 	{
 		// Handle msg here. Only Before Play MSG
@@ -554,6 +607,7 @@ namespace NS_GRAPHICS
 			return;
 		_isPlaying = msg.isPlaying;
 		TracyMessageL("CameraSystem::HandleTogglePlay: Camera Playing!");
+		SPEEDLOG("CameraSystem::HandleTogglePlay: Camera Playing!");
 		//std::cout << "Camera Playing!" << std::endl;
 		if (_isPlaying && _Inited == false)
 		{

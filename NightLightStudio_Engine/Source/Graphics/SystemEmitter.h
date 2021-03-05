@@ -42,7 +42,7 @@ namespace NS_GRAPHICS
         void UpdateEmitter(ComponentEmitter* emitter, float dt);
         void Render(ComponentEmitter* emitter);
 
-        unsigned LoadTexture(std::string filename);
+        unsigned LoadTexture(std::string filename, bool blackAlpha);
 
         std::vector<Emitter*> _emitters;
         std::vector<bool> _usedStatus;
