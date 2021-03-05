@@ -4,11 +4,10 @@
 // Default log
 SpeedLog SPEEDLOG; //= spdlog::basic_logger_st("log", "logs/log.txt");
 
+#if SPEEDLOG_ALLOW
 bool SpeedLog::_first = true;
 
-SpeedLog::SpeedLog()
-{
-}
+SpeedLog::SpeedLog(){}
 
 SpeedLog::~SpeedLog()
 {
@@ -79,13 +78,25 @@ std::shared_ptr<spdlog::logger> SpeedLog::operator->()
 				struct tm now;
 				localtime_s(&now, &rawtime);
 
-				std::string currentDate = "[";
+				// Path name with date included
+				std::string currentDate = ""; // = "[";
+				if (now.tm_mday < 10)
+				{
+					currentDate.append("0");
+				}
 				currentDate.append(std::to_string(now.tm_mday));
 				currentDate.append("_");
+
+				if (now.tm_mon < 10)
+				{
+					currentDate.append("0");
+				}
 				currentDate.append(std::to_string(now.tm_mon + 1));
 				currentDate.append("_");
+
 				currentDate.append(std::to_string(now.tm_year + 1900));
-				currentDate.append("]");
+				//currentDate.append("]");
+
 				std::string path = "logs/";
 				path.append(currentDate).append(".txt");
 
@@ -139,3 +150,8 @@ std::shared_ptr<spdlog::logger> SpeedLog::SetNewDailyLogger(const std::string& n
 	_log = spdlog::daily_logger_st(name, path, hour, minute, truncate);
 	return _log;
 }
+
+#else
+
+
+#endif

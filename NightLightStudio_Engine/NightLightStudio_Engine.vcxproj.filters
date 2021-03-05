@@ -414,14 +414,8 @@
     <ClCompile Include="Source\Component\ComponentWayPoint.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\Particle.cpp" />
-    <ClCompile Include="Source\Component\ComponentEmitter.cpp" />
-    <ClCompile Include="Source\Graphics\SystemEmitter.cpp" />
-    <ClCompile Include="Source\Graphics\Emitter.cpp" />
     <ClCompile Include="Source\Ai\WayPointManager.cpp" />
-    <ClCompile Include="Source\Component\ComponentNavigator.cpp" />
     <ClCompile Include="Source\Ai\AiGraph.cpp" />
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentEmitterBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\CustomTypes\Vector4Bind.cpp" />
     <ClCompile Include="Source\Component\ComponentResolver.cpp">
       <Filter>Source Files\Component</Filter>
@@ -432,6 +426,28 @@
     <ClCompile Include="Source\Core\AssetsMananger.cpp" />
     <ClCompile Include="Source\Log\SpeedLog.cpp">
       <Filter>Source Files\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\GLAD\src\glad.c" />
+    <ClCompile Include="Source\Editor\imgui\imgui_impl_glfw.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentEmitter.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentEmitterBind.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentNavigator.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\SystemEmitter.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Particle.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Emitter.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -825,14 +841,9 @@
     <ClInclude Include="Source\Graphics\Animation.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\Particle.h" />
-    <ClInclude Include="Source\Component\ComponentEmitter.h" />
-    <ClInclude Include="Source\Graphics\SystemEmitter.h" />
     <ClInclude Include="Source\Ai\AiGraph.h">
       <Filter>Source Files\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\Emitter.h" />
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentEmitterBind.h" />
     <ClInclude Include="Source\Mono\Binding\CustomTypes\Vector4Bind.h" />
     <ClInclude Include="Source\Core\TagHandler.h">
       <Filter>Source Files\Core</Filter>
@@ -845,8 +856,9 @@
     <ClInclude Include="Source\Log\SpeedLog.h">
       <Filter>Source Files\Log</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\Shapes.h" />
-  </ItemGroup>
+    <ClInclude Include="Source\Editor\imgui\imgui_impl_glfw.h">
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Shapes.h" />  </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
   </ItemGroup>

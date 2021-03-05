@@ -51,14 +51,17 @@ namespace NS_WINDOW
 		void Exit() override;
 
 		// The WndProc function for Win32
-		virtual LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+		//virtual LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 		// Gets the Handler to Window
 		HWND& GetHandlerToWindow();
 		// Gets the Handler to the HDC (Hardware Device Context)
-		HDC& GetHandlerToDeviceContext();
+		//HDC& GetHandlerToDeviceContext();
 		// Gets the Handler to the first GLRenderContext
-		HGLRC& GetHandlerToGLRenderContext();
+		//HGLRC& GetHandlerToGLRenderContext();
+
+		// Get pointer to GLFWWindow Object
+		GLFWwindow* GetGLFWWnd();
 
 		// Checks if the Window System has initialised
 		bool HasInit() const;
@@ -83,7 +86,7 @@ namespace NS_WINDOW
 		// Gets the current resolution's width
 		int GetResolutionWidth() const;
 
-		void SetAppInstance(HINSTANCE&);
+		//void SetAppInstance(HINSTANCE&);
 
 		void SetAppTitle(std::string&);
 
@@ -92,15 +95,15 @@ namespace NS_WINDOW
 
 	protected:
 		HWND		hAppWnd;			// Handler to window
-		HINSTANCE	hAppInstance;		// Handle to application instance
-		HDC			hDevContext;		// Handle to device context
-		HGLRC		hGLRenderContext;	// Handle to render context
+		//HINSTANCE	hAppInstance;		// Handle to application instance
+		//HDC			hDevContext;		// Handle to device context
+		//HGLRC		hGLRenderContext;	// Handle to render context
 
 		UINT		appWidth;			// Client Width
 		UINT		appHeight;			// Client Height
-		DWORD		windowStyleWM;		// Define Window Styles for window in windowed mode
-		DWORD		windowStyleFM;		// Define Window Styles for window in fullscreen mode
-		DWORD		windowStyle;		// Define Window Styles for window creation
+		//DWORD		windowStyleWM;		// Define Window Styles for window in windowed mode
+		//DWORD		windowStyleFM;		// Define Window Styles for window in fullscreen mode
+		//DWORD		windowStyle;		// Define Window Styles for window creation
 		std::string appTitle;			// Window text at top
 		bool		hasInit;			// Check if windows successfully initialised
 		bool		swap;				// Check if double swap buffers is active for WndSystem
@@ -113,6 +116,9 @@ namespace NS_WINDOW
 		int         iDisplayResW;		// Integer representing the width of the display resolution, defaults to current display's defaults
 		int         iDisplayResH;		// Integer representing the height of the display resolution, defaults to current display's defaults
 
+
+		// GLFW Implementation Variables
+		GLFWwindow* _glfwWnd;
 
 		// Initialize Window
 		bool InitWindow();
