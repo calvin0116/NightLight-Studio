@@ -7,6 +7,7 @@
 
 // Stores a DO function, UNDO function, and a single value that stores values that you want to use
 typedef std::function<std::any(std::any)> COMMAND;
+//typedef std::function<std::any(std::any,bool)> COMMAND_2;
 typedef std::pair<COMMAND, COMMAND> DO_UNDO_COMMAND;
 
 class ConsoleLog : public LE_WinBase_Derived<ConsoleLog>

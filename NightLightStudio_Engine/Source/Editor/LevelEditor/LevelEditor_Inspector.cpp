@@ -368,6 +368,8 @@ void InspectorWindow::Run()
 	//Check for valid Entity Id
 	if (LE_ECHELPER->GetSelectedEntityID() != -1 || LE_ECHELPER->GetPrefabInst().prefab_id != -1)
 	{
+		bool is_prefab = false;
+
 		if (!ImGui::IsWindowAppearing() && !LE_ECHELPER->setFocus)
 		{
 			ImGui::SetWindowFocus();
@@ -382,11 +384,13 @@ void InspectorWindow::Run()
 		{
 			g_ecman = G_ECMANAGER;
 			id = LE_ECHELPER->GetSelectedEntityID();
+			is_prefab = false;
 		}
 		else if (LE_ECHELPER->GetPrefabInst().prefab_id != -1)
 		{
 			g_ecman = G_ECMANAGER_PREFABS;
 			id = LE_ECHELPER->GetPrefabInst().prefab_id;
+			is_prefab = true;
 		}
 		else
 		{
@@ -394,18 +398,42 @@ void InspectorWindow::Run()
 			SPEEDLOG("InspectorWindow::Run: No set manager is allocated");
 			//std::cout << "No set manager is allocated" << std::endl;
 		}
-		Entity 	ent = g_ecman->getEntity(id);
+		Entity selected_ent = g_ecman->getEntity(id);
+		std::string& selected_ent_name = g_ecman->EntityName[id];
 		// Entity name
-		_levelEditor->LE_AddInputText("Name##Entity", g_ecman->EntityName[id], 256);
+		_levelEditor->LE_AddInputText("Name##Entity", selected_ent_name, 256);
 		
 		ImGui::SameLine(0, 10);
 		ImGui::Text("ID : ");
 
 		ImGui::SameLine(0, 10);
 		ImGui::Text(std::to_string(id).c_str());//std::to_string(LE_ECHELPER->GetSelectedEntityID()).c_str());
+		
+		if (is_prefab)
+		{
+			_levelEditor->LE_AddButton("Update prefabs", [selected_ent, selected_ent_name, this]()
+				{
+					std::vector<std::pair<std::string, LS::ENTITY_COMP_DATA>> _allCopiedObjs;
+					LS::ENTITY_COMP_DATA compData;
+					LS::ReadIntoCompVec(selected_ent, &compData);
 
+					for (Entity ent : G_ECMANAGER->getEntityContainer())
+					{
+						std::string ent_name = G_ECMANAGER->EntityName[ent.getId()];
+						if (LS::findCaseInsensitive(ent_name, selected_ent_name) == std::string::npos)
+							continue;
+						//pref_name_to_update;
+
+						_allCopiedObjs.push_back(std::make_pair(ent_name, compData));
+					}
+					_levelEditor->LE_AccessWindowFunc
+					("Console", &ConsoleLog::RunCommand, std::string("HIERARCHY_COPY_OBJECTS"),std::any(_allCopiedObjs));
+					
+				}
+			);
+		}
 		//Componenets layout
-		ComponentLayout(ent);
+		ComponentLayout(selected_ent);
 	}
 	// Print out the ID of the entity (Debug purposes)
 }

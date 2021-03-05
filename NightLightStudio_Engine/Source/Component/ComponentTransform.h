@@ -26,6 +26,12 @@ public:
 	int _tag;
 
 	LocalVector<int> _tagNames;
+
+	//For prefab referencing
+	bool _isPrefab;
+	std::string _prefabToRef;
+	int _prefab_Uid;
+
 	//for collision check
 	NlMath::Vector3D _nextPos;
 

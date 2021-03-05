@@ -8,6 +8,9 @@
 
 
 ComponentTransform::ComponentTransform() : _tag(0),
+	_isPrefab{false},
+	_prefabToRef{""},
+	_prefab_Uid{-1},
 	_nextPos(0), _position{ 0.0f, 0.0f, 0.0f },
 	_rotation{ 0.0f, 0.0f, 0.0f }, _scale{ 1.0f, 1.0f, 1.0f },
 	_phyposition{0.0f, 0.0f, 0.0f}
@@ -35,6 +38,61 @@ glm::mat4 ComponentTransform::GetModelMatrix()
 
 void ComponentTransform::Read(Value& val)
 {
+	for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
+	{
+		if (itr->name == "EntityName")
+		{
+			_entityName = itr->value.GetString();
+		}
+		else if (itr->name == "Tag")
+		{
+			_tag = itr->value.GetInt();
+			TAG_HANDLER->InsertTagToUsed(_tag);
+		}
+		else if (itr->name == "Position")
+		{
+			auto pos = itr->value.GetArray();
+
+			_position.x = pos[0].GetFloat();
+			_position.y = pos[1].GetFloat();
+			_position.z = pos[2].GetFloat();
+		}
+		else if (itr->name == "Scale")
+		{
+			auto scale = itr->value.GetArray();
+
+			_scale.x = scale[0].GetFloat();
+			_scale.y = scale[1].GetFloat();
+			_scale.z = scale[2].GetFloat();
+		}
+		else if (itr->name == "Rotate")
+		{
+			auto rotate = itr->value.GetArray();
+
+			_rotation.x = rotate[0].GetFloat();
+			_rotation.y = rotate[1].GetFloat();
+			_rotation.z = rotate[2].GetFloat();
+		}
+		else if (itr->name == "tagNames")
+		{
+			auto tn_list_val = itr->value.GetArray();
+			if (_tagNames.size() == 0)
+				for (unsigned i = 0; i < tn_list_val.Size(); ++i)
+					_tagNames.push_back(tn_list_val[i].GetInt());
+			else
+				for (unsigned i = 0; i < tn_list_val.Size(); ++i)
+					_tagNames.at(i) = tn_list_val[i].GetInt();
+
+			if (_tagNames.size() == 0)
+				_tagNames.push_back(0);
+		}
+		else if (itr->name == "isPrefab")
+		{
+			_isPrefab = itr->value.GetBool();
+		}
+	}
+
+
 	if (val.FindMember("EntityName") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentTransform::Read: No EntityName data has been found");
@@ -121,6 +179,9 @@ void ComponentTransform::Read(Value& val)
 	}
 	if(_tagNames.size() == 0)
 		_tagNames.push_back(0);
+
+
+
 }
 
 Value ComponentTransform::Write()

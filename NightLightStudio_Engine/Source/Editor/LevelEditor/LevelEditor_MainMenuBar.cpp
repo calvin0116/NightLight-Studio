@@ -113,17 +113,13 @@ void LevelEditor::LE_MainMenuBar()
 
         LE_AddMenuWithItems("Edit", 
             { "Create Entity" , "Delete Entity" ,"Undo", "Redo" }, 
-            { "", "Ctrl-Delete" ,"Ctrl-Z", "Ctrl-Y" }, 
+            { "", "Ctrl-Del" ,"Ctrl-Z", "Ctrl-Y" }, 
             { 
                 [this]()
-                {
-                    TransformComponent tran;
-                    Entity ent = G_ECMANAGER->BuildEntity().AttachComponent(tran);
-                    LE_ECHELPER->SelectEntity(ent.getId());
-                },
+                {LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("HIERARCHY_CREATE_OBJECT"), std::any()); },
                 [this]()
                 {
-                    G_ECMANAGER->FreeEntity(LE_ECHELPER->GetSelectedEntityID());
+                   // G_ECMANAGER->FreeEntity(LE_ECHELPER->GetSelectedEntityID()); //<- just to show the button press here
                 },
                 [this]() { LE_AccessWindowFunc("Console", &ConsoleLog::UndoLastCommand); },
                 [this]() { LE_AccessWindowFunc("Console", &ConsoleLog::RedoLastCommand); }
@@ -310,6 +306,28 @@ void LevelEditor::LE_MainMenuBar()
             ImGui::EndMenu();
         }
         ImGui::Text("FPS: %f" , ImGui::GetIO().Framerate);
+        /*
+        if (ImGui::BeginMenu("Update Prefabs##UPDATEPREFAB"))
+        {
+            std::string pref_name_to_update;
+            LE_AddInputText("", pref_name_to_update, 256, 0);
+
+            LE_AddButton("Update", [ pref_name_to_update]()
+                {
+                    /*
+                    Entity prefab_ent = G_ECMANAGER_PREFABS->getEntityUsingEntName(pref_name_to_update);
+                    
+                    for (Entity ent : G_ECMANAGER->getEntityContainer())
+                    {
+                        std::string ent_name = G_ECMANAGER->EntityName[ent.getId()];
+                        if (findCaseInsensitive(ent_name, pref_name_to_update) == std::string::npos)
+                            return;
+                        pref_name_to_update;
+                    }
+                }
+            );
+        }*/
+
 
         ImGui::EndMenuBar();
     }

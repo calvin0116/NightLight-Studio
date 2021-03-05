@@ -387,6 +387,7 @@
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_AssetInsp.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Console.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_DropDowns.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_ECHelper.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Hierarchy.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_InputProperties.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Inspector.cpp" />
