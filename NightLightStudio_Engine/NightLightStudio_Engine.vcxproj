@@ -271,6 +271,7 @@
     <ClInclude Include="Source\Graphics\ModelManager.h" />
     <ClInclude Include="Source\Graphics\Particle.h" />
     <ClInclude Include="Source\Graphics\ShaderSystem.h" />
+    <ClInclude Include="Source\Graphics\Shapes.h" />
     <ClInclude Include="Source\Graphics\Skeleton.h" />
     <ClInclude Include="Source\Graphics\SystemEmitter.h" />
     <ClInclude Include="Source\Graphics\UISystem.h" />

@@ -179,8 +179,8 @@ namespace NS_GRAPHICS
 
         // Storage variables for near and far plane, used for shadow mapping matrix reference
         // Affected only by SetProjectionMatrix
-        float _nearPlane = 0.f;
-        float _farPlane = 0.f;
+        //float _nearPlane = 0.f; // Moved to camera.h
+        //float _farPlane = 0.f;
 
         glm::mat4 lightSpaceMatrix;
 

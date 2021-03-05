@@ -1431,8 +1431,8 @@ namespace NS_GRAPHICS
 	void GraphicsSystem::SetProjectionMatrix(const float& fov, const float& aspect_ratio, const float& near_plane, const float& far_plane)
 	{
 		// Save values to member variables for shadow mapping
-		_nearPlane = near_plane;
-		_farPlane = far_plane;
+		//_nearPlane = near_plane; // Moved to camera.h
+		//_farPlane = far_plane;
 
 		_projectionMatrix = glm::perspective(glm::radians(fov), aspect_ratio, near_plane, far_plane);
 

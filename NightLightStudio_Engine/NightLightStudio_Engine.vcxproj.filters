@@ -845,6 +845,7 @@
     <ClInclude Include="Source\Log\SpeedLog.h">
       <Filter>Source Files\Log</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Graphics\Shapes.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
