@@ -6,14 +6,14 @@
 #pragma warning( disable : 26812 )
 
 ComponentEmitter::ComponentEmitter()
-	: _isActive{ true }, _emitterID{ -1 }
+	: _isActive{ true }, _emitterID{ -1 }, _blackIsAlpha{ false }
 {
 	strcpy_s(ser_name, "EmitterComponent");
 }
 
 ComponentEmitter::ComponentEmitter(const int& emitterID)
 	: _isActive{ true }
-	, _emitterID{ emitterID }, _blackIsAlpha{ true } 
+	, _emitterID{ emitterID }, _blackIsAlpha{ false } 
 {
 	strcpy_s(ser_name, "EmitterComponent");
 }

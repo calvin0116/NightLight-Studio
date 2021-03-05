@@ -181,7 +181,7 @@ namespace SystemInput_ns
 	}
 	bool SystemMousePosition::GetIfScrollDown()
 	{
-		return _scrollDown < 0;;
+		return _scrollDown < 0;
 	}
 
 	void SystemMousePosition::ResetWinSize()
