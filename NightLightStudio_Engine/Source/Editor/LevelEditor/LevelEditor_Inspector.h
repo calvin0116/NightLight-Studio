@@ -69,6 +69,14 @@ private:
 	float _snapRotate;
 	float _snapScale;
 
+	bool _isSnapX;
+	bool _isSnapY;
+	bool _isSnapYD;
+	bool _isSnapZ;
+	float _snapDist;
+	float _snapGap;
+	int _snapLod;
+
 	bool _lastPos_Start;
 	bool _lastEnter;
 	ENTITY_LAST_POS _lastPos_ELP;
@@ -107,11 +115,13 @@ private:
 	void ComponentLayout(Entity& ent);
 	bool EditTransform(const float* cameraView, float* cameraProjection, glm::mat4& matrix);
 	void TransformGizmo(TransformComponent* comp);
+	void TransformSnap(Entity& ent);
 public:
 	InspectorWindow()
 		: selected_index{ -1 }, _mCurrentGizmoOperation{ ImGuizmo::TRANSLATE }, _mCurrentGizmoMode{ ImGuizmo::WORLD },
 		_useSnap{ false }, _snapTrans{ 1.0f, 1.0f, 1.0f }, _lastEnter{ false }, _lastPos_Start{ false }, _lastPos_ELP{ false },
-		_itemType{ 0 }, _notRemove{ true }, _snapRotate{ 1.0f }, _snapScale{ 1.0f }
+		_itemType{ 0 }, _notRemove{ true }, _snapRotate{ 1.0f }, _snapScale{ 1.0f }, _isSnapX{ false },  _isSnapY{ false },
+		_isSnapZ{ false }, _isSnapYD{ true }, _snapDist{ 1000.0f }, _snapGap{ 1.00f }, _snapLod{ 3 }
 	{};
 	~InspectorWindow() {};
 

@@ -25,6 +25,9 @@
 
 #include "../../Core/TagHandler.h"
 
+// Snap
+#include "../../Collision/SystemCollision.h"
+
 void InspectorWindow::Start()
 {
 	// Set up Command to run to move objects
@@ -454,6 +457,8 @@ void InspectorWindow::TransformComp(Entity& ent)
 			trans_comp->_tagNames.push_back(0);
 
 	TransformGizmo(trans_comp);
+	// the snap window
+	TransformSnap(ent);
     //ImGui::NewLine();
     //int tag = trans_comp->_tag;
 		/*
@@ -2598,9 +2603,63 @@ bool InspectorWindow::EditTransform(const float* cameraView, float* cameraProjec
 		break;
 	}
 
+
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 	return ImGuizmo::Manipulate(cameraView, cameraProjection, _mCurrentGizmoOperation, _mCurrentGizmoMode, glm::value_ptr(matrix), NULL, _useSnap ? snapPtr : NULL, NULL, NULL);
+}
+
+void InspectorWindow::TransformSnap(Entity& ent)
+{
+	_levelEditor->LE_AddChildWindow("##SnapChildWindow", ImVec2(0, 210),
+		[this, &ent]()
+		{
+			ImGui::Checkbox("Snap X direction##SNAPX", &_isSnapX);
+			ImGui::Checkbox("Snap Y direction##SNAPY", &_isSnapY);
+			ImGui::Checkbox("Snap Z direction##SNAPZ", &_isSnapZ);
+			ImGui::Checkbox("Snap downwards##SNAPYD", &_isSnapYD);
+
+			if (ImGui::InputFloat("Snap Distance##SNAPDIST", &_snapDist, 3))
+			{
+			}
+			if (ImGui::InputFloat("GAP##SNAPGAP", &_snapGap, 0.10f))
+			{
+			}
+			if (ImGui::InputInt("LOD##SNAPLOD", &_snapLod, 1))
+			{
+			}
+
+			if (ImGui::Button("Do Snap##"))
+			{
+				int directions = 0;
+
+#define SNAP_X 1
+#define SNAP_Y 2
+#define SNAP_Z 4
+#define SNAP_D 8
+
+				if (_isSnapX)
+				{
+					directions = directions | SNAP_X;
+				}
+				if (_isSnapY)
+				{
+					directions = directions | SNAP_Y;
+				}
+				if (_isSnapZ)
+				{
+					directions = directions | SNAP_Z;
+				}
+				if (_isSnapYD)
+				{
+					directions = directions | SNAP_D;
+				}
+
+				NS_COLLISION::SYS_COLLISION->Snap_AABB_AABB_Do(ent, _snapDist, _snapGap, directions, _snapLod, true);
+			}
+
+		}, true);
+
 }
 
 void InspectorWindow::TransformGizmo(TransformComponent* trans_comp)

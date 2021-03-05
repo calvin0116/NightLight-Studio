@@ -102,7 +102,7 @@ namespace NS_COLLISION
 
 		bool Snap_AABB_AABB_Detect(Entity entity, float distance, int directions, int lod, bool isDrawDebug);
 
-		bool Snap_AABB_AABB_Do(Entity entity, float distance, int directions, int lod, bool isDrawDebug);
+		bool Snap_AABB_AABB_Do(Entity entity, float distance, float gap, int directions, int lod, bool isDrawDebug);
 
 	private:
 		bool Snap_To_AABB(Entity entity, float distance, DIRECTION direction, NlMath::Vec3& snapVec, int lod, bool isDrawDebug);

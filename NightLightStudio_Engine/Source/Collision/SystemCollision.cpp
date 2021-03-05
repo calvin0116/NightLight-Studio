@@ -1529,7 +1529,7 @@ namespace NS_COLLISION
 		return doesIntersect;
 	}
 
-	bool CollisionSystem::Snap_AABB_AABB_Do(Entity entity, float distance, int directions, int lod, bool isDrawDebug)
+	bool CollisionSystem::Snap_AABB_AABB_Do(Entity entity, float distance, float gap, int directions, int lod, bool isDrawDebug)
 	{
 		if (Snap_AABB_AABB_Detect(entity, distance, directions, lod, isDrawDebug))
 		{
@@ -1538,6 +1538,18 @@ namespace NS_COLLISION
 
 			if (ct)
 			{
+				for (int i = 0; i < 3; ++i)
+				{
+					if(abs(currentSnapVec[i]) != 0.0f)
+						if (currentSnapVec[i] > 0.0f)
+						{
+							currentSnapVec[i] -= gap;
+						}
+						else
+						{
+							currentSnapVec[i] += gap;
+						}
+				}
 				ct->_position += glm::vec3(currentSnapVec.x, currentSnapVec.y, currentSnapVec.z);
 
 				return true;
