@@ -112,7 +112,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\Mono\lib;$(SolutionDir)Bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;mono-2.0-sgen.lib;fmod_vc.lib;glew32s.lib;soil.lib;assimp-vc142-mt.lib;XINPUT9_1_0.LIB;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;mono-2.0-sgen.lib;fmod_vc.lib;soil.lib;assimp-vc142-mt.lib;XINPUT9_1_0.LIB;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -153,7 +153,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\Mono\lib;$(SolutionDir)Bin\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;mono-2.0-sgen.lib;soil.lib;fmod_vc.lib;assimp-vc142-mtd.lib;opengl32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;XINPUT9_1_0.LIB;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;mono-2.0-sgen.lib;soil.lib;fmod_vc.lib;assimp-vc142-mtd.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;XINPUT9_1_0.LIB;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -187,6 +187,7 @@
     <ClInclude Include="Source\Core\AssetInfo.h" />
     <ClInclude Include="Source\Core\AssetsMananger.h" />
     <ClInclude Include="Source\Core\TagHandler.h" />
+    <ClInclude Include="Source\Editor\imgui\imgui_impl_glfw.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Source\Ai\AiManager.h" />
@@ -324,6 +325,7 @@
     <ClInclude Include="Source\Window\WndUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Include\GLAD\src\glad.c" />
     <ClCompile Include="..\Include\tracy-master\TracyClient.cpp" />
     <ClCompile Include="Source\Ai\AiGraph.cpp" />
     <ClCompile Include="Source\Ai\AiManager.cpp" />
@@ -334,6 +336,7 @@
     <ClCompile Include="Source\Component\ComponentResolver.cpp" />
     <ClCompile Include="Source\Component\ComponentWayPoint.cpp" />
     <ClCompile Include="Source\Core\AssetsMananger.cpp" />
+    <ClCompile Include="Source\Editor\imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

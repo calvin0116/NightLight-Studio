@@ -14,7 +14,8 @@ void SystemEditor::Load()
 
 void SystemEditor::Init()
 {
-	_editor.Init(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
+	//_editor.Init(NS_WINDOW::SYS_WINDOW->GetHandlerToWindow());
+	_editor.Init(NS_WINDOW::SYS_WINDOW->GetGLFWWnd());
 }
 
 void SystemEditor::GameInit()

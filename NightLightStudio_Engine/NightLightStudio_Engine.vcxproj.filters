@@ -433,6 +433,10 @@
     <ClCompile Include="Source\Log\SpeedLog.cpp">
       <Filter>Source Files\Log</Filter>
     </ClCompile>
+    <ClCompile Include="..\Include\GLAD\src\glad.c" />
+    <ClCompile Include="Source\Editor\imgui\imgui_impl_glfw.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -844,6 +848,9 @@
     <ClInclude Include="Source\Core\AssetsMananger.h" />
     <ClInclude Include="Source\Log\SpeedLog.h">
       <Filter>Source Files\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imgui_impl_glfw.h">
+      <Filter>Source Files\Editor\imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
