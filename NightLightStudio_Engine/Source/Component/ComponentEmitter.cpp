@@ -6,14 +6,14 @@
 #pragma warning( disable : 26812 )
 
 ComponentEmitter::ComponentEmitter()
-	: _isActive{ true }, _emitterID{ -1 }
+	: _isActive{ true }, _emitterID{ -1 }, _blackIsAlpha{ false }
 {
 	strcpy_s(ser_name, "EmitterComponent");
 }
 
 ComponentEmitter::ComponentEmitter(const int& emitterID)
 	: _isActive{ true }
-	, _emitterID{ emitterID }
+	, _emitterID{ emitterID }, _blackIsAlpha{ false } 
 {
 	strcpy_s(ser_name, "EmitterComponent");
 }
@@ -33,7 +33,7 @@ void ComponentEmitter::AddTexture(std::string filename)
 	if (!filename.empty() && _image.toString() != filename)
 	{
 		_image = filename;
-		_imageID = NS_GRAPHICS::EmitterSystem::GetInstance().LoadTexture(_image.toString());
+		_imageID = NS_GRAPHICS::EmitterSystem::GetInstance().LoadTexture(_image.toString(), _blackIsAlpha);
 	}
 }
 
@@ -406,6 +406,17 @@ void ComponentEmitter::Read(Value& val)
 		{
 			AddTexture(image);
 		}
+	}
+
+	if (val.FindMember("BlackIsAlpha") == val.MemberEnd())
+	{
+		TracyMessageL("ComponentEmitter::Read: No BlackIsAlpha data has been found");
+		SPEEDLOG("ComponentEmitter::Read: No BlackIsAlpha data has been found");
+		//std::cout << "No Texture file data has been found" << std::endl;
+	}
+	else
+	{
+		_blackIsAlpha = val["BlackIsAlpha"].GetBool();
 	}
 
 	if (val.FindMember("EmitterType") == val.MemberEnd())
@@ -913,6 +924,7 @@ Value ComponentEmitter::Write()
 	NS_SERIALISER::ChangeData(&val, "isActive", _isActive);		//Bool
 
 	NS_SERIALISER::ChangeData(&val, "Image", rapidjson::StringRef(_image.c_str()));
+	NS_SERIALISER::ChangeData(&val, "BlackIsAlpha", _blackIsAlpha);
 
 	switch (emitSys._emitters[_emitterID]->_type)
 	{

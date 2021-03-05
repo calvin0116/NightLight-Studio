@@ -305,6 +305,10 @@ void SystemAudio::MyGameInit()
 
 void SystemAudio::Update()
 {
+  // Tracy
+  // Zone Color: Green
+  ZoneScopedNC("Audio", 0x1df52f);
+
   // position update here
   _system->update();
   if (_listenerVecPos)
@@ -334,10 +338,6 @@ void SystemAudio::Update()
     // Set position
     _channels[i]->set3DAttributes(&_fmodPos, nullptr);
   }
-
-  // Tracy
-  // Zone Color: Green
-  ZoneScopedNC("Audio", 0x1df52f);
 }
 
 void SystemAudio::Free()

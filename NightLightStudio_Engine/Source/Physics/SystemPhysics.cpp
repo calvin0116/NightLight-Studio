@@ -51,6 +51,10 @@ namespace NS_PHYSICS
 	void PhysicsSystem::FixedUpdate(float dt)
 	{
 
+		// Tracy
+		// Zone Color: Light Blue
+		ZoneScopedNC("Physics", 0xa5cffa);
+
 		//TA's example
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*struct ComponentView
@@ -407,10 +411,6 @@ namespace NS_PHYSICS
 
 
 		//return true;
-
-		// Tracy
-		// Zone Color: Light Blue
-		ZoneScopedNC("Physics", 0xa5cffa);
 
 	}
 

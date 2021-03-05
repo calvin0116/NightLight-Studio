@@ -379,6 +379,10 @@ namespace NS_LOGIC
 
   void SystemLogic::Update()
   {
+    // Tracy
+    // Zone Color: Light Pink
+    ZoneScopedNC("Logic: Update", 0xfaa5e2);
+
     if (!_isPlaying)
       return;
     if (!_Inited)
@@ -413,14 +417,14 @@ namespace NS_LOGIC
       MonoWrapper::InvokeMethod(MyUpdate, MyScript->_MonoData._pInstance);
     }
 #endif
-
-    // Tracy
-    // Zone Color: Light Pink
-    ZoneScopedNC("Logic: Update", 0xfaa5e2);
   }
 
   void SystemLogic::FixedUpdate(float dt)
   {
+      // Tracy
+      // Zone Color: Pink
+      ZoneScopedNC("Logic: Fixed Update", 0xff24c1);
+
       dt;
     if (!_isPlaying || !_Inited)
       return;
@@ -437,10 +441,6 @@ namespace NS_LOGIC
       MonoWrapper::InvokeMethod(MyFixedUpdate, MyScript->_MonoData._pInstance);
     }
 #endif
-
-    // Tracy
-    // Zone Color: Pink
-    ZoneScopedNC("Logic: Fixed Update", 0xff24c1);
   }
 
   void SystemLogic::GameGameExit()
