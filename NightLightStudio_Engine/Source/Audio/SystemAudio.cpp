@@ -7,7 +7,7 @@
 #include "../Log/SpeedLog.h"
 
 const float SystemAudio::s_UNITS_PER_METER = 100.0f;
-const int listenerTag = 1000;
+const int listenerTag = 200;
 const float minDist = 0.5f;
 const float maxDist = 5.0f;
 bool SystemAudio::_isPlaying = false;
