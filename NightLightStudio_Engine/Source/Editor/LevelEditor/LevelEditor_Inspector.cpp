@@ -415,7 +415,7 @@ void InspectorWindow::Run()
 				{
 					std::vector<std::pair<std::string, LS::ENTITY_COMP_DATA>> _allCopiedObjs;
 					LS::ENTITY_COMP_DATA compData;
-					LS::ReadIntoCompVec(selected_ent, &compData);
+					LS::ReadIntoCompVec(selected_ent, &compData, true);
 
 					for (Entity ent : G_ECMANAGER->getEntityContainer())
 					{

@@ -55,7 +55,7 @@ namespace LS
 			ENTITY_COMP_INFO comp(ent.getComponent<CanvasComponent>()->Write());
 			compData.insert(std::make_pair(typeid(CanvasComponent).hash_code(), comp));
 		}
-		if (ent.getComponent<CScriptComponent>())
+		if (!leftTransOut && ent.getComponent<CScriptComponent>())
 		{
 			ENTITY_COMP_INFO comp(ent.getComponent<CScriptComponent>()->Write());
 			compData.insert(std::make_pair(typeid(CScriptComponent).hash_code(), comp));
@@ -70,12 +70,12 @@ namespace LS
 			ENTITY_COMP_INFO comp(ent.getComponent<CauldronStatsComponent>()->Write());
 			compData.insert(std::make_pair(typeid(CauldronStatsComponent).hash_code(), comp));
 		}
-		if (ent.getComponent<VariablesComponent>())
+		if (!leftTransOut && ent.getComponent<VariablesComponent>())
 		{
 			ENTITY_COMP_INFO comp(ent.getComponent<VariablesComponent>()->Write());
 			compData.insert(std::make_pair(typeid(VariablesComponent).hash_code(), comp));
 		}
-		if (ent.getComponent<NavComponent>())
+		if (!leftTransOut && ent.getComponent<NavComponent>())
 		{
 			ENTITY_COMP_INFO comp(ent.getComponent<NavComponent>()->Write());
 			compData.insert(std::make_pair(typeid(NavComponent).hash_code(), comp));
