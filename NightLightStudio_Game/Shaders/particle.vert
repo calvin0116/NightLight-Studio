@@ -20,7 +20,8 @@ uniform uint maxRow;
 out vec2 texCoords;
 out vec4 particleColour;
 
-void main(void) {
+void main(void) 
+{
 	vec3 particlePos = xyzs.xyz;
 	float particleSize = xyzs.w;
 	
