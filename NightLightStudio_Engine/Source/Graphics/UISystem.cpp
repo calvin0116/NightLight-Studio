@@ -116,6 +116,45 @@ void NS_GRAPHICS::UISystem::Init()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
+	glm::vec3 worldVertex[numOfSides] = {
+		//Top Right
+		{
+			glm::vec3(0.5f,	0.5f, 0.0f)//position
+		},
+		//Top Left
+		{
+			glm::vec3(-0.5f, 0.5f, 0.0f)//position
+		},
+		//Bottom Left
+		{
+			glm::vec3(-0.5f, -0.5f, 0.0f)//position
+		},
+		//Bottom Right
+		{
+			glm::vec3(0.5f, -0.5f, 0.0f)//position
+		}
+	};
+
+
+	glGenVertexArrays(1, &_vaoWorld);
+	glGenBuffers(1, &_vboWorld);
+	glGenBuffers(1, &_eboWorld);
+
+	glBindVertexArray(_vaoWorld);
+	glBindBuffer(GL_ARRAY_BUFFER, _vboWorld);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * numOfSides, &worldVertex[0], GL_STATIC_DRAW);
+	// position
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribDivisor(0, 0);
+
+	// Indices
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _eboWorld);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
 	_textureManager = &TextureManager::GetInstance();
 	_shaderSystem = &ShaderSystem::GetInstance();
 
@@ -240,34 +279,39 @@ void NS_GRAPHICS::UISystem::RenderUI()
 			else if (canvas->_canvasType == WORLD_SPACE)
 			{
 				//glm::mat4 ModelMatrix = canvas->_uiElements.at(i).GetModelMatrix();
-				glm::mat4 ModelMatrix(1.0f);
+				//glm::mat4 ModelMatrix(1.0f);
 
 				Entity entity = G_ECMANAGER->getEntity(canvas);
 				ComponentTransform* trans = entity.getComponent<ComponentTransform>();
 
 				glm::vec3 pos = ui._position;
 				pos += trans->_position;
-				glm::mat4 Translate = glm::translate(glm::mat4(1.f), pos);
+				//glm::mat4 Translate = glm::translate(glm::mat4(1.f), pos);
 
 				glm::vec2 size = ui._size;
 				size.x *= trans->_scale.x;
 				size.y *= trans->_scale.y;
-				glm::mat4 Scale = glm::scale(glm::mat4(1.f), glm::vec3(size, 1.0f));
+				//glm::mat4 Scale = glm::scale(glm::mat4(1.f), glm::vec3(size, 1.0f));
 
-				glm::quat Quaternion(glm::radians(trans->_rotation));
-				glm::mat4 Rotate = glm::mat4_cast(Quaternion);
+				//glm::quat Quaternion(glm::radians(trans->_rotation));
+				//glm::mat4 Rotate = glm::mat4_cast(Quaternion);
 
-				ModelMatrix = Translate * Rotate * Scale;	
+				//ModelMatrix = Translate;	
 
 				_shaderSystem->StartProgram(ShaderSystem::ShaderType::UI_WORLDSPACE); // textured program
 
-				glBindVertexArray(_vao);
+				glBindVertexArray(_vaoWorld);
+
+				glUniform3fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "ui_pos"), 1, &pos[0]);
+				glUniform3fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "ui_size"), 1, &size[0]);
+
+				glm::vec3 camRight = CameraSystem::GetInstance().GetCamera().cameraRight;
+				glm::vec3 camUp = CameraSystem::GetInstance().GetCamera().cameraUp;
+				glUniform3fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "camera_right"), 1, &camRight[0]);
+				glUniform3fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "camera_up"), 1, &camUp[0]);
 
 				// Update model and uniform for material
 				glUniform4fv(glGetUniformLocation(_shaderSystem->GetCurrentProgramHandle(), "colour"), 1, &ui._colour[0]);
-
-				glBindBuffer(GL_ARRAY_BUFFER, _mmbo);
-				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
 
 				//Should work
 				if (ui._isAnimated)

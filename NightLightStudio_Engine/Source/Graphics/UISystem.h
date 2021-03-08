@@ -54,6 +54,11 @@ namespace NS_GRAPHICS
         GLuint _mmbo;
         //GLuint _cbo;
 
+        // Referenced object for instancing
+        GLuint _vaoWorld;
+        GLuint _vboWorld;
+        GLuint _eboWorld;
+
         TextureManager* _textureManager;
         ShaderSystem* _shaderSystem;
     };

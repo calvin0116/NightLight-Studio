@@ -12,7 +12,8 @@ uniform uint currentFrame;
 
 out vec2 texCoords;
 
-void main(void) {
+void main(void) 
+{
     gl_Position = ortho_proj * model * vec4(pos, 1.0f);
 	
 	float offsetX;
