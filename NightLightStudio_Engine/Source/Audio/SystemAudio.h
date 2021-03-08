@@ -18,6 +18,7 @@ class SystemAudio : public MySystem, public  Singleton<SystemAudio>
   friend Singleton<SystemAudio>;
   // Alias
   using MyAudioMap = std::map<std::string, FMOD::Sound*>;
+  using MyChnnlMap = std::map<int, float>;
 
   // Max channels allowed
   const static int    s_MAX_CHANNELS = 32;
@@ -26,6 +27,7 @@ class SystemAudio : public MySystem, public  Singleton<SystemAudio>
 
   // to store sound handles
   MyAudioMap          _sounds;
+  MyChnnlMap          _channelIDs;
   // to store listener position, default at 0,0,0
   glm::vec3*          _listenerVecPos;
   FMOD_VECTOR         _listenerPos;
@@ -59,11 +61,12 @@ public: // Suppose to be private and use messaging, but since SystemAudio is sin
   void  Stop(const int _channelID);
   void  SetVol(const int _channelID, float _vol);
   int   PlayBGM(const std::string& _name);
-  int  PlayOnce(const std::string& _name);
+  int   PlayOnce(const std::string& _name);
   // Object ID = entity ID; to get transform position to follow for audio.
   int   Play3DLoop(const std::string& _name, const int _objID);
   // Object ID = entity ID; to get transform position to follow for audio.
-  int  Play3DOnce(const std::string& name, const  int _objID);
+  int   Play3DOnce(const std::string& name, const  int _objID);
+  void  FadeOut(const int _channelID, const float _seconds);
   // Inline
   inline void MuteBGM(bool _mute) { _bgm->setMute(_mute); }
   inline void MuteSFX(bool _mute) { _sfx->setMute(_mute); }

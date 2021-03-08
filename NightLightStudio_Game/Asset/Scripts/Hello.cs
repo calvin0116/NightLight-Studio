@@ -30,14 +30,18 @@ namespace Unicorn
         vol -= 0.1f;
         Audio.SetVol(chnl, vol);
       }
-    }
-    public override void FixedUpdate()
-    {
-      if(Input.GetKeyPress(VK.IKEY_SPACE))
+      if (Input.GetKeyPress(VK.IKEY_SPACE))
       {
         vol = 1.0f;
         Audio.SetVol(chnl, vol);
       }
+      if(Input.GetKeyPress(VK.IKEY_F))
+      {
+        Audio.FadeOut(chnl, 3.0f);
+      }
+    }
+    public override void FixedUpdate()
+    {
     }
 
     public override void OnCollisionEnter(int other) { Console.WriteLine("Collision Enter!"); }

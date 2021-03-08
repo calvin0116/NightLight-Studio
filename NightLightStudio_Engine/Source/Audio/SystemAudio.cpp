@@ -207,6 +207,14 @@ void SystemAudio::Play3DOnce(const std::string& name, float x, float y, float z)
   }
 }
 
+void SystemAudio::FadeOut(const int _channelID, const float _sec)
+{
+  if (_channelID < 0 || _channelID >= s_MAX_CHANNELS)
+    return;
+  _channelIDs.emplace(_channelID, _sec);
+  //_channels[_channelID]->setVolume(_vol);
+}
+
 void SystemAudio::Load()
 {
   // Create FMOD System Once
@@ -350,6 +358,27 @@ void SystemAudio::Update()
     _fmodPos = { _pos.x, _pos.y, _pos.z };
     // Set position
     _channels[i]->set3DAttributes(&_fmodPos, nullptr);
+  }
+
+  // Fade out audios
+  if (!_channelIDs.empty())
+  {
+    MyChnnlMap::iterator begin = _channelIDs.begin();
+    MyChnnlMap::iterator end = _channelIDs.end();
+    while (begin != end)
+    {
+      float vol;
+      _channels[begin->first]->getVolume(&vol);
+      vol -= DELTA_T->real_dt / begin->second; // (1.0f * fixedDt) / duration - decreased vol per second.
+      _channels[begin->first]->setVolume(vol);
+      if (vol <= 0.0f)
+      {
+        _channels[begin->first]->stop();
+        begin = _channelIDs.erase(begin);
+      }
+      else
+        ++begin;
+    }
   }
 }
 

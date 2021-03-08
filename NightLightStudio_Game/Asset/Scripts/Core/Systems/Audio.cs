@@ -20,6 +20,9 @@ namespace Unicorn
     public extern static int Play3DOnce(string _name, int _entity);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void FadeOut(int _channel, float _duration);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void Pause(int _channel);
     
     [MethodImpl(MethodImplOptions.InternalCall)]

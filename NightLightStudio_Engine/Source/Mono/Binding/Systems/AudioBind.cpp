@@ -19,6 +19,9 @@ namespace AudioBind
     MonoWrapper::BindClassFunction(csPlay3DOnce, "Play3DOnce",
       "Audio");
 
+    MonoWrapper::BindClassFunction(csFadeOut, "FadeOut",
+      "Audio");
+
     MonoWrapper::BindClassFunction(csPause, "Pause",
       "Audio");
 
@@ -71,6 +74,11 @@ namespace AudioBind
   int csPlay3DOnce(MonoString* _name, int _entity)
   {
     return SYS_AUDIO->Play3DOnce(MonoWrapper::ToString(_name), _entity);
+  }
+
+  void csFadeOut(int _channel, float _duration)
+  {
+    SYS_AUDIO->FadeOut(_channel, _duration);
   }
 
   void csPause(int _channel)
