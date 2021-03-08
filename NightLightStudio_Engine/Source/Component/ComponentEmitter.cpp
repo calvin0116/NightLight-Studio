@@ -259,6 +259,16 @@ void ComponentEmitter::SetLoop(bool loop)
 	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_loop = loop;
 }
 
+bool ComponentEmitter::GetReverse()
+{
+	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_reverse;
+}
+
+void ComponentEmitter::SetReverse(bool reverse)
+{
+	NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_reverse = reverse;
+}
+
 bool ComponentEmitter::GetFollow()
 {
 	return NS_GRAPHICS::EmitterSystem::GetInstance()._emitters[_emitterID]->_follow;

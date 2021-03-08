@@ -138,6 +138,12 @@ void Emitter::InitAllParticles(bool prewarm)
 				_particles[i]._currentFrame = 0;
 				_particles[i]._animationTime = 0.0f;
 
+				if (_reverse)
+				{
+					_particles[i]._position = _particles[i]._position + _particles[i]._velocity * _particles[i]._speed * _particles[i]._lifespan;
+					_particles[i]._velocity *= -1.0f;
+				}
+
 				//Remember to set it alive
 				_particles[i]._alive = true;
 
@@ -223,6 +229,12 @@ void Emitter::InitAllParticles(bool prewarm)
 
 				_particles[i]._currentFrame = 0;
 				_particles[i]._animationTime = 0.0f;
+
+				if (_reverse)
+				{
+					_particles[i]._position = _particles[i]._position + _particles[i]._velocity * _particles[i]._speed * _particles[i]._lifespan;
+					_particles[i]._velocity *= -1.0f;
+				}
 
 				//Remember to set it alive
 				_particles[i]._alive = true;
@@ -323,6 +335,12 @@ void Emitter::ResetParticle(size_t index)
 			_particles[index]._currentFrame = 0;
 			_particles[index]._animationTime = 0.0f;
 
+			if (_reverse)
+			{
+				_particles[index]._position = _particles[index]._position + _particles[index]._velocity * _particles[index]._speed * _particles[index]._lifespan;
+				_particles[index]._velocity *= -1.0f;
+			}
+
 			//Remember to set it alive
 			_particles[index]._alive = true;
 
@@ -407,6 +425,12 @@ void Emitter::ResetParticle(size_t index)
 
 			_particles[index]._currentFrame = 0;
 			_particles[index]._animationTime = 0.0f;
+
+			if (_reverse)
+			{
+				_particles[index]._position = _particles[index]._position + _particles[index]._velocity * _particles[index]._speed * _particles[index]._lifespan;
+				_particles[index]._velocity *= -1.0f;
+			}
 
 			//Remember to set it alive
 			_particles[index]._alive = true;

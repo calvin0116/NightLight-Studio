@@ -91,6 +91,9 @@ public:
 	bool GetLoop();
 	void SetLoop(bool loop);
 
+	bool GetReverse();
+	void SetReverse(bool reverse);
+
 	bool GetFollow();
 	void SetFollow(bool follow);
 

@@ -230,16 +230,16 @@ void NS_GRAPHICS::EmitterSystem::Render(ComponentEmitter* emitter)
 			float scale = 1.0f;
 
 			float aliveRatio = _emitters[emitter->_emitterID]->_particles[i]._timeAlive / _emitters[emitter->_emitterID]->_particles[i]._lifespan;
-			//_emitters[emitter->_emitterID]->_particles[i]._cameraDistance = glm::length2(_emitters[emitter->_emitterID]->_particles[i]._position - camPos);
-			glm::vec3 particleVec = _emitters[emitter->_emitterID]->_particles[i]._position - camPos;
-			float dotProduct = camFront.x * particleVec.x + camFront.y * particleVec.y + camFront.z * particleVec.z;
+			_emitters[emitter->_emitterID]->_particles[i]._cameraDistance = glm::length2(_emitters[emitter->_emitterID]->_particles[i]._position - camPos);
+			//glm::vec3 particleVec = _emitters[emitter->_emitterID]->_particles[i]._position - camPos;
+			//float dotProduct = camFront.x * particleVec.x + camFront.y * particleVec.y + camFront.z * particleVec.z;
 
-			if (dotProduct <= 0.0f)
-			{
-				_emitters[emitter->_emitterID]->_particles[i]._cameraDistance = -1.0f;
-			}
+			//if (dotProduct <= 0.0f)
+			//{
+			//	_emitters[emitter->_emitterID]->_particles[i]._cameraDistance = -1.0f;
+			//}
 
-			_emitters[emitter->_emitterID]->_particles[i]._cameraDistance = dotProduct;
+			//_emitters[emitter->_emitterID]->_particles[i]._cameraDistance = dotProduct;
 
 			if (_emitters[emitter->_emitterID]->_follow)
 			{

@@ -15,8 +15,6 @@ bool Particle::operator<(const Particle& rhs) const
 	}
 	else
 	{
-		if (_alive)
-			return false;
 		return _cameraDistance > rhs._cameraDistance;
 	}
 }

@@ -871,7 +871,7 @@ void InspectorWindow::GraphicsComp(Entity& ent)
 						{ return (char)std::tolower(c); });
 
 					std::string fileType = LE_GetFileType(data);
-					if (fileType == "fbx" || fileType == "obj")
+					if (fileType == "fbx" || fileType == "obj" || fileType == "model")
 					{
 						//assimp doesnt deal with preceding slash
 						if (data[0] == '\\')
@@ -2290,16 +2290,11 @@ void InspectorWindow::EmitterComp(Entity& ent)
 
 			ImGui::Checkbox("Play##Particle", &emit->_play);
 
+			ImGui::Checkbox("Reverse##Particle", &emit->_reverse);
+
 			// Undo-Redo for Components
 			_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
 			editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-			//emitter->Play();
-
-			//if (emit->_type == CONE)
-			//{
-			//	ImGui::Checkbox("Reverse", &emit->_reverse);
-			//}
 
 			if (ImGui::Checkbox("Follow##Emitter", &emit->_follow))
 			{
