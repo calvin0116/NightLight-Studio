@@ -68,15 +68,15 @@ namespace ECSBind
     return en.getId();
   }
 
-  // Delta Time
+  // Delta Time (Real DT)
   float dt()
   {
-      return DELTA_T->fixed_dt;
+      return DELTA_T->real_dt;
   }
-
+  // Fixed dt
   float realDt()
   {
-      return DELTA_T->real_dt;// DELTA_T->real_dt;// / CLOCKS_PER_SEC;
+      return DELTA_T->fixed_dt;// DELTA_T->real_dt;// / CLOCKS_PER_SEC;
   }
 
   void SetNextScene(MonoString* scene_name)
