@@ -1784,6 +1784,7 @@ void InspectorWindow::CanvasComp(Entity& ent)
 					
 					ImGui::Checkbox(std::string("Play##").append(std::to_string(i)).c_str(), &ui._play);
 					ImGui::Checkbox(std::string("Loop##").append(std::to_string(i)).c_str(), &ui._loop);
+					ImGui::Checkbox(std::string("Auto Play##").append(std::to_string(i)).c_str(), &ui._autoPlay);
 
 					// Undo-Redo for Components
 					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;

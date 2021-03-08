@@ -43,8 +43,9 @@ struct UI_Element
 	float _timePassed = 0.0f;
 
 	//Should be exposed?
-	bool _play;
-	bool _loop;
+	bool _play = false;
+	bool _loop = false;
+	bool _autoPlay = false;
 
 	LocalString<256> _fileName;
 	unsigned _imageID;

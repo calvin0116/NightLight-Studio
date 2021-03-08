@@ -239,6 +239,23 @@ void ComponentCanvas::Read(Value& val)
 			toPush._loop = val[loop.c_str()].GetBool();
 		}
 
+		std::string autoPlay = std::string("AutoPlay").append(std::to_string(i));
+		if (val.FindMember(autoPlay.c_str()) == val.MemberEnd())
+		{
+			//std::cout << "No loop data has been found" << std::endl;
+			TracyMessageL("ComponentCanvas::Read: No AutoPlay data has been found");
+			SPEEDLOG("ComponentCanvas::Read: No AutoPlay data has been found");
+		}
+		else
+		{
+			toPush._autoPlay = val[autoPlay.c_str()].GetBool();
+
+			if (toPush._autoPlay)
+			{
+				toPush.PlayAnimation(toPush._loop);
+			}
+		}
+
 		std::string position = std::string("UIPosition").append(std::to_string(i));
 		if (val.FindMember(position.c_str()) == val.MemberEnd())
 		{
@@ -325,6 +342,7 @@ Value ComponentCanvas::Write()
 
 		NS_SERIALISER::ChangeData(&val, std::string("Play").append(std::to_string(i)), _uiElements.at(i)._play);
 		NS_SERIALISER::ChangeData(&val, std::string("Loop").append(std::to_string(i)), _uiElements.at(i)._loop);
+		NS_SERIALISER::ChangeData(&val, std::string("AutoPlay").append(std::to_string(i)), _uiElements.at(i)._autoPlay);
 
 		Value position(rapidjson::kArrayType);
 		position.PushBack(_uiElements.at(i)._position.x, global_alloc);
