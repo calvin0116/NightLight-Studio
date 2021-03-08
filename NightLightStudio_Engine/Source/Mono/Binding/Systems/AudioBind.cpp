@@ -58,9 +58,9 @@ namespace AudioBind
     return SYS_AUDIO->PlayBGM(MonoWrapper::ToString(_name));
   }
            
-  void csPlayOnce(MonoString* _name)
+  int csPlayOnce(MonoString* _name)
   {
-    SYS_AUDIO->PlayOnce(MonoWrapper::ToString(_name));
+    return SYS_AUDIO->PlayOnce(MonoWrapper::ToString(_name));
   }
 
   int csPlay3DLoop(MonoString* _name, int _entity)
@@ -68,9 +68,9 @@ namespace AudioBind
     return SYS_AUDIO->Play3DLoop(MonoWrapper::ToString(_name), _entity);
   }
            
-  void csPlay3DOnce(MonoString* _name, int _entity)
+  int csPlay3DOnce(MonoString* _name, int _entity)
   {
-    SYS_AUDIO->Play3DOnce(MonoWrapper::ToString(_name), _entity);
+    return SYS_AUDIO->Play3DOnce(MonoWrapper::ToString(_name), _entity);
   }
 
   void csPause(int _channel)

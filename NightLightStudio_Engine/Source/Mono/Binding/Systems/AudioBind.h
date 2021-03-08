@@ -6,10 +6,10 @@ namespace AudioBind
 {
   void BindAudio();
 
-  int  csPlayBGM(MonoString* _name);
-  void csPlayOnce(MonoString* _name);
-  int  csPlay3DLoop(MonoString* _name, int _entity);
-  void csPlay3DOnce(MonoString* _name, int _entity);
+  int csPlayBGM(MonoString* _name);
+  int csPlayOnce(MonoString* _name);
+  int csPlay3DLoop(MonoString* _name, int _entity);
+  int csPlay3DOnce(MonoString* _name, int _entity);
   void csPause(int _channel);
   void csUnpause(int _channel);
   void csStop(int _channel);

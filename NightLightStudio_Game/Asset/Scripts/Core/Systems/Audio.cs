@@ -11,13 +11,13 @@ namespace Unicorn
     public extern static int PlayBGM(string _name);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static void PlayOnce(string _name);
+    public extern static int PlayOnce(string _name);
     
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static int Play3DLoop(string _name, int _entity);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static void Play3DOnce(string _name, int _entity);
+    public extern static int Play3DOnce(string _name, int _entity);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void Pause(int _channel);

@@ -81,17 +81,28 @@ int SystemAudio::PlayBGM(const std::string& _name)
   return retVal;
 }
 
-void SystemAudio::PlayOnce(const std::string& _name)
+int SystemAudio::PlayOnce(const std::string& _name)
 {
   MyAudioMap::iterator it = _sounds.find(_name);
+  int retVal = -1;
   if (it != _sounds.end())
   {
-    FMOD::Channel* temp;
-    _system->playSound(it->second, _sfx, true, &temp);
-    temp->setMode(FMOD_LOOP_OFF);
-    temp->setMode(FMOD_2D);
-    temp->setPaused(false);
+    for (retVal = 0; retVal < s_MAX_CHANNELS; ++retVal)
+    {
+      bool isPlaying;
+      _channels[retVal]->isPlaying(&isPlaying);
+      if (!isPlaying)
+      {
+        FMOD::Channel* temp;
+        _system->playSound(it->second, _sfx, true, &temp);
+        temp->setMode(FMOD_LOOP_OFF);
+        temp->setMode(FMOD_2D);
+        temp->setPaused(false);
+        break;
+      }
+    }
   }
+  return retVal;
 }
 
 // Name of sound to loop and entity ID's position to follow
@@ -129,12 +140,13 @@ int SystemAudio::Play3DLoop(const std::string& _name, const int _id)
   return retVal;
 }
 
-void SystemAudio::Play3DOnce(const std::string& name, const int _id)
+int SystemAudio::Play3DOnce(const std::string& name, const int _id)
 {
   MyAudioMap::iterator it = _sounds.find(name);
+  int retVal = -1;
   if (it != _sounds.end())
   {
-    for (int retVal = 0; retVal < s_MAX_CHANNELS; ++retVal)
+    for (retVal = 0; retVal < s_MAX_CHANNELS; ++retVal)
     {
       bool isPlaying;
       _channels[retVal]->isPlaying(&isPlaying);
@@ -160,6 +172,7 @@ void SystemAudio::Play3DOnce(const std::string& name, const int _id)
       }
     }
   }
+  return retVal;
 }
 
 // Overloaded function for testing only! do not use this!
