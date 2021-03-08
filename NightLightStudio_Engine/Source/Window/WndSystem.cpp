@@ -611,8 +611,9 @@ namespace NS_WINDOW
 				//SetWindowPos(hAppWnd, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 
 				//InvalidateRect(hAppWnd, NULL, TRUE);
+				const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-				glfwSetWindowMonitor(_glfwWnd, glfwGetPrimaryMonitor(), 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), GLFW_DONT_CARE);
+				glfwSetWindowMonitor(_glfwWnd, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, 0);
 
 				RECT rect; // Making a rect to ensure that size is proper
 				GetClientRect(GetHandlerToWindow(), &rect);
@@ -648,7 +649,7 @@ namespace NS_WINDOW
 				//InvalidateRect(hAppWnd, NULL, TRUE);
 
 				// 2nd param must be null for windowed mode
-				glfwSetWindowMonitor(_glfwWnd, NULL, 0, 0, appWidth, appHeight, GLFW_DONT_CARE);
+				glfwSetWindowMonitor(_glfwWnd, nullptr, 0, 0, appWidth, appHeight, 0);
 
 				RECT rect; // Making a rect to ensure that size is proper
 				GetClientRect(GetHandlerToWindow(), &rect);
