@@ -59,11 +59,11 @@ public: // Suppose to be private and use messaging, but since SystemAudio is sin
   void  Stop(const int _channelID);
   void  SetVol(const int _channelID, float _vol);
   int   PlayBGM(const std::string& _name);
-  void  PlayOnce(const std::string& _name);
+  int  PlayOnce(const std::string& _name);
   // Object ID = entity ID; to get transform position to follow for audio.
   int   Play3DLoop(const std::string& _name, const int _objID);
   // Object ID = entity ID; to get transform position to follow for audio.
-  void  Play3DOnce(const std::string& name, const  int _objID);
+  int  Play3DOnce(const std::string& name, const  int _objID);
   // Inline
   inline void MuteBGM(bool _mute) { _bgm->setMute(_mute); }
   inline void MuteSFX(bool _mute) { _sfx->setMute(_mute); }
