@@ -24,7 +24,7 @@
 #define new DEBUG_NEW
 #endif
 
-//#define _DEFERRED_SHADING
+#define _DEFERRED_SHADING
 
 #define DRAW_DEBUG_GRID
 #define PBR_DRAWING
@@ -172,8 +172,8 @@ namespace NS_GRAPHICS
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE);
 
 		// Passes if the fragment's depth value is less than the stored depth value.
 		// This is the default, but we will call this function to be explicit
@@ -223,6 +223,8 @@ namespace NS_GRAPHICS
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _rtPositionAlpha, 0);
 
 		// Calculated normals/normal map + metallic
@@ -231,6 +233,8 @@ namespace NS_GRAPHICS
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, _rtNormalMapAndMetallic, 0);
 		
 		// Albedo/Diffuse map + roughness
@@ -239,6 +243,8 @@ namespace NS_GRAPHICS
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, _rtAlbedoMapAndRoughness, 0);
 
 		// Ambient Occlusion
@@ -247,6 +253,8 @@ namespace NS_GRAPHICS
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, _rtAmbientOcclusion, 0);
 
 		// Tell opengl which color attachments to use for rendering
@@ -342,14 +350,22 @@ namespace NS_GRAPHICS
 			// To deal with blending, perhaps turn off blending while rendering to fbo, then turn on again for transparent objects
 		*/
 
-		// To deal with transparent items
-		//std::vector<ComponentGraphics*> _blended;
+		// To deal with transparent and/or emissive items, which require forward rendering
+		std::vector<ComponentGraphics*> _forward;
+
 #ifdef _DEFERRED_SHADING
 		///////////////////////////////////////
 		// START OF DEFERRED SHADING
 
+		// Disable GL_BLEND during geometry pass
+		glDisable(GL_BLEND);
+
 		// Frame buffer was initiallly set up, so no further initialization is required
 		glBindFramebuffer(GL_FRAMEBUFFER, _geometryBuffer);
+
+		glClearColor(0.f, 0.f, 0.f, 1.0f); // Clear to black for geometry pass!! MUST BE DONE
+		// Note: For custom colors, set glClearColor to black, then in the fragment shader,
+		// then, in the lighting fragment shader, return custom color when normal is black(vec3(0.f,0.f,0.f))
 
 		// Must be done once again for frame buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -363,12 +379,12 @@ namespace NS_GRAPHICS
 		{
 			ComponentGraphics* graphicsComp = G_ECMANAGER->getComponent<ComponentGraphics>(itr);
 
-			/*if (graphicsComp->GetAlpha() < 1.f)
+			if (graphicsComp->CheckEmissiveActivation() || (graphicsComp->GetAlpha() < 1.f))
 			{
-				_blended.push_back(graphicsComp);
+				_forward.push_back(graphicsComp);
 				++itr;
 				continue;
-			}*/
+			}
 
 
 			Entity entity = G_ECMANAGER->getEntity(itr);
@@ -378,14 +394,12 @@ namespace NS_GRAPHICS
 			if (graphicsComp->_modelID < 0)
 			{
 				++itr;
-				//++compItr;
 				continue;
 			}
 
 			if (!graphicsComp->_isActive)
 			{
 				++itr;
-				//++compItr;
 				continue;
 			}
 
@@ -617,185 +631,269 @@ namespace NS_GRAPHICS
 						  GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 		
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// Enable GL_BLEND again 
+		glEnable(GL_BLEND);
+
 		// Then render other non-light affected stuff as per normal
+		// Emissive objects will also go here
 		// In here, we try to render transparent objects
-		// Enable glBlend here and disable afterwards
 		// Requires use of old shaders to render
 		// In other words, make way for older shaders to utilize blending as we are no longer in the lighting pass
 
-		//glEnable(GL_BLEND);
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		//auto blendedItr = _blended.begin();
-		//auto blendedItrEnd = _blended.end();
-
-		//// Render objects with transparency
-		//while (blendedItr != blendedItrEnd)
-		//{
-		//	ComponentGraphics* graphicsComp = *blendedItr;
-
-		//	Entity entity = G_ECMANAGER->getEntity(graphicsComp);
-
-		//	ComponentAnimation* animComp = entity.getComponent<ComponentAnimation>();
-
-		//	if (graphicsComp->_modelID < 0)
-		//	{
-		//		++blendedItr;
-		//		continue;
-		//	}
-
-		//	if (!graphicsComp->_isActive)
-		//	{
-		//		++blendedItr;
-		//		continue;
-		//	}
-
-		//	Model* model = modelManager->_models[graphicsComp->_modelID];
-
-		//	// get transform component
-		//	ComponentTransform* transformComp = entity.getComponent<ComponentTransform>();
-
-		//	glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
-
-		//	if (animComp)
-		//	{
-		//		if (animComp->_isActive && model->_isAnimated)
-		//		{
-		//			glm::mat4 identity(1.0f);
-		//			double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
-		//			std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
-		//			if (!currAnimation.empty())
-		//			{
-		//				model->GetPose(currAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
-		//			}
-		//		}
-		//	}
-
-		//	if (graphicsComp->_renderType == RENDERTYPE::SOLID)
-		//	{
-		//		if (model->_isAnimated)
-		//		{
-		//			shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED);
-		//		}
-		//		else
-		//		{
-		//			shaderManager->StartProgram(ShaderSystem::PBR); // solid program
-		//		}
-
-		//		// Update alpha
-		//		glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
-
-		//		// Update model and uniform for material
-		//		glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
-		//		glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
-		//		glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
-
-		//		if (model->_isAnimated)
-		//		{
-		//			glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-		//			for (auto& mesh : model->_animatedMeshes)
-		//			{
-		//				glBindVertexArray(mesh->VAO);
-		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
-		//			}
-		//		}
-		//		else
-		//		{
-		//			for (auto& mesh : model->_meshes)
-		//			{
-		//				glBindVertexArray(mesh->VAO);
-		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
-		//			}
-		//		}
-
-		//		shaderManager->StopProgram();
-		//	}
-		//	else // textured program
-		//	{
-		//		if (model->_isAnimated)
-		//		{
-		//			// If normal map does not exist
-		//			if (!graphicsComp->_normalID)
-		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP);
-		//			else
-		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED);
-		//			//glm::mat4 identity(1.0f);
-		//			//model->GetPose("Take 001", model->_rootBone, _testTimeElapsed, identity, model->_globalInverseTransform);
-		//		}
-		//		else
-		//		{
-		//			if (!graphicsComp->_normalID)
-		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP);
-		//			else
-		//				shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED); // textured program
-		//		}
-
-		//		// Update alpha
-		//		glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
-
-		//		// Roughness Control
-		//		glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
-		//		glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
-
-		//		// Bind textures
-		//		// bind diffuse map
-		//		textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
-
-		//		// bind metallic map
-		//		textureManager->BindMetallicTexture(graphicsComp->_metallicID);
-
-		//		// bind roughness map
-		//		textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
-
-		//		// bind ao map
-		//		textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
-
-		//		// bind normal map
-		//		textureManager->BindNormalTexture(graphicsComp->_normalID);
-
-		//		if (model->_isAnimated)
-		//		{
-		//			glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
-		//			for (auto& mesh : model->_animatedMeshes)
-		//			{
-		//				glBindVertexArray(mesh->VAO);
-
-		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
-		//			}
-		//		}
-		//		else
-		//		{
-		//			for (auto& mesh : model->_meshes)
-		//			{
-		//				glBindVertexArray(mesh->VAO);
-
-		//				glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
-		//				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
-
-		//				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
-		//			}
-		//		}
-
-		//		shaderManager->StopProgram();
-		//	}
-		//	++blendedItr;
-		//}
-
-		//glDisable(GL_BLEND);
-
-
+		// debug grid is almost always opaque, so draw it first before other objects
 #ifdef DRAW_DEBUG_GRID
 		debugManager->Render(); // Render opaque objects first, in this case, our grid is most definitely opaque
 #endif
+
+		// Handle emissive and/or alpha < 1.f objects here
+
+		// Iterators for blending and/or emissive objects
+		auto forwardItr = _forward.begin();
+		auto forwardItrEnd = _forward.end();
+
+		// Render objects with transparency
+		while (forwardItr != forwardItrEnd)
+		{
+			ComponentGraphics* graphicsComp = *forwardItr;
+
+			Entity entity = G_ECMANAGER->getEntity(graphicsComp);
+
+			ComponentAnimation* animComp = entity.getComponent<ComponentAnimation>();
+
+			if (graphicsComp->_modelID < 0)
+			{
+				++forwardItr;
+				continue;
+			}
+
+			if (!graphicsComp->_isActive)
+			{
+				++forwardItr;
+				continue;
+			}
+
+			Model* model = modelManager->_models[graphicsComp->_modelID];
+
+			// get transform component
+			ComponentTransform* transformComp = entity.getComponent<ComponentTransform>();
+
+			glm::mat4 ModelMatrix = transformComp->GetModelMatrix();
+
+			if (animComp)
+			{
+				if (animComp->_isActive && model->_isAnimated)
+				{
+					glm::mat4 identity(1.0f);
+					double dt = animManager->_animControllers[animComp->_controllerID]->_dt;
+					std::string& currAnimation = animManager->_animControllers[animComp->_controllerID]->_currAnim;
+					if (!currAnimation.empty())
+					{
+						model->GetPose(currAnimation, model->_rootBone->_rootJoint, dt, identity, model->_globalInverseTransform);
+					}
+				}
+			}
+
+			if (graphicsComp->_renderType == RENDERTYPE::SOLID)
+			{
+				if (model->_isAnimated)
+				{
+					// Check if emission material is activated
+					if (graphicsComp->CheckEmissiveActivation())
+					{
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED);
+						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+					}
+					else
+					{
+						shaderManager->StartProgram(ShaderSystem::PBR_ANIMATED_FORWARD);
+
+						// Get uniforms done only if non-emissive shaders are activated
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+						glUniform1f(shaderManager->GetRoughnessLocation(), graphicsComp->_pbrData._roughness);
+						glUniform1f(shaderManager->GetMetallicLocation(), graphicsComp->_pbrData._metallic);
+					}
+				}
+				else
+				{
+					if (graphicsComp->CheckEmissiveActivation())
+					{
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE);
+						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+					}
+					else
+					{
+						shaderManager->StartProgram(ShaderSystem::PBR_FORWARD); // solid program
+
+						glUniform3fv(shaderManager->GetAlbedoLocation(), 1, &graphicsComp->_pbrData._albedo[0]); // albedo
+						glUniform1f(shaderManager->GetRoughnessLocation(), graphicsComp->_pbrData._roughness);
+						glUniform1f(shaderManager->GetMetallicLocation(), graphicsComp->_pbrData._metallic);
+					}
+				}
+
+				// Update alpha
+				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
+
+				if (model->_isAnimated)
+				{
+					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+					for (auto& mesh : model->_meshes)
+					{
+						glBindVertexArray(mesh->VAO);
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+					}
+				}
+				else
+				{
+					for (auto& mesh : model->_meshes)
+					{
+						glBindVertexArray(mesh->VAO);
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+					}
+				}
+
+				shaderManager->StopProgram();
+			}
+			else // textured program
+			{
+				if (model->_isAnimated)
+				{
+					// Check if emission material is activated
+					if (graphicsComp->CheckEmissiveActivation())
+					{
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_ANIMATED_TEXTURED);
+						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+					}
+					else
+					{
+						// If normal map does not exist
+						if (!graphicsComp->_normalID)
+							shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP_FORWARD);
+						else
+							shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_FORWARD);
+
+						// Get uniforms done only if non-emissive shaders are activated
+						// Roughness Control
+						glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+
+						// Metallic Control
+						glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+
+						// Bind textures
+						// bind diffuse map
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+
+						// bind metallic map
+						textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+
+						// bind roughness map
+						textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+
+						// bind ao map
+						textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+
+						// bind normal map
+						textureManager->BindNormalTexture(graphicsComp->_normalID);
+					}
+				}
+				else
+				{
+					// Check if emission material is activated
+					if (graphicsComp->CheckEmissiveActivation())
+					{
+						shaderManager->StartProgram(ShaderSystem::EMISSIVE_TEXTURED);
+						glUniform3fv(shaderManager->GetEmissiveLocation(), 1, &graphicsComp->_pbrData._emissive[0]); // emissive
+						glUniform1f(shaderManager->GetEmissiveIntensityLocation(), graphicsComp->_pbrData._emissiveIntensity);
+
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+					}
+					else
+					{
+						if (!graphicsComp->_normalID)
+							shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP_FORWARD);
+						else
+							shaderManager->StartProgram(ShaderSystem::PBR_TEXTURED_FORWARD); // textured program
+
+						// Get uniforms done only if non-emissive shaders are activated
+						// Roughness Control
+						glUniform1f(shaderManager->GetRoughnessControlLocation(), graphicsComp->_pbrData._roughness);
+
+						// Metallic Control
+						glUniform1f(shaderManager->GetMetallicControlLocation(), graphicsComp->_pbrData._metallic);
+
+						// Bind textures
+						// bind diffuse map
+						textureManager->BindAlbedoTexture(graphicsComp->_albedoID);
+
+						// bind metallic map
+						textureManager->BindMetallicTexture(graphicsComp->_metallicID);
+
+						// bind roughness map
+						textureManager->BindRoughnessTexture(graphicsComp->_roughnessID);
+
+						// bind ao map
+						textureManager->BindAmbientOcclusionTexture(graphicsComp->_aoID);
+
+						// bind normal map
+						textureManager->BindNormalTexture(graphicsComp->_normalID);
+					}
+				}
+
+				// Update alpha
+				glUniform1f(shaderManager->GetAlphaLocation(), graphicsComp->GetAlpha());
+
+				if (model->_isAnimated)
+				{
+					glUniformMatrix4fv(shaderManager->GetJointsMatrixLocation(), MAX_BONE_COUNT, GL_FALSE, glm::value_ptr(model->_poseTransform[0]));
+					for (auto& mesh : model->_meshes)
+					{
+						glBindVertexArray(mesh->VAO);
+
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+					}
+				}
+				else
+				{
+					for (auto& mesh : model->_meshes)
+					{
+						glBindVertexArray(mesh->VAO);
+
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->ModelMatrixBO);
+						glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &ModelMatrix);
+
+						glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->_indices.size()), GL_UNSIGNED_INT, 0);
+					}
+				}
+
+				shaderManager->StopProgram();
+			}
+			++forwardItr;
+		}
+
+
+//#ifdef DRAW_DEBUG_GRID
+//		debugManager->Render(); // Render opaque objects first, in this case, our grid is most definitely opaque
+//#endif
 		// END OF DEFERRED SHADING
 		///////////////////////////////////////
 #endif

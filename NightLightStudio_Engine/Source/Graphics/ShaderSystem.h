@@ -7,7 +7,7 @@ namespace NS_GRAPHICS
 {
 	class ShaderSystem
 	{
-		static const unsigned s_max_shaders = 16;
+		static const unsigned s_max_shaders = 22;
 		static const unsigned s_view_projection_buffer_size = 128; // Inclusive of padding
 		static const unsigned s_lights_buffer_size = sizeof(LightBlock); // Inclusive of padding
 
@@ -93,6 +93,12 @@ namespace NS_GRAPHICS
 			UI_WORLDSPACE,
 			PARTICLE,
 			PBR_LIGHTPASS,
+			PBR_FORWARD,
+			PBR_ANIMATED_FORWARD,
+			PBR_TEXTURED_FORWARD,
+			PBR_TEXTURED_ANIMATED_FORWARD,
+			PBR_TEXTURED_NONORMALMAP_FORWARD,
+			PBR_TEXTURED_ANIMATED_NONORMALMAP_FORWARD,
 			TOTAL_SHADER //If shader type is this means GG
 		};
 

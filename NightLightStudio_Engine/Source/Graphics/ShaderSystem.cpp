@@ -99,12 +99,19 @@ namespace NS_GRAPHICS
 				continue;
 			}
 
-			if ((i >= ShaderType::PBR) && (i <= ShaderType::EMISSIVE_ANIMATED_TEXTURED))
+			if ((i >= ShaderType::PBR) && (i <= ShaderType::EMISSIVE_ANIMATED_TEXTURED) ||
+				(i >= ShaderType::PBR_FORWARD) && (i <= ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP_FORWARD))
 			{
 				StartProgram(i);
 
 				// General PBR uniforms
-				p_uniformLocations[i]._gamma = glGetUniformLocation(GetCurrentProgramHandle(), "Gamma");
+				// Gamma shifted to lighting fragment shader for deferred shading
+
+				if ((i >= ShaderType::PBR_FORWARD) && (i <= ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP_FORWARD))
+				{
+					p_uniformLocations[i]._gamma = glGetUniformLocation(GetCurrentProgramHandle(), "Gamma");
+				}
+				
 				p_uniformLocations[i]._alpha = glGetUniformLocation(GetCurrentProgramHandle(), "Alpha");
 
 				// All emissive shaders
@@ -119,18 +126,22 @@ namespace NS_GRAPHICS
 					|| i == ShaderType::PBR_TEXTURED_ANIMATED
 					|| i == ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP
 					|| i == ShaderType::EMISSIVE_ANIMATED
-					|| i == ShaderType::EMISSIVE_ANIMATED_TEXTURED)
+					|| i == ShaderType::EMISSIVE_ANIMATED_TEXTURED
+					|| i == ShaderType::PBR_ANIMATED_FORWARD
+					|| i == ShaderType::PBR_TEXTURED_ANIMATED_FORWARD
+					|| i == ShaderType::PBR_TEXTURED_ANIMATED_NONORMALMAP_FORWARD)
 				{
 					p_uniformLocations[i]._jointsMatrix = glGetUniformLocation(GetCurrentProgramHandle(), "jointsMat");
 				}
 				
 				// All shaders which use albedo material(not albedo texture)
-				if (i == ShaderType::PBR || i == ShaderType::PBR_ANIMATED || i == ShaderType::EMISSIVE || i == ShaderType::EMISSIVE_ANIMATED)
+				if (i == ShaderType::PBR || i == ShaderType::PBR_ANIMATED || i == ShaderType::EMISSIVE || i == ShaderType::EMISSIVE_ANIMATED
+					|| i == ShaderType::PBR_FORWARD || i == ShaderType::PBR_ANIMATED_FORWARD)
 				{
 					p_uniformLocations[i]._albedo = glGetUniformLocation(GetCurrentProgramHandle(), "Albedo");
 
 					// Non-textured PBR uniforms
-					if (i == ShaderType::PBR || i == ShaderType::PBR_ANIMATED)
+					if (i == ShaderType::PBR || i == ShaderType::PBR_ANIMATED || i == ShaderType::PBR_FORWARD || i == ShaderType::PBR_ANIMATED_FORWARD)
 					{
 						p_uniformLocations[i]._roughness = glGetUniformLocation(GetCurrentProgramHandle(), "Roughness");
 						p_uniformLocations[i]._metallic = glGetUniformLocation(GetCurrentProgramHandle(), "Metallic");
@@ -277,6 +288,9 @@ namespace NS_GRAPHICS
 			IMPORTANT NOTES WHEN ADDING PBR:
 			1) Ensure that all uniform sampler2D(if any) are accounted for
 			2) Ensure that SetGamma() in light system is set for any new PBR shaders
+
+			IMPORTANT NOTES IN GENERAL:
+			1) MAKE SURE THAT s_max_shaders is enough
 		*/
 
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/default.vert"),std::string("../NightLightStudio_Game/Shaders/default.frag")); //DEFAULT 0
@@ -295,6 +309,12 @@ namespace NS_GRAPHICS
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/ui_world.vert"), std::string("../NightLightStudio_Game/Shaders/ui_world.frag")); //UI_WorldSpace 13
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/particle.vert"), std::string("../NightLightStudio_Game/Shaders/particle.frag")); //Particle 14
 		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_LightingPass.vert"), std::string("../NightLightStudio_Game/Shaders/PBR_LightingPass.frag")); // PBR_LIGHTPASS 15
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR.vert"), std::string("../NightLightStudio_Game/Shaders/ForwardShading/PBR.frag")); //PBR_FORWARD 16
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/ForwardShading/PBR_Animated.frag")); //PBR_ANIMATED_FORWARD 17
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured.vert"), std::string("../NightLightStudio_Game/Shaders/ForwardShading/PBR_Textured.frag")); //PBR_TEXTURED_FORWARD 18
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated.vert"), std::string("../NightLightStudio_Game/Shaders/ForwardShading/PBR_Textured_Animated.frag")); //PBR_TEXTURED_ANIMATED_FORWARD 19
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/ForwardShading/PBR_Textured_NoNormalMap.frag")); //PBR_TEXTURED_NONORMALMAP_FORWARD 20
+		LoadShader(std::string("../NightLightStudio_Game/Shaders/PBR_Textured_Animated_NoNormalMap.vert"), std::string("../NightLightStudio_Game/Shaders/ForwardShading/PBR_Textured_Animated_NoNormalMap.frag")); //PBR_TEXTURED_ANIMATED_NONORMALMAP_FORWARD 21
 		//LoadShader("../NightLightStudio_Game/Shaders/","../NightLightStudio_Game/Shaders/");
 		//LoadShader("","");
 
@@ -449,12 +469,44 @@ namespace NS_GRAPHICS
 			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
 			StopProgram();
 
+			// Geometry buffer variables must be setup during run time during render
 			//StartProgram(ShaderSystem::PBR_LIGHTPASS);
 			//glUniform1i(glGetUniformLocation(currentProgramID, "gPositionAlpha"), 0);    // Position + Alpha
 			//glUniform1i(glGetUniformLocation(currentProgramID, "gNormalMetallic"), 1);   // Normal + Metallic
 			//glUniform1i(glGetUniformLocation(currentProgramID, "gAlbedoRoughness"), 2);  // Albedo + Roughness
 			//glUniform1i(glGetUniformLocation(currentProgramID, "gAmbientOcclusion"), 3); // Ambient Occlusion
 			//StopProgram();
+
+
+			StartProgram(ShaderSystem::PBR_TEXTURED_FORWARD);
+			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
+			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
+			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
+			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
+			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
+			StopProgram();
+
+			StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_FORWARD);
+			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
+			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
+			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
+			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
+			glUniform1i(glGetUniformLocation(currentProgramID, "NormalTex"), 4); // Normal
+			StopProgram();
+
+			StartProgram(ShaderSystem::PBR_TEXTURED_NONORMALMAP_FORWARD);
+			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
+			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
+			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
+			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
+			StopProgram();
+
+			StartProgram(ShaderSystem::PBR_TEXTURED_ANIMATED_NONORMALMAP_FORWARD);
+			glUniform1i(glGetUniformLocation(currentProgramID, "AlbedoTex"), 0); // Albedo
+			glUniform1i(glGetUniformLocation(currentProgramID, "MetallicTex"), 1); // Metallic
+			glUniform1i(glGetUniformLocation(currentProgramID, "RoughnessTex"), 2); // Roughness
+			glUniform1i(glGetUniformLocation(currentProgramID, "AOTex"), 3); // AO
+			StopProgram();
 		}
 	}
 }
