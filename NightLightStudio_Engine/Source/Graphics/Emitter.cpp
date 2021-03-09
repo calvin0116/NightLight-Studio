@@ -164,10 +164,19 @@ void Emitter::InitAllParticles(bool prewarm)
 					spawnPos = _emitterPosition;
 				}
 				glm::vec3 randVec = RandomConeVec3(_spawnAngle, _coneDir);
+
 				glm::quat Quaternion(glm::radians(_emitterRotation));
 				glm::mat4 Rotate = glm::mat4_cast(Quaternion);
-				randVec = Rotate * glm::vec4(randVec,1.0f);
-				spawnPos += (randVec * _radius) - (_coneDir * _radius);
+				glm::vec3 newDir = glm::vec3(Rotate * glm::vec4(_coneDir, 1.0f));
+				randVec = Rotate * glm::vec4(randVec, 1.0f);
+				randVec = glm::normalize(randVec);
+
+				float angleInRadian = _spawnAngle * PI / 180.0f;
+				float heightOfCone = _radius / std::tanf(angleInRadian);
+				float heightOfVector = glm::dot(randVec * heightOfCone, newDir);
+
+				spawnPos += (randVec * heightOfCone) - (newDir * heightOfVector);
+				//spawnPos += (randVec * _radius) - (_coneDir * _radius);
 				_particles[i]._position = spawnPos;
 
 				//Unit Length Direction
@@ -365,7 +374,8 @@ void Emitter::ResetParticle(size_t index)
 			randVec = Rotate * glm::vec4(randVec, 1.0f);
 			randVec = glm::normalize(randVec);
 
-			float heightOfCone = _radius / std::tanf(_spawnAngle);
+			float angleInRadian = _spawnAngle * PI / 180.0f;
+			float heightOfCone = _radius / std::tanf(angleInRadian);
 			float heightOfVector = glm::dot(randVec * heightOfCone, newDir);
 
 			spawnPos += (randVec * heightOfCone) - (newDir * heightOfVector);
