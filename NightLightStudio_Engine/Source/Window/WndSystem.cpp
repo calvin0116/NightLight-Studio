@@ -19,6 +19,8 @@ Institute of Technology is prohibited.
 #include "WndSystem.h"
 #include "../IO/Json/Config.h"
 
+#include "../Graphics/GraphicsSystem.h"
+
 
 #ifdef _EDITOR
 #include "../Editor/imgui/imgui_impl_win32.h"
@@ -498,6 +500,59 @@ namespace NS_WINDOW
 		{
 			UNREFERENCED_PARAMETER(window);
 			glViewport(0, 0, width, height);
+
+			// Set all render targets of framebuffers appropriately for resize (Deferred shading)
+			glBindFramebuffer(GL_FRAMEBUFFER, NS_GRAPHICS::SYS_GRAPHICS->GetGeometryBuffer());
+
+			// Re-generate data buffers for geometry buffer + render targets
+
+			// Position
+			glBindTexture(GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetPositionAlphaRT());
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetPositionAlphaRT(), 0);
+
+			// Calculated normals/normal map + metallic
+			glBindTexture(GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetNormalMapAndMetallicRT());
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetNormalMapAndMetallicRT(), 0);
+
+			// Albedo/Diffuse map + roughness
+			glBindTexture(GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetAlbedoMapAndRoughnessRT());
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetAlbedoMapAndRoughnessRT(), 0);
+
+			// Ambient Occlusion
+			glBindTexture(GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetAmbientOcclusionRT());
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetAmbientOcclusionRT(), 0);
+
+			// Tell opengl which color attachments to use for rendering
+			unsigned int _renderTargets[4]
+				= { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+			glDrawBuffers(4, _renderTargets);
+
+			// Depth buffer
+			glBindRenderbuffer(GL_RENDERBUFFER, NS_GRAPHICS::SYS_GRAPHICS->GetDepthBuffer());
+			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, NS_GRAPHICS::SYS_GRAPHICS->GetDepthBuffer());
+
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		});
 
 		return;

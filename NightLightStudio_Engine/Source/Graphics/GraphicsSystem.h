@@ -151,6 +151,15 @@ namespace NS_GRAPHICS
         // Note: Shader program handling must be done outside of function
         void RenderScreenQuad();
 
+
+        // Getters for display resize callback for framebuffers
+        GLuint& GetGeometryBuffer();          // Geometry buffer
+        GLuint& GetPositionAlphaRT();         // Position + Alpha Render Target
+        GLuint& GetNormalMapAndMetallicRT();  // Normal map + Metallic Render Target
+        GLuint& GetAlbedoMapAndRoughnessRT(); // Albedo map + Roughness Render Target
+        GLuint& GetAmbientOcclusionRT();      // Ambient Occlusion map Render Target
+        GLuint& GetDepthBuffer();             // Depth Buffer
+
     private:
 
         bool _hasInit;
@@ -186,10 +195,10 @@ namespace NS_GRAPHICS
 
         // Deferred Shading Variables
         GLuint _geometryBuffer = 0;
-        unsigned int _rtPositionAlpha = 0;         // Position color buffer/render target
-        unsigned int _rtNormalMapAndMetallic = 0;  // Normal + metallic map color buffer/render target, normal map data will replace with polygon normals if no texture exists
-        unsigned int _rtAlbedoMapAndRoughness = 0; // Albedo + roughness map color buffer/render targets
-        unsigned int _rtAmbientOcclusion = 0;      // Ambient Occlusion mapping color buffer/render target 
+        GLuint _rtPositionAlpha = 0;         // Position color buffer/render target
+        GLuint _rtNormalMapAndMetallic = 0;  // Normal + metallic map color buffer/render target, normal map data will replace with polygon normals if no texture exists
+        GLuint _rtAlbedoMapAndRoughness = 0; // Albedo + roughness map color buffer/render targets
+        GLuint _rtAmbientOcclusion = 0;      // Ambient Occlusion mapping color buffer/render target 
         
         GLuint _depthBuffer = 0; // Used to help determine screen pixel and its data for deferred light pass
 

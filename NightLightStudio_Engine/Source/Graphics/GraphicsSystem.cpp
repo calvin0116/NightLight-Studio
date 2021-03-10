@@ -1714,4 +1714,28 @@ namespace NS_GRAPHICS
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		glBindVertexArray(0);
 	}
+	GLuint& GraphicsSystem::GetGeometryBuffer()
+	{
+		return _geometryBuffer;
+	}
+	GLuint& GraphicsSystem::GetPositionAlphaRT()
+	{
+		return _rtPositionAlpha;
+	}
+	GLuint& GraphicsSystem::GetNormalMapAndMetallicRT()
+	{
+		return _rtNormalMapAndMetallic;
+	}
+	GLuint& GraphicsSystem::GetAlbedoMapAndRoughnessRT()
+	{
+		return _rtAlbedoMapAndRoughness;
+	}
+	GLuint& GraphicsSystem::GetAmbientOcclusionRT()
+	{
+		return _rtAmbientOcclusion;
+	}
+	GLuint& GraphicsSystem::GetDepthBuffer()
+	{
+		return _depthBuffer;
+	}
 }
