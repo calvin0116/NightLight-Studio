@@ -498,6 +498,10 @@ namespace NS_WINDOW
 		// Set callback for resizing
 		glfwSetFramebufferSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
 		{
+			// Assign values for reference
+			SYS_WINDOW->appWidth = width;
+			SYS_WINDOW->appHeight = height;
+
 			UNREFERENCED_PARAMETER(window);
 			glViewport(0, 0, width, height);
 
@@ -548,6 +552,10 @@ namespace NS_WINDOW
 			glDrawBuffers(4, _renderTargets);
 
 			// Depth buffer
+			// Delete original buffer first due to glRenderbufferStorage being unable to resize
+			glDeleteRenderbuffers(1, &NS_GRAPHICS::SYS_GRAPHICS->GetDepthBuffer());
+
+			glCreateRenderbuffers(1, &NS_GRAPHICS::SYS_GRAPHICS->GetDepthBuffer());
 			glBindRenderbuffer(GL_RENDERBUFFER, NS_GRAPHICS::SYS_GRAPHICS->GetDepthBuffer());
 			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, NS_GRAPHICS::SYS_GRAPHICS->GetDepthBuffer());
