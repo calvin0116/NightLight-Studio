@@ -90,7 +90,7 @@ namespace NS_LOGIC
               MonoClass* raw_class_type = array_type->eklass;
               MonoType* mono_type = mono_class_get_type(raw_class_type);
 
-              MonoArray* mono_array = MonoWrapper::GetObjectFieldValue<MonoArray*>(MonoData._pInstance, var_name);
+              //MonoArray* mono_array = MonoWrapper::GetObjectFieldValue<MonoArray*>(MonoData._pInstance, var_name);
               int my_type = mono_type_get_type(mono_type);
               //int arr_sz = mono_array_length(mono_array);
               ED_OUT("My MONO Type: " + std::to_string(my_type));

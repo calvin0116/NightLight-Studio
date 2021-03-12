@@ -75,8 +75,10 @@ namespace Prefab_Function {
 			else
 			{
 				const std::type_info& tinf = typeid(*comp);
-				TracyMessageL(std::string("Prefab_Function::WritePrefab: Wrong data given from component: ").append(tinf.name()).c_str());
-				SPEEDLOG(std::string("Prefab_Function::WritePrefab: Wrong data given from component: ").append(tinf.name()));
+
+				std::string outStr = "Prefab_Function::WritePrefab: Wrong data given from component: "; outStr.append(tinf.name());
+				TracyMessage(outStr.c_str(), outStr.size());
+				SPEEDLOG(outStr);
 				//std::cout << "Wrong data given from component: " << tinf.name() << std::endl;
 			}
 
@@ -92,8 +94,10 @@ namespace Prefab_Function {
 		fs::path cur_path_name = file;
 
 		std::string file_without_ext = cur_path_name.parent_path().string() +"/"+ cur_path_name.stem().string();
-		TracyMessageL(std::string("PrefabInstances::CreatePrefabInstance: " + file_without_ext).c_str());
-		SPEEDLOG(std::string("PrefabInstances::CreatePrefabInstance: " + file_without_ext));
+
+		std::string outStr = "PrefabInstances::CreatePrefabInstance: "; outStr.append(file_without_ext);
+		TracyMessage(outStr.c_str(), outStr.size());
+		SPEEDLOG(outStr);
 		//std::cout << file_without_ext << std::endl;
 		//Save and delete temp prefab
 		if (isActive)

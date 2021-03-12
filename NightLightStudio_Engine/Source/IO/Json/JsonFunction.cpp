@@ -128,8 +128,9 @@ namespace NS_SERIALISER {
     {
         for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
         {
-            TracyMessageL(std::string("NS_SERIALISER::EntityListCreation: Entity Name: ").append(itr->name.GetString()).c_str());
-            SPEEDLOG(std::string("NS_SERIALISER::EntityListCreation: Entity Name: ").append(itr->name.GetString()));
+            std::string outStr = "NS_SERIALISER::EntityListCreation: Entity Name: "; outStr.append(itr->name.GetString());
+            TracyMessage(outStr.c_str(), outStr.size());
+            SPEEDLOG(outStr);
             //std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
             Entity ent_handle = g_ecman->BuildEntity(itr->name.GetString());		//Build entity
 
@@ -147,12 +148,16 @@ namespace NS_SERIALISER {
     {
         for (auto itr = Ent_list.MemberBegin(); itr != Ent_list.MemberEnd(); ++itr)
         {
-            TracyMessageL(std::string("NS_SERIALISER::EntityListInit: Entity Name: ").append(itr->name.GetString()).c_str());
-            SPEEDLOG(std::string("NS_SERIALISER::EntityListInit: Entity Name: ").append(itr->name.GetString()));
+            std::string outStr = "NS_SERIALISER::EntityListInit: Entity Name: "; outStr.append(itr->name.GetString());
+            TracyMessage(outStr.c_str(), outStr.size());
+            SPEEDLOG(outStr);
             //std::cout << "Entity Name: " << itr->name.GetString() << std::endl;
             Entity ent_handle = G_ECMANAGER->getEntityUsingEntName(itr->name.GetString());		//Build entity
-            TracyMessageL(std::string("NS_SERIALISER::EntityListInit: Entity ID: ").append(std::to_string(ent_handle.getId())).c_str());
-            SPEEDLOG(std::string("NS_SERIALISER::EntityListInit: Entity ID: ").append(std::to_string(ent_handle.getId())));
+
+
+            outStr = "NS_SERIALISER::EntityListInit: Entity ID: "; outStr.append(std::to_string(ent_handle.getId()));
+            TracyMessage(outStr.c_str(), outStr.size());
+            SPEEDLOG(outStr);
             //std::cout << "Entity ID: " << ent_handle.getId() << std::endl;
 
             Value& Component_list = Ent_list[itr->name.GetString()];					//Get component list
