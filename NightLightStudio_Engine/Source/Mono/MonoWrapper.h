@@ -76,7 +76,6 @@ namespace MonoWrapper
   T GetObjectFieldValue(MonoObject* _obj, const std::string& _fieldName)
   {
     MonoClass* classType = mono_object_get_class(_obj);
-
     MonoClassField* field = mono_class_get_field_from_name(classType,
       _fieldName.c_str());
 
@@ -85,5 +84,23 @@ namespace MonoWrapper
     mono_field_get_value(_obj, field, &val);
 
     return val;
+  }
+
+  template <typename T>
+  MonoArray* ToMonoArray(T* array, MonoClass* eklass, size_t size)
+  {
+    MonoArray* result = mono_array_new(mono_domain_get(), eklass, size);
+    for (int i = 0; i < size; ++i)
+      mono_array_set(result, T, i, array[i]);
+    return result;
+  }
+
+  template <typename T>
+  void ToArray(MonoArray* _array, T* _myArray)
+  {
+    int length = mono_array_length(_array);
+
+    for (int i = 0; i < length; ++i)
+      _myArray[i] = (T)mono_array_get(_array, T, i);
   }
 }

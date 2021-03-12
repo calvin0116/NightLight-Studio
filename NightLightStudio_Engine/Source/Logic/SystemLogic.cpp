@@ -12,6 +12,8 @@
 #include "../tracy-master/Tracy.hpp"
 // SpeedLog
 #include "../Log/SpeedLog.h"
+// For editor console cout
+#include "../Editor/SystemEditor.h"
 
 namespace NS_LOGIC
 {
@@ -44,7 +46,8 @@ namespace NS_LOGIC
         while (field)
         {
           const char* var_name = mono_field_get_name(field);
-          int var_typeid = mono_type_get_type(mono_field_get_type(field));
+          MonoType* type = mono_field_get_type(field);
+          int var_typeid = mono_type_get_type(type);
           unsigned var_flag = mono_field_get_flags(field);
           // Store values into local vector
           if (var_flag == MONO_FIELD_ATTR_PUBLIC)
@@ -80,8 +83,24 @@ namespace NS_LOGIC
               else
                 ScriptValues.emplace(tempVar, std::string(""));
               break;
+            case MONO_TYPE_SZARRAY:
+            {
+              MonoArrayType* array_type = mono_type_get_array_type(type);              
+              //ED_OUT("My Array Type: " + std::to_string(var_typeid));
+              MonoClass* raw_class_type = array_type->eklass;
+              MonoType* mono_type = mono_class_get_type(raw_class_type);
+
+              MonoArray* mono_array = MonoWrapper::GetObjectFieldValue<MonoArray*>(MonoData._pInstance, var_name);
+              int my_type = mono_type_get_type(mono_type);
+              //int arr_sz = mono_array_length(mono_array);
+              ED_OUT("My MONO Type: " + std::to_string(my_type));
+              //ED_OUT("My Arr Size: " + std::to_string(arr_sz));
+              //switch()
+              break;
+            }
             default:
               // Unhandled type, do nothing.
+              ED_OUT("My MONO Type: " + std::to_string(var_typeid));
               break;
             }
           }

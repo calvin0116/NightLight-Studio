@@ -6,38 +6,36 @@ namespace Unicorn
 {
   public class Hello : UniBehaviour
   {
-    public float vol = 1.0f;
-    int chnl;
+    //public int size;
+    public bool[] MyBoolArr;
 
     public override void Init()
     {
-      chnl = Audio.PlayBGM("0");
+      //MyStringArr = new string[size];
     }
 
     public override void LateInit()
     {
+      //MyStringArr[0] = "Hello";
+      //MyStringArr[1] = "How";
+      //MyStringArr[2] = "YouDoing?";
+      //for (int i = 0; i < size; ++i)
+      //  Print(MyStringArr[i]);
     }
 
     public override void Update()
     {
       if (Input.GetKeyHold(VK.IKEY_V))
       {
-        vol += 0.1f;
-        Audio.SetVol(chnl, vol);
       }
       if (Input.GetKeyHold(VK.IKEY_C))
       {
-        vol -= 0.1f;
-        Audio.SetVol(chnl, vol);
       }
       if (Input.GetKeyPress(VK.IKEY_SPACE))
       {
-        vol = 1.0f;
-        Audio.SetVol(chnl, vol);
       }
       if(Input.GetKeyPress(VK.IKEY_F))
       {
-        Audio.FadeOut(chnl, 3.0f);
       }
     }
     public override void FixedUpdate()
