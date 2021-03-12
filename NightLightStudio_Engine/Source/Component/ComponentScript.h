@@ -3,6 +3,7 @@
 #include "LocalString.h"  // LocalString
 #include "..\..\ISerializable.h"
 #include <mono/metadata/object.h>
+#include <unordered_map>
 
 // Only BGM will use this the most.3D sound will follow this component's ObjID pos by default.
 typedef class ComponentScript : public ISerializable
@@ -25,6 +26,8 @@ public:
   LocalString<512> _SavedStrings[10]; // Saved values of string
   //LocalString<512> _SavedString[10]; // Saved values of string
   //LocalString<512> _SavedString1; // Saved values of string
+  std::unordered_map<std::string, int> array_sizes;
+  int arr_sz = 0;
 
   ComponentScript();
 	~ComponentScript();
