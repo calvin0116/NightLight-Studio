@@ -77,7 +77,7 @@ void FluffyUnicornEngine::Run()
 				}
 
 
-				//DELTA_T->end();
+				DELTA_T->end();
 				FrameMark
 			}
 		}
