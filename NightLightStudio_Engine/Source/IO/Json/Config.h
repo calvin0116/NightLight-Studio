@@ -50,7 +50,6 @@ struct ConfigData
 	float _gridColourBlue;
 	float _gridColourAlpha;
 
-	float _fpsLimit;
 	//============= Run time variable ============//
 	bool engineRunning;
 	bool sceneRunning;
@@ -58,7 +57,6 @@ struct ConfigData
 	bool isPlaying;
 
 	float gamma;
-
 };
 
 class Config : public MySystem ,public Singleton<Config> {
@@ -129,15 +127,6 @@ public:
 
 		if (config_val.FindMember("Gamma") != config_val.MemberEnd())
 			config_d.gamma = config_val["Gamma"].GetFloat();
-
-		if (config_val.FindMember("fpsLimit") != config_val.MemberEnd())
-			config_d._fpsLimit = config_val["fpsLimit"].GetFloat();
-		else
-		{
-			//config_val.AddMember("fpsLimit", 60.0f, global_alloc);
-			//NS_SERIALISER::ChangeData(&config_val, "fpsLimit", 60.0f);
-			config_d._fpsLimit = 60.0f;
-		}
 	}
 
 
@@ -177,8 +166,7 @@ public:
 
 		config_val["start_in_level_editor"].SetBool(config_d.levelEditorMode);
 		config_val["Gamma"].SetFloat(config_d.gamma);
-		//config_val["fpsLimit"].SetFloat(config_d._fpsLimit);
-		//NS_SERIALISER::ChangeData(&config_val, "fpsLimit", config_d._fpsLimit);
+
 		parser.Save();
 	};
 

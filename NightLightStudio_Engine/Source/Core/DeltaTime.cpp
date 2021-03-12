@@ -2,10 +2,6 @@
 #include "DeltaTime.h"
 #include  <iostream>
 #include <thread>
-#include <string>
-#include "../tracy-master/Tracy.hpp"
-#include "../Log/SpeedLog.h"
-#include "../IO/Json/Config.h"
 //DeltaTime delta_t;
 
 void DeltaTime::load()
@@ -16,7 +12,7 @@ void DeltaTime::load()
 	oneSecond = 0;
 	fpsLimit = -1;
 	frameDelay = -1;
-	SetFpsLimit(CONFIG_DATA->GetConfigData()._fpsLimit);
+	SetFpsLimit(30);
 	timeLastRound = timeThisRound = std::chrono::system_clock::now();
 	real_dt = (float)(timeThisRound - timeLastRound).count() / 10000000;
 	accumulatedTime = 0;
@@ -24,6 +20,7 @@ void DeltaTime::load()
 
 void DeltaTime::start()
 {
+
 	/*
 	currentNumberOfSteps = 0;
 
@@ -85,6 +82,8 @@ void DeltaTime::start()
 		oneSecond = 0;
 		fpsCounter = 0;
 	}
+
+	DelayFrame();
 }
 
 void DeltaTime::end()
@@ -102,7 +101,6 @@ void DeltaTime::end()
 	//_sysMgr._currentFPS = fps;
 	// fps
 	//////
-	DelayFrame();
 }
 
 void DeltaTime::Exit()
@@ -114,21 +112,16 @@ void DeltaTime::Exit()
 void DeltaTime::SetFpsLimit(float f)
 {
 	fpsLimit = f;
-	frameDelay = 1500.0f / (fpsLimit)+(0.25f);
+	frameDelay = 2000.0f / (fpsLimit)+(0.25f);
 	//frameDelay = 1000.0 / (fpsLimit);
 }
 
 void DeltaTime::DelayFrame()
 {
 	auto now = std::chrono::system_clock::now();
-	float currentDt = std::chrono::duration_cast<std::chrono::milliseconds>(now - timeLastRound).count();
+	float currentDt = (float)(now - timeLastRound).count();
 	std::chrono::duration<float, std::milli> delta_ms(frameDelay - currentDt);
 	std::chrono::time_point end = now + std::chrono::duration_cast<std::chrono::milliseconds>(delta_ms);
-	
-	std::string msg = "DeltaTime::DelayFrame: " + std::to_string(delta_ms.count());
-	TracyMessageL(msg.c_str()); //+std::to_string(delta_ms.count()
-	SPEEDLOG(std::string("DeltaTime::DelayFrame: ").append(std::to_string(delta_ms.count())).c_str());
-	
 	std::this_thread::sleep_until(end);
 }
 
