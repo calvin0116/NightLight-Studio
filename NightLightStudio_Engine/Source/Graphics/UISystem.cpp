@@ -233,7 +233,6 @@ void NS_GRAPHICS::UISystem::RenderUI()
 							else
 							{
 								ui._play = false;
-								ui._currentFrame = 0;
 							}
 						}
 					}
