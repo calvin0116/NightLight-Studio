@@ -896,9 +896,9 @@ namespace NS_GRAPHICS
 		{
 			//Debug_LogToFile("Resources/Logs/Generate_texture.txt", "Texture loading failed");
 			//CDEBUG_ASSERT(textureData, std::string("Failed to load texture: ").append(file).c_str());
-			std::string outStr = "TextureLoader::LoadOtherImage: Failed to load texture: "; outStr.append(SOIL_last_result());
-			TracyMessage(outStr.c_str(), outStr.size());
-			SPEEDLOG(outStr);
+			std::string outStr2 = "TextureLoader::LoadOtherImage: Failed to load texture: "; outStr2.append(SOIL_last_result());
+			TracyMessage(outStr2.c_str(), outStr2.size());
+			SPEEDLOG(outStr2);
 			//std::cout << "Failed to load texture: " << SOIL_last_result() << std::endl;
 			SOIL_free_image_data(textureData);
 			return false;

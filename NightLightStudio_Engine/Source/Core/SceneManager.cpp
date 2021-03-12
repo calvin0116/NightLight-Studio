@@ -473,7 +473,7 @@ namespace NS_SCENE
 				else
 				{
 					const std::type_info& tinf = typeid(*comp);
-					std::string outStr = "SceneManager::SaveScene: Wrong data given from component: "; outStr.append(tinf.name()).c_str();
+					std::string outStr = "SceneManager::SaveScene: Wrong data given from component: "; outStr.append(tinf.name());
 					TracyMessage(outStr.c_str(), outStr.size());
 					SPEEDLOG(outStr);
 					//std::cout << "Wrong data given from component: " << tinf.name() << std::endl;
