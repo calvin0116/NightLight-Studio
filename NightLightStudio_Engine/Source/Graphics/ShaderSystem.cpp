@@ -56,8 +56,9 @@ namespace NS_GRAPHICS
 		}
 		catch (std::ifstream::failure& e)
 		{
-			TracyMessageL(std::string("ShaderSystem::LoadShader: ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ").append(e.what()).c_str());
-			SPEEDLOG(std::string("ShaderSystem::LoadShader: ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ").append(e.what()));
+			std::string outStr = "ShaderSystem::LoadShader: ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ";  outStr.append(e.what());
+			TracyMessage(outStr.c_str(), outStr.size());
+			SPEEDLOG(outStr);
 			//std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << e.what() << std::endl;
 		}
 
@@ -192,10 +193,10 @@ namespace NS_GRAPHICS
 
 			if (glErr != GL_NO_ERROR)
 			{
-				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: Creation of Shader Program Handler failed for Shader no. ")
-					.append(std::to_string(i) + ". Please check GLSL source.").c_str());
-				SPEEDLOG(std::string("ShaderSystem::CompileLoadedShaders: Creation of Shader Program Handler failed for Shader no. ")
-					.append(std::to_string(i) + ". Please check GLSL source."));
+				std::string outStr = "ShaderSystem::CompileLoadedShaders: Creation of Shader Program Handler failed for Shader no. ";
+				outStr.append(std::to_string(i) + ". Please check GLSL source.");
+				TracyMessage(outStr.c_str(), outStr.size());
+				SPEEDLOG(outStr);
 				/*
 				std::cout
 					<< "Creation of Shader Program Handler failed for Shader no. "
@@ -218,8 +219,10 @@ namespace NS_GRAPHICS
 			{
 				GLchar infoLog[512];
 				glGetShaderInfoLog(sVertexID, 512, NULL, infoLog);
-				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog).c_str());
-				SPEEDLOG(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog));
+
+				std::string outStr = "ShaderSystem::CompileLoadedShaders: "; outStr.append(infoLog);
+				TracyMessage(outStr.c_str(), outStr.size());
+				SPEEDLOG(outStr);
 				//std::cout << infoLog << std::endl;
 			}
 
@@ -236,8 +239,10 @@ namespace NS_GRAPHICS
 			{
 				GLchar infoLog[512];
 				glGetShaderInfoLog(sFragmentID, 512, NULL, infoLog);
-				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog).c_str());
-				SPEEDLOG(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog));
+
+				std::string outStr = "ShaderSystem::CompileLoadedShaders: "; outStr.append(infoLog);
+				TracyMessage(outStr.c_str(), outStr.size());
+				SPEEDLOG(outStr);
 				//std::cout << infoLog << std::endl;
 			}
 
@@ -252,8 +257,10 @@ namespace NS_GRAPHICS
 			{
 				GLchar infoLog[512];
 				glGetProgramInfoLog(program_handler, 512, NULL, infoLog);
-				TracyMessageL(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog).c_str());
-				SPEEDLOG(std::string("ShaderSystem::CompileLoadedShaders: ").append(infoLog));
+
+				std::string outStr = "ShaderSystem::CompileLoadedShaders: "; outStr.append(infoLog);
+				TracyMessage(outStr.c_str(), outStr.size());
+				SPEEDLOG(outStr);
 				//std::cout << infoLog << std::endl;
 			}
 			else

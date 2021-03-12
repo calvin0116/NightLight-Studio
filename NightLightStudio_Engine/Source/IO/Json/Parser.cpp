@@ -33,8 +33,10 @@ namespace NS_SERIALISER
 
         if (!in)
         {
-            TracyMessageL(std::string("Parser::Load:: Error: Failed to open file in: " + fullfilepath).c_str());
-            SPEEDLOG(std::string("Parser::Load:: Error: Failed to open file in: " + fullfilepath));
+            std::string outputStr = "Parser::Load:: Error: Failed to open file in: ";
+            outputStr.append(fullfilepath);
+            TracyMessage(outputStr.c_str(), outputStr.size());
+            SPEEDLOG(outputStr.c_str());
             //std::cout << "Error: Failed to open file in: " + filepath << std::endl;
         }
         // dont skip on whitespace
@@ -192,8 +194,10 @@ namespace NS_SERIALISER
         }
         }
 
-        TracyMessageL(std::string("Parser::PrintData: " + outStr).c_str());
-        SPEEDLOG(std::string("Parser::PrintData: " + outStr).c_str());
+        std::string outputString = "Parser::PrintData: ";
+        outputString.append(outStr);
+        TracyMessage(outputString.c_str(), outputString.size());
+        SPEEDLOG(outputString);
     }
 
 

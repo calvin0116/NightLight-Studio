@@ -50,8 +50,9 @@ namespace NS_GRAPHICS
 
 	bool TextureLoader::LoadDDSImage(const std::string& file)
 	{
-		TracyMessageL(std::string("TextureLoader::LoadDDSImage: Loading DDS Images " + file).c_str());
-		SPEEDLOG(std::string("TextureLoader::LoadDDSImage: Loading DDS Images " + file));
+		std::string outStr = "TextureLoader::LoadDDSImage: Loading DDS Images "; outStr.append(file);
+		TracyMessage(outStr.c_str(), outStr.size());
+		SPEEDLOG(outStr);
 		//std::cout << "Loading DDS Images " << file << std::endl;
 		DDSImageData* image;
 
@@ -220,8 +221,9 @@ namespace NS_GRAPHICS
 
 	bool TextureLoader::LoadHDR(const std::string& file)
 	{
-		TracyMessageL(std::string("TextureLoader::LoadHDR: Loading HDR : " + file).c_str());
-		SPEEDLOG(std::string("TextureLoader::LoadHDR: Loading HDR : " + file));
+		std::string outStr = "TextureLoader::LoadHDR: Loading HDR : "; outStr.append(file);
+		TracyMessage(outStr.c_str(), outStr.size());
+		SPEEDLOG(outStr);
 		//std::cout << "Loading HDR : " << file << std::endl;
 		int width, height, nrComp;
 		float* data = stbi_loadf(file.c_str(), &width, &height, &nrComp, 0);
@@ -818,8 +820,9 @@ namespace NS_GRAPHICS
 	bool TextureLoader::LoadOtherImage(const std::string& file, const std::string& newFile, bool sRGB, bool blackAlpha)
 	{
 		(void)newFile;
-		TracyMessageL(std::string("TextureLoader::LoadOtherImage: Loading Other Images " + file).c_str());
-		SPEEDLOG(std::string("TextureLoader::LoadOtherImage: Loading Other Images " + file));
+		std::string outStr = "TextureLoader::LoadOtherImage: Loading Other Images "; outStr.append(file);
+		TracyMessage(outStr.c_str(), outStr.size());
+		SPEEDLOG(outStr);
 		//std::cout << "Loading Other Images " << file << std::endl;
 		int width, height, channel;
 		unsigned char* textureData = SOIL_load_image(file.c_str(), &width, &height, &channel, SOIL_LOAD_AUTO);
@@ -893,8 +896,9 @@ namespace NS_GRAPHICS
 		{
 			//Debug_LogToFile("Resources/Logs/Generate_texture.txt", "Texture loading failed");
 			//CDEBUG_ASSERT(textureData, std::string("Failed to load texture: ").append(file).c_str());
-			TracyMessageL(std::string("TextureLoader::LoadOtherImage: Failed to load texture: ").append(SOIL_last_result()).c_str());
-			SPEEDLOG(std::string("TextureLoader::LoadOtherImage: Failed to load texture: ").append(SOIL_last_result()));
+			std::string outStr = "TextureLoader::LoadOtherImage: Failed to load texture: "; outStr.append(SOIL_last_result());
+			TracyMessage(outStr.c_str(), outStr.size());
+			SPEEDLOG(outStr);
 			//std::cout << "Failed to load texture: " << SOIL_last_result() << std::endl;
 			SOIL_free_image_data(textureData);
 			return false;

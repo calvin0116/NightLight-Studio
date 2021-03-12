@@ -135,7 +135,7 @@ void ConsoleLog::Run()
 			ImGui::PopStyleVar();
 
 			if (_scrollToBottom) {
-				ImGui::SetScrollHere(1.0f);
+				ImGui::SetScrollHereY(1.0f);
 				_scrollToBottom = false;
 			}
 		}, true, ImGuiWindowFlags_HorizontalScrollbar);
