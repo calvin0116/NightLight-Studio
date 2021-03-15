@@ -25,6 +25,11 @@ namespace InputBind
     MonoWrapper::BindClassFunction(csGetButtonUp, "GetButtonUp",
       "Input");
 
+    MonoWrapper::BindClassFunction(csGetTrigger, "GetTrigger",
+        "Input");
+    MonoWrapper::BindClassFunction(csGetAnalog, "GetAnalog",
+        "Input");
+
     MonoWrapper::BindClassFunction(csGetMousePos, "GetMousePos",
       "Input");
     MonoWrapper::BindClassFunction(csGetOriginalMousePos, "GetOriginalMousePos",
