@@ -37,9 +37,11 @@ namespace NS_SCENE
 		
 		current_scene = scene_parser["StartUpScene"].GetString();
 
+		std::string outputStr = "SceneManager::Load: ";
+		outputStr.append(scene_parser.GetPath()).append(" ").append(scene_parser["SceneFolder"].GetString());
 		//Filepath that contains the scene
-		TracyMessageL(std::string("SceneManager::Load: " + scene_parser.GetPath() + " " + scene_parser["SceneFolder"].GetString()).c_str());
-		SPEEDLOG(std::string("SceneManager::Load: " + scene_parser.GetPath() + " " + scene_parser["SceneFolder"].GetString()));
+		TracyMessage(outputStr.c_str(), outputStr.size());
+		SPEEDLOG(outputStr);
 		//std::cout << scene_parser.GetPath() << scene_parser["SceneFolder"].GetString() << std::endl;
 		//As of now is "../Resources/JsonFile/" + "Scene"
 		scenes_path = scene_parser.GetPath() + scene_parser["SceneFolder"].GetString();
@@ -57,8 +59,10 @@ namespace NS_SCENE
 			//Insert Scene Name with its relative path
 			scene_list[cur_path_name.stem().string()] = new NS_SERIALISER::Parser(cur_path_name.stem().string(), cur_path_name.parent_path().string());
 			//Individual files in Scene folder
-			TracyMessageL(std::string("SceneManager::Load: ").append(cur_path_name.stem().string()).c_str());
-			SPEEDLOG(std::string("SceneManager::Load: ").append(cur_path_name.stem().string()));
+			std::string outputStr2 = "SceneManager::Load: ";
+			outputStr2.append(cur_path_name.stem().string());
+			TracyMessage(outputStr2.c_str(), outputStr2.size());
+			SPEEDLOG(outputStr2);
 			//std::cout << cur_path_name.stem().string() << std::endl;
 
 			//Store index with string
@@ -104,8 +108,9 @@ namespace NS_SCENE
 			else
 				scene_index = 0;
 
-			TracyMessageL(std::string("SceneManager::Update: Going next scene........: " + scene_list.size()).c_str());
-			SPEEDLOG(std::string("SceneManager::Update: Going next scene........: " + scene_list.size()));
+			std::string outStr = "SceneManager::Update: Going next scene........: "; outStr.append(std::to_string(scene_list.size()));
+			TracyMessage(outStr.c_str(), outStr.size());
+			SPEEDLOG(outStr);
 			//std::cout << "Going next scene........: " << scene_list.size() << std::endl;
 
 			SetNextScene(scene_indexes[scene_index]);
@@ -153,9 +158,10 @@ namespace NS_SCENE
 		
 		//~~!Create object using data
 		TracyMessageL("SceneManager::LoadScene: ===============================================");
-		TracyMessageL(std::string("SceneManager::LoadScene: Loading Scene: " + current_scene).c_str());
+		std::string outStr = "SceneManager::LoadScene: Loading Scene: "; outStr.append(current_scene);
+		TracyMessage(outStr.c_str(), outStr.size());
 		SPEEDLOG("SceneManager::LoadScene: ===============================================");
-		SPEEDLOG(std::string("SceneManager::LoadScene: Loading Scene: " + current_scene));
+		SPEEDLOG(outStr);
 		//std::cout << "===============================================" << std::endl;
 		//std::cout << "Loading Scene: " << current_scene << std::endl;
 		if (scene->CheckForMember("Objects"))
@@ -265,8 +271,9 @@ namespace NS_SCENE
 				else
 				{
 					const std::type_info& tinf = typeid(*comp);
-					TracyMessageL(std::string("SceneManager::TempSave: Wrong data given from component: ").append(tinf.name()).c_str());
-					SPEEDLOG(std::string("SceneManager::TempSave: Wrong data given from component: ").append(tinf.name()).c_str());
+					std::string outStr = "SceneManager::TempSave: Wrong data given from component: "; outStr.append(tinf.name());
+					TracyMessage(outStr.c_str(), outStr.size());
+					SPEEDLOG(outStr);
 					//std::cout << "Wrong data given from component: " << tinf.name() << std::endl;
 				}
 			}
@@ -313,9 +320,10 @@ namespace NS_SCENE
 		{
 			//~~!Create object using data
 			TracyMessageL("SceneManager::TempLoad: ===============================================");
-			TracyMessageL(std::string("SceneManager::TempLoad: Loading Scene: " + output_filename).c_str());
+			std::string outStr = "SceneManager::TempLoad: Loading Scene: "; outStr.append(output_filename);
+			TracyMessage(outStr.c_str(), outStr.size());
 			SPEEDLOG("SceneManager::TempLoad: ===============================================");
-			SPEEDLOG(std::string("SceneManager::TempLoad: Loading Scene: " + output_filename));
+			SPEEDLOG(outStr);
 			//std::cout << "===============================================" << std::endl;
 			//std::cout << "Loading Scene: " << output_filename << std::endl;
 			if (scene.CheckForMember("Objects"))
@@ -465,8 +473,9 @@ namespace NS_SCENE
 				else
 				{
 					const std::type_info& tinf = typeid(*comp);
-					TracyMessageL(std::string("SceneManager::SaveScene: Wrong data given from component: ").append(tinf.name()).c_str());
-					SPEEDLOG(std::string("SceneManager::SaveScene: Wrong data given from component: ").append(tinf.name()));
+					std::string outStr = "SceneManager::SaveScene: Wrong data given from component: "; outStr.append(tinf.name());
+					TracyMessage(outStr.c_str(), outStr.size());
+					SPEEDLOG(outStr);
 					//std::cout << "Wrong data given from component: " << tinf.name() << std::endl;
 				}
 			}
@@ -545,8 +554,9 @@ namespace NS_SCENE
 			scene_list[scene_path.stem().string()] = new NS_SERIALISER::Parser(scene_path.stem().string(), scene_path.parent_path().string());
 
 		next_scene = scene_path.stem().string();
-		TracyMessageL(std::string("SceneManager::SetNextScene: Switching to: " + scene_name + ".....").c_str());
-		SPEEDLOG(std::string("SceneManager::SetNextScene: Switching to: " + scene_name + "....."));
+		std::string outStr = "SceneManager::SetNextScene: Switching to: "; outStr.append(scene_name).append(".....");
+		TracyMessage(outStr.c_str(), outStr.size());
+		SPEEDLOG(outStr);
 		//std::cout << "Switching to: " << scene_name << "....." << std::endl;
 
 		if (scene_name == EXIT_SCENCE)

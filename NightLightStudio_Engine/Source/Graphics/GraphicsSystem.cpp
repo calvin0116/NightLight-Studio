@@ -220,7 +220,7 @@ namespace NS_GRAPHICS
 		// Position
 		glGenTextures(1, &_rtPositionAlpha);
 		glBindTexture(GL_TEXTURE_2D, _rtPositionAlpha);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, NS_WINDOW::SYS_WINDOW->GetAppWidth(), NS_WINDOW::SYS_WINDOW->GetAppHeight(), 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -230,7 +230,7 @@ namespace NS_GRAPHICS
 		// Calculated normals/normal map + metallic
 		glGenTextures(1, &_rtNormalMapAndMetallic);
 		glBindTexture(GL_TEXTURE_2D, _rtNormalMapAndMetallic);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, NS_WINDOW::SYS_WINDOW->GetAppWidth(), NS_WINDOW::SYS_WINDOW->GetAppHeight(), 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -240,7 +240,7 @@ namespace NS_GRAPHICS
 		// Albedo/Diffuse map + roughness
 		glGenTextures(1, &_rtAlbedoMapAndRoughness);
 		glBindTexture(GL_TEXTURE_2D, _rtAlbedoMapAndRoughness);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, NS_WINDOW::SYS_WINDOW->GetAppWidth(), NS_WINDOW::SYS_WINDOW->GetAppHeight(), 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -250,7 +250,7 @@ namespace NS_GRAPHICS
 		// Ambient Occlusion
 		glGenTextures(1, &_rtAmbientOcclusion);
 		glBindTexture(GL_TEXTURE_2D, _rtAmbientOcclusion);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, NS_WINDOW::SYS_WINDOW->GetAppWidth(), NS_WINDOW::SYS_WINDOW->GetAppHeight(), 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -262,10 +262,10 @@ namespace NS_GRAPHICS
 			= { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 		glDrawBuffers(4, _renderTargets);
 
-		// Depth buffer
+		// Depth render buffer
 		glGenRenderbuffers(1, &_depthBuffer);
 		glBindRenderbuffer(GL_RENDERBUFFER, _depthBuffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, NS_WINDOW::SYS_WINDOW->GetAppWidth(), NS_WINDOW::SYS_WINDOW->GetAppHeight());
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthBuffer);
 
 		// finally check if framebuffer is complete
@@ -626,8 +626,8 @@ namespace NS_GRAPHICS
 
 		// Setting for GIT so that it doesn't look weird
 		// Copies info(in this case, depth data)to a user-defined region of read framebuffer to user-defined region of draw framebuffer
-		glBlitFramebuffer(0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height,
-						  0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height,
+		glBlitFramebuffer(0, 0, NS_WINDOW::SYS_WINDOW->GetAppWidth(), NS_WINDOW::SYS_WINDOW->GetAppHeight(),
+						  0, 0, NS_WINDOW::SYS_WINDOW->GetAppWidth(), NS_WINDOW::SYS_WINDOW->GetAppHeight(),
 						  GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 		
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);

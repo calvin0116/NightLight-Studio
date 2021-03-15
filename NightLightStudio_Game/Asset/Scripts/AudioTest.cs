@@ -8,51 +8,52 @@ namespace Unicorn
   {
     Transform trans;
     RigidBody rb;
+    public string source1;
+    public string source2;
     int leftBGM = -1;
     int rightBGM = -1;
-    int ent = -100;
 
     public override void Init()
     {
       trans = GetTransform(id);
-      if (rb == null)
-        Print("NULL");
       rb = GetRigidBody(id);
-      RigidBody rb1 = GetRigidBody(GameObjectFind("Entity_0"));
-      if (rb1 == null)
-        Print("rb1 null");
-      Print(ent.ToString());
+      //RigidBody rb1 = GetRigidBody(GameObjectFind("Entity_0"));
+      leftBGM = GameObjectFind(source1);
+      rightBGM = GameObjectFind(source2);
     }
 
     public override void LateInit()
     {
-      Print("My ID: " + id.ToString());
+      //Print("My ID: " + id.ToString());
     }
 
     public override void Update()
     {
-
+      if (Input.GetKeyPress(VK.IKEY_Q))
+      {
+        Print("Q");
+        Audio.Play3DOnce("0", leftBGM);
+      }
+      if (Input.GetKeyPress(VK.IKEY_E))
+      {
+        Print("E");
+        Audio.Play3DOnce("0", rightBGM);
+      }
     }
     public override void FixedUpdate()
     {
-      if (Input.GetKeyPress(VK.IKEY_Q))
-        Audio.Play3DOnce("0", GameObjectFind("Left"));
-      if (Input.GetKeyPress(VK.IKEY_E))
-        Audio.Play3DOnce("0", GameObjectFind("Right"));
-      if (Input.GetKeyPress(VK.IKEY_Z))
-        leftBGM = Audio.Play3DLoop("0", GameObjectFind("Left"));
-      if (Input.GetKeyPress(VK.IKEY_C))
-        rightBGM = Audio.Play3DLoop("0", GameObjectFind("Right"));
-      if (Input.GetKeyPress(VK.IKEY_X))
-      {
-        Audio.Stop(leftBGM);
-        Audio.Stop(rightBGM);
-      }
+
+
+
       Vector3 vel = new Vector3(0.0f, rb.GetVel().y, 0.0f);
       if (Input.GetKeyHold(VK.IKEY_A))
-        vel.x = -100.0f;
+        vel.x = -1000.0f;
       else if (Input.GetKeyHold(VK.IKEY_D))
-        vel.x = +100.0f;
+        vel.x = +1000.0f;
+      if (Input.GetKeyHold(VK.IKEY_W))
+        vel.z = -1000.0f;
+      else if (Input.GetKeyHold(VK.IKEY_S))
+        vel.z = 1000.0f;
       rb.SetVel(vel);
     }
 

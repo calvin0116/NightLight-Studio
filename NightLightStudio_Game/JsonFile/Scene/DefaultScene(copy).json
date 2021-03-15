@@ -1,0 +1,315 @@
+{
+    "Objects": {
+        "Player": {
+            "TransformComponent": {
+                "EntityName": "Player",
+                "Tag": 200,
+                "tagNames": [
+                    0
+                ],
+                "Position": [
+                    0.0,
+                    62.271240234375,
+                    0.0
+                ],
+                "Scale": [
+                    50.0,
+                    50.0,
+                    50.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": false,
+                "isGravity": true,
+                "mass": 70.0,
+                "friction": 0.8999999761581421,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "renderEmission": false,
+                "emissiveIntensity": 1.0,
+                "Emissive": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    0.0,
+                    0.11768245697021485,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
+            },
+            "AudioManager": {
+                "ListOfSound": {
+                    "0": "asset\\sounds\\testaudio.ogg"
+                }
+            },
+            "ScriptComponent": {
+                "isActive": true,
+                "isRunning": true,
+                "ScriptName": "AudioTest",
+                "source1string": "source1",
+                "source2string": "source2"
+            },
+            "AnimationComponent": {
+                "isActive": true,
+                "Play": false,
+                "Loop": false,
+                "CurrentAnimation": "",
+                "DefaultAnimation": "",
+                "Animation0": "Take 001"
+            }
+        },
+        "Plane": {
+            "TransformComponent": {
+                "EntityName": "Ground",
+                "Tag": 0,
+                "tagNames": [
+                    0
+                ],
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    10000.0,
+                    50.0,
+                    10000.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "ColliderComponent": {
+                "colliderType": "AABB",
+                "tag": 1,
+                "isCollidable": true,
+                "Center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Extend": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "RigidBody": {
+                "isStatic": true,
+                "isGravity": false,
+                "mass": 0.0,
+                "friction": 0.009999999776482582,
+                "Force": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Accelaration": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "source1": {
+            "TransformComponent": {
+                "EntityName": "source1",
+                "Tag": 0,
+                "tagNames": [
+                    0
+                ],
+                "Position": [
+                    -131.62570190429688,
+                    125.52268981933594,
+                    0.0
+                ],
+                "Scale": [
+                    100.0,
+                    100.0,
+                    100.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "renderEmission": false,
+                "emissiveIntensity": 1.0,
+                "Emissive": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
+            }
+        },
+        "source2": {
+            "TransformComponent": {
+                "EntityName": "source2",
+                "Tag": 0,
+                "tagNames": [
+                    0
+                ],
+                "Position": [
+                    114.71202087402344,
+                    134.37823486328126,
+                    0.0
+                ],
+                "Scale": [
+                    100.0,
+                    100.0,
+                    100.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "renderEmission": false,
+                "emissiveIntensity": 1.0,
+                "Emissive": [
+                    1.0,
+                    0.10294115543365479,
+                    0.10294115543365479
+                ],
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
+            }
+        }
+    }
+}

@@ -175,37 +175,37 @@ int SystemAudio::Play3DOnce(const std::string& name, const int _id)
   return retVal;
 }
 
-// Overloaded function for testing only! do not use this!
-void SystemAudio::Play3DOnce(const std::string& name, float x, float y, float z)
-{
-  MyAudioMap::iterator it = _sounds.find(name);
-  if (it != _sounds.end())
-  {
-    for (int retVal = 0; retVal < s_MAX_CHANNELS; ++retVal)
-    {
-      bool isPlaying;
-      _channels[retVal]->isPlaying(&isPlaying);
-      if (!isPlaying)
-      {
-        _system->playSound(it->second, _sfx, true, _channels + retVal);
-        _channels[retVal]->setMode(FMOD_LOOP_OFF);
-        _channels[retVal]->setMode(FMOD_3D);
-        _channels[retVal]->setMode(FMOD_3D_LINEARROLLOFF);
-        _fmodPos = { x, y, z };
-        _channels[retVal]->set3DAttributes(&_fmodPos, nullptr);
-        _channels[retVal]->setPaused(false);
-        //ErrorCheck(temp->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 5.0f * m_fUnitsPerMeter));
-        _channels[retVal]->set3DMinMaxDistance(minDist * s_UNITS_PER_METER, maxDist * s_UNITS_PER_METER);
-        //FMOD_VECTOR fmodPos = { _pos.x, _pos.y, _pos.z };
-    /*    _channels[retVal]->set3DAttributes(&fmodPos, nullptr);
-        _channels[retVal]->setPaused(false);*/
-        //// Setting group channel
-        //ErrorCheck(it->second.second->setChannelGroup(SFX));
-        break;
-      }
-    }
-  }
-}
+//// Overloaded function for testing only! do not use this!
+//void SystemAudio::Play3DOnce(const std::string& name, float x, float y, float z)
+//{
+//  MyAudioMap::iterator it = _sounds.find(name);
+//  if (it != _sounds.end())
+//  {
+//    for (int retVal = 0; retVal < s_MAX_CHANNELS; ++retVal)
+//    {
+//      bool isPlaying;
+//      _channels[retVal]->isPlaying(&isPlaying);
+//      if (!isPlaying)
+//      {
+//        _system->playSound(it->second, _sfx, true, _channels + retVal);
+//        _channels[retVal]->setMode(FMOD_LOOP_OFF);
+//        _channels[retVal]->setMode(FMOD_3D);
+//        _channels[retVal]->setMode(FMOD_3D_LINEARROLLOFF);
+//        _fmodPos = { x, y, z };
+//        _channels[retVal]->set3DAttributes(&_fmodPos, nullptr);
+//        _channels[retVal]->setPaused(false);
+//        //ErrorCheck(temp->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 5.0f * m_fUnitsPerMeter));
+//        _channels[retVal]->set3DMinMaxDistance(minDist * s_UNITS_PER_METER, maxDist * s_UNITS_PER_METER);
+//        //FMOD_VECTOR fmodPos = { _pos.x, _pos.y, _pos.z };
+//    /*    _channels[retVal]->set3DAttributes(&fmodPos, nullptr);
+//        _channels[retVal]->setPaused(false);*/
+//        //// Setting group channel
+//        //ErrorCheck(it->second.second->setChannelGroup(SFX));
+//        break;
+//      }
+//    }
+//  }
+//}
 
 void SystemAudio::FadeOut(const int _channelID, const float _sec)
 {
@@ -266,12 +266,14 @@ void SystemAudio::MyGameInit()
   auto itrEnd = G_ECMANAGER->end<ComponentLoadAudio>();
   for (; itr != itrEnd; ++itr)
   {
+
+    std::string outStr = "SystemAudio::My Game Init: "; outStr.append(std::to_string(G_ECMANAGER->getObjId(itr)));
     //std::cout << G_ECMANAGER->getObjId(itr) << std::endl;
     TracyMessageL("SystemAudio::My Game Init: System Audio Game Init Obj ID:");
-    TracyMessageL(std::string("SystemAudio::My Game Init: ").append(std::to_string(G_ECMANAGER->getObjId(itr))).c_str());
+    TracyMessage(outStr.c_str(), outStr.size());
 
     SPEEDLOG("SystemAudio::My Game Init: System Audio Game Init Obj ID:");
-    SPEEDLOG(std::string("SystemAudio::My Game Init: ").append(std::to_string(G_ECMANAGER->getObjId(itr))));
+    SPEEDLOG(outStr);
 
     // Load the following audios from load audio component
     ComponentLoadAudio* myComp = G_ECMANAGER->getComponent<ComponentLoadAudio>(itr);

@@ -122,8 +122,10 @@ namespace NS_GRAPHICS
 		for (unsigned int i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			TracyMessageL(std::string("ModelLoader::ProcessNode: Loading ").append(mesh->mName.C_Str()).c_str());
-			SPEEDLOG(std::string("ModelLoader::ProcessNode: Loading ").append(mesh->mName.C_Str()));
+
+			std::string outStr = "ModelLoader::ProcessNode: Loading "; outStr.append(mesh->mName.C_Str());
+			TracyMessage(outStr.c_str(), outStr.size());
+			SPEEDLOG(outStr);
 			//std::cout << "Loading " << mesh->mName.C_Str() << std::endl;
 			
 			if (model->_isAnimated)
@@ -453,8 +455,9 @@ namespace NS_GRAPHICS
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			TracyMessageL(std::string("ModelLoader::LoadFBX: Load Failed. Reason: ").append(import.GetErrorString()).c_str());
-			SPEEDLOG(std::string("ModelLoader::LoadFBX: Load Failed. Reason: ").append(import.GetErrorString()).c_str());
+			std::string outStr = "ModelLoader::LoadFBX: Load Failed. Reason: "; outStr.append(import.GetErrorString());
+			TracyMessage(outStr.c_str(), outStr.size());
+			SPEEDLOG(outStr);
 			//std::cout << "Load Failed. Reason: " << import.GetErrorString() << std::endl;
 			return false;
 		}

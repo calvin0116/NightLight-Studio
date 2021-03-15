@@ -33,6 +33,12 @@ namespace Unicorn
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool GetButtonUp(uint button);
 
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float GetTrigger(int lr);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Vector3 GetAnalog(int lr);
+
     // Mouse
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Vector3 GetMousePos();

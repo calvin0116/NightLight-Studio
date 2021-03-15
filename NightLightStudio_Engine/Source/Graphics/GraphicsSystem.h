@@ -158,7 +158,7 @@ namespace NS_GRAPHICS
         GLuint& GetNormalMapAndMetallicRT();  // Normal map + Metallic Render Target
         GLuint& GetAlbedoMapAndRoughnessRT(); // Albedo map + Roughness Render Target
         GLuint& GetAmbientOcclusionRT();      // Ambient Occlusion map Render Target
-        GLuint& GetDepthBuffer();             // Depth Buffer
+        GLuint& GetDepthBuffer();             // Depth Render Buffer (not to be confused with the depth framebuffer for shadows)
 
     private:
 
@@ -186,12 +186,12 @@ namespace NS_GRAPHICS
         // Size depends on client window resolution
         GLuint _shadowDepthMapFBO = 0;
 
+        glm::mat4 lightSpaceMatrix;
+
         // Storage variables for near and far plane, used for shadow mapping matrix reference
         // Affected only by SetProjectionMatrix
         //float _nearPlane = 0.f; // Moved to camera.h
         //float _farPlane = 0.f;
-
-        glm::mat4 lightSpaceMatrix;
 
         // Deferred Shading Variables
         GLuint _geometryBuffer = 0;
@@ -200,7 +200,7 @@ namespace NS_GRAPHICS
         GLuint _rtAlbedoMapAndRoughness = 0; // Albedo + roughness map color buffer/render targets
         GLuint _rtAmbientOcclusion = 0;      // Ambient Occlusion mapping color buffer/render target 
         
-        GLuint _depthBuffer = 0; // Used to help determine screen pixel and its data for deferred light pass
+        GLuint _depthBuffer = 0; // Used to help determine screen pixel and its data for deferred light pass (not to be confused with the depth framebuffer for shadows)
 
         // Should NOT be calculated every frame
         glm::mat4 _projectionMatrix;
