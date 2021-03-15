@@ -47,7 +47,7 @@ class SystemAudio : public MySystem, public  Singleton<SystemAudio>
   void  LoadSound(const std::string& _soundPath, const std::string& _name);
   void  ReleaseSounds();
   // Overloaded function for testing only! Do not use this function!
-  void  Play3DOnce(const std::string& name, float x, float y, float z);
+  //void  Play3DOnce(const std::string& name, float x, float y, float z);
 
 
   // For receiving event/message
