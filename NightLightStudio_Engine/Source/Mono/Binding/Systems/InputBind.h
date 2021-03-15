@@ -21,6 +21,9 @@ namespace InputBind
   bool csGetButtonHold(unsigned int button);   // Checks if button is held
   bool csGetButtonUp(unsigned int button);     // Checks if button is released
 
+  float csGetTrigger(int lr);				// Left Trigger = 0, Right Trigger = 1, all other values default to Left
+  MonoObject* csGetAnalog(int lr);			// Left Analog Stick = 0, Right Analog Stick = 1, all other values default to Left
+
 
   // Mouse
   MonoObject* csGetMousePos();          // Get Mouse Position - (0,0) Begins in Bottom-Left Corner

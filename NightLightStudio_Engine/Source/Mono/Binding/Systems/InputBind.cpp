@@ -25,6 +25,11 @@ namespace InputBind
     MonoWrapper::BindClassFunction(csGetButtonUp, "GetButtonUp",
       "Input");
 
+    MonoWrapper::BindClassFunction(csGetTrigger, "GetTrigger",
+        "Input");
+    MonoWrapper::BindClassFunction(csGetAnalog, "GetAnalog",
+        "Input");
+
     MonoWrapper::BindClassFunction(csGetMousePos, "GetMousePos",
       "Input");
     MonoWrapper::BindClassFunction(csGetOriginalMousePos, "GetOriginalMousePos",
@@ -113,6 +118,20 @@ namespace InputBind
     if (SYS_INPUT->GetSystemController().GetIfButtonRelease(button))
       return true;
     return false;
+  }
+  float csGetTrigger(int lr)
+  {
+      return (SYS_INPUT->GetSystemController().GetTrigger(lr));
+  }
+  MonoObject* csGetAnalog(int lr)
+  {
+      MonoObject* vec3 = MonoWrapper::ConstructObject("Vector3");
+      SystemInput_ns::ControllerVec2 vec2 = SYS_INPUT->GetSystemController().GetAnalog(lr);
+      MonoWrapper::SetObjectFieldValue<float>(vec3, "X", vec2._x);
+      MonoWrapper::SetObjectFieldValue<float>(vec3, "Y", vec2._y);
+      float myZ = 0.0f;
+      MonoWrapper::SetObjectFieldValue<float>(vec3, "Z", myZ);
+      return vec3;
   }
   // Mouse
   MonoObject* csGetMousePos()
