@@ -53,6 +53,7 @@ void NS_GRAPHICS::EmitterSystem::Update()
 	//Draw only if particle is enabled
 	if (_particleDrawing || _isPlaying)
 	{
+		glDepthMask(GL_FALSE);
 		_shaderSystem->StartProgram(ShaderSystem::PARTICLE);
 
 		//glEnable(GL_BLEND);
@@ -79,6 +80,7 @@ void NS_GRAPHICS::EmitterSystem::Update()
 		//glDisable(GL_BLEND);
 
 		_shaderSystem->StopProgram();
+		glDepthMask(GL_TRUE);
 	}
 }
 
