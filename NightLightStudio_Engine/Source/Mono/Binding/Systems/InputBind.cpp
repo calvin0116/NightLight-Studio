@@ -119,10 +119,12 @@ namespace InputBind
       return true;
     return false;
   }
+
   float csGetTrigger(int lr)
   {
       return (SYS_INPUT->GetSystemController().GetTrigger(lr));
   }
+
   MonoObject* csGetAnalog(int lr)
   {
       MonoObject* vec3 = MonoWrapper::ConstructObject("Vector3");
@@ -133,6 +135,7 @@ namespace InputBind
       MonoWrapper::SetObjectFieldValue<float>(vec3, "Z", myZ);
       return vec3;
   }
+
   // Mouse
   MonoObject* csGetMousePos()
   {
