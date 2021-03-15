@@ -309,6 +309,7 @@
     <ClInclude Include="Source\Mono\Binding\Components\ComponentLightBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentNavigatorBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentScriptBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentTransformBind.h" />
     <ClInclude Include="Source\Mono\Binding\Components\ComponentVariablesBind.h" />
     <ClInclude Include="Source\Mono\Binding\CustomTypes\UIElementBind.h" />
@@ -440,6 +441,7 @@
     <ClCompile Include="Source\Mono\Binding\Components\ComponentLightBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentNavigatorBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentScriptBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentTransformBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\Components\ComponentVariablesBind.cpp" />
     <ClCompile Include="Source\Mono\Binding\CustomTypes\UIElementBind.cpp" />

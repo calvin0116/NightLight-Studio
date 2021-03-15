@@ -31,6 +31,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(RayCast, "RayCast", "UniBehaviour");
     MonoWrapper::BindClassFunction(RayTest, "RayTest", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetScript, "GetScript", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetScriptComp, "GetScriptComp", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetCollider, "GetCollider", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetRigidBody, "GetRigidBody", "UniBehaviour");
@@ -154,6 +155,17 @@ namespace ECSBind
     if (script && script->_MonoData._pInstance)
       return script->_MonoData._pInstance; // Found script
     return nullptr; // nope
+  }
+
+  MonoObject* GetScriptComp(int id)
+  {
+    MonoObject* monoObj = MonoWrapper::ConstructObject("Script");
+    Entity en = G_ECMANAGER->getEntity(id);
+    ScriptComponent* script = en.getComponent<ScriptComponent>();
+    if (CheckCompGet(script, "GetScriptComp()", id))
+      return nullptr;
+    MonoWrapper::SetNativeHandle(monoObj, script);
+    return monoObj;
   }
 
   MonoObject* GetTransform(int id)

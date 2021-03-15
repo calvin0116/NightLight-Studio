@@ -57,6 +57,9 @@ namespace Unicorn
     public extern static dynamic GetScript(int id);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static Script GetScriptComp(int id);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Transform GetTransform(int id);
 
     [MethodImpl(MethodImplOptions.InternalCall)]

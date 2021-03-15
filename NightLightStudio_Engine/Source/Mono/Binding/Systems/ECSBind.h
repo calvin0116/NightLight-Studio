@@ -21,6 +21,7 @@ namespace ECSBind
   void  RayTest(MonoObject* origin, MonoObject* end);
   // Get components from object ID
   MonoObject* GetScript(int id);
+  MonoObject* GetScriptComp(int id);
   MonoObject* GetTransform(int id);
   MonoObject* GetCollider(int id);
   MonoObject* GetRigidBody(int id);

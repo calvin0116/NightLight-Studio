@@ -10,6 +10,7 @@
 #include "Components/ComponentAnimationBind.h"
 #include "Components/ComponentCanvasBind.h"
 #include "Components/ComponentEmitterBind.h"
+#include "Components/ComponentScriptBind.h"
 // Temporary comp
 #include "Components/ComponentVariablesBind.h"
 

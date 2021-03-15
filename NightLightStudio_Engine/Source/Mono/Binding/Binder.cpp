@@ -16,6 +16,7 @@ namespace MonoBind
     ComponentAnimationBind::BindComponentAnimation();
     ComponentCanvasBind::BindComponentCanvas();
     ComponentEmitterBind::BindComponentEmitter();
+    ComponentScriptBind::BindComponentScript();
     // Temporary
     ComponentVariablesBind::BindComponentVariables();
   }

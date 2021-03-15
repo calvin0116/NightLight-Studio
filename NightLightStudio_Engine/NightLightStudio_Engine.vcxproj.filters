@@ -449,6 +449,8 @@
     <ClCompile Include="Source\Graphics\Emitter.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_ECHelper.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentScriptBind.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -858,7 +860,14 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\imgui\imgui_impl_glfw.h">
     </ClInclude>
-    <ClInclude Include="Source\Graphics\Shapes.h" />  </ItemGroup>
+    <ClInclude Include="Source\Graphics\Shapes.h" />
+    <ClInclude Include="Source\Component\ComponentEmitter.h" />
+    <ClInclude Include="Source\Graphics\Emitter.h" />
+    <ClInclude Include="Source\Graphics\Particle.h" />
+    <ClInclude Include="Source\Graphics\SystemEmitter.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentEmitterBind.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentScriptBind.h" />
+  </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
   </ItemGroup>
