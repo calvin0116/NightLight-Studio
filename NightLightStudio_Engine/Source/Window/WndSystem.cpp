@@ -275,7 +275,7 @@ namespace NS_WINDOW
 
 		glfwMakeContextCurrent(_glfwWnd); // If success, set the created GLFW window object's context as current
 
-		glfwSwapInterval(0);			  // Fixes fps issue(?)
+		glfwSwapInterval(1);			  // Fixes fps issue(?)
 
 		hAppWnd = glfwGetWin32Window(_glfwWnd);
 
