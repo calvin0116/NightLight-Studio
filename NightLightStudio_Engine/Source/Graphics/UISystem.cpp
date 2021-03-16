@@ -240,6 +240,11 @@ void NS_GRAPHICS::UISystem::RenderUI()
 				}
 			}
 
+			if (ui._type == BUTTON)
+			{
+				ui.CheckMouseCollision();
+			}
+			
 			if (canvas->_canvasType == SCREEN_SPACE)
 			{
 				glm::mat4 ModelMatrix = ui.GetModelMatrix();

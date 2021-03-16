@@ -1720,6 +1720,18 @@ void InspectorWindow::CanvasComp(Entity& ent)
 				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
 				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
+				if (_levelEditor->LE_AddCombo(std::string("UI Type").append(std::to_string(i)).c_str(), (int&)ui._type,
+					{
+						"IMAGE",
+						"BUTTON"
+					}))
+				{
+					// Undo-Redo for Components
+					_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = true;
+				}
+				
+
 				if (ImGui::Button(std::string("X##").append(std::to_string(i)).c_str()))
 				{
 					canvas->RemoveUI(i);

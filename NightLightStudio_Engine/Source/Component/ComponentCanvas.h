@@ -7,6 +7,7 @@
 enum UI_TYPE
 {
 	IMAGE,
+	BUTTON,
 	ALL_UI
 };
 
@@ -60,8 +61,17 @@ struct UI_Element
 	//Works only on screen space
 	bool OnClick() const;
 	bool OnHover() const;
+	bool OnEnter() const;
+	bool OnExit() const;
 
 	bool operator<(const UI_Element& rhs);
+
+private:
+	bool _mouseEnter = false;
+	bool _mouseExit = false;
+	bool _mouseStay = false;
+public:
+	void CheckMouseCollision();
 };
 
 typedef class ComponentCanvas : public ISerializable//: public IComponent

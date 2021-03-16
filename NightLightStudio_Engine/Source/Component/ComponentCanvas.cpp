@@ -121,6 +121,27 @@ void ComponentCanvas::Read(Value& val)
 		else
 			toPush._uiName = val[uiName.c_str()].GetString();
 
+
+		std::string uiType = std::string("UIType").append(std::to_string(i));
+		if (val.FindMember(uiType.c_str()) == val.MemberEnd())
+		{
+			//std::cout << "No CanvasType data has been found" << std::endl;
+			TracyMessageL("ComponentCanvas::Read: No UIType data has been found");
+			SPEEDLOG("ComponentCanvas::Read: No UIType data has been found");
+		}
+		else
+		{
+			std::string type = val[uiType.c_str()].GetString();
+			if (type == "IMAGE")
+			{
+				toPush._type = UI_TYPE::IMAGE;
+			}
+			else if (type == "BUTTON")
+			{
+				toPush._type = UI_TYPE::BUTTON;
+			}
+		}
+
 		std::string spriteName = std::string("Sprite").append(std::to_string(i));
 		if (val.FindMember(spriteName.c_str()) == val.MemberEnd())
 		{
@@ -333,6 +354,16 @@ Value ComponentCanvas::Write()
 		NS_SERIALISER::ChangeData(&val, std::string("UIName").append(std::to_string(i)), rapidjson::StringRef(_uiElements.at(i)._uiName.c_str()));
 		NS_SERIALISER::ChangeData(&val, std::string("Sprite").append(std::to_string(i)), rapidjson::StringRef(_uiElements.at(i)._fileName.c_str()));
 
+		switch (_uiElements.at(i)._type)
+		{
+		case IMAGE:
+			NS_SERIALISER::ChangeData(&val, std::string("UIType").append(std::to_string(i)), rapidjson::StringRef("IMAGE"));
+			break;
+		case BUTTON:
+			NS_SERIALISER::ChangeData(&val, std::string("UIType").append(std::to_string(i)), rapidjson::StringRef("BUTTON"));
+			break;
+		}
+
 		NS_SERIALISER::ChangeData(&val, std::string("UI_IsActive").append(std::to_string(i)), _uiElements.at(i)._isActive);
 		NS_SERIALISER::ChangeData(&val, std::string("Animated").append(std::to_string(i)), _uiElements.at(i)._isAnimated);
 		NS_SERIALISER::ChangeData(&val, std::string("Row").append(std::to_string(i)), _uiElements.at(i)._row);
@@ -439,18 +470,9 @@ void UI_Element::StopAnimation()
 
 bool UI_Element::OnClick() const
 {
-	glm::vec2 mouse = SYS_INPUT->GetSystemMousePos().GetMousePos();
-	mouse.x = mouse.x - SYS_INPUT->GetSystemMousePos().GetClientRectSize().x * 0.5f;
-	mouse.y = mouse.y - SYS_INPUT->GetSystemMousePos().GetClientRectSize().y * 0.5f;
-
-	glm::vec2 min = glm::vec2{ (_position.x - (_size.x * 0.5f)) * SYS_INPUT->GetSystemMousePos().GetClientRectSize().x,
-								(_position.y - (_size.y * 0.5f)) * SYS_INPUT->GetSystemMousePos().GetClientRectSize().y };
-	glm::vec2 max = glm::vec2{ (_position.x + (_size.x * 0.5f)) * SYS_INPUT->GetSystemMousePos().GetClientRectSize().x,
-								(_position.y + (_size.y * 0.5f)) * SYS_INPUT->GetSystemMousePos().GetClientRectSize().y };
-
-	if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IMOUSE_LBUTTON))
+	if (_mouseStay)
 	{
-		if (min.x < mouse.x && max.x > mouse.x && min.y < mouse.y && max.y > mouse.y)
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IMOUSE_LBUTTON))
 		{
 			return true;
 		}
@@ -459,6 +481,26 @@ bool UI_Element::OnClick() const
 }
 
 bool UI_Element::OnHover() const
+{
+	return _mouseStay;
+}
+
+bool UI_Element::OnEnter() const
+{
+	return _mouseEnter;
+}
+
+bool UI_Element::OnExit() const
+{
+	return _mouseExit;
+}
+
+bool UI_Element::operator<(const UI_Element& rhs)
+{
+	return _position.z < rhs._position.z;
+}
+
+void UI_Element::CheckMouseCollision()
 {
 	glm::vec2 mouse = SYS_INPUT->GetSystemMousePos().GetMousePos();
 	mouse.x = mouse.x - SYS_INPUT->GetSystemMousePos().GetClientRectSize().x * 0.5f;
@@ -471,13 +513,28 @@ bool UI_Element::OnHover() const
 
 	if (min.x < mouse.x && max.x > mouse.x && min.y < mouse.y && max.y > mouse.y)
 	{
-		return true;
+		if (!_mouseEnter && !_mouseStay)
+		{
+			_mouseEnter = true;
+			_mouseStay = true;
+		}
+		else
+		{
+			_mouseEnter = false;
+			_mouseExit = false;
+		}
 	}
-
-	return false;
-}
-
-bool UI_Element::operator<(const UI_Element& rhs)
-{
-	return _position.z < rhs._position.z;
+	else
+	{
+		if (_mouseStay && !_mouseExit)
+		{
+			_mouseStay = false;
+			_mouseExit = true;
+		}
+		else
+		{
+			_mouseEnter = false;
+			_mouseExit = false;
+		}
+	}
 }
