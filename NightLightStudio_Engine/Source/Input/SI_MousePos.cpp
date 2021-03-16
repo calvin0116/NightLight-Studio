@@ -71,10 +71,15 @@ namespace SystemInput_ns
 	{
 		_showCursor ^= 1;
 
-		if (_showCursor)
+		/*if (_showCursor)
 			while (ShowCursor(true) < 0);
 		else
-			while (ShowCursor(false) > 0);
+			while (ShowCursor(false) > 0);*/
+
+		if (_showCursor)
+			NS_WINDOW::SYS_WINDOW->SetCursorVisibility(true);
+		else
+			NS_WINDOW::SYS_WINDOW->SetCursorVisibility(false);
 
 		return _showCursor;
 	}
@@ -82,10 +87,15 @@ namespace SystemInput_ns
 	{
 		_showCursor = show;
 
-		if (_showCursor)
+		/*if (_showCursor)
 			while (ShowCursor(true) < 0);
 		else
-			while (ShowCursor(false) > 0);
+			while (ShowCursor(false) > 0);*/
+
+		if (_showCursor)
+			NS_WINDOW::SYS_WINDOW->SetCursorVisibility(true);
+		else
+			NS_WINDOW::SYS_WINDOW->SetCursorVisibility(false);
 	}
 
 	void SystemMousePosition::LoadCursorImage(std::string name)

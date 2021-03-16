@@ -793,4 +793,17 @@ namespace NS_WINDOW
 			glfwSetWindowSize(_glfwWnd, appWidth, appHeight);
 		}
 	}
+	void WndSystem::SetCursorVisibility(const bool& set)
+	{
+		if (set == false)
+		{
+			glfwSetInputMode(_glfwWnd, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			return;
+		}
+		else
+		{
+			// Enter here if set is true
+			glfwSetInputMode(_glfwWnd, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+	}
 }

@@ -93,6 +93,8 @@ namespace NS_WINDOW
 		// Sets size of window for windowed mode
 		void SetWindowedSize(int width, int height);
 
+		void SetCursorVisibility(const bool&);
+
 	protected:
 		HWND		hAppWnd;			// Handler to window
 		//HINSTANCE	hAppInstance;		// Handle to application instance
