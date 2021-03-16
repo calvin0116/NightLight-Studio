@@ -399,8 +399,10 @@ SphereCollider& SphereCollider::operator=(const SphereCollider& rhs)
 
 void SphereCollider::posUpdate(ComponentTransform* transform)
 {
-	center = transform->_phyposition + colliderPosition.x;
+	center = transform->_phyposition + colliderPosition;
 	radius = transform->_scale.x * colliderScale.x;
+	transform->_scale.y = transform->_scale.x;
+	transform->_scale.z = transform->_scale.x;
 }
 
 //// Sphere END
