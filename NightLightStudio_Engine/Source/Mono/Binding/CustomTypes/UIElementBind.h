@@ -55,4 +55,8 @@ namespace UIElementBind
   bool OnClick_Internal(const UI_Element* ui);
 
   bool OnHover_Internal(const UI_Element* ui);
+
+  bool OnEnter_Internal(const UI_Element* ui);
+
+  bool OnExit_Internal(const UI_Element* ui);
 }

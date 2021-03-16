@@ -119,11 +119,27 @@ namespace Unicorn
       return OnHover_Internal(this.native_handle);
     }
 
+    public bool OnEnter()
+    {
+      return OnEnter_Internal(this.native_handle);
+    }
+
+    public bool OnExit()
+    {
+      return OnExit_Internal(this.native_handle);
+    }
+
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool OnClick_Internal(IntPtr native_handle);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool OnHover_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool OnEnter_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool OnExit_Internal(IntPtr native_handle);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool get_IsActive_Internal(IntPtr native_handle);

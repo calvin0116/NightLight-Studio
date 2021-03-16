@@ -6,7 +6,7 @@ namespace Unicorn
 {
   public class CanvasTest : UniBehaviour
   {
-
+    public string UIName = "";
     Canvas cnvs;
     UIElement ui1;
 
@@ -14,7 +14,7 @@ namespace Unicorn
     {
       cnvs = GetCanvas(id);
       Print(id.ToString());
-      ui1 = cnvs.FindUI("Cart");
+      ui1 = cnvs.FindUI(UIName);
     }
 
     public override void LateInit()
@@ -30,10 +30,11 @@ namespace Unicorn
       if (Input.GetKeyPress(VK.IKEY_SPACE))
       {
         cnvs.isActive = !cnvs.isActive;
-        //Print(ui1.isActive.ToString());
-        //Vector3 a = new Vector3(0.0f, 0.0f, 0.0f);
-        //ui1.SetColour(a);
       }
+      if (ui1.OnEnter())
+        Print("ENter");
+      if (ui1.OnExit())
+        Print("Exit");
     }
     public override void FixedUpdate()
     {

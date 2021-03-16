@@ -68,6 +68,12 @@ namespace UIElementBind
 
     MonoWrapper::BindClassFunction(OnHover_Internal, "OnHover_Internal",
       "UIElement");
+
+    MonoWrapper::BindClassFunction(OnEnter_Internal, "OnEnter_Internal",
+      "UIElement");
+
+    MonoWrapper::BindClassFunction(OnExit_Internal, "OnExit_Internal",
+      "UIElement");
   }
 
   bool get_IsActive_Internal(const UI_Element* ui)
@@ -226,5 +232,15 @@ namespace UIElementBind
   bool OnHover_Internal(const UI_Element* ui)
   {
     return ui->OnHover();
+  }
+
+  bool OnEnter_Internal(const UI_Element* ui)
+  {
+    return ui->OnEnter();
+  }
+
+  bool OnExit_Internal(const UI_Element* ui)
+  {
+    return ui->OnExit();
   }
 }
