@@ -137,11 +137,11 @@ int DeltaTime::GetCurrNumberOfSteps()
 		stepTime = currTime;
 	}
 
-	if (cur_step > 5)
-		cur_step = 5;
+	if (cur_step > 20)
+		cur_step = 20;
 
-	if (prev_step > 4)
-		cur_step = 1;
+	if (prev_step > 10)
+		cur_step = 5;
 
 	prev_step = cur_step;
 
