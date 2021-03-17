@@ -373,9 +373,14 @@ namespace NS_GRAPHICS
 			//if (mousePos.y < -0.05f)
 			//	mousePos.y = -0.05f;
 
+			if (analogVec._x < 0.1f && analogVec._x > -0.1f)
+				analogVec._x = 0.0f;
+			if (analogVec._y < 0.1f && analogVec._y > -0.1f)
+				analogVec._y = 0.0f;
+
 			// Rotation for left and right
 			_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
-			_camera.SetCameraYaw(_camera.GetYaw() + analogVec._x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
+			_camera.SetCameraYaw(_camera.GetYaw() + analogVec._x * 0.02f * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
 
 			// Rotation for up and down
 			float offsetted = _camera.GetPitch() + mousePos.y * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP;
@@ -389,7 +394,7 @@ namespace NS_GRAPHICS
 			_camera.SetCameraPitch(offsetted);
 
 			// Rotation for up and down
-			offsetted = _camera.GetPitch() + analogVec._y * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP;
+			offsetted = _camera.GetPitch() + analogVec._y * 0.02f * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP;
 
 			if (offsetted > NS_GRAPHICS::MAX_PITCH)
 				offsetted = NS_GRAPHICS::MAX_PITCH;
