@@ -362,7 +362,7 @@ namespace NS_GRAPHICS
 		{
 			//Mouse relative velocity
 			glm::vec2 mousePos = SYS_INPUT->GetSystemMousePos().GetRelativeDragVec();
-
+			SystemInput_ns::ControllerVec2 analogVec = SYS_INPUT->GetSystemController().GetAnalog(1);
 			// this can limit motion - me was testing
 			//if (mousePos.x >  0.05f)
 			//	mousePos.x =  0.05f;
@@ -375,9 +375,21 @@ namespace NS_GRAPHICS
 
 			// Rotation for left and right
 			_camera.SetCameraYaw(_camera.GetYaw() + mousePos.x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
+			_camera.SetCameraYaw(_camera.GetYaw() + analogVec._x * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP);
 
 			// Rotation for up and down
 			float offsetted = _camera.GetPitch() + mousePos.y * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP;
+
+			if (offsetted > NS_GRAPHICS::MAX_PITCH)
+				offsetted = NS_GRAPHICS::MAX_PITCH;
+
+			if (offsetted < NS_GRAPHICS::MIN_PITCH)
+				offsetted = NS_GRAPHICS::MIN_PITCH;
+
+			_camera.SetCameraPitch(offsetted);
+
+			// Rotation for up and down
+			offsetted = _camera.GetPitch() + analogVec._y * NS_GRAPHICS::ROTATION_SENSITIVITY * NS_GRAPHICS::ONE_ROT_STEP;
 
 			if (offsetted > NS_GRAPHICS::MAX_PITCH)
 				offsetted = NS_GRAPHICS::MAX_PITCH;
