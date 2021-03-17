@@ -498,6 +498,9 @@ namespace NS_WINDOW
 		// Set callback for resizing
 		glfwSetFramebufferSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
 		{
+			// Update rect in SystemMousePosition
+			SYS_INPUT->GetSystemMousePos().ResetWinSize();
+
 			// Assign values for reference
 			SYS_WINDOW->appWidth = width;
 			SYS_WINDOW->appHeight = height;
@@ -682,6 +685,9 @@ namespace NS_WINDOW
 				GetClientRect(GetHandlerToWindow(), &rect);
 				glViewport(0, 0, rect.right - rect.left, rect.bottom - rect.top);
 
+				// Update rect in SystemMousePosition
+				SYS_INPUT->GetSystemMousePos().ResetWinSize();
+
 				//glViewport(0, 0, appWidth, appHeight);
 				//SAE_GRAPHICS::system->SetViewport(0, 0); // Reset the viewport position to fit resize
 
@@ -717,6 +723,9 @@ namespace NS_WINDOW
 				RECT rect; // Making a rect to ensure that size is proper
 				GetClientRect(GetHandlerToWindow(), &rect);
 				glViewport(0, 0, rect.right - rect.left, rect.bottom - rect.top);
+
+				// Update rect in SystemMousePosition
+				SYS_INPUT->GetSystemMousePos().ResetWinSize();
 
 				//SAE_GRAPHICS::system->SetViewport(0, 0); // Reset the viewport position to fit resize
 
