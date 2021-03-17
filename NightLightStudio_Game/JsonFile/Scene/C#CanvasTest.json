@@ -4,145 +4,117 @@
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
+                "tagNames": [
+                    0
+                ],
                 "Position": [
                     0.0,
-                    140.63565063476563,
+                    0.0,
                     0.0
                 ],
                 "Scale": [
-                    100.0,
-                    100.0,
-                    100.0
+                    0.0010000000474974514,
+                    1.0,
+                    1.0
                 ],
                 "Rotate": [
                     0.0,
                     -0.0,
-                    0.0
-                ]
-            },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
-                ],
-                "Rotation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "RigidBody": {
-                "isStatic": false,
-                "isGravity": true,
-                "mass": 10.0,
-                "friction": 0.009999999776482582,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
                     0.0
                 ]
             },
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "CanvasTest"
+                "ScriptName": "CanvasTest",
+                "UINamestring": "Cart",
+                "UIName2string": "Left"
             },
             "CanvasComponent": {
                 "isActive": true,
-                "NumOfUIElement": 1,
+                "CanvasType": "SCREENSPACE",
+                "NumOfUIElement": 3,
                 "UIName0": "Cart",
-                "Sprite0": "asset\\textures\\cart\\delivery_cart_atlas.png",
+                "Sprite0": "asset\\textures\\concrete019_2k_color.tga",
+                "UIType0": "BUTTON",
+                "UI_IsActive0": true,
+                "Animated0": false,
+                "Row0": 1,
+                "Column0": 1,
+                "TotalFrame0": 1,
+                "FramesPerSecond0": 1,
+                "Play0": false,
+                "Loop0": false,
+                "AutoPlay0": false,
                 "UIPosition0": [
-                    500.0,
-                    0.0,
+                    0.10000000149011612,
+                    0.10000000149011612,
                     0.0
                 ],
                 "UISize0": [
-                    1000.0,
-                    1000.0
+                    0.10000000149011612,
+                    0.10000000149011612
                 ],
                 "UIColour0": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "UIName1": "Left",
+                "Sprite1": "asset\\textures\\store\\store_cart_atlas_uv.tga",
+                "UIType1": "BUTTON",
+                "UI_IsActive1": true,
+                "Animated1": false,
+                "Row1": 1,
+                "Column1": 1,
+                "TotalFrame1": 1,
+                "FramesPerSecond1": 1,
+                "Play1": false,
+                "Loop1": false,
+                "AutoPlay1": false,
+                "UIPosition1": [
+                    -0.10000000149011612,
+                    0.10000000149011612,
+                    0.0
+                ],
+                "UISize1": [
+                    0.10000000149011612,
+                    0.10000000149011612
+                ],
+                "UIColour1": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "UIName2": "",
+                "Sprite2": "asset\\textures\\store\\store_cart_atlas_uv_disp.tga",
+                "UIType2": "IMAGE",
+                "UI_IsActive2": true,
+                "Animated2": false,
+                "Row2": 1,
+                "Column2": 1,
+                "TotalFrame2": 1,
+                "FramesPerSecond2": 1,
+                "Play2": false,
+                "Loop2": false,
+                "AutoPlay2": false,
+                "UIPosition2": [
                     0.0,
-                    0.0000030994415283203127,
+                    0.0,
+                    0.0
+                ],
+                "UISize2": [
+                    1.0,
+                    1.0
+                ],
+                "UIColour2": [
+                    1.0,
+                    1.0,
                     1.0,
                     1.0
                 ]
-            }
-        },
-        "Plane": {
-            "TransformComponent": {
-                "EntityName": "",
-                "Tag": 0,
-                "Position": [
-                    5.0,
-                    2.0,
-                    1.0
-                ],
-                "Scale": [
-                    1000.0,
-                    100.0,
-                    1000.0
-                ],
-                "Rotate": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ]
-            },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
-                ],
-                "Rotation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "RigidBody": {
-                "isStatic": true,
-                "isGravity": false,
-                "mass": 0.0,
-                "friction": 0.009999999776482582,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "AudioManager": {
-                "ListOfSound": {
-                    "TestAudio": "Asset/Sounds/TestAudio.ogg"
-                }
             }
         }
     }
