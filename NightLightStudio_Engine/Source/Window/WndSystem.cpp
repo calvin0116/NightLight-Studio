@@ -505,6 +505,9 @@ namespace NS_WINDOW
 			SYS_WINDOW->appWidth = width;
 			SYS_WINDOW->appHeight = height;
 
+			// Get updated resolution sizing
+			SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+
 			UNREFERENCED_PARAMETER(window);
 			glViewport(0, 0, width, height);
 
@@ -688,6 +691,9 @@ namespace NS_WINDOW
 				// Update rect in SystemMousePosition
 				SYS_INPUT->GetSystemMousePos().ResetWinSize();
 
+				// Get updated resolution sizing
+				SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+
 				//glViewport(0, 0, appWidth, appHeight);
 				//SAE_GRAPHICS::system->SetViewport(0, 0); // Reset the viewport position to fit resize
 
@@ -726,6 +732,9 @@ namespace NS_WINDOW
 
 				// Update rect in SystemMousePosition
 				SYS_INPUT->GetSystemMousePos().ResetWinSize();
+
+				// Get updated resolution sizing
+				SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
 
 				//SAE_GRAPHICS::system->SetViewport(0, 0); // Reset the viewport position to fit resize
 
