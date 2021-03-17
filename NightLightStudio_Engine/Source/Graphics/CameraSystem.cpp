@@ -195,6 +195,17 @@ namespace NS_GRAPHICS
 				}
 			});
 
+		//// toggle mouse visiblity test
+		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TOGGLE_OFF_CURSOR", SystemInput_ns::IKEY_L, "TOGGLE_OFF_CURSOR", SystemInput_ns::OnPress, [this]()
+		//	{
+		//		SYS_INPUT->GetSystemMousePos().SetCursorVisible(false);
+		//	});
+
+		//SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TOGGLE_ON_CURSOR", SystemInput_ns::IKEY_K, "TOGGLE_ON_CURSOR", SystemInput_ns::OnPress, [this]()
+		//	{
+		//		SYS_INPUT->GetSystemMousePos().SetCursorVisible(true);
+		//	});
+
 		// For messaging/event system
 		r.AttachHandler("TogglePlay", &CameraSystem::HandleTogglePlay, this);
 	}
