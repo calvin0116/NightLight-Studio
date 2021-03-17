@@ -87,6 +87,8 @@ namespace SystemInput_ns
 	{
 		_showCursor = show;
 
+		TracyMessageL("SystemMousePosition::SetCursorVisible: Toggle Mouse Visibility");
+
 		if (_showCursor)
 			while (ShowCursor(true) < 0);
 		else

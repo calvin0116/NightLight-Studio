@@ -494,7 +494,7 @@ namespace NS_GRAPHICS
 		{
 			// turn off cursor thingy
 			SYS_INPUT->GetSystemMousePos().SetToCenter(false);
-			SYS_INPUT->GetSystemMousePos().SetCursorVisible(true);
+			//SYS_INPUT->GetSystemMousePos().SetCursorVisible(true);
 		}
 		else
 		{
