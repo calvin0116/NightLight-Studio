@@ -8,10 +8,12 @@
 #include "../Core/SceneManager.h"
 #include <filesystem>
 #include "../tracy-master/Tracy.hpp"
+
+
 namespace fs = std::filesystem;
 
 namespace Prefab_Function {
-	int PrefabReadAndCreate(std::string file, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
+	int PrefabManager::PrefabReadAndCreate(std::string file, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 	{
 		fs::path cur_path_name = file;
 		NS_SERIALISER::Parser prefab_parser(
@@ -41,7 +43,15 @@ namespace Prefab_Function {
 	
 	}
 
-	void WritePrefab(std::string file, Entity& prefab_ent,
+
+
+	inline void PrefabManager::Load()
+	{
+		//Add PrefabInstance to Load Assert queue
+		SYS_ASSETSMANAGER->AddType<PrefabInstances>();
+	}
+
+	void PrefabManager::WritePrefab(std::string file, Entity& prefab_ent,
 		NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 	{
 		std::string ent_name = g_ecman->EntityName[prefab_ent.getId()];
@@ -86,9 +96,11 @@ namespace Prefab_Function {
 
 	}
 	
-	void PrefabInstances::CreatePrefabInstance(std::string file)
+	PrefabInstances* PrefabManager::CreatePrefabInstance(std::string file)
 	{
-		filepath = file;
+		auto pi_asset = SYS_ASSETSMANAGER->CreateAsset<PrefabInstances>(file);
+
+		pi_asset.second.filepath = file;
 		fs::path cur_path_name = file;
 
 		std::string file_without_ext = cur_path_name.parent_path().string() +"/"+ cur_path_name.stem().string();
@@ -96,22 +108,22 @@ namespace Prefab_Function {
 		SPEEDLOG(std::string("PrefabInstances::CreatePrefabInstance: " + file_without_ext));
 		//std::cout << file_without_ext << std::endl;
 		//Save and delete temp prefab
-		if (isActive)
+		if (pi_asset.second.isActive)
 		{
-			SavePrefab();
+			SavePrefab(&pi_asset.second);
 			//Entity ent = G_ECMANAGER_PREFABS->getEntity(prefab_id);
 			//WritePrefab(cur_path_name.parent_path().string(), ent, G_ECMANAGER_PREFABS);
 			//save
 			//G_ECMANAGER_PREFABS->FreeEntity(ent.getId());
 		}
 
-		prefab_id = PrefabReadAndCreate(file_without_ext, G_ECMANAGER_PREFABS);
+		pi_asset.second.prefab_id = PrefabReadAndCreate(file_without_ext, G_ECMANAGER_PREFABS);
 	}
 
-	void PrefabInstances::SavePrefab()
+	void PrefabManager::SavePrefab(PrefabInstances* pi)
 	{
-		fs::path cur_path_name = filepath;
-		Entity ent = G_ECMANAGER_PREFABS->getEntity(prefab_id);
+		fs::path cur_path_name = pi->filepath;
+		Entity ent = G_ECMANAGER_PREFABS->getEntity(pi->prefab_id);
 		WritePrefab(cur_path_name.parent_path().string(), ent, G_ECMANAGER_PREFABS);
 		//save
 		G_ECMANAGER_PREFABS->FreeEntity(ent.getId());

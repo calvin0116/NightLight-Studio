@@ -1,3 +1,4 @@
+#pragma once
 #include "AssetInfo.h"
 #include "Singleton.h"
 #include "MySystem.h"
@@ -7,7 +8,10 @@
 #include <vector>
 #include <filesystem>
 
+#include "../Editor/PrefabManager.h"
+
 namespace fs = std::filesystem;
+typedef std::function<void(void)>  void_func;
 
 class AssetsManager : public Singleton<AssetsManager>, public MySystem
 {
@@ -31,7 +35,7 @@ class AssetsManager : public Singleton<AssetsManager>, public MySystem
 			//std::string MainFilePath; 	
 			//std::string AssetsFilePath;
 			//=>
-			std::map<FILETYPE, std::string> PathMap;
+			std::unordered_map<FILETYPE, std::string> DirMap;
 
 		public:
 			FileSystem()
@@ -41,23 +45,23 @@ class AssetsManager : public Singleton<AssetsManager>, public MySystem
 
 			std::string& operator [] (FILETYPE ft)
 			{
-				return PathMap[ft];
+				return DirMap[ft];
 			}
 			
 			//Get and store pointer so that any changes here will be reflected on other class using this
 			std::string* GetPathPtr(FILETYPE ft)
 			{
-				return &PathMap[ft];
+				return &DirMap[ft];
 			}
 			//Address version
 			std::string& GetPathRef(FILETYPE ft)
 			{
-				return PathMap[ft];
+				return DirMap[ft];
 			}
 
 			std::string GetFullPath(FILETYPE ft)
 			{
-				return PathMap[MAIN] + PathMap[ft];
+				return DirMap[MAIN] + DirMap[ft];
 			}
 
 		};
@@ -65,29 +69,31 @@ class AssetsManager : public Singleton<AssetsManager>, public MySystem
 		
 		//Assets container
 		template<typename T, FILETYPE FileType = MAIN>
-		class MyAssets : public Singleton<T>
+		class MyAssets : public Singleton<MyAssets<T>>
 		{
+			friend class Singleton<T>;
 			int _uid_count = 0;
-			std::map<std::string, T> assets_map; 
+			std::unordered_map<std::string, T> assets_map; 
 			
 		public:
 			//Create Empty Assets
 			//return id and Asset
-			std::pair<std::string,T>& CreateAsset(std::string filename)
+			inline std::pair<std::string,T&> CrtAsset(std::string filename)
 			{
 				//Find for existing assets
-				for(std::pair<std::string,T>& asset : assets_map)
+				for(std::pair<std::string,T> asset : assets_map)
 				{
-					if(asset.first == filename)
-						return asset;
+					if (asset.first == filename)
+						return std::make_pair<std::string, T&>(filename, assets_map[filename]);//asset;
 				}
 				//Create new assets
-				std::pair<std::string,T>& asset = assets_map.push_back(std::make_pair<std::string,T>(filename, T())); //Can change to using memory man
-				AssetInfo* asset_info = asset.second;
-				asset_info._uid = _uid_count;
+				assets_map.insert(std::make_pair(filename, T()));
+				//std::pair<std::string, T> asset = ;//assets_map[filename]; //= assets_map.insert(std::make_pair(filename, T())); //Can change to using memory man
+				AssetInfo* asset_info = &assets_map[filename];//&asset.second;
+				asset_info->_uid = _uid_count;
 				++_uid_count;
 				
-				return assets_map.back();
+				return std::make_pair<std::string, T&>(filename, assets_map[filename]);
 			}
 			
 			void LoadAssets()
@@ -121,7 +127,7 @@ class AssetsManager : public Singleton<AssetsManager>, public MySystem
 		std::string currentAssetsLoading;
 		float loadingProgress;				//->100%
 		
-		std::vector<std::function<void(void)>> loadfuncs; 
+		std::vector< void_func > loadfuncs;
 		
 		//Load All Requested Asset
 		void LoadAsset()
@@ -144,15 +150,15 @@ class AssetsManager : public Singleton<AssetsManager>, public MySystem
 		void AddType()
 		{
 			MyAssets<T>::GetInstance();	//Create class instance
-			loadfuncs.push_back(MyAssets<T>::LoadAssets);	
+			//loadfuncs.push_back(MyAssets<T>::GetInstance()->LoadAssets());
 		}
 		
 		//Create Asset Request
 		//e.g. CreateAsset<SoundAsset>(food step)
 		template<typename T>
-		std::map<std::string,T>& CreateAsset(std::string filename)
+		inline std::pair<std::string,T&> CreateAsset(std::string filename)
 		{
-			return MyAssets<T>::GetInstance()->CreateAsset(filename);		
+			return MyAssets<T>::GetInstance()->CrtAsset(filename);
 		}
 		
 

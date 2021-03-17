@@ -28,7 +28,7 @@ protected:
 	//First = level editor id, second = entity id
 	std::map<int, int> le_id_to_object_id;
 
-	Prefab_Function::PrefabInstances prefab_inst;  //For prefab
+	Prefab_Function::PrefabInstances* prefab_inst;  //For prefab
 	bool prefabMode;
 public:
 
@@ -48,11 +48,11 @@ public:
 			}
 		}
 
-		if (prefab_inst.prefab_id != -1)
+		if (prefab_inst->prefab_id != -1)
 		{
-			prefab_inst.SavePrefab();
-			prefab_inst.prefab_id = -1;		//Deselect prefab
-			prefab_inst.isActive = false;
+			PFunc->SavePrefab(prefab_inst);
+			//prefab_inst->prefab_id = -1;		//Deselect prefab
+			prefab_inst->isActive = false;
 		}
 		//Select current entity
 		selected_ents[id] = true;
@@ -75,8 +75,9 @@ public:
 			DeSelectEntity(selected_ent_id);
 			selected_ent_id = -1;
 		}
-		prefab_inst.CreatePrefabInstance(file);
-		prefab_inst.isActive = true;
+		Prefab_Function::PrefabInstances* pi = PFunc->CreatePrefabInstance(file);
+		pi->isActive = true;
+		//prefab_inst.isActive = true;
 	}
 
 	//=====================================//
@@ -111,7 +112,7 @@ public:
 
 	Prefab_Function::PrefabInstances GetPrefabInst()
 	{
-		return prefab_inst;
+		return *prefab_inst;
 	}
 };
 

@@ -323,7 +323,7 @@ void AssetInspector::Run()
                 //std::cout << ent.getId() << std::endl;
                 //std::cout << _selectedFolderPath << std::endl;
 
-                PFunc::WritePrefab(_selectedFolderPath, ent);
+                PFunc->WritePrefab(_selectedFolderPath, ent);
                 //Copied from your refresh inspector to refresh
                 {
                     _allDirFiles.clear();
