@@ -346,7 +346,7 @@ namespace NS_GRAPHICS
 	{
 		// cursor setting
 		SYS_INPUT->GetSystemMousePos().SetToCenter(true);
-		SYS_INPUT->GetSystemMousePos().SetCursorVisible(false);
+		//SYS_INPUT->GetSystemMousePos().SetCursorVisible(false);
 
 		// set camera position
 		NS_GRAPHICS::Camera& cam = NS_GRAPHICS::CameraSystem::GetInstance().GetCamera();
