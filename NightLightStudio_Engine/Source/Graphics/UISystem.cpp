@@ -201,6 +201,9 @@ void NS_GRAPHICS::UISystem::RenderUI()
 			//Skips not active and no texture
 			if (!ui._isActive)
 			{
+				ui._mouseEnter = false;
+				ui._mouseStay = false;
+				ui._mouseExit = false;
 				continue;
 			}
 			if (!ui._imageID)
@@ -244,6 +247,18 @@ void NS_GRAPHICS::UISystem::RenderUI()
 			{
 				ui.CheckMouseCollision();
 			}
+
+			//if (ui.OnEnter())
+			//{
+			//	TracyMessageL(std::string("Enter ").append(ui._uiName.c_str()).c_str());
+			//	std::cout << std::string("Enter ").append(ui._uiName.c_str()).c_str() << std::endl;
+			//}
+
+			//if (ui.OnExit())
+			//{
+			//	TracyMessageL(std::string("Exit ").append(ui._uiName.c_str()).c_str());
+			//	std::cout << std::string("Exit ").append(ui._uiName.c_str()).c_str() << std::endl;
+			//}
 			
 			if (canvas->_canvasType == SCREEN_SPACE)
 			{

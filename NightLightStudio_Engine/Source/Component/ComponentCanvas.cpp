@@ -474,6 +474,11 @@ bool UI_Element::OnClick() const
 	{
 		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IMOUSE_LBUTTON))
 		{
+			std::string error = "Click ";
+			error += _uiName;
+
+			TracyMessage(error.c_str(), error.size());
+
 			return true;
 		}
 	}
