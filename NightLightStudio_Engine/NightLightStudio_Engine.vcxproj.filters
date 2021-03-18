@@ -120,9 +120,6 @@
     <ClCompile Include="Source\Component\ComponentAnimation.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentAnimationBind.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\ComponentAudio.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
@@ -138,19 +135,10 @@
     <ClCompile Include="Source\Component\ComponentCollider.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentColliderBind.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\ComponentGraphics.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentGraphicsBind.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\ComponentLight.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentLightBind.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentLoadAudio.cpp">
@@ -162,16 +150,10 @@
     <ClCompile Include="Source\Component\ComponentMemoryManager.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentNavigatorBind.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\ComponentPlayerStats.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentRigidBody.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\Components.cpp">
@@ -183,13 +165,7 @@
     <ClCompile Include="Source\Component\ComponentTransform.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentTransformBind.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\ComponentVariables.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentVariablesBind.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\DeltaTime.cpp">
@@ -411,19 +387,12 @@
     <ClCompile Include="Source\Graphics\Animation.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\ComponentWayPoint.cpp">
-      <Filter>Source Files\AI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Ai\WayPointManager.cpp" />
-    <ClCompile Include="Source\Ai\AiGraph.cpp" />
-    <ClCompile Include="Source\Mono\Binding\CustomTypes\Vector4Bind.cpp" />
     <ClCompile Include="Source\Component\ComponentResolver.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\tracy-master\TracyClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\AssetsMananger.cpp" />
     <ClCompile Include="Source\Log\SpeedLog.cpp">
       <Filter>Source Files\Log</Filter>
     </ClCompile>
@@ -432,9 +401,6 @@
       <Filter>Source Files\Editor\imgui</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentEmitter.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentEmitterBind.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentNavigator.cpp">
@@ -449,9 +415,53 @@
     <ClCompile Include="Source\Graphics\Emitter.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_ECHelper.cpp" />
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentScriptBind.cpp">
+    <ClCompile Include="Source\Ai\WayPointManager.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Ai\AiGraph.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentWayPoint.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\AssetsMananger.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_ECHelper.cpp">
+      <Filter>Source Files\Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\CustomTypes\Vector4Bind.cpp">
+      <Filter>Source Files\Mono\Binding\CustomTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentAnimationBind.cpp">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentColliderBind.cpp">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentEmitterBind.cpp">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentGraphicsBind.cpp">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentLightBind.cpp">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentNavigatorBind.cpp">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.cpp">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentTransformBind.cpp">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentVariablesBind.cpp">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentScriptBind.cpp">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -488,9 +498,6 @@
     <ClInclude Include="Source\Component\ComponentAnimation.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentAnimationBind.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\ComponentAudio.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
@@ -506,19 +513,10 @@
     <ClInclude Include="Source\Component\ComponentCollider.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentColliderBind.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\ComponentGraphics.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentGraphicsBind.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\ComponentLight.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentLightBind.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentLoadAudio.h">
@@ -536,9 +534,6 @@
     <ClInclude Include="Source\Component\ComponentNavigator.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentNavigatorBind.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\ComponentPath.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
@@ -546,9 +541,6 @@
       <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentRigidBody.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\Components.h">
@@ -563,13 +555,7 @@
     <ClInclude Include="Source\Component\ComponentTransform.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentTransformBind.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\ComponentVariables.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentVariablesBind.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\LocalString.h">
@@ -848,33 +834,71 @@
     <ClInclude Include="Source\Ai\AiGraph.h">
       <Filter>Source Files\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\CustomTypes\Vector4Bind.h" />
     <ClInclude Include="Source\Core\TagHandler.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentResolver.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\AssetInfo.h" />
-    <ClInclude Include="Source\Core\AssetsMananger.h" />
     <ClInclude Include="Source\Log\SpeedLog.h">
       <Filter>Source Files\Log</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\Shapes.h" />
-    <ClInclude Include="Source\Graphics\Emitter.h" />
-    <ClInclude Include="Source\Graphics\Particle.h" />
-    <ClInclude Include="Source\Graphics\SystemEmitter.h" />
     <ClInclude Include="Source\Component\ComponentEmitter.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentEmitterBind.h">
-      <Filter>Source Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentScriptBind.h">
       <Filter>Source Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\imgui\imgui_impl_glfw.h">
       <Filter>Source Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Particle.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Emitter.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\SystemEmitter.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\AssetsMananger.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\AssetInfo.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\CustomTypes\Vector4Bind.h">
+      <Filter>Source Files\Mono\Binding\CustomTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentAnimationBind.h">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentColliderBind.h">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentEmitterBind.h">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentGraphicsBind.h">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentLightBind.h">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentNavigatorBind.h">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentRigidBodyBind.h">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentTransformBind.h">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentVariablesBind.h">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentScriptBind.h">
+      <Filter>Source Files\Mono\Binding\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Shapes.h">
+      <Filter>Source Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
