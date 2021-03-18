@@ -53,11 +53,6 @@ bool ComponentAnimation::IsFinished()
 	return !NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play;
 }
 
-bool ComponentAnimation::GetPlaying() const
-{
-	return NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play;
-}
-
 //read and write function for initialization from saved files
 
 void ComponentAnimation::SetAnimController(unsigned index)

@@ -23,8 +23,6 @@ public:
 	bool IsFinished(const std::string& anim);
 	bool IsFinished();
 
-	bool GetPlaying() const;
-
 	void SetAnimController(unsigned index);
 	unsigned GetAnimController();
 
