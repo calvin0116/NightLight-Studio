@@ -25,11 +25,13 @@ ComponentCanvas::~ComponentCanvas()
 void ComponentCanvas::AddUI()
 {
 	_uiElements.push_back(UI_Element{});
+	++_canvasSize;
 }
 
 void ComponentCanvas::RemoveUI(size_t index)
 {
 	_uiElements.erase(index);
+	--_canvasSize;
 }
 
 void ComponentCanvas::Sort()
@@ -83,7 +85,10 @@ void ComponentCanvas::Read(Value& val)
 		SPEEDLOG("ComponentCanvas::Read: No UI element quantity data has been found");
 	}
 	else
+	{
 		loopCount = val["NumOfUIElement"].GetInt();
+		_canvasSize = val["NumOfUIElement"].GetInt();
+	}
 
 	if (val.FindMember("CanvasType") == val.MemberEnd())
 	{
@@ -476,6 +481,8 @@ bool UI_Element::OnClick() const
 		{
 			std::string error = "Click ";
 			error += _uiName;
+			error += ": ";
+			error += std::to_string(_isActive);
 
 			TracyMessage(error.c_str(), error.size());
 
@@ -520,13 +527,14 @@ bool UI_Element::operator<(const UI_Element& rhs)
 void UI_Element::CheckMouseCollision()
 {
 	glm::vec2 mouse = SYS_INPUT->GetSystemMousePos().GetMousePos();
-	mouse.x = mouse.x - SYS_INPUT->GetSystemMousePos().GetClientRectSize().x * 0.5f;
-	mouse.y = mouse.y - SYS_INPUT->GetSystemMousePos().GetClientRectSize().y * 0.5f;
 
-	glm::vec2 min = glm::vec2{ (_position.x - (_size.x * 0.5f)) * SYS_INPUT->GetSystemMousePos().GetClientRectSize().x,
-								(_position.y - (_size.y * 0.5f)) * SYS_INPUT->GetSystemMousePos().GetClientRectSize().y };
-	glm::vec2 max = glm::vec2{ (_position.x + (_size.x * 0.5f)) * SYS_INPUT->GetSystemMousePos().GetClientRectSize().x,
-								(_position.y + (_size.y * 0.5f)) * SYS_INPUT->GetSystemMousePos().GetClientRectSize().y };
+	mouse.x = mouse.x - NS_WINDOW::SYS_WINDOW->GetAppWidth() * 0.5f;
+	mouse.y = mouse.y - NS_WINDOW::SYS_WINDOW->GetAppHeight() * 0.5f;
+
+	glm::vec2 min = glm::vec2{ (_position.x - (_size.x * 0.5f)) * NS_WINDOW::SYS_WINDOW->GetAppWidth(),
+								(_position.y - (_size.y * 0.5f)) * NS_WINDOW::SYS_WINDOW->GetAppHeight() };
+	glm::vec2 max = glm::vec2{ (_position.x + (_size.x * 0.5f)) * NS_WINDOW::SYS_WINDOW->GetAppWidth(),
+								(_position.y + (_size.y * 0.5f)) * NS_WINDOW::SYS_WINDOW->GetAppHeight() };
 
 	if (min.x < mouse.x && max.x > mouse.x && min.y < mouse.y && max.y > mouse.y)
 	{
