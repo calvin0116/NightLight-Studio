@@ -733,7 +733,7 @@ namespace NS_WINDOW
 				//InvalidateRect(hAppWnd, NULL, TRUE);
 
 				// 2nd param must be null for windowed mode
-				glfwSetWindowMonitor(_glfwWnd, nullptr, 0, 0, appWidth, appHeight, 0);
+				glfwSetWindowMonitor(_glfwWnd, nullptr, 0, 0, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0);
 
 				RECT rect; // Making a rect to ensure that size is proper
 				GetClientRect(GetHandlerToWindow(), &rect);
