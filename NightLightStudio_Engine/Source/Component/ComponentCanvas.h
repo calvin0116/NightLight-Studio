@@ -67,11 +67,10 @@ struct UI_Element
 
 	bool operator<(const UI_Element& rhs);
 
-private:
 	bool _mouseEnter = false;
 	bool _mouseExit = false;
 	bool _mouseStay = false;
-public:
+
 	void CheckMouseCollision();
 };
 
@@ -88,6 +87,7 @@ public:
 	LocalVector<UI_Element, 32> _uiElements;
 	//TODO 
 	CANVAS_TYPE _canvasType;
+	size_t _canvasSize;
 
 	// Default constructor
 	ComponentCanvas();
