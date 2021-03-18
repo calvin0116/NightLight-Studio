@@ -489,6 +489,8 @@ namespace NS_WINDOW
 
 		hasInit = true;
 
+		SetFullScreenMode(CONFIG_DATA->GetConfigData().toFullScreen); //<- Use json to control
+
 		// Set callback for mouse scroll
 		glfwSetScrollCallback(_glfwWnd, [](GLFWwindow * window, double xoffset, double yoffset)
 		{
@@ -580,8 +582,6 @@ namespace NS_WINDOW
 			{
 				ToggleMaximizeWindowed();
 			});
-
-		SetFullScreenMode(CONFIG_DATA->GetConfigData().toFullScreen); //<- Use json to control
 
 		return;
 	}
@@ -707,8 +707,12 @@ namespace NS_WINDOW
 				GetClientRect(GetHandlerToWindow(), &rect);
 				glViewport(0, 0, rect.right - rect.left, rect.bottom - rect.top);
 
+				SetWindowedSize(rect.right - rect.left, rect.bottom - rect.top);
+
+				RestoreWindowed();
+
 				// Update rect in SystemMousePosition
-				SYS_INPUT->GetSystemMousePos().ResetWinSize();
+				//SYS_INPUT->GetSystemMousePos().ResetWinSize();
 
 				// Get updated resolution sizing
 				SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));

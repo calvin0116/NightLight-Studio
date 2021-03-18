@@ -95,7 +95,7 @@ namespace NS_WINDOW
 
 		void SetCursorVisibility(const bool&);
 
-		// Called to restore window size after revertint from fullscreen
+		// Called to restore window size after reverting from fullscreen
 		void RestoreWindowed();
 
 		void SetMaximizedWindow(const bool&);
