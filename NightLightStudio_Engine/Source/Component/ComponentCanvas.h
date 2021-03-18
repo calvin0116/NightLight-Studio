@@ -63,6 +63,7 @@ struct UI_Element
 	bool OnHover() const;
 	bool OnEnter() const;
 	bool OnExit() const;
+	bool OnRelease() const;
 
 	bool operator<(const UI_Element& rhs);
 

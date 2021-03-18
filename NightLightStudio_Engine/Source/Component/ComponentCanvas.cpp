@@ -470,7 +470,7 @@ void UI_Element::StopAnimation()
 
 bool UI_Element::OnClick() const
 {
-	if (_mouseStay)
+	if (_mouseStay && _isActive)
 	{
 		if (SYS_INPUT->GetSystemKeyPress().GetKeyPress(SystemInput_ns::IMOUSE_LBUTTON))
 		{
@@ -480,19 +480,31 @@ bool UI_Element::OnClick() const
 	return false;
 }
 
+bool UI_Element::OnRelease() const
+{
+	if (_mouseStay && _isActive)
+	{
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyRelease(SystemInput_ns::IMOUSE_LBUTTON))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 bool UI_Element::OnHover() const
 {
-	return _mouseStay;
+	return _mouseStay && _isActive;
 }
 
 bool UI_Element::OnEnter() const
 {
-	return _mouseEnter;
+	return _mouseEnter && _isActive;
 }
 
 bool UI_Element::OnExit() const
 {
-	return _mouseExit;
+	return _mouseExit && _isActive;
 }
 
 bool UI_Element::operator<(const UI_Element& rhs)
