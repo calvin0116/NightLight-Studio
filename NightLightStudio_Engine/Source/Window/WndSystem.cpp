@@ -245,7 +245,7 @@ namespace NS_WINDOW
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MINGLMAJORVER);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MINGLMINORVER);
 
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);		// Allows resizing of windowed window
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);		// Disallows resizing of windowed window
 		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);		// Ensure visibility of window upon creation
 		glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);		// Include minimize, maximize and close widgets at top right corner of window
 		glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);		// Do not give input focus upon creation
@@ -279,7 +279,7 @@ namespace NS_WINDOW
 
 		hAppWnd = glfwGetWin32Window(_glfwWnd);
 
-		glfwSetWindowAspectRatio(_glfwWnd, 16, 9); // Lock aspect ratio so no one screws this up
+		//glfwSetWindowAspectRatio(_glfwWnd, 16, 9); // Lock aspect ratio so no one screws this up
 
 #ifdef _DEBUG
 		ShowCursor(true);
@@ -498,7 +498,8 @@ namespace NS_WINDOW
 		});
 
 		// Set callback for resizing
-		glfwSetFramebufferSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
+		//glfwSetFramebufferSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
+		glfwSetWindowSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
 		{
 			// Update rect in SystemMousePosition
 			SYS_INPUT->GetSystemMousePos().ResetWinSize();
