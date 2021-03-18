@@ -120,6 +120,7 @@ namespace NS_WINDOW
 		int         cDisplayPosY;		// Centralized position in virtual screen coordinates (Y-coordinate)
 		int         iDisplayResW;		// Integer representing the width of the display resolution, defaults to current display's defaults
 		int         iDisplayResH;		// Integer representing the height of the display resolution, defaults to current display's defaults
+		bool		maximized_windowed; // Check if window is maximized
 
 
 		// GLFW Implementation Variables

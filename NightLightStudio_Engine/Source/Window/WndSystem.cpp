@@ -260,7 +260,7 @@ namespace NS_WINDOW
 		glfwWindowHint(GLFW_DEPTH_BITS, 24);	// Desired level of bits for depth component of framebuffer, default is 24 but we will be explicit
 		glfwWindowHint(GLFW_STENCIL_BITS, 24);	// Desired level of bits for stencil component of framebuffer, default is 8
 
-		glfwWindowHint(GLFW_REFRESH_RATE, 60); // Set refresh rate to 60 for full screen
+		glfwWindowHint(GLFW_REFRESH_RATE, 60);			   // Set refresh rate to 60 for full screen
 		glfwWindowHint(GLFW_SRGB_CAPABLE, GLFW_TRUE);	   // Allow capabilities for sRGB support
 
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);  // Create context for specified opengl profile, in this case compatibility
@@ -576,6 +576,56 @@ namespace NS_WINDOW
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		});
 
+		// Button Press for borderless windowed
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TOGGLE_BORDERLESS_WINDOWED", SystemInput_ns::IKEY_F10, "TOGGLE_BORDERLESS_WINDOWED", SystemInput_ns::OnPress, [this]()
+			{
+				// If window is not maximized, maximize the window
+				if (!maximized_windowed)
+				{
+					glfwMaximizeWindow(_glfwWnd);
+
+					RECT rect; // Making a rect to ensure that size is proper
+					GetClientRect(GetHandlerToWindow(), &rect);
+
+					// 2nd param must be null for windowed mode
+					glfwSetWindowMonitor(_glfwWnd, nullptr, 0, 0, rect.right - rect.left, rect.bottom - rect.top, 0);
+
+					glViewport(0, 0, rect.right - rect.left, rect.bottom - rect.top);
+
+					SetWindowedSize(rect.right - rect.left, rect.bottom - rect.top);
+
+					RestoreWindowed();
+
+					// Get updated resolution sizing
+					SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+
+					maximized_windowed = true;
+				}
+				else // Restore original configuration for windowed mode
+				{
+					glfwRestoreWindow(_glfwWnd);
+
+					RECT rect; // Making a rect to ensure that size is proper
+					GetClientRect(GetHandlerToWindow(), &rect);
+
+					// 2nd param must be null for windowed mode
+					glfwSetWindowMonitor(_glfwWnd, nullptr, CONFIG_DATA->GetConfigData().width / 3, CONFIG_DATA->GetConfigData().height / 3, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0);
+
+					glViewport(0, 0, rect.right - rect.left, rect.bottom - rect.top);
+
+					SetWindowedSize(CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height);
+
+					RestoreWindowed();
+
+					// Get updated resolution sizing
+					SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+
+					maximized_windowed = false;
+				}
+
+				
+			});
+
 		return;
 	}
 
@@ -701,7 +751,8 @@ namespace NS_WINDOW
 				// Get updated resolution sizing
 				SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
 
-				glfwSwapInterval(1); // IMPORTANT TO ENABLE VSYNC AGAIN
+				// This does absolute jackshit in fullscreen
+				//glfwSwapInterval(10);
 
 				//glViewport(0, 0, appWidth, appHeight);
 				//SAE_GRAPHICS::system->SetViewport(0, 0); // Reset the viewport position to fit resize
