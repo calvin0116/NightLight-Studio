@@ -245,7 +245,8 @@ namespace NS_WINDOW
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MINGLMAJORVER);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MINGLMINORVER);
 
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);		// Disallows resizing of windowed window
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);		// Disallows resizing of windowed window
+		//glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);		// Maximize upon startup
 		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);		// Ensure visibility of window upon creation
 		glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);		// Include minimize, maximize and close widgets at top right corner of window
 		glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);		// Do not give input focus upon creation
@@ -259,7 +260,7 @@ namespace NS_WINDOW
 		glfwWindowHint(GLFW_DEPTH_BITS, 24);	// Desired level of bits for depth component of framebuffer, default is 24 but we will be explicit
 		glfwWindowHint(GLFW_STENCIL_BITS, 24);	// Desired level of bits for stencil component of framebuffer, default is 8
 
-		glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE); // Set the highest available refresh rate for full screen
+		glfwWindowHint(GLFW_REFRESH_RATE, 60); // Set refresh rate to 60 for full screen
 		glfwWindowHint(GLFW_SRGB_CAPABLE, GLFW_TRUE);	   // Allow capabilities for sRGB support
 
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);  // Create context for specified opengl profile, in this case compatibility

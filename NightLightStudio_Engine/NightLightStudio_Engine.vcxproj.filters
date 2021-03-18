@@ -450,7 +450,9 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_ECHelper.cpp" />
-    <ClCompile Include="Source\Mono\Binding\Components\ComponentScriptBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentScriptBind.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -858,15 +860,22 @@
     <ClInclude Include="Source\Log\SpeedLog.h">
       <Filter>Source Files\Log</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\imgui\imgui_impl_glfw.h">
-    </ClInclude>
     <ClInclude Include="Source\Graphics\Shapes.h" />
-    <ClInclude Include="Source\Component\ComponentEmitter.h" />
     <ClInclude Include="Source\Graphics\Emitter.h" />
     <ClInclude Include="Source\Graphics\Particle.h" />
     <ClInclude Include="Source\Graphics\SystemEmitter.h" />
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentEmitterBind.h" />
-    <ClInclude Include="Source\Mono\Binding\Components\ComponentScriptBind.h" />
+    <ClInclude Include="Source\Component\ComponentEmitter.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentEmitterBind.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentScriptBind.h">
+      <Filter>Source Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\imgui\imgui_impl_glfw.h">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
