@@ -279,6 +279,8 @@ namespace NS_WINDOW
 
 		hAppWnd = glfwGetWin32Window(_glfwWnd);
 
+		glfwSetWindowAspectRatio(_glfwWnd, 16, 9); // Lock aspect ratio so no one screws this up
+
 #ifdef _DEBUG
 		ShowCursor(true);
 #else
