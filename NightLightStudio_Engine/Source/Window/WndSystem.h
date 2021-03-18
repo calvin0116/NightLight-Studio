@@ -95,6 +95,9 @@ namespace NS_WINDOW
 
 		void SetCursorVisibility(const bool&);
 
+		// Called to restore window size after revertint from fullscreen
+		void RestoreWindowed();
+
 	protected:
 		HWND		hAppWnd;			// Handler to window
 		//HINSTANCE	hAppInstance;		// Handle to application instance
