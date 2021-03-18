@@ -152,22 +152,17 @@ int SystemAudio::Play3DOnce(const std::string& name, const int _id)
       _channels[retVal]->isPlaying(&isPlaying);
       if (!isPlaying)
       {
-        _system->playSound(it->second, _sfx, true, _channels + retVal);
-        _channels[retVal]->setMode(FMOD_LOOP_OFF);
-        _channels[retVal]->setMode(FMOD_3D);
-        _channels[retVal]->setMode(FMOD_3D_LINEARROLLOFF);
+        FMOD::Channel* temp;
+        _system->playSound(it->second, _sfx, true, &temp);
+        temp->setMode(FMOD_LOOP_OFF);
+        temp->setMode(FMOD_3D);
+        temp->setMode(FMOD_3D_LINEARROLLOFF);
         glm::vec3 _pos = G_ECMANAGER->getEntity(_id).getComponent<TransformComponent>()->_position;
         _fmodPos = { _pos.x, _pos.y, _pos.z };
-        _channels[retVal]->set3DAttributes(&_fmodPos, nullptr);
-        _channels[retVal]->setPaused(false);
-        _objIDs[retVal] = _id;
-        //ErrorCheck(temp->set3DMinMaxDistance(0.5f * m_fUnitsPerMeter, 5.0f * m_fUnitsPerMeter));
+        temp->set3DAttributes(&_fmodPos, nullptr);
+        temp->setPaused(false);
+        //_objIDs[retVal] = _id;
         _channels[retVal]->set3DMinMaxDistance(minDist * s_UNITS_PER_METER, maxDist * s_UNITS_PER_METER);
-        //FMOD_VECTOR fmodPos = { _pos.x, _pos.y, _pos.z };
-    /*    _channels[retVal]->set3DAttributes(&fmodPos, nullptr);
-        _channels[retVal]->setPaused(false);*/
-        //// Setting group channel
-        //ErrorCheck(it->second.second->setChannelGroup(SFX));
         break;
       }
     }
@@ -262,6 +257,7 @@ void SystemAudio::MyGameInit()
   // For testing
   //LoadSound("asset/Sounds/TestAudio.ogg", "TestAudio");
   // Loading
+  ReleaseSounds();
   auto itr = G_ECMANAGER->begin<ComponentLoadAudio>();
   auto itrEnd = G_ECMANAGER->end<ComponentLoadAudio>();
   for (; itr != itrEnd; ++itr)
