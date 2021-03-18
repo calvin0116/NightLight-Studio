@@ -500,6 +500,7 @@ namespace NS_WINDOW
 		// Set callback for resizing
 		glfwSetFramebufferSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
 		{
+			NS_GRAPHICS::SYS_GRAPHICS->SetUIMatrix(width, height);
 			// Update rect in SystemMousePosition
 			SYS_INPUT->GetSystemMousePos().ResetWinSize();
 
