@@ -501,6 +501,7 @@ namespace NS_WINDOW
 		//glfwSetFramebufferSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
 		glfwSetWindowSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
 		{
+			NS_GRAPHICS::SYS_GRAPHICS->SetUIMatrix(width, height);
 			// Update rect in SystemMousePosition
 			SYS_INPUT->GetSystemMousePos().ResetWinSize();
 
