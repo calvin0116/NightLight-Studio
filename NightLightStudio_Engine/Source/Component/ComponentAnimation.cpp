@@ -44,18 +44,13 @@ bool ComponentAnimation::IsFinished(const std::string& anim)
 {
 	//TracyMessage(anim.c_str(), anim.size());
 	return !NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play &&
-		NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_currAnim == anim;
+		NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_prevAnim == anim;
 }
 
 bool ComponentAnimation::IsFinished()
 {
 	//TracyMessage(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_currAnim.c_str(), NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_currAnim.size());
 	return !NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play;
-}
-
-bool ComponentAnimation::GetPlaying() const
-{
-	return NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play;
 }
 
 //read and write function for initialization from saved files
