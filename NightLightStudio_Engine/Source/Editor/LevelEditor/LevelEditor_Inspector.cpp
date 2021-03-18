@@ -1709,195 +1709,206 @@ void InspectorWindow::CanvasComp(Entity& ent)
 				editedComp = true;
 			}
 
+			static std::string searchString = "";
+			std::string search = searchString;
+			_levelEditor->LE_AddInputText("Search##canvas", search, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+				[&search]()
+				{
+					searchString = search;
+				});
+
 			size_t uiCount = canvas->_uiElements.size();
 			for (size_t i = 0; i < uiCount; ++i)
 			{
 				UI_Element& ui = canvas->_uiElements.at(i);
 
-				ImGui::Checkbox(std::string("IsActive##UI").append(std::to_string(i)).c_str(), &ui._isActive);
-
-				// Undo-Redo for Components
-				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-				if (_levelEditor->LE_AddCombo(std::string("UI Type").append(std::to_string(i)).c_str(), (int&)ui._type,
-					{
-						"IMAGE",
-						"BUTTON"
-					}))
-				{
-					// Undo-Redo for Components
-					_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
-					editedComp = true;
-				}
-				
-
-				if (ImGui::Button(std::string("X##").append(std::to_string(i)).c_str()))
-				{
-					canvas->RemoveUI(i);
-
-					// Undo-Redo for Components
-					_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
-					editedComp = true;
-				}
-
-				ImGui::SameLine();
-
 				std::string tex = ui._fileName.toString();
 				std::string uiName = ui._uiName.toString();
-				//canvas->_uiElements.at(i)._position;
-				//canvas->_uiElements.at(i)._size;
 
-				if (canvas->_canvasType == SCREEN_SPACE)
+				if (searchString == "" || uiName == searchString)
 				{
-					ImGui::InputFloat2(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._position), 3);
+					ImGui::Checkbox(std::string("IsActive##UI").append(std::to_string(i)).c_str(), &ui._isActive);
 
 					// Undo-Redo for Components
 					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
 					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
-					ImGui::InputFloat(std::string("Layer Order##").append(std::to_string(i)).c_str(), &ui._position.z, 1);
-
-					// Undo-Redo for Components
-					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-				}
-				else if (canvas->_canvasType == WORLD_SPACE)
-				{
-					ImGui::InputFloat3(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._position), 3);
-
-					// Undo-Redo for Components
-					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-				}
-				ImGui::InputFloat2(std::string("UISize##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._size), 3);
-
-				// Undo-Redo for Components
-				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-				_levelEditor->LE_AddInputText(std::string("UIName##").append(std::to_string(i)).c_str(), uiName, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-					[&uiName, &ui, &i]()
-					{
-						ui._uiName = uiName;
-					});
-
-				// Undo-Redo for Components
-				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-				_levelEditor->LE_AddInputText(std::string("Image##").append(std::to_string(i)).c_str(), tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-					[&tex, &ui, &i]()
-					{
-						ui.AddTexture(tex);
-						ui._fileName = tex;
-					});
-
-				// Undo-Redo for Components
-				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-				_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
-					[this, &tex, &ui, &i, &activeRead, &editedComp](std::string* str)
-					{
-						std::string data = *str;
-						std::transform(data.begin(), data.end(), data.begin(),
-							[](unsigned char c)
-							{ return (char)std::tolower(c); });
-
-						std::string fileType = LE_GetFileType(data);
-						if (fileType == "png" || fileType == "tga" || fileType == "dds")
+					if (_levelEditor->LE_AddCombo(std::string("UI Type").append(std::to_string(i)).c_str(), (int&)ui._type,
 						{
-							//SOIL doesnt deal with preceding slash
-							if (data[0] == '\\')
-							{
-								data.erase(0, 1);
-							}
-							tex = data;
+							"IMAGE",
+							"BUTTON"
+						}))
+					{
+						// Undo-Redo for Components
+						_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = true;
+					}
+
+
+					if (ImGui::Button(std::string("X##").append(std::to_string(i)).c_str()))
+					{
+						canvas->RemoveUI(i);
+
+						// Undo-Redo for Components
+						_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = true;
+					}
+
+					ImGui::SameLine();
+					//canvas->_uiElements.at(i)._position;
+					//canvas->_uiElements.at(i)._size;
+
+					if (canvas->_canvasType == SCREEN_SPACE)
+					{
+						ImGui::InputFloat2(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._position), 3);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+						ImGui::InputFloat(std::string("Layer Order##").append(std::to_string(i)).c_str(), &ui._position.z, 1);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+					}
+					else if (canvas->_canvasType == WORLD_SPACE)
+					{
+						ImGui::InputFloat3(std::string("UIPosition##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._position), 3);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+					}
+					ImGui::InputFloat2(std::string("UISize##").append(std::to_string(i)).c_str(), glm::value_ptr(ui._size), 3);
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+					_levelEditor->LE_AddInputText(std::string("UIName##").append(std::to_string(i)).c_str(), uiName, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+						[&uiName, &ui, &i]()
+						{
+							ui._uiName = uiName;
+						});
+
+					// Undo-Redo for Components
+					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+					_levelEditor->LE_AddInputText(std::string("Image##").append(std::to_string(i)).c_str(), tex, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+						[&tex, &ui, &i]()
+						{
 							ui.AddTexture(tex);
 							ui._fileName = tex;
-
-							// Undo-Redo for Components
-							_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
-							editedComp = true;
-						}
-					});
-
-				ImGui::Checkbox(std::string("Animatable##").append(std::to_string(i)).c_str(), &ui._isAnimated);
-
-				// Undo-Redo for Components
-				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-				if (ui._isAnimated)
-				{
-					ImGui::InputScalar(std::string("Row##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._row);
+						});
 
 					// Undo-Redo for Components
 					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
 					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
-					ImGui::InputScalar(std::string("Column##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._column);
+					_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
+						[this, &tex, &ui, &i, &activeRead, &editedComp](std::string* str)
+						{
+							std::string data = *str;
+							std::transform(data.begin(), data.end(), data.begin(),
+								[](unsigned char c)
+								{ return (char)std::tolower(c); });
+
+							std::string fileType = LE_GetFileType(data);
+							if (fileType == "png" || fileType == "tga" || fileType == "dds")
+							{
+								//SOIL doesnt deal with preceding slash
+								if (data[0] == '\\')
+								{
+									data.erase(0, 1);
+								}
+								tex = data;
+								ui.AddTexture(tex);
+								ui._fileName = tex;
+
+								// Undo-Redo for Components
+								_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+								editedComp = true;
+							}
+						});
+
+					ImGui::Checkbox(std::string("Animatable##").append(std::to_string(i)).c_str(), &ui._isAnimated);
 
 					// Undo-Redo for Components
 					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
 					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
-					ImGui::InputScalar(std::string("Total Frame##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._totalFrame);
-
-					// Undo-Redo for Components
-					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-					if (ImGui::InputScalar(std::string("Frames per second##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._framesPerSecond))
+					if (ui._isAnimated)
 					{
-						if (ui._framesPerSecond == 0)
+						ImGui::InputScalar(std::string("Row##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._row);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+						ImGui::InputScalar(std::string("Column##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._column);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+						ImGui::InputScalar(std::string("Total Frame##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._totalFrame);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+						if (ImGui::InputScalar(std::string("Frames per second##").append(std::to_string(i)).c_str(), ImGuiDataType_U32, &ui._framesPerSecond))
 						{
-							ui._animationRate = 0.0f;
+							if (ui._framesPerSecond == 0)
+							{
+								ui._animationRate = 0.0f;
+							}
+							else
+							{
+								ui._animationRate = 1.0f / ui._framesPerSecond;
+							}
 						}
-						else
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+						ImGui::Checkbox(std::string("Play##").append(std::to_string(i)).c_str(), &ui._play);
+						ImGui::Checkbox(std::string("Loop##").append(std::to_string(i)).c_str(), &ui._loop);
+						ImGui::Checkbox(std::string("Auto Play##").append(std::to_string(i)).c_str(), &ui._autoPlay);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+						if (ImGui::Button("Test Animation##"))
 						{
-							ui._animationRate = 1.0f / ui._framesPerSecond;
+							ui.PlayAnimation(ui._loop);
+						}
+
+						//For debug
+						if (ImGui::Button("Next Frame##"))
+						{
+							ui._currentFrame++;
+
+							if (ui._currentFrame >= ui._totalFrame)
+							{
+								ui._currentFrame = 0;
+							}
 						}
 					}
 
-					// Undo-Redo for Components
-					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-					ImGui::Checkbox(std::string("Play##").append(std::to_string(i)).c_str(), &ui._play);
-					ImGui::Checkbox(std::string("Loop##").append(std::to_string(i)).c_str(), &ui._loop);
-					ImGui::Checkbox(std::string("Auto Play##").append(std::to_string(i)).c_str(), &ui._autoPlay);
+					ImGui::ColorEdit4(std::string("Colour##Canvas").append(std::to_string(i)).c_str(), glm::value_ptr(ui._colour));
 
 					// Undo-Redo for Components
 					_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
 					editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
-					if (ImGui::Button("Test Animation##"))
-					{
-						ui.PlayAnimation(ui._loop);
-					}
-
-					//For debug
-					if (ImGui::Button("Next Frame##"))
-					{
-						ui._currentFrame++;
-
-						if (ui._currentFrame >= ui._totalFrame)
-						{
-							ui._currentFrame = 0;
-						}
-					}
+					ImGui::Separator();
 				}
-
-				ImGui::ColorEdit4(std::string("Colour##Canvas").append(std::to_string(i)).c_str(), glm::value_ptr(ui._colour));
-
-				// Undo-Redo for Components
-				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-				ImGui::Separator();
 			}
 
 			if (ImGui::Button("Add UI"))
