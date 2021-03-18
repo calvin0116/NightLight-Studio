@@ -498,10 +498,12 @@ namespace NS_WINDOW
 		});
 
 		// Set callback for resizing
-		//glfwSetFramebufferSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
-		glfwSetWindowSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
+		//glfwSetWindowSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
+		glfwSetFramebufferSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
 		{
+			// Update orthogonal projection matrix with new width and height
 			NS_GRAPHICS::SYS_GRAPHICS->SetUIMatrix(width, height);
+
 			// Update rect in SystemMousePosition
 			SYS_INPUT->GetSystemMousePos().ResetWinSize();
 
@@ -698,6 +700,8 @@ namespace NS_WINDOW
 				// Get updated resolution sizing
 				SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
 
+				glfwSwapInterval(1); // IMPORTANT TO ENABLE VSYNC AGAIN
+
 				//glViewport(0, 0, appWidth, appHeight);
 				//SAE_GRAPHICS::system->SetViewport(0, 0); // Reset the viewport position to fit resize
 
@@ -739,6 +743,8 @@ namespace NS_WINDOW
 
 				// Get updated resolution sizing
 				SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+
+				glfwSwapInterval(1); // IMPORTANT TO ENABLE VSYNC AGAIN
 
 				//SAE_GRAPHICS::system->SetViewport(0, 0); // Reset the viewport position to fit resize
 
