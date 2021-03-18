@@ -583,6 +583,15 @@ namespace NS_WINDOW
 				ToggleMaximizeWindowed();
 			});
 
+		// Button Press for fullscreen
+		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TOGGLE_FULLSCREEN", SystemInput_ns::IKEY_F9, "TOGGLE_FULLSCREEN", SystemInput_ns::OnPress, [this]()
+			{
+				if (isWndMode)
+					SetFullScreenMode(true);
+				else
+					SetFullScreenMode(false);
+			});
+
 		return;
 	}
 
@@ -701,7 +710,7 @@ namespace NS_WINDOW
 				//InvalidateRect(hAppWnd, NULL, TRUE);
 				const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-				glfwSetWindowMonitor(_glfwWnd, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, 0);
+				glfwSetWindowMonitor(_glfwWnd, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, mode->refreshRate);
 
 				RECT rect; // Making a rect to ensure that size is proper
 				GetClientRect(GetHandlerToWindow(), &rect);
