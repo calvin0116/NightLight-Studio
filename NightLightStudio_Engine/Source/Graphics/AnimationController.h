@@ -8,6 +8,7 @@ struct Model;
 struct AnimationController
 {
 	std::string _currAnim;
+	std::string _prevAnim;
 	std::string _defaultAnim;
 
 	std::set<std::string> _allAnims;

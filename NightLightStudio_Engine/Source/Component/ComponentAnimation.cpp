@@ -44,7 +44,7 @@ bool ComponentAnimation::IsFinished(const std::string& anim)
 {
 	//TracyMessage(anim.c_str(), anim.size());
 	return !NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_play &&
-		NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_currAnim == anim;
+		NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_prevAnim == anim;
 }
 
 bool ComponentAnimation::IsFinished()
