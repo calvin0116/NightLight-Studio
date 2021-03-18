@@ -90,7 +90,7 @@ namespace NS_GRAPHICS
         // Default values are set if not called throughout program lifetime
         // fov must be given in degrees
         // DO NOT, DO NOT CHANGE NEAR PLANE
-        void SetProjectionMatrix(const float& fov = 45.f, const float& aspect_ratio = 1.78f, const float& near_plane = 1.0f, const float& far_plane = 50000.f);
+        void SetProjectionMatrix(const float& fov = 45.f, const float& aspect_ratio = 1.78f, const float& near_plane = 1.0f, const float& far_plane = 500000.f);
 
         // Sets ortho projection for UI
         void SetUIMatrix(const int& width, const int& height, const float& near_plane = -100.0f, const float& far_plane = 100.f);
