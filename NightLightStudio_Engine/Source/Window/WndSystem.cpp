@@ -488,7 +488,6 @@ namespace NS_WINDOW
 		}
 
 		hasInit = true;
-		SetFullScreenMode(CONFIG_DATA->GetConfigData().toFullScreen); //<- Use json to control
 
 		// Set callback for mouse scroll
 		glfwSetScrollCallback(_glfwWnd, [](GLFWwindow * window, double xoffset, double yoffset)
@@ -581,6 +580,8 @@ namespace NS_WINDOW
 			{
 				ToggleMaximizeWindowed();
 			});
+
+		SetFullScreenMode(CONFIG_DATA->GetConfigData().toFullScreen); //<- Use json to control
 
 		return;
 	}
