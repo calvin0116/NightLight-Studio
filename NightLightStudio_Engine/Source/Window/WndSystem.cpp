@@ -579,51 +579,7 @@ namespace NS_WINDOW
 		// Button Press for borderless windowed
 		SYS_INPUT->GetSystemKeyPress().CreateNewEvent("TOGGLE_BORDERLESS_WINDOWED", SystemInput_ns::IKEY_F10, "TOGGLE_BORDERLESS_WINDOWED", SystemInput_ns::OnPress, [this]()
 			{
-				// If window is not maximized, maximize the window
-				if (!maximized_windowed)
-				{
-					glfwMaximizeWindow(_glfwWnd);
-
-					RECT rect; // Making a rect to ensure that size is proper
-					GetClientRect(GetHandlerToWindow(), &rect);
-
-					// 2nd param must be null for windowed mode
-					glfwSetWindowMonitor(_glfwWnd, nullptr, 0, 0, rect.right - rect.left, rect.bottom - rect.top, 0);
-
-					glViewport(0, 0, rect.right - rect.left, rect.bottom - rect.top);
-
-					SetWindowedSize(rect.right - rect.left, rect.bottom - rect.top);
-
-					RestoreWindowed();
-
-					// Get updated resolution sizing
-					SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
-
-					maximized_windowed = true;
-				}
-				else // Restore original configuration for windowed mode
-				{
-					glfwRestoreWindow(_glfwWnd);
-
-					RECT rect; // Making a rect to ensure that size is proper
-					GetClientRect(GetHandlerToWindow(), &rect);
-
-					// 2nd param must be null for windowed mode
-					glfwSetWindowMonitor(_glfwWnd, nullptr, CONFIG_DATA->GetConfigData().width / 3, CONFIG_DATA->GetConfigData().height / 3, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0);
-
-					glViewport(0, 0, rect.right - rect.left, rect.bottom - rect.top);
-
-					SetWindowedSize(CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height);
-
-					RestoreWindowed();
-
-					// Get updated resolution sizing
-					SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
-
-					maximized_windowed = false;
-				}
-
-				
+				ToggleMaximizeWindowed();
 			});
 
 		return;
@@ -722,6 +678,11 @@ namespace NS_WINDOW
 		{
 			if (isWndMode && set) // To switch to fullscreen & client is currently windowed
 			{
+				// If fullscreen is set while maximized window is set
+				// Deactivate maximize, MUST CALL ORIGINAL FUNCTION AND NOT DIRECTLY SET THE BOOL TO FALSE
+				if (maximized_windowed)
+					ToggleMaximizeWindowed();
+
 				//// Change resolution to fit window
 				//DEVMODE resolutionSetting;
 				//resolutionSetting.dmSize = sizeof(DEVMODE);
@@ -957,5 +918,69 @@ namespace NS_WINDOW
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, NS_GRAPHICS::SYS_GRAPHICS->GetDepthBuffer());
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void WndSystem::SetMaximizedWindow(const bool& set)
+	{
+		if (set == maximized_windowed)
+			return;
+
+		ToggleMaximizeWindowed();
+	}
+
+	void WndSystem::ToggleMaximizeWindowed()
+	{
+		// If fullscreen, do not run
+		if (!isWndMode)
+			return;
+
+		// If window is not maximized, maximize the window
+		if (!maximized_windowed)
+		{
+			glfwMaximizeWindow(_glfwWnd);
+
+			RECT rect; // Making a rect to ensure that size is proper
+			GetClientRect(GetHandlerToWindow(), &rect);
+
+			// 2nd param must be null for windowed mode
+			glfwSetWindowMonitor(_glfwWnd, nullptr, 0, 0, rect.right - rect.left, rect.bottom - rect.top, 0);
+
+			glViewport(0, 0, rect.right - rect.left, rect.bottom - rect.top);
+
+			SetWindowedSize(rect.right - rect.left, rect.bottom - rect.top);
+
+			RestoreWindowed();
+
+			// Get updated resolution sizing
+			SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+
+			maximized_windowed = true;
+		}
+		else // Restore original configuration for windowed mode
+		{
+			glfwRestoreWindow(_glfwWnd);
+
+			RECT rect; // Making a rect to ensure that size is proper
+			GetClientRect(GetHandlerToWindow(), &rect);
+
+			// 2nd param must be null for windowed mode
+			glfwSetWindowMonitor(_glfwWnd, nullptr, CONFIG_DATA->GetConfigData().width / 3, CONFIG_DATA->GetConfigData().height / 3, CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height, 0);
+
+			glViewport(0, 0, rect.right - rect.left, rect.bottom - rect.top);
+
+			SetWindowedSize(CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height);
+
+			RestoreWindowed();
+
+			// Get updated resolution sizing
+			SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+
+			maximized_windowed = false;
+		}
+	}
+
+	bool WndSystem::isMaximizedWindowed() const
+	{
+		return maximized_windowed;
 	}
 }

@@ -98,6 +98,13 @@ namespace NS_WINDOW
 		// Called to restore window size after revertint from fullscreen
 		void RestoreWindowed();
 
+		void SetMaximizedWindow(const bool&);
+
+		// Toggles maximized window, if window is already maximized, restore windowed mode with original configuration
+		void ToggleMaximizeWindowed();
+
+		bool isMaximizedWindowed() const;
+
 	protected:
 		HWND		hAppWnd;			// Handler to window
 		//HINSTANCE	hAppInstance;		// Handle to application instance

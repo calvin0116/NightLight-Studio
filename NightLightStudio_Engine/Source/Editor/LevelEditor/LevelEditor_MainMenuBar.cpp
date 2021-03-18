@@ -149,7 +149,6 @@ void LevelEditor::LE_MainMenuBar()
         }
 
 
-
         std::vector<std::string> editorNames;
         std::vector<std::function<void()>> funcs;
         for (unsigned i = 0; i < _editorWind.size(); ++i)
@@ -216,6 +215,18 @@ void LevelEditor::LE_MainMenuBar()
     // Grid Control
     if (ImGui::BeginMenuBar())
     {
+        // Add maximize window option
+        if (NS_WINDOW::SYS_WINDOW->GetWindowedMode())
+        {
+            bool maximized_win = NS_WINDOW::SYS_WINDOW->isMaximizedWindowed();
+
+            ImGui::Separator();
+            LE_AddCheckbox("Maximize Window", &maximized_win, [this, &maximized_win]() {
+                NS_WINDOW::SYS_WINDOW->SetMaximizedWindow(maximized_win);
+                });
+            ImGui::Separator();
+        }
+
         NS_GRAPHICS::DebugManager& dm = NS_GRAPHICS::DebugManager::GetInstance();
         //ImGui::SetCursorPosX(viewport->GetWorkSize().x / 10.0f);
         ImGui::Separator();
