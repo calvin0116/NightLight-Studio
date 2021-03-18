@@ -129,6 +129,11 @@ namespace Unicorn
       return OnExit_Internal(this.native_handle);
     }
 
+    public bool OnRelease()
+    {
+      return OnRelease_Internal(this.native_handle);
+    }
+
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool OnClick_Internal(IntPtr native_handle);
 
@@ -140,6 +145,9 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool OnExit_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool OnRelease_Internal(IntPtr native_handle);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool get_IsActive_Internal(IntPtr native_handle);

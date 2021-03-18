@@ -59,4 +59,6 @@ namespace UIElementBind
   bool OnEnter_Internal(const UI_Element* ui);
 
   bool OnExit_Internal(const UI_Element* ui);
+
+  bool OnRelease_Internal(const UI_Element* ui);
 }

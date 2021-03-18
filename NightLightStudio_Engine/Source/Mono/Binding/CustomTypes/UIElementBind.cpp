@@ -74,6 +74,9 @@ namespace UIElementBind
 
     MonoWrapper::BindClassFunction(OnExit_Internal, "OnExit_Internal",
       "UIElement");
+
+    MonoWrapper::BindClassFunction(OnRelease_Internal, "OnRelease_Internal",
+      "UIElement");
   }
 
   bool get_IsActive_Internal(const UI_Element* ui)
@@ -242,5 +245,10 @@ namespace UIElementBind
   bool OnExit_Internal(const UI_Element* ui)
   {
     return ui->OnExit();
+  }
+
+  bool OnRelease_Internal(const UI_Element* ui)
+  {
+    return ui->OnRelease();
   }
 }
