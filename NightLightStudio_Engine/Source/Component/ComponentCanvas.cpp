@@ -457,6 +457,11 @@ void UI_Element::StopAnimation()
 	_currentFrame = 0;
 }
 
+bool UI_Element::CheckIfLastFrame()
+{
+	return (_currentFrame-1) == _totalFrame;
+}
+
 //bool UI_Element::OnClick()
 //{
 //	glm::vec2 mouse = SYS_INPUT->GetSystemMousePos().GetMousePos();

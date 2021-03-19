@@ -139,6 +139,11 @@ namespace Unicorn
       SetFrame_Internal(this.native_handle, index);
     }
 
+    public bool CheckIfLastFrame()
+    {
+      return CheckIfLastFrame_Internal(this.native_handle);
+    }
+
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool OnClick_Internal(IntPtr native_handle);
 
@@ -156,6 +161,9 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void SetFrame_Internal(IntPtr native_handle, uint index);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool CheckIfLastFrame_Internal(IntPtr native_handle);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool get_IsActive_Internal(IntPtr native_handle);

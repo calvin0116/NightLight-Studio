@@ -80,6 +80,9 @@ namespace UIElementBind
 
     MonoWrapper::BindClassFunction(SetFrame_Internal, "SetFrame_Internal",
       "UIElement");
+
+    MonoWrapper::BindClassFunction(CheckIfLastFrame_Internal, "CheckIfLastFrame_Internal",
+      "UIElement");
   }
 
   bool get_IsActive_Internal(const UI_Element* ui)
@@ -258,5 +261,10 @@ namespace UIElementBind
   void SetFrame_Internal(UI_Element* ui, unsigned int index)
   {
     ui->SetFrame(index);
+  }
+
+  bool CheckIfLastFrame_Internal(UI_Element* ui)
+  {
+      return ui->CheckIfLastFrame();
   }
 }

@@ -63,4 +63,6 @@ namespace UIElementBind
   bool OnRelease_Internal(const UI_Element* ui);
 
   void SetFrame_Internal(UI_Element* ui, unsigned int index);
+
+  bool CheckIfLastFrame_Internal(UI_Element* ui);
 }

@@ -56,6 +56,8 @@ struct UI_Element
 	void PlayAnimation(bool loop = false); // Expose
 	void StopAnimation();
 
+	bool CheckIfLastFrame();
+
 	//Expose this
 	//bool OnClick();
 	//Works only on screen space
