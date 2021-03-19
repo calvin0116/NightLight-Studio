@@ -77,6 +77,9 @@ namespace UIElementBind
 
     MonoWrapper::BindClassFunction(OnRelease_Internal, "OnRelease_Internal",
       "UIElement");
+
+    MonoWrapper::BindClassFunction(SetFrame_Internal, "SetFrame_Internal",
+      "UIElement");
   }
 
   bool get_IsActive_Internal(const UI_Element* ui)
@@ -250,5 +253,10 @@ namespace UIElementBind
   bool OnRelease_Internal(const UI_Element* ui)
   {
     return ui->OnRelease();
+  }
+
+  void SetFrame_Internal(UI_Element* ui, unsigned int index)
+  {
+    ui->SetFrame(index);
   }
 }

@@ -134,6 +134,11 @@ namespace Unicorn
       return OnRelease_Internal(this.native_handle);
     }
 
+    public void SetFrame(uint index)
+    {
+      SetFrame_Internal(this.native_handle, index);
+    }
+
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool OnClick_Internal(IntPtr native_handle);
 
@@ -148,6 +153,9 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool OnRelease_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void SetFrame_Internal(IntPtr native_handle, uint index);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool get_IsActive_Internal(IntPtr native_handle);
