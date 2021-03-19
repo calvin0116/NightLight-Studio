@@ -157,6 +157,7 @@ int SystemAudio::Play3DOnce(const std::string& name, const int _id)
         temp->setMode(FMOD_LOOP_OFF);
         temp->setMode(FMOD_3D);
         temp->setMode(FMOD_3D_LINEARROLLOFF);
+        temp->setMode(FMOD_3D);
         glm::vec3 _pos = G_ECMANAGER->getEntity(_id).getComponent<TransformComponent>()->_position;
         _fmodPos = { _pos.x, _pos.y, _pos.z };
         temp->set3DAttributes(&_fmodPos, nullptr);
@@ -273,8 +274,8 @@ void SystemAudio::MyGameInit()
 
     // Load the following audios from load audio component
     ComponentLoadAudio* myComp = G_ECMANAGER->getComponent<ComponentLoadAudio>(itr);
-    for (const auto& [path, name] : myComp->_sounds)
-      LoadSound(path, name);
+    //for (const auto& [path, name] : myComp->_sounds)
+    //  LoadSound(path, name);
   }
   // Init
   auto itr1 = G_ECMANAGER->begin<AudioComponent>();
