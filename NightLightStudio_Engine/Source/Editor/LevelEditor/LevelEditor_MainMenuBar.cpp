@@ -63,8 +63,8 @@ void LevelEditor::LE_MainMenuBar()
     if (ImGui::BeginMenuBar())
     {
         LE_AddMenuWithItems("File", 
-            { "New" , "Open" , "Save", "Save As"},
-            { "" , "" , "Ctrl-S", "" },
+            { "New" , "Open" , "Save", "Save As", "Exit"},
+            { "" , "" , "Ctrl-S", "", "F8" },
             {
                 [this]()
                 {
@@ -111,7 +111,13 @@ void LevelEditor::LE_MainMenuBar()
                     //std::cout << fileToSaveTo << std::endl;
                     if (fileToSaveTo != "")
                         NS_SCENE::SYS_SCENE_MANAGER->SaveScene(fileToSaveTo);
+                },
+                []()
+                {
+                    NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(NS_SCENE::EXIT_SCENCE);
                 }
+
+
             });
 
 
