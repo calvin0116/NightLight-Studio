@@ -13,6 +13,9 @@ namespace ECSBind
   float realDt();
   // Scene change
   void  SetNextScene(MonoString* scene_name);
+  // Pause game
+  void	SetPause(bool _val);
+  bool	GetPause();
   // Print in console
   void  Print(MonoString* text);
   // Ray cast

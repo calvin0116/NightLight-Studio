@@ -15,6 +15,8 @@
 #include "../tracy-master/Tracy.hpp"
 // SpeedLog
 #include "../../../Log/SpeedLog.h"
+// System Manager, pause/unpause
+#include "../../../Core/SystemManager.h"
 
 //#define CSDebug
 
@@ -26,6 +28,8 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(dt, "DT", "UniBehaviour");
     MonoWrapper::BindClassFunction(realDt, "RealDT", "UniBehaviour");
     MonoWrapper::BindClassFunction(SetNextScene, "SetNextScene", "UniBehaviour");
+    MonoWrapper::BindClassFunction(SetPause, "SetPause", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetPause, "GetPause", "UniBehaviour");
     MonoWrapper::BindClassFunction(Print, "Print", "UniBehaviour");
     MonoWrapper::BindClassFunction(RayCastIntersect, "RayCastIntersect", "UniBehaviour");
     MonoWrapper::BindClassFunction(RayCast, "RayCast", "UniBehaviour");
@@ -46,8 +50,8 @@ namespace ECSBind
   // For debugging in C#
   bool CheckCompGet(const void* comp, const std::string& type, const int& id)
   {
-      (void)type;
-      (void)id;
+    (void)type;
+    (void)id;
     if (comp == nullptr)
     {
 #ifdef CSDebug
@@ -72,17 +76,27 @@ namespace ECSBind
   // Delta Time
   float dt()
   {
-      return DELTA_T->fixed_dt;
+    return DELTA_T->fixed_dt;
   }
 
   float realDt()
   {
-      return DELTA_T->real_dt;// DELTA_T->real_dt;// / CLOCKS_PER_SEC;
+    return DELTA_T->real_dt;// DELTA_T->real_dt;// / CLOCKS_PER_SEC;
   }
 
   void SetNextScene(MonoString* scene_name)
   {
     NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(MonoWrapper::ToString(scene_name));
+  }
+
+  void SetPause(bool _val)
+  {
+    SYS_MAN->SetPause(_val);
+  }
+
+  bool GetPause()
+  {
+    return SYS_MAN->GetPause();
   }
 
   void Print(MonoString* text)
@@ -102,7 +116,7 @@ namespace ECSBind
     myEndPos.x = MonoWrapper::GetObjectFieldValue<float>(endPos, "X");
     myEndPos.y = MonoWrapper::GetObjectFieldValue<float>(endPos, "Y");
     myEndPos.z = MonoWrapper::GetObjectFieldValue<float>(endPos, "Z");
-    
+
     NlMath::Vec3 myIntersect;
     int entity = -1;
     entity = NS_COLLISION::SYS_COLLISION->Check_RayCollision(myOrigin, myEndPos, myIntersect, pos);

@@ -55,6 +55,7 @@ struct ConfigData
 	bool sceneRunning;
 	bool levelEditorMode;
 	bool isPlaying;
+	bool isPaused;
 
 	float gamma;
 };

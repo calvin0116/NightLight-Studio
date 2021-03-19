@@ -73,6 +73,9 @@ namespace NS_PHYSICS
 		/////////////////////////////////////////////////////////////////////////////////////////////////
 		//TA's example
 
+		//Check if engine should run
+		if (!isActive)
+			return;
 
 		// update the forces
 		//_forceManager.updateTranslationalForces();

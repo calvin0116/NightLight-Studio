@@ -29,11 +29,13 @@ enum class S_PRIORITY
 
 class MySystem : public ISystem
 {
-protected:
+//protected:
 	//int id;
 	//S_PRIORITY priority;	//Not used
-	bool isActive;
+
 public:
+	bool isActive;
+
 	MySystem()
 		:isActive{true}
 		//: id{ -1 }

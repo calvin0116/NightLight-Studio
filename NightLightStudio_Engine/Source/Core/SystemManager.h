@@ -24,6 +24,8 @@ private:
 	//Map of system according to their piority
 	std::map<S_PRIORITY, MySystem*> Systems;
 	//std::vector< MySystem *
+
+
 public:
 	//List of function calling for all system
 	//== Memory allocation phase / Load all system
@@ -59,6 +61,16 @@ public:
 	{
 		return Systems[sys_p];
 	}
+	//Pause
+	void SetPause(bool _isPaused) {
+		CONFIG_DATA->GetConfigData().isPaused = _isPaused;
+		Systems[S_PRIORITY::SP_PHYSICS]->isActive = _isPaused;
+		Systems[S_PRIORITY::SP_AI]->isActive = _isPaused;
+	};
+	bool GetPause()
+	{
+		return CONFIG_DATA->GetConfigData().isPaused;
+	};
 };
 
 //Access point for all system
