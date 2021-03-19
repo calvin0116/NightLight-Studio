@@ -526,6 +526,7 @@ void UI_Element::SetFrame(unsigned index)
 
 	_currentFrame = index;
 	_play = false;
+	_autoPlay = false;
 }
 
 bool UI_Element::operator<(const UI_Element& rhs)
