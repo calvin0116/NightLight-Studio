@@ -78,7 +78,8 @@ namespace NS_GRAPHICS
 		UpdateLights();
 
 		// Update Animation
-		animManager->Update();
+		if (isActive)
+			animManager->Update();
 
 		Render();
 

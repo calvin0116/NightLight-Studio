@@ -519,6 +519,16 @@ bool UI_Element::OnExit() const
 	return _mouseExit && _isActive;
 }
 
+void UI_Element::SetFrame(unsigned index)
+{
+	if (index >= _totalFrame)
+		return;
+
+	_currentFrame = index;
+	_play = false;
+	_autoPlay = false;
+}
+
 bool UI_Element::operator<(const UI_Element& rhs)
 {
 	return _position.z < rhs._position.z;

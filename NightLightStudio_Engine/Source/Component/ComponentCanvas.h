@@ -65,6 +65,10 @@ struct UI_Element
 	bool OnExit() const;
 	bool OnRelease() const;
 
+	//Alex expose this if aiden need;
+	//Pauses the animation and set it to specific frame
+	void SetFrame(unsigned index);
+
 	bool operator<(const UI_Element& rhs);
 
 	bool _mouseEnter = false;

@@ -14,6 +14,7 @@
 NS_GRAPHICS::EmitterSystem::EmitterSystem() :
 	_particleDrawing{ true },
 	_isPlaying{ false },
+	_paused{ false },
 	_textureManager{ nullptr },
 	_shaderSystem{ nullptr },
 	_cameraSystem{ nullptr }
@@ -71,7 +72,8 @@ void NS_GRAPHICS::EmitterSystem::Update()
 				continue;
 			}
 
-			UpdateEmitter(emitter, DELTA_T->real_dt);
+			if(!_paused)
+				UpdateEmitter(emitter, DELTA_T->real_dt);
 			Render(emitter);
 
 			itr++;
