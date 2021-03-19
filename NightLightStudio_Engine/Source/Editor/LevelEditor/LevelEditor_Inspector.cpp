@@ -193,6 +193,11 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<CameraComponent>();
 			entComp._ent.getComponent<CameraComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(ListenerComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<ListenerComponent>();
+			entComp._ent.getComponent<ListenerComponent>()->Read(*entComp._rjDoc);
+		}
 
 		return comp;
 	};
@@ -296,6 +301,11 @@ void InspectorWindow::Start()
 			entComp.Copy(entComp._ent.getComponent<CameraComponent>()->Write());
 			entComp._ent.RemoveComponent<CameraComponent>();
 		}
+		else if (t == typeid(ListenerComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<ListenerComponent>()->Write());
+			entComp._ent.RemoveComponent<ListenerComponent>();
+		}
 
 		return std::any(entComp);
 	};
@@ -326,6 +336,8 @@ void InspectorWindow::Start()
 		std::function(Paste_Component<AnimationComponent>), std::function(Paste_Component<AnimationComponent>));
 	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_EMITTER"),
 		std::function(Paste_Component<EmitterComponent>), std::function(Paste_Component<EmitterComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_EMITTER"),
+		std::function(Paste_Component<ListenerComponent>), std::function(Paste_Component<ListenerComponent>));
 	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_PLAYER"),
 		std::function(Paste_Component<PlayerStatsComponent>), std::function(Paste_Component<PlayerStatsComponent>));
 	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_CAULDRON"),
@@ -468,6 +480,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	AnimationComp(ent);
 
 	EmitterComp(ent);
+
+	ListenerComp(ent);
 
 	CScriptComp(ent);
 
@@ -2533,6 +2547,113 @@ void InspectorWindow::EmitterComp(Entity& ent)
 	}
 }
 
+void InspectorWindow::ListenerComp(Entity& ent)
+{
+	ListenerComponent* lisComp = ent.getComponent<ListenerComponent>();
+	if (lisComp == nullptr)
+		return;
+
+	// Undo-Redo for Components
+	ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ListenerComponent>()->Write() };
+	bool editedComp = false;
+
+	if (ImGui::CollapsingHeader("Listener component", &_notRemove))
+		ImGui::Checkbox("IsActive##Listener", &lisComp->_isActive);
+	if (!_notRemove)
+	{
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<ListenerComponent>()->Write(), typeid(ListenerComponent).hash_code() };
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+		_notRemove = true;
+	}
+
+	if (editedComp)
+	{
+		if (_origComp._entID != -1)
+		{
+			// Undo-Redo for Components
+			//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+			//bool editedComp = false;
+
+			// Undo-Redo for Components
+			//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+			//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+			ENTITY_COMP_READ finalComp{ ent, ent.getComponent<ListenerComponent>()->Write() };
+			lisComp->Read(*_origComp._rjDoc);
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_CAMERA"), std::any(finalComp));
+			_origComp = ENTITY_COMP_READ{};
+		}
+	}
+
+	ImGui::Separator();
+	/*if (camComp != nullptr)
+	{
+		if (ImGui::CollapsingHeader("Animation component", &_notRemove))
+		{
+			ImGui::Checkbox("IsActive##Animation", &anim->_isActive);
+
+			ImGui::Text("Current Animation: ");
+			auto it = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
+			while (it != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
+			{
+				bool currAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim == *it;
+				if (ImGui::Selectable(it->c_str(), &currAnim))
+				{
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim = it->c_str();
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play = false;
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_dt = 0.0f;
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = "";
+				}
+				++it;
+			}
+
+			ImGui::Separator();
+			ImGui::Text("Default Animation: ");
+			auto it2 = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
+			while (it2 != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
+			{
+				bool defaultAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim == *it2;
+				if (ImGui::Selectable(std::string(it2->c_str()).append("##defaultAnim").c_str(), &defaultAnim))
+				{
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = it2->c_str();
+				}
+				++it2;
+			}
+
+			ImGui::InputFloat("Animation Speed##anim", &NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_animMultiplier);
+
+			if (ImGui::Button("Preview Animation"))
+			{
+				anim->PlayAnimation(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim,
+					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_loop);
+			}
+
+			if (NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play)
+			{
+				if (ImGui::Button("Pause Animation"))
+				{
+					anim->PauseAnimation();
+				}
+			}
+			else
+			{
+				if (ImGui::Button("Resume Animation"))
+				{
+					anim->ResumeAnimation();
+				}
+			}
+
+			if (ImGui::Button("Stop Animation"))
+			{
+				anim->StopAnimation();
+			}
+
+			ImGui::Checkbox("Loop", &NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_loop);
+		}
+
+		ImGui::Separator();
+	}*/
+}
 void InspectorWindow::CameraComp(Entity& ent)
 {
 	CameraComponent* camComp = ent.getComponent<CameraComponent>();
@@ -3463,7 +3584,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  WayPointPath",
 			"  WayPointComp",
 			"  Emitter",
-			"  Camera"
+			"  Camera",
+			"  Listener"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -3639,6 +3761,15 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			if (!ent.getComponent<CameraComponent>())
 			{
 				ENTITY_COMP_DOC comp{ ent, CameraComponent().Write(), typeid(CameraComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		case 16: // Listener
+		{
+			if (!ent.getComponent<ListenerComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, ListenerComponent().Write(), typeid(ListenerComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;

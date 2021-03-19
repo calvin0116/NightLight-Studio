@@ -18,6 +18,7 @@
 #include "ComponentCanvas.h"
 #include "ComponentAnimation.h"
 #include "ComponentEmitter.h"
+#include "ComponentListener.h"
 
 //Stats components
 #include "ComponentPlayerStats.h"

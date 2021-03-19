@@ -101,5 +101,11 @@ namespace LS
 			//NS_GRAPHICS::EmitterSystem::GetInstance().RemoveEmitterByID(ent.getComponent<EmitterComponent>()->_emitterID);
 			compData.insert(std::make_pair(typeid(EmitterComponent).hash_code(), comp));
 		}
+		if (ent.getComponent<ComponentListener>())
+		{
+			ENTITY_COMP_INFO comp(ent.getComponent<ComponentListener>()->Write());
+			//NS_GRAPHICS::EmitterSystem::GetInstance().RemoveEmitterByID(ent.getComponent<EmitterComponent>()->_emitterID);
+			compData.insert(std::make_pair(typeid(ComponentListener).hash_code(), comp));
+		}
 	}
 }

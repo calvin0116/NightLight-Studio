@@ -183,11 +183,13 @@
     <ClInclude Include="Source\Ai\AiGraph.h" />
     <ClInclude Include="Source\Component\ComponentCScript.h" />
     <ClInclude Include="Source\Component\ComponentEmitter.h" />
+    <ClInclude Include="Source\Component\ComponentListener.h" />
     <ClInclude Include="Source\Component\ComponentResolver.h" />
     <ClInclude Include="Source\Core\AssetInfo.h" />
     <ClInclude Include="Source\Core\AssetsMananger.h" />
     <ClInclude Include="Source\Core\TagHandler.h" />
     <ClInclude Include="Source\Editor\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Audio.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Source\Ai\AiManager.h" />
@@ -334,11 +336,13 @@
     <ClCompile Include="Source\Ai\WayPointManager.cpp" />
     <ClCompile Include="Source\Component\ComponentCScript.cpp" />
     <ClCompile Include="Source\Component\ComponentEmitter.cpp" />
+    <ClCompile Include="Source\Component\ComponentListener.cpp" />
     <ClCompile Include="Source\Component\ComponentNavigator.cpp" />
     <ClCompile Include="Source\Component\ComponentResolver.cpp" />
     <ClCompile Include="Source\Component\ComponentWayPoint.cpp" />
     <ClCompile Include="Source\Core\AssetsMananger.cpp" />
     <ClCompile Include="Source\Editor\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Audio.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_CSVTag.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

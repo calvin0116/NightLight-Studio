@@ -141,6 +141,12 @@ void HierarchyInspector::Start()
 				NS_GRAPHICS::EmitterSystem::GetInstance().RemoveEmitterByID(ent.getComponent<EmitterComponent>()->_emitterID);
 				compData.insert(std::make_pair(typeid(EmitterComponent).hash_code(), comp));
 			}
+			if (ent.getComponent<ListenerComponent>())
+			{
+				LS::ENTITY_COMP_INFO comp(ent.getComponent<ListenerComponent>()->Write());
+				//NS_GRAPHICS::EmitterSystem::GetInstance().RemoveEmitterByID(ent.getComponent<ListenerComponent>()->_emitterID);
+				compData.insert(std::make_pair(typeid(ListenerComponent).hash_code(), comp));
+			}
 			compDataVec.push_back(std::make_pair(G_ECMANAGER->EntityName[ent.getId()], compData));
 
 			G_ECMANAGER->FreeEntity(ent.getId());
@@ -255,6 +261,11 @@ void HierarchyInspector::Start()
 				{
 					ent.AttachComponent<EmitterComponent>();
 					ent.getComponent<EmitterComponent>()->Read(*j.second._rjDoc);
+				}
+				if (j.first == typeid(ListenerComponent).hash_code())
+				{
+					ent.AttachComponent<ListenerComponent>();
+					ent.getComponent<ListenerComponent>()->Read(*j.second._rjDoc);
 				}
 			}
 

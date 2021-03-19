@@ -463,6 +463,8 @@
     <ClCompile Include="Source\Mono\Binding\Components\ComponentScriptBind.cpp">
       <Filter>Source Files\Mono\Binding\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\ComponentListener.cpp" />
+    <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Audio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -900,6 +902,8 @@
     <ClInclude Include="Source\Graphics\Shapes.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\ComponentListener.h" />
+    <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Audio.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />
