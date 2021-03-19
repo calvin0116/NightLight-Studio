@@ -66,6 +66,7 @@ public:
 		CONFIG_DATA->GetConfigData().isPaused = _isPaused;
 		Systems[S_PRIORITY::SP_PHYSICS]->isActive = _isPaused;
 		Systems[S_PRIORITY::SP_AI]->isActive = _isPaused;
+		Systems[S_PRIORITY::SP_GRAPHICS]->isActive = _isPaused;
 	};
 	bool GetPause()
 	{

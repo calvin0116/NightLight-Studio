@@ -85,7 +85,8 @@ namespace NS_GRAPHICS
 
 		//Updates emitter
 		//Renders particle in its own manager
-		emitterManager->Update();
+		if (isActive)
+			emitterManager->Update();
 		//UI Draws Last
 		//Renders UI in its own manager
 		uiManager->Update();
