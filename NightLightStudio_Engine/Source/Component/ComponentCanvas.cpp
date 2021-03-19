@@ -459,7 +459,7 @@ void UI_Element::StopAnimation()
 
 bool UI_Element::CheckIfLastFrame()
 {
-	return (_currentFrame-1) == _totalFrame;
+	return (_currentFrame+1) == _totalFrame;
 }
 
 //bool UI_Element::OnClick()
