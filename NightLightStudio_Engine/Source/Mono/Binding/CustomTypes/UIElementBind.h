@@ -61,4 +61,6 @@ namespace UIElementBind
   bool OnExit_Internal(const UI_Element* ui);
 
   bool OnRelease_Internal(const UI_Element* ui);
+
+  void SetFrame_Internal(UI_Element* ui, unsigned int index);
 }
