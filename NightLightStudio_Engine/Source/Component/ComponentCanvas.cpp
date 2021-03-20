@@ -265,10 +265,22 @@ void ComponentCanvas::Read(Value& val)
 			toPush._loop = val[loop.c_str()].GetBool();
 		}
 
+		std::string reverse = std::string("Reverse").append(std::to_string(i));
+		if (val.FindMember(reverse.c_str()) == val.MemberEnd())
+		{
+			//std::cout << "No reverse data has been found" << std::endl;
+			TracyMessageL("ComponentCanvas::Read: No Reverse data has been found");
+			SPEEDLOG("ComponentCanvas::Read: No Reverse data has been found");
+		}
+		else
+		{
+			toPush._reverse = val[reverse.c_str()].GetBool();
+		}
+
 		std::string autoPlay = std::string("AutoPlay").append(std::to_string(i));
 		if (val.FindMember(autoPlay.c_str()) == val.MemberEnd())
 		{
-			//std::cout << "No loop data has been found" << std::endl;
+			//std::cout << "No autoplay data has been found" << std::endl;
 			TracyMessageL("ComponentCanvas::Read: No AutoPlay data has been found");
 			SPEEDLOG("ComponentCanvas::Read: No AutoPlay data has been found");
 		}
@@ -378,6 +390,7 @@ Value ComponentCanvas::Write()
 
 		NS_SERIALISER::ChangeData(&val, std::string("Play").append(std::to_string(i)), _uiElements.at(i)._play);
 		NS_SERIALISER::ChangeData(&val, std::string("Loop").append(std::to_string(i)), _uiElements.at(i)._loop);
+		NS_SERIALISER::ChangeData(&val, std::string("Reverse").append(std::to_string(i)), _uiElements.at(i)._reverse);
 		NS_SERIALISER::ChangeData(&val, std::string("AutoPlay").append(std::to_string(i)), _uiElements.at(i)._autoPlay);
 
 		Value position(rapidjson::kArrayType);
@@ -432,14 +445,23 @@ void UI_Element::AddTexture(std::string filename)
 	}
 }
 
-void UI_Element::PlayAnimation(bool loop)
+void UI_Element::PlayAnimation(bool loop, bool reverse)
 {
 	if (!_isAnimated || _play)
 		return;
 
 	_play = true;
 	_loop = loop;
-	_currentFrame = 0;
+	_reverse = reverse;
+
+	if (_reverse)
+	{
+		_currentFrame = _totalFrame - 1;
+	}
+	else
+	{
+		_currentFrame = 0;
+	}
 
 	if (_framesPerSecond == 0)
 	{

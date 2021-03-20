@@ -42,7 +42,7 @@ namespace UIElementBind
 
   void AddTexture_Internal(UI_Element* ui, MonoString* val);
 
-  void PlayAnimation_Internal(UI_Element* ui, bool loop);
+  void PlayAnimation_Internal(UI_Element* ui, bool loop, bool reverse);
 
   void StopAnimation_Internal(UI_Element* ui);
 

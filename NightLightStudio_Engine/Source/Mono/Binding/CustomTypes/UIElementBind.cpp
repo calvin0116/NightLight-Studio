@@ -189,9 +189,9 @@ namespace UIElementBind
     ui->AddTexture(MonoWrapper::ToString(fileName));
   }
 
-  void PlayAnimation_Internal(UI_Element* ui, bool loop)
+  void PlayAnimation_Internal(UI_Element* ui, bool loop, bool reverse)
   {
-    ui->PlayAnimation(loop);
+    ui->PlayAnimation(loop, reverse);
   }
 
   void StopAnimation_Internal(UI_Element* ui)

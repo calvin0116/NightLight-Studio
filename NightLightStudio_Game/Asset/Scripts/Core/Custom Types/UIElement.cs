@@ -79,9 +79,9 @@ namespace Unicorn
       AddTexture_Internal(this.native_handle, fileName);
     }
 
-    public void PlayAnimation(bool loop = false)
+    public void PlayAnimation(bool loop = false, bool reverse = false)
     {
-      PlayAnimation_Internal(this.native_handle, loop);
+      PlayAnimation_Internal(this.native_handle, loop, reverse);
     }
 
     public void StopAnimation()
@@ -224,7 +224,7 @@ namespace Unicorn
     public extern static void AddTexture_Internal(IntPtr native_handle, string fileName);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static void PlayAnimation_Internal(IntPtr native_handle, bool val);
+    public extern static void PlayAnimation_Internal(IntPtr native_handle, bool val, bool val2);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void StopAnimation_Internal(IntPtr native_handle);

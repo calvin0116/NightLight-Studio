@@ -225,18 +225,38 @@ void NS_GRAPHICS::UISystem::RenderUI()
 					{
 						ui._timePassed = 0.0f;
 
-						++ui._currentFrame;
-						
-						if (ui._currentFrame >= ui._totalFrame)
+						if (ui._reverse)
 						{
-							if (ui._loop)
+							--ui._currentFrame;
+
+							if (ui._currentFrame >= ui._totalFrame)
 							{
-								ui._currentFrame = 0;
+								if (ui._loop)
+								{
+									ui._currentFrame = ui._totalFrame-1;
+								}
+								else
+								{
+									ui._play = false;
+									ui._currentFrame++;
+								}
 							}
-							else
+						}
+						else
+						{
+							++ui._currentFrame;
+
+							if (ui._currentFrame >= ui._totalFrame)
 							{
-								ui._play = false;
-								ui._currentFrame--;
+								if (ui._loop)
+								{
+									ui._currentFrame = 0;
+								}
+								else
+								{
+									ui._play = false;
+									ui._currentFrame--;
+								}
 							}
 						}
 					}
