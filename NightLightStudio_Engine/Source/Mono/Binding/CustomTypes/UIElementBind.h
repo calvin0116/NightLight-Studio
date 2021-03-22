@@ -42,7 +42,7 @@ namespace UIElementBind
 
   void AddTexture_Internal(UI_Element* ui, MonoString* val);
 
-  void PlayAnimation_Internal(UI_Element* ui, bool loop);
+  void PlayAnimation_Internal(UI_Element* ui, bool loop, bool reverse);
 
   void StopAnimation_Internal(UI_Element* ui);
 
@@ -63,4 +63,6 @@ namespace UIElementBind
   bool OnRelease_Internal(const UI_Element* ui);
 
   void SetFrame_Internal(UI_Element* ui, unsigned int index);
+
+  bool CheckIfLastFrame_Internal(UI_Element* ui);
 }

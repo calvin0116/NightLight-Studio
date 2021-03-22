@@ -91,7 +91,7 @@ namespace NS_SCENE
 		ZoneScopedNC("Scene Manager", 0xff1f2a);
 
 		//Exit button that uses scene
-		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_ESCAPE))
+		if (SYS_INPUT->GetSystemKeyPress().GetKeyHold(SystemInput_ns::IKEY_F8))
 		{
 			SetNextScene(EXIT_SCENCE);
 		}

@@ -1740,7 +1740,13 @@ void InspectorWindow::CanvasComp(Entity& ent)
 				std::string tex = ui._fileName.toString();
 				std::string uiName = ui._uiName.toString();
 
-				if (searchString == "" || uiName == searchString)
+				std::string tempString = uiName;
+				std::string tempSearchString = searchString;
+
+				std::transform(tempString.begin(), tempString.end(), tempString.begin(), ::toupper);
+				std::transform(tempSearchString.begin(), tempSearchString.end(), tempSearchString.begin(), ::toupper);
+
+				if (searchString == "" || tempString.find(tempSearchString) != std::string::npos)
 				{
 					ImGui::Checkbox(std::string("IsActive##UI").append(std::to_string(i)).c_str(), &ui._isActive);
 
@@ -1893,6 +1899,7 @@ void InspectorWindow::CanvasComp(Entity& ent)
 
 						ImGui::Checkbox(std::string("Play##").append(std::to_string(i)).c_str(), &ui._play);
 						ImGui::Checkbox(std::string("Loop##").append(std::to_string(i)).c_str(), &ui._loop);
+						ImGui::Checkbox(std::string("Reverse##").append(std::to_string(i)).c_str(), &ui._reverse);
 						ImGui::Checkbox(std::string("Auto Play##").append(std::to_string(i)).c_str(), &ui._autoPlay);
 
 						// Undo-Redo for Components

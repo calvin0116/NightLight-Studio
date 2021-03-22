@@ -46,6 +46,7 @@ struct UI_Element
 	//Should be exposed?
 	bool _play = false;
 	bool _loop = false;
+	bool _reverse = false;
 	bool _autoPlay = false;
 
 	LocalString<256> _fileName;
@@ -53,8 +54,10 @@ struct UI_Element
 
 	glm::mat4 GetModelMatrix();
 	void AddTexture(std::string filename); // Expose
-	void PlayAnimation(bool loop = false); // Expose
+	void PlayAnimation(bool loop = false, bool reverse = false); // Expose
 	void StopAnimation();
+
+	bool CheckIfLastFrame();
 
 	//Expose this
 	//bool OnClick();

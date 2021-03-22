@@ -79,9 +79,9 @@ namespace Unicorn
       AddTexture_Internal(this.native_handle, fileName);
     }
 
-    public void PlayAnimation(bool loop = false)
+    public void PlayAnimation(bool loop = false, bool reverse = false)
     {
-      PlayAnimation_Internal(this.native_handle, loop);
+      PlayAnimation_Internal(this.native_handle, loop, reverse);
     }
 
     public void StopAnimation()
@@ -139,6 +139,11 @@ namespace Unicorn
       SetFrame_Internal(this.native_handle, index);
     }
 
+    public bool CheckIfLastFrame()
+    {
+      return CheckIfLastFrame_Internal(this.native_handle);
+    }
+
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool OnClick_Internal(IntPtr native_handle);
 
@@ -156,6 +161,9 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void SetFrame_Internal(IntPtr native_handle, uint index);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool CheckIfLastFrame_Internal(IntPtr native_handle);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool get_IsActive_Internal(IntPtr native_handle);
@@ -216,7 +224,7 @@ namespace Unicorn
     public extern static void AddTexture_Internal(IntPtr native_handle, string fileName);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static void PlayAnimation_Internal(IntPtr native_handle, bool val);
+    public extern static void PlayAnimation_Internal(IntPtr native_handle, bool val, bool val2);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void StopAnimation_Internal(IntPtr native_handle);
