@@ -12,27 +12,27 @@ typedef class ComponentLoadAudio : public ISerializable
   struct AudioData
   {
     // Standard variables
-    std::string userName;
+    int index;
     bool isActive;
     bool isLoop;
     bool playOnAwake;
     bool is3D;
     // 3D variables
     float minDist, maxDist;
-    AudioData() : userName(""), isActive(false), isLoop(false), playOnAwake(false), is3D(false) {}
+    AudioData() : index(-1), isActive(false), isLoop(false), playOnAwake(false), is3D(false), minDist(0.0f), maxDist(0.0f) {}
 
-    void Read(Value& val)
-    {
-      for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
-      {
-        if (itr->name == "userName")
-        {
-          userName = itr->value.GetString();
-        }
+    //void Read(Value& val)
+    //{
+    //  for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
+    //  {
+    //    if (itr->name == "userName")
+    //    {
+    //      userName = itr->value.GetString();
+    //    }
 
-      }
-    };
-    Value& Write(Value& val);
+    //  }
+    //};
+    //Value& Write(Value& val);
   };
 public:
   using data = AudioData;

@@ -23,6 +23,7 @@
                     0.0
                 ]
             },
+            "AudioManager": {},
             "ListenerComponent": {
                 "isActive": true
             }
