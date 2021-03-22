@@ -2,6 +2,8 @@
 #include "LocalVector.h"  // replaces std::vector
 #include "..\..\ISerializable.h"
 #include <string>
+// FMOD channel
+#include "..\FMOD\inc\fmod.hpp"
 
 //#include <filesystem>
 //#define MySize 10 // Size of array, sounds allowed per component
@@ -12,14 +14,19 @@ typedef class ComponentLoadAudio : public ISerializable
   struct AudioData
   {
     // Standard variables
-    int index;
-    bool isActive;
-    bool isLoop;
-    bool playOnAwake;
-    bool is3D;
+    int index;        // index of sound in audio imgui
+    bool isActive;    // Whether this sound is active
+    bool isBGM;       // Whether sound is a BGM/Ambience or SFX
+    bool isLoop;      // whether this sound is looping
+    bool playOnAwake; // whether to play on isActive = true
+    float volume;     // Volume of sound 0.0f - 1.0f
+    bool is3D;        // Whether sound is 3D
     // 3D variables
     float minDist, maxDist;
-    AudioData() : index(-1), isActive(false), isLoop(false), playOnAwake(false), is3D(false), minDist(0.0f), maxDist(0.0f) {}
+    // no need to save this variable!
+    // Hidden variables for system use
+    FMOD::Channel* channel;    // Current channel sound is playing on if it is playing.
+    AudioData() : index(-1), isActive(false), isBGM(false), isLoop(false), playOnAwake(false), volume(1.0f), is3D(false), minDist(0.5f), maxDist(100.0f), channel(nullptr) {}
 
     //void Read(Value& val)
     //{

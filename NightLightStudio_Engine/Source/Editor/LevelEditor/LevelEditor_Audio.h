@@ -1,11 +1,9 @@
 #pragma once
 #include "LevelEditor.h"
-
+#include "..\..\FMOD\inc\fmod.hpp"
 
 class LevelEditorAudio : public LE_WinBase_Derived<LevelEditorAudio>
 {
-private:
-	std::vector<std::string> Audios; // index, path
 public :
 	LevelEditorAudio() {}
 	~LevelEditorAudio() {}

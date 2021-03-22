@@ -1,5 +1,6 @@
 #include "LevelEditor_Audio.h"
-#include <unordered_map>;
+#include "../../Audio/SystemAudio.h"
+//#include <unordered_map>;
 
 void LevelEditorAudio::Init()
 {
@@ -9,8 +10,9 @@ void LevelEditorAudio::Init()
 
 void LevelEditorAudio::Run()
 {
+  std::vector<std::string>& Audios = SYS_AUDIO->Audios;
   _levelEditor->LE_AddButton("AddAudio##AudioButton", 
-    [this]()
+    [&Audios]()
     {
       Audios.push_back("");
     });
@@ -19,7 +21,11 @@ void LevelEditorAudio::Run()
   for (std::string& path : Audios)
   {
     ImGui::SetNextItemWidth(500);
-    _levelEditor->LE_AddInputText(std::to_string(index), path, 500, ImGuiInputTextFlags_EnterReturnsTrue);
+    _levelEditor->LE_AddInputText(std::to_string(index), path, 500, ImGuiInputTextFlags_EnterReturnsTrue,
+      []()
+    {
+      SYS_AUDIO->LoadAudios();
+    });
     ++index;
 
     _levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
@@ -34,6 +40,7 @@ void LevelEditorAudio::Run()
         std::string fileType = LE_GetFileType(newData);
         if (fileType == "ogg")
           path = newData;
+        SYS_AUDIO->LoadAudios();
       });
   }
 }
