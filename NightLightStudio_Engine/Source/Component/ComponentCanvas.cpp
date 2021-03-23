@@ -447,8 +447,10 @@ void UI_Element::AddTexture(std::string filename)
 
 void UI_Element::PlayAnimation(bool loop, bool reverse)
 {
-	if (!_isAnimated || _play)
+	if (!_isAnimated && _play)
 		return;
+
+	//TracyMessageL("Playing Animation");
 
 	_play = true;
 	_loop = loop;
