@@ -40,7 +40,6 @@ namespace NS_AI
 		void WalkTowards(NavigatorComponent* nav_comp, NlMath::Vec3 my_pos, NlMath::Vec3 target_position);		//using nav comp, position, and target position
 		void WalkTowards(int ent_id, NlMath::Vec3 target_position);												//using entity id and target position				
 
-		//bool IsAroundWP(NavigatorComponent* nav_comp);
 		void NavBehaviour(NavigatorComponent* nav_comp);
 		//==================WayPointManager Fnc======================================//
 

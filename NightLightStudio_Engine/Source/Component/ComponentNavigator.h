@@ -339,7 +339,6 @@ public:
 
 	void GoToClosestWP();
 
-	bool IsAroundWP(float proximity = 0);
 	//================ Getter / Setter ========================//
 	void SetSpeed(float spd)
 	{

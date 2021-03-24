@@ -33,9 +33,3 @@ inline void ComponentNavigator::GoToClosestWP()
 	this->prev_route_wp_index = cur_route_wp_index;
 	this->cur_route_wp_index = i;	//wp index to go to will be the closest one
 }
-
-bool ComponentNavigator::IsAroundWP(float proximity)
-{
-	float len = glm::length(dir);
-	return ((len - size_in_rad) < FLT_EPSILON + proximity);
-}
