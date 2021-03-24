@@ -734,18 +734,19 @@ void InspectorWindow::AudioComp(Entity& ent)
 			{
 				ComponentLoadAudio::data& MyData = aud_manager->MyAudios.at(i);
 				std::string header = "Audio " + std::to_string(MyData.index);
+				std::string sIndex = std::to_string(i);
 				ImGui::NewLine();
 				ImGui::Text(header.c_str());
-				ImGui::InputInt("Index", &MyData.index);
+				ImGui::InputInt(std::string("Index##" + sIndex).c_str(), &MyData.index);
 				// Variables
-				ImGui::Checkbox("IsActive", &MyData.isActive);
-				ImGui::Checkbox("IsLoop", &MyData.isLoop);
-				ImGui::Checkbox("PlayOnAwake", &MyData.playOnAwake);
-				ImGui::Checkbox("Is3D", &MyData.is3D);
+				ImGui::Checkbox(std::string("IsActive##" + sIndex).c_str(), &MyData.isActive);
+				ImGui::Checkbox(std::string("IsLoop##" + sIndex).c_str(), &MyData.isLoop);
+				ImGui::Checkbox(std::string("PlayOnAwake##" + sIndex).c_str(), &MyData.playOnAwake);
+				ImGui::Checkbox(std::string("Is3D##" + sIndex).c_str(), &MyData.is3D);
 				if (MyData.is3D)
 				{
-					ImGui::InputFloat("Min Dist", &MyData.minDist);
-					ImGui::InputFloat("Max Dist", &MyData.maxDist);
+					ImGui::InputFloat(std::string("Min Dist##" + sIndex).c_str(), &MyData.minDist);
+					ImGui::InputFloat(std::string("Max Dist##" + sIndex).c_str(), &MyData.maxDist);
 				}
 			}
 			//for (auto& data : aud_manager->_sounds) //[path, name]
