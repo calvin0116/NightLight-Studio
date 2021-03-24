@@ -129,6 +129,8 @@ inline void NS_AI::AiManager::WalkTowards(int ent_id, NlMath::Vec3 target_positi
 	WalkTowards(nav_comp, trans_comp->_position, target_position);
 }
 
+
+
 void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 {
 	//Make shift dt
@@ -180,8 +182,7 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 	{
 		case NV_PATROL:
 		{
-			float len = glm::length(navComp->dir);
-			if (len < navComp->size_in_rad)	//Check if Ai reached the way point
+			if (navComp->IsAroundWP())	//Check if Ai reached the way point
 			{
 				navComp->SetNextWp(nullptr);//Set next way point to be the target for navigation
 				navComp->dir = glm::normalize(navComp->dir);
@@ -194,14 +195,13 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 			{
 				navComp->dir = glm::normalize(navComp->dir);
 				//NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//Move to way point
-				rb->velocity = navComp->dir * navComp->speed;
+				rb->velocity = glm::normalize(navComp->dir) * navComp->speed;
 			}
 			break;
 		}
 		case NV_CIRCLING:
 		{
-			float len = glm::length(navComp->dir);
-			if ((len - navComp->circuling_rad) < FLT_EPSILON)	//Check if Ai reached the way point
+			if (navComp->IsAroundWP())	//Check if Ai reached the way point
 			{
 				//Circular motion
 				glm::vec3 rev_dir = navTrans->_position - wp_pos;
@@ -214,12 +214,11 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 				rb->velocity = dir * navComp->speed;
 				navComp->dir = glm::normalize(dir);
 			}
-
 			else
 			{
-				navComp->dir = glm::normalize(navComp->dir);
+				//navComp->dir = glm::normalize(navComp->dir);
 				//NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//Move to way point
-				rb->velocity = navComp->dir * navComp->speed;
+				rb->velocity = glm::normalize(navComp->dir) * navComp->speed;
 			}
 			break;
 		}

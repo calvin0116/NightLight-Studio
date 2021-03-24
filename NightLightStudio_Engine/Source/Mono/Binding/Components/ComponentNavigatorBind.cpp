@@ -43,6 +43,9 @@ namespace ComponentNavigatorBind
     MonoWrapper::BindClassFunction(getDistFromPrevPathWP_Internal, "getDistFromPrevPathWP_Internal",
         "Navigator");
 
+    MonoWrapper::BindClassFunction(IsAroundWP_Internal, "IsAroundWP",
+        "Navigator");
+
   }
 
   float get_Speed_Internal(NavComponent* nav)
@@ -103,6 +106,11 @@ namespace ComponentNavigatorBind
   float getDistFromPrevPathWP_Internal(NavComponent* nav)
   {
       return nav->DistFromPrevPathWP();
+  }
+
+  bool IsAroundWP_Internal(NavComponent* nav)
+  {
+      return nav->IsAroundWP(1.0f);
   }
 
   MonoObject* get_Dir_Internal(NavComponent* nav)

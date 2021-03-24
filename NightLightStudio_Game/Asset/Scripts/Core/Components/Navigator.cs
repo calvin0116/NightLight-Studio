@@ -63,6 +63,11 @@ namespace Unicorn
     {
       return getDistFromPrevPathWP_Internal(native_handle);
     }
+    public bool IsAroundWP()
+    {
+      return IsAroundWP_Internal(native_handle);
+    }
+
     // Getter/Setter for speed
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static float get_Speed_Internal(IntPtr native_handle);
@@ -107,6 +112,9 @@ namespace Unicorn
     public extern static float getDistFromCurPathWP_Internal(IntPtr native_handle);
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static float getDistFromPrevPathWP_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool IsAroundWP_Internal(IntPtr native_handle);
   }
 }
 
