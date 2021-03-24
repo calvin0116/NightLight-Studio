@@ -60,7 +60,7 @@ public:
 
   // Maybe not needed
   void MyGameInit() {};
-  void MyGameExit() {};
+  void MyGameExit();
 
 
 //  // Alias

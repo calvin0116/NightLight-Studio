@@ -8,14 +8,14 @@
                     0
                 ],
                 "Position": [
-                    0.0,
-                    0.0,
+                    -267.2547302246094,
+                    71.47434997558594,
                     0.0
                 ],
                 "Scale": [
-                    1.0,
-                    1.0,
-                    1.0
+                    5.0,
+                    5.0,
+                    5.0
                 ],
                 "Rotate": [
                     0.0,
@@ -23,7 +23,111 @@
                     0.0
                 ]
             },
-            "AudioManager": {},
+            "GraphicsComponent": {
+                "isActive": true,
+                "renderEmission": true,
+                "emissiveIntensity": 1.0,
+                "Emissive": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
+            },
+            "AudioManager": {}
+        },
+        "Listener": {
+            "TransformComponent": {
+                "EntityName": "",
+                "Tag": 0,
+                "tagNames": [],
+                "Position": [
+                    -443.4082336425781,
+                    84.19566345214844,
+                    0.0
+                ],
+                "Scale": [
+                    10.0,
+                    10.0,
+                    10.0
+                ],
+                "Rotate": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ]
+            },
+            "GraphicsComponent": {
+                "isActive": true,
+                "renderEmission": true,
+                "emissiveIntensity": 1.0,
+                "Emissive": [
+                    0.058809757232666019,
+                    0.0,
+                    1.0
+                ],
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
+            },
             "ListenerComponent": {
                 "isActive": true
             }

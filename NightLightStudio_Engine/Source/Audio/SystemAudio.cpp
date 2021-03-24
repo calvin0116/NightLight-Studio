@@ -683,6 +683,27 @@ void SystemAudio::Play(int entity)
   }
 }
 
+void SystemAudio::MyGameExit()
+{
+  // Get aud comp to stop all from playing
+  auto audItr = G_ECMANAGER->begin<ComponentLoadAudio>();
+  auto audItrEnd = G_ECMANAGER->end<ComponentLoadAudio>();
+  for (; audItr != audItrEnd; ++audItr)
+  {
+    ComponentLoadAudio* aud = G_ECMANAGER->getComponent<ComponentLoadAudio>(audItr);
+    // Err check
+    if (aud == nullptr)
+    {
+      std::string error = "Audio::Update::aud is nullptr";
+      TracyMessage(error.c_str(), error.size());
+      SPEEDLOG(error);
+      continue;
+    }
+    for (ComponentLoadAudio::data& MyData : aud->MyAudios)
+      MyData.channel->stop();
+  }
+}
+
 void SystemAudio::HandleTogglePlay(MessageTogglePlay& msg)
 {
   // Handle msg here. Only Before Play MSG
