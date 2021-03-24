@@ -1893,7 +1893,7 @@ void InspectorWindow::CanvasComp(Entity& ent)
 
 						if (ImGui::Button("Test Animation##"))
 						{
-							ui.PlayAnimation(ui._loop);
+							ui.PlayAnimation(ui._loop, ui._reverse);
 						}
 
 						//For debug
