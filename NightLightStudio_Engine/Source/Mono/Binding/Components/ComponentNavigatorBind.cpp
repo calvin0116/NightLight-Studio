@@ -116,7 +116,7 @@ namespace ComponentNavigatorBind
   MonoObject* get_Dir_Internal(NavComponent* nav)
   {
       MonoObject* monoVec = MonoWrapper::ConstructObject("Vector3");
-      glm::vec3& dir = nav->dir;
+      glm::vec3 dir = glm::normalize(nav->dir);
       MonoWrapper::SetObjectFieldValue(monoVec, "X", dir.x);
       MonoWrapper::SetObjectFieldValue(monoVec, "Y", dir.y);
       MonoWrapper::SetObjectFieldValue(monoVec, "Z", dir.z);
