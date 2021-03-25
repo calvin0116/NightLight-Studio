@@ -144,6 +144,9 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 		return;
 	}
 
+	//check and switch way point if needed
+	navComp->ToGoToPrevWP();
+
 	TransformComponent* navTrans = navComp->trans;
 	RigidBody* rb = navComp->rb;
 
@@ -193,7 +196,7 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 			}
 			else
 			{
-				navComp->dir = glm::normalize(navComp->dir);
+				//navComp->dir = glm::normalize(navComp->dir);
 				//NS_PHYSICS::USE_THE_FORCE.addForceToNextTick(G_ECMANAGER->getEntity(itr),mag_dir, navComp->speed);	//Move to way point
 				rb->velocity = glm::normalize(navComp->dir) * navComp->speed;
 			}
@@ -212,7 +215,7 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 				glm::vec3 dir = Rotate * glm::vec4{ rev_dir , 1.0f };
 				dir = glm::normalize(dir);
 				rb->velocity = dir * navComp->speed;
-				navComp->dir = glm::normalize(dir);
+				//navComp->dir = glm::normalize(dir);
 			}
 			else
 			{

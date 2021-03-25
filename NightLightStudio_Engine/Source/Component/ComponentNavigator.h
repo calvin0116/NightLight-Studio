@@ -18,7 +18,7 @@ enum WP_NAV_TYPE {
 };
 
 enum WP_PATH_CREATION_TYPE {
-	WPP_STANDARD = 0,	// 1 ->  N
+	WPP_STANDARD = 0,	// 1 -> N
 	WPP_REVERSE,		// N -> 1
 	WPP_CUSTOM,			// Inserted through script / leveleditor 
 };
@@ -275,6 +275,12 @@ public:
 			isPaused = true;
 			curTime = 0.0f;
 		}
+	}
+
+	void ToGoToPrevWP()
+	{
+		if (!path_indexes.at(cur_route_wp_index).second && cur_route_wp_index!= 0)
+			--cur_route_wp_index;
 	}
 
 	void DecideOnNextWp()

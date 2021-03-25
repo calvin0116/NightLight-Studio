@@ -1846,13 +1846,13 @@ void InspectorWindow::CanvasComp(Entity& ent)
 						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
 						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
-						if (ImGui::Button("Test Animation##"))
+						if (ImGui::Button(std::string("Test Animation##").append(std::to_string(i)).c_str()))
 						{
-							ui.PlayAnimation(ui._loop);
+							ui.PlayAnimation(ui._loop, ui._reverse);
 						}
 
 						//For debug
-						if (ImGui::Button("Next Frame##"))
+						if (ImGui::Button(std::string("Next Frame##").append(std::to_string(i)).c_str()))
 						{
 							ui._currentFrame++;
 
