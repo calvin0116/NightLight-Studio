@@ -707,16 +707,16 @@ void InspectorWindow::AudioComp(Entity& ent)
 	ComponentLoadAudio* aud_manager = ent.getComponent<ComponentLoadAudio>();
 	if (aud_manager != nullptr)
 	{
-		if (ImGui::CollapsingHeader("Audio Manager", &_notRemove))
+		if (ImGui::CollapsingHeader("Audio Manager##AudioComp", &_notRemove))
 		{
-			if (ImGui::Button("Add Audio"))
+			if (ImGui::Button("Add Audio##AudioCOmp"))
 			{
 				aud_manager->MyAudios.push_back(ComponentLoadAudio::data());
 			}
 			size_t size = aud_manager->MyAudios.size();
 			// Remove vector
 			int remove = -1;
-			if (ImGui::BeginTabBar("Audio", ImGuiTabBarFlags_AutoSelectNewTabs))
+			if (ImGui::BeginTabBar("Audio##AudioComp", ImGuiTabBarFlags_AutoSelectNewTabs))
 			{
 				for (size_t i = 0; i < size; ++i)
 				{
@@ -725,22 +725,22 @@ void InspectorWindow::AudioComp(Entity& ent)
 					std::string header = sIndex + "| " + std::to_string(MyData.index);
 					if (ImGui::BeginTabItem(header.c_str(), &MyData.ImGuiTab))
 					{
-						ImGui::InputInt(std::string("Index##" + sIndex).c_str(), &MyData.index);
+						ImGui::InputInt(std::string("Index##AudioComp" + sIndex).c_str(), &MyData.index);
 						// Variables
-						ImGui::Checkbox(std::string("IsActive##" + sIndex).c_str(), &MyData.isActive);
-						ImGui::Checkbox(std::string("IsLoop##" + sIndex).c_str(), &MyData.isLoop);
-						ImGui::Checkbox(std::string("PlayOnAwake##" + sIndex).c_str(), &MyData.playOnAwake);
-						ImGui::Checkbox(std::string("Is3D##" + sIndex).c_str(), &MyData.is3D);
+						ImGui::Checkbox(std::string("IsActive##AudioComp" + sIndex).c_str(), &MyData.isActive);
+						ImGui::Checkbox(std::string("IsLoop##AudioComp" + sIndex).c_str(), &MyData.isLoop);
+						ImGui::Checkbox(std::string("PlayOnAwake##AudioComp" + sIndex).c_str(), &MyData.playOnAwake);
+						ImGui::Checkbox(std::string("Is3D##AudioComp" + sIndex).c_str(), &MyData.is3D);
 						if (MyData.is3D)
 						{
-							ImGui::InputFloat(std::string("Min Dist##" + sIndex).c_str(), &MyData.minDist);
-							ImGui::InputFloat(std::string("Max Dist##" + sIndex).c_str(), &MyData.maxDist);
+							ImGui::InputFloat(std::string("Min Dist##AudioComp" + sIndex).c_str(), &MyData.minDist);
+							ImGui::InputFloat(std::string("Max Dist##AudioComp" + sIndex).c_str(), &MyData.maxDist);
 						}
 						ImGui::EndTabItem();
 					}
 
 					if (MyData.ImGuiTab == false)
-						remove = i;
+						remove = (int)i;
 				}
 				ImGui::EndTabBar();
 			}

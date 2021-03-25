@@ -11,10 +11,17 @@ void LevelEditorAudio::Init()
 void LevelEditorAudio::Run()
 {
   std::vector<std::string>& Audios = SYS_AUDIO->Audios;
-  _levelEditor->LE_AddButton("AddAudio##AudioButton", 
+  _levelEditor->LE_AddButton("Add##AudioButton", 
     [&Audios]()
     {
       Audios.push_back("");
+    });
+  ImGui::SameLine();
+  _levelEditor->LE_AddButton("Remove##AudioRemove",
+    [&Audios]()
+    {
+      if(!Audios.empty())
+        Audios.pop_back();
     });
 
   size_t index = 0;
