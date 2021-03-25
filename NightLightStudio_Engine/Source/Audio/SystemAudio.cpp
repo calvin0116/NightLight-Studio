@@ -86,7 +86,7 @@ void SystemAudio::Update()
 
       // Front vector
       FMOD_VECTOR frontVec;
-      NlMath::Vec3 forwardVec{0.0f, 0.0f, 1.0f};
+      NlMath::Vec3 forwardVec = lis->_front;
       NlMath::Matrix4x4 rot;
       NlMath::Mtx44RotYDeg(rot, pos->_rotation.y);
       forwardVec = NlMath::MulT(rot, forwardVec);

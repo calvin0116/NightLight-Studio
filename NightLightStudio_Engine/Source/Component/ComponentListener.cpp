@@ -4,7 +4,7 @@
 
 //#include "Components.h"   // inherit required functions
 
-ComponentListener::ComponentListener() : _isActive(false)
+ComponentListener::ComponentListener() : _isActive(false), _front{0.0f, 0.0f, 1.0f}
 {
 	strcpy_s(ser_name, "ListenerComponent");
 }

@@ -7,11 +7,20 @@ namespace Unicorn
   public class Hello : UniBehaviour
   {
     //public int size;
-    public bool[] MyBoolArr;
+    //public bool[] MyBoolArr;
+    Transform trans;
+    int ListenerID;
+    Transform lisTrans;
+    public string Listener = "Listener";
+    public float speed = 1.0f;
+    public float rotSpeed = 1.0f;
 
     public override void Init()
     {
       //MyStringArr = new string[size];
+      trans = GetTransform(id);
+      ListenerID = GameObjectFind(Listener);
+      lisTrans = GetTransform(ListenerID);
     }
 
     public override void LateInit()
@@ -25,17 +34,33 @@ namespace Unicorn
 
     public override void Update()
     {
-      if (Input.GetKeyHold(VK.IKEY_V))
+      float realSpeed = speed * RealDT();
+      float realRot = rotSpeed * RealDT();
+      if (Input.GetKeyHold(VK.IKEY_A))
       {
+        Vector3 left = new Vector3( -realSpeed, 0.0f, 0.0f );
+        left = left + trans.GetPosition();
+        trans.SetPosition(left);
       }
+      if (Input.GetKeyHold(VK.IKEY_D))
+      {
+        Vector3 right = new Vector3(realSpeed, 0.0f, 0.0f);
+        right = right + trans.GetPosition();
+        trans.SetPosition(right);
+      }
+
       if (Input.GetKeyHold(VK.IKEY_C))
       {
+        Vector3 left = new Vector3(0.0f, rotSpeed, 0.0f);
+        left = left + lisTrans.GetRotation();
+        lisTrans.SetRotation(left);
       }
-      if (Input.GetKeyPress(VK.IKEY_SPACE))
+
+      if(Input.GetKeyHold(VK.IKEY_V))
       {
-      }
-      if(Input.GetKeyPress(VK.IKEY_F))
-      {
+        Vector3 right = new Vector3(0.0f, -rotSpeed, 0.0f);
+        right = right + lisTrans.GetRotation();
+        lisTrans.SetRotation(right);
       }
     }
     public override void FixedUpdate()

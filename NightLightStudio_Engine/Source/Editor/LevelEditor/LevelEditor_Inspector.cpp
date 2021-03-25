@@ -2507,7 +2507,10 @@ void InspectorWindow::ListenerComp(Entity& ent)
 	bool editedComp = false;
 
 	if (ImGui::CollapsingHeader("Listener component", &_notRemove))
+	{
 		ImGui::Checkbox("IsActive##Listener", &lisComp->_isActive);
+		ImGui::InputFloat3("Front##Listener", lisComp->_front.m);
+	}
 	if (!_notRemove)
 	{
 		ENTITY_COMP_DOC comp{ ent, ent.getComponent<ListenerComponent>()->Write(), typeid(ListenerComponent).hash_code() };
@@ -2519,14 +2522,6 @@ void InspectorWindow::ListenerComp(Entity& ent)
 	{
 		if (_origComp._entID != -1)
 		{
-			// Undo-Redo for Components
-			//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
-			//bool editedComp = false;
-
-			// Undo-Redo for Components
-			//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-			//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
 			ENTITY_COMP_READ finalComp{ ent, ent.getComponent<ListenerComponent>()->Write() };
 			lisComp->Read(*_origComp._rjDoc);
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_CAMERA"), std::any(finalComp));
@@ -2535,73 +2530,6 @@ void InspectorWindow::ListenerComp(Entity& ent)
 	}
 
 	ImGui::Separator();
-	/*if (camComp != nullptr)
-	{
-		if (ImGui::CollapsingHeader("Animation component", &_notRemove))
-		{
-			ImGui::Checkbox("IsActive##Animation", &anim->_isActive);
-
-			ImGui::Text("Current Animation: ");
-			auto it = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
-			while (it != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
-			{
-				bool currAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim == *it;
-				if (ImGui::Selectable(it->c_str(), &currAnim))
-				{
-					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim = it->c_str();
-					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play = false;
-					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_dt = 0.0f;
-					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = "";
-				}
-				++it;
-			}
-
-			ImGui::Separator();
-			ImGui::Text("Default Animation: ");
-			auto it2 = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.begin();
-			while (it2 != NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_allAnims.end())
-			{
-				bool defaultAnim = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim == *it2;
-				if (ImGui::Selectable(std::string(it2->c_str()).append("##defaultAnim").c_str(), &defaultAnim))
-				{
-					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_defaultAnim = it2->c_str();
-				}
-				++it2;
-			}
-
-			ImGui::InputFloat("Animation Speed##anim", &NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_animMultiplier);
-
-			if (ImGui::Button("Preview Animation"))
-			{
-				anim->PlayAnimation(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_currAnim,
-					NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_loop);
-			}
-
-			if (NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_play)
-			{
-				if (ImGui::Button("Pause Animation"))
-				{
-					anim->PauseAnimation();
-				}
-			}
-			else
-			{
-				if (ImGui::Button("Resume Animation"))
-				{
-					anim->ResumeAnimation();
-				}
-			}
-
-			if (ImGui::Button("Stop Animation"))
-			{
-				anim->StopAnimation();
-			}
-
-			ImGui::Checkbox("Loop", &NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID]->_loop);
-		}
-
-		ImGui::Separator();
-	}*/
 }
 void InspectorWindow::CameraComp(Entity& ent)
 {

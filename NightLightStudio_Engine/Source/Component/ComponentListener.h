@@ -1,11 +1,13 @@
 #pragma once
 #include "..\\..\\ISerializable.h"
+#include "..\Math\Vector.h"
 
 // Only BGM will use this the most.3D sound will follow this component's ObjID pos by default.
 typedef class ComponentListener : public ISerializable
 {
 public:
 	bool _isActive;
+	NlMath::Vector3D _front;
 
 	ComponentListener();
 	~ComponentListener();
