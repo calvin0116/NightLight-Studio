@@ -707,102 +707,45 @@ void InspectorWindow::AudioComp(Entity& ent)
 	ComponentLoadAudio* aud_manager = ent.getComponent<ComponentLoadAudio>();
 	if (aud_manager != nullptr)
 	{
-		//// Undo-Redo for Components
-		//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentLoadAudio>()->Write() };
-		//bool editedComp = false;
-
 		if (ImGui::CollapsingHeader("Audio Manager", &_notRemove))
 		{
 			if (ImGui::Button("Add Audio"))
 			{
-				//static int i = 0;
-				//std::string s = std::to_string(i);
-				//ComponentLoadAudio::data d;
-				//strcpy_s(d.name, 128, s.c_str());
-				//strcpy_s(d.path, 512, "");
-				//aud_manager->_sounds.push_back(d);
-				//++i;
 				aud_manager->MyAudios.push_back(ComponentLoadAudio::data());
-
-				//// Undo-Redo for Components
-				//_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
-				//editedComp = true;
 			}
-
 			size_t size = aud_manager->MyAudios.size();
-			for (size_t i = 0; i < size; ++i)
+			// Remove vector
+			int remove = -1;
+			if (ImGui::BeginTabBar("Audio", ImGuiTabBarFlags_AutoSelectNewTabs))
 			{
-				ComponentLoadAudio::data& MyData = aud_manager->MyAudios.at(i);
-				std::string header = "Audio " + std::to_string(MyData.index);
-				std::string sIndex = std::to_string(i);
-				ImGui::NewLine();
-				ImGui::Text(header.c_str());
-				ImGui::InputInt(std::string("Index##" + sIndex).c_str(), &MyData.index);
-				// Variables
-				ImGui::Checkbox(std::string("IsActive##" + sIndex).c_str(), &MyData.isActive);
-				ImGui::Checkbox(std::string("IsLoop##" + sIndex).c_str(), &MyData.isLoop);
-				ImGui::Checkbox(std::string("PlayOnAwake##" + sIndex).c_str(), &MyData.playOnAwake);
-				ImGui::Checkbox(std::string("Is3D##" + sIndex).c_str(), &MyData.is3D);
-				if (MyData.is3D)
+				for (size_t i = 0; i < size; ++i)
 				{
-					ImGui::InputFloat(std::string("Min Dist##" + sIndex).c_str(), &MyData.minDist);
-					ImGui::InputFloat(std::string("Max Dist##" + sIndex).c_str(), &MyData.maxDist);
+					ComponentLoadAudio::data& MyData = aud_manager->MyAudios.at(i);
+					std::string sIndex = std::to_string(i);
+					std::string header = sIndex + "| " + std::to_string(MyData.index);
+					if (ImGui::BeginTabItem(header.c_str(), &MyData.ImGuiTab))
+					{
+						ImGui::InputInt(std::string("Index##" + sIndex).c_str(), &MyData.index);
+						// Variables
+						ImGui::Checkbox(std::string("IsActive##" + sIndex).c_str(), &MyData.isActive);
+						ImGui::Checkbox(std::string("IsLoop##" + sIndex).c_str(), &MyData.isLoop);
+						ImGui::Checkbox(std::string("PlayOnAwake##" + sIndex).c_str(), &MyData.playOnAwake);
+						ImGui::Checkbox(std::string("Is3D##" + sIndex).c_str(), &MyData.is3D);
+						if (MyData.is3D)
+						{
+							ImGui::InputFloat(std::string("Min Dist##" + sIndex).c_str(), &MyData.minDist);
+							ImGui::InputFloat(std::string("Max Dist##" + sIndex).c_str(), &MyData.maxDist);
+						}
+						ImGui::EndTabItem();
+					}
+
+					if (MyData.ImGuiTab == false)
+						remove = i;
 				}
+				ImGui::EndTabBar();
 			}
-			//for (auto& data : aud_manager->_sounds) //[path, name]
-			//{
-			//	std::string p = "##AUDIOPATH" + std::to_string(index);
-			//	std::string n = "##AUDIONAME" + std::to_string(index);
-			//	//ImGui::InputText(p.c_str(), data.path, 512);
-			//	++index;
-			//	//ImGui::InputText(n.c_str(), data.name, 256);
-
-			//	std::string s_name = data.name;
-			//	ImGui::SetNextItemWidth(50);
-			//	_levelEditor->LE_AddInputText(n, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
-			//		[&data, &s_name]()
-			//		{
-			//			strcpy_s(data.name, s_name.c_str());
-			//		});
-			//	// Undo-Redo for Components
-			//	_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-			//	editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-			//	ImGui::SameLine(0, 10);
-			//	std::string s_path = data.path;
-
-			//	_levelEditor->LE_AddInputText(p, s_path, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-			//		[&data, &s_path]()
-			//		{
-			//			strcpy_s(data.path, s_path.c_str());
-			//		});
-
-			//	// Undo-Redo for Components
-			//	_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-			//	editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-			//	_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
-			//		[this, &data](std::string* str)
-			//		{
-			//			std::string newData = *str;
-			//			newData.erase(newData.begin());
-			//			std::transform(newData.begin(), newData.end(), newData.begin(),
-			//				[](unsigned char c)
-			//				{ return (char)std::tolower(c); });
-
-			//			std::string fileType = LE_GetFileType(newData);
-			//			if (fileType == "ogg")
-			//			{
-			//				memset(data.path, 0, 512);
-			//				strcpy_s(data.path, newData.c_str());
-			//			}
-			//		});
-
-			//	// Undo-Redo for Components
-			//	_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-			//	editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-			//}
+			if (remove != -1)
+				aud_manager->MyAudios.erase(remove);
 		}
 
 		if (!_notRemove)
@@ -812,26 +755,6 @@ void InspectorWindow::AudioComp(Entity& ent)
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
 		}
-
-		//if (editedComp)
-		//{
-		//	if (_origComp._entID != -1)
-		//	{
-		//		// Undo-Redo for Components
-		//		//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
-		//		//bool editedComp = false;
-
-		//		// Undo-Redo for Components
-		//		//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-		//		//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
-		//		ENTITY_COMP_READ finalComp{ ent, ent.getComponent<ComponentLoadAudio>()->Write() };
-		//		aud_manager->Read(*_origComp._rjDoc);
-		//		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_AUDIO"), std::any(finalComp));
-		//		_origComp = ENTITY_COMP_READ{};
-		//	}
-		//}
-
 		ImGui::Separator();
 	}
 }

@@ -13,6 +13,7 @@ typedef class ComponentLoadAudio : public ISerializable
 {
   struct AudioData
   {
+    bool ImGuiTab;
     // Standard variables
     int index;        // index of sound in audio imgui
     bool isActive;    // Whether this sound is active
@@ -26,7 +27,7 @@ typedef class ComponentLoadAudio : public ISerializable
     // no need to save this variable!
     // Hidden variables for system use
     FMOD::Channel* channel;    // Current channel sound is playing on if it is playing.
-    AudioData() : index(-1), isActive(false), isBGM(false), isLoop(false), playOnAwake(false), volume(1.0f), is3D(false), minDist(0.5f), maxDist(100.0f), channel(nullptr) {}
+    AudioData() : ImGuiTab(true), index(-1), isActive(false), isBGM(false), isLoop(false), playOnAwake(false), volume(1.0f), is3D(false), minDist(0.5f), maxDist(100.0f), channel(nullptr) {}
 
     //void Read(Value& val)
     //{
