@@ -727,9 +727,10 @@ void InspectorWindow::AudioComp(Entity& ent)
 					{
 						ImGui::InputInt(std::string("Index##AudioComp" + sIndex).c_str(), &MyData.index);
 						// Variables
-						ImGui::Checkbox(std::string("IsActive##AudioComp" + sIndex).c_str(), &MyData.isActive);
 						ImGui::Checkbox(std::string("IsLoop##AudioComp" + sIndex).c_str(), &MyData.isLoop);
 						ImGui::Checkbox(std::string("PlayOnAwake##AudioComp" + sIndex).c_str(), &MyData.playOnAwake);
+						//ImGui::Checkbox(std::string("Mute##AudioComp" + sIndex).c_str(), &MyData.mute);
+						ImGui::InputFloat(std::string("Volume##AudioComp" + sIndex).c_str(), &MyData.volume);
 						ImGui::Checkbox(std::string("Is3D##AudioComp" + sIndex).c_str(), &MyData.is3D);
 						if (MyData.is3D)
 						{

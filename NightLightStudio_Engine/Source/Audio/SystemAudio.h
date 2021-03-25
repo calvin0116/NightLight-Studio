@@ -48,7 +48,7 @@ public:
   void LoadAudios();
 
   // Play audio
-  void Play(int entity);
+  void Play(int entity, int _index);
 
   // Not used
   void Load() override {} // Not needed.

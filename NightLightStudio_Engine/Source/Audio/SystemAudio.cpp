@@ -123,7 +123,7 @@ void SystemAudio::Update()
       {
         ComponentLoadAudio::data& MyData = AudVec.at(i);
         // Audio is active, 3D and is playing on a channel
-        if (MyData.isActive && MyData.channel)
+        if (MyData.channel)
         {
           ComponentTransform* trans = G_ECMANAGER->getComponent<ComponentTransform>(audItr);
           // Err check
@@ -189,10 +189,10 @@ void SystemAudio::PlayOnAwake()
       for (size_t i = 0; i < size; ++i)
       {
         ComponentLoadAudio::data& MyData = AudVec.at(i);
-        if (MyData.isActive && MyData.playOnAwake)
+        if (MyData.playOnAwake)
         {
           // !!!!!!!!!Play Audio here
-          Play(aud->objId);
+          Play(aud->objId, (int)i);
           // Played, turn onawake off.
           MyData.playOnAwake = false;
         }
@@ -225,7 +225,7 @@ void SystemAudio::LoadAudios()
   }
 }
 
-void SystemAudio::Play(int entity)
+void SystemAudio::Play(int entity, int _index)
 {
   // Err check
   if (entity < 0)
@@ -247,48 +247,46 @@ void SystemAudio::Play(int entity)
   }
 
   LocalVector<ComponentLoadAudio::data>& audio = aud->MyAudios;
-  const size_t size = audio.size();
-  for (int i = 0; i < size; ++i)
+  ComponentLoadAudio::data& MyData = audio.at(_index);
+  FMOD::Sound*& sound = Sounds[MyData.index];
+  // Play sound but pause it first to set attributes.
+  if (MyData.isBGM)
+    _system->playSound(sound, _bgm, true, &MyData.channel);
+  else
+    _system->playSound(sound, _sfx, true, &MyData.channel);
+  if (MyData.isLoop)
+    MyData.channel->setMode(FMOD_LOOP_NORMAL);
+  else
+    MyData.channel->setMode(FMOD_LOOP_OFF);
+  if (MyData.is3D)
   {
-    ComponentLoadAudio::data& MyData = audio.at(i);
-    // Set isActive to true to play it;
-    MyData.isActive = true;
-    FMOD::Sound*& sound = Sounds[MyData.index];
-    // Play sound but pause it first to set attributes.
-    if (MyData.isBGM)
-      _system->playSound(sound, _bgm, true, &MyData.channel);
-    else
-      _system->playSound(sound, _sfx, true, &MyData.channel);
-    if (MyData.isLoop)
-      MyData.channel->setMode(FMOD_LOOP_NORMAL);
-    else
-      MyData.channel->setMode(FMOD_LOOP_OFF);
-    if (MyData.is3D)
+    MyData.channel->setMode(FMOD_3D);
+    MyData.channel->setMode(FMOD_3D_LINEARROLLOFF);
+    MyData.channel->set3DMinMaxDistance(MyData.minDist * s_UNITS_PER_METER, MyData.maxDist * s_UNITS_PER_METER);
+    // Get position to set initial pos
+    ComponentTransform* trans = en.getComponent<ComponentTransform>();
+    // Err check
+    if (trans == nullptr)
     {
-      MyData.channel->setMode(FMOD_3D);
-      MyData.channel->setMode(FMOD_3D_LINEARROLLOFF);
-      MyData.channel->set3DMinMaxDistance(MyData.minDist * s_UNITS_PER_METER, MyData.maxDist * s_UNITS_PER_METER);
-      // Get position to set initial pos
-      ComponentTransform* trans = en.getComponent<ComponentTransform>();
-      // Err check
-      if (trans == nullptr)
-      {
-        std::string error = "Audio::Play::trans is nullptr";
-        TracyMessage(error.c_str(), error.size());
-        SPEEDLOG(error);
-        return;
-      }
-      FMOD_VECTOR pos;
-      pos.x = trans->_position.x;
-      pos.y = trans->_position.y;
-      pos._z = trans->_position.z;
-      MyData.channel->set3DAttributes(&pos, nullptr);
+      std::string error = "Audio::Play::trans is nullptr";
+      TracyMessage(error.c_str(), error.size());
+      SPEEDLOG(error);
+      return;
     }
-    else
-      MyData.channel->setMode(FMOD_2D);
-    // Unpause sound to start playing it
-    MyData.channel->setPaused(false);
+    FMOD_VECTOR pos;
+    pos.x = trans->_position.x;
+    pos.y = trans->_position.y;
+    pos._z = trans->_position.z;
+    MyData.channel->set3DAttributes(&pos, nullptr);
   }
+  else
+    MyData.channel->setMode(FMOD_2D);
+
+  // Set volume
+  MyData.channel->setVolume(MyData.volume);
+
+  // Unpause sound to start playing it
+  MyData.channel->setPaused(false);
 }
 
 void SystemAudio::MyGameExit()

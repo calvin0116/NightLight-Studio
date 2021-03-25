@@ -3,6 +3,8 @@
 #include "ComponentLoadAudio.h"
 #include "../tracy-master/Tracy.hpp"
 //#include "Components.h"   // inherit required functions
+// Audio System
+#include "../Audio/SystemAudio.h" // TO play sound
 
 ComponentLoadAudio::ComponentLoadAudio()
 {
@@ -14,57 +16,160 @@ ComponentLoadAudio::~ComponentLoadAudio()
 
 }
 
+bool ComponentLoadAudio::GetPlay(int _index)
+{
+  // Err check
+  if (_index < 0 || _index >= MyAudios.size())
+  {
+    std::string error = "AudioComponent::GetPlay _index out of range!";
+    TracyMessage(error.c_str(), error.size());
+    SPEEDLOG(error);
+    return false;
+  }
+
+  bool isPlaying = false;
+  MyAudios.at(_index).channel->isPlaying(&isPlaying);
+  return isPlaying;
+}
+
+void ComponentLoadAudio::Play(int _index)
+{
+  SYS_AUDIO->Play(objId, _index);
+}
+
+bool ComponentLoadAudio::GetMute(int _index)
+{
+  // Err check
+  if (_index < 0 || _index >= MyAudios.size())
+  {
+    std::string error = "AudioComponent::GetMute _index out of range!";
+    TracyMessage(error.c_str(), error.size());
+    SPEEDLOG(error);
+    return true;
+  }
+
+  bool isMute = false;
+  MyAudios.at(_index).channel->getMute(&isMute);
+  return isMute;
+}
+
+void ComponentLoadAudio::Mute(int _index, bool _mute)
+{
+  // Err check
+  if (_index < 0 || _index >= MyAudios.size())
+  {
+    std::string error = "AudioComponent::Mute _index out of range!";
+    TracyMessage(error.c_str(), error.size());
+    SPEEDLOG(error);
+    return;
+  }
+
+  //SYS_AUDIO->Mute(objId, _index, _mute);
+  MyAudios.at(_index).channel->setMute(_mute);
+}
+
+bool ComponentLoadAudio::GetPause(int _index)
+{
+  // Err check
+  if (_index < 0 || _index >= MyAudios.size())
+  {
+    std::string error = "AudioComponent::GetPause _index out of range!";
+    TracyMessage(error.c_str(), error.size());
+    SPEEDLOG(error);
+    return true;
+  }
+
+  bool isPause = false;
+  MyAudios.at(_index).channel->getPaused(&isPause);
+  return isPause;
+}
+
+void ComponentLoadAudio::Pause(int _index, bool _pause)
+{
+  // Err check
+  if (_index < 0 || _index >= MyAudios.size())
+  {
+    std::string error = "AudioComponent::Pause _index out of range!";
+    TracyMessage(error.c_str(), error.size());
+    SPEEDLOG(error);
+    return;
+  }
+
+  //SYS_AUDIO->Mute(objId, _index, _mute);
+  MyAudios.at(_index).channel->setPaused(_pause);
+}
+
+void ComponentLoadAudio::SetLoop(int _index, bool _loop)
+{  // Err check
+  if (_index < 0 || _index >= MyAudios.size())
+  {
+    std::string error = "AudioComponent::SetLoop _index out of range!";
+    TracyMessage(error.c_str(), error.size());
+    SPEEDLOG(error);
+    return;
+  }
+
+  data& MyData = MyAudios.at(_index);
+  MyData.isLoop = _loop;
+  if (_loop)
+    MyData.channel->setMode(FMOD_LOOP_NORMAL);
+  else
+    MyData.channel->setMode(FMOD_LOOP_OFF);
+}
+
+void ComponentLoadAudio::SetVolume(int _index, float _vol)
+{
+  // Err check
+  if (_index < 0 || _index >= MyAudios.size())
+  {
+    std::string error = "AudioComponent::SetVolume _index out of range!";
+    TracyMessage(error.c_str(), error.size());
+    SPEEDLOG(error);
+    return;
+  }
+
+  //SYS_AUDIO->Mute(objId, _index, _mute);
+  data& MyData = MyAudios.at(_index);
+  MyData.volume = _vol;
+  MyData.channel->setVolume(_vol);
+}
+
+void ComponentLoadAudio::SetMinDist(int _index, float _dist)
+{
+  // Err check
+  if (_index < 0 || _index >= MyAudios.size())
+  {
+    std::string error = "AudioComponent::SetMinDist _index out of range!";
+    TracyMessage(error.c_str(), error.size());
+    SPEEDLOG(error);
+    return;
+  }
+
+  //SYS_AUDIO->Mute(objId, _index, _mute);
+  data& MyData = MyAudios.at(_index);
+  MyData.minDist = _dist;
+  MyData.channel->set3DMinMaxDistance(_dist, MyData.maxDist);
+}
+
+void ComponentLoadAudio::SetMaxDist(int _index, float _dist)
+{
+  // Err check
+  if (_index < 0 || _index >= MyAudios.size())
+  {
+    std::string error = "AudioComponent::SetMaxDist _index out of range!";
+    TracyMessage(error.c_str(), error.size());
+    SPEEDLOG(error);
+    return;
+  }
+
+  //SYS_AUDIO->Mute(objId, _index, _mute);
+  data& MyData = MyAudios.at(_index);
+  MyData.maxDist = _dist;
+  MyData.channel->set3DMinMaxDistance(MyData.minDist, _dist);
+}
+
 void	ComponentLoadAudio::Read(Value& val)
 {
-  //if (val.FindMember("ListOfSound") == val.MemberEnd())
-  //{
-  //  TracyMessageL("ComponentLoadAudio::Read: No data has been found");
-  //  SPEEDLOG("ComponentLoadAudio::Read: No data has been found");
-  //  //std::cout << "No Force data has been found" << std::endl;
-  //}
-  //else
-  //{
-  //  if (val["ListOfSound"].IsObject())
-  //  {
-  //    auto sound_array = val["ListOfSound"].GetObject();
-  //    //bool empty_at_start = (_sounds.size() == 0);
-  //    int index = 0;
-  //    for (Value::ConstMemberIterator itr = sound_array.MemberBegin(); itr != sound_array.MemberEnd(); ++itr)
-  //    {
-  //      data& MyData = MyAudios[index];
-  //      MyData.isActive = itr->
-
-  //        //strcpy_s(MyData.name, 128, itr->name.GetString());
-  //        //strcpy_s(MyData.path, 512, itr->value.GetString());
-  //        //if(empty_at_start)
-  //        //  _sounds.push_back(MyData);
-  //        //else
-  //        //   _sounds.at(index) = MyData;
-  //        ++index;
-  //    }
-  //  }
-  //  //Should be removed if tested removal without issue
-  //  else if (val["ListOfSound"].IsArray())
-  //  {
-  //    auto sound_array = val["ListOfSound"].GetArray();
-  //    bool empty_at_start = (_sounds.size() == 0);
-
-
-  //    for (int i = 0; i < (int)sound_array.Size(); ++i)
-  //    {
-  //      fs::path cur_path_name = sound_array[i].GetString();
-  //      data MyData;
-  //      std::string MyName = cur_path_name.stem().string();
-  //      std::string MyPath = cur_path_name.parent_path().string() + "/" + MyName + cur_path_name.extension().string();
-  //      strcpy_s(MyData.name, 128, MyName.c_str());
-  //      strcpy_s(MyData.path, 512, MyPath.c_str());
-  //      if (empty_at_start)
-  //        _sounds.push_back(MyData);
-  //      else
-  //        _sounds.at(i) = MyData;
-  //    }
-  //  }
-  //}
   for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
   {
     auto data_list = itr->value.GetArray();

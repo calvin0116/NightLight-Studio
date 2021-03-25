@@ -70,7 +70,9 @@
             "TransformComponent": {
                 "EntityName": "",
                 "Tag": 0,
-                "tagNames": [],
+                "tagNames": [
+                    0
+                ],
                 "Position": [
                     -443.4082336425781,
                     84.19566345214844,
