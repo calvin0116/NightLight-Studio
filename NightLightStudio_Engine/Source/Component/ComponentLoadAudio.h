@@ -13,35 +13,22 @@ typedef class ComponentLoadAudio : public ISerializable
 {
   struct AudioData
   {
-    bool ImGuiTab;
+    bool ImGuiTab     = true;
     // Standard variables
-    int index;        // index of sound in audio imgui
+    int index         = -1;        // index of sound in audio imgui
     //bool isActive;    // Whether this sound is active
-    bool isBGM;       // Whether sound is a BGM/Ambience or SFX
-    bool isLoop;      // whether this sound is looping
-    bool playOnAwake; // whether to play on isActive = true
-    float volume;     // Volume of sound 0.0f - 1.0f
-    bool is3D;        // Whether sound is 3D
+    bool isBGM        = false;       // Whether sound is a BGM/Ambience or SFX
+    bool isLoop       = false;      // whether this sound is looping
+    bool playOnAwake  = false; // whether to play on isActive = true
+    float volume      = 1.0f;     // Volume of sound 0.0f - 1.0f
+    bool is3D         = false;        // Whether sound is 3D
     // 3D variables
-    float minDist, maxDist;
+    float minDist     = 0.5f;
+    float maxDist     = 100.0f;
 
     // no need to save channel variable! Don't touch it!
     // Hidden variables for system use
-    FMOD::Channel* channel;    // Current channel sound is playing on if it is playing.
-    AudioData() : ImGuiTab(true), index(-1), isBGM(false), isLoop(false), playOnAwake(false), volume(1.0f), is3D(false), minDist(0.5f), maxDist(100.0f), channel(nullptr) {}
-
-    //void Read(Value& val)
-    //{
-    //  for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
-    //  {
-    //    if (itr->name == "userName")
-    //    {
-    //      userName = itr->value.GetString();
-    //    }
-
-    //  }
-    //};
-    //Value& Write(Value& val);
+    FMOD::Channel* channel = nullptr;
   };
 public:
   using data = AudioData;
@@ -75,4 +62,4 @@ public:
 	  *newcomp = *this;
 	  return newcomp;
   }
-} LoadAudioComponent;
+} LoadAudioComponent, AudioSourceComponent, ComponentAudioSource;

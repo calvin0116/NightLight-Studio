@@ -465,6 +465,8 @@
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentListener.cpp" />
     <ClCompile Include="Source\Editor\LevelEditor\LevelEditor_Audio.cpp" />
+    <ClCompile Include="Source\Mono\Binding\Components\ComponentAudioSourceBind.cpp" />
+    <ClCompile Include="Source\Mono\Binding\CustomTypes\AudioDataBind.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -904,6 +906,8 @@
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentListener.h" />
     <ClInclude Include="Source\Editor\LevelEditor\LevelEditor_Audio.h" />
+    <ClInclude Include="Source\Mono\Binding\Components\ComponentAudioSourceBind.h" />
+    <ClInclude Include="Source\Mono\Binding\CustomTypes\AudioDataBind.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Bin\fmod_vc.lib" />

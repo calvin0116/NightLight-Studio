@@ -9,6 +9,9 @@ namespace Unicorn
     //public int size;
     //public bool[] MyBoolArr;
     Transform trans;
+    AudioSource audSource;
+    //AudioData[] myDatas;
+    AudioData MyData;
     int ListenerID;
     Transform lisTrans;
     public string Listener = "Listener";
@@ -17,19 +20,16 @@ namespace Unicorn
 
     public override void Init()
     {
-      //MyStringArr = new string[size];
       trans = GetTransform(id);
+      audSource = GetAudioSource(id);
+      //myDatas = audSource.audioDatas;
+      MyData = audSource.GetData(0);
       ListenerID = GameObjectFind(Listener);
       lisTrans = GetTransform(ListenerID);
     }
 
     public override void LateInit()
     {
-      //MyStringArr[0] = "Hello";
-      //MyStringArr[1] = "How";
-      //MyStringArr[2] = "YouDoing?";
-      //for (int i = 0; i < size; ++i)
-      //  Print(MyStringArr[i]);
     }
 
     public override void Update()
@@ -47,6 +47,13 @@ namespace Unicorn
         Vector3 right = new Vector3(realSpeed, 0.0f, 0.0f);
         right = right + trans.GetPosition();
         trans.SetPosition(right);
+      }
+
+      if(Input.GetKeyPress(VK.IKEY_P))
+      {
+        Print(audSource.Size().ToString());
+        //Print(myDatas.Length.ToString());
+        Print(MyData.index.ToString());
       }
 
       if (Input.GetKeyHold(VK.IKEY_C))
