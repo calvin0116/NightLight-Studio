@@ -25,10 +25,12 @@ typedef class ComponentLoadAudio : public ISerializable
     // 3D variables
     float minDist     = 0.5f;
     float maxDist     = 100.0f;
-
+    
     // no need to save channel variable! Don't touch it!
     // Hidden variables for system use
     FMOD::Channel* channel = nullptr;
+
+    AudioData() : ImGuiTab(true), index(-1), isBGM(false), isLoop(false), playOnAwake(false), volume(1.0f), is3D(false), minDist(0.5f), maxDist(100.0f) {}
   };
 public:
   using data = AudioData;

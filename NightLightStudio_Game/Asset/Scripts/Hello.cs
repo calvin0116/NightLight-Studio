@@ -51,9 +51,16 @@ namespace Unicorn
 
       if(Input.GetKeyPress(VK.IKEY_P))
       {
-        Print(audSource.Size().ToString());
+        //Print(audSource.Size().ToString());
         //Print(myDatas.Length.ToString());
-        Print(MyData.index.ToString());
+        //Print(MyData.index.ToString());
+        AudioData[] audio = audSource.audioDatas;
+        //int test = audio[0];
+        //Print(audio[0].index.Tostring());
+        Print("end");
+
+        //Print(audio.index.ToString());
+        Print(audio[0].index.ToString());
       }
 
       if (Input.GetKeyHold(VK.IKEY_C))

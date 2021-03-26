@@ -34,10 +34,10 @@ namespace Unicorn
       private set { }
     }
 
-    public AudioData GetData(int _index)
-    {
-      return get_Data_Internal(native_handle, _index);
-    }
+    //public AudioData GetData(int _index)
+    //{
+    //  return get_Data_Internal(native_handle, _index);
+    //}
 
     // Getter/Setter for isActive
     [MethodImpl(MethodImplOptions.InternalCall)]
