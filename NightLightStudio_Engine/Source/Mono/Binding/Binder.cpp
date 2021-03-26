@@ -17,6 +17,7 @@ namespace MonoBind
     ComponentCanvasBind::BindComponentCanvas();
     ComponentEmitterBind::BindComponentEmitter();
     ComponentScriptBind::BindComponentScript();
+    ComponentAudioSourceBind::BindComponentAudioSource();
     // Temporary
     ComponentVariablesBind::BindComponentVariables();
   }
@@ -27,6 +28,7 @@ namespace MonoBind
     Vector3DBind::BindVector3D();
     UIElementBind::BindUIElement();
     Vector4Bind::BindVector4();
+    AudioDataBind::BindAudioData();
   }
 
   // Systems

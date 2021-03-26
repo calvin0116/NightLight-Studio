@@ -45,6 +45,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(GetAnimation, "GetAnimation", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetCanvas, "GetCanvas", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetEmitter, "GetEmitter", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetAudioSource, "GetAudioSource", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetVariables, "GetVariables", "UniBehaviour");
   }
   // For debugging in C#
@@ -54,9 +55,9 @@ namespace ECSBind
     (void)id;
     if (comp == nullptr)
     {
-#ifdef CSDebug
-      ED_OUT(type + " returned nullptr on Entity ID: " + std::to_string(id));
-#endif
+      std::string error = type + " returned nullptr trying to get id:" + std::to_string(id);
+      TracyMessage(error.c_str(), error.size());
+      SPEEDLOG(error);
       return true;
     }
     return false;
@@ -66,10 +67,13 @@ namespace ECSBind
   {
     std::string sName = MonoWrapper::ToString(_name);
     Entity en = G_ECMANAGER->getEntity(sName);
-#ifdef CSDebug
     if (en.getId() == -1)
-      ED_OUT("GameObjectFind(): Can't find " + sName + "!");
-#endif
+    {
+      std::string error = "GameObjectFind(): Can't find " + sName + "!";
+      TracyMessage(error.c_str(), error.size());
+      SPEEDLOG(error);
+      //ED_OUT("GameObjectFind(): Can't find " + sName + "!");
+    }
     return en.getId();
   }
 
@@ -287,6 +291,18 @@ namespace ECSBind
     if (CheckCompGet(emt, "GetEmitter()", id))
       return nullptr;
     MonoWrapper::SetNativeHandle(monoObj, emt);
+
+    return monoObj;
+  }
+
+  MonoObject* GetAudioSource(int id)
+  {
+    MonoObject* monoObj = MonoWrapper::ConstructObject("AudioSource");
+    Entity en = G_ECMANAGER->getEntity(id);
+    AudioSourceComponent* aud = en.getComponent<AudioSourceComponent>();
+    if (CheckCompGet(aud, "GetAudioSource()", id))
+      return nullptr;
+    MonoWrapper::SetNativeHandle(monoObj, aud);
 
     return monoObj;
   }

@@ -34,6 +34,7 @@ namespace ECSBind
   MonoObject* GetAnimation(int id);
   MonoObject* GetCanvas(int id);
   MonoObject* GetEmitter(int id);
+  MonoObject* GetAudioSource(int id);
   MonoObject* GetVariables(int id); // Use this for now until reflection is out
 
   void BindECS();
