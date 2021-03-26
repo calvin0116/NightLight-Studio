@@ -13,6 +13,8 @@
 #include "../Messaging/Messages/MessageTogglePlay.h"
 
 #include "../IO/Json/Parser.h"
+// ComponentLoadAudio::data
+#include "../Component/ComponentLoadAudio.h"
 
 #define s_MAX_CHANNELS 32
 #define s_UNITS_PER_METER 100
@@ -57,7 +59,7 @@ public:
   void LoadAudios();
 
   // Play audio
-  void Play(int entity, int _index);
+  void Play(int entity, ComponentLoadAudio::data& MyData);
 
   // Not used
   void Load() override {} // Not needed.

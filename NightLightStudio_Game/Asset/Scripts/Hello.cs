@@ -49,7 +49,20 @@ namespace Unicorn
         trans.SetPosition(right);
       }
 
-      if(Input.GetKeyPress(VK.IKEY_P))
+      if (Input.GetKeyHold(VK.IKEY_Q))
+      {
+        Vector3 left = new Vector3(-realSpeed, 0.0f, 0.0f);
+        left = left + lisTrans.GetPosition();
+        lisTrans.SetPosition(left);
+      }
+      if (Input.GetKeyHold(VK.IKEY_E))
+      {
+        Vector3 right = new Vector3(realSpeed, 0.0f, 0.0f);
+        right = right + lisTrans.GetPosition();
+        lisTrans.SetPosition(right);
+      }
+
+      if (Input.GetKeyPress(VK.IKEY_P))
       {
         //Print(audSource.Size().ToString());
         //Print(myDatas.Length.ToString());
@@ -61,6 +74,7 @@ namespace Unicorn
 
         //Print(audio.index.ToString());
         Print(audio[0].index.ToString());
+        audio[0].Play();
       }
 
       if (Input.GetKeyHold(VK.IKEY_C))

@@ -67,42 +67,12 @@
             "AudioManager": {
                 "ListOfSound": [
                     {
-                        "index": 1,
-                        "isBGM": false,
-                        "isLoop": true,
-                        "playOnAwake": true,
-                        "volume": 1.0,
-                        "is3D": true,
-                        "minDist": 0.5,
-                        "maxDist": 100.0
-                    },
-                    {
-                        "index": -1,
-                        "isBGM": false,
-                        "isLoop": true,
-                        "playOnAwake": true,
-                        "volume": 1.0,
-                        "is3D": true,
-                        "minDist": 0.5,
-                        "maxDist": 100.0
-                    },
-                    {
                         "index": 0,
                         "isBGM": false,
                         "isLoop": false,
                         "playOnAwake": false,
                         "volume": 1.0,
-                        "is3D": false,
-                        "minDist": 0.5,
-                        "maxDist": 100.0
-                    },
-                    {
-                        "index": -1,
-                        "isBGM": false,
-                        "isLoop": false,
-                        "playOnAwake": false,
-                        "volume": 1.0,
-                        "is3D": false,
+                        "is3D": true,
                         "minDist": 0.5,
                         "maxDist": 100.0
                     }
@@ -111,7 +81,10 @@
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "Hello"
+                "ScriptName": "Hello",
+                "Listenerstring": "Listener",
+                "speedfloat": 100.0,
+                "rotSpeedfloat": 1.0
             }
         },
         "Listener": {

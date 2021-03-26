@@ -13,6 +13,7 @@ typedef class ComponentLoadAudio : public ISerializable
 {
   struct AudioData
   {
+    int objID = -1;
     bool ImGuiTab     = true;
     // Standard variables
     int index         = -1;        // index of sound in audio imgui
@@ -31,6 +32,23 @@ typedef class ComponentLoadAudio : public ISerializable
     FMOD::Channel* channel = nullptr;
 
     AudioData() : ImGuiTab(true), index(-1), isBGM(false), isLoop(false), playOnAwake(false), volume(1.0f), is3D(false), minDist(0.5f), maxDist(100.0f) {}
+
+    void Play();
+    void SetLoop(bool _loop);
+    void SetVolume(float _vol);
+    void Set3D(bool _3d);
+    void SetMinDist(float _val);
+    void SetMaxDist(float _val);
+    bool GetMute() const;
+    void SetMute(bool _mute);
+    bool GetPause() const;
+    void SetPause(bool _pause);
+    //void Mute(bool _mute);
+    //void Pause(bool _pause);
+    //void Loop(bool _loop);
+    //void Volume(float _vol);
+    //void MinDist(float _dist);
+    //void MaxDist(float _dist);
   };
 public:
   using data = AudioData;
@@ -40,19 +58,19 @@ public:
 	~ComponentLoadAudio();
 
   // Variables in C# side
-  bool GetPlay(int _index);
-  void Play(int _index);
+  //bool GetPlay(int _index);
+  //void Play(int _index);
 
-  bool GetMute(int _index);
-  void Mute(int _index, bool _mute);
+  //bool GetMute(int _index);
+  //void Mute(int _index, bool _mute);
 
-  bool GetPause(int _index);
-  void Pause(int _index, bool _pause);
+  //bool GetPause(int _index);
+  //void Pause(int _index, bool _pause);
 
-  void SetLoop(int _index, bool _loop);
-  void SetVolume(int _index, float _vol);
-  void SetMinDist(int _index, float _vol);
-  void SetMaxDist(int _index, float _vol);
+  //void SetLoop(int _index, bool _loop);
+  //void SetVolume(int _index, float _vol);
+  //void SetMinDist(int _index, float _vol);
+  //void SetMaxDist(int _index, float _vol);
 
 	//read and write function for initialization from saved files
   virtual void	Read(Value& val) override;

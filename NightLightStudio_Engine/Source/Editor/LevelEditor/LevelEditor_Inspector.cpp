@@ -715,8 +715,11 @@ void InspectorWindow::AudioComp(Entity& ent)
 		{
 			if (ImGui::Button("Add Audio##AudioCOmp"))
 			{
-				aud_manager->MyAudios.push_back(ComponentLoadAudio::data());
-
+				ComponentLoadAudio::data MyData;
+				MyData.objID = aud_manager->objId;
+				//MyData.objID = aud_manager->objId;
+				aud_manager->MyAudios.push_back(MyData);
+				
 				// Undo-Redo for Components
 				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
 				editedComp = true;

@@ -6,6 +6,75 @@
 // Audio System
 #include "../Audio/SystemAudio.h" // TO play sound
 
+void ComponentLoadAudio::AudioData::Play()
+{
+  SYS_AUDIO->Play(objID, *this);
+}
+
+void ComponentLoadAudio::AudioData::SetLoop(bool _loop)
+{
+  isLoop = _loop;
+  if (_loop)
+    channel->setMode(FMOD_LOOP_NORMAL);
+  else
+    channel->setMode(FMOD_LOOP_OFF);
+}
+
+void ComponentLoadAudio::AudioData::SetVolume(float _vol)
+{
+  volume = _vol;
+  channel->setVolume(_vol);
+}
+
+void ComponentLoadAudio::AudioData::Set3D(bool _3d)
+{
+  is3D = _3d;
+  if (_3d)
+  {
+    channel->setMode(FMOD_3D);
+    channel->setMode(FMOD_3D_LINEARROLLOFF);
+    channel->set3DMinMaxDistance(minDist * s_UNITS_PER_METER, maxDist * s_UNITS_PER_METER);
+  }
+  else
+    channel->setMode(FMOD_2D);
+}
+
+void ComponentLoadAudio::AudioData::SetMinDist(float _val)
+{
+  minDist = _val;
+  channel->set3DMinMaxDistance(minDist * s_UNITS_PER_METER, maxDist * s_UNITS_PER_METER);
+}
+
+void ComponentLoadAudio::AudioData::SetMaxDist(float _val)
+{
+  maxDist = _val;
+  channel->set3DMinMaxDistance(minDist * s_UNITS_PER_METER, maxDist * s_UNITS_PER_METER);
+}
+
+bool ComponentLoadAudio::AudioData::GetMute() const
+{
+  bool ret = true;
+  channel->getMute(&ret);
+  return ret;
+}
+
+void ComponentLoadAudio::AudioData::SetMute(bool _mute)
+{
+  channel->setMute(_mute);
+}
+
+bool ComponentLoadAudio::AudioData::GetPause() const
+{
+  bool ret = true;
+  channel->getPaused(&ret);
+  return ret;
+}
+
+void ComponentLoadAudio::AudioData::SetPause(bool _pause)
+{
+  channel->setPaused(_pause);
+}
+
 ComponentLoadAudio::ComponentLoadAudio()
 {
   strcpy_s(ser_name, "AudioManager");
@@ -16,157 +85,157 @@ ComponentLoadAudio::~ComponentLoadAudio()
 
 }
 
-bool ComponentLoadAudio::GetPlay(int _index)
-{
-  // Err check
-  if (_index < 0 || _index >= MyAudios.size())
-  {
-    std::string error = "AudioComponent::GetPlay _index out of range!";
-    TracyMessage(error.c_str(), error.size());
-    SPEEDLOG(error);
-    return false;
-  }
-
-  bool isPlaying = false;
-  MyAudios.at(_index).channel->isPlaying(&isPlaying);
-  return isPlaying;
-}
-
-void ComponentLoadAudio::Play(int _index)
-{
-  SYS_AUDIO->Play(objId, _index);
-}
-
-bool ComponentLoadAudio::GetMute(int _index)
-{
-  // Err check
-  if (_index < 0 || _index >= MyAudios.size())
-  {
-    std::string error = "AudioComponent::GetMute _index out of range!";
-    TracyMessage(error.c_str(), error.size());
-    SPEEDLOG(error);
-    return true;
-  }
-
-  bool isMute = false;
-  MyAudios.at(_index).channel->getMute(&isMute);
-  return isMute;
-}
-
-void ComponentLoadAudio::Mute(int _index, bool _mute)
-{
-  // Err check
-  if (_index < 0 || _index >= MyAudios.size())
-  {
-    std::string error = "AudioComponent::Mute _index out of range!";
-    TracyMessage(error.c_str(), error.size());
-    SPEEDLOG(error);
-    return;
-  }
-
-  //SYS_AUDIO->Mute(objId, _index, _mute);
-  MyAudios.at(_index).channel->setMute(_mute);
-}
-
-bool ComponentLoadAudio::GetPause(int _index)
-{
-  // Err check
-  if (_index < 0 || _index >= MyAudios.size())
-  {
-    std::string error = "AudioComponent::GetPause _index out of range!";
-    TracyMessage(error.c_str(), error.size());
-    SPEEDLOG(error);
-    return true;
-  }
-
-  bool isPause = false;
-  MyAudios.at(_index).channel->getPaused(&isPause);
-  return isPause;
-}
-
-void ComponentLoadAudio::Pause(int _index, bool _pause)
-{
-  // Err check
-  if (_index < 0 || _index >= MyAudios.size())
-  {
-    std::string error = "AudioComponent::Pause _index out of range!";
-    TracyMessage(error.c_str(), error.size());
-    SPEEDLOG(error);
-    return;
-  }
-
-  //SYS_AUDIO->Mute(objId, _index, _mute);
-  MyAudios.at(_index).channel->setPaused(_pause);
-}
-
-void ComponentLoadAudio::SetLoop(int _index, bool _loop)
-{  // Err check
-  if (_index < 0 || _index >= MyAudios.size())
-  {
-    std::string error = "AudioComponent::SetLoop _index out of range!";
-    TracyMessage(error.c_str(), error.size());
-    SPEEDLOG(error);
-    return;
-  }
-
-  data& MyData = MyAudios.at(_index);
-  MyData.isLoop = _loop;
-  if (_loop)
-    MyData.channel->setMode(FMOD_LOOP_NORMAL);
-  else
-    MyData.channel->setMode(FMOD_LOOP_OFF);
-}
-
-void ComponentLoadAudio::SetVolume(int _index, float _vol)
-{
-  // Err check
-  if (_index < 0 || _index >= MyAudios.size())
-  {
-    std::string error = "AudioComponent::SetVolume _index out of range!";
-    TracyMessage(error.c_str(), error.size());
-    SPEEDLOG(error);
-    return;
-  }
-
-  //SYS_AUDIO->Mute(objId, _index, _mute);
-  data& MyData = MyAudios.at(_index);
-  MyData.volume = _vol;
-  MyData.channel->setVolume(_vol);
-}
-
-void ComponentLoadAudio::SetMinDist(int _index, float _dist)
-{
-  // Err check
-  if (_index < 0 || _index >= MyAudios.size())
-  {
-    std::string error = "AudioComponent::SetMinDist _index out of range!";
-    TracyMessage(error.c_str(), error.size());
-    SPEEDLOG(error);
-    return;
-  }
-
-  //SYS_AUDIO->Mute(objId, _index, _mute);
-  data& MyData = MyAudios.at(_index);
-  MyData.minDist = _dist;
-  MyData.channel->set3DMinMaxDistance(_dist, MyData.maxDist);
-}
-
-void ComponentLoadAudio::SetMaxDist(int _index, float _dist)
-{
-  // Err check
-  if (_index < 0 || _index >= MyAudios.size())
-  {
-    std::string error = "AudioComponent::SetMaxDist _index out of range!";
-    TracyMessage(error.c_str(), error.size());
-    SPEEDLOG(error);
-    return;
-  }
-
-  //SYS_AUDIO->Mute(objId, _index, _mute);
-  data& MyData = MyAudios.at(_index);
-  MyData.maxDist = _dist;
-  MyData.channel->set3DMinMaxDistance(MyData.minDist, _dist);
-}
+//bool ComponentLoadAudio::GetPlay(int _index)
+//{
+//  // Err check
+//  if (_index < 0 || _index >= MyAudios.size())
+//  {
+//    std::string error = "AudioComponent::GetPlay _index out of range!";
+//    TracyMessage(error.c_str(), error.size());
+//    SPEEDLOG(error);
+//    return false;
+//  }
+//
+//  bool isPlaying = false;
+//  MyAudios.at(_index).channel->isPlaying(&isPlaying);
+//  return isPlaying;
+//}
+//
+//void ComponentLoadAudio::Play(int _index)
+//{
+//  SYS_AUDIO->Play(objId, _index);
+//}
+//
+//bool ComponentLoadAudio::GetMute(int _index)
+//{
+//  // Err check
+//  if (_index < 0 || _index >= MyAudios.size())
+//  {
+//    std::string error = "AudioComponent::GetMute _index out of range!";
+//    TracyMessage(error.c_str(), error.size());
+//    SPEEDLOG(error);
+//    return true;
+//  }
+//
+//  bool isMute = false;
+//  MyAudios.at(_index).channel->getMute(&isMute);
+//  return isMute;
+//}
+//
+//void ComponentLoadAudio::Mute(int _index, bool _mute)
+//{
+//  // Err check
+//  if (_index < 0 || _index >= MyAudios.size())
+//  {
+//    std::string error = "AudioComponent::Mute _index out of range!";
+//    TracyMessage(error.c_str(), error.size());
+//    SPEEDLOG(error);
+//    return;
+//  }
+//
+//  //SYS_AUDIO->Mute(objId, _index, _mute);
+//  MyAudios.at(_index).channel->setMute(_mute);
+//}
+//
+//bool ComponentLoadAudio::GetPause(int _index)
+//{
+//  // Err check
+//  if (_index < 0 || _index >= MyAudios.size())
+//  {
+//    std::string error = "AudioComponent::GetPause _index out of range!";
+//    TracyMessage(error.c_str(), error.size());
+//    SPEEDLOG(error);
+//    return true;
+//  }
+//
+//  bool isPause = false;
+//  MyAudios.at(_index).channel->getPaused(&isPause);
+//  return isPause;
+//}
+//
+//void ComponentLoadAudio::Pause(int _index, bool _pause)
+//{
+//  // Err check
+//  if (_index < 0 || _index >= MyAudios.size())
+//  {
+//    std::string error = "AudioComponent::Pause _index out of range!";
+//    TracyMessage(error.c_str(), error.size());
+//    SPEEDLOG(error);
+//    return;
+//  }
+//
+//  //SYS_AUDIO->Mute(objId, _index, _mute);
+//  MyAudios.at(_index).channel->setPaused(_pause);
+//}
+//
+//void ComponentLoadAudio::SetLoop(int _index, bool _loop)
+//{  // Err check
+//  if (_index < 0 || _index >= MyAudios.size())
+//  {
+//    std::string error = "AudioComponent::SetLoop _index out of range!";
+//    TracyMessage(error.c_str(), error.size());
+//    SPEEDLOG(error);
+//    return;
+//  }
+//
+//  data& MyData = MyAudios.at(_index);
+//  MyData.isLoop = _loop;
+//  if (_loop)
+//    MyData.channel->setMode(FMOD_LOOP_NORMAL);
+//  else
+//    MyData.channel->setMode(FMOD_LOOP_OFF);
+//}
+//
+//void ComponentLoadAudio::SetVolume(int _index, float _vol)
+//{
+//  // Err check
+//  if (_index < 0 || _index >= MyAudios.size())
+//  {
+//    std::string error = "AudioComponent::SetVolume _index out of range!";
+//    TracyMessage(error.c_str(), error.size());
+//    SPEEDLOG(error);
+//    return;
+//  }
+//
+//  //SYS_AUDIO->Mute(objId, _index, _mute);
+//  data& MyData = MyAudios.at(_index);
+//  MyData.volume = _vol;
+//  MyData.channel->setVolume(_vol);
+//}
+//
+//void ComponentLoadAudio::SetMinDist(int _index, float _dist)
+//{
+//  // Err check
+//  if (_index < 0 || _index >= MyAudios.size())
+//  {
+//    std::string error = "AudioComponent::SetMinDist _index out of range!";
+//    TracyMessage(error.c_str(), error.size());
+//    SPEEDLOG(error);
+//    return;
+//  }
+//
+//  //SYS_AUDIO->Mute(objId, _index, _mute);
+//  data& MyData = MyAudios.at(_index);
+//  MyData.minDist = _dist;
+//  MyData.channel->set3DMinMaxDistance(_dist, MyData.maxDist);
+//}
+//
+//void ComponentLoadAudio::SetMaxDist(int _index, float _dist)
+//{
+//  // Err check
+//  if (_index < 0 || _index >= MyAudios.size())
+//  {
+//    std::string error = "AudioComponent::SetMaxDist _index out of range!";
+//    TracyMessage(error.c_str(), error.size());
+//    SPEEDLOG(error);
+//    return;
+//  }
+//
+//  //SYS_AUDIO->Mute(objId, _index, _mute);
+//  data& MyData = MyAudios.at(_index);
+//  MyData.maxDist = _dist;
+//  MyData.channel->set3DMinMaxDistance(MyData.minDist, _dist);
+//}
 
 void	ComponentLoadAudio::Read(Value& val)
 {
@@ -179,6 +248,7 @@ void	ComponentLoadAudio::Read(Value& val)
         auto aud_val = data_list[i].GetObjectA();
         
         data aud_obj;   //create dummy object
+        aud_obj.objID = objId;
 
         for (Value::ConstMemberIterator itr2 = aud_val.MemberBegin(); itr2 != aud_val.MemberEnd(); ++itr2)
         {

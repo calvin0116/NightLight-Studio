@@ -189,18 +189,28 @@ void SystemAudio::PlayOnAwake()
     if (aud->isActive)
     {
       LocalVector<ComponentLoadAudio::data>& AudVec = aud->MyAudios;
-      const size_t size = AudVec.size();
-      for (size_t i = 0; i < size; ++i)
+      for (ComponentLoadAudio::data& MyData : AudVec)
       {
-        ComponentLoadAudio::data& MyData = AudVec.at(i);
         if (MyData.playOnAwake)
         {
           // !!!!!!!!!Play Audio here
-          Play(aud->objId, (int)i);
+          Play(aud->objId, MyData);
           // Played, turn onawake off.
           MyData.playOnAwake = false;
         }
       }
+      //const size_t size = AudVec.size();
+      //for (size_t i = 0; i < size; ++i)
+      //{
+      //  ComponentLoadAudio::data& MyData = AudVec.at(i);
+      //  if (MyData.playOnAwake)
+      //  {
+      //    // !!!!!!!!!Play Audio here
+      //    Play(aud->objId, (int)i);
+      //    // Played, turn onawake off.
+      //    MyData.playOnAwake = false;
+      //  }
+      //}
     }
   }
 }
@@ -229,7 +239,7 @@ void SystemAudio::LoadAudios()
   }
 }
 
-void SystemAudio::Play(int entity, int _index)
+void SystemAudio::Play(int entity, ComponentLoadAudio::data& MyData)
 {
   // Err check
   if (entity < 0)
@@ -250,17 +260,19 @@ void SystemAudio::Play(int entity, int _index)
     return;
   }
 
-  LocalVector<ComponentLoadAudio::data>& audio = aud->MyAudios;
-  ComponentLoadAudio::data& MyData = audio.at(_index);
+  //LocalVector<ComponentLoadAudio::data>& audio = aud->MyAudios;
+  //ComponentLoadAudio::data& MyData = audio.at(_index);
   const int& aud_index = MyData.index;
   if (aud_index < 0 || aud_index >= Audios.size())
   {
-    std::string error = "Audio " + std::to_string(_index) + " | " + std::to_string(aud_index) + ", " + std::to_string(aud_index) + " is out of range";
+    std::string error = "Audio " + std::to_string(aud_index) + " is out of range";
     TracyMessage(error.c_str(), error.size());
     SPEEDLOG(error);
     return;
   }
   FMOD::Sound*& sound = Sounds[aud_index];
+  // Stop previously playing audio if any.
+  MyData.channel->stop();
   // Play sound but pause it first to set attributes.
   if (MyData.isBGM)
     _system->playSound(sound, _bgm, true, &MyData.channel);
