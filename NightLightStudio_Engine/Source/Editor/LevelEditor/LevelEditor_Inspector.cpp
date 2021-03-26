@@ -707,11 +707,19 @@ void InspectorWindow::AudioComp(Entity& ent)
 	ComponentLoadAudio* aud_manager = ent.getComponent<ComponentLoadAudio>();
 	if (aud_manager != nullptr)
 	{
+		// Undo-Redo for Components
+		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentLoadAudio>()->Write() };
+		bool editedComp = false;
+
 		if (ImGui::CollapsingHeader("Audio Manager##AudioComp", &_notRemove))
 		{
 			if (ImGui::Button("Add Audio##AudioCOmp"))
 			{
 				aud_manager->MyAudios.push_back(ComponentLoadAudio::data());
+
+				// Undo-Redo for Components
+				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
+				editedComp = true;
 			}
 			size_t size = aud_manager->MyAudios.size();
 			// Remove vector
@@ -726,16 +734,51 @@ void InspectorWindow::AudioComp(Entity& ent)
 					if (ImGui::BeginTabItem(header.c_str(), &MyData.ImGuiTab))
 					{
 						ImGui::InputInt(std::string("Index##AudioComp" + sIndex).c_str(), &MyData.index);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 						// Variables
 						ImGui::Checkbox(std::string("IsLoop##AudioComp" + sIndex).c_str(), &MyData.isLoop);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 						ImGui::Checkbox(std::string("PlayOnAwake##AudioComp" + sIndex).c_str(), &MyData.playOnAwake);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 						//ImGui::Checkbox(std::string("Mute##AudioComp" + sIndex).c_str(), &MyData.mute);
 						ImGui::InputFloat(std::string("Volume##AudioComp" + sIndex).c_str(), &MyData.volume);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 						ImGui::Checkbox(std::string("Is3D##AudioComp" + sIndex).c_str(), &MyData.is3D);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 						if (MyData.is3D)
 						{
 							ImGui::InputFloat(std::string("Min Dist##AudioComp" + sIndex).c_str(), &MyData.minDist);
+
+							// Undo-Redo for Components
+							_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+							editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 							ImGui::InputFloat(std::string("Max Dist##AudioComp" + sIndex).c_str(), &MyData.maxDist);
+
+							// Undo-Redo for Components
+							_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+							editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 						}
 						ImGui::EndTabItem();
 					}
@@ -756,6 +799,28 @@ void InspectorWindow::AudioComp(Entity& ent)
 			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
 			_notRemove = true;
 		}
+
+		if (editedComp)
+		{
+			if (_origComp._entID != -1)
+			{
+				// Undo-Redo for Components
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ nt, ent.getComponent<ComponentCollider>()->Write() };
+				//bool editedComp = false;
+
+				// Undo-Redo for Components
+				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+				/* // Uncomment this when Read/Write is working
+				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<ComponentLoadAudio>()->Write() };
+				aud_manager->Read(*_origComp._rjDoc);
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_AUDIO"), std::any(finalComp));
+				_origComp = ENTITY_COMP_READ{};
+				*/
+			}
+		}
+
 		ImGui::Separator();
 	}
 }
