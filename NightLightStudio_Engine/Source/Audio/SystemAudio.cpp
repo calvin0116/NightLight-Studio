@@ -28,6 +28,8 @@ void SystemAudio::Init()
   _system->set3DSettings(1.0f, s_UNITS_PER_METER, 1.0f);
   //_system->set3DRolloffCallback();
 
+  // Load Audio list
+  LoadList();
   // Load stuff here
   LoadAudios();
 
@@ -155,6 +157,8 @@ void SystemAudio::Update()
 
 void SystemAudio::Exit()
 {
+    //Save Audio List
+    SaveList();
   // Release Channels
   _bgm->release();
   _sfx->release();
@@ -308,6 +312,15 @@ void SystemAudio::MyGameExit()
     for (ComponentLoadAudio::data& MyData : aud->MyAudios)
       MyData.channel->stop();
   }
+}
+
+void SystemAudio::SaveList()
+{
+}
+
+void SystemAudio::LoadList()
+{
+
 }
 
 void SystemAudio::HandleTogglePlay(MessageTogglePlay& msg)
