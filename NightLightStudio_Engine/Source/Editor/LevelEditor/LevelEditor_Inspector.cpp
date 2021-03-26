@@ -730,7 +730,7 @@ void InspectorWindow::AudioComp(Entity& ent)
 				{
 					ComponentLoadAudio::data& MyData = aud_manager->MyAudios.at(i);
 					std::string sIndex = std::to_string(i);
-					std::string header = sIndex + "| " + std::to_string(MyData.index);
+					std::string header = "\t" + sIndex + "| " + std::to_string(MyData.index) + "\t";
 					if (ImGui::BeginTabItem(header.c_str(), &MyData.ImGuiTab))
 					{
 						ImGui::InputInt(std::string("Index##AudioComp" + sIndex).c_str(), &MyData.index);
