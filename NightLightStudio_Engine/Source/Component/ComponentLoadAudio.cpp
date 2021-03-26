@@ -303,14 +303,12 @@ inline Value ComponentLoadAudio::Write()
 
   //  //NS_SERIALISER::ChangeData(&soundData, std::to_string(i), )
   //}
-
   Value aud_data_list(rapidjson::kArrayType);
   ////std::string fullpath;
   for (int i = 0; i < MyAudios.size(); ++i)
   {
       data& d = MyAudios.at(i);
       Value aud_data(rapidjson::kObjectType);
-
 
       NS_SERIALISER::ChangeData(&aud_data, "index", d.index);
       NS_SERIALISER::ChangeData(&aud_data, "isBGM", d.isBGM);

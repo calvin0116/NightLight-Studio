@@ -157,8 +157,6 @@ void SystemAudio::Update()
 
 void SystemAudio::Exit()
 {
-    //Save Audio List
-    SaveList();
   // Release Channels
   _bgm->release();
   _sfx->release();
@@ -166,6 +164,9 @@ void SystemAudio::Exit()
   // Close and release system
   _system->close();
   _system->release();
+
+  //Save Audio List
+  SaveList();
 
   DestroyInstance();
 }
@@ -336,11 +337,40 @@ void SystemAudio::MyGameExit()
 
 void SystemAudio::SaveList()
 {
+    AudioListParser.CleanDoc();
+
+    Value* aud_str_list = new Value;
+    aud_str_list->SetArray();
+    //Value aud_str_list(rapidjson::kArrayType);
+    for (int i = 0; i < Audios.size(); ++i)
+        aud_str_list->PushBack(rapidjson::StringRef(Audios[i].c_str()), global_alloc);
+        //NS_SERIALISER::ChangeData(aud_str_list, "index", rapidjson::StringRef(Audios[i].c_str()) );
+        
+
+    AudioListParser.AddData("Audio List", aud_str_list);
+    AudioListParser.Save();
+    
+    //delete aud_str_list;
 }
 
 void SystemAudio::LoadList()
 {
+    AudioListParser.Load();
+    if (AudioListParser.GetDoc().MemberCount() == 0)
+        return;
 
+    for (Value::ConstMemberIterator itr = AudioListParser.GetDoc().MemberBegin(); itr != AudioListParser.GetDoc().MemberEnd(); ++itr)
+    {
+        if (itr->name == "Audio List")
+        {
+            auto aud_list = AudioListParser["Audio List"].GetArray();
+            for (unsigned i = 0; i < aud_list.Size(); ++i)
+            {
+                Audios.push_back(aud_list[i].GetString());
+            }
+            //string_list_val.PushBack(rapidjson::StringRef(s.c_str()), global_alloc);
+        }
+    }
 }
 
 void SystemAudio::HandleTogglePlay(MessageTogglePlay& msg)
