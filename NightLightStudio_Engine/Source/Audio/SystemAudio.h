@@ -12,6 +12,8 @@
 #include "../Messaging/SystemReceiver.h"
 #include "../Messaging/Messages/MessageTogglePlay.h"
 
+#include "../IO/Json/Parser.h"
+
 #define s_MAX_CHANNELS 32
 #define s_UNITS_PER_METER 100
 
@@ -35,7 +37,14 @@ class SystemAudio : public MySystem, public  Singleton<SystemAudio>
   FMOD::ChannelGroup* _sfx;
 
   SystemMessaging::SystemReceiver r;
+
+  //Json Audio List
+  NS_SERIALISER::Parser AudioListParser;
+
 public: 
+	SystemAudio() :
+		AudioListParser{ "AudioList", json_path }
+	{}
   // Getting of audios' path
   std::vector<std::string> Audios; // index, path
 
@@ -62,6 +71,10 @@ public:
   void MyGameInit() {};
   void MyGameExit();
 
+  // Save list
+  void SaveList();
+  // Load list 
+  void LoadList();
 
 //  // Alias
 //  using MyAudioMap = std::map<std::string, FMOD::Sound*>;

@@ -16,20 +16,36 @@ ComponentListener::~ComponentListener()
 
 void ComponentListener::Read(Value& val)
 {
-	if (val.FindMember("isActive") == val.MemberEnd())
+	for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
 	{
-		//std::cout << "No active data has been found" << std::endl;
-		TracyMessageL("ComponentListener::Read: No active data has been found");
-		SPEEDLOG("ComponentListener::Read: No active data has been found");
+		if (itr->name == "isActive")
+		{
+			_isActive = val["isActive"].GetBool();
+		}
+		if (itr->name == "front")
+		{
+			auto front = val["front"].GetArray();
+
+			_front.x = front[0].GetFloat();
+			_front.y = front[1].GetFloat();
+			_front.z = front[2].GetFloat();
+		}
 	}
-	else
-		_isActive = val["isActive"].GetBool();
+
+		
 }
 
 inline Value ComponentListener::Write()
 {
 	Value val(rapidjson::kObjectType);
 	NS_SERIALISER::ChangeData(&val, "isActive", _isActive);
+
+	Value front(rapidjson::kArrayType);
+	front.PushBack(_front.x, global_alloc);
+	front.PushBack(_front.y, global_alloc);
+	front.PushBack(_front.z, global_alloc);
+
+	NS_SERIALISER::ChangeData(&val, "front", front);
 
 	return val;
 }

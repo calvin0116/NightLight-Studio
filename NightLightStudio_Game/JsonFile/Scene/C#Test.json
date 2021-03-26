@@ -64,14 +64,54 @@
                 "RoughnessMat": 0.5,
                 "Alpha": 1.0
             },
-            "AudioManager": {},
+            "AudioManager": {
+                "ListOfSound": [
+                    {
+                        "index": 1,
+                        "isBGM": false,
+                        "isLoop": true,
+                        "playOnAwake": true,
+                        "volume": 1.0,
+                        "is3D": true,
+                        "minDist": 0.5,
+                        "maxDist": 100.0
+                    },
+                    {
+                        "index": -1,
+                        "isBGM": false,
+                        "isLoop": true,
+                        "playOnAwake": true,
+                        "volume": 1.0,
+                        "is3D": true,
+                        "minDist": 0.5,
+                        "maxDist": 100.0
+                    },
+                    {
+                        "index": 0,
+                        "isBGM": false,
+                        "isLoop": false,
+                        "playOnAwake": false,
+                        "volume": 1.0,
+                        "is3D": false,
+                        "minDist": 0.5,
+                        "maxDist": 100.0
+                    },
+                    {
+                        "index": -1,
+                        "isBGM": false,
+                        "isLoop": false,
+                        "playOnAwake": false,
+                        "volume": 1.0,
+                        "is3D": false,
+                        "minDist": 0.5,
+                        "maxDist": 100.0
+                    }
+                ]
+            },
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "Hello",
-                "Listenerstring": "Listener",
-                "speedfloat": 100.0,
-                "rotSpeedfloat": 1.0
+                "ScriptName": "Hello"
             }
         },
         "Listener": {
@@ -139,7 +179,12 @@
                 "Alpha": 1.0
             },
             "ListenerComponent": {
-                "isActive": true
+                "isActive": true,
+                "front": [
+                    0.0,
+                    0.0,
+                    1.0
+                ]
             }
         }
     }

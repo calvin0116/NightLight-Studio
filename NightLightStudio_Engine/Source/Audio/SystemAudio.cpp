@@ -28,6 +28,8 @@ void SystemAudio::Init()
   _system->set3DSettings(1.0f, s_UNITS_PER_METER, 1.0f);
   //_system->set3DRolloffCallback();
 
+  // Load Audio list
+  LoadList();
   // Load stuff here
   LoadAudios();
 
@@ -155,6 +157,8 @@ void SystemAudio::Update()
 
 void SystemAudio::Exit()
 {
+    //Save Audio List
+    SaveList();
   // Release Channels
   _bgm->release();
   _sfx->release();
@@ -248,7 +252,15 @@ void SystemAudio::Play(int entity, int _index)
 
   LocalVector<ComponentLoadAudio::data>& audio = aud->MyAudios;
   ComponentLoadAudio::data& MyData = audio.at(_index);
-  FMOD::Sound*& sound = Sounds[MyData.index];
+  const int& aud_index = MyData.index;
+  if (aud_index < 0 || aud_index >= Audios.size())
+  {
+    std::string error = "Audio " + std::to_string(_index) + " | " + std::to_string(aud_index) + ", " + std::to_string(aud_index) + " is out of range";
+    TracyMessage(error.c_str(), error.size());
+    SPEEDLOG(error);
+    return;
+  }
+  FMOD::Sound*& sound = Sounds[aud_index];
   // Play sound but pause it first to set attributes.
   if (MyData.isBGM)
     _system->playSound(sound, _bgm, true, &MyData.channel);
@@ -308,6 +320,15 @@ void SystemAudio::MyGameExit()
     for (ComponentLoadAudio::data& MyData : aud->MyAudios)
       MyData.channel->stop();
   }
+}
+
+void SystemAudio::SaveList()
+{
+}
+
+void SystemAudio::LoadList()
+{
+
 }
 
 void SystemAudio::HandleTogglePlay(MessageTogglePlay& msg)

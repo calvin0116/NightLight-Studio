@@ -170,12 +170,53 @@ void ComponentLoadAudio::SetMaxDist(int _index, float _dist)
 
 void	ComponentLoadAudio::Read(Value& val)
 {
+  MyAudios.clear();
   for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
   {
     auto data_list = itr->value.GetArray();
     for (unsigned i = 0; i < data_list.Size(); ++i)
     {
+        auto aud_val = data_list[i].GetObjectA();
+        
+        data aud_obj;   //create dummy object
 
+        for (Value::ConstMemberIterator itr2 = aud_val.MemberBegin(); itr2 != aud_val.MemberEnd(); ++itr2)
+        {
+            if (itr2->name == "index")
+            {
+                aud_obj.index = itr2->value.GetInt();        // index of sound in audio imgui
+            }
+            else if (itr2->name == "isBGM")
+            {
+                aud_obj.isBGM = itr2->value.GetBool();       // Whether sound is a BGM/Ambience or SFX
+            }
+            else if (itr2->name == "isLoop")
+            {
+                aud_obj.isLoop = itr2->value.GetBool();      // whether this sound is looping
+            }
+            else if (itr2->name == "playOnAwake")
+            {
+                aud_obj.playOnAwake = itr2->value.GetBool(); // whether to play on isActive = true
+            }
+            else if (itr2->name == "volume")
+            {
+                aud_obj.volume = itr2->value.GetFloat();     // Volume of sound 0.0f - 1.0f
+            }
+            else if (itr2->name == "is3D")
+            {
+                aud_obj.is3D = itr2->value.GetBool();        // Whether sound is 3D
+            }
+            else if (itr2->name == "minDist")
+            {
+                // 3D variables
+                aud_obj.minDist = itr2->value.GetFloat();
+            }
+            else if (itr2->name == "maxDist")
+            {
+                aud_obj.maxDist = itr2->value.GetFloat();
+            }
+        }
+        MyAudios.push_back(aud_obj);
     }
 
   }
@@ -185,7 +226,6 @@ inline Value ComponentLoadAudio::Write()
 {
   Value val(rapidjson::kObjectType);
   //NS_SERIALISER::ChangeData(&val, my, rapidjson::StringRef(_modelFileName.c_str()));
-  Value soundData(rapidjson::kObjectType);
 
   //for (size_t i = 0; i < MySize; ++i)
   //{
@@ -194,16 +234,26 @@ inline Value ComponentLoadAudio::Write()
   //  //NS_SERIALISER::ChangeData(&soundData, std::to_string(i), )
   //}
 
+  Value aud_data_list(rapidjson::kArrayType);
   ////std::string fullpath;
-  //for (int i = 0; i < _sounds.size(); ++i)
-  //{
-  //    data& d = _sounds.at(i);
-  //    Value str(rapidjson::kStringType);
-  //    str.SetString(rapidjson::StringRef(d.path));
-  //    //soundlist.PushBack(str, global_alloc);
-  //    NS_SERIALISER::ChangeData(&soundlist, d.name, str);
-  //}
-  //NS_SERIALISER::ChangeData(&val, "ListOfSound", soundlist);
+  for (int i = 0; i < MyAudios.size(); ++i)
+  {
+      data& d = MyAudios.at(i);
+      Value aud_data(rapidjson::kObjectType);
+
+
+      NS_SERIALISER::ChangeData(&aud_data, "index", d.index);
+      NS_SERIALISER::ChangeData(&aud_data, "isBGM", d.isBGM);
+      NS_SERIALISER::ChangeData(&aud_data, "isLoop", d.isLoop);
+      NS_SERIALISER::ChangeData(&aud_data, "playOnAwake", d.playOnAwake);
+      NS_SERIALISER::ChangeData(&aud_data, "volume", d.volume);
+      NS_SERIALISER::ChangeData(&aud_data, "is3D", d.is3D);
+      NS_SERIALISER::ChangeData(&aud_data, "minDist", d.minDist);
+      NS_SERIALISER::ChangeData(&aud_data, "maxDist", d.maxDist);
+
+      aud_data_list.PushBack(aud_data, global_alloc);
+  }
+  NS_SERIALISER::ChangeData(&val, "ListOfSound", aud_data_list);
 
   return val;
 }
