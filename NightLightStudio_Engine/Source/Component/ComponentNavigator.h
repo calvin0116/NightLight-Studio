@@ -280,7 +280,7 @@ public:
 	void ToGoToPrevWP()
 	{
 		if (!path_indexes.at(cur_route_wp_index).second && cur_route_wp_index!= 0)
-			--cur_route_wp_index;
+			cur_route_wp_index = prev_route_wp_index;
 	}
 
 	void DecideOnNextWp()
