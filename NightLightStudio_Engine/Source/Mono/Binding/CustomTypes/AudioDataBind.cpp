@@ -11,6 +11,51 @@ namespace AudioDataBind
     MonoWrapper::BindClassFunction(set_Index_Internal, "set_Index_Internal",
       "AudioData");
 
+    MonoWrapper::BindClassFunction(get_IsBGM_Internal, "get_IsBGM_Internal",
+      "AudioData");
+    MonoWrapper::BindClassFunction(set_ISBGM_Internal, "set_ISBGM_Internal",
+      "AudioData");
+
+    MonoWrapper::BindClassFunction(get_IsLoop_Internal, "get_IsLoop_Internal",
+      "AudioData");
+    MonoWrapper::BindClassFunction(set_IsLoop_Internal, "set_IsLoop_Internal",
+      "AudioData");
+
+    MonoWrapper::BindClassFunction(get_PlayOnAwake_Internal, "get_PlayOnAwake_Internal",
+      "AudioData");
+    MonoWrapper::BindClassFunction(set_PlayOnAwake_Internal, "set_PlayOnAwake_Internal",
+      "AudioData");
+
+    MonoWrapper::BindClassFunction(get_Volume_Internal, "get_Volume_Internal",
+      "AudioData");
+    MonoWrapper::BindClassFunction(set_Volume_Internal, "set_Volume_Internal",
+      "AudioData");
+
+    MonoWrapper::BindClassFunction(get_Is3D_Internal, "get_Is3D_Internal",
+      "AudioData");
+    MonoWrapper::BindClassFunction(set_Is3D_Internal, "set_Is3D_Internal",
+      "AudioData");
+
+    MonoWrapper::BindClassFunction(get_MinDist_Internal, "get_MinDist_Internal",
+      "AudioData");
+    MonoWrapper::BindClassFunction(set_MinDist_Internal, "set_MinDist_Internal",
+      "AudioData");
+
+    MonoWrapper::BindClassFunction(get_MaxDist_Internal, "get_MaxDist_Internal",
+      "AudioData");
+    MonoWrapper::BindClassFunction(set_MaxDist_Internal, "set_MaxDist_Internal",
+      "AudioData");
+
+    MonoWrapper::BindClassFunction(get_IsMute_Internal, "get_IsMute_Internal",
+      "AudioData");
+    MonoWrapper::BindClassFunction(set_IsMute_Internal, "set_IsMute_Internal",
+      "AudioData");
+
+    MonoWrapper::BindClassFunction(get_IsPause_Internal, "get_IsPause_Internal",
+      "AudioData");
+    MonoWrapper::BindClassFunction(set_IsPause_Internal, "set_IsPause_Internal",
+      "AudioData");
+
     MonoWrapper::BindClassFunction(Play_Internal, "Play_Internal", "AudioData");
   }
 

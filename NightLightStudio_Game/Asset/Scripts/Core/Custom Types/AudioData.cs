@@ -56,6 +56,18 @@ namespace Unicorn
       set { set_MaxDist_Internal(native_handle, value); }
     }
 
+    public bool mute
+    {
+      get { return get_IsMute_Internal(native_handle); }
+      set { set_IsMute_Internal(native_handle, value); }
+    }
+
+    public bool pause
+    {
+      get { return get_IsPause_Internal(native_handle); }
+      set { set_IsPause_Internal(native_handle, value); }
+    }
+
     public void Play()
     {
       Play_Internal(native_handle);
@@ -100,6 +112,16 @@ namespace Unicorn
     public extern static float get_MaxDist_Internal(IntPtr native_handle);
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void set_MaxDist_Internal(IntPtr native_handle, float val);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool get_IsMute_Internal(IntPtr native_handle);
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_IsMute_Internal(IntPtr native_handle, bool val);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool get_IsPause_Internal(IntPtr native_handle);
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void set_IsPause_Internal(IntPtr native_handle, bool val);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void Play_Internal(IntPtr native_handle);

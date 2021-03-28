@@ -39,25 +39,6 @@ namespace Unicorn
       return get_Data_Internal(native_handle, _index);
     }
 
-    //public bool IsPlaying(int _index)
-    //{
-    //  return get_IsPlaying_Internal(native_handle, _index);
-    //}
-    //public void Play(int _index)
-    //{
-    //  Play_Internal(native_handle, _index);
-    //}
-
-    //public bool IsMuted(int _index)
-    //{
-    //  return get_IsMuted_Internal(native_handle, _index);
-    //}
-    //public void Mute(int _index, bool _mute)
-    //{
-    //  Mute_Internal(native_handle, _index, _mute);
-    //}
-
-
     // Getter/Setter for isActive
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool get_IsActive_Internal(IntPtr native_handle);

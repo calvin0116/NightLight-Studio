@@ -43,12 +43,6 @@ typedef class ComponentLoadAudio : public ISerializable
     void SetMute(bool _mute);
     bool GetPause() const;
     void SetPause(bool _pause);
-    //void Mute(bool _mute);
-    //void Pause(bool _pause);
-    //void Loop(bool _loop);
-    //void Volume(float _vol);
-    //void MinDist(float _dist);
-    //void MaxDist(float _dist);
   };
 public:
   using data = AudioData;

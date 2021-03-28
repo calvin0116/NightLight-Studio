@@ -32,10 +32,10 @@ namespace AudioDataBind
   void set_MaxDist_Internal(ComponentLoadAudio::data* data, float val);
 
   bool get_IsMute_Internal(const ComponentLoadAudio::data* data);
-  void set_IsMute_Internal(const ComponentLoadAudio::data* data, bool val);
+  void set_IsMute_Internal(ComponentLoadAudio::data* data, bool val);
 
   bool get_IsPause_Internal(const ComponentLoadAudio::data* data);
-  void set_IsPause_Internal(const ComponentLoadAudio::data* data, bool val);
+  void set_IsPause_Internal(ComponentLoadAudio::data* data, bool val);
 
   // Play audio
   void Play_Internal(ComponentLoadAudio::data* data);
