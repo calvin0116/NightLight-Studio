@@ -58,8 +58,19 @@ public:
   void PlayOnAwake();
   void LoadAudios();
 
-  // Play audio
+  // Play/Stop audio
   void Play(int entity, ComponentLoadAudio::data& MyData);
+  void Stop(int entity, ComponentLoadAudio::data& MyData);
+  // Inline
+  inline void MuteSFX(bool _mute) { _sfx->setMute(_mute); }
+  inline void MuteBGM(bool _mute) { _bgm->setMute(_mute); }
+  inline void MuteMASTER(bool _mute) { _master->setMute(_mute); }
+  inline void PauseSFX(bool _pause) { _sfx->setPaused(_pause); }
+  inline void PauseBGM(bool _pause) { _bgm->setPaused(_pause); }
+  inline void PauseMASTER(bool _pause) { _master->setPaused(_pause); }
+  inline void VolumeSFX(float _vol) { _sfx->setVolume(_vol); }
+  inline void VolumeBGM(float _vol) { _bgm->setVolume(_vol); }
+  inline void VolumeMASTER(float _vol) { _master->setVolume(_vol); }
 
   // Not used
   void Load() override {} // Not needed.

@@ -163,7 +163,7 @@ namespace Unicorn
       {
         if (script_Player.CurrentState == ScriptPlayer.State.Moth)
         {
-          Audio.PlayOnce("13");
+          //Audio.PlayOnce("13");
           activate = true;
          
           // Set player script nextspawn position == possessionSpawnPos

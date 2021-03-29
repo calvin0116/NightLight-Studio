@@ -73,6 +73,11 @@ namespace Unicorn
       Play_Internal(native_handle);
     }
 
+    public void Stop()
+    {
+      Stop_Internal(native_handle);
+    }
+
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static int get_Index_Internal(IntPtr native_handle);
     [MethodImpl(MethodImplOptions.InternalCall)]
@@ -125,5 +130,8 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void Play_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void Stop_Internal(IntPtr native_handle);
   }
 }

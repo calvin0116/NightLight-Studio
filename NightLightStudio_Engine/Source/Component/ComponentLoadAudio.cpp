@@ -11,6 +11,11 @@ void ComponentLoadAudio::AudioData::Play()
   SYS_AUDIO->Play(objID, *this);
 }
 
+void ComponentLoadAudio::AudioData::Stop()
+{
+  SYS_AUDIO->Stop(objID, *this);
+}
+
 void ComponentLoadAudio::AudioData::SetLoop(bool _loop)
 {
   isLoop = _loop;

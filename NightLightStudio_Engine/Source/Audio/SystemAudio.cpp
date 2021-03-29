@@ -157,6 +157,9 @@ void SystemAudio::Update()
 
 void SystemAudio::Exit()
 {
+
+  //Save Audio List
+  SaveList();
   // Release Channels
   _bgm->release();
   _sfx->release();
@@ -165,8 +168,6 @@ void SystemAudio::Exit()
   _system->close();
   _system->release();
 
-  //Save Audio List
-  SaveList();
 
   DestroyInstance();
 }
@@ -312,6 +313,31 @@ void SystemAudio::Play(int entity, ComponentLoadAudio::data& MyData)
 
   // Unpause sound to start playing it
   MyData.channel->setPaused(false);
+}
+
+void SystemAudio::Stop(int entity, ComponentLoadAudio::data& MyData)
+{
+  // Err check
+  if (entity < 0)
+  {
+    std::string error = "Audio::Stop for entity that doesnt exist!";
+    TracyMessage(error.c_str(), error.size());
+    SPEEDLOG(error);
+    return;
+  }
+  Entity en = G_ECMANAGER->getEntity(entity);
+  ComponentLoadAudio* aud = en.getComponent<ComponentLoadAudio>();
+  // Err check
+  if (aud == nullptr)
+  {
+    std::string error = "Audio::Stop::aud is nullptr";
+    TracyMessage(error.c_str(), error.size());
+    SPEEDLOG(error);
+    return;
+  }
+
+  // Stop audio
+  MyData.channel->stop();
 }
 
 void SystemAudio::MyGameExit()

@@ -742,6 +742,8 @@ void InspectorWindow::AudioComp(Entity& ent)
 						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
 						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
+						ImGui::Checkbox(std::string("IsBGM##AudioComp" + sIndex).c_str(), &MyData.isBGM);
+
 						// Variables
 						ImGui::Checkbox(std::string("IsLoop##AudioComp" + sIndex).c_str(), &MyData.isLoop);
 
@@ -815,12 +817,12 @@ void InspectorWindow::AudioComp(Entity& ent)
 				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
 				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
-				/* // Uncomment this when Read/Write is working
+				 // Uncomment this when Read/Write is working
 				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<ComponentLoadAudio>()->Write() };
 				aud_manager->Read(*_origComp._rjDoc);
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_AUDIO"), std::any(finalComp));
 				_origComp = ENTITY_COMP_READ{};
-				*/
+				
 			}
 		}
 

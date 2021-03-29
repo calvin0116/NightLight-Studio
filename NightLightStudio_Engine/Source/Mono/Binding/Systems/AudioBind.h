@@ -15,11 +15,13 @@ namespace AudioBind
   //void csUnpause(int _channel);
   //void csStop(int _channel);
   //void csSetVol(int _channel, float _vol);
-  //void csMuteBGM(bool _mute);
-  //void csMuteSFX(bool _mute);
-  //void csMuteMASTER(bool _mute);
-  //void csSetBGMVol(float _vol);
-  //void csSetSFXVol(float _vol);
-  //void csSetMASTERVol(float _vol);
-  //void csMASTERPause(bool _pause);
+  void csMuteBGM(bool _mute);
+  void csMuteSFX(bool _mute);
+  void csMuteMASTER(bool _mute);
+  void csPauseBGM(bool _pause);
+  void csPauseSFX(bool _pause);
+  void csPauseMASTER(bool _pause);
+  void csSetBGMVol(float _vol);
+  void csSetSFXVol(float _vol);
+  void csSetMASTERVol(float _vol);
 }

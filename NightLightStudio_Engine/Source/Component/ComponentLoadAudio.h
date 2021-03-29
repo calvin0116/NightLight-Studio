@@ -34,6 +34,7 @@ typedef class ComponentLoadAudio : public ISerializable
     AudioData() : ImGuiTab(true), index(-1), isBGM(false), isLoop(false), playOnAwake(false), volume(1.0f), is3D(false), minDist(0.5f), maxDist(100.0f) {}
 
     void Play();
+    void Stop();
     void SetLoop(bool _loop);
     void SetVolume(float _vol);
     void Set3D(bool _3d);

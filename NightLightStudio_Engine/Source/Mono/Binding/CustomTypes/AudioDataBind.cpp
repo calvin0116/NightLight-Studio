@@ -57,6 +57,7 @@ namespace AudioDataBind
       "AudioData");
 
     MonoWrapper::BindClassFunction(Play_Internal, "Play_Internal", "AudioData");
+    MonoWrapper::BindClassFunction(Stop_Internal, "Stop_Internal", "AudioData");
   }
 
   int get_Index_Internal(const ComponentLoadAudio::data* data)
@@ -152,5 +153,10 @@ namespace AudioDataBind
   void Play_Internal(ComponentLoadAudio::data* data)
   {
     data->Play();
+  }
+
+  void Stop_Internal(ComponentLoadAudio::data* data)
+  {
+    data->Stop();
   }
 }

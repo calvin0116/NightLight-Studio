@@ -29,7 +29,7 @@ namespace Unicorn
     public override void Init()
     {
      
-      Audio.PlayBGM("6");
+      //Audio.PlayBGM("6");
       
     }
 
@@ -51,40 +51,40 @@ namespace Unicorn
     public int PlayAudio (int index)
     {
       int chnl = -1;
-      switch (index)
-      {
-        case 1:
-          chnl = Audio.PlayBGM("0");
-          break;
+      //switch (index)
+      //{
+      //  case 1:
+      //    chnl = Audio.PlayBGM("0");
+      //    break;
 
-        case 2:
-          chnl = Audio.PlayBGM("1");
-          break;
+      //  case 2:
+      //    chnl = Audio.PlayBGM("1");
+      //    break;
 
-        case 3:
-          chnl = Audio.PlayBGM("2");
-          break;
+      //  case 3:
+      //    chnl = Audio.PlayBGM("2");
+      //    break;
 
-        case 4:
-          chnl = Audio.PlayBGM("3");
-          break;
+      //  case 4:
+      //    chnl = Audio.PlayBGM("3");
+      //    break;
 
-        case 5:
-          chnl = Audio.PlayBGM("4");
-          break;
+      //  case 5:
+      //    chnl = Audio.PlayBGM("4");
+      //    break;
 
-        case 6:
-          chnl = Audio.PlayBGM("5");
-          //Audio.SetBGMVol(0.5f);
-          break;
+      //  case 6:
+      //    chnl = Audio.PlayBGM("5");
+      //    //Audio.SetBGMVol(0.5f);
+      //    break;
 
-        case 7:
-          chnl = Audio.PlayBGM("6");
-          //Audio.SetBGMVol(0.5f);
-          break;
-        
+      //  case 7:
+      //    chnl = Audio.PlayBGM("6");
+      //    //Audio.SetBGMVol(0.5f);
+      //    break;
 
-      }
+
+      //}
 
       return chnl;
     }
@@ -93,17 +93,17 @@ namespace Unicorn
     public int PlaySFX(int index)
     {
       cc2 = 0;
-      switch (index)
-      {
-        case 1:
-          cc2 = Audio.PlayBGM("7");
-          break;
+      //switch (index)
+      //{
+      //  case 1:
+      //    cc2 = Audio.PlayBGM("7");
+      //    break;
 
-        case 2:
-        Audio.PlayOnce("8");
-          break;
+      //  case 2:
+      //  Audio.PlayOnce("8");
+      //    break;
 
-      }
+      //}
 
       return cc2;
     }

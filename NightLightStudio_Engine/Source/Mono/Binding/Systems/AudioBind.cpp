@@ -34,26 +34,32 @@ namespace AudioBind
     //MonoWrapper::BindClassFunction(csSetVol, "SetVol",
     //  "Audio");
 
-    //MonoWrapper::BindClassFunction(csMuteBGM, "MuteBGM",
-    //  "Audio");
+    MonoWrapper::BindClassFunction(csMuteBGM, "MuteBGM",
+      "Audio");
 
-    //MonoWrapper::BindClassFunction(csMuteSFX, "MuteSFX",
-    //  "Audio");
+    MonoWrapper::BindClassFunction(csMuteSFX, "MuteSFX",
+      "Audio");
 
-    //MonoWrapper::BindClassFunction(csMuteMASTER, "MuteMASTER",
-    //  "Audio");
+    MonoWrapper::BindClassFunction(csMuteMASTER, "MuteMASTER",
+      "Audio");
 
-    //MonoWrapper::BindClassFunction(csSetBGMVol, "SetBGMVol",
-    //  "Audio");
+    MonoWrapper::BindClassFunction(csPauseBGM, "PauseBGM",
+      "Audio");
 
-    //MonoWrapper::BindClassFunction(csSetSFXVol, "SetSFXVol",
-    //  "Audio");
+    MonoWrapper::BindClassFunction(csPauseSFX, "PauseSFX",
+      "Audio");
 
-    //MonoWrapper::BindClassFunction(csSetMASTERVol, "SetMASTERVol",
-    //  "Audio");
+    MonoWrapper::BindClassFunction(csPauseMASTER, "PauseMASTER",
+      "Audio");
 
-    //MonoWrapper::BindClassFunction(csMASTERPause, "PauseMASTER",
-    //  "Audio");
+    MonoWrapper::BindClassFunction(csSetBGMVol, "VolumeBGM",
+      "Audio");
+
+    MonoWrapper::BindClassFunction(csSetSFXVol, "VolumeSFX",
+      "Audio");
+
+    MonoWrapper::BindClassFunction(csSetMASTERVol, "VolumeMASTER",
+      "Audio");
   }
 
   //int csPlayBGM(MonoString* _name)
@@ -105,50 +111,60 @@ namespace AudioBind
   //  SYS_AUDIO->SetVol(_channel, _vol);
   //}
 
-  //void csMuteBGM(bool _mute)
-  //{
-  //  SYS_AUDIO->MuteBGM(_mute);
-  //}
+  void csMuteBGM(bool _mute)
+  {
+    SYS_AUDIO->MuteBGM(_mute);
+  }
 
-  //void csMuteSFX(bool _mute)
-  //{
-  //  SYS_AUDIO->MuteSFX(_mute);
-  //}
+  void csMuteSFX(bool _mute)
+  {
+    SYS_AUDIO->MuteSFX(_mute);
+  }
 
-  //void csMuteMASTER(bool _mute)
-  //{
-  //  SYS_AUDIO->MuteMASTER(_mute);
-  //}
+  void csMuteMASTER(bool _mute)
+  {
+    SYS_AUDIO->MuteMASTER(_mute);
+  }
 
-  //void csSetBGMVol(float _vol)
-  //{
-  //  if (_vol > 100.0f)
-  //    _vol = 100.0f;
-  //  else if (_vol < 0.0f)
-  //    _vol = 0.0f;
-  //  SYS_AUDIO->SetBGMVol(_vol);
-  //}
+  void csPauseBGM(bool _mute)
+  {
+    SYS_AUDIO->PauseBGM(_mute);
+  }
 
-  //void csSetSFXVol(float _vol)
-  //{
-  //  if (_vol > 100.0f)
-  //    _vol = 100.0f;
-  //  else if (_vol < 0.0f)
-  //    _vol = 0.0f;
-  //  SYS_AUDIO->SetSFXVol(_vol);
-  //}
+  void csPauseSFX(bool _mute)
+  {
+    SYS_AUDIO->PauseSFX(_mute);
+  }
 
-  //void csSetMASTERVol(float _vol)
-  //{
-  //  if (_vol > 100.0f)
-  //    _vol = 100.0f;
-  //  else if (_vol < 0.0f)
-  //    _vol = 0.0f;
-  //  SYS_AUDIO->SetMASTERVol(_vol);
-  //}
+  void csPauseMASTER(bool _mute)
+  {
+    SYS_AUDIO->PauseMASTER(_mute);
+  }
 
-  //void csMASTERPause(bool _pause)
-  //{
-  //  SYS_AUDIO->PauseAll(_pause);
-  //}
+  void csSetBGMVol(float _vol)
+  {
+    if (_vol > 100.0f)
+      _vol = 100.0f;
+    else if (_vol < 0.0f)
+      _vol = 0.0f;
+    SYS_AUDIO->VolumeBGM(_vol);
+  }
+
+  void csSetSFXVol(float _vol)
+  {
+    if (_vol > 100.0f)
+      _vol = 100.0f;
+    else if (_vol < 0.0f)
+      _vol = 0.0f;
+    SYS_AUDIO->VolumeSFX(_vol);
+  }
+
+  void csSetMASTERVol(float _vol)
+  {
+    if (_vol > 100.0f)
+      _vol = 100.0f;
+    else if (_vol < 0.0f)
+      _vol = 0.0f;
+    SYS_AUDIO->VolumeMASTER(_vol);
+  }
 }

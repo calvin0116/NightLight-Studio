@@ -39,4 +39,6 @@ namespace AudioDataBind
 
   // Play audio
   void Play_Internal(ComponentLoadAudio::data* data);
+  // Stop Audio
+  void Stop_Internal(ComponentLoadAudio::data* data);
 }
