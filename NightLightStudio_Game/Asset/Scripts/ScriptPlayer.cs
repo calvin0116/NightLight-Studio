@@ -537,7 +537,7 @@ namespace Unicorn
               anim.Play("Idle_2", true, -1f, 10f);
             }
             
-            Audio.Stop(chnl);
+            //Audio.Stop(chnl);
             isPlaying = false;
           }
         }
@@ -671,7 +671,7 @@ namespace Unicorn
       // If next state not equal to current state
       if (NextState != CurrentState)
       {
-        Audio.Stop(chnl);
+        //Audio.Stop(chnl);
         isPlaying = false;
         // Changing to possessed state. It's here because going possessed state has no delay.
         if (NextState == State.Possessed)

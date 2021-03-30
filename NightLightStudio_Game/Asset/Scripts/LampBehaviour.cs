@@ -160,7 +160,7 @@ namespace Unicorn
       //  lightSource.isActive = true;
       //}
 
-      Audio.PlayOnce("9");
+      //Audio.PlayOnce("9");
       isWaypoint = true;
       script_Moth.ActivateWP(wayPointID);
 
@@ -173,7 +173,7 @@ namespace Unicorn
 
     public void SwitchOffFunction()
     {
-      Audio.PlayOnce("10");
+      //Audio.PlayOnce("10");
       isWaypoint = false;
       script_Moth.DeactivateWP(wayPointID);
       isOn = false;

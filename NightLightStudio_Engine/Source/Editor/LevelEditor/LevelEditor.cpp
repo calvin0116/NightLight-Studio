@@ -5,6 +5,7 @@
 #include "LevelEditor_Hierarchy.h"
 #include "LevelEditor_Inspector.h"
 #include "LevelEditor_CSVTag.h"
+#include "LevelEditor_Audio.h"
 #include "../imgui/imguizmo/ImGuizmo.h"
 
 #include "../../Input/SystemInput.h"
@@ -41,6 +42,7 @@ void LevelEditor::Init(GLFWwindow* window)
     LE_CreateWindow<HierarchyInspector>("Hierarchy", true);
     LE_CreateWindow<InspectorWindow>("Inspector", true);
     LE_CreateWindow<LevelEditor_CSVTag>("CSVArr", false, ImGuiWindowFlags_HorizontalScrollbar);
+    LE_CreateWindow<LevelEditorAudio>("Audio");
 
     _window = window;
 

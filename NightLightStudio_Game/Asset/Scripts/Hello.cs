@@ -7,35 +7,88 @@ namespace Unicorn
   public class Hello : UniBehaviour
   {
     //public int size;
-    public bool[] MyBoolArr;
+    //public bool[] MyBoolArr;
+    Transform trans;
+    AudioSource audSource;
+    //AudioData[] myDatas;
+    AudioData MyData;
+    int ListenerID;
+    Transform lisTrans;
+    public string Listener = "Listener";
+    public float speed = 1.0f;
+    public float rotSpeed = 1.0f;
 
     public override void Init()
     {
-      //MyStringArr = new string[size];
+      trans = GetTransform(id);
+      audSource = GetAudioSource(id);
+      //myDatas = audSource.audioDatas;
+      MyData = audSource.GetData(0);
+      ListenerID = GameObjectFind(Listener);
+      lisTrans = GetTransform(ListenerID);
     }
 
     public override void LateInit()
     {
-      //MyStringArr[0] = "Hello";
-      //MyStringArr[1] = "How";
-      //MyStringArr[2] = "YouDoing?";
-      //for (int i = 0; i < size; ++i)
-      //  Print(MyStringArr[i]);
     }
 
     public override void Update()
     {
-      if (Input.GetKeyHold(VK.IKEY_V))
+      float realSpeed = speed * RealDT();
+      float realRot = rotSpeed * RealDT();
+      if (Input.GetKeyHold(VK.IKEY_A))
       {
+        Vector3 left = new Vector3( -realSpeed, 0.0f, 0.0f );
+        left = left + trans.GetPosition();
+        trans.SetPosition(left);
       }
+      if (Input.GetKeyHold(VK.IKEY_D))
+      {
+        Vector3 right = new Vector3(realSpeed, 0.0f, 0.0f);
+        right = right + trans.GetPosition();
+        trans.SetPosition(right);
+      }
+
+      if (Input.GetKeyHold(VK.IKEY_Q))
+      {
+        Vector3 left = new Vector3(-realSpeed, 0.0f, 0.0f);
+        left = left + lisTrans.GetPosition();
+        lisTrans.SetPosition(left);
+      }
+      if (Input.GetKeyHold(VK.IKEY_E))
+      {
+        Vector3 right = new Vector3(realSpeed, 0.0f, 0.0f);
+        right = right + lisTrans.GetPosition();
+        lisTrans.SetPosition(right);
+      }
+
+      if (Input.GetKeyPress(VK.IKEY_P))
+      {
+        //Print(audSource.Size().ToString());
+        //Print(myDatas.Length.ToString());
+        //Print(MyData.index.ToString());
+        AudioData[] audio = audSource.audioDatas;
+        //int test = audio[0];
+        //Print(audio[0].index.Tostring());
+        Print("end");
+
+        //Print(audio.index.ToString());
+        Print(audio[0].index.ToString());
+        audio[0].Play();
+      }
+
       if (Input.GetKeyHold(VK.IKEY_C))
       {
+        Vector3 left = new Vector3(0.0f, rotSpeed, 0.0f);
+        left = left + lisTrans.GetRotation();
+        lisTrans.SetRotation(left);
       }
-      if (Input.GetKeyPress(VK.IKEY_SPACE))
+
+      if(Input.GetKeyHold(VK.IKEY_V))
       {
-      }
-      if(Input.GetKeyPress(VK.IKEY_F))
-      {
+        Vector3 right = new Vector3(0.0f, -rotSpeed, 0.0f);
+        right = right + lisTrans.GetRotation();
+        lisTrans.SetRotation(right);
       }
     }
     public override void FixedUpdate()

@@ -38,6 +38,9 @@ namespace NS_SERIALISER
             TracyMessage(outputStr.c_str(), outputStr.size());
             SPEEDLOG(outputStr.c_str());
             //std::cout << "Error: Failed to open file in: " + filepath << std::endl;
+            std::ofstream MyFile(fullfilepath);
+
+            MyFile << "{\n}";
         }
         // dont skip on whitespace
         std::noskipws(in);

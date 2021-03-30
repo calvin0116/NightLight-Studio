@@ -31,13 +31,13 @@ namespace Unicorn
     {
       if (Input.GetKeyPress(VK.IKEY_Q))
       {
-        Print("Q");
-        Audio.Play3DOnce("0", leftBGM);
+        //Print("Q");
+        //Audio.Play3DOnce("0", leftBGM);
       }
       if (Input.GetKeyPress(VK.IKEY_E))
       {
-        Print("E");
-        Audio.Play3DOnce("0", rightBGM);
+        //Print("E");
+        //Audio.Play3DOnce("0", rightBGM);
       }
     }
     public override void FixedUpdate()

@@ -89,6 +89,9 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Emitter GetEmitter(int id);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static AudioSource GetAudioSource(int id);
     // Temporary till reflection comes out
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static Variables GetVariables(int id);

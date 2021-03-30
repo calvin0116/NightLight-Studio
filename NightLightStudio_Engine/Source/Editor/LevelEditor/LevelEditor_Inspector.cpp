@@ -193,6 +193,11 @@ void InspectorWindow::Start()
 			entComp._ent.AttachComponent<CameraComponent>();
 			entComp._ent.getComponent<CameraComponent>()->Read(*entComp._rjDoc);
 		}
+		else if (t == typeid(ListenerComponent).hash_code())
+		{
+			entComp._ent.AttachComponent<ListenerComponent>();
+			entComp._ent.getComponent<ListenerComponent>()->Read(*entComp._rjDoc);
+		}
 
 		return comp;
 	};
@@ -296,6 +301,11 @@ void InspectorWindow::Start()
 			entComp.Copy(entComp._ent.getComponent<CameraComponent>()->Write());
 			entComp._ent.RemoveComponent<CameraComponent>();
 		}
+		else if (t == typeid(ListenerComponent).hash_code())
+		{
+			entComp.Copy(entComp._ent.getComponent<ListenerComponent>()->Write());
+			entComp._ent.RemoveComponent<ListenerComponent>();
+		}
 
 		return std::any(entComp);
 	};
@@ -326,6 +336,8 @@ void InspectorWindow::Start()
 		std::function(Paste_Component<AnimationComponent>), std::function(Paste_Component<AnimationComponent>));
 	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_EMITTER"),
 		std::function(Paste_Component<EmitterComponent>), std::function(Paste_Component<EmitterComponent>));
+	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_EMITTER"),
+		std::function(Paste_Component<ListenerComponent>), std::function(Paste_Component<ListenerComponent>));
 	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_PLAYER"),
 		std::function(Paste_Component<PlayerStatsComponent>), std::function(Paste_Component<PlayerStatsComponent>));
 	_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::AddCommand, std::string("SCENE_EDITOR_PASTE_COMP_CAULDRON"),
@@ -468,6 +480,8 @@ void InspectorWindow::ComponentLayout(Entity& ent)
 	AnimationComp(ent);
 
 	EmitterComp(ent);
+
+	ListenerComp(ent);
 
 	CScriptComp(ent);
 
@@ -697,80 +711,90 @@ void InspectorWindow::AudioComp(Entity& ent)
 		ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentLoadAudio>()->Write() };
 		bool editedComp = false;
 
-		if (ImGui::CollapsingHeader("Audio Manager", &_notRemove))
+		if (ImGui::CollapsingHeader("Audio Manager##AudioComp", &_notRemove))
 		{
-			if (ImGui::Button("Add Audio"))
+			if (ImGui::Button("Add Audio##AudioCOmp"))
 			{
-				static int i = 0;
-				std::string s = std::to_string(i);
-				ComponentLoadAudio::data d;
-				strcpy_s(d.name, 128, s.c_str());
-				strcpy_s(d.path, 512, "");
-				aud_manager->_sounds.push_back(d);
-				++i;
-
+				ComponentLoadAudio::data MyData;
+				MyData.objID = aud_manager->objId;
+				//MyData.objID = aud_manager->objId;
+				aud_manager->MyAudios.push_back(MyData);
+				
 				// Undo-Redo for Components
 				_origComp = (_origComp._entID == -1) ? activeRead : _origComp;
 				editedComp = true;
-
 			}
-
-			int index = 1;
-
-			for (auto& data : aud_manager->_sounds) //[path, name]
+			size_t size = aud_manager->MyAudios.size();
+			// Remove vector
+			int remove = -1;
+			if (ImGui::BeginTabBar("Audio##AudioComp", ImGuiTabBarFlags_AutoSelectNewTabs))
 			{
-				std::string p = "##AUDIOPATH" + std::to_string(index);
-				std::string n = "##AUDIONAME" + std::to_string(index);
-				//ImGui::InputText(p.c_str(), data.path, 512);
-				++index;
-				//ImGui::InputText(n.c_str(), data.name, 256);
-
-				std::string s_name = data.name;
-				ImGui::SetNextItemWidth(50);
-				_levelEditor->LE_AddInputText(n, s_name, 100, ImGuiInputTextFlags_EnterReturnsTrue,
-					[&data, &s_name]()
+				for (size_t i = 0; i < size; ++i)
+				{
+					ComponentLoadAudio::data& MyData = aud_manager->MyAudios.at(i);
+					std::string sIndex = std::to_string(i);
+					std::string header = "\t" + sIndex + "| " + std::to_string(MyData.index) + "\t";
+					if (ImGui::BeginTabItem(header.c_str(), &MyData.ImGuiTab))
 					{
-						strcpy_s(data.name, s_name.c_str());
-					});
-				// Undo-Redo for Components
-				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+						ImGui::InputInt(std::string("Index##AudioComp" + sIndex).c_str(), &MyData.index);
 
-				ImGui::SameLine(0, 10);
-				std::string s_path = data.path;
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
-				_levelEditor->LE_AddInputText(p, s_path, 500, ImGuiInputTextFlags_EnterReturnsTrue,
-					[&data, &s_path]()
-					{
-						strcpy_s(data.path, s_path.c_str());
-					});
+						ImGui::Checkbox(std::string("IsBGM##AudioComp" + sIndex).c_str(), &MyData.isBGM);
 
-				// Undo-Redo for Components
-				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+						// Variables
+						ImGui::Checkbox(std::string("IsLoop##AudioComp" + sIndex).c_str(), &MyData.isLoop);
 
-				_levelEditor->LE_AddDragDropTarget<std::string>("ASSET_FILEPATH",
-					[this, &data](std::string* str)
-					{
-						std::string newData = *str;
-						newData.erase(newData.begin());
-						std::transform(newData.begin(), newData.end(), newData.begin(),
-							[](unsigned char c)
-							{ return (char)std::tolower(c); });
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
-						std::string fileType = LE_GetFileType(newData);
-						if (fileType == "ogg")
+						ImGui::Checkbox(std::string("PlayOnAwake##AudioComp" + sIndex).c_str(), &MyData.playOnAwake);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+						//ImGui::Checkbox(std::string("Mute##AudioComp" + sIndex).c_str(), &MyData.mute);
+						ImGui::InputFloat(std::string("Volume##AudioComp" + sIndex).c_str(), &MyData.volume);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+						ImGui::Checkbox(std::string("Is3D##AudioComp" + sIndex).c_str(), &MyData.is3D);
+
+						// Undo-Redo for Components
+						_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+						editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+						if (MyData.is3D)
 						{
-							memset(data.path, 0, 512);
-							strcpy_s(data.path, newData.c_str());
+							ImGui::InputFloat(std::string("Min Dist##AudioComp" + sIndex).c_str(), &MyData.minDist);
+
+							// Undo-Redo for Components
+							_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+							editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
+							ImGui::InputFloat(std::string("Max Dist##AudioComp" + sIndex).c_str(), &MyData.maxDist);
+
+							// Undo-Redo for Components
+							_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
+							editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
+
 						}
-					});
+						ImGui::EndTabItem();
+					}
 
-				// Undo-Redo for Components
-				_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
-				editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
-
+					if (MyData.ImGuiTab == false)
+						remove = (int)i;
+				}
+				ImGui::EndTabBar();
 			}
+			if (remove != -1)
+				aud_manager->MyAudios.erase(remove);
 		}
 
 		if (!_notRemove)
@@ -786,17 +810,19 @@ void InspectorWindow::AudioComp(Entity& ent)
 			if (_origComp._entID != -1)
 			{
 				// Undo-Redo for Components
-				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ComponentCollider>()->Write() };
+				//ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ nt, ent.getComponent<ComponentCollider>()->Write() };
 				//bool editedComp = false;
 
 				// Undo-Redo for Components
 				//_origComp = (ImGui::IsItemActivated() && _origComp._entID == -1) ? activeRead : _origComp;
 				//editedComp = !editedComp ? ImGui::IsItemDeactivatedAfterEdit() : true;
 
+				 // Uncomment this when Read/Write is working
 				ENTITY_COMP_READ finalComp{ ent, ent.getComponent<ComponentLoadAudio>()->Write() };
 				aud_manager->Read(*_origComp._rjDoc);
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_AUDIO"), std::any(finalComp));
 				_origComp = ENTITY_COMP_READ{};
+				
 			}
 		}
 
@@ -2540,6 +2566,41 @@ void InspectorWindow::EmitterComp(Entity& ent)
 	}
 }
 
+void InspectorWindow::ListenerComp(Entity& ent)
+{
+	ListenerComponent* lisComp = ent.getComponent<ListenerComponent>();
+	if (lisComp == nullptr)
+		return;
+
+	// Undo-Redo for Components
+	ENTITY_COMP_READ activeRead = ENTITY_COMP_READ{ ent, ent.getComponent<ListenerComponent>()->Write() };
+	bool editedComp = false;
+
+	if (ImGui::CollapsingHeader("Listener component", &_notRemove))
+	{
+		ImGui::Checkbox("IsActive##Listener", &lisComp->_isActive);
+		ImGui::InputFloat3("Front##Listener", lisComp->_front.m);
+	}
+	if (!_notRemove)
+	{
+		ENTITY_COMP_DOC comp{ ent, ent.getComponent<ListenerComponent>()->Write(), typeid(ListenerComponent).hash_code() };
+		_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_REMOVE_COMP"), std::any(comp));
+		_notRemove = true;
+	}
+
+	if (editedComp)
+	{
+		if (_origComp._entID != -1)
+		{
+			ENTITY_COMP_READ finalComp{ ent, ent.getComponent<ListenerComponent>()->Write() };
+			lisComp->Read(*_origComp._rjDoc);
+			_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_PASTE_COMP_CAMERA"), std::any(finalComp));
+			_origComp = ENTITY_COMP_READ{};
+		}
+	}
+
+	ImGui::Separator();
+}
 void InspectorWindow::CameraComp(Entity& ent)
 {
 	CameraComponent* camComp = ent.getComponent<CameraComponent>();
@@ -3470,7 +3531,8 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			"  WayPointPath",
 			"  WayPointComp",
 			"  Emitter",
-			"  Camera"
+			"  Camera",
+			"  Listener"
 		});
 
 	//ImGui::Combo(" ", &item_type, "Add component\0  RigidBody\0  Audio\0  Graphics\0--Collider--\0  AABB Colider\0  OBB Collider\0  Plane Collider\0  SphereCollider\0  CapsuleCollider\0");
@@ -3646,6 +3708,15 @@ void InspectorWindow::AddSelectedComps(Entity& ent)
 			if (!ent.getComponent<CameraComponent>())
 			{
 				ENTITY_COMP_DOC comp{ ent, CameraComponent().Write(), typeid(CameraComponent).hash_code() };
+				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
+			}
+			break;
+		}
+		case 16: // Listener
+		{
+			if (!ent.getComponent<ListenerComponent>())
+			{
+				ENTITY_COMP_DOC comp{ ent, ListenerComponent().Write(), typeid(ListenerComponent).hash_code() };
 				_levelEditor->LE_AccessWindowFunc("Console", &ConsoleLog::RunCommand, std::string("SCENE_EDITOR_ATTACH_COMP"), std::any(comp));
 			}
 			break;

@@ -1,18 +1,21 @@
 {
     "Objects": {
-        "Player": {
+        "Source": {
             "TransformComponent": {
-                "EntityName": "Player",
+                "EntityName": "",
                 "Tag": 0,
+                "tagNames": [
+                    0
+                ],
                 "Position": [
-                    0.0,
-                    182.8325653076172,
+                    -267.2547302246094,
+                    71.47434997558594,
                     0.0
                 ],
                 "Scale": [
-                    50.0,
-                    50.0,
-                    50.0
+                    5.0,
+                    5.0,
+                    5.0
                 ],
                 "Rotate": [
                     0.0,
@@ -20,45 +23,16 @@
                     0.0
                 ]
             },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
-                ],
-                "Rotation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "RigidBody": {
-                "isStatic": false,
-                "isGravity": true,
-                "mass": 70.0,
-                "friction": 0.9900000095367432,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
             "GraphicsComponent": {
                 "isActive": true,
-                "Model": "",
+                "renderEmission": true,
+                "emissiveIntensity": 1.0,
+                "Emissive": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "Model": "box.fbx",
                 "Albedo": "",
                 "Normal": "",
                 "Metallic": "",
@@ -87,283 +61,122 @@
                     1.0
                 ],
                 "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
             },
-            "ScriptComponent": {
-                "isActive": true,
-                "isRunning": true,
-                "ScriptName": "ScriptPlayer"
-            },
-            "LightComponent": {
-                "isActive": false,
-                "Diffuse": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "Intensity": 1000.0,
-                "CutOff": 0.0,
-                "OuterCutOff": 100.0
-            },
-            "ComponentVariables": {
-                "IntList": [],
-                "StringList": [],
-                "FloatList": [
-                    70000.0,
-                    10000.0,
-                    15.0,
-                    1.0
-                ]
-            }
-        },
-        "Floor": {
-            "TransformComponent": {
-                "EntityName": "Floor",
-                "Tag": 0,
-                "Position": [
-                    0.0,
-                    -22.0,
-                    0.0
-                ],
-                "Scale": [
-                    10000.0,
-                    50.0,
-                    10000.0
-                ],
-                "Rotate": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ]
-            },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
-                ],
-                "Rotation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "RigidBody": {
-                "isStatic": true,
-                "isGravity": false,
-                "mass": 0.0,
-                "friction": 1.0,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "\\box.fbx",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Doll": {
-            "TransformComponent": {
-                "EntityName": "Doll",
-                "Tag": 0,
-                "Position": [
-                    -377.6206359863281,
-                    54.89873504638672,
-                    0.0
-                ],
-                "Scale": [
-                    50.0,
-                    100.0,
-                    50.0
-                ],
-                "Rotate": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ]
-            },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
-                ],
-                "Rotation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "RigidBody": {
-                "isStatic": true,
-                "isGravity": false,
-                "mass": 0.0,
-                "friction": 0.009999999776482582,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "GraphicsComponent": {
-                "isActive": true,
-                "Model": "\\box.fbx",
-                "Albedo": "",
-                "Normal": "",
-                "Metallic": "",
-                "Roughness": "",
-                "AmbientOcclusion": "",
-                "Specular": "",
-                "DiffuseMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "AmbientMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "SpecularMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "ShininessMat": 32.0,
-                "AlbedoMat": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "MetallicMat": 1.0,
-                "RoughnessMat": 0.5
-            }
-        },
-        "Camera": {
-            "TransformComponent": {
-                "EntityName": "Camera",
-                "Tag": 0,
-                "Position": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Scale": [
-                    30.0,
-                    30.0,
-                    30.0
-                ],
-                "Rotate": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ]
-            },
-            "ColliderComponent": {
-                "colliderType": "AABB",
-                "tag": 1,
-                "isCollidable": true,
-                "Center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Extend": [
-                    0.5,
-                    0.5,
-                    0.5
-                ],
-                "Rotation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ]
-            },
-            "RigidBody": {
-                "isStatic": false,
-                "isGravity": false,
-                "mass": 1.0,
-                "friction": 0.009999999776482582,
-                "Force": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "Accelaration": [
-                    0.0,
-                    0.0,
-                    0.0
+            "AudioManager": {
+                "ListOfSound": [
+                    {
+                        "index": 0,
+                        "isBGM": true,
+                        "isLoop": true,
+                        "playOnAwake": true,
+                        "volume": 1.0,
+                        "is3D": true,
+                        "minDist": 0.5,
+                        "maxDist": 100.0
+                    },
+                    {
+                        "index": 2,
+                        "isBGM": true,
+                        "isLoop": true,
+                        "playOnAwake": true,
+                        "volume": 1.0,
+                        "is3D": true,
+                        "minDist": 0.5,
+                        "maxDist": 100.0
+                    },
+                    {
+                        "index": 1,
+                        "isBGM": true,
+                        "isLoop": true,
+                        "playOnAwake": true,
+                        "volume": 1.0,
+                        "is3D": true,
+                        "minDist": 0.5,
+                        "maxDist": 100.0
+                    }
                 ]
             },
             "ScriptComponent": {
                 "isActive": true,
                 "isRunning": true,
-                "ScriptName": "ScriptCamera"
+                "ScriptName": "Hello",
+                "Listenerstring": "Listener",
+                "speedfloat": 100.0,
+                "rotSpeedfloat": 1.0
+            }
+        },
+        "Listener": {
+            "TransformComponent": {
+                "EntityName": "Listener",
+                "Tag": 0,
+                "tagNames": [
+                    0
+                ],
+                "Position": [
+                    -266.7502136230469,
+                    87.56004333496094,
+                    0.0
+                ],
+                "Scale": [
+                    10.000263214111329,
+                    10.000370025634766,
+                    10.000606536865235
+                ],
+                "Rotate": [
+                    -0.00019078842888120562,
+                    -0.0,
+                    -0.00019379734294489026
+                ]
             },
-            "ComponentVariables": {
-                "IntList": [],
-                "StringList": [],
-                "FloatList": [
-                    50.0,
-                    50.0,
-                    400.0
+            "GraphicsComponent": {
+                "isActive": true,
+                "renderEmission": true,
+                "emissiveIntensity": 1.0,
+                "Emissive": [
+                    0.058809757232666019,
+                    0.0,
+                    1.0
+                ],
+                "Model": "box.fbx",
+                "Albedo": "",
+                "Normal": "",
+                "Metallic": "",
+                "Roughness": "",
+                "AmbientOcclusion": "",
+                "Specular": "",
+                "DiffuseMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "AmbientMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "SpecularMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "ShininessMat": 32.0,
+                "AlbedoMat": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "MetallicMat": 1.0,
+                "RoughnessMat": 0.5,
+                "Alpha": 1.0
+            },
+            "ListenerComponent": {
+                "isActive": true,
+                "front": [
+                    0.0,
+                    0.0,
+                    1.0
                 ]
             }
         }

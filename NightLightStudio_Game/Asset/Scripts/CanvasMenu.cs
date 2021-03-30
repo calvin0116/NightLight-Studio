@@ -26,7 +26,7 @@ namespace Unicorn
     public override void Init()
     {
       player_ID = GameObjectFind("Player");
-      chnl = Audio.PlayBGM("5");
+      //chnl = Audio.PlayBGM("5");
       HUD = GetCanvas(id);
       digiLogo = true;
       time = 0;
@@ -144,7 +144,7 @@ namespace Unicorn
           HUD.FindUI("MainMenu").isActive = false;
           HUD.FindUI("EndGame").isActive = false;
           inGame = true;
-          Audio.Stop(chnl);
+          //Audio.Stop(chnl);
         }
 
         else if(inGame==false && gameOver==true)

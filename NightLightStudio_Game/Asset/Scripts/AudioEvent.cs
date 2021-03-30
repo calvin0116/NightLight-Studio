@@ -39,7 +39,7 @@ namespace Unicorn
 
     public override void LateInit()
     {
-      script_AM = GetScript(aMID);
+      //script_AM = GetScript(aMID);
     }
 
     public override void Update()
@@ -60,12 +60,12 @@ namespace Unicorn
 
       if (GetTransform(other).tag == 200)
       {
-        Print("playing1");
-        if (isPlaying == false)
-        {
-          chnl = script_AM.PlayAudio(audioIndex);
-          isPlaying = true;
-        }
+        //Print("playing1");
+        //if (isPlaying == false)
+        //{
+        //  chnl = script_AM.PlayAudio(audioIndex);
+        //  isPlaying = true;
+        //}
 
        
       }
@@ -77,9 +77,9 @@ namespace Unicorn
 
       if (GetTransform(other).tag == 200)
       {
-        //Print("Stop playing1");
-        Audio.Stop(chnl);
-        isPlaying = false;
+        ////Print("Stop playing1");
+        //Audio.Stop(chnl);
+        //isPlaying = false;
       }
 
     }

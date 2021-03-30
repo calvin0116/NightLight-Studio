@@ -17,6 +17,7 @@ class ComponentCanvas;
 class ComponentAnimation;
 class ComponentEmitter;
 class ComponentCamera;
+class ComponentListener;
 struct ComponentPlayerStats;
 struct ComponentCauldronStats;
 class ComponentCScript;
@@ -108,6 +109,12 @@ template<>
 int typeResolver<ComponentCamera>();
 template<>
 void setTypeResolver<ComponentCamera>(int set);
+
+static int ComponentListener_ind = -1;
+template<>
+int typeResolver<ComponentListener>();
+template<>
+void setTypeResolver<ComponentListener>(int set);
 
 static int ComponentPlayerStats_ind = -1;
 template<>
