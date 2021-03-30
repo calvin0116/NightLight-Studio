@@ -204,7 +204,7 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 		}
 		case NV_CIRCLING:
 		{
-			if (navComp->IsAroundWP())	//Check if Ai reached the way point
+			if (navComp->IsWithinCirclingRange())	//Check if Ai reached the way point
 			{
 				//Circular motion
 				glm::vec3 rev_dir = navTrans->_position - wp_pos;

@@ -37,5 +37,13 @@ inline void ComponentNavigator::GoToClosestWP()
 bool ComponentNavigator::IsAroundWP(float proximity)
 {
 	float len = glm::length(dir);
-	return ((len - size_in_rad) < FLT_EPSILON + proximity);
+
+	return ((len - size_in_rad) < (FLT_EPSILON + proximity));
+}
+
+bool ComponentNavigator::IsWithinCirclingRange()
+{
+	float len = glm::length(dir);
+
+	return ((len - circuling_rad) < FLT_EPSILON);
 }
