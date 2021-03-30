@@ -129,6 +129,16 @@ inline void ComponentAnimation::Read(Value& val)
 	else
 		defaultAnim = val["DefaultAnimation"].GetString();
 
+	if (val.FindMember("AnimationSpeed") == val.MemberEnd())
+	{
+		//std::cout << "No anim data has been found" << std::endl;
+		TracyMessageL("ComponentAnimation::Read: No anim speed data has been found");
+		SPEEDLOG("ComponentAnimation::Read: No anim speed data has been found");
+	}
+	else
+		NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_animMultiplier = val["AnimationSpeed"].GetFloat();
+	
+
 	int i = 0;
 	std::string animName = std::string("Animation").append(std::to_string(i));
 	while (val.FindMember(animName.c_str()) != val.MemberEnd())
@@ -164,6 +174,7 @@ inline Value ComponentAnimation::Write()
 	NS_SERIALISER::ChangeData(&val, "Loop", NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_loop);
 	NS_SERIALISER::ChangeData(&val, "CurrentAnimation", rapidjson::StringRef(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_currAnim.c_str()));
 	NS_SERIALISER::ChangeData(&val, "DefaultAnimation", rapidjson::StringRef(NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_defaultAnim.c_str()));
+	NS_SERIALISER::ChangeData(&val, "AnimationSpeed", NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_animMultiplier);
 
 	int i = 0;
 	for(auto& name : NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->_allAnims)
