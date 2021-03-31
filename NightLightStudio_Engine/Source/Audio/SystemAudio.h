@@ -71,13 +71,14 @@ public:
   inline void VolumeSFX(float _vol) { _sfx->setVolume(_vol); }
   inline void VolumeBGM(float _vol) { _bgm->setVolume(_vol); }
   inline void VolumeMASTER(float _vol) { _master->setVolume(_vol); }
+  // Called MyGameExit in game loop // workaround for botched game loop
+  void GameExit() override;
 
   // Not used
   void Load() override {} // Not needed.
   void FixedUpdate(float dt) override { dt; } // Not used
   void GameLoad() override {}
   void GameInit() override {}
-  void GameExit() override {}
   void Free() override {} // Not needed
 
   // Maybe not needed

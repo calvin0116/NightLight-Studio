@@ -398,6 +398,13 @@ void SystemAudio::LoadList()
   }
 }
 
+void SystemAudio::GameExit()
+{
+  //_isPlaying = false;
+  _isInited = false;
+  MyGameExit();
+}
+
 void SystemAudio::HandleTogglePlay(MessageTogglePlay& msg)
 {
   // Handle msg here. Only Before Play MSG
