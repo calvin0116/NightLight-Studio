@@ -40,7 +40,7 @@ namespace ComponentAudioSourceBind
   {
     if (_index < 0 || _index >= aud->MyAudios.size())
     {
-      std::string error = "audioDatas _index out of range: " + std::to_string(_index);
+      std::string error = "audioDatas _index out of range: " + std::to_string(_index) + " for " + aud->ser_name + ", id: " + std::to_string(aud->objId);
       TracyMessage(error.c_str(), error.size());
       SPEEDLOG(error);
       return nullptr;

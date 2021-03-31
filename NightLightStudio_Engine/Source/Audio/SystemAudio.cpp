@@ -201,18 +201,6 @@ void SystemAudio::PlayOnAwake()
           MyData.playOnAwake = false;
         }
       }
-      //const size_t size = AudVec.size();
-      //for (size_t i = 0; i < size; ++i)
-      //{
-      //  ComponentLoadAudio::data& MyData = AudVec.at(i);
-      //  if (MyData.playOnAwake)
-      //  {
-      //    // !!!!!!!!!Play Audio here
-      //    Play(aud->objId, (int)i);
-      //    // Played, turn onawake off.
-      //    MyData.playOnAwake = false;
-      //  }
-      //}
     }
   }
 }
@@ -294,7 +282,7 @@ void SystemAudio::Play(int entity, ComponentLoadAudio::data& MyData)
     // Err check
     if (trans == nullptr)
     {
-      std::string error = "Audio::Play::trans is nullptr";
+      std::string error = "Audio::Play::trans is nullptr, id:" + entity;
       TracyMessage(error.c_str(), error.size());
       SPEEDLOG(error);
       return;
@@ -330,7 +318,7 @@ void SystemAudio::Stop(int entity, ComponentLoadAudio::data& MyData)
   // Err check
   if (aud == nullptr)
   {
-    std::string error = "Audio::Stop::aud is nullptr";
+    std::string error = "Audio::Stop::aud is nullptr, id:" + entity;
     TracyMessage(error.c_str(), error.size());
     SPEEDLOG(error);
     return;
@@ -348,14 +336,14 @@ void SystemAudio::MyGameExit()
   for (; audItr != audItrEnd; ++audItr)
   {
     ComponentLoadAudio* aud = G_ECMANAGER->getComponent<ComponentLoadAudio>(audItr);
-    // Err check
-    if (aud == nullptr)
-    {
-      std::string error = "Audio::Update::aud is nullptr";
-      TracyMessage(error.c_str(), error.size());
-      SPEEDLOG(error);
-      continue;
-    }
+    //// Err check
+    //if (aud == nullptr)
+    //{
+    //  std::string error = "Audio::GameExit::aud is nullptr";
+    //  TracyMessage(error.c_str(), error.size());
+    //  SPEEDLOG(error);
+    //  continue;
+    //}
     for (ComponentLoadAudio::data& MyData : aud->MyAudios)
       MyData.channel->stop();
   }
