@@ -320,6 +320,27 @@ inline void ComponentGraphics::Read(Value& val)
 			//model->_fileName = s_LocalPathName + name + s_ModelFileType;
 			*/
 			_modelID = NS_GRAPHICS::ModelManager::GetInstance().AddModel(_modelFileName.toString());
+
+			//Only if valid model
+			//if (_modelID >= 0)
+			//{
+				//if (NS_GRAPHICS::ModelManager::GetInstance()._models[_modelID]->_isAnimated)
+				//{
+					//Entity entity = G_ECMANAGER->getEntity(this);
+
+					//if (entity.getComponent<ComponentAnimation>() == nullptr)
+					//{
+					//	entity.AttachComponent<ComponentAnimation>();
+					//	ComponentAnimation* anim = entity.getComponent<ComponentAnimation>();
+					//	anim->_controllerID = NS_GRAPHICS::AnimationSystem::GetInstance().AddAnimController();
+					//	AnimationController* animCtrl = NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[anim->_controllerID];
+					//	for (auto& anims : NS_GRAPHICS::ModelManager::GetInstance()._models[_modelID]->_animations)
+					//	{
+					//		animCtrl->_allAnims.insert(anims.first);
+					//	}
+					//}
+				//}
+			//}
 		}
 	}
 
