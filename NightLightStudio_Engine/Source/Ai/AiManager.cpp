@@ -213,9 +213,11 @@ void NS_AI::AiManager::NavBehaviour(NavigatorComponent* navComp)
 				glm::mat4 Rotate = glm::mat4_cast(Quaternion);
 
 				glm::vec3 dir = Rotate * glm::vec4{ rev_dir , 1.0f };
+				navComp->dir = dir;
+				
 				dir = glm::normalize(dir);
 				rb->velocity = dir * navComp->speed;
-				//navComp->dir = glm::normalize(dir);
+				
 			}
 			else
 			{

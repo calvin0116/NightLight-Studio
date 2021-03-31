@@ -373,7 +373,7 @@ void SystemAudio::SaveList()
   //NS_SERIALISER::ChangeData(aud_str_list, "index", rapidjson::StringRef(Audios[i].c_str()) );
 
 
-  AudioListParser.AddData("Audio List", aud_str_list);
+  AudioListParser.AddData("Audio List", aud_str_list, &global_alloc);
   AudioListParser.Save();
 
   //delete aud_str_list;
