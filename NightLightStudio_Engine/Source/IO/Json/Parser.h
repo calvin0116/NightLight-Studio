@@ -67,7 +67,7 @@ namespace NS_SERIALISER
 		//===========Functionality for data manipulation=================//
 		//Add data into the initial json list
 		template<typename d_type>
-		ENGINE_API void AddData(std::string name, d_type data);
+		ENGINE_API void AddData(std::string name, d_type data, Document::AllocatorType* _alloc = nullptr);
 		//For known name change
 		template<typename d_type>
 		ENGINE_API void ChangeData(std::string name, d_type data);

@@ -56,23 +56,27 @@ namespace NS_SERIALISER {
 	}*/
 
 	template<>
-	inline void Parser::AddData(std::string d_name, Value* val)
+	inline void Parser::AddData(std::string d_name, Value* val, Document::AllocatorType* _alloc)
 	{
+		if (_alloc == nullptr)
+			_alloc = alloc;
 
 		//Document::AllocatorType& temp_alloc = doc.GetAllocator();
-		Value key(d_name.c_str(), *alloc);
+		Value key(d_name.c_str(), *_alloc);
 
-		doc.AddMember(key, *val, *alloc);
+		doc.AddMember(key, *val, *_alloc);
 		delete val;
 	}
 	template<typename d_type>
-	inline void Parser::AddData(std::string d_name, d_type data)
+	inline void Parser::AddData(std::string d_name, d_type data, Document::AllocatorType* _alloc)
 	{
+		if (_alloc == nullptr)
+			_alloc = alloc;
 
 		//Document::AllocatorType& temp_alloc = doc.GetAllocator();
-		Value key(d_name.c_str(), *alloc);
+		Value key(d_name.c_str(), *_alloc);
 		Value val(data);
 
-		doc.AddMember(key, val, *alloc);
+		doc.AddMember(key, val, *_alloc);
 	}
 }
