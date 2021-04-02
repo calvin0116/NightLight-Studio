@@ -182,7 +182,19 @@ namespace Unicorn
       if (Input.GetKeyPress(VK.IKEY_J))
       {
         enemyNavigator.SetWpActive(1, false);
+		enemyNavigator.SetWpActive(2, false);
       }
+	  if (Input.GetKeyPress(VK.IKEY_H))
+      {
+        enemyNavigator.SetWpActive(1, true);
+		enemyNavigator.SetWpActive(2, true);
+      }
+	  
+	  if (Input.GetKeyPress(VK.IKEY_G))
+      {
+        enemyNavigator.SetWpActive(2, false);
+      }
+	  
       //Speed up
       if (Input.GetKeyPress(VK.IKEY_K))
       {

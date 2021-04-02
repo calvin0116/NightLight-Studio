@@ -277,10 +277,54 @@ public:
 		}
 	}
 
+	int GetNextWayPointNaive()
+	{
+		if (wp_nav_type == WN_RANDOM)
+		{
+			srand((unsigned int)time(NULL));
+			return (rand() % cur_wp_path->GetPath().size());
+		}
+		else
+			if (traverseFront)
+			{
+				if (cur_route_wp_index < path_indexes.size() - 1)
+					return (cur_route_wp_index + 1);
+				else {
+					if (wp_nav_type == WN_TOANDFRO)
+					{
+						traverseFront = false;
+						return (cur_route_wp_index - 1);
+					}
+					else if (wp_nav_type == WN_CIRCULAR)
+					{
+						return 0;
+					}
+				}
+			}
+			else
+			{
+				if (cur_route_wp_index > 0)
+					return (cur_route_wp_index - 1);
+				else
+				{
+					traverseFront = true;
+					return (cur_route_wp_index + 1);
+				}
+			}
+	}
+
+	bool GetNextWayPointActive()
+	{
+		return path_indexes.at(GetNextWayPointNaive()).second;
+	}
+
 	void ToGoToPrevWP()
 	{
-		if (!path_indexes.at(cur_route_wp_index).second && cur_route_wp_index!= 0)
-			cur_route_wp_index = prev_route_wp_index;
+		if (cur_route_wp_index >= 0 && !path_indexes.at(cur_route_wp_index).second) //&& cur_route_wp_index!= 0)
+			if (prev_route_wp_index >= 0 && !path_indexes.at(prev_route_wp_index).second)
+				cur_route_wp_index = prev_route_wp_index;	//Return to previous way point
+			else
+				cur_route_wp_index = 0;						//Return to origin
 	}
 
 	void DecideOnNextWp()
@@ -293,7 +337,9 @@ public:
 			//return;
 
 
-		prev_route_wp_index = cur_route_wp_index;
+		//cur_route_wp_index = 
+		int next_route_wp_index = GetNextWayPointNaive();
+		/*
 		if (wp_nav_type == WN_RANDOM)
 		{
 			srand((unsigned int)time(NULL));
@@ -322,11 +368,30 @@ public:
 					traverseFront = true;
 					++cur_route_wp_index;
 				}
+				*/
+		if (path_indexes.at(next_route_wp_index).second)	//If next waypoint is active
+		{
+			prev_route_wp_index = cur_route_wp_index;
+			cur_route_wp_index = next_route_wp_index;
+		}
+		else //If next waypoint is not active
+		{
+			if (path_indexes.at(prev_route_wp_index).second)	//If previous is active
+			{
+				next_route_wp_index = prev_route_wp_index;		
+				prev_route_wp_index = cur_route_wp_index;		//Prev -> Current
+				cur_route_wp_index = next_route_wp_index;		//Current -> Prev
+			}
+			else if (cur_route_wp_index != path_indexes.size() - 1)
+			{
+				cur_route_wp_index = prev_route_wp_index = 0;
+			}
 
-		if (!path_indexes.at(cur_route_wp_index).second)
-			DecideOnNextWp();
+		}
 
-		cur_path_wp_index = cur_route_wp_index;			//Temp ==
+			//DecideOnNextWp();
+
+		cur_path_wp_index = cur_route_wp_index;			
 		prev_path_wp_index = prev_route_wp_index;
 		//cur_path_wp_index = 0;.
 		//prev_path_wp_index = 0;
