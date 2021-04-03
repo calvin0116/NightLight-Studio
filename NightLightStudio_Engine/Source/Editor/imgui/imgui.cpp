@@ -7564,6 +7564,7 @@ static void ImGui::ErrorCheckNewFrameSanityChecks()
         for (int monitor_n = 0; monitor_n < g.PlatformIO.Monitors.Size; monitor_n++)
         {
             ImGuiPlatformMonitor& mon = g.PlatformIO.Monitors[monitor_n];
+            mon;
             IM_ASSERT(mon.MainSize.x > 0.0f && mon.MainSize.y > 0.0f && "Monitor main bounds not setup properly.");
             IM_ASSERT(ImRect(mon.MainPos, mon.MainPos + mon.MainSize).Contains(ImRect(mon.WorkPos, mon.WorkPos + mon.WorkSize)) && "Monitor work bounds not setup properly. If you don't have work area information, just copy MainPos/MainSize into them.");
             IM_ASSERT(mon.DpiScale != 0.0f);

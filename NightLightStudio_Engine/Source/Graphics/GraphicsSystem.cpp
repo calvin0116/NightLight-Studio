@@ -201,7 +201,7 @@ namespace NS_GRAPHICS
 #ifdef _DEFERRED_SHADING
 		// Set up frame buffers
 		bool checkFBO = InitFrameBuffers();
-
+		checkFBO;
 #ifdef _DEBUG
 		if (!checkFBO)
 			TracyMessageL("GraphicsSystem::Init: ERROR: Unable to load frame buffer object (FN: NS_GRAPHICS::GraphicsSystem::InitFrameBuffers()");

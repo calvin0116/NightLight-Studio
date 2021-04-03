@@ -311,6 +311,7 @@ public:
 					return (cur_route_wp_index + 1);
 				}
 			}
+		return -1;	//Something is not taken care of 
 	}
 
 	bool GetNextWayPointActive()
