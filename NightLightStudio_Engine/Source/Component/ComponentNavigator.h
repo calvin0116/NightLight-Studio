@@ -377,13 +377,7 @@ public:
 		}
 		else //If next waypoint is not active
 		{
-			if (next_route_wp_index == path_indexes.size() - 1)
-			{
-				if (wp_nav_type == WN_TOANDFRO)
-				{
-					traverseFront = false;
-				}
-			}
+			traverseFront = !traverseFront;	//Move backwards
 
 			if (path_indexes.at(prev_route_wp_index).second)	//If previous is active
 			{
