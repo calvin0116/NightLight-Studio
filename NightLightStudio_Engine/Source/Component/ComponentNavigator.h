@@ -322,8 +322,8 @@ public:
 	void ToGoToPrevWP()
 	{
 		if (cur_route_wp_index >= 0 && !path_indexes.at(cur_route_wp_index).second) //&& cur_route_wp_index!= 0)
-			if (prev_route_wp_index >= 0 && !path_indexes.at(prev_route_wp_index).second)
-				cur_route_wp_index = prev_route_wp_index;	//Return to previous way point
+			if (prev_route_wp_index >= 0 && path_indexes.at(prev_route_wp_index).second)
+				cur_route_wp_index = prev_route_wp_index;	//Return to previous way point if prev waypoint is active
 			else
 				cur_route_wp_index = 0;						//Return to origin
 	}
@@ -377,6 +377,14 @@ public:
 		}
 		else //If next waypoint is not active
 		{
+			if (next_route_wp_index == path_indexes.size() - 1)
+			{
+				if (wp_nav_type == WN_TOANDFRO)
+				{
+					traverseFront = false;
+				}
+			}
+
 			if (path_indexes.at(prev_route_wp_index).second)	//If previous is active
 			{
 				next_route_wp_index = prev_route_wp_index;		
