@@ -14,8 +14,9 @@ ComponentListener::~ComponentListener()
 
 }
 
-void ComponentListener::Read(Value& val)
+void ComponentListener::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 {
+	g_ecman;
 	for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
 	{
 		if (itr->name == "isActive")

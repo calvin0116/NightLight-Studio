@@ -65,8 +65,9 @@ UI_Element& ComponentCanvas::operator[](size_t index)
 	return _uiElements.at(index);
 }
 
-void ComponentCanvas::Read(Value& val)
+void ComponentCanvas::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 {
+	g_ecman;
 	if (val.FindMember("isActive") == val.MemberEnd())
 	{
 		//std::cout << "No active data has been found" << std::endl;

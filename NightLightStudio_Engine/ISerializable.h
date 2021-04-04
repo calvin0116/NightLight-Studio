@@ -14,7 +14,7 @@ struct ISerializable
 
 
 
-	virtual void	Read(Value&) { };
+	virtual void	Read(Value&, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER) { g_ecman; };
 	virtual Value	Write() { return Value(rapidjson::kObjectType); };
 	virtual Value&	Write(Value& val) { return val; };	
 	virtual ISerializable* Clone() { return new ISerializable(); }

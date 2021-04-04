@@ -16,7 +16,7 @@ public:
 	~ComponentAnimation();
 
 	//C# Expose Functions
-	void PlayAnimation(const std::string& newAnim, bool loop = true, double startFrame = -1.0, double endFrame = -1.0);
+	void PlayAnimation(const std::string& newAnim, bool loop = true, double startFrame = -1.0, double endFrame = -1.0, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER);
 	void PauseAnimation();
 	void ResumeAnimation();
 	void StopAnimation();
@@ -27,7 +27,7 @@ public:
 	unsigned GetAnimController();
 
 	//read and write function for initialization from saved files
-	void	Read(Value&);
+	void	Read(Value&, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER);
 	Value	Write();
 	virtual Value& Write(Value& val) { return val; };
 	virtual ComponentAnimation* Clone()

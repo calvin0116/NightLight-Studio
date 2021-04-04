@@ -14,7 +14,7 @@ typedef struct ComponentVariables : public ISerializable //: public IComponent
   ComponentVariables();
   ~ComponentVariables();
 
-  void	Read(Value& val);
+  void	Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER) override;
   Value	Write();
   Value& Write(Value& val) { return val; };
   virtual ComponentVariables* Clone()

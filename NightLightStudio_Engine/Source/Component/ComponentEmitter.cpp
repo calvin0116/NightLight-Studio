@@ -383,8 +383,9 @@ ComponentEmitter::~ComponentEmitter()
 {
 }
 
-void ComponentEmitter::Read(Value& val)
+void ComponentEmitter::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 {
+	g_ecman;
 	//If doesn't exist
 	if (_emitterID < 0)
 	{

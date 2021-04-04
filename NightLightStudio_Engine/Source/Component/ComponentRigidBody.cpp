@@ -33,8 +33,9 @@ ComponentRigidBody::~ComponentRigidBody()
 {
 }
 
-inline void ComponentRigidBody::Read(Value& val) 
+inline void ComponentRigidBody::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 { 
+	g_ecman;
 	if (val.FindMember("isStatic") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentRigidBody::Read: No Force data has been found");

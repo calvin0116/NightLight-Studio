@@ -90,58 +90,62 @@ ComponentLoadAudio::~ComponentLoadAudio()
 
 }
 
-void	ComponentLoadAudio::Read(Value& val)
+void	ComponentLoadAudio::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 {
+    g_ecman;
+
   MyAudios.clear();
   for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
   {
-    auto data_list = itr->value.GetArray();
-    for (unsigned i = 0; i < data_list.Size(); ++i)
-    {
-        auto aud_val = data_list[i].GetObjectA();
-        
-        data aud_obj;   //create dummy object
-        aud_obj.objID = objId;
+      if (itr->name == "ListOfSound" && itr->value.IsArray())
+      {
+          auto data_list = itr->value.GetArray();
+          for (unsigned i = 0; i < data_list.Size(); ++i)
+          {
+              auto aud_val = data_list[i].GetObjectA();
 
-        for (Value::ConstMemberIterator itr2 = aud_val.MemberBegin(); itr2 != aud_val.MemberEnd(); ++itr2)
-        {
-            if (itr2->name == "index")
-            {
-                aud_obj.index = itr2->value.GetInt();        // index of sound in audio imgui
-            }
-            else if (itr2->name == "isBGM")
-            {
-                aud_obj.isBGM = itr2->value.GetBool();       // Whether sound is a BGM/Ambience or SFX
-            }
-            else if (itr2->name == "isLoop")
-            {
-                aud_obj.isLoop = itr2->value.GetBool();      // whether this sound is looping
-            }
-            else if (itr2->name == "playOnAwake")
-            {
-                aud_obj.playOnAwake = itr2->value.GetBool(); // whether to play on isActive = true
-            }
-            else if (itr2->name == "volume")
-            {
-                aud_obj.volume = itr2->value.GetFloat();     // Volume of sound 0.0f - 1.0f
-            }
-            else if (itr2->name == "is3D")
-            {
-                aud_obj.is3D = itr2->value.GetBool();        // Whether sound is 3D
-            }
-            else if (itr2->name == "minDist")
-            {
-                // 3D variables
-                aud_obj.minDist = itr2->value.GetFloat();
-            }
-            else if (itr2->name == "maxDist")
-            {
-                aud_obj.maxDist = itr2->value.GetFloat();
-            }
-        }
-        MyAudios.push_back(aud_obj);
-    }
+              data aud_obj;   //create dummy object
+              aud_obj.objID = objId;
 
+              for (Value::ConstMemberIterator itr2 = aud_val.MemberBegin(); itr2 != aud_val.MemberEnd(); ++itr2)
+              {
+                  if (itr2->name == "index")
+                  {
+                      aud_obj.index = itr2->value.GetInt();        // index of sound in audio imgui
+                  }
+                  else if (itr2->name == "isBGM")
+                  {
+                      aud_obj.isBGM = itr2->value.GetBool();       // Whether sound is a BGM/Ambience or SFX
+                  }
+                  else if (itr2->name == "isLoop")
+                  {
+                      aud_obj.isLoop = itr2->value.GetBool();      // whether this sound is looping
+                  }
+                  else if (itr2->name == "playOnAwake")
+                  {
+                      aud_obj.playOnAwake = itr2->value.GetBool(); // whether to play on isActive = true
+                  }
+                  else if (itr2->name == "volume")
+                  {
+                      aud_obj.volume = itr2->value.GetFloat();     // Volume of sound 0.0f - 1.0f
+                  }
+                  else if (itr2->name == "is3D")
+                  {
+                      aud_obj.is3D = itr2->value.GetBool();        // Whether sound is 3D
+                  }
+                  else if (itr2->name == "minDist")
+                  {
+                      // 3D variables
+                      aud_obj.minDist = itr2->value.GetFloat();
+                  }
+                  else if (itr2->name == "maxDist")
+                  {
+                      aud_obj.maxDist = itr2->value.GetFloat();
+                  }
+              }
+              MyAudios.push_back(aud_obj);
+          }
+      }
   }
 }
 

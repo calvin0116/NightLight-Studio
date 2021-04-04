@@ -51,7 +51,7 @@ typedef struct ComponentRigidBody : public ISerializable //: public IComponent
 	ComponentRigidBody();
 	~ComponentRigidBody();
 
-	void	Read(Value& val);
+	void	Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER);
 	Value	Write();
 	Value& Write(Value& val) { return val; };
 	virtual ComponentRigidBody* Clone()

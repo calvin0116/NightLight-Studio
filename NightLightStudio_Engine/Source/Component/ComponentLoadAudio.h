@@ -68,7 +68,7 @@ public:
   //void SetMaxDist(int _index, float _vol);
 
 	//read and write function for initialization from saved files
-  virtual void	Read(Value& val) override;
+  virtual void	Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER) override;
   virtual Value	Write() override;
   virtual Value& Write(Value& val) override { return val; }
   virtual ComponentLoadAudio* Clone()

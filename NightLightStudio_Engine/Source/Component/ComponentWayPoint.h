@@ -11,8 +11,9 @@ public:
 		strcpy_s(ser_name, "WayPointComponent");
 	}
 	
-	virtual void	Read(Value& val)
+	virtual void	Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER) override
 	{
+		g_ecman;
 		for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
 		{
 			if (itr->name == "SelfDefineVariable")

@@ -81,7 +81,8 @@ namespace NS_SERIALISER
 
 		ENGINE_API void CleanDoc()
 		{
-			doc.RemoveAllMembers();
+			if(doc.IsObject())
+				doc.RemoveAllMembers();
 			//alloc = nullptr;
 		}
 		//Access by count

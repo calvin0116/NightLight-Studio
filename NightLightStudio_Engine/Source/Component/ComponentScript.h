@@ -33,7 +33,7 @@ public:
 	~ComponentScript();
 
 	//read and write function for initialization from saved files
-	void	Read(Value&) override;
+	void	Read(Value&, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER) override;
   Value	Write() override;
   Value& Write(Value& val) override { return val; };
   virtual ComponentScript* Clone()
