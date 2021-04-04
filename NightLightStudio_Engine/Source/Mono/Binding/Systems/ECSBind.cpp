@@ -51,8 +51,6 @@ namespace ECSBind
   // For debugging in C#
   bool CheckCompGet(const void* comp, const std::string& type, const int& id)
   {
-    (void)type;
-    (void)id;
     if (comp == nullptr)
     {
       std::string error = type + " returned nullptr trying to get id:" + std::to_string(id);
@@ -106,6 +104,7 @@ namespace ECSBind
   void Print(MonoString* text)
   {
     TracyMessage(MonoWrapper::ToString(text).c_str(), MonoWrapper::ToString(text).size());
+    SPEEDLOG(MonoWrapper::ToString(text));
     //ED_OUT(MonoWrapper::ToString(text));
   }
 

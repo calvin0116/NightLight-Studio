@@ -361,8 +361,19 @@ namespace NS_LOGIC
       ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
       if (MyScript == nullptr || !MyScript->_isActive)
         continue;
+
+      // Debugging purposes
+      std::string output = "SystemLogic::GameInit calling " + std::to_string(MyScript->objId) + "'s script: " + std::string(MyScript->_ScriptName) + "...";
+      TracyMessage(output.c_str(), output.size());
+      SPEEDLOG(output);
+
       MonoMethod* MyInit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseInit);
       MonoWrapper::InvokeMethod(MyInit, MyScript->_MonoData._pInstance);
+
+      // Debugging purposes
+      output = "...Done.";
+      TracyMessage(output.c_str(), output.size());
+      SPEEDLOG(output);
     }
 #endif
   }
@@ -390,8 +401,19 @@ namespace NS_LOGIC
       ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
       if (MyScript == nullptr || !MyScript->_isActive)
         continue;
+
+      // Debugging purposes
+      std::string output = "SystemLogic::GameLateInit calling " + std::to_string(MyScript->objId) + "'s script: " + std::string(MyScript->_ScriptName) + "...";
+      TracyMessage(output.c_str(), output.size());
+      SPEEDLOG(output);
+
       MonoMethod* MyLateInit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseLateInit);
       MonoWrapper::InvokeMethod(MyLateInit, MyScript->_MonoData._pInstance);
+
+      // Debugging purposes
+      output = "...Done.";
+      TracyMessage(output.c_str(), output.size());
+      SPEEDLOG(output);
     }
 #endif
   }
@@ -482,12 +504,23 @@ namespace NS_LOGIC
     for (; itrS != itrE; ++itrS)
     {
       ComponentScript* MyScript = G_ECMANAGER->getComponent<ComponentScript>(itrS);
+      //ComponentTransform* trans = G_ECMANAGER->getComponent<ComponentTransform>(itrS);
       if (MyScript == nullptr)
         continue;
       if (MyScript->_isActive)
       {
+        // Debugging purposes
+        std::string output = "SystemLogic::GameExit calling " + std::to_string(MyScript->objId) + "'s script: " + std::string(MyScript->_ScriptName) + "...";
+        TracyMessage(output.c_str(), output.size());
+        SPEEDLOG(output);
+
         MonoMethod* MyExit = MonoWrapper::GetDerivedMethod(MyScript->_MonoData._pInstance, baseExit);
         MonoWrapper::InvokeMethod(MyExit, MyScript->_MonoData._pInstance);
+
+        // Debugging purposes
+        output = "...Done.";
+        TracyMessage(output.c_str(), output.size());
+        SPEEDLOG(output);
       }
       //MonoWrapper::FreeGCHandle(MyScript->_MonoData._GCHandle);
     }
