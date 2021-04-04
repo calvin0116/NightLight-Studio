@@ -213,7 +213,7 @@ public:
 
 	void CollisionTimeReset();
 
-	virtual void	Read(Value&);
+	virtual void	Read(Value& , NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER) override;
 	virtual Value	Write();
 	virtual Value& Write(Value& val) { return val; };
 

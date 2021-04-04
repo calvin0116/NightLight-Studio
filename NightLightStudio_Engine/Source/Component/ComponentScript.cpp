@@ -18,8 +18,10 @@ ComponentScript::~ComponentScript()
 
 //read and write function for initialization from saved files
 
-inline void ComponentScript::Read(Value& val)
+inline void ComponentScript::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 { 
+    g_ecman;
+
 	for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
 	{
         if (val.FindMember("isActive") == val.MemberEnd())

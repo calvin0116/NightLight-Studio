@@ -140,8 +140,9 @@ void ComponentLight::SetCutOff(const float& cutoff)
 	_cutOff = cutoff;
 }
 
-void ComponentLight::Read(Value& val)
+void ComponentLight::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 {
+	g_ecman;
 	if (val.FindMember("LightType") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentLight::Read: No active data has been found");

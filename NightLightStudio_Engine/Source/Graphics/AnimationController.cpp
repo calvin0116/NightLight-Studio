@@ -32,7 +32,7 @@ void AnimationController::Update(float dt)
 	}
 }
 
-void AnimationController::PlayAnimation(const std::string& newAnim, ComponentAnimation* currComp, bool loop, double startFrame, double endFrame)
+void AnimationController::PlayAnimation(const std::string& newAnim, ComponentAnimation* currComp, bool loop, double startFrame, double endFrame, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 {
 	if (_currAnim != newAnim || _play == false)
 	{
@@ -48,7 +48,7 @@ void AnimationController::PlayAnimation(const std::string& newAnim, ComponentAni
 				_dt = startFrame;
 			}
 
-			Entity entity = G_ECMANAGER->getEntity(currComp);
+			Entity entity = g_ecman->getEntity(currComp);
 			ComponentGraphics* compGraphic = entity.getComponent<ComponentGraphics>();
 
 			if (compGraphic)

@@ -23,5 +23,5 @@ struct AnimationController
 	double _endAnimTime;
 
 	void Update(float dt);
-	void PlayAnimation(const std::string& newAnim, ComponentAnimation* currComp, bool loop = true, double startFrame = -1.0, double endFrame = -1.0);
+	void PlayAnimation(const std::string& newAnim, ComponentAnimation* currComp, bool loop = true, double startFrame = -1.0, double endFrame = -1.0, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER);
 };

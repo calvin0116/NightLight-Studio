@@ -14,7 +14,7 @@ namespace NS_SERIALISER {
         //G_ECMANAGER->AttachComponent<T>(entity, comp);
 
         T* comp = g_ecman->AddComponent<T>(entity);
-        static_cast<ISerializable*>(comp)->Read(Comp_list[component_name.c_str()]);
+        static_cast<ISerializable*>(comp)->Read(Comp_list[component_name.c_str()] , g_ecman);
         
     }
 

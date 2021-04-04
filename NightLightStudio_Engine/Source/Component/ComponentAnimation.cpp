@@ -17,9 +17,9 @@ ComponentAnimation::~ComponentAnimation()
 	strcpy_s(ser_name, "AnimationComponent");
 }
 
-void ComponentAnimation::PlayAnimation(const std::string& newAnim, bool loop, double startFrame, double endFrame)
+void ComponentAnimation::PlayAnimation(const std::string& newAnim, bool loop, double startFrame, double endFrame, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 {
-	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->PlayAnimation(newAnim, this, loop, startFrame, endFrame);
+	NS_GRAPHICS::AnimationSystem::GetInstance()._animControllers[_controllerID]->PlayAnimation(newAnim, this, loop, startFrame, endFrame, g_ecman);
 }
 
 void ComponentAnimation::PauseAnimation()
@@ -77,8 +77,9 @@ unsigned ComponentAnimation::GetAnimController()
 	return _controllerID;
 }
 
-inline void ComponentAnimation::Read(Value& val)
+inline void ComponentAnimation::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 {
+	g_ecman;
 	if (val.FindMember("isActive") == val.MemberEnd())
 	{
 		//std::cout << "No active data has been found" << std::endl;

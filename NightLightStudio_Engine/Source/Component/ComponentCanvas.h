@@ -115,7 +115,7 @@ public:
 	UI_Element& operator[](size_t index);
 
 	//read and write function for initialization from saved files
-	void	Read(Value&);
+	void	Read(Value&, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER) override;
 	Value	Write();
 	virtual Value& Write(Value& val) { return val; };
 	virtual ComponentCanvas* Clone()

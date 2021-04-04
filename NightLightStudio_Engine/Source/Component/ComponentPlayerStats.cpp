@@ -23,8 +23,9 @@ ComponentPlayerStats::~ComponentPlayerStats()
 {
 }
 
-inline void ComponentPlayerStats::Read(Value& val) 
+inline void ComponentPlayerStats::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 { 
+	g_ecman;
 	//float player_move_mag;
 	//float player_fly_mag;
 	//int player_max_energy;

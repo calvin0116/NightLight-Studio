@@ -147,8 +147,9 @@ void ComponentCollider::CollisionTimeReset()
 	collisionTime = FLT_MAX;
 }
 
-void ComponentCollider::Read(Value& val)
+void ComponentCollider::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 {
+	g_ecman;
 	//get collider type
 	if (val.FindMember("colliderType") == val.MemberEnd())
 	{

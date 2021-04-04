@@ -240,8 +240,9 @@ ComponentGraphics::~ComponentGraphics()
 
 //read and write function for initialization from saved files
 
-inline void ComponentGraphics::Read(Value& val) 
+inline void ComponentGraphics::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 { 
+	g_ecman;
 	if (val.FindMember("isActive") == val.MemberEnd())
 	{
 		TracyMessageL("ComponentGraphics::Read: No active data has been found");

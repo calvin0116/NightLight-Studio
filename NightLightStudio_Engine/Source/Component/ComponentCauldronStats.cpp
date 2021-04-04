@@ -17,8 +17,9 @@ ComponentCauldronStats::~ComponentCauldronStats()
 {
 }
 
-inline void ComponentCauldronStats::Read(Value& val) 
+inline void ComponentCauldronStats::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 { 
+	g_ecman;
 	//std::string talisman;
 	//std::string collider;
 	//float magnitude;

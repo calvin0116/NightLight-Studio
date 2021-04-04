@@ -90,8 +90,10 @@ ComponentLoadAudio::~ComponentLoadAudio()
 
 }
 
-void	ComponentLoadAudio::Read(Value& val)
+void	ComponentLoadAudio::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 {
+    g_ecman;
+
   MyAudios.clear();
   for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
   {

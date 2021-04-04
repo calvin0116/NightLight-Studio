@@ -33,8 +33,9 @@ ComponentCamera::~ComponentCamera()
 //	NS_GRAPHICS::CameraSystem::GetInstance().SetCurrentCamera(_cameraID);
 //}
 
-inline void ComponentCamera::Read(Value& val)
+inline void ComponentCamera::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 {
+	g_ecman;
 	if (val.FindMember("isActive") == val.MemberEnd())
 		;//std::cout << "No active data has been found" << std::endl;
 	else
