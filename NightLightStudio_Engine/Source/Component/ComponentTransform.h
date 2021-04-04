@@ -48,7 +48,7 @@ public:
 	glm::mat4 GetModelMatrix();
 
 	//read and write function for initialization from saved files
-	void	Read(Value& val);
+	void	Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman = G_ECMANAGER) override;
 	Value	Write();			
 	Value&	Write(Value& val);	// Ovewrite data that has alr have a memory slot
 	virtual ComponentTransform* Clone() 

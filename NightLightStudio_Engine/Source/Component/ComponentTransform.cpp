@@ -36,8 +36,9 @@ glm::mat4 ComponentTransform::GetModelMatrix()
 	return (Translate * Rotate * Scale);
 }
 
-void ComponentTransform::Read(Value& val)
+void ComponentTransform::Read(Value& val, NS_COMPONENT::ComponentManager::ComponentSetManager* g_ecman)
 {
+	g_ecman;
 	for (Value::ConstMemberIterator itr = val.MemberBegin(); itr != val.MemberEnd(); ++itr)
 	{
 		if (itr->name == "EntityName")
