@@ -178,34 +178,74 @@ namespace Unicorn
       set { set_ColourOverTime_Internal(native_handle, value); }
     }
 
-    public Vector4 colourA
+    //public Vector4 colourA
+    //{
+    //  get { return get_ColourA_Internal(native_handle); }
+    //  set { set_ColourA_Internal(native_handle, value); }
+    //}
+
+    public Vector4 GetColourA()
     {
-      get { return get_ColourA_Internal(native_handle); }
-      set { set_ColourA_Internal(native_handle, value); }
+      return get_ColourA_Internal(native_handle);
+    }
+    public void SetColourA(Vector4 val)
+    {
+      set_ColourA_Internal(native_handle, val);
     }
 
-    public Vector4 colourB
+    //public Vector4 colourB
+    //{
+    //  get { return get_ColourB_Internal(native_handle); }
+    //  set { set_ColourB_Internal(native_handle, value); }
+    //}
+
+    public Vector4 GetColourB()
     {
-      get { return get_ColourB_Internal(native_handle); }
-      set { set_ColourB_Internal(native_handle, value); }
+      return get_ColourB_Internal(native_handle);
+    }
+    public void SetColourB(Vector4 val)
+    {
+      set_ColourB_Internal(native_handle, val);
     }
 
-    public Vector4 colourStart
+    //public Vector4 colourStart
+    //{
+    //  get { return get_ColourStart_Internal(native_handle); }
+    //  set { set_ColourStart_Internal(native_handle, value); }
+    //}
+
+    public Vector4 GetColourStart()
     {
-      get { return get_ColourStart_Internal(native_handle); }
-      set { set_ColourStart_Internal(native_handle, value); }
+      return get_ColourStart_Internal(native_handle);
+    }
+    public void SetColourStart(Vector4 val)
+    {
+      set_ColourStart_Internal(native_handle, val);
     }
 
-    public Vector4 colourEnd
+    //public Vector4 colourEnd
+    //{
+    //  get { return get_ColourEnd_Internal(native_handle); }
+    //  set { set_ColourEnd_Internal(native_handle, value); }
+    //}
+
+    public Vector4 GetColourEnd()
     {
-      get { return get_ColourEnd_Internal(native_handle); }
-      set { set_ColourEnd_Internal(native_handle, value); }
+      return get_ColourEnd_Internal(native_handle);
+    }
+    public void SetColourEnd(Vector4 val)
+    {
+      set_ColourEnd_Internal(native_handle, val);
     }
 
-    public Vector3 velocity
+    public Vector3 GetVelocity()
     {
-      get { return get_Velocity_Internal(native_handle); }
-      set { set_Velocity_Internal(native_handle, value); }
+      return get_Velocity_Internal(native_handle);
+    }
+
+    public void SetVelocity(Vector3 val)
+    {
+      set_Velocity_Internal(native_handle, value);
     }
 
     public void AddTexture(string val)
