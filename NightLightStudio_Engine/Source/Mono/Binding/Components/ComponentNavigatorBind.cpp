@@ -43,7 +43,7 @@ namespace ComponentNavigatorBind
     MonoWrapper::BindClassFunction(getDistFromPrevPathWP_Internal, "getDistFromPrevPathWP_Internal",
         "Navigator");
 
-    MonoWrapper::BindClassFunction(IsAroundWP_Internal, "IsAroundWP",
+    MonoWrapper::BindClassFunction(IsAroundWP_Internal, "IsAroundWP_Internal",
         "Navigator");
 
   }
