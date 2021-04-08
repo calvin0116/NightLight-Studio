@@ -810,6 +810,20 @@ namespace NS_GRAPHICS
 				GL_UNSIGNED_BYTE, image._imageData);
 
 			FreeTargaBuffers(&image);
+			
+			//SAVES CUSTOM DDS HERE
+			//std::string pathName;
+			//size_t pos = fileName.rfind(".");
+			//if (pos != std::string::npos)
+			//{
+			//	name = file.substr(0, pos);
+			//}
+			//else
+			//{
+			//	name = file;
+			//}
+			//name += ".dds";
+			//SOIL_save_image(name.c_str(), SOIL_SAVE_TYPE_DDS, width, height, channel, image._imageData);
 
 			return true;
 		}
@@ -916,7 +930,7 @@ namespace NS_GRAPHICS
 		//	name = file;
 		//}
 		//name += ".dds";
-		//SOIL_save_image(newFile.c_str(), SOIL_SAVE_TYPE_DDS, width, height, channel, textureData);
+		//SOIL_save_image(name.c_str(), SOIL_SAVE_TYPE_DDS, width, height, channel, textureData);
 		//
 		SOIL_free_image_data(textureData);
 
