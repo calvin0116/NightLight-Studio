@@ -45,7 +45,8 @@ namespace ComponentNavigatorBind
 
     MonoWrapper::BindClassFunction(IsAroundWP_Internal, "IsAroundWP_Internal",
         "Navigator");
-
+    MonoWrapper::BindClassFunction(IsWithinCirclingRange_Internal, "IsWithinCirclingRange_Internal",
+        "Navigator");
   }
 
   float get_Speed_Internal(NavComponent* nav)
@@ -111,6 +112,11 @@ namespace ComponentNavigatorBind
   bool IsAroundWP_Internal(NavComponent* nav)
   {
       return nav->IsAroundWP(1.0f);
+  }
+    
+  bool IsWithinCirclingRange_Internal(NavComponent* nav)
+  {
+      return nav->IsWithinCirclingRange();
   }
 
   MonoObject* get_Dir_Internal(NavComponent* nav)

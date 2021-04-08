@@ -67,6 +67,10 @@ namespace Unicorn
     {
       return IsAroundWP_Internal(native_handle);
     }
+    public bool IsWithinCirclingRange()
+    {
+      return IsWithinCirclingRange_Internal(native_handle);
+    }
 
     // Getter/Setter for speed
     [MethodImpl(MethodImplOptions.InternalCall)]
@@ -115,6 +119,11 @@ namespace Unicorn
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool IsAroundWP_Internal(IntPtr native_handle);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool IsWithinCirclingRange_Internal(IntPtr native_handle);
+
+
   }
 }
 

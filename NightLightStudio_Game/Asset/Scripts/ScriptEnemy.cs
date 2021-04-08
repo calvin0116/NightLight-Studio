@@ -53,6 +53,8 @@ namespace Unicorn
       Decision();
       Move();
       Control();
+	  
+	  enemyNavigator.IsAroundWP();
     }
     public override void FixedUpdate()
     {
