@@ -172,19 +172,20 @@ namespace NS_WINDOW
 			NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(NS_SCENE::EXIT_SCENCE);
 			return;
 		}
+		else
+		{
+			{
+				// Pink color
+				ZoneScopedNC("glfwPollEvents", 0xff00d9);
+				glfwPollEvents();
+			}
 
-		{
-			// Cyan color
-			ZoneScopedNC("glfwSwapBuffers", 0x03f4fc);
-			glfwSwapBuffers(_glfwWnd);
+			{
+				// Cyan color
+				ZoneScopedNC("glfwSwapBuffers", 0x03f4fc);
+				glfwSwapBuffers(_glfwWnd);
+			}
 		}
-		
-		{
-			// Pink color
-			ZoneScopedNC("glfwPollEvents", 0xff00d9);
-			glfwPollEvents();
-		}
-		
 	}
 
 	// Frees the resources used by the System
@@ -265,7 +266,21 @@ namespace NS_WINDOW
 
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);  // Create context for specified opengl profile, in this case compatibility
 
-		_glfwWnd = glfwCreateWindow(appWidth, appHeight, appTitle.c_str(), NULL, NULL);
+
+		// Check if we should set to fullscreen upon initialization
+		if (CONFIG_DATA->GetConfigData().toFullScreen)
+		{
+			isWndMode = false;
+			appWidth = GetSystemMetrics(SM_CXSCREEN);
+			appHeight = GetSystemMetrics(SM_CYSCREEN);
+			_glfwWnd = glfwCreateWindow(appWidth, appHeight, appTitle.c_str(), glfwGetPrimaryMonitor(), NULL);
+		}
+		else
+		{
+			// Already set to true by default, but we shall be pedantic here
+			isWndMode = true;
+			_glfwWnd = glfwCreateWindow(appWidth, appHeight, appTitle.c_str(), NULL, NULL);
+		}
 
 		if (_glfwWnd == nullptr)
 		{
@@ -489,7 +504,8 @@ namespace NS_WINDOW
 
 		hasInit = true;
 
-		SetFullScreenMode(CONFIG_DATA->GetConfigData().toFullScreen); //<- Use json to control
+		// Do not initialize fullscreen mode here, refer to InitWindow()
+		//SetFullScreenMode(CONFIG_DATA->GetConfigData().toFullScreen); //<- Use json to control
 
 		// Set callback for mouse scroll
 		glfwSetScrollCallback(_glfwWnd, [](GLFWwindow * window, double xoffset, double yoffset)
