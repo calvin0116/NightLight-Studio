@@ -26,6 +26,7 @@ namespace ComponentNavigatorBind
 
   bool IsAroundWP_Internal(NavComponent* nav);
   bool IsWithinCirclingRange_Internal(NavComponent* nav);
+  int GetCurWpId_Internal(NavComponent* nav);
 
   MonoObject* get_Dir_Internal(NavComponent* nav);
 

@@ -96,6 +96,14 @@ public:
 			return nullptr;
 		return cur_wp_path->GetPath().at(path_indexes.at(cur_path_wp_index).first);
 	}
+	int GetCurPathWpEntityID()
+	{
+		WayPointComponent* wpc = GetCurPathWp();
+		if (wpc == nullptr)
+			return -1;
+		return G_ECMANAGER->getEntity(wpc).getId();
+	}
+
 	WayPointComponent* GetPrevPathWp()
 	{
 		if (cur_wp_path == nullptr || cur_wp_path->GetPath().size() == 0)

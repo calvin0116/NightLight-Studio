@@ -47,6 +47,9 @@ namespace ComponentNavigatorBind
         "Navigator");
     MonoWrapper::BindClassFunction(IsWithinCirclingRange_Internal, "IsWithinCirclingRange_Internal",
         "Navigator");
+
+    MonoWrapper::BindClassFunction(GetCurWpId_Internal, "GetCurWpId_Internal",
+        "Navigator");
   }
 
   float get_Speed_Internal(NavComponent* nav)
@@ -117,6 +120,11 @@ namespace ComponentNavigatorBind
   bool IsWithinCirclingRange_Internal(NavComponent* nav)
   {
       return nav->IsWithinCirclingRange();
+  }
+
+  int GetCurWpId_Internal(NavComponent* nav)
+  {
+      return nav->GetCurPathWpEntityID();
   }
 
   MonoObject* get_Dir_Internal(NavComponent* nav)
