@@ -24,4 +24,14 @@ namespace AudioBind
   void csSetBGMVol(float _vol);
   void csSetSFXVol(float _vol);
   void csSetMASTERVol(float _vol);
+  // Getter
+  bool csGetMuteBGM();
+  bool csGetMuteSFX();
+  bool csGetMuteMASTER();
+  bool csGetPauseBGM();
+  bool csGetPauseSFX();
+  bool csGetPauseMASTER();
+  float csGetBGMVol();
+  float csGetSFXVol();
+  float csGetMASTERVol();
 }

@@ -71,6 +71,61 @@ public:
   inline void VolumeSFX(float _vol) { _sfx->setVolume(_vol); }
   inline void VolumeBGM(float _vol) { _bgm->setVolume(_vol); }
   inline void VolumeMASTER(float _vol) { _master->setVolume(_vol); }
+  // Getter
+  inline bool GetMuteSFX()
+  {
+    bool mute;
+    _sfx->getMute(&mute);
+    return mute;
+  }
+  inline bool GetMuteBGM()
+  {
+    bool mute;
+    _bgm->getMute(&mute);
+    return mute;
+  }
+  inline bool GetMuteMASTER()
+  {
+    bool mute;
+    _master->getMute(&mute);
+    return mute;
+  }
+  inline bool GetPauseSFX()
+  {
+    bool pause;
+    _sfx->getPaused(&pause);
+    return pause;
+  }
+  inline bool GetPauseBGM()
+  {
+    bool pause;
+    _bgm->getPaused(&pause);
+    return pause;
+  }
+  inline bool GetPauseMASTER()
+  {
+    bool pause;
+    _master->getPaused(&pause);
+    return pause;
+  }
+  inline float GetVolumeSFX()
+  {
+    float vol;
+    _sfx->getVolume(&vol);
+    return vol;
+  }
+  inline float GetVolumeBGM()
+  {
+    float vol;
+    _bgm->getVolume(&vol);
+    return vol;
+  }
+  inline float GetVolumeMASTER()
+  {
+    float vol;
+    _master->getVolume(&vol);
+    return vol;
+  }
   // Called MyGameExit in game loop // workaround for botched game loop
   void GameExit() override;
 
