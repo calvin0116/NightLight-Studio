@@ -812,18 +812,19 @@ namespace NS_GRAPHICS
 			FreeTargaBuffers(&image);
 			
 			//SAVES CUSTOM DDS HERE
+			//Note: Not Working
 			//std::string pathName;
-			//size_t pos = fileName.rfind(".");
+			//size_t pos = file.rfind(".");
 			//if (pos != std::string::npos)
 			//{
-			//	name = file.substr(0, pos);
+			//	pathName = file.substr(0, pos);
 			//}
 			//else
 			//{
-			//	name = file;
+			//	pathName = file;
 			//}
-			//name += ".dds";
-			//SOIL_save_image(name.c_str(), SOIL_SAVE_TYPE_DDS, width, height, channel, image._imageData);
+			//pathName += ".bmp";
+			//SOIL_save_image(pathName.c_str(), SOIL_SAVE_TYPE_BMP, image._width, image._height, 3, image._imageData);
 
 			return true;
 		}
@@ -920,18 +921,18 @@ namespace NS_GRAPHICS
 
 		//SAVES CUSTOM DDS HERE
 		//std::string pathName;
-		//size_t pos = fileName.rfind(".");
+		//size_t pos = file.rfind(".");
 		//if (pos != std::string::npos)
 		//{
-		//	name = file.substr(0, pos);
+		//	pathName = file.substr(0, pos);
 		//}
 		//else
 		//{
-		//	name = file;
+		//	pathName = file;
 		//}
-		//name += ".dds";
-		//SOIL_save_image(name.c_str(), SOIL_SAVE_TYPE_DDS, width, height, channel, textureData);
-		//
+		//pathName += ".dds";
+		//SOIL_save_image(pathName.c_str(), SOIL_SAVE_TYPE_DDS, width, height, channel, textureData);
+		
 		SOIL_free_image_data(textureData);
 
 		return true;

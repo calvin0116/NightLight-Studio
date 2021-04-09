@@ -804,7 +804,7 @@ namespace NS_GRAPHICS
 				<< "\n";
 
 			file << "uv: " << mesh->_vertexDatas[i]._uv.x << ","
-				<< mesh->_vertexDatas[i]._uv.x
+				<< mesh->_vertexDatas[i]._uv.y
 				<< "\n";
 
 			file << "n: " << mesh->_vertexDatas[i]._normals.x << ","
