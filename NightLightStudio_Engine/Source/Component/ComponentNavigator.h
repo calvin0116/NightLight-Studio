@@ -446,6 +446,21 @@ public:
 			path_indexes.push_back(std::make_pair(node, true));
 	}
 
+	LocalVector<int> GetActiveWP_ID()
+	{
+		LocalVector<int> active_ent_id;
+		LocalVector<WayPointComponent*>& path = cur_wp_path->GetPath();
+			for (auto wp_index : path_indexes)
+			{
+				if (wp_index.second)
+				{
+					Entity ent = G_ECMANAGER->getEntity(path.at(wp_index.first));
+					active_ent_id.push_back(ent.getId());
+					//ent.id
+				}
+			}
+	}
+
 	LocalVector<WayPointComponent*> GetCurPath()
 	{
 		return cur_wp_path->GetPath();

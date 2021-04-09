@@ -34,6 +34,7 @@ public:
 		return cur_edge;
 	}
 
+
 	//Converts list of entity name to real entity for way point traversing
 	void InitPath()
 	{
