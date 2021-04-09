@@ -62,6 +62,8 @@ public:
 	NAV_STATE nav_state;
 	float circuling_rad = 20.0f;
 
+	LocalVector<int> active_ent_id_list;				//Store active ent id
+
 	ComponentNavigator()
 		:isFollowing{ true }
 		,isPaused{false}
@@ -216,66 +218,7 @@ public:
 		return newcomp;
 	}
 
-	void InitPath()
-	{
-		Entity ent = G_ECMANAGER->getEntity(this);
-		trans = ent.getComponent<TransformComponent>();
-		rb = ent.getComponent<RigidBody>();
-
-		if (cur_wp_path == nullptr)
-		{
-			if (!wp_path_ent_name.empty())
-			{
-				Entity path_ent = G_ECMANAGER->getEntityUsingEntName((std::string)wp_path_ent_name);
-				if (path_ent.getId() != -1)
-					cur_wp_path = path_ent.getComponent<WayPointMapComponent>();
-				else
-				{
-					TracyMessageL("ComponentNavigator::InitPath : No entity have been found");
-					SPEEDLOG("ComponentNavigator::InitPath : No entity have been found");
-					return;
-				}
-			}
-			else
-			{
-				TracyMessageL("ComponentNavigator::InitPath : No entity name have been found");
-				SPEEDLOG("ComponentNavigator::InitPath : No entity name have been found");
-				return;
-			}
-			//if way point path entity does not exist
-			if (cur_wp_path == nullptr)
-				return;
-		}
-
-		cur_route_wp_index = 0;
-		prev_route_wp_index = 0;
-		isPaused = false;
-
-		switch (wp_creation_type) 
-		{
-		case WPP_STANDARD:
-		{
-			path_indexes.clear();
-			size_t wp_size = cur_wp_path->GetPath().size();
-			for (size_t i = 0; i < wp_size; ++i)
-				path_indexes.push_back(std::make_pair((int)i, true));
-			break;
-		}
-		case WPP_REVERSE:
-		{
-			path_indexes.clear();
-			size_t wp_size = cur_wp_path->GetPath().size() - 1;
-			for (int i = static_cast<int>(wp_size); i >= 0; --i)
-				path_indexes.push_back(std::make_pair(i, true));
-			break;
-		}
-		case WPP_CUSTOM:	//Inserted beforehand
-		{
-			break;
-		}
-		}
-		//SetNextWp(this);
-	}
+	void InitPath();
 	
 	void StopAtEachWPCheck()
 	{
@@ -454,7 +397,7 @@ public:
 			path_indexes.push_back(std::make_pair(node, true));
 	}
 
-	LocalVector<int> GetActiveWP_ID()
+	LocalVector<int> GetActiveWpsId()
 	{
 		LocalVector<int> active_ent_id;
 		LocalVector<WayPointComponent*>& path = cur_wp_path->GetPath();
@@ -467,6 +410,16 @@ public:
 					//ent.id
 				}
 			}
+			return active_ent_id;
+	}
+
+	int GetActiveWpId(int index)
+	{
+		return active_ent_id_list.at(index);
+	}
+	int GetActiveWpIdListSize()
+	{
+		return (int)active_ent_id_list.size();
 	}
 
 	LocalVector<WayPointComponent*> GetCurPath()
@@ -482,6 +435,8 @@ public:
 	void ToggleWayPointActive(int index, bool act)
 	{
 		path_indexes.at(index).second = act;
+
+		active_ent_id_list = GetActiveWpsId();
 	}
 
 

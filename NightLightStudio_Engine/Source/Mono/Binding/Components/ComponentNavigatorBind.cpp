@@ -50,6 +50,11 @@ namespace ComponentNavigatorBind
 
     MonoWrapper::BindClassFunction(GetCurWpId_Internal, "GetCurWpId_Internal",
         "Navigator");
+
+    MonoWrapper::BindClassFunction(GetActiveWpId_Internal, "GetActiveWpId_Internal",
+        "Navigator");
+   MonoWrapper::BindClassFunction(GetActiveWpIdListSize_Internal, "GetActiveWpIdListSize_Internal",
+       "Navigator");
   }
 
   float get_Speed_Internal(NavComponent* nav)
@@ -125,6 +130,16 @@ namespace ComponentNavigatorBind
   int GetCurWpId_Internal(NavComponent* nav)
   {
       return nav->GetCurPathWpEntityID();
+  }
+
+  int GetActiveWpId_Internal(NavComponent* nav, int index)
+  {
+      return nav->GetActiveWpId(index);
+  }
+
+  int GetActiveWpIdListSize_Internal(NavComponent* nav)
+  {
+      return nav->GetActiveWpIdListSize();
   }
 
   MonoObject* get_Dir_Internal(NavComponent* nav)
