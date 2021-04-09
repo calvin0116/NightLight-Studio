@@ -245,7 +245,7 @@ namespace Unicorn
 
     public void SetVelocity(Vector3 val)
     {
-      set_Velocity_Internal(native_handle, value);
+      set_Velocity_Internal(native_handle, val);
     }
 
     public void AddTexture(string val)

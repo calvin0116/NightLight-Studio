@@ -18,6 +18,10 @@ namespace Unicorn
     public float speed = 1.0f;
     public float rotSpeed = 1.0f;
 
+    bool sfx = false;
+    bool bgm = false;
+    bool all = false;
+
     public override void Init()
     {
       trans = GetTransform(id);
@@ -62,19 +66,32 @@ namespace Unicorn
         lisTrans.SetPosition(right);
       }
 
+      if (Input.GetKeyPress(VK.IKEY_U))
+      {
+        Print(Audio.GetMuteSFX().ToString());
+        Print(Audio.GetMuteBGM().ToString());
+        Print(Audio.GetMuteMASTER().ToString());
+      }
+
+      if (Input.GetKeyPress(VK.IKEY_I))
+      {
+        sfx = !sfx;
+        Print(sfx.ToString());
+        Audio.MuteSFX(sfx);
+      }
+
+      if (Input.GetKeyPress(VK.IKEY_O))
+      {
+        bgm = !bgm;
+        Print(bgm.ToString());
+        Audio.MuteBGM(bgm);
+      }
+
       if (Input.GetKeyPress(VK.IKEY_P))
       {
-        //Print(audSource.Size().ToString());
-        //Print(myDatas.Length.ToString());
-        //Print(MyData.index.ToString());
-        AudioData[] audio = audSource.audioDatas;
-        //int test = audio[0];
-        //Print(audio[0].index.Tostring());
-        Print("end");
-
-        //Print(audio.index.ToString());
-        Print(audio[0].index.ToString());
-        audio[0].Play();
+        all = !all;
+        Print(all.ToString());
+        Audio.MuteMASTER(all);
       }
 
       if (Input.GetKeyHold(VK.IKEY_C))

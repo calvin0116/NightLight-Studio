@@ -54,5 +54,26 @@ namespace Unicorn
     public extern static void VolumeSFX(float _vol);
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void VolumeMASTER(float _vol);
+    // Getters
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool GetMuteBGM();
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool GetMuteSFX();
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool GetMuteMASTER();
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool GetPauseBGM();
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool GetPauseSFX();
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool GetPauseMASTER();
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float GetVolumeBGM();
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float GetVolumeSFX();
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static float GetVolumeMASTER();
   }
 }
