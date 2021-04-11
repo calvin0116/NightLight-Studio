@@ -37,6 +37,8 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(RayCast, "RayCast", "UniBehaviour");
     MonoWrapper::BindClassFunction(RayTest, "RayTest", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetWindowedMode, "GetWindowedMode", "UniBehaviour");
+    MonoWrapper::BindClassFunction(SetFullScreenMode, "SetFullScreenMode", "UniBehaviour");
+    MonoWrapper::BindClassFunction(SetMaximizedMode, "SetMaximizedMode", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetScript, "GetScript", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetScriptComp, "GetScriptComp", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
@@ -170,6 +172,16 @@ namespace ECSBind
   bool GetWindowedMode()
   {
     return NS_WINDOW::SYS_WINDOW->GetWindowedMode();
+  }
+
+  void SetFullScreenMode(bool mode)
+  {
+    NS_WINDOW::SYS_WINDOW->SetFullScreenMode(mode);
+  }
+
+  void SetMaximizedMode(bool mode)
+  {
+    NS_WINDOW::SYS_WINDOW->SetMaximizedWindow(mode);
   }
 
   MonoObject* GetScript(int id)

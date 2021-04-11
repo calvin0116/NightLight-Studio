@@ -24,6 +24,8 @@ namespace ECSBind
   void  RayTest(MonoObject* origin, MonoObject* end);
   // Application fullscreen
   bool  GetWindowedMode();
+  void  SetFullScreenMode(bool mode);
+  void  SetMaximizedMode(bool mode);
   // Get components from object ID
   MonoObject* GetScript(int id);
   MonoObject* GetScriptComp(int id);
