@@ -17,6 +17,8 @@
 #include "../../../Log/SpeedLog.h"
 // System Manager, pause/unpause
 #include "../../../Core/SystemManager.h"
+// Wnd System, check fullscreen
+#include "../../../Window/WndSystem.h"
 
 //#define CSDebug
 
@@ -34,6 +36,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(RayCastIntersect, "RayCastIntersect", "UniBehaviour");
     MonoWrapper::BindClassFunction(RayCast, "RayCast", "UniBehaviour");
     MonoWrapper::BindClassFunction(RayTest, "RayTest", "UniBehaviour");
+    MonoWrapper::BindClassFunction(GetWindowedMode, "GetWindowedMode", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetScript, "GetScript", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetScriptComp, "GetScriptComp", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetTransform, "GetTransform", "UniBehaviour");
@@ -162,6 +165,11 @@ namespace ECSBind
     myEnd.z = MonoWrapper::GetObjectFieldValue<float>(end, "Z");
 
     NS_COLLISION::SYS_COLLISION->Test_Ray(myOrigin, myEnd);
+  }
+
+  bool GetWindowedMode()
+  {
+    return NS_WINDOW::SYS_WINDOW->GetWindowedMode();
   }
 
   MonoObject* GetScript(int id)

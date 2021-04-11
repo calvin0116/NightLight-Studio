@@ -22,6 +22,8 @@ namespace ECSBind
   int   RayCastIntersect(MonoObject* origin, MonoObject* endPos, MonoObject* intersect, int pos);
   int   RayCast(MonoObject* origin, MonoObject* endPos, int pos);
   void  RayTest(MonoObject* origin, MonoObject* end);
+  // Application fullscreen
+  bool  GetWindowedMode();
   // Get components from object ID
   MonoObject* GetScript(int id);
   MonoObject* GetScriptComp(int id);

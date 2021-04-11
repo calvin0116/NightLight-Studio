@@ -56,6 +56,9 @@ namespace Unicorn
     // Test ray, don't use. For testing only
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void RayTest(Vector3 origin, Vector3 end);
+    // Check fullscreen
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static bool GetWindowedMode();
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static dynamic GetScript(int id);
