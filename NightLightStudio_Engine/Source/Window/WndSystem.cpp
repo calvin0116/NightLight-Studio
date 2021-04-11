@@ -519,8 +519,7 @@ namespace NS_WINDOW
 		//glfwSetWindowSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
 		glfwSetFramebufferSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
 		{
-			// Update orthogonal projection matrix with new width and height
-			NS_GRAPHICS::SYS_GRAPHICS->SetUIMatrix(width, height);
+			
 
 			// Update rect in SystemMousePosition
 			SYS_INPUT->GetSystemMousePos().ResetWinSize();
@@ -531,6 +530,11 @@ namespace NS_WINDOW
 
 			// Get updated resolution sizing
 			SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+
+			// Update projection matrix
+			NS_GRAPHICS::SYS_GRAPHICS->SetProjectionMatrix(NS_GRAPHICS::CameraSystem::GetInstance().GetCamera().cameraFOV, static_cast<float>(width) / static_cast<float>(height));
+			// Update orthogonal projection matrix with new width and height
+			//NS_GRAPHICS::SYS_GRAPHICS->SetUIMatrix(SYS_WINDOW->iDisplayResW/width, SYS_WINDOW->iDisplayResH/height);
 
 			UNREFERENCED_PARAMETER(window);
 			glViewport(0, 0, width, height);
@@ -882,7 +886,8 @@ namespace NS_WINDOW
 	void WndSystem::RestoreWindowed()
 	{
 		// Update orthogonal projection matrix with new width and height
-		NS_GRAPHICS::SYS_GRAPHICS->SetUIMatrix(appWidth, appHeight);
+		// Must use system metrics width and height
+		NS_GRAPHICS::SYS_GRAPHICS->SetUIMatrix(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
 
 		// Update rect in SystemMousePosition
 		SYS_INPUT->GetSystemMousePos().ResetWinSize();
