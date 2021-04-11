@@ -40,9 +40,9 @@ namespace Unicorn
     }
 
 
-    public void SetWpActive(int val, bool act)
+    public int SetWpActive(int val, bool act)
     {
-      toggle_WayPointActive_Internal(native_handle, val, act);
+      return toggle_WayPointActive_Internal(native_handle, val, act);
     }
 
     public bool MoreThenOneWPActive()
@@ -71,6 +71,34 @@ namespace Unicorn
     {
       return IsWithinCirclingRange_Internal(native_handle);
     }
+	//Get current way point entity id 
+    public int GetCurWpEntId()
+    {
+		return GetCurWpId_Internal(native_handle);
+	}
+	
+	//Get active way point entity id using index in array 
+	public int GetActiveWpId(int val)
+    {
+      return GetActiveWpId_Internal(native_handle, val);
+    }
+	//Get size of the way point list for the navigator -> to get all active waypoint, *from i in range[0 -> size] , call GetActiveWpId(i)*
+    public int GetActiveWpIdListSize()
+    {
+      return GetActiveWpIdListSize_Internal(native_handle);
+    }
+	
+	//Get active way point entity id using index in array 
+	public int GetInactiveWpId(int val)
+    {
+      return GetInactiveWpId_Internal(native_handle, val);
+    }
+	//Get size of the way point list for the navigator -> to get all active waypoint, *from i in range[0 -> size] , call GetActiveWpId(i)*
+    public int GetInactiveWpIdListSize()
+    {
+      return GetInactiveWpIdListSize_Internal(native_handle);
+    }
+
 
     // Getter/Setter for speed
     [MethodImpl(MethodImplOptions.InternalCall)]
@@ -101,7 +129,7 @@ namespace Unicorn
     public extern static void set_NavState_Internal(IntPtr native_handle, int val);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern static void toggle_WayPointActive_Internal(IntPtr native_handle, int val, bool act);
+    public extern static int toggle_WayPointActive_Internal(IntPtr native_handle, int val, bool act);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool MoreThenOneWPActive_Internal(IntPtr native_handle);
@@ -123,6 +151,20 @@ namespace Unicorn
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool IsWithinCirclingRange_Internal(IntPtr native_handle);
 
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static int GetCurWpId_Internal(IntPtr native_handle);
+	
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static int GetActiveWpId_Internal(IntPtr native_handle, int val);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static int GetActiveWpIdListSize_Internal(IntPtr native_handle);
+	
+	    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static int GetInactiveWpId_Internal(IntPtr native_handle, int val);
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static int GetInactiveWpIdListSize_Internal(IntPtr native_handle);
 
   }
 }

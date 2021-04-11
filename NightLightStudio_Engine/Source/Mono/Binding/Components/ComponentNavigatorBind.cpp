@@ -55,6 +55,11 @@ namespace ComponentNavigatorBind
         "Navigator");
    MonoWrapper::BindClassFunction(GetActiveWpIdListSize_Internal, "GetActiveWpIdListSize_Internal",
        "Navigator");
+
+   MonoWrapper::BindClassFunction(GetInactiveWpId_Internal, "GetInactiveWpId_Internal",
+       "Navigator");
+   MonoWrapper::BindClassFunction(GetInactiveWpIdListSize_Internal, "GetInactiveWpIdListSize_Internal",
+       "Navigator");
   }
 
   float get_Speed_Internal(NavComponent* nav)
@@ -95,9 +100,9 @@ namespace ComponentNavigatorBind
       nav->nav_state = (NAV_STATE)val;
   }
 
-  void toggle_WayPointActive_Internal(NavComponent* nav, int val, bool act)
+  int toggle_WayPointActive_Internal(NavComponent* nav, int val, bool act)
   {
-      nav->ToggleWayPointActive(val, act);
+      return nav->ToggleWayPointActive(val, act);
   }
   bool MoreThenOneWPActive_Internal(NavComponent* nav)
   {
@@ -132,14 +137,23 @@ namespace ComponentNavigatorBind
       return nav->GetCurPathWpEntityID();
   }
 
-  int GetActiveWpId_Internal(NavComponent* nav, int index)
+  int GetActiveWpId_Internal(NavComponent* nav, int val)
   {
-      return nav->GetActiveWpId(index);
+      return nav->GetActiveWpId(val);
   }
 
   int GetActiveWpIdListSize_Internal(NavComponent* nav)
   {
       return nav->GetActiveWpIdListSize();
+  }
+
+  int GetInactiveWpId_Internal(NavComponent* nav, int val)
+  {
+      return nav->GetInactiveWpId(val);
+  }
+  int GetInactiveWpIdListSize_Internal(NavComponent* nav)
+  {
+      return nav->GetInactiveWpIdListSize();
   }
 
   MonoObject* get_Dir_Internal(NavComponent* nav)

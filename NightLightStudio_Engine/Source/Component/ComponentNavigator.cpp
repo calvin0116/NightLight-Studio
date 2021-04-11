@@ -73,7 +73,7 @@ void ComponentNavigator::InitPath()
 	}
 	//SetNextWp(this);
 
-	active_ent_id_list = GetActiveWpsId();	//Set up active ent list
+	update_wp_active();
 }
 
 inline void ComponentNavigator::GoToClosestWP()

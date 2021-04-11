@@ -54,7 +54,13 @@ namespace Unicorn
       Move();
       Control();
 	  
-	  enemyNavigator.IsAroundWP();
+	  //enemyNavigator.IsAroundWP();
+	  enemyNavigator.GetCurWpEntId();
+	  //Print(enemyNavigator.GetActiveWpId(0).ToString());
+	 //Print(enemyNavigator.GetActiveWpIdListSize().ToString());
+	 
+	 //Print(enemyNavigator.GetInactiveWpId(0).ToString());
+	 //Print(enemyNavigator.GetInactiveWpIdListSize().ToString());
     }
     public override void FixedUpdate()
     {

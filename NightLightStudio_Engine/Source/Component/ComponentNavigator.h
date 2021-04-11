@@ -63,6 +63,7 @@ public:
 	float circuling_rad = 20.0f;
 
 	LocalVector<int> active_ent_id_list;				//Store active ent id
+	LocalVector<int> inactive_ent_id_list;
 
 	ComponentNavigator()
 		:isFollowing{ true }
@@ -397,30 +398,53 @@ public:
 			path_indexes.push_back(std::make_pair(node, true));
 	}
 
-	LocalVector<int> GetActiveWpsId()
+	///////////////////////////////////////////////////////////////////////////////////
+	LocalVector<int> GetWpsId(bool active = true)
 	{
-		LocalVector<int> active_ent_id;
+		LocalVector<int> ent_ids;
 		LocalVector<WayPointComponent*>& path = cur_wp_path->GetPath();
 			for (auto wp_index : path_indexes)
 			{
-				if (wp_index.second)
+				if (wp_index.second == active)
 				{
 					Entity ent = G_ECMANAGER->getEntity(path.at(wp_index.first));
-					active_ent_id.push_back(ent.getId());
+					ent_ids.push_back(ent.getId());
 					//ent.id
 				}
 			}
-			return active_ent_id;
-	}
-
-	int GetActiveWpId(int index)
-	{
-		return active_ent_id_list.at(index);
+			return ent_ids;
 	}
 	int GetActiveWpIdListSize()
 	{
 		return (int)active_ent_id_list.size();
 	}
+	int GetActiveWpId(int index)
+	{
+		if (GetActiveWpIdListSize() == 0)
+			return -1;
+
+		return active_ent_id_list.at(index);
+	}
+	int GetInactiveWpIdListSize()
+	{
+		return (int)inactive_ent_id_list.size();
+	}
+	int GetInactiveWpId(int index)
+	{
+		if (GetInactiveWpIdListSize() == 0)
+			return -1;
+		return inactive_ent_id_list.at(index);
+	}
+
+
+	void update_wp_active()
+	{
+		active_ent_id_list = GetWpsId();
+		inactive_ent_id_list = GetWpsId(false);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+
 
 	LocalVector<WayPointComponent*> GetCurPath()
 	{
@@ -432,11 +456,17 @@ public:
 		path_indexes.at(cur_path_wp_index).second = false;
 	}
 
-	void ToggleWayPointActive(int index, bool act)
+	int ToggleWayPointActive(int index, bool act)
 	{
-		path_indexes.at(index).second = act;
+		auto& path_act = path_indexes.at(index);
+		path_act.second = act;
 
-		active_ent_id_list = GetActiveWpsId();
+		LocalVector<WayPointComponent*>& path = cur_wp_path->GetPath();
+		Entity ent = G_ECMANAGER->getEntity(path.at(path_act.first));
+
+		update_wp_active();
+
+		return ent.getId();
 	}
 
 
