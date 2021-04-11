@@ -17,7 +17,7 @@ namespace ComponentNavigatorBind
   void set_NavState_Internal(NavComponent* trans, int val);
 
   //Way point functions
-  void toggle_WayPointActive_Internal(NavComponent* nav, int val, bool act);
+  int toggle_WayPointActive_Internal(NavComponent* nav, int val, bool act);
   bool MoreThenOneWPActive_Internal(NavComponent* nav);
   void GoToNextWp_Internal(NavComponent* nav);
 
@@ -28,8 +28,11 @@ namespace ComponentNavigatorBind
   bool IsWithinCirclingRange_Internal(NavComponent* nav);
   int GetCurWpId_Internal(NavComponent* nav);
 
-  int GetActiveWpId_Internal(NavComponent* nav, int index);
+  int GetActiveWpId_Internal(NavComponent* nav, int val);
   int GetActiveWpIdListSize_Internal(NavComponent* nav);
+
+  int GetInactiveWpId_Internal(NavComponent* nav, int val);
+  int GetInactiveWpIdListSize_Internal(NavComponent* nav);
 
   MonoObject* get_Dir_Internal(NavComponent* nav);
 
