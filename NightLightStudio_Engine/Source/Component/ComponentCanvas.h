@@ -54,7 +54,7 @@ struct UI_Element
 
 	glm::mat4 GetModelMatrix();
 	void AddTexture(std::string filename); // Expose
-	void PlayAnimation(bool loop = false, bool reverse = false); // Expose
+	void PlayAnimation(bool loop = false, bool reverse = false, bool current = true); // Expose
 	void StopAnimation();
 
 	bool CheckIfLastFrame();
@@ -91,7 +91,7 @@ public:
 	/////////////////////////////////////////
 	/// Material without texture
 	/////////////////////////////////////////
-	LocalVector<UI_Element, 32> _uiElements;
+	LocalVector<UI_Element, 64> _uiElements;
 	//TODO 
 	CANVAS_TYPE _canvasType;
 	size_t _canvasSize;
