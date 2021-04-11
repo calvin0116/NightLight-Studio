@@ -446,7 +446,7 @@ void UI_Element::AddTexture(std::string filename)
 	}
 }
 
-void UI_Element::PlayAnimation(bool loop, bool reverse)
+void UI_Element::PlayAnimation(bool loop, bool reverse, bool current)
 {
 	if (!_isAnimated && _play)
 		return;
@@ -459,7 +459,10 @@ void UI_Element::PlayAnimation(bool loop, bool reverse)
 
 	if (_reverse)
 	{
-		_currentFrame = _totalFrame - 1;
+		if (!current)
+		{
+			_currentFrame = _totalFrame - 1;
+		}
 	}
 	else
 	{
