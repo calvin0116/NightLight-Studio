@@ -744,6 +744,8 @@ void InspectorWindow::AudioComp(Entity& ent)
 
 						ImGui::Checkbox(std::string("IsBGM##AudioComp" + sIndex).c_str(), &MyData.isBGM);
 
+						ImGui::Checkbox(std::string("IsUI##AudioComp" + sIndex).c_str(), &MyData.isUI);
+
 						// Variables
 						ImGui::Checkbox(std::string("IsLoop##AudioComp" + sIndex).c_str(), &MyData.isLoop);
 

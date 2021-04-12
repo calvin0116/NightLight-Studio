@@ -117,6 +117,10 @@ void	ComponentLoadAudio::Read(Value& val, NS_COMPONENT::ComponentManager::Compon
                   {
                       aud_obj.isBGM = itr2->value.GetBool();       // Whether sound is a BGM/Ambience or SFX
                   }
+                  else if (itr2->name == "isUI")
+                  {
+                    aud_obj.isUI = itr2->value.GetBool();       // Whether sound is a UI SFX
+                  }
                   else if (itr2->name == "isLoop")
                   {
                       aud_obj.isLoop = itr2->value.GetBool();      // whether this sound is looping
@@ -169,6 +173,7 @@ inline Value ComponentLoadAudio::Write()
 
       NS_SERIALISER::ChangeData(&aud_data, "index", d.index);
       NS_SERIALISER::ChangeData(&aud_data, "isBGM", d.isBGM);
+      NS_SERIALISER::ChangeData(&aud_data, "isUI", d.isUI);
       NS_SERIALISER::ChangeData(&aud_data, "isLoop", d.isLoop);
       NS_SERIALISER::ChangeData(&aud_data, "playOnAwake", d.playOnAwake);
       NS_SERIALISER::ChangeData(&aud_data, "volume", d.volume);

@@ -38,17 +38,23 @@ namespace AudioBind
       "Audio");
     MonoWrapper::BindClassFunction(csMuteSFX, "MuteSFX",
       "Audio");
+    MonoWrapper::BindClassFunction(csMuteUI, "MuteUI",
+      "Audio");
     MonoWrapper::BindClassFunction(csMuteMASTER, "MuteMASTER",
       "Audio");
     MonoWrapper::BindClassFunction(csPauseBGM, "PauseBGM",
       "Audio");
     MonoWrapper::BindClassFunction(csPauseSFX, "PauseSFX",
       "Audio");
+    MonoWrapper::BindClassFunction(csPauseUI, "PauseUI",
+      "Audio");
     MonoWrapper::BindClassFunction(csPauseMASTER, "PauseMASTER",
       "Audio");
     MonoWrapper::BindClassFunction(csSetBGMVol, "VolumeBGM",
       "Audio");
     MonoWrapper::BindClassFunction(csSetSFXVol, "VolumeSFX",
+      "Audio");
+    MonoWrapper::BindClassFunction(csSetUIVol, "VolumeUI",
       "Audio");
     MonoWrapper::BindClassFunction(csSetMASTERVol, "VolumeMASTER",
       "Audio");
@@ -130,6 +136,10 @@ namespace AudioBind
   {
     SYS_AUDIO->MuteSFX(_mute);
   }
+  void csMuteUI(bool _mute)
+  {
+    SYS_AUDIO->MuteUI(_mute);
+  }
   void csMuteMASTER(bool _mute)
   {
     SYS_AUDIO->MuteMASTER(_mute);
@@ -142,25 +152,25 @@ namespace AudioBind
   {
     SYS_AUDIO->PauseSFX(_mute);
   }
+  void csPauseUI(bool _pause)
+  {
+    SYS_AUDIO->PauseUI(_pause);
+  }
   void csPauseMASTER(bool _mute)
   {
     SYS_AUDIO->PauseMASTER(_mute);
   }
   void csSetBGMVol(float _vol)
   {
-    if (_vol > 100.0f)
-      _vol = 100.0f;
-    else if (_vol < 0.0f)
-      _vol = 0.0f;
     SYS_AUDIO->VolumeBGM(_vol);
   }
   void csSetSFXVol(float _vol)
   {
-    if (_vol > 100.0f)
-      _vol = 100.0f;
-    else if (_vol < 0.0f)
-      _vol = 0.0f;
     SYS_AUDIO->VolumeSFX(_vol);
+  }
+  void csSetUIVol(float _vol)
+  {
+    SYS_AUDIO->VolumeUI(_vol);
   }
   void csSetMASTERVol(float _vol)
   {

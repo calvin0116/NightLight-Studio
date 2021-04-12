@@ -23,6 +23,7 @@ typedef class ComponentLoadAudio : public ISerializable
     bool playOnAwake  = false; // whether to play on isActive = true
     float volume      = 1.0f;     // Volume of sound 0.0f - 1.0f
     bool is3D         = false;        // Whether sound is 3D
+    bool isUI         = false;    // Is ui sound
     // 3D variables
     float minDist     = 0.5f;
     float maxDist     = 100.0f;

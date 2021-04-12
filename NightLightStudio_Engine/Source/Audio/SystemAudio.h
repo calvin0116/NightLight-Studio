@@ -37,6 +37,8 @@ class SystemAudio : public MySystem, public  Singleton<SystemAudio>
   FMOD::ChannelGroup* _master;
   FMOD::ChannelGroup* _bgm;
   FMOD::ChannelGroup* _sfx;
+  FMOD::ChannelGroup* _BGMui;
+  FMOD::ChannelGroup* _SFXui;
 
   SystemMessaging::SystemReceiver r;
 
@@ -64,12 +66,15 @@ public:
   // Inline
   inline void MuteSFX(bool _mute) { _sfx->setMute(_mute); }
   inline void MuteBGM(bool _mute) { _bgm->setMute(_mute); }
+  inline void MuteUI(bool _mute) { _BGMui->setMute(_mute), _SFXui->setMute(_mute); }
   inline void MuteMASTER(bool _mute) { _master->setMute(_mute); }
   inline void PauseSFX(bool _pause) { _sfx->setPaused(_pause); }
   inline void PauseBGM(bool _pause) { _bgm->setPaused(_pause); }
+  inline void PauseUI(bool _pause) { _BGMui->setPaused(_pause), _SFXui->setPaused(_pause); }
   inline void PauseMASTER(bool _pause) { _master->setPaused(_pause); }
   inline void VolumeSFX(float _vol) { _sfx->setVolume(_vol); }
   inline void VolumeBGM(float _vol) { _bgm->setVolume(_vol); }
+  inline void VolumeUI(float _vol) { _BGMui->setVolume(_vol), _SFXui->setVolume(_vol); }
   inline void VolumeMASTER(float _vol) { _master->setVolume(_vol); }
   // Getter
   inline bool GetMuteSFX()

@@ -39,6 +39,8 @@ namespace Unicorn
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void MuteSFX(bool _mute);
     [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void MuteUI(bool _mute);
+    [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void MuteMASTER(bool _mute);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
@@ -46,12 +48,16 @@ namespace Unicorn
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void PauseSFX(bool _mute);
     [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void PauseUI(bool _mute);
+    [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void PauseMASTER(bool _mute);
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void VolumeBGM(float _vol);
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void VolumeSFX(float _vol);
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void VolumeUI(float _vol);
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void VolumeMASTER(float _vol);
     // Getters
