@@ -40,6 +40,10 @@ namespace Unicorn
     // Change scene
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static void SetNextScene(string scene);
+	    
+	[MethodImpl(MethodImplOptions.InternalCall)]
+    public extern static void RestartScene();
+	
     [MethodImpl(MethodImplOptions.InternalCall)]
     public extern static bool GetPause();
     [MethodImpl(MethodImplOptions.InternalCall)]

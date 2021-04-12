@@ -13,6 +13,7 @@ namespace ECSBind
   float realDt();
   // Scene change
   void  SetNextScene(MonoString* scene_name);
+  void  RestartScene();
   // Pause game
   void	SetPause(bool _val);
   bool	GetPause();

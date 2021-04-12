@@ -36,7 +36,7 @@ Institute of Technology is prohibited.
 // SpeedLog
 #include "../Log/SpeedLog.h"
 
-#define APPTITLE "NightLight Studios: Rebirth"
+#define APPTITLE "Rebirth"
 
 namespace NS_WINDOW
 {

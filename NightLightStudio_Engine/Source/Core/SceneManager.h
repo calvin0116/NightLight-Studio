@@ -100,7 +100,7 @@ namespace NS_SCENE
 
 
 		//============= Getting / Setter ====================//
-		ENGINE_API void SetNextScene(std::string scene_name);
+		ENGINE_API void SetNextScene(std::string scene_name = "");
 		//bool GetToExit();
 		//SCENE_CHANGE GetToChangeScene();
 		std::string GetCurrentScene() { return current_scene; };

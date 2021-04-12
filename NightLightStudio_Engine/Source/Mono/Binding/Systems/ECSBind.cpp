@@ -52,6 +52,7 @@ namespace ECSBind
     MonoWrapper::BindClassFunction(GetEmitter, "GetEmitter", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetAudioSource, "GetAudioSource", "UniBehaviour");
     MonoWrapper::BindClassFunction(GetVariables, "GetVariables", "UniBehaviour");
+    MonoWrapper::BindClassFunction(RestartScene, "RestartScene", "UniBehaviour");
   }
   // For debugging in C#
   bool CheckCompGet(const void* comp, const std::string& type, const int& id)
@@ -94,6 +95,11 @@ namespace ECSBind
   void SetNextScene(MonoString* scene_name)
   {
     NS_SCENE::SYS_SCENE_MANAGER->SetNextScene(MonoWrapper::ToString(scene_name));
+  }
+  void RestartScene()
+  {
+    //NS_SCENE::SYS_SCENE_MANAGER->;
+    NS_SCENE::SYS_SCENE_MANAGER->SetNextScene();
   }
 
   void SetPause(bool _val)
