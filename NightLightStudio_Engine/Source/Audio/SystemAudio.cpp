@@ -268,10 +268,10 @@ void SystemAudio::Play(int entity, ComponentLoadAudio::data& MyData)
   // Stop previously playing audio if any.
   MyData.channel->stop();
   // Play sound but pause it first to set attributes.
-  if (MyData.isBGM)
-    _system->playSound(sound, _bgm, true, &MyData.channel);
-  else if (MyData.isUI)
+  if (MyData.isUI)
     _system->playSound(sound, _ui, true, &MyData.channel);
+  else if (MyData.isBGM)
+    _system->playSound(sound, _bgm, true, &MyData.channel);
   else
     _system->playSound(sound, _sfx, true, &MyData.channel);
   if (MyData.isLoop)
