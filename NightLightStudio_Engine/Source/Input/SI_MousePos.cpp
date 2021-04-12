@@ -129,6 +129,10 @@ namespace SystemInput_ns
 			rect.left += 10;
 			ClipCursor(&rect);
 		}
+		else
+		{
+			ClipCursor(nullptr);
+		}
 		return _clipCursor;
 	}
 	void SystemMousePosition::SetClipCursor(bool clip)
@@ -142,6 +146,10 @@ namespace SystemInput_ns
 			rect.bottom -= 10;
 			rect.left += 10;
 			ClipCursor(&rect);
+		}
+		else
+		{
+			ClipCursor(nullptr);
 		}
 	}
 	POINT SystemMousePosition::SetCurPos(int x, int y)
