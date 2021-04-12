@@ -19,13 +19,13 @@ void SystemAudio::Init()
   // Create Channel Groups
   _system->createChannelGroup("BGM", &_bgm);
   _system->createChannelGroup("SFX", &_sfx);
-  _bgm->addGroup(_BGMui);
-  _sfx->addGroup(_SFXui);
+  _system->createChannelGroup("SFX", &_ui);
   // Set Master Channel
   _system->getMasterChannelGroup(&_master);
   // Pool all channels under master channel
   _master->addGroup(_bgm);
   _master->addGroup(_sfx);
+  _master->addGroup(_ui);
   // Set 3D settings
   _system->set3DSettings(1.0f, s_UNITS_PER_METER, 1.0f);
   //_system->set3DRolloffCallback();
@@ -163,8 +163,7 @@ void SystemAudio::Exit()
   //Save Audio List
   SaveList();
   // Release Channels
-  _BGMui->release();
-  _SFXui->release();
+  _ui->release();
   _bgm->release();
   _sfx->release();
   _master->release();
@@ -270,19 +269,11 @@ void SystemAudio::Play(int entity, ComponentLoadAudio::data& MyData)
   MyData.channel->stop();
   // Play sound but pause it first to set attributes.
   if (MyData.isBGM)
-  {
-    if (MyData.isUI)
-      _system->playSound(sound, _BGMui, true, &MyData.channel);
-    else
-      _system->playSound(sound, _bgm, true, &MyData.channel);
-  }
+    _system->playSound(sound, _bgm, true, &MyData.channel);
+  else if (MyData.isUI)
+    _system->playSound(sound, _ui, true, &MyData.channel);
   else
-  {
-    if (MyData.isUI)
-      _system->playSound(sound, _SFXui, true, &MyData.channel);
-    else
-      _system->playSound(sound, _sfx, true, &MyData.channel);
-  }
+    _system->playSound(sound, _sfx, true, &MyData.channel);
   if (MyData.isLoop)
     MyData.channel->setMode(FMOD_LOOP_NORMAL);
   else
