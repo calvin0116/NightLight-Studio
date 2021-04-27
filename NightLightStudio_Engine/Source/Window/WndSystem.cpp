@@ -477,7 +477,7 @@ namespace NS_WINDOW
 		std::string s(APPTITLE);
 
 		SYS_WINDOW->SetAppTitle(s);
-		
+
 		SetWindowedSize(CONFIG_DATA->GetConfigData().width, CONFIG_DATA->GetConfigData().height);
 
 		// Window Creation Function Call
@@ -508,19 +508,99 @@ namespace NS_WINDOW
 		//SetFullScreenMode(CONFIG_DATA->GetConfigData().toFullScreen); //<- Use json to control
 
 		// Set callback for mouse scroll
-		glfwSetScrollCallback(_glfwWnd, [](GLFWwindow * window, double xoffset, double yoffset)
+		glfwSetScrollCallback(_glfwWnd, [](GLFWwindow* window, double xoffset, double yoffset)
+			{
+				UNREFERENCED_PARAMETER(window);
+				UNREFERENCED_PARAMETER(xoffset);
+				SYS_INPUT->GetSystemMousePos().SetScroll(static_cast<short>(yoffset));
+			});
+
+		glfwSetWindowIconifyCallback(_glfwWnd, [](GLFWwindow* window, int iconified)
 		{
-			UNREFERENCED_PARAMETER(window);
-			UNREFERENCED_PARAMETER(xoffset);
-			SYS_INPUT->GetSystemMousePos().SetScroll(static_cast<short>(yoffset));
-		});
+			int width = SYS_WINDOW->GetAppWidth();
+			int height = SYS_WINDOW->GetAppHeight();
+
+			if (!iconified)
+			{
+				// Update rect in SystemMousePosition
+				SYS_INPUT->GetSystemMousePos().ResetWinSize();
+
+				// Get updated resolution sizing
+				SYS_WINDOW->SetAppResolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+
+				// Update projection matrix
+				NS_GRAPHICS::SYS_GRAPHICS->SetProjectionMatrix(NS_GRAPHICS::CameraSystem::GetInstance().GetCamera().cameraFOV, static_cast<float>(width) / static_cast<float>(height));
+				// Update orthogonal projection matrix with new width and height
+				//NS_GRAPHICS::SYS_GRAPHICS->SetUIMatrix(SYS_WINDOW->iDisplayResW/width, SYS_WINDOW->iDisplayResH/height);
+
+				UNREFERENCED_PARAMETER(window);
+				glViewport(0, 0, width, height);
+
+				// Set all render targets of framebuffers appropriately for resize (Deferred shading)
+				glBindFramebuffer(GL_FRAMEBUFFER, NS_GRAPHICS::SYS_GRAPHICS->GetGeometryBuffer());
+
+				// Re-generate data buffers for geometry buffer + render targets
+
+				// Position
+				glBindTexture(GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetPositionAlphaRT());
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetPositionAlphaRT(), 0);
+
+				// Calculated normals/normal map + metallic
+				glBindTexture(GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetNormalMapAndMetallicRT());
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetNormalMapAndMetallicRT(), 0);
+
+				// Albedo/Diffuse map + roughness
+				glBindTexture(GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetAlbedoMapAndRoughnessRT());
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetAlbedoMapAndRoughnessRT(), 0);
+
+				// Ambient Occlusion
+				glBindTexture(GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetAmbientOcclusionRT());
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, NS_GRAPHICS::SYS_GRAPHICS->GetAmbientOcclusionRT(), 0);
+
+				// Tell opengl which color attachments to use for rendering
+				unsigned int _renderTargets[4]
+					= { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+				glDrawBuffers(4, _renderTargets);
+
+				// Depth buffer
+				// Delete original buffer first due to glRenderbufferStorage being unable to resize
+				glDeleteRenderbuffers(1, &NS_GRAPHICS::SYS_GRAPHICS->GetDepthBuffer());
+
+				glCreateRenderbuffers(1, &NS_GRAPHICS::SYS_GRAPHICS->GetDepthBuffer());
+				glBindRenderbuffer(GL_RENDERBUFFER, NS_GRAPHICS::SYS_GRAPHICS->GetDepthBuffer());
+				glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, NS_GRAPHICS::SYS_GRAPHICS->GetDepthBuffer());
+
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			}
+
+		}
+		);
 
 		// Set callback for resizing
 		//glfwSetWindowSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
 		glfwSetFramebufferSizeCallback(_glfwWnd, [](GLFWwindow* window, int width, int height)
 		{
-			
-
 			// Update rect in SystemMousePosition
 			SYS_INPUT->GetSystemMousePos().ResetWinSize();
 
